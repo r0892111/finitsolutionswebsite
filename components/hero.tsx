@@ -17,10 +17,11 @@ import { ProjectRequestDialog } from "@/components/project-request-dialog";
  * All overlays are drawn in the same coordinate system (viewBox 0 0 818 768)
  * so they sit exactly on top of the existing network lines and hubs.
  */
+import { motion, useReducedMotion } from "framer-motion";
+
 function MagicVisual() {
   const reduce = useReducedMotion();
 
-  // Native image dimensions: 818 x 768 (keep overlays in same space)
   return (
     <div className="relative w-[320px] md:w-[640px] aspect-[818/768] select-none">
       {/* Base artwork */}
@@ -31,19 +32,26 @@ function MagicVisual() {
         draggable={false}
       />
 
-      {/* ===== Flow-on-lines layer (masked to the white wires in the PNG) ===== */}
+      {/* Particle flow EXACTLY on the white lines using the image as a luminance mask */}
       <svg
         className="absolute inset-0 z-20 pointer-events-none"
         viewBox="0 0 818 768"
         preserveAspectRatio="xMidYMid meet"
       >
         <defs>
-          {/* Load the same image into SVG for masking */}
-          <image id="art" href="/about-image.png" x="0" y="0" width="818" height="768" preserveAspectRatio="none" />
+          {/* Bring the image into SVG space */}
+          <image
+            id="netArt"
+            href="/about-image.png"
+            x="0"
+            y="0"
+            width="818"
+            height="768"
+            preserveAspectRatio="none"
+          />
 
-          {/* Convert image to grayscale, then threshold so only very bright pixels (the white connectors)
-              become opaque in the mask. Adjust the slope/intercept for your asset if needed. */}
-          <filter id="toWhiteLines">
+          {/* Convert to luminance then hard-threshold near white so only the connectors remain opaque */}
+          <filter id="whiteOnly">
             <feColorMatrix
               type="matrix"
               values="
@@ -53,122 +61,94 @@ function MagicVisual() {
                 0       0       0       1 0"
               result="lum"
             />
-            {/* Hard-ish threshold near white; tweak slope/intercept to include/exclude bits */}
+            {/* Increase slope / adjust intercept to tighten/loosen selection of bright pixels */}
             <feComponentTransfer>
-              <feFuncR type="linear" slope="6" intercept="-5" />
-              <feFuncG type="linear" slope="6" intercept="-5" />
-              <feFuncB type="linear" slope="6" intercept="-5" />
-              <feFuncA type="linear" slope="6" intercept="-5" />
+              <feFuncA type="linear" slope="7" intercept="-6" />
+              <feFuncR type="linear" slope="7" intercept="-6" />
+              <feFuncG type="linear" slope="7" intercept="-6" />
+              <feFuncB type="linear" slope="7" intercept="-6" />
             </feComponentTransfer>
           </filter>
 
-          {/* Use the filtered image as a luminance mask */}
-          <mask id="lineMask" maskUnits="userSpaceOnUse" x="0" y="0" width="818" height="768">
-            <use href="#art" filter="url(#toWhiteLines)" />
+          {/* Use filtered image as luminance mask */}
+          <mask id="wireMask" x="0" y="0" width="818" height="768" maskUnits="userSpaceOnUse">
+            <use href="#netArt" filter="url(#whiteOnly)" />
           </mask>
 
-          {/* Flow textures: diagonal and orthogonal stripe gradients */}
-          <linearGradient id="stripeGradX" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="rgba(59,130,246,0)" />
-            <stop offset="40%" stopColor="rgba(59,130,246,0.85)" />
-            <stop offset="60%" stopColor="rgba(34,211,238,0.85)" />
-            <stop offset="100%" stopColor="rgba(34,211,238,0)" />
-          </linearGradient>
-          <linearGradient id="stripeGradY" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(147,197,253,0)" />
-            <stop offset="45%" stopColor="rgba(147,197,253,0.9)" />
-            <stop offset="55%" stopColor="rgba(59,130,246,0.9)" />
-            <stop offset="100%" stopColor="rgba(59,130,246,0)" />
-          </linearGradient>
-
-          {/* Slight outer glow so the “wires” feel lit */}
+          {/* Soft glow so wires feel lit */}
           <filter id="glow">
-            <feGaussianBlur stdDeviation="1.2" result="b" />
+            <feGaussianBlur stdDeviation="1.1" result="b" />
             <feMerge>
               <feMergeNode in="b" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+
+          {/* Dot textures as SVG patterns (cleaner than CSS for viewBox control) */}
+          <pattern id="dotsX" width="12" height="12" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="6" r="1.6" fill="rgba(147,197,253,0.95)" />
+          </pattern>
+          <pattern id="dotsY" width="12" height="12" patternUnits="userSpaceOnUse">
+            <circle cx="6" cy="2" r="1.6" fill="rgba(59,130,246,0.9)" />
+          </pattern>
+          <pattern id="dotsD" width="14" height="14" patternUnits="userSpaceOnUse">
+            <circle cx="3" cy="3" r="1.5" fill="rgba(34,211,238,0.9)" />
+          </pattern>
         </defs>
 
-        {/* Two moving layers (different directions/speeds) clipped to the white lines.
-            Because they are masked, they ride *exactly* on the lines in your PNG. */}
-        <g mask="url(#lineMask)" filter="url(#glow)" opacity="0.95">
-          {/* Horizontal flow */}
+        {/* Because we paint under a mask built from the exact PNG, dots are visible ONLY on white pixels = pixel perfect */}
+        <g mask="url(#wireMask)" filter="url(#glow)" opacity="0.95">
+          {/* Layer 1: horizontal flow (slides along X) */}
           <g>
-            <rect id="flowX" x="-818" y="0" width="1636" height="768" fill="url(#stripeGradX)">
+            <rect id="layerX" x="-818" y="0" width="1636" height="768" fill="url(#dotsX)">
               {!reduce && (
-                <animate
-                  attributeName="x"
-                  from="-818"
-                  to="0"
-                  dur="2.8s"
-                  repeatCount="indefinite"
-                />
+                <animate attributeName="x" from="-818" to="0" dur="2.2s" repeatCount="indefinite" />
               )}
             </rect>
           </g>
 
-          {/* Vertical flow */}
-          <g>
-            <rect id="flowY" x="0" y="-768" width="818" height="1536" fill="url(#stripeGradY)" opacity="0.6">
+          {/* Layer 2: vertical flow (slides along Y) */}
+          <g opacity="0.8">
+            <rect id="layerY" x="0" y="-768" width="818" height="1536" fill="url(#dotsY)">
               {!reduce && (
-                <animate
-                  attributeName="y"
-                  from="-768"
-                  to="0"
-                  dur="3.6s"
-                  repeatCount="indefinite"
-                />
+                <animate attributeName="y" from="-768" to="0" dur="2.8s" repeatCount="indefinite" />
+              )}
+            </rect>
+          </g>
+
+          {/* Layer 3: diagonal flow (~45°). We move a big rect diagonally by animating x and y together */}
+          <g opacity="0.7" transform="rotate(45 409 384)">
+            <rect id="layerD" x="-1156" y="-1086" width="2312" height="2172" fill="url(#dotsD)">
+              {!reduce && (
+                <>
+                  <animate attributeName="x" from="-1156" to="0" dur="3s" repeatCount="indefinite" />
+                  <animate attributeName="y" from="-1086" to="0" dur="3s" repeatCount="indefinite" />
+                </>
               )}
             </rect>
           </g>
         </g>
       </svg>
 
-      {/* ===== Optional: precise traveling packets on the four main spokes for extra depth ===== */}
-      <svg
-        className="absolute inset-0 z-30 pointer-events-none"
-        viewBox="0 0 818 768"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <defs>
-          <filter id="pktGlow">
-            <feGaussianBlur stdDeviation="1.3" result="b" />
-            <feMerge>
-              <feMergeNode in="b" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
-        {/* Handful of motion paths (approximate but aligned) */}
-        {[
-          // Center → TL
-          "M 409 384 C 350 360 300 320 260 300 C 230 285 205 260 160 150",
-          // Center → TR
-          "M 409 384 C 470 360 520 320 560 300 C 590 285 620 260 658 150",
-          // Center → BL
-          "M 409 384 C 350 410 300 450 260 470 C 230 485 205 510 160 618",
-          // Center → BR
-          "M 409 384 C 470 410 520 450 560 470 C 590 485 620 510 658 618",
-        ].map((d, i) => (
-          <g key={i}>
-            {!reduce && (
-              <circle r="4" fill="rgba(251,191,36,0.95)" filter="url(#pktGlow)">
-                <animateMotion dur={`${2.7 + i * 0.3}s`} repeatCount="indefinite" rotate="auto">
-                  <mpath xlinkHref={`#p${i}`} />
-                </animateMotion>
-              </circle>
-            )}
-            {/* invisible path holder */}
-            <path id={`p${i}`} d={d} fill="none" stroke="none" />
-          </g>
-        ))}
-      </svg>
+      {/* Optional: subtle central pulse so the hub feels alive */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
+        animate={reduce ? {} : { scale: [1, 1.08, 1], opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          width: 28,
+          height: 28,
+          borderRadius: "9999px",
+          boxShadow:
+            "0 0 18px rgba(147,197,253,0.9), 0 0 34px rgba(59,130,246,0.45)",
+          background:
+            "radial-gradient(circle, rgba(255,255,255,0.9), rgba(59,130,246,0.35))",
+        }}
+      />
     </div>
   );
 }
+
 
 
 export function Hero() {
