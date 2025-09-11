@@ -169,8 +169,8 @@ export function Hero() {
               <span className="font-semibold">and scale your business.</span>
             </h1>
             <p className="text-xl font-semibold lg:text-2xl leading-relaxed max-w-2xl" style={{ color: 'rgb(28, 44, 85)' }}>
-              We build AI-powered software that eliminates inefficiencies
-              <br className="md:block hidden" /> and unlocks powerful leverage
+              We build AI-powered software on top of the systems you already use.
+              <br className="md:block hidden" /> Our goal is to eliminate inefficiencies and unlock powerful leverage
               for your company&apos;s growth.
             </p>
           </motion.div>
