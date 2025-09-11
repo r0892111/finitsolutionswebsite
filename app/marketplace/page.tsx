@@ -130,17 +130,7 @@ export default function MarketplacePage() {
                     src="/Voicelink homepage.png"
                     alt="VoiceLink Interface"
                     fill
-                    className="object-contain p-6 rounded-l-xl"
-                    sizes="(max-width: 1024px) 100vw, 42vw"
-                    unoptimized
-                  />
-                  
-                  {/* Overlay with product logo */}
-                  <Image
-                    src="/Voicelink homepage.png"
-                    alt="VoiceLink Interface"
-                    fill
-                    className="object-contain p-6 rounded-xl"
+                    className="object-cover rounded-xl"
                     sizes="(max-width: 1024px) 100vw, 42vw"
                     unoptimized
                   />
