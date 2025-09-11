@@ -40,7 +40,8 @@ export function ProcessHero({ onScrollToProcess }: ProcessHeroProps) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="finit-h1 mb-12 text-center text-white"
+          className="finit-h1 mb-12 text-center"
+          style={{ color: '#202226' }}
         >
           Van Idee tot Impact
         </motion.h1>
@@ -49,7 +50,8 @@ export function ProcessHero({ onScrollToProcess }: ProcessHeroProps) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="finit-body text-white/90 mb-20 max-w-5xl mx-auto text-center"
+          className="finit-body mb-20 max-w-5xl mx-auto text-center"
+          style={{ color: '#202226' }}
         >
           Ontdek hoe wij samen met u van uitdaging naar oplossing gaan — kort, duidelijk en
           resultaatgericht.
