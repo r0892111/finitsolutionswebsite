@@ -164,14 +164,14 @@ export function Hero() {
             <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{ color: 'rgb(28, 44, 85)' }}>
               AI Workforces
               <br className="md:block hidden" />
-              <span className="font-semibold">that automate </span>
+              <span className="font-semibold">to automate </span>
               <br className="md:block hidden" />
               <span className="font-semibold">and scale your business.</span>
             </h1>
             <p className="text-xl font-semibold lg:text-2xl leading-relaxed max-w-2xl" style={{ color: 'rgb(28, 44, 85)' }}>
-              We build AI-powered software on top of your current systems
-              <br className="md:block hidden" />
-              which unlocks powerful leverage for your company&apos;s growth.
+              We build AI-powered workforces that eliminate inefficiencies
+              <br className="md:block hidden" /> and unlock powerful leverage
+              for your company&apos;s growth.
             </p>
           </motion.div>
 
