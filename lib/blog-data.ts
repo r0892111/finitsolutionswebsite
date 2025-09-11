@@ -668,30 +668,4 @@ export const blogPosts: BlogPost[] = [
   </section>
 </article>
     `,
-    publishedAt: "2025-06-3",
-    featuredImage: "https://images.pexels.com/photos/8439093/pexels-photo-8439093.jpeg",
-    author: {
-      name: "Alex Otten",
-      image: "/alex.png"
-    },
-    tags: ["AI", "Boekhouding", "Facturatie", "Bedrijfsbeleid"]
-  }
-];
-
-export const categories: BlogCategory[] = [
-  {
-    name: "Automatisering", 
-    slug: "automatisering",
-    description: "Artikelen over procesautomatisering en efficiency"
-  },
-  {
-    name: "AI & Machine Learning",
-    slug: "ai-ml", 
-    description: "Inzichten in kunstmatige intelligentie en machine learning"
-  },
-  {
-    name: "Digitale Transformatie",
-    slug: "digitale-transformatie",
-    description: "Strategieën voor digitale bedrijfstransformatie"
-  }
-];
+    publish
