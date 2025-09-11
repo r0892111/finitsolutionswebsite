@@ -156,7 +156,6 @@ export default function AboutPage() {
             </motion.p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {team.map((member, index) => (
               <motion.div
