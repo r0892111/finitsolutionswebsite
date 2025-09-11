@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ChevronRight, Search, Filter, Star, ArrowRight, Zap, Bot, BarChart3, MessageSquare, Users, Clock, Building2, User, Crown, Sparkles } from "lucide-react";
+import { ChevronRight, Search, Sparkles, ArrowRight, Mic, BarChart3, Bot, Zap, Shield, Database, Globe, Users, MessageSquare, Calendar, FileText, Brain, Workflow, Lock, TrendingUp, Mail, Phone, Building2, Headphones, Settings, Cloud, Target, PieChart, UserCheck, ClipboardList, Briefcase, CreditCard, Truck, UserPlus, BookOpen, Award, Lightbulb, Cog } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,139 +10,223 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-// Define consistent Product type
-interface Product {
+interface Service {
   id: string;
   name: string;
   description: string;
   category: string;
   status: "available" | "coming-soon" | "beta";
-  price: string;
-  originalPrice?: string;
   features: string[];
   image: string;
   icon: any;
   route: string;
-  premium?: boolean;
-  popular?: boolean;
+  featured?: boolean;
+  external?: boolean;
 }
 
-// Business Products
-const businessProducts: Product[] = [
+const services: Service[] = [
+  // Integration Tools
   {
-    id: "voice-to-crm-business",
-    name: "Voice-to-CRM Enterprise",
-    description: "Enterprise-grade spraakherkenning voor CRM-automatisering met team management en advanced analytics",
-    category: "Sales & CRM",
+    id: "voice-to-crm",
+    name: "Voice-to-CRM",
+    description: "Transformeer spraaknotities automatisch naar gestructureerde CRM-data. Uw verkopers spreken, wij zorgen dat het CRM klopt.",
+    category: "Integration Tools",
     status: "available",
-    price: "€499/maand",
-    originalPrice: "€699/maand",
-    features: ["Multi-user support", "Advanced analytics", "Custom integrations", "Priority support", "Team management"],
+    features: ["Spraakherkenning", "CRM-integratie", "Automatische data-entry", "Multi-platform support"],
     image: "https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg",
-    icon: MessageSquare,
+    icon: Mic,
     route: "/voice-to-crm",
-    premium: true,
-    popular: true
+    featured: true
   },
   {
-    id: "ai-dashboard-enterprise",
-    name: "AI Dashboard Enterprise",
-    description: "Geavanceerde business intelligence dashboards met real-time data en predictive analytics",
-    category: "Business Intelligence",
+    id: "api-connector-hub",
+    name: "API Connector Hub",
+    description: "Verbind al uw systemen naadloos met onze intelligente API-orchestratie platform. Geen technische kennis vereist.",
+    category: "Integration Tools",
+    status: "available",
+    features: ["Drag & drop integraties", "Real-time sync", "Error handling", "Monitoring dashboard"],
+    image: "https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg",
+    icon: Globe,
+    route: "/marketplace/api-connector-hub"
+  },
+  {
+    id: "data-sync-pro",
+    name: "Data Sync Pro",
+    description: "Houd al uw bedrijfsdata gesynchroniseerd tussen verschillende platforms met intelligente conflict-resolutie.",
+    category: "Integration Tools",
+    status: "beta",
+    features: ["Bi-directionele sync", "Conflict resolutie", "Scheduled updates", "Audit trails"],
+    image: "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg",
+    icon: Database,
+    route: "/marketplace/data-sync-pro"
+  },
+
+  // Automation
+  {
+    id: "workflow-automator",
+    name: "Workflow Automator",
+    description: "Automatiseer complexe bedrijfsprocessen met onze visuele workflow builder. Van eenvoudige taken tot enterprise-workflows.",
+    category: "Automation",
+    status: "available",
+    features: ["Visual workflow builder", "Conditional logic", "Multi-step processes", "Team collaboration"],
+    image: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg",
+    icon: Workflow,
+    route: "/marketplace/workflow-automator",
+    featured: true
+  },
+  {
+    id: "smart-scheduler",
+    name: "Smart Scheduler",
+    description: "AI-gedreven planning die automatisch optimale tijdslots vindt voor meetings, taken en resources.",
+    category: "Automation",
+    status: "available",
+    features: ["AI scheduling", "Resource optimization", "Calendar integration", "Conflict prevention"],
+    image: "https://images.pexels.com/photos/1181298/pexels-photo-1181298.jpeg",
+    icon: Calendar,
+    route: "/marketplace/smart-scheduler"
+  },
+  {
+    id: "document-processor",
+    name: "Document Processor",
+    description: "Automatische verwerking en extractie van data uit documenten met AI-powered OCR en intelligente classificatie.",
+    category: "Automation",
+    status: "beta",
+    features: ["OCR technology", "Smart classification", "Data extraction", "Bulk processing"],
+    image: "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg",
+    icon: FileText,
+    route: "/marketplace/document-processor"
+  },
+  {
+    id: "email-automation-suite",
+    name: "Email Automation Suite",
+    description: "Intelligente e-mail automatisering met personalisatie, timing optimalisatie en response tracking.",
+    category: "Automation",
     status: "coming-soon",
-    price: "€399/maand",
-    features: ["Real-time analytics", "Custom widgets", "Multi-source data", "Advanced reporting", "API access"],
+    features: ["Smart personalization", "Send time optimization", "Response tracking", "A/B testing"],
+    image: "https://images.pexels.com/photos/1591062/pexels-photo-1591062.jpeg",
+    icon: Mail,
+    route: "/marketplace/email-automation-suite"
+  },
+
+  // Reporting & Analytics
+  {
+    id: "business-intelligence-hub",
+    name: "Business Intelligence Hub",
+    description: "Transformeer uw data in actionable insights met onze AI-powered analytics platform en real-time dashboards.",
+    category: "Reporting & Analytics",
+    status: "available",
+    features: ["Real-time dashboards", "Predictive analytics", "Custom reports", "Data visualization"],
     image: "https://images.pexels.com/photos/669610/pexels-photo-669610.jpeg",
     icon: BarChart3,
-    route: "/marketplace/ai-dashboard-enterprise",
-    premium: true
+    route: "/marketplace/business-intelligence-hub",
+    featured: true
   },
   {
-    id: "smart-chatbot-business",
-    name: "AI Customer Hub Pro",
-    description: "Professionele AI-chatbot met document training en seamless human handoff voor bedrijven",
-    category: "Customer Support",
+    id: "performance-tracker",
+    name: "Performance Tracker",
+    description: "Monitor en analyseer team performance met geavanceerde metrics en AI-gedreven aanbevelingen voor verbetering.",
+    category: "Reporting & Analytics",
+    status: "available",
+    features: ["Team metrics", "Performance insights", "Goal tracking", "Improvement suggestions"],
+    image: "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg",
+    icon: TrendingUp,
+    route: "/marketplace/performance-tracker"
+  },
+  {
+    id: "financial-insights",
+    name: "Financial Insights",
+    description: "Geavanceerde financiële analytics met cashflow voorspellingen en automatische rapportage voor CFO's.",
+    category: "Reporting & Analytics",
     status: "beta",
-    price: "€299/maand",
-    features: ["Document training", "Human handoff", "Multi-language", "Analytics dashboard", "Custom branding"],
+    features: ["Cashflow predictions", "Automated reporting", "Risk analysis", "Budget optimization"],
+    image: "https://images.pexels.com/photos/164527/pexels-photo-164527.jpeg",
+    icon: PieChart,
+    route: "/marketplace/financial-insights"
+  },
+  {
+    id: "customer-analytics",
+    name: "Customer Analytics",
+    description: "Diepgaande klantinzichten met gedragsanalyse, churn prediction en lifetime value berekeningen.",
+    category: "Reporting & Analytics",
+    status: "coming-soon",
+    features: ["Behavior analysis", "Churn prediction", "LTV calculations", "Segmentation"],
+    image: "https://images.pexels.com/photos/1181673/pexels-photo-1181673.jpeg",
+    icon: Users,
+    route: "/marketplace/customer-analytics"
+  },
+
+  // Security & Compliance
+  {
+    id: "compliance-monitor",
+    name: "Compliance Monitor",
+    description: "Automatische monitoring van GDPR, ISO en andere compliance vereisten met real-time alerts en rapportage.",
+    category: "Security & Compliance",
+    status: "available",
+    features: ["GDPR monitoring", "Automated audits", "Compliance reports", "Risk assessment"],
+    image: "https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg",
+    icon: Shield,
+    route: "/marketplace/compliance-monitor"
+  },
+  {
+    id: "security-scanner",
+    name: "Security Scanner",
+    description: "Proactieve beveiligingsscans van uw digitale infrastructuur met AI-gedreven threat detection.",
+    category: "Security & Compliance",
+    status: "beta",
+    features: ["Threat detection", "Vulnerability scanning", "Security reports", "Automated patching"],
+    image: "https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg",
+    icon: Lock,
+    route: "/marketplace/security-scanner"
+  },
+  {
+    id: "access-control-manager",
+    name: "Access Control Manager",
+    description: "Centraal beheer van gebruikerstoegang met role-based permissions en automated provisioning.",
+    category: "Security & Compliance",
+    status: "coming-soon",
+    features: ["Role-based access", "Automated provisioning", "Access reviews", "Audit logging"],
+    image: "https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg",
+    icon: UserCheck,
+    route: "/marketplace/access-control-manager"
+  },
+
+  // Customer Support
+  {
+    id: "ai-support-assistant",
+    name: "AI Support Assistant",
+    description: "Intelligente chatbot die uw kennisbank leert en klanten 24/7 ondersteunt met menselijke handoff wanneer nodig.",
+    category: "Customer Support",
+    status: "available",
+    features: ["24/7 availability", "Knowledge base training", "Human handoff", "Multi-language support"],
     image: "https://images.pexels.com/photos/8439093/pexels-photo-8439093.jpeg",
     icon: Bot,
-    route: "/marketplace/smart-chatbot-business",
-    premium: true
+    route: "/marketplace/ai-support-assistant"
   },
   {
-    id: "workflow-automator-pro",
-    name: "Workflow Automator Pro",
-    description: "Enterprise workflow automatisering met geavanceerde integraties en compliance features",
-    category: "Operations",
-    status: "coming-soon",
-    price: "€199/maand",
-    features: ["Enterprise integrations", "Compliance tracking", "Advanced workflows", "Team collaboration", "Audit logs"],
-    image: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg",
-    icon: Zap,
-    route: "/marketplace/workflow-automator-pro",
-    premium: true
-  }
-];
-
-// Personal Products
-const personalProducts: Product[] = [
-  {
-    id: "voice-to-crm-personal",
-    name: "Voice-to-CRM Personal",
-    description: "Persoonlijke CRM-automatisering voor freelancers en kleine ondernemers",
-    category: "Productivity",
-    status: "available",
-    price: "€49/maand",
-    features: ["Single user", "Basic integrations", "Voice notes", "Contact management", "Email support"],
-    image: "https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg",
-    icon: MessageSquare,
-    route: "/voice-to-crm",
-    popular: true,
-    premium: false
-  },
-  {
-    id: "personal-assistant",
-    name: "AI Personal Assistant",
-    description: "Jouw persoonlijke AI-assistent voor dagelijkse taken en planning",
-    category: "Productivity",
-    status: "coming-soon",
-    price: "€29/maand",
-    features: ["Task management", "Calendar integration", "Email drafting", "Meeting notes", "Personal insights"],
-    image: "https://images.pexels.com/photos/590045/pexels-photo-590045.jpeg",
-    icon: User,
-    route: "/marketplace/personal-assistant",
-    premium: false
-  },
-  {
-    id: "smart-budgeting",
-    name: "Smart Budget Tracker",
-    description: "AI-gedreven budgettering en financieel inzicht voor persoonlijk gebruik",
-    category: "Finance",
+    id: "ticket-intelligence",
+    name: "Ticket Intelligence",
+    description: "Automatische ticket classificatie, prioritering en routing met AI-gedreven oplossingsvoorstellen.",
+    category: "Customer Support",
     status: "beta",
-    price: "€19/maand",
-    features: ["Expense tracking", "Budget predictions", "Savings goals", "Financial insights", "Bank sync"],
-    image: "https://images.pexels.com/photos/164527/pexels-photo-164527.jpeg",
-    icon: BarChart3,
-    route: "/marketplace/smart-budgeting",
-    premium: false
+    features: ["Auto-classification", "Smart routing", "Priority scoring", "Solution suggestions"],
+    image: "https://images.pexels.com/photos/1181715/pexels-photo-1181715.jpeg",
+    icon: Headphones,
+    route: "/marketplace/ticket-intelligence"
   },
   {
-    id: "content-creator-suite",
-    name: "Content Creator Suite",
-    description: "AI-tools voor content creators: van ideatie tot publicatie",
-    category: "Creative",
+    id: "feedback-analyzer",
+    name: "Feedback Analyzer",
+    description: "Analyseer klantfeedback uit alle kanalen met sentiment analysis en automatische actie-aanbevelingen.",
+    category: "Customer Support",
     status: "coming-soon",
-    price: "€39/maand",
-    features: ["Content ideas", "Auto-scheduling", "Performance analytics", "Multi-platform", "Brand consistency"],
-    image: "https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg",
-    icon: Sparkles,
-    route: "/marketplace/content-creator-suite",
-    premium: false
+    features: ["Sentiment analysis", "Multi-channel aggregation", "Action recommendations", "Trend detection"],
+    image: "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg",
+    icon: MessageSquare,
+    route: "/marketplace/feedback-analyzer"
   }
 ];
 
-const categories = ["Alle", "Sales & CRM", "Business Intelligence", "Customer Support", "Operations", "Productivity", "Finance", "Creative"];
+const categories = ["Alle", "Integration Tools", "Automation", "Reporting & Analytics", "Security & Compliance", "Customer Support"];
 
 const statusColors = {
   available: "bg-emerald-100 text-emerald-800 border-emerald-200",
@@ -159,28 +243,20 @@ const statusLabels = {
 export default function MarketplacePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Alle");
-  const [activeTab, setActiveTab] = useState<"business" | "personal">("business");
 
-  const currentProducts = activeTab === "business" ? businessProducts : personalProducts;
-
-  // Filter products based on search and category
-  const filteredProducts = currentProducts.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "Alle" || product.category === selectedCategory;
+  // Filter services based on search and category
+  const filteredServices = services.filter(service => {
+    const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         service.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         service.features.some(feature => feature.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCategory = selectedCategory === "Alle" || service.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const handleProductClick = (product: Product) => {
-    if (product.status === "available") {
-      window.location.href = product.route;
-    } else {
-      console.log(`Product ${product.name} is ${product.status}`);
-    }
-  };
+  const featuredServices = services.filter(service => service.featured);
 
   return (
-    <main className="pt-20 bg-gradient-to-br from-slate-50 via-white to-slate-50 min-h-screen relative">
+    <main className="pt-20 bg-gradient-to-br from-slate-50 via-white to-slate-50 min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 md:py-28 overflow-hidden">
         {/* Background Elements */}
@@ -198,7 +274,7 @@ export default function MarketplacePage() {
           >
             <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-primary/10 to-blue-500/10 text-primary mb-6 border border-primary/20">
               <Sparkles className="h-4 w-4 mr-2" />
-              <span>AI SaaS Marketplace</span> 
+              <span>SaaS Marketplace</span> 
               <ChevronRight className="h-4 w-4 ml-2" />
             </div>
           </motion.div>
@@ -209,7 +285,7 @@ export default function MarketplacePage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-5xl md:text-6xl font-bold mb-6 text-center bg-gradient-to-r from-slate-900 via-primary to-slate-900 bg-clip-text text-transparent"
           >
-            Premium AI Solutions
+            Finit Solutions Catalogue
           </motion.h1>
           
           <motion.p
@@ -218,57 +294,21 @@ export default function MarketplacePage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-slate-600 text-xl mb-12 max-w-3xl mx-auto text-center leading-relaxed"
           >
-            Ontdek onze collectie van premium AI-oplossingen. Plug & play, enterprise-grade, 
-            en klaar om uw bedrijf naar het volgende niveau te tillen.
+            Ontdek onze complete collectie van AI-oplossingen en SaaS-services. 
+            Van integraties tot automatisering - alles wat uw bedrijf nodig heeft op één plek.
           </motion.p>
-
-          {/* Business/Personal Toggle */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex justify-center mb-12"
-          >
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 border border-slate-200/50 shadow-lg">
-              <div className="flex">
-                <button
-                  onClick={() => setActiveTab("business")}
-                  className={`flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all duration-300 ${
-                    activeTab === "business"
-                      ? "bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  <Building2 className="h-5 w-5" />
-                  Business
-                  {activeTab === "business" && <Crown className="h-4 w-4" />}
-                </button>
-                <button
-                  onClick={() => setActiveTab("personal")}
-                  className={`flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all duration-300 ${
-                    activeTab === "personal"
-                      ? "bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  <User className="h-5 w-5" />
-                  Personal
-                </button>
-              </div>
-            </div>
-          </motion.div>
 
           {/* Search and Filter */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col md:flex-row gap-6 mb-16 max-w-4xl mx-auto"
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex flex-col gap-6 mb-16 max-w-4xl mx-auto"
           >
-            <div className="relative flex-1">
+            <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
               <Input
-                placeholder="Zoek naar AI-oplossingen..."
+                placeholder="Zoek naar oplossingen, features of categorieën..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-12 h-14 text-lg bg-white/80 backdrop-blur-sm border-slate-200/50 rounded-2xl shadow-lg focus:shadow-xl transition-all duration-300"
@@ -296,158 +336,206 @@ export default function MarketplacePage() {
         </div>
       </section>
 
-      {/* Products Grid */}
+      {/* Featured Services */}
+      {featuredServices.length > 0 && selectedCategory === "Alle" && !searchTerm && (
+        <section className="pb-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900">
+                Uitgelichte Oplossingen
+              </h2>
+              <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+                Onze meest populaire en bewezen AI-oplossingen
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {featuredServices.map((service, index) => {
+                const IconComponent = service.icon;
+                return (
+                  <motion.div
+                    key={service.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <Link href={service.route}>
+                      <Card className="h-full hover:shadow-2xl transition-all duration-500 cursor-pointer group relative overflow-hidden bg-white/90 backdrop-blur-sm border-slate-200/50 ring-2 ring-primary/20">
+                        {/* Featured Badge */}
+                        <div className="absolute top-4 left-4 z-10">
+                          <div className="bg-gradient-to-r from-primary to-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                            <Sparkles className="h-3 w-3" />
+                            FEATURED
+                          </div>
+                        </div>
+
+                        <div className="relative h-48 w-full overflow-hidden">
+                          <Image
+                            src={service.image}
+                            alt={service.name}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            unoptimized
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                          
+                          {/* Status Badge */}
+                          <div className="absolute bottom-4 left-4">
+                            <Badge className={`${statusColors[service.status]} font-semibold`}>
+                              {statusLabels[service.status]}
+                            </Badge>
+                          </div>
+
+                          {/* Icon */}
+                          <div className="absolute bottom-4 right-4">
+                            <div className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                              <IconComponent className="h-6 w-6 text-primary" />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <CardContent className="p-6">
+                          <div className="mb-3">
+                            <Badge variant="secondary" className="text-xs font-medium bg-slate-100 text-slate-700">
+                              {service.category}
+                            </Badge>
+                          </div>
+                          
+                          <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                            {service.name}
+                          </h3>
+                          
+                          <p className="text-slate-600 mb-4 line-clamp-2 leading-relaxed text-sm">
+                            {service.description}
+                          </p>
+                          
+                          <div className="flex items-center justify-between">
+                            <div className="flex flex-wrap gap-1">
+                              {service.features.slice(0, 2).map((feature, idx) => (
+                                <Badge key={idx} variant="outline" className="text-xs bg-slate-50 border-slate-200">
+                                  {feature}
+                                </Badge>
+                              ))}
+                            </div>
+                            <ArrowRight className="h-5 w-5 text-primary group-hover:translate-x-1 transition-transform duration-300" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* All Services Grid */}
       <section className="pb-20 md:pb-28">
         <div className="container mx-auto px-4">
           {/* Section Header */}
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900">
-              {activeTab === "business" ? "Business Solutions" : "Personal Tools"}
+              {selectedCategory === "Alle" ? "Alle Oplossingen" : selectedCategory}
             </h2>
             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              {activeTab === "business" 
-                ? "Enterprise-grade AI-oplossingen voor professionele teams en organisaties"
-                : "Persoonlijke AI-tools om uw dagelijkse productiviteit te verhogen"
-              }
+              {filteredServices.length} oplossing{filteredServices.length !== 1 ? 'en' : ''} gevonden
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {filteredProducts.map((product, index) => {
-              const IconComponent = product.icon;
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {filteredServices.map((service, index) => {
+              const IconComponent = service.icon;
               return (
                 <motion.div
-                  key={product.id}
+                  key={service.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <Card 
-                    className={`h-full hover:shadow-2xl transition-all duration-500 cursor-pointer group relative overflow-hidden bg-white/80 backdrop-blur-sm border-slate-200/50 ${
-                      (product.premium ?? false) ? 'ring-2 ring-gradient-to-r from-primary/20 to-blue-500/20' : ''
-                    }`}
-                    onClick={() => handleProductClick(product)}
-                  >
-                    {/* Premium Badge */}
-                    {(product.premium ?? false) && (
-                      <div className="absolute top-4 left-4 z-10">
-                        <div className="bg-gradient-to-r from-amber-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                          <Crown className="h-3 w-3" />
-                          PREMIUM
+                  <Link href={service.route}>
+                    <Card className="h-full hover:shadow-2xl transition-all duration-500 cursor-pointer group relative overflow-hidden bg-white/80 backdrop-blur-sm border-slate-200/50">
+                      <div className="relative h-48 w-full overflow-hidden">
+                        <Image
+                          src={service.image}
+                          alt={service.name}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          unoptimized
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                        
+                        {/* Status Badge */}
+                        <div className="absolute bottom-4 left-4">
+                          <Badge className={`${statusColors[service.status]} font-semibold`}>
+                            {statusLabels[service.status]}
+                          </Badge>
                         </div>
-                      </div>
-                    )}
 
-                    {/* Popular Badge */}
-                    {(product.popular ?? false) && (
-                      <div className="absolute top-4 right-4 z-10">
-                        <div className="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                          <Star className="h-3 w-3 fill-current" />
-                          POPULAIR
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="relative h-64 w-full overflow-hidden">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        unoptimized
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                      
-                      {/* Status Badge */}
-                      <div className="absolute bottom-4 left-4">
-                        <Badge className={`${statusColors[product.status]} font-semibold`}>
-                          {statusLabels[product.status]}
-                        </Badge>
-                      </div>
-
-                      {/* Icon */}
-                      <div className="absolute bottom-4 right-4">
-                        <div className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                          <IconComponent className="h-6 w-6 text-primary" />
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <CardContent className="p-8">
-                      <div className="mb-4">
-                        <Badge variant="secondary" className="text-xs font-medium bg-slate-100 text-slate-700">
-                          {product.category}
-                        </Badge>
-                      </div>
-                      
-                      <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                        {product.name}
-                      </h3>
-                      
-                      <p className="text-slate-600 mb-6 line-clamp-2 leading-relaxed">
-                        {product.description}
-                      </p>
-                      
-                      <div className="mb-6">
-                        <div className="flex flex-wrap gap-2">
-                          {product.features.slice(0, 3).map((feature, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs bg-slate-50 border-slate-200">
-                              {feature}
-                            </Badge>
-                          ))}
-                          {product.features.length > 3 && (
-                            <Badge variant="outline" className="text-xs bg-slate-50 border-slate-200">
-                              +{product.features.length - 3} meer
-                            </Badge>
-                          )}
+                        {/* Icon */}
+                        <div className="absolute bottom-4 right-4">
+                          <div className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                            <IconComponent className="h-6 w-6 text-primary" />
+                          </div>
                         </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <div className="flex flex-col">
-                          <div className="flex items-center gap-2">
-                            <div className="text-2xl font-bold text-primary">
-                              {product.price}
-                            </div>
-                            {product.originalPrice && (
-                              <div className="text-sm text-slate-400 line-through">
-                                {product.originalPrice}
-                              </div>
+                      <CardContent className="p-6">
+                        <div className="mb-3">
+                          <Badge variant="secondary" className="text-xs font-medium bg-slate-100 text-slate-700">
+                            {service.category}
+                          </Badge>
+                        </div>
+                        
+                        <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                          {service.name}
+                        </h3>
+                        
+                        <p className="text-slate-600 mb-4 line-clamp-3 leading-relaxed text-sm">
+                          {service.description}
+                        </p>
+                        
+                        <div className="mb-4">
+                          <div className="flex flex-wrap gap-2">
+                            {service.features.slice(0, 3).map((feature, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs bg-slate-50 border-slate-200">
+                                {feature}
+                              </Badge>
+                            ))}
+                            {service.features.length > 3 && (
+                              <Badge variant="outline" className="text-xs bg-slate-50 border-slate-200">
+                                +{service.features.length - 3} meer
+                              </Badge>
                             )}
                           </div>
-                          {product.originalPrice && (
-                            <div className="text-xs text-green-600 font-medium">
-                              Bespaar €{parseInt(product.originalPrice.replace(/[^\d]/g, '')) - parseInt(product.price.replace(/[^\d]/g, ''))}/maand
-                            </div>
-                          )}
                         </div>
-                        <Button 
-                          size="lg" 
-                          variant={product.status === "available" ? "default" : "outline"}
-                          className={`group-hover:translate-x-1 transition-all duration-300 ${
-                            product.status === "available" 
-                              ? "bg-gradient-to-r from-primary to-blue-600 shadow-lg hover:shadow-xl" 
-                              : "border-slate-300 hover:border-primary"
-                          }`}
-                        >
-                          {product.status === "available" ? "Bekijk" : "Meer info"}
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                        
+                        <div className="flex items-center justify-between">
+                          <Button 
+                            size="sm" 
+                            variant="ghost"
+                            className="text-primary hover:text-primary/80 hover:bg-primary/5 p-0 h-auto font-semibold"
+                          >
+                            Meer informatie
+                          </Button>
+                          <ArrowRight className="h-5 w-5 text-primary group-hover:translate-x-1 transition-transform duration-300" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </motion.div>
               );
             })}
           </div>
 
-          {filteredProducts.length === 0 && (
+          {filteredServices.length === 0 && (
             <div className="text-center py-20">
               <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Search className="h-12 w-12 text-slate-400" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-2">Geen producten gevonden</h3>
+              <h3 className="text-2xl font-bold text-slate-900 mb-2">Geen oplossingen gevonden</h3>
               <p className="text-slate-600 text-lg">
                 Probeer een andere zoekopdracht of categorie
               </p>
@@ -474,11 +562,15 @@ export default function MarketplacePage() {
               Mist er een oplossing?
             </h2>
             <p className="text-blue-100 text-xl mb-10 max-w-3xl mx-auto leading-relaxed">
-              We bouwen voortdurend nieuwe AI-oplossingen. Laat ons weten wat je nodig hebt 
-              en misschien wordt het ons volgende premium product.
+              We ontwikkelen voortdurend nieuwe AI-oplossingen op maat. 
+              Vertel ons wat u nodig heeft en we bouwen het voor u.
             </p>
-            <Button size="lg" className="bg-white text-primary hover:bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-8 py-4">
-              Suggereer een product
+            <Button 
+              size="lg" 
+              className="bg-white text-primary hover:bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-8 py-4"
+              onClick={() => window.location.href = '/#contact'}
+            >
+              Bespreek uw behoeften
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </motion.div>
