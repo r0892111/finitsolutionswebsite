@@ -57,7 +57,7 @@ export function ProcessStep({ step, index, isVisible, isActive, layout }: Proces
           </div>
         </div>
 
-        <h2 className="text-2xl md:text-3xl font-bold text-slate-900">{step.title}</h2>
+        <h2 className="finit-h1 text-white">{step.title}</h2>
 
         <div className="space-y-2">
           <h4 className="font-semibold text-slate-900 flex items-center gap-2 text-sm">
@@ -68,7 +68,7 @@ export function ProcessStep({ step, index, isVisible, isActive, layout }: Proces
             {step.details.map((detail, i) => (
               <li key={i} className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed">
                 <span className="text-white text-xs">✓</span>
-                {detail}
+                <span className="finit-body text-white/90">{detail}</span>
               </li>
             ))}
           </ul>
@@ -82,8 +82,8 @@ export function ProcessStep({ step, index, isVisible, isActive, layout }: Proces
             <span className="text-primary text-lg">🎯</span>
           </div>
           <div>
-            <h4 className="font-semibold text-slate-900 mb-1 text-sm">Client Case</h4>
-            <p className="text-slate-700 italic text-sm leading-relaxed">
+            <h4 className="finit-h2 text-white">Client Case</h4>
+            <p className="finit-body text-white/90 italic mb-6">
               &quot;{step.useCase}&quot;
             </p>
           </div>
