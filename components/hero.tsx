@@ -17,8 +17,6 @@ import { ProjectRequestDialog } from "@/components/project-request-dialog";
  * All overlays are drawn in the same coordinate system (viewBox 0 0 818 768)
  * so they sit exactly on top of the existing network lines and hubs.
  */
-import { motion, useReducedMotion } from "framer-motion";
-
 function MagicVisual() {
   const reduce = useReducedMotion();
 
@@ -148,7 +146,6 @@ function MagicVisual() {
     </div>
   );
 }
-
 
 
 export function Hero() {
