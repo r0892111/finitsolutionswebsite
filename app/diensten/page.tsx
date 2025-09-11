@@ -10,6 +10,7 @@ import { useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, Lightbulb, Code, TestTube, Rocket, ChevronDown } from "lucide-react";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
+import { useLanguage } from "@/contexts/language-context";
 
 const processSteps = [
   {
@@ -137,6 +138,7 @@ const processSteps = [
 export default function DienstenPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -219,9 +221,9 @@ export default function DienstenPage() {
           </motion.div>
 
           <h1 className="text-8xl md:text-9xl lg:text-[10rem] font-extralight text-white mb-12 tracking-tight leading-none">
-            Strategic
+            {t('diensten.hero.title').split(' ')[0]}
             <span className="block bg-gradient-to-r from-[#F7E69B] via-[#F7E69B]/80 to-[#F7E69B] bg-clip-text text-transparent">
-              Excellence
+              {t('diensten.hero.title').split(' ')[1]}
             </span>
           </h1>
           
@@ -231,8 +233,7 @@ export default function DienstenPage() {
             transition={{ duration: 1.2, delay: 1 }}
             className="text-2xl md:text-3xl text-slate-300 font-extralight max-w-5xl mx-auto leading-relaxed mb-20 tracking-wide"
           >
-            Transforming digital ambitions into measurable business outcomes through 
-            methodical excellence and innovative engineering.
+            {t('diensten.hero.subtitle')}
           </motion.p>
 
           <motion.div
@@ -243,7 +244,7 @@ export default function DienstenPage() {
             onClick={() => handleStepNavigation(0)}
           >
             <div className="inline-flex flex-col items-center gap-6 text-white/60 hover:text-white transition-all duration-700">
-              <span className="font-extralight tracking-[0.3em] text-sm uppercase">Explore Process</span>
+              <span className="font-extralight tracking-[0.3em] text-sm uppercase">{t('diensten.hero.explore')}</span>
               <motion.div
                 animate={{ y: [0, 12, 0] }}
                 transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
@@ -289,22 +290,27 @@ export default function DienstenPage() {
                     <Search className="h-8 w-8 text-white" />
                   </div>
                   <div>
-                    <div className="text-3xl font-bold text-white">Phase {processSteps[0].id}</div>
-                    <div className="text-lg text-white/60 font-light tracking-wide">{processSteps[0].subtitle}</div>
+                    <div className="text-3xl font-bold text-white">{t('diensten.phase')} {processSteps[0].id}</div>
+                    <div className="text-lg text-white/60 font-light tracking-wide">{t('diensten.step1.subtitle')}</div>
                   </div>
                 </div>
 
                 <h2 className="text-7xl md:text-8xl font-extralight text-white tracking-tight leading-none">
-                  {processSteps[0].title}
+                  {t('diensten.step1.title')}
                 </h2>
                 
                 <p className="text-2xl text-white/85 font-light leading-relaxed max-w-3xl">
-                  {processSteps[0].description}
+                  {t('diensten.step1.description')}
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {processSteps[0].keyInsights.map((insight: string, i: number) => (
+                {[
+                  t('diensten.step1.insights.1'),
+                  t('diensten.step1.insights.2'),
+                  t('diensten.step1.insights.3'),
+                  t('diensten.step1.insights.4')
+                ].map((insight: string, i: number) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, y: 40 }}
@@ -333,24 +339,24 @@ export default function DienstenPage() {
               <div className="bg-white/8 backdrop-blur-xl rounded-3xl p-10 border border-white/15 shadow-2xl">
                 <div className="space-y-8">
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{processSteps[0].clientExample.company}</h3>
+                    <h3 className="text-2xl font-bold text-white mb-2">{t('diensten.step1.case.company')}</h3>
                     <p className="text-white/50 text-sm font-light tracking-wide uppercase">Case Study</p>
                   </div>
                   
                   <div className="space-y-6">
                     <div>
                       <h4 className="text-[#F7E69B] font-semibold mb-3 tracking-wide text-lg">Challenge</h4>
-                      <p className="text-white/85 leading-relaxed font-light">{processSteps[0].clientExample.challenge}</p>
+                      <p className="text-white/85 leading-relaxed font-light">{t('diensten.step1.case.challenge')}</p>
                     </div>
                     
                     <div>
                       <h4 className="text-[#F7E69B] font-semibold mb-3 tracking-wide text-lg">Approach</h4>
-                      <p className="text-white/85 leading-relaxed font-light">{processSteps[0].clientExample.solution}</p>
+                      <p className="text-white/85 leading-relaxed font-light">{t('diensten.step1.case.solution')}</p>
                     </div>
                     
                     <div>
                       <h4 className="text-[#F7E69B] font-semibold mb-3 tracking-wide text-lg">Result</h4>
-                      <p className="text-white/85 leading-relaxed font-light">{processSteps[0].clientExample.outcome}</p>
+                      <p className="text-white/85 leading-relaxed font-light">{t('diensten.step1.case.outcome')}</p>
                     </div>
                   </div>
                 </div>
@@ -410,23 +416,28 @@ export default function DienstenPage() {
               </div>
               
               <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/8 backdrop-blur-sm border border-white/15 mb-8">
-                <span className="text-white/80 text-lg font-light tracking-wide">Phase {processSteps[1].id}</span>
+                <span className="text-white/80 text-lg font-light tracking-wide">{t('diensten.phase')} {processSteps[1].id}</span>
                 <div className="w-2 h-2 rounded-full bg-white/40"></div>
-                <span className="text-white/60 text-lg font-light">{processSteps[1].subtitle}</span>
+                <span className="text-white/60 text-lg font-light">{t('diensten.step2.subtitle')}</span>
               </div>
               
               <h2 className="text-7xl md:text-8xl font-extralight text-white mb-8 tracking-tight">
-                {processSteps[1].title}
+                {t('diensten.step2.title')}
               </h2>
               
               <p className="text-2xl text-white/85 font-light leading-relaxed max-w-4xl mx-auto">
-                {processSteps[1].description}
+                {t('diensten.step2.description')}
               </p>
             </motion.div>
 
             {/* Architecture showcase grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-              {processSteps[1].keyInsights.map((insight: string, i: number) => (
+              {[
+                t('diensten.step2.insights.1'),
+                t('diensten.step2.insights.2'),
+                t('diensten.step2.insights.3'),
+                t('diensten.step2.insights.4')
+              ].map((insight: string, i: number) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 80 }}
@@ -459,21 +470,21 @@ export default function DienstenPage() {
                     <div className="w-3 h-3 rounded-full bg-[#F7E69B]"></div>
                   </div>
                   <h4 className="text-[#F7E69B] font-semibold text-xl tracking-wide">Challenge</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{processSteps[1].clientExample.challenge}</p>
+                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step2.case.challenge')}</p>
                 </div>
                 <div className="text-center space-y-4">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/10 flex items-center justify-center mx-auto">
                     <div className="w-3 h-3 rounded-full bg-[#F7E69B]"></div>
                   </div>
                   <h4 className="text-[#F7E69B] font-semibold text-xl tracking-wide">Solution</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{processSteps[1].clientExample.solution}</p>
+                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step2.case.solution')}</p>
                 </div>
                 <div className="text-center space-y-4">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/10 flex items-center justify-center mx-auto">
                     <div className="w-3 h-3 rounded-full bg-[#F7E69B]"></div>
                   </div>
                   <h4 className="text-[#F7E69B] font-semibold text-xl tracking-wide">Impact</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{processSteps[1].clientExample.outcome}</p>
+                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step2.case.outcome')}</p>
                 </div>
               </div>
             </motion.div>
@@ -532,17 +543,17 @@ export default function DienstenPage() {
                   <Code className="h-10 w-10 text-white" />
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-white">Phase {processSteps[2].id}</div>
-                  <div className="text-xl text-white/60 font-light tracking-wide">{processSteps[2].subtitle}</div>
+                  <div className="text-4xl font-bold text-white">{t('diensten.phase')} {processSteps[2].id}</div>
+                  <div className="text-xl text-white/60 font-light tracking-wide">{t('diensten.step3.subtitle')}</div>
                 </div>
               </div>
 
               <h2 className="text-6xl md:text-7xl font-extralight text-white tracking-tight leading-tight">
-                {processSteps[2].title}
+                {t('diensten.step3.title')}
               </h2>
               
               <p className="text-xl text-white/85 font-light leading-relaxed">
-                {processSteps[2].description}
+                {t('diensten.step3.description')}
               </p>
 
               {/* Technical terminal */}
@@ -728,7 +739,12 @@ export default function DienstenPage() {
             >
               <h4 className="text-2xl font-bold text-white mb-8">Validation Process</h4>
               <div className="space-y-6">
-                {processSteps[3].keyInsights.map((insight: string, i: number) => (
+                {[
+                  t('diensten.step4.insights.1'),
+                  t('diensten.step4.insights.2'),
+                  t('diensten.step4.insights.3'),
+                  t('diensten.step4.insights.4')
+                ].map((insight: string, i: number) => (
                   <div key={i} className="flex items-center gap-5 p-4 rounded-lg bg-white/5">
                     <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center shadow">
                       <span className="text-white text-sm font-bold">✓</span>
@@ -750,15 +766,15 @@ export default function DienstenPage() {
               <div className="space-y-6">
                 <div>
                   <h5 className="text-[#F7E69B] font-semibold mb-3 text-lg">Challenge</h5>
-                  <p className="text-white/80 leading-relaxed font-light">{processSteps[3].clientExample.challenge}</p>
+                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step4.case.challenge')}</p>
                 </div>
                 <div>
                   <h5 className="text-[#F7E69B] font-semibold mb-3 text-lg">Solution</h5>
-                  <p className="text-white/80 leading-relaxed font-light">{processSteps[3].clientExample.solution}</p>
+                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step4.case.solution')}</p>
                 </div>
                 <div>
                   <h5 className="text-[#F7E69B] font-semibold mb-3 text-lg">Outcome</h5>
-                  <p className="text-white/80 leading-relaxed font-light">{processSteps[3].clientExample.outcome}</p>
+                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step4.case.outcome')}</p>
                 </div>
               </div>
             </motion.div>
@@ -817,17 +833,17 @@ export default function DienstenPage() {
               </div>
               
               <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white/8 backdrop-blur-sm border border-white/15 mb-10">
-                <span className="text-white/80 text-xl font-light tracking-wide">Phase {processSteps[4].id}</span>
+                <span className="text-white/80 text-xl font-light tracking-wide">{t('diensten.phase')} {processSteps[4].id}</span>
                 <div className="w-2 h-2 rounded-full bg-white/40"></div>
-                <span className="text-white/60 text-xl font-light">{processSteps[4].subtitle}</span>
+                <span className="text-white/60 text-xl font-light">{t('diensten.step5.subtitle')}</span>
               </div>
               
               <h2 className="text-7xl md:text-8xl font-extralight text-white mb-10 tracking-tight">
-                {processSteps[4].title}
+                {t('diensten.step5.title')}
               </h2>
               
               <p className="text-2xl text-white/85 font-light leading-relaxed max-w-5xl mx-auto">
-                {processSteps[4].description}
+                {t('diensten.step5.description')}
               </p>
             </motion.div>
 
@@ -873,7 +889,12 @@ export default function DienstenPage() {
               >
                 <h4 className="text-2xl font-bold text-white mb-8">Support Framework</h4>
                 <div className="space-y-6">
-                  {processSteps[4].keyInsights.map((insight: string, i: number) => (
+                  {[
+                    t('diensten.step5.insights.1'),
+                    t('diensten.step5.insights.2'),
+                    t('diensten.step5.insights.3'),
+                    t('diensten.step5.insights.4')
+                  ].map((insight: string, i: number) => (
                     <div key={i} className="flex items-start gap-4">
                       <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#F7E69B] to-[#F7E69B]/70 flex items-center justify-center mt-1 shadow">
                         <span className="text-[#1C2C55] text-sm font-bold">✓</span>
@@ -924,21 +945,21 @@ export default function DienstenPage() {
                     <div className="w-4 h-4 rounded-full bg-[#F7E69B]"></div>
                   </div>
                   <h4 className="text-[#F7E69B] font-semibold text-xl">Deployment</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{processSteps[4].clientExample.challenge}</p>
+                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step5.case.challenge')}</p>
                 </div>
                 <div className="text-center space-y-4">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/10 flex items-center justify-center mx-auto">
                     <div className="w-4 h-4 rounded-full bg-[#F7E69B]"></div>
                   </div>
                   <h4 className="text-[#F7E69B] font-semibold text-xl">Adoption</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{processSteps[4].clientExample.solution}</p>
+                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step5.case.solution')}</p>
                 </div>
                 <div className="text-center space-y-4">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/10 flex items-center justify-center mx-auto">
                     <div className="w-4 h-4 rounded-full bg-[#F7E69B]"></div>
                   </div>
                   <h4 className="text-[#F7E69B] font-semibold text-xl">Results</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{processSteps[4].clientExample.outcome}</p>
+                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step5.case.outcome')}</p>
                 </div>
               </div>
             </motion.div>
@@ -987,15 +1008,14 @@ export default function DienstenPage() {
           className="text-center z-10 px-6 max-w-6xl mx-auto"
         >
           <h2 className="text-7xl md:text-8xl font-extralight text-white mb-12 tracking-tight leading-tight">
-            Ready for
+            {t('diensten.cta.title').split(' ')[0]} {t('diensten.cta.title').split(' ')[1]}
             <span className="block bg-gradient-to-r from-[#F7E69B] via-[#F7E69B]/90 to-[#F7E69B] bg-clip-text text-transparent">
-              Excellence?
+              {t('diensten.cta.title').split(' ')[2]}
             </span>
           </h2>
           
           <p className="text-2xl md:text-3xl text-slate-300 font-extralight max-w-4xl mx-auto leading-relaxed mb-20">
-            Transform your digital vision into measurable business impact. 
-            Your ambition deserves exceptional execution.
+            {t('diensten.cta.subtitle')}
           </p>
 
           <motion.div
@@ -1004,7 +1024,7 @@ export default function DienstenPage() {
             transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
             <ProjectRequestDialog 
-              buttonText="Begin Your Transformation"
+              buttonText={t('diensten.cta.button')}
               buttonClassName="bg-gradient-to-r from-[#F7E69B] via-[#F7E69B]/90 to-[#F7E69B] hover:from-[#F7E69B]/90 hover:via-[#F7E69B]/80 hover:to-[#F7E69B]/90 text-[#1C2C55] px-16 py-8 text-xl rounded-full shadow-2xl hover:shadow-3xl transition-all duration-700 font-semibold tracking-wide border border-[#F7E69B]/30"
             />
           </motion.div>
