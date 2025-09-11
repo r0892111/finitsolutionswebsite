@@ -87,7 +87,7 @@ export default function MarketplacePage() {
               />
               {/* Vertical separator line */}
               <div className="w-px h-16 bg-white/30"></div>
-              <div className="text-left min-w-0 flex-1 min-w-[600px] max-w-none">
+              <div className="text-left min-w-0 flex-1 min-w-[700px] max-w-none">
                 <h1 className="finit-h1 text-white mb-2">
                   Plug & play <span className="finit-highlight">AI solutions</span>
                 </h1>
