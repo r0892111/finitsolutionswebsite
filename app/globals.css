@@ -51,6 +51,44 @@
   .font-montserrat {
     font-family: var(--font-montserrat);
   }
+  .font-general-sans {
+    font-family: var(--font-general-sans);
+  }
+}
+
+/* Finit Brand Typography System */
+.finit-h1 {
+  font-family: var(--font-general-sans);
+  font-weight: 700; /* Bold */
+  font-size: clamp(2.5rem, 4vw, 3.5rem); /* 40-56px responsive */
+  line-height: 1.1;
+  letter-spacing: normal;
+}
+
+.finit-h2 {
+  font-family: var(--font-general-sans);
+  font-weight: 500; /* Medium */
+  font-size: clamp(1.5rem, 3vw, 2rem); /* 24-32px responsive */
+  line-height: 1.25;
+  letter-spacing: normal;
+}
+
+.finit-body {
+  font-family: var(--font-general-sans);
+  font-weight: 400; /* Regular */
+  font-size: clamp(1rem, 2vw, 1.125rem); /* 16-18px responsive */
+  line-height: 1.6;
+  letter-spacing: normal;
+}
+
+/* Finit highlight pill treatment */
+.finit-highlight {
+  background: linear-gradient(90deg, #F7E69B 0%, #FFFFFF 100%);
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(28,44,85,0.18);
+  padding: 0.1em 0.35em;
+  color: #1C2C55;
+  font-weight: 700;
 }
 
 .bg-grid-pattern {

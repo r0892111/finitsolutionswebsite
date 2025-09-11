@@ -18,6 +18,14 @@ const montserrat = Montserrat({
   variable: '--font-montserrat',
 });
 
+// General Sans font configuration for Finit brand
+const generalSans = Inter({ 
+  subsets: ['latin'],
+  weight: ['400', '500', '700'], // Regular, Medium, Bold
+  variable: '--font-general-sans',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
   description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen. Ontdek hoe wij uw bedrijfsprocessen kunnen optimaliseren.',
@@ -129,7 +137,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${inter.className} ${montserrat.variable}`}>
+      <body className={`${inter.className} ${montserrat.variable} ${generalSans.variable}`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe 
