@@ -560,12 +560,12 @@ export default function DienstenPage() {
                   <span className="ml-6 text-slate-400 text-sm font-light tracking-wide">development-environment</span>
                 </div>
                 <div className="font-mono text-sm space-y-3 text-slate-300">
-                  <div className="text-green-400">// Enterprise-grade system architecture</div>
+                  <div className="text-green-400">Enterprise-grade system architecture</div>
                   <div><span className="text-blue-400">const</span> <span className="text-yellow-300">system</span> = <span className="text-purple-400">new</span> <span className="text-blue-300">EnterpriseProcessor</span>();</div>
                   <div><span className="text-yellow-300">system</span>.<span className="text-green-300">initializeSecureInfrastructure</span>();</div>
                   <div><span className="text-yellow-300">system</span>.<span className="text-green-300">deployMicroservices</span>(<span className="text-orange-300">'production'</span>);</div>
                   <div><span className="text-yellow-300">system</span>.<span className="text-green-300">enableRealTimeMonitoring</span>();</div>
-                  <div className="text-green-400">// System operational and optimized</div>
+                  <div className="text-green-400">System operational and optimized</div>
                 </div>
               </motion.div>
             </motion.div>
