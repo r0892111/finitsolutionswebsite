@@ -29,26 +29,26 @@ export function Hero() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-4"
-          >
-            <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight text-blue-900">
-              AI workforces
-              <br className="md:block hidden" />
-              <span className="font-semibold"> that automate </span>
-              <br className="md:block hidden" />
-              <span className="font-semibold"> and scale your business.</span>
-            </h1>
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.2 }}
+  className="space-y-4"
+>
+  <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight text-blue-900">
+    AI Workforces  
+    <br className="md:block hidden" />
+    <span className="font-semibold">to automate, scale,</span>  
+    <br className="md:block hidden" />
+    <span className="font-semibold">and transform your business.</span>
+  </h1>
 
-            {/* Subheading */}
-            <p className="text-xl font-semibold lg:text-2xl text-blue-900 leading-relaxed max-w-2xl">
-              Building AI workforces that automate{" "}
-              <br className="md:block hidden" /> inefficiency and give your
-              company powerful leverage.
-            </p>
-          </motion.div>
+  {/* Subheading */}
+  <p className="text-xl font-semibold lg:text-2xl text-blue-900 leading-relaxed max-w-2xl">
+    We build AI-powered workforces that eliminate inefficiencies  
+    <br className="md:block hidden" /> and unlock powerful leverage for your company’s growth.
+  </p>
+</motion.div>
+
 
           {/* CTA Buttons */}
           <motion.div
