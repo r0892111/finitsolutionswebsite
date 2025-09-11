@@ -43,7 +43,7 @@ export function Navbar() {
     <header
       className={cn(
         `fixed ${
-          scrolled || isOpen ? "bg-white shadow-md" : "bg-transparent"
+          scrolled || isOpen ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100" : "bg-white/80 backdrop-blur-sm shadow-sm"
         } top-0 w-full z-50 transition-all duration-300`
       )}
     >
@@ -69,22 +69,22 @@ export function Navbar() {
             </Link>
           </div>
 
-          <div className=" lg:flex hidden items-center bg-gray-900/20 backdrop-blur-sm rounded-full px-2 py-1 mr-6">
+          <div className="lg:flex hidden items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-2 py-1 mr-6 border border-gray-200/50 shadow-sm">
             <Link
               href="/diensten"
-              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 transition-all duration-200"
+              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
             >
               Tailored IT Solutions
             </Link>
             <Link
               href="/marketplace"
-              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 transition-all duration-200"
+              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
             >
               Marketplace
             </Link>
             <Link
               href="/about"
-              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 transition-all duration-200"
+              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
             >
               About Us
             </Link>
