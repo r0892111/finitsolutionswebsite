@@ -27,7 +27,7 @@ const team = [
     name: "Jord Goossens",
     role: "Chief Technology Officer",
     image: "/jord.png",
-    linkedin: "https://www.linkedin.com/in/jord-goossens",
+    linkedin: "https://www.linkedin.com/in/jord-goossens/",
     description: "Als Chief Technology Officer brengt Jord een schat aan ervaring mee in enterprise-level softwarearchitectuur en AI-implementaties. Met zijn diepgaande kennis van cloud-infrastructuur en machine learning zorgt hij ervoor dat onze technische oplossingen schaalbaar, veilig en toekomstbestendig zijn. Jord's strategische visie op technologie-innovatie vormt de ruggengraat van onze technische excellentie."
   },
 ];
