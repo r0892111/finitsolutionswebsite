@@ -128,12 +128,12 @@ export default function MarketplacePage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
               {/* Product Image - 5/12 width */}
               <div className="lg:col-span-5 relative">
-                <div className="aspect-[4/3] lg:aspect-auto lg:h-full relative overflow-hidden rounded-l-xl">
+                <div className="aspect-[4/3] lg:aspect-auto lg:h-full relative overflow-hidden rounded-l-xl bg-gray-50">
                   <Image
                     src="/finit voicelink 1.JPG"
                     alt="VoiceLink Interface"
                     fill
-                    className="object-contain p-4"
+                    className="object-contain p-6 rounded-l-xl"
                     sizes="(max-width: 1024px) 100vw, 42vw"
                     unoptimized
                   />
