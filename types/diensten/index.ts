@@ -15,7 +15,7 @@ export interface ProcessStep {
   details: string[];
   useCase: string;
   visual: string;
-  metrics: {
+  metrics?: {
     time: string;
     deliverable: string;
     impact: string;

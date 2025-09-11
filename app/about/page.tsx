@@ -443,7 +443,7 @@ export default function AboutPage() {
                 {/* Quote */}
                 <div className="bg-slate-50 rounded-2xl p-6 border-l-4 border-primary">
                   <p className="text-slate-700 italic text-lg leading-relaxed">
-                    "{selectedMember.quote}"
+                    &ldquo;{selectedMember.quote}&rdquo;
                   </p>
                 </div>
 

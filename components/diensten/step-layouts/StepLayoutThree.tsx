@@ -53,11 +53,11 @@ export function StepLayoutThree({ step, isEven }: StepLayoutThreeProps) {
             <div className="w-3 h-3 rounded-full bg-green-500"></div>
           </div>
           <div className="font-mono text-sm text-slate-300 space-y-2">
-            <div className="text-green-400">// AI-gedreven kennisbank implementatie</div>
+            <div className="text-green-400">{/* AI-gedreven kennisbank implementatie */}</div>
             <div><span className="text-blue-400">const</span> <span className="text-yellow-300">ragSystem</span> = <span className="text-purple-400">new</span> <span className="text-blue-300">DocumentProcessor</span>();</div>
-            <div><span className="text-yellow-300">ragSystem</span>.<span className="text-green-300">ingestDocuments</span>(<span className="text-orange-300">'juridische-database'</span>);</div>
-            <div><span className="text-yellow-300">ragSystem</span>.<span className="text-green-300">createIndex</span>(<span className="text-orange-300">'vector-embeddings'</span>);</div>
-            <div><span className="text-yellow-300">ragSystem</span>.<span className="text-green-300">enableChat</span>(<span className="text-orange-300">'natuurlijke-taal'</span>);</div>
+            <div><span className="text-yellow-300">ragSystem</span>.<span className="text-green-300">ingestDocuments</span>(<span className="text-orange-300">&apos;juridische-database&apos;</span>);</div>
+            <div><span className="text-yellow-300">ragSystem</span>.<span className="text-green-300">createIndex</span>(<span className="text-orange-300">&apos;vector-embeddings&apos;</span>);</div>
+            <div><span className="text-yellow-300">ragSystem</span>.<span className="text-green-300">enableChat</span>(<span className="text-orange-300">&apos;natuurlijke-taal&apos;</span>);</div>
           </div>
         </motion.div>
       </div>
@@ -85,7 +85,7 @@ export function StepLayoutThree({ step, isEven }: StepLayoutThreeProps) {
 
         <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
           <h4 className="text-lg font-bold text-white mb-4">Client Case</h4>
-          <p className="text-slate-200 italic leading-relaxed">"{step.useCase}"</p>
+          <p className="text-slate-200 italic leading-relaxed">&ldquo;{step.useCase}&rdquo;</p>
         </div>
       </motion.div>
     </div>

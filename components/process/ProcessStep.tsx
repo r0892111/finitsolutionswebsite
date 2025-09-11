@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { DivideIcon as LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface ProcessStepProps {
   step: {
@@ -78,7 +78,7 @@ export function ProcessStep({ step, index, isVisible, isActive, accent }: Proces
           <div>
             <h4 className="font-semibold text-slate-900 mb-1 text-sm">Client Case</h4>
             <p className="text-slate-700 italic text-sm leading-relaxed">
-              "{step.useCase}"
+              &ldquo;{step.useCase}&rdquo;
             </p>
           </div>
         </div>

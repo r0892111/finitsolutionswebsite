@@ -9,7 +9,7 @@ export function useProcessAutoplay(
   isPlaying: boolean,
   hasStarted: boolean,
   activeStep: number,
-  setActiveStep: (step: number) => void,
+  setActiveStep: (step: number | ((prev: number) => number)) => void,
   setIsPlaying: (playing: boolean) => void,
   totalSteps: number
 ) {

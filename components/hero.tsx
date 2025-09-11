@@ -171,7 +171,7 @@ export function Hero() {
             <p className="text-xl font-semibold lg:text-2xl text-blue-900 leading-relaxed max-w-2xl">
               We build AI-powered workforces that eliminate inefficiencies
               <br className="md:block hidden" /> and unlock powerful leverage
-              for your company's growth.
+              for your company&apos;s growth.
             </p>
           </motion.div>
 

@@ -67,8 +67,7 @@ export function ProcessStep({ step, index, isVisible, isActive, layout }: Proces
           <ul className="space-y-1.5">
             {step.details.map((detail, i) => (
               <li key={i} className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed">
-                  <span className="text-white text-xs">✓</span>
-                </div>
+                <span className="text-white text-xs">✓</span>
                 {detail}
               </li>
             ))}
