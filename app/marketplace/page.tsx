@@ -75,16 +75,18 @@ export default function MarketplacePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-6 flex items-center justify-center gap-6"
+              className="mb-6 flex items-center justify-center gap-8"
             >
               <Image
                 src="/Finit Marketplace White.svg"
                 alt="Finit Marketplace"
-                width={180}
-                height={90}
-                className="opacity-90"
+                width={220}
+                height={110}
+                className="opacity-90 mr-4"
                 priority
               />
+              {/* Vertical separator line */}
+              <div className="w-px h-16 bg-white/30"></div>
               <div className="text-left">
                 <h1 className="finit-h1 text-white mb-2">
                   Plug & play <span className="finit-highlight">AI solutions</span>
