@@ -164,7 +164,7 @@ export default function DienstenPage() {
             transition={{ duration: 1, delay: 0.6 }}
             className="max-w-5xl mx-auto mb-16"
           >
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
               {processSteps.map((step, index) => {
                 const IconComponent = step.icon;
                 return (
@@ -173,13 +173,31 @@ export default function DienstenPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                    className="text-center group"
+                    className="text-center group cursor-pointer"
                   >
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r ${step.accent} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110`}>
-                      <IconComponent className="h-8 w-8 text-white" />
+                    <div className="relative w-20 h-20 mx-auto mb-6">
+                      {/* Professional glass morphism container */}
+                      <div className="absolute inset-0 bg-white/20 backdrop-blur-xl rounded-2xl border border-white/30 shadow-2xl group-hover:shadow-3xl transition-all duration-500 group-hover:scale-105" />
+                      
+                      {/* Icon container with brand colors */}
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/25 to-white/10 flex items-center justify-center border border-white/40 shadow-lg">
+                          <IconComponent className="h-6 w-6 text-white drop-shadow-sm" />
+                        </div>
+                      </div>
+                      
+                      {/* Subtle accent ring */}
+                      <div className="absolute inset-0 rounded-2xl ring-1 ring-white/20 group-hover:ring-white/40 transition-all duration-300" />
                     </div>
-                    <div className="text-sm font-medium text-white mb-2">{step.title}</div>
-                    <div className="text-xs text-white/70 font-light">{step.subtitle}</div>
+                    
+                    <div className="space-y-2">
+                      <div className="text-base font-semibold text-white tracking-wide group-hover:text-white/90 transition-colors duration-300">
+                        {step.title}
+                      </div>
+                      <div className="text-sm text-white/80 font-light tracking-wide leading-relaxed">
+                        {step.subtitle}
+                      </div>
+                    </div>
                   </motion.div>
                 );
               })}
