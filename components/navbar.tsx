@@ -69,29 +69,31 @@ export function Navbar() {
             </Link>
           </div>
 
+          <div className="lg:flex hidden items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-2 py-1 mr-6 border border-gray-200/50 shadow-sm">
+            <Link
+              href="/diensten"
+              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
+            >
+              Tailored IT Solutions
+            </Link>
+            <Link
+              href="/marketplace"
+              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
+            >
+              Marketplace
+            </Link>
+            <Link
+              href="/about"
+              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
+            >
+              About Us
+            </Link>
+          </div>
+
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center">
             {/* Navigation Pills Container */}
-            <div className="lg:flex hidden items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-2 py-1 border border-gray-200/50 shadow-sm absolute left-1/2 transform -translate-x-1/2">
-              <Link
-                href="/diensten"
-                className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
-              >
-                Tailored IT Solutions
-              </Link>
-              <Link
-                href="/marketplace"
-                className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
-              >
-                Marketplace
-              </Link>
-              <Link
-                href="/about"
-                className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
-              >
-                About Us
-              </Link>
-            </div>
+
           </nav>
           {/* Mobile Navigation Toggle */}
           <div className="flex lg:hidden items-center space-x-4">
