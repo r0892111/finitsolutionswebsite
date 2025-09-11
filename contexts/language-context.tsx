@@ -33,9 +33,9 @@ const translations = {
     'hero.title.line1': 'AI Workforces',
     'hero.title.line2': 'that automate',
     'hero.title.line3': 'and scale your business.',
-    'hero.subtitle': 'We build AI-powered software on top of the systems you already use.\nOur goal is to eliminate inefficiencies and unlock powerful leverage\nfor your company\'s growth.',
-    'hero.cta.primary': 'Get Started',
-    'hero.cta.secondary': 'Learn More',
+    'hero.subtitle': 'Wij bouwen AI-gestuurde software bovenop de systemen die je al gebruikt.\nOns doel is inefficiënties elimineren en krachtige hefbomen\nvoor de groei van je bedrijf ontgrendelen.',
+    'hero.cta.primary': 'Aan de slag',
+    'hero.cta.secondary': 'Meer weten',
     
     // About
     'about.badge': 'Diensten',
