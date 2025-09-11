@@ -1,1035 +1,508 @@
 "use client";
 
-/**
- * Premium professional multi-step interface
- * Sophisticated dark blue gradients with subtle yellow accents, highly unique layouts per step
- */
-
-import React from "react";
-import { useState, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Search, Lightbulb, Code, TestTube, Rocket, ChevronDown } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
+import { Search, Lightbulb, Code, TestTube, Rocket, ChevronRight, Cog, ArrowDown, Play, Pause, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
-import { useLanguage } from "@/contexts/language-context";
+import { useProcessScroll } from "@/hooks/useProcessScroll";
+import { useProcessAutoplay } from "@/hooks/useProcessAutoplay";
 
 const processSteps = [
   {
     id: 1,
-    title: "Discovery & Analysis",
-    subtitle: "Strategic Foundation",
-    description: "Comprehensive business process analysis to identify optimization opportunities and technical requirements.",
+    title: "Probleem Identificatie",
+    subtitle: "Ontdekken & Analyseren",
+    description: "We beginnen met een grondige analyse van uw huidige situatie en identificeren de kernuitdagingen.",
     icon: Search,
-    keyInsights: [
-      "Stakeholder alignment workshops",
-      "Technical infrastructure assessment", 
-      "Process bottleneck identification",
-      "ROI potential calculation"
+    accent: "from-blue-500 to-blue-600",
+    details: [
+      "Uitgebreide stakeholder interviews",
+      "Analyse van bestaande systemen en workflows",
+      "Identificatie van pijnpunten en inefficiënties",
+      "Documentatie van huidige processen"
     ],
-    clientExample: {
-      company: "Legal Technology Firm",
-      challenge: "Document retrieval across 15+ systems consuming 4 hours daily per attorney",
-      solution: "Unified knowledge architecture with intelligent search capabilities",
-      outcome: "85% reduction in information retrieval time"
-    },
-    metrics: {
-      duration: "1-2 weeks",
-      deliverable: "Strategic roadmap",
-      impact: "Clear optimization path"
-    }
+    useCase: "Een advocatenkantoor worstelt met het snel vinden van relevante juridische informatie verspreid over verschillende documenten en systemen.",
+    visual: "analysis"
   },
   {
     id: 2,
-    title: "Solution Architecture",
-    subtitle: "Technical Blueprint",
-    description: "Designing scalable, secure systems that integrate seamlessly with your existing infrastructure.",
+    title: "Oplossing Ontwerp",
+    subtitle: "Strategisch Plannen",
+    description: "Op basis van onze bevindingen ontwerpen we een op maat gemaakte oplossing die perfect aansluit bij uw behoeften.",
     icon: Lightbulb,
-    keyInsights: [
-      "Microservices architecture design",
-      "AI/ML model selection strategy",
-      "Integration ecosystem planning",
-      "Security framework implementation"
+    accent: "from-amber-500 to-orange-500",
+    details: [
+      "Technische architectuur en systeemontwerp",
+      "User experience en interface planning",
+      "Integratiestrategie met bestaande systemen",
+      "Projectplanning en milestone definitie"
     ],
-    clientExample: {
-      company: "Legal Technology Firm",
-      challenge: "Complex legal terminology requiring natural language processing capabilities",
-      solution: "RAG architecture with vector embeddings for semantic search",
-      outcome: "340% improvement in search relevance accuracy"
-    },
-    metrics: {
-      duration: "2-3 weeks",
-      deliverable: "Technical blueprint",
-      impact: "Validated approach"
-    }
+    useCase: "We stellen een AI-gedreven kennisbank voor die alle juridische documenten indexeert en doorzoekbaar maakt via natuurlijke taal.",
+    visual: "design"
   },
   {
     id: 3,
-    title: "Development & Integration",
-    subtitle: "Precision Engineering",
-    description: "Building robust, scalable solutions with enterprise-grade security and performance optimization.",
+    title: "Ontwikkeling",
+    subtitle: "Bouwen & Integreren",
+    description: "Ons ervaren team bouwt uw oplossing met de nieuwste technologieën en best practices.",
     icon: Code,
-    keyInsights: [
-      "Test-driven development methodology",
-      "Real-time performance monitoring",
-      "Progressive deployment strategy",
-      "Continuous integration pipeline"
+    accent: "from-green-500 to-emerald-600",
+    details: [
+      "Agile ontwikkeling met regelmatige updates",
+      "Moderne technologieën en frameworks",
+      "Veilige en schaalbare architectuur",
+      "Continue integratie en deployment"
     ],
-    clientExample: {
-      company: "Legal Technology Firm",
-      challenge: "Processing 10TB of legal documents with sub-second query response requirements",
-      solution: "Distributed processing with intelligent caching and edge optimization",
-      outcome: "Response times under 200ms with 99.9% uptime"
-    },
-    metrics: {
-      duration: "6-12 weeks",
-      deliverable: "Production-ready system",
-      impact: "Measurable performance"
-    }
+    useCase: "We ontwikkelen een RAG-systeem dat documenten ingesteert, indexeert en een intuïtieve chat-interface biedt voor juridische zoekopdrachten.",
+    visual: "development"
   },
   {
     id: 4,
-    title: "Quality Assurance",
-    subtitle: "Excellence Validation",
-    description: "Rigorous testing protocols ensuring flawless performance and user experience optimization.",
+    title: "Testing & Validatie",
+    subtitle: "Kwaliteit Verzekeren",
+    description: "Uitgebreide tests zorgen ervoor dat uw oplossing perfect functioneert voordat we live gaan.",
     icon: TestTube,
-    keyInsights: [
-      "Automated regression testing",
-      "Load testing and stress scenarios",
-      "Security penetration testing",
-      "User acceptance validation"
+    accent: "from-purple-500 to-violet-600",
+    details: [
+      "Geautomatiseerde en handmatige testing",
+      "Performance en security audits",
+      "User acceptance testing",
+      "Bug fixes en optimalisaties"
     ],
-    clientExample: {
-      company: "Legal Technology Firm",
-      challenge: "Achieving 99.5%+ accuracy for legal document analysis in production environment",
-      solution: "Multi-layered validation with AI model fine-tuning and human oversight",
-      outcome: "99.8% accuracy with 40% faster user adoption"
-    },
-    metrics: {
-      duration: "2-3 weeks",
-      deliverable: "Validated system",
-      impact: "Quality assurance"
-    }
+    useCase: "We testen de zoeknauwkeurigheid, gebruikersinterface en beveiligingsprotocollen met echte juridische cases.",
+    visual: "testing"
   },
   {
     id: 5,
-    title: "Launch & Optimization",
-    subtitle: "Continuous Excellence",
-    description: "Strategic deployment with ongoing performance monitoring and continuous improvement cycles.",
+    title: "Lancering & Ondersteuning",
+    subtitle: "Live Gaan & Groeien",
+    description: "We lanceren uw oplossing en bieden continue ondersteuning voor optimale prestaties.",
     icon: Rocket,
-    keyInsights: [
-      "Phased rollout strategy",
-      "Real-time monitoring systems",
-      "User training programs",
-      "Performance optimization cycles"
+    accent: "from-red-500 to-pink-600",
+    details: [
+      "Geleidelijke uitrol en go-live ondersteuning",
+      "Training en documentatie voor gebruikers",
+      "Monitoring en performance optimalisatie",
+      "Continue ondersteuning en updates"
     ],
-    clientExample: {
-      company: "Legal Technology Firm",
-      challenge: "Seamless adoption across 120 attorneys without productivity disruption",
-      solution: "Champion-led rollout with comprehensive training and support systems",
-      outcome: "95% adoption rate within 3 weeks, 45-minute to 3-minute query reduction"
-    },
-    metrics: {
-      duration: "Ongoing",
-      deliverable: "Live system + support",
-      impact: "Sustained transformation"
-    }
+    useCase: "Het systeem wordt gelanceerd met training voor alle advocaten, en we monitoren de prestaties om verder te optimaliseren.",
+    visual: "launch"
   }
 ];
 
 export default function DienstenPage() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { t } = useLanguage();
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const processRef = useRef<HTMLDivElement>(null);
 
-  const handleStepNavigation = (stepIndex: number) => {
-    setCurrentStep(stepIndex);
-    const stepElement = document.getElementById(`step-${stepIndex}`);
-    if (stepElement) {
-      stepElement.scrollIntoView({ behavior: 'smooth' });
-    }
+  const { activeStep, setActiveStep, visibleSteps } = useProcessScroll(stepRefs, isPlaying);
+
+  useProcessAutoplay(isPlaying, hasStarted, activeStep, setActiveStep, setIsPlaying, processSteps.length);
+
+  const handlePlay = () => {
+    setIsPlaying(true);
+    setHasStarted(true);
   };
 
-  // Sophisticated background gradients using brand colors
-  const getStepBackground = (index: number): string => {
-    const backgrounds = [
-      // Hero: Deep brand blue with subtle yellow glow
-      "bg-gradient-to-br from-[#0f1419] via-[#1C2C55] to-[#0a1628]",
-      // Step 1: Radial blue with yellow accent
-      "bg-gradient-to-r from-[#1C2C55] via-[#2a3f6b] to-[#1a2951]",
-      // Step 2: Diagonal sophisticated blue
-      "bg-gradient-to-tr from-[#0f1419] via-[#1C2C55] to-[#243560]",
-      // Step 3: Complex multi-directional blue
-      "bg-gradient-to-bl from-[#1a2951] via-[#1C2C55] to-[#0f1419]",
-      // Step 4: Sophisticated blue with warm undertones
-      "bg-gradient-to-tl from-[#1C2C55] via-[#243560] to-[#1a2951]",
-      // Step 5: Premium blue with subtle yellow energy
-      "bg-gradient-to-br from-[#0f1419] via-[#1C2C55] to-[#243560]",
-      // CTA: Premium gradient finale
-      "bg-gradient-to-r from-[#1a2951] via-[#1C2C55] to-[#0f1419]"
-    ];
-    
-    return backgrounds[index] || backgrounds[0];
+  const handlePause = () => {
+    setIsPlaying(false);
+  };
+
+  const handleReset = () => {
+    setIsPlaying(false);
+    setHasStarted(false);
+    setActiveStep(0);
+  };
+
+  const scrollToProcess = () => {
+    processRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen">
-      {/* Hero Section - Sophisticated Introduction */}
-      <section className={`min-h-screen flex items-center justify-center relative overflow-hidden ${getStepBackground(0)}`}>
-        {/* Sophisticated floating elements with brand colors */}
-        <div className="absolute inset-0">
-          <motion.div 
-            animate={{ 
-              x: [0, 120, 0],
-              y: [0, -60, 0],
-              scale: [1, 1.3, 1],
-              opacity: [0.15, 0.25, 0.15]
-            }}
-            transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/5 rounded-full blur-3xl"
-          />
-          <motion.div 
-            animate={{ 
-              x: [0, -100, 0],
-              y: [0, 80, 0],
-              scale: [1, 0.8, 1],
-              opacity: [0.1, 0.2, 0.1]
-            }}
-            transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute bottom-1/3 right-1/4 w-[600px] h-[600px] bg-gradient-to-l from-[#1C2C55]/30 to-[#243560]/20 rounded-full blur-3xl"
-          />
-        </div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 80 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center z-10 px-6 max-w-7xl mx-auto"
-        >
+    <main className="bg-finit-aurora min-h-screen">
+      {/* Hero Section */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1.5, delay: 0.4 }}
-            className="mb-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
           >
-            <div className="inline-flex items-center gap-4 px-8 py-4 rounded-full bg-white/8 backdrop-blur-xl border border-white/15 shadow-2xl">
-              <div className="w-3 h-3 rounded-full bg-[#F7E69B] animate-pulse"></div>
-              <span className="text-white/90 font-light tracking-wider text-lg">Premium Process</span>
+            <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white/20 text-white border border-white/30 mb-8 backdrop-blur-sm">
+              <Cog className="h-4 w-4 mr-2" />
+              <span>Maatwerk proces</span>
+              <ChevronRight className="h-4 w-4 ml-2" />
             </div>
           </motion.div>
 
-          <h1 className="text-8xl md:text-9xl lg:text-[10rem] font-extralight text-white mb-12 tracking-tight leading-none">
-            {t('diensten.hero.title').split(' ')[0]}
-            <span className="block bg-gradient-to-r from-[#F7E69B] via-[#F7E69B]/80 to-[#F7E69B] bg-clip-text text-transparent">
-              {t('diensten.hero.title').split(' ')[1]}
-            </span>
-          </h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-5xl md:text-6xl font-extralight mb-8 text-center text-white tracking-tight"
+          >
+            Van Idee tot Impact
+          </motion.h1>
           
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 1 }}
-            className="text-2xl md:text-3xl text-slate-300 font-extralight max-w-5xl mx-auto leading-relaxed mb-20 tracking-wide"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-white/90 text-xl mb-16 max-w-4xl mx-auto text-center leading-relaxed font-light tracking-wide"
           >
-            {t('diensten.hero.subtitle')}
+            Ontdek hoe wij samen met u van uitdaging naar oplossing gaan — kort, duidelijk en
+            resultaatgericht.
           </motion.p>
 
+          {/* Process Preview */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 1.4 }}
-            className="cursor-pointer"
-            onClick={() => handleStepNavigation(0)}
+            transition={{ duration: 1, delay: 0.6 }}
+            className="max-w-5xl mx-auto mb-16"
           >
-            <div className="inline-flex flex-col items-center gap-6 text-white/60 hover:text-white transition-all duration-700">
-              <span className="font-extralight tracking-[0.3em] text-sm uppercase">{t('diensten.hero.explore')}</span>
-              <motion.div
-                animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm hover:border-[#F7E69B]/50 transition-all duration-500"
-              >
-                <ChevronDown className="h-6 w-6" />
-              </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+              {processSteps.map((step, index) => {
+                const IconComponent = step.icon;
+                return (
+                  <motion.div
+                    key={step.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
+                    className="text-center group"
+                  >
+                    <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r ${step.accent} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110`}>
+                      <IconComponent className="h-8 w-8 text-white" />
+                    </div>
+                    <div className="text-sm font-medium text-white mb-2">{step.title}</div>
+                    <div className="text-xs text-white/70 font-light">{step.subtitle}</div>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
-        </motion.div>
-      </section>
 
-      {/* Step 1: Discovery - Asymmetric Layout */}
-      <section
-        id="step-0"
-        className={`min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden ${getStepBackground(1)}`}
-      >
-        <div className="absolute inset-0">
-          <motion.div 
-            animate={{ 
-              x: [0, 80, 0],
-              y: [0, -40, 0],
-              rotate: [0, 15, 0]
-            }}
-            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/5 left-1/5 w-[400px] h-[400px] bg-gradient-to-r from-[#F7E69B]/15 to-[#F7E69B]/5 rounded-full blur-3xl"
-          />
-        </div>
-
-        <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
-            {/* Left: Content - 8 columns */}
-            <motion.div
-              initial={{ opacity: 0, x: -100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="lg:col-span-8 space-y-12"
-            >
-              <div className="space-y-8">
-                <div className="inline-flex items-center gap-5 px-8 py-5 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-r from-[#1C2C55] to-[#243560] flex items-center justify-center shadow-xl">
-                    <Search className="h-8 w-8 text-white" />
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-white">{t('diensten.phase')} {processSteps[0].id}</div>
-                    <div className="text-lg text-white/60 font-light tracking-wide">{t('diensten.step1.subtitle')}</div>
-                  </div>
-                </div>
-
-                <h2 className="text-7xl md:text-8xl font-extralight text-white tracking-tight leading-none">
-                  {t('diensten.step1.title')}
-                </h2>
-                
-                <p className="text-2xl text-white/85 font-light leading-relaxed max-w-3xl">
-                  {t('diensten.step1.description')}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                  t('diensten.step1.insights.1'),
-                  t('diensten.step1.insights.2'),
-                  t('diensten.step1.insights.3'),
-                  t('diensten.step1.insights.4')
-                ].map((insight: string, i: number) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: i * 0.2 }}
-                    className="flex items-center gap-5 p-6 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg hover:bg-white/8 transition-all duration-500"
-                  >
-                    <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-[#F7E69B] to-[#F7E69B]/80 flex items-center justify-center shadow-lg">
-                      <span className="text-[#1C2C55] text-lg font-bold">{i + 1}</span>
-                    </div>
-                    <span className="text-white/90 font-light leading-relaxed text-lg">{insight}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Right: Client Case - 4 columns */}
-            <motion.div
-              initial={{ opacity: 0, x: 100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, delay: 0.5 }}
-              className="lg:col-span-4"
-            >
-              <div className="bg-white/8 backdrop-blur-xl rounded-3xl p-10 border border-white/15 shadow-2xl">
-                <div className="space-y-8">
-                  <div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{t('diensten.step1.case.company')}</h3>
-                    <p className="text-white/50 text-sm font-light tracking-wide uppercase">Case Study</p>
-                  </div>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="text-[#F7E69B] font-semibold mb-3 tracking-wide text-lg">Challenge</h4>
-                      <p className="text-white/85 leading-relaxed font-light">{t('diensten.step1.case.challenge')}</p>
-                    </div>
-                    
-                    <div>
-                      <h4 className="text-[#F7E69B] font-semibold mb-3 tracking-wide text-lg">Approach</h4>
-                      <p className="text-white/85 leading-relaxed font-light">{t('diensten.step1.case.solution')}</p>
-                    </div>
-                    
-                    <div>
-                      <h4 className="text-[#F7E69B] font-semibold mb-3 tracking-wide text-lg">Result</h4>
-                      <p className="text-white/85 leading-relaxed font-light">{t('diensten.step1.case.outcome')}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Navigation dots */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl z-50">
-            {processSteps.map((_, dotIndex) => (
-              <motion.button
-                key={dotIndex}
-                onClick={() => handleStepNavigation(dotIndex)}
-                whileHover={{ scale: 1.3 }}
-                whileTap={{ scale: 0.9 }}
-                className={`relative transition-all duration-700 ${
-                  0 === dotIndex 
-                    ? 'w-16 h-5 bg-gradient-to-r from-[#F7E69B] to-[#F7E69B]/80 rounded-full shadow-lg' 
-                    : 'w-5 h-5 bg-white/30 rounded-full hover:bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Step 2: Architecture - Centered Showcase Layout */}
-      <section
-        id="step-1"
-        className={`min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden ${getStepBackground(2)}`}
-      >
-        <div className="absolute inset-0">
-          <motion.div 
-            animate={{ 
-              x: [0, -60, 0],
-              y: [0, 40, 0],
-              scale: [1, 1.2, 1]
-            }}
-            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-gradient-to-l from-[#F7E69B]/12 to-[#F7E69B]/3 rounded-full blur-3xl"
-          />
-        </div>
-
-        <div className="container mx-auto max-w-6xl relative z-10">
-          <div className="text-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="mb-20"
-            >
-              <div className="w-24 h-24 rounded-3xl bg-gradient-to-r from-[#1C2C55] to-[#243560] flex items-center justify-center mx-auto mb-10 shadow-2xl">
-                <Lightbulb className="h-12 w-12 text-white" />
-              </div>
-              
-              <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/8 backdrop-blur-sm border border-white/15 mb-8">
-                <span className="text-white/80 text-lg font-light tracking-wide">{t('diensten.phase')} {processSteps[1].id}</span>
-                <div className="w-2 h-2 rounded-full bg-white/40"></div>
-                <span className="text-white/60 text-lg font-light">{t('diensten.step2.subtitle')}</span>
-              </div>
-              
-              <h2 className="text-7xl md:text-8xl font-extralight text-white mb-8 tracking-tight">
-                {t('diensten.step2.title')}
-              </h2>
-              
-              <p className="text-2xl text-white/85 font-light leading-relaxed max-w-4xl mx-auto">
-                {t('diensten.step2.description')}
-              </p>
-            </motion.div>
-
-            {/* Architecture showcase grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-              {[
-                t('diensten.step2.insights.1'),
-                t('diensten.step2.insights.2'),
-                t('diensten.step2.insights.3'),
-                t('diensten.step2.insights.4')
-              ].map((insight: string, i: number) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 80 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: i * 0.25 }}
-                  whileHover={{ y: -15, scale: 1.05 }}
-                  className="bg-white/8 backdrop-blur-xl rounded-2xl p-8 border border-white/15 shadow-xl hover:shadow-2xl transition-all duration-700"
-                >
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-r from-[#F7E69B] to-[#F7E69B]/70 flex items-center justify-center mb-6 shadow-lg">
-                    <span className="text-[#1C2C55] font-bold text-xl">{i + 1}</span>
-                  </div>
-                  <p className="text-white/90 font-light leading-relaxed text-lg">{insight}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Client story showcase */}
-            <motion.div
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, delay: 1 }}
-              className="bg-white/8 backdrop-blur-xl rounded-3xl p-12 border border-white/15 shadow-2xl max-w-5xl mx-auto"
-            >
-              <h3 className="text-3xl font-bold text-white mb-12 text-center">Architecture in Practice</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/10 flex items-center justify-center mx-auto">
-                    <div className="w-3 h-3 rounded-full bg-[#F7E69B]"></div>
-                  </div>
-                  <h4 className="text-[#F7E69B] font-semibold text-xl tracking-wide">Challenge</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step2.case.challenge')}</p>
-                </div>
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/10 flex items-center justify-center mx-auto">
-                    <div className="w-3 h-3 rounded-full bg-[#F7E69B]"></div>
-                  </div>
-                  <h4 className="text-[#F7E69B] font-semibold text-xl tracking-wide">Solution</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step2.case.solution')}</p>
-                </div>
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/10 flex items-center justify-center mx-auto">
-                    <div className="w-3 h-3 rounded-full bg-[#F7E69B]"></div>
-                  </div>
-                  <h4 className="text-[#F7E69B] font-semibold text-xl tracking-wide">Impact</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step2.case.outcome')}</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Navigation dots */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl z-50">
-            {processSteps.map((_, dotIndex) => (
-              <motion.button
-                key={dotIndex}
-                onClick={() => handleStepNavigation(dotIndex)}
-                whileHover={{ scale: 1.3 }}
-                whileTap={{ scale: 0.9 }}
-                className={`relative transition-all duration-700 ${
-                  1 === dotIndex 
-                    ? 'w-16 h-5 bg-gradient-to-r from-[#F7E69B] to-[#F7E69B]/80 rounded-full shadow-lg' 
-                    : 'w-5 h-5 bg-white/30 rounded-full hover:bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Step 3: Development - Split Technical Layout */}
-      <section
-        id="step-2"
-        className={`min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden ${getStepBackground(3)}`}
-      >
-        <div className="absolute inset-0">
-          <motion.div 
-            animate={{ 
-              x: [0, 100, 0],
-              y: [0, -50, 0],
-              rotate: [0, -10, 0]
-            }}
-            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute bottom-1/4 left-1/6 w-[350px] h-[350px] bg-gradient-to-r from-[#F7E69B]/18 to-[#F7E69B]/8 rounded-full blur-3xl"
-          />
-        </div>
-
-        <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-center">
-            {/* Left: Technical showcase - 3 columns */}
-            <motion.div
-              initial={{ opacity: 0, x: -80 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="lg:col-span-3 space-y-10"
-            >
-              <div className="flex items-center gap-5 mb-10">
-                <div className="w-18 h-18 rounded-2xl bg-gradient-to-r from-[#1C2C55] to-[#243560] flex items-center justify-center shadow-2xl">
-                  <Code className="h-10 w-10 text-white" />
-                </div>
-                <div>
-                  <div className="text-4xl font-bold text-white">{t('diensten.phase')} {processSteps[2].id}</div>
-                  <div className="text-xl text-white/60 font-light tracking-wide">{t('diensten.step3.subtitle')}</div>
-                </div>
-              </div>
-
-              <h2 className="text-6xl md:text-7xl font-extralight text-white tracking-tight leading-tight">
-                {t('diensten.step3.title')}
-              </h2>
-              
-              <p className="text-xl text-white/85 font-light leading-relaxed">
-                {t('diensten.step3.description')}
-              </p>
-
-              {/* Technical terminal */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.4 }}
-                className="bg-[#0a0e1a]/90 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-slate-700/30"
-              >
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-4 h-4 rounded-full bg-red-400"></div>
-                  <div className="w-4 h-4 rounded-full bg-yellow-400"></div>
-                  <div className="w-4 h-4 rounded-full bg-green-400"></div>
-                  <span className="ml-6 text-slate-400 text-sm font-light tracking-wide">development-environment</span>
-                </div>
-                <div className="font-mono text-sm space-y-3 text-slate-300">
-                  <div className="text-green-400">Enterprise-grade system architecture</div>
-                  <div><span className="text-blue-400">const</span> <span className="text-yellow-300">system</span> = <span className="text-purple-400">new</span> <span className="text-blue-300">EnterpriseProcessor</span>();</div>
-                  <div><span className="text-yellow-300">system</span>.<span className="text-green-300">initializeSecureInfrastructure</span>();</div>
-                  <div><span className="text-yellow-300">system</span>.<span className="text-green-300">deployMicroservices</span>(<span className="text-orange-300">&apos;production&apos;</span>);</div>
-                  <div><span className="text-yellow-300">system</span>.<span className="text-green-300">enableRealTimeMonitoring</span>();</div>
-                  <div className="text-green-400">System operational and optimized</div>
-                </div>
-              </motion.div>
-            </motion.div>
-
-            {/* Right: Metrics and progress - 2 columns */}
-            <motion.div
-              initial={{ opacity: 0, x: 80 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.3, delay: 0.6 }}
-              className="lg:col-span-2 space-y-8"
-            >
-              <div className="bg-white/8 backdrop-blur-xl rounded-2xl p-8 border border-white/15 shadow-xl">
-                <h4 className="text-xl font-bold text-white mb-8">Development Progress</h4>
-                <div className="space-y-6">
-                  {[
-                    { component: "Core Architecture", progress: 100, color: "from-green-400 to-emerald-500" },
-                    { component: "AI Integration", progress: 90, color: "from-[#F7E69B] to-[#F7E69B]/70" },
-                    { component: "Security Layer", progress: 95, color: "from-blue-400 to-indigo-500" },
-                    { component: "API Gateway", progress: 85, color: "from-purple-400 to-violet-500" }
-                  ].map((item, i) => (
-                    <div key={i} className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-white/90 font-light">{item.component}</span>
-                        <span className="text-[#F7E69B] font-bold">{item.progress}%</span>
-                      </div>
-                      <div className="w-full bg-white/15 rounded-full h-3 overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${item.progress}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 2, delay: i * 0.3, ease: "easeOut" }}
-                          className={`bg-gradient-to-r ${item.color} h-3 rounded-full shadow-lg`}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-white/8 backdrop-blur-xl rounded-2xl p-8 border border-white/15 shadow-xl">
-                <h4 className="text-xl font-bold text-white mb-6">Client Impact</h4>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80">Processing Speed</span>
-                    <span className="text-[#F7E69B] font-bold">340% faster</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80">Accuracy Rate</span>
-                    <span className="text-green-400 font-bold">99.8%</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80">System Uptime</span>
-                    <span className="text-blue-400 font-bold">99.99%</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Navigation dots */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl z-50">
-            {processSteps.map((_, dotIndex) => (
-              <motion.button
-                key={dotIndex}
-                onClick={() => handleStepNavigation(dotIndex)}
-                whileHover={{ scale: 1.3 }}
-                whileTap={{ scale: 0.9 }}
-                className={`relative transition-all duration-700 ${
-                  2 === dotIndex 
-                    ? 'w-16 h-5 bg-gradient-to-r from-[#F7E69B] to-[#F7E69B]/80 rounded-full shadow-lg' 
-                    : 'w-5 h-5 bg-white/30 rounded-full hover:bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Step 4: Validation - Diagonal Split Layout */}
-      <section
-        id="step-3"
-        className={`min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden ${getStepBackground(4)}`}
-      >
-        <div className="absolute inset-0">
-          <motion.div 
-            animate={{ 
-              x: [0, -80, 0],
-              y: [0, 60, 0],
-              scale: [1, 1.1, 1]
-            }}
-            transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/2 left-1/3 w-[400px] h-[400px] bg-gradient-to-r from-[#F7E69B]/14 to-[#F7E69B]/4 rounded-full blur-3xl"
-          />
-        </div>
-
-        <div className="container mx-auto max-w-6xl relative z-10">
-          {/* Diagonal header layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-end mb-20">
-            <motion.div
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="lg:col-span-2"
-            >
-              <div className="flex items-center gap-5 mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#1C2C55] to-[#243560] flex items-center justify-center shadow-2xl">
-                  <TestTube className="h-8 w-8 text-white" />
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-white">Phase {processSteps[3].id}</div>
-                  <div className="text-lg text-white/60 font-light">{processSteps[3].subtitle}</div>
-                </div>
-              </div>
-              
-              <h2 className="text-6xl md:text-7xl font-extralight text-white mb-8 tracking-tight text-left">
-                {processSteps[3].title}
-              </h2>
-              
-              <p className="text-xl text-white/85 font-light leading-relaxed text-left">
-                {processSteps[3].description}
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, delay: 0.4 }}
-              className="bg-white/8 backdrop-blur-xl rounded-2xl p-8 border border-white/15 shadow-xl"
-            >
-              <h4 className="text-xl font-bold text-white mb-6">Quality Metrics</h4>
-              <div className="space-y-4">
-                {[
-                  { label: "Accuracy", value: "99.8%", icon: "target" },
-                  { label: "Response", value: "<150ms", icon: "speed" },
-                  { label: "Uptime", value: "99.99%", icon: "reliability" },
-                  { label: "Satisfaction", value: "9.4/10", icon: "rating" }
-                ].map((metric, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <span className="text-white/80">{metric.label}</span>
-                    <span className="text-[#F7E69B] font-bold text-lg">{metric.value}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Testing showcase grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <motion.div
-              initial={{ opacity: 0, x: -60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="bg-white/8 backdrop-blur-xl rounded-2xl p-10 border border-white/15 shadow-xl"
-            >
-              <h4 className="text-2xl font-bold text-white mb-8">Validation Process</h4>
-              <div className="space-y-6">
-                {[
-                  t('diensten.step4.insights.1'),
-                  t('diensten.step4.insights.2'),
-                  t('diensten.step4.insights.3'),
-                  t('diensten.step4.insights.4')
-                ].map((insight: string, i: number) => (
-                  <div key={i} className="flex items-center gap-5 p-4 rounded-lg bg-white/5">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center shadow">
-                      <span className="text-white text-sm font-bold">✓</span>
-                    </div>
-                    <span className="text-white/90 font-light leading-relaxed">{insight}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.5 }}
-              className="bg-white/8 backdrop-blur-xl rounded-2xl p-10 border border-white/15 shadow-xl"
-            >
-              <h4 className="text-2xl font-bold text-white mb-8">Client Validation</h4>
-              <div className="space-y-6">
-                <div>
-                  <h5 className="text-[#F7E69B] font-semibold mb-3 text-lg">Challenge</h5>
-                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step4.case.challenge')}</p>
-                </div>
-                <div>
-                  <h5 className="text-[#F7E69B] font-semibold mb-3 text-lg">Solution</h5>
-                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step4.case.solution')}</p>
-                </div>
-                <div>
-                  <h5 className="text-[#F7E69B] font-semibold mb-3 text-lg">Outcome</h5>
-                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step4.case.outcome')}</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Navigation dots */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl z-50">
-            {processSteps.map((_, dotIndex) => (
-              <motion.button
-                key={dotIndex}
-                onClick={() => handleStepNavigation(dotIndex)}
-                whileHover={{ scale: 1.3 }}
-                whileTap={{ scale: 0.9 }}
-                className={`relative transition-all duration-700 ${
-                  3 === dotIndex 
-                    ? 'w-16 h-5 bg-gradient-to-r from-[#F7E69B] to-[#F7E69B]/80 rounded-full shadow-lg' 
-                    : 'w-5 h-5 bg-white/30 rounded-full hover:bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Step 5: Transformation - Grand Finale Layout */}
-      <section
-        id="step-4"
-        className={`min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden ${getStepBackground(5)}`}
-      >
-        <div className="absolute inset-0">
-          <motion.div 
-            animate={{ 
-              scale: [1, 1.4, 1],
-              opacity: [0.08, 0.15, 0.08],
-              rotate: [0, 180, 360]
-            }}
-            transition={{ duration: 35, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/5 rounded-full blur-3xl"
-          />
-        </div>
-
-        <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="text-center">
-            {/* Grand header */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="mb-24"
-            >
-              <div className="w-28 h-28 rounded-3xl bg-gradient-to-r from-[#1C2C55] to-[#243560] flex items-center justify-center mx-auto mb-12 shadow-2xl">
-                <Rocket className="h-14 w-14 text-white" />
-              </div>
-              
-              <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white/8 backdrop-blur-sm border border-white/15 mb-10">
-                <span className="text-white/80 text-xl font-light tracking-wide">{t('diensten.phase')} {processSteps[4].id}</span>
-                <div className="w-2 h-2 rounded-full bg-white/40"></div>
-                <span className="text-white/60 text-xl font-light">{t('diensten.step5.subtitle')}</span>
-              </div>
-              
-              <h2 className="text-7xl md:text-8xl font-extralight text-white mb-10 tracking-tight">
-                {t('diensten.step5.title')}
-              </h2>
-              
-              <p className="text-2xl text-white/85 font-light leading-relaxed max-w-5xl mx-auto">
-                {t('diensten.step5.description')}
-              </p>
-            </motion.div>
-
-            {/* Success metrics showcase */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-20">
-              <motion.div
-                initial={{ opacity: 0, y: 80 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.2 }}
-                className="bg-white/8 backdrop-blur-xl rounded-2xl p-10 border border-white/15 shadow-xl"
-              >
-                <h4 className="text-2xl font-bold text-white mb-8">System Status</h4>
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-4 h-4 rounded-full bg-green-400 animate-pulse"></div>
-                      <span className="text-white/80">Operational</span>
-                    </div>
-                    <span className="text-green-400 font-bold">Live</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80">Active Users</span>
-                    <span className="text-[#F7E69B] font-bold text-xl">247</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80">Daily Queries</span>
-                    <span className="text-[#F7E69B] font-bold text-xl">1,834</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80">Avg Response</span>
-                    <span className="text-green-400 font-bold">0.8s</span>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 80 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.4 }}
-                className="bg-white/8 backdrop-blur-xl rounded-2xl p-10 border border-white/15 shadow-xl"
-              >
-                <h4 className="text-2xl font-bold text-white mb-8">Support Framework</h4>
-                <div className="space-y-6">
-                  {[
-                    t('diensten.step5.insights.1'),
-                    t('diensten.step5.insights.2'),
-                    t('diensten.step5.insights.3'),
-                    t('diensten.step5.insights.4')
-                  ].map((insight: string, i: number) => (
-                    <div key={i} className="flex items-start gap-4">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#F7E69B] to-[#F7E69B]/70 flex items-center justify-center mt-1 shadow">
-                        <span className="text-[#1C2C55] text-sm font-bold">✓</span>
-                      </div>
-                      <span className="text-white/80 leading-relaxed font-light">{insight}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 80 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.6 }}
-                className="bg-white/8 backdrop-blur-xl rounded-2xl p-10 border border-white/15 shadow-xl"
-              >
-                <h4 className="text-2xl font-bold text-white mb-8">Business Impact</h4>
-                <div className="space-y-6">
-                  <div className="text-center p-6 rounded-xl bg-white/5">
-                    <div className="text-4xl font-bold text-[#F7E69B] mb-2">85%</div>
-                    <div className="text-sm text-white/60 uppercase tracking-wide">Faster Retrieval</div>
-                  </div>
-                  <div className="text-center p-6 rounded-xl bg-white/5">
-                    <div className="text-4xl font-bold text-green-400 mb-2">24/7</div>
-                    <div className="text-sm text-white/60 uppercase tracking-wide">Availability</div>
-                  </div>
-                  <div className="text-center p-6 rounded-xl bg-white/5">
-                    <div className="text-4xl font-bold text-blue-400 mb-2">€180K</div>
-                    <div className="text-sm text-white/60 uppercase tracking-wide">Annual Savings</div>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Final transformation story */}
-            <motion.div
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, delay: 0.8 }}
-              className="bg-white/8 backdrop-blur-xl rounded-3xl p-12 border border-white/15 shadow-2xl max-w-5xl mx-auto mb-20"
-            >
-              <h3 className="text-3xl font-bold text-white mb-10 text-center">Transformation Complete</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/10 flex items-center justify-center mx-auto">
-                    <div className="w-4 h-4 rounded-full bg-[#F7E69B]"></div>
-                  </div>
-                  <h4 className="text-[#F7E69B] font-semibold text-xl">Deployment</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step5.case.challenge')}</p>
-                </div>
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/10 flex items-center justify-center mx-auto">
-                    <div className="w-4 h-4 rounded-full bg-[#F7E69B]"></div>
-                  </div>
-                  <h4 className="text-[#F7E69B] font-semibold text-xl">Adoption</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step5.case.solution')}</p>
-                </div>
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#F7E69B]/20 to-[#F7E69B]/10 flex items-center justify-center mx-auto">
-                    <div className="w-4 h-4 rounded-full bg-[#F7E69B]"></div>
-                  </div>
-                  <h4 className="text-[#F7E69B] font-semibold text-xl">Results</h4>
-                  <p className="text-white/80 leading-relaxed font-light">{t('diensten.step5.case.outcome')}</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Navigation dots */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl z-50">
-            {processSteps.map((_, dotIndex) => (
-              <motion.button
-                key={dotIndex}
-                onClick={() => handleStepNavigation(dotIndex)}
-                whileHover={{ scale: 1.3 }}
-                whileTap={{ scale: 0.9 }}
-                className={`relative transition-all duration-700 ${
-                  4 === dotIndex 
-                    ? 'w-16 h-5 bg-gradient-to-r from-[#F7E69B] to-[#F7E69B]/80 rounded-full shadow-lg' 
-                    : 'w-5 h-5 bg-white/30 rounded-full hover:bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Premium CTA Section */}
-      <section className={`min-h-screen flex items-center justify-center relative overflow-hidden ${getStepBackground(6)}`}>
-        <div className="absolute inset-0">
-          <motion.div 
-            animate={{ 
-              scale: [1, 1.5, 1],
-              opacity: [0.1, 0.2, 0.1],
-              rotate: [0, 270, 360]
-            }}
-            transition={{ duration: 40, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-gradient-to-r from-[#F7E69B]/15 to-[#F7E69B]/5 rounded-full blur-3xl"
-          />
-        </div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 80 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center z-10 px-6 max-w-6xl mx-auto"
-        >
-          <h2 className="text-7xl md:text-8xl font-extralight text-white mb-12 tracking-tight leading-tight">
-            {t('diensten.cta.title').split(' ')[0]} {t('diensten.cta.title').split(' ')[1]}
-            <span className="block bg-gradient-to-r from-[#F7E69B] via-[#F7E69B]/90 to-[#F7E69B] bg-clip-text text-transparent">
-              {t('diensten.cta.title').split(' ')[2]}
-            </span>
-          </h2>
-          
-          <p className="text-2xl md:text-3xl text-slate-300 font-extralight max-w-4xl mx-auto leading-relaxed mb-20">
-            {t('diensten.cta.subtitle')}
-          </p>
-
+          {/* Scroll Indicator */}
           <motion.div
-            whileHover={{ scale: 1.08, y: -8 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="text-center"
           >
+            <button
+              onClick={scrollToProcess}
+              className="group flex flex-col items-center gap-3 mx-auto text-white/80 hover:text-white transition-colors duration-300"
+            >
+              <span className="text-sm font-light tracking-wide">Ontdek het proces</span>
+              <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center group-hover:border-white transition-colors duration-300"
+              >
+                <ArrowDown className="h-4 w-4" />
+              </motion.div>
+            </button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Process Steps Section */}
+      <section ref={processRef} className="relative py-20 md:py-32">
+        {/* Progress Bar */}
+        <div className="absolute left-6 top-0 z-40 hidden lg:block">
+          <div className="absolute w-1 bg-white/20 rounded-full" style={{ height: '100%' }} />
+          <motion.div
+            className="absolute w-1 bg-gradient-to-b from-white to-white/60 rounded-full"
+            style={{
+              height: `${(activeStep / (processSteps.length - 1)) * 100}%`
+            }}
+            transition={{ duration: 0.2 }}
+          />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Process Controls */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-4xl md:text-5xl font-extralight mb-8 text-white tracking-tight">
+              Ons Bewezen Proces
+            </h2>
+            <p className="text-white/80 text-xl mb-12 max-w-3xl mx-auto font-light leading-relaxed">
+              Een gestructureerde aanpak die zorgt voor resultaten
+            </p>
+
+            {/* Controls */}
+            <div className="flex justify-center gap-6">
+              {!isPlaying ? (
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Button
+                    onClick={handlePlay}
+                    size="lg"
+                    className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 px-10 py-4 rounded-2xl"
+                  >
+                    <Play className="h-5 w-5 mr-4" />
+                    <span className="font-light tracking-wide text-base">Start Proces</span>
+                  </Button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Button
+                    onClick={handlePause}
+                    size="lg"
+                    className="bg-white/20 backdrop-blur-xl text-white hover:bg-white/30 border border-white/40 shadow-xl hover:shadow-2xl transition-all duration-300 px-10 py-4 rounded-2xl"
+                  >
+                    <Pause className="h-5 w-5 mr-4" />
+                    <span className="font-light tracking-wide text-base">Pauzeer</span>
+                  </Button>
+                </motion.div>
+              )}
+
+              {hasStarted && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Button
+                    onClick={handleReset}
+                    size="lg"
+                    variant="outline"
+                    className="bg-white/15 backdrop-blur-xl text-white border border-white/30 hover:bg-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 px-10 py-4 rounded-2xl"
+                  >
+                    <RotateCcw className="h-5 w-5 mr-4" />
+                    <span className="font-light tracking-wide text-base">Opnieuw</span>
+                  </Button>
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+
+          {/* Process Steps */}
+          <div className="space-y-32 max-w-7xl mx-auto">
+            {processSteps.map((step, index) => {
+              const IconComponent = step.icon;
+              const isVisible = visibleSteps.has(index);
+              const isActive = activeStep === index;
+
+              return (
+                <motion.div
+                  key={step.id}
+                  ref={(el) => (stepRefs.current[index] = el)}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{
+                    opacity: isVisible ? 1 : 0.35,
+                    y: isVisible ? 0 : 20,
+                    scale: isActive ? 1.01 : 1
+                  }}
+                  transition={{ duration: 0.5 }}
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+                >
+                  {/* Left Column - Process Info */}
+                  <div className="space-y-8">
+                    <div className="inline-flex items-center gap-4 px-6 py-3 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 shadow-xl step-number-marker">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${step.accent} flex items-center justify-center shadow-lg`}>
+                        <IconComponent className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="text-lg font-bold text-white">Stap {step.id}</div>
+                        <div className="text-sm text-white/70">{step.subtitle}</div>
+                      </div>
+                    </div>
+
+                    <h2 className="text-5xl md:text-6xl font-extralight text-white tracking-tight leading-tight">
+                      {step.title}
+                    </h2>
+                    
+                    <p className="text-xl text-white/80 font-light leading-relaxed">
+                      {step.description}
+                    </p>
+
+                    <div className="grid grid-cols-1 gap-4">
+                      {step.details.map((detail, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: i * 0.1 }}
+                          className="flex items-center gap-4 p-4 rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 shadow-lg"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shadow">
+                            <span className="text-white text-sm font-bold">✓</span>
+                          </div>
+                          <span className="text-white/90 font-medium">{detail}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Column - Client Case */}
+                  <div className="relative">
+                    <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/25">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                          <span className="text-white text-lg">🎯</span>
+                        </div>
+                        <h4 className="text-lg font-bold text-white">Client Case</h4>
+                      </div>
+                      <p className="text-white/90 italic leading-relaxed mb-6">&ldquo;{step.useCase}&rdquo;</p>
+                      
+                      {/* Step-specific visual examples */}
+                      <div className="mt-6">
+                        {step.id === 1 && (
+                          <div className="grid grid-cols-1 gap-2">
+                            {["Versnipperde info", "Handmatige stappen", "Onvoldoende vindbaarheid"].map((item, i) => (
+                              <div key={i} className="flex items-center justify-between rounded-md border border-white/20 px-3 py-2 bg-white/10">
+                                <span className="text-sm text-white/80">{item}</span>
+                                <span className="text-amber-400">⚠️</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {step.id === 2 && (
+                          <div className="grid grid-cols-3 gap-2">
+                            {["Scope", "Integraties", "RBAC", "Chat", "E-mail", "Workflows"].map((tag, i) => (
+                              <div key={i} className="rounded-md bg-white/20 border border-white/30 px-2 py-2 text-center text-xs font-medium text-white">
+                                {tag}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {step.id === 3 && (
+                          <div className="rounded-md bg-slate-900/50 text-slate-200 text-xs font-mono p-3 border border-white/20">
+                            <div>ingest_sources()</div>
+                            <div>index_documents()</div>
+                            <div>build_chat_interface()</div>
+                            <div>rag.generate(query, context)</div>
+                          </div>
+                        )}
+                        
+                        {step.id === 4 && (
+                          <div className="flex flex-wrap gap-2">
+                            {["Login OK", "RBAC OK", "Kwaliteit ↑", "E-mail voorstel OK"].map((badge, i) => (
+                              <span key={i} className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-300 border border-green-400/30">
+                                {badge}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {step.id === 5 && (
+                          <div className="h-20 flex items-end gap-2">
+                            {[30, 45, 60, 80].map((height, i) => (
+                              <div key={i} className="flex-1 bg-white/20 border border-white/30 rounded">
+                                <div
+                                  className="w-full bg-gradient-to-t from-blue-400 to-white rounded-b"
+                                  style={{ height: `${height}%` }}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-20 md:py-32">
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+          >
+            <h2 className="text-5xl md:text-6xl font-extralight mb-8 text-white tracking-tight">
+              Waarom ons proces werkt
+            </h2>
+            <p className="text-white/80 text-xl max-w-4xl mx-auto mb-20 font-light leading-relaxed tracking-wide">
+              Bewezen resultaten door een gestructureerde aanpak, continue samenwerking en focus op meetbare impact.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              {
+                title: "Echte samenwerking",
+                description: "We werken niet voor u, maar met u — uw expertise gecombineerd met onze technische kennis voor optimale resultaten."
+              },
+              {
+                title: "Snelle resultaten", 
+                description: "Door onze agile aanpak ziet u snel concrete vooruitgang en kunt u tijdig bijsturen voor maximale impact."
+              },
+              {
+                title: "Meetbare impact",
+                description: "Elke oplossing wordt gebouwd met duidelijke KPI's en meetbare verbeteringen die uw ROI aantonen."
+              }
+            ].map((benefit, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 60 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: i * 0.2 }}
+                whileHover={{ y: -12, scale: 1.03 }}
+                className="bg-white/15 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/25 hover:shadow-3xl transition-all duration-500"
+              >
+                <h3 className="text-xl font-light mb-6 text-white tracking-wide">{benefit.title}</h3>
+                <p className="text-white/80 font-light leading-relaxed tracking-wide text-base">{benefit.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 md:py-32">
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="text-center max-w-4xl mx-auto"
+          >
+            <h2 className="text-4xl md:text-5xl font-extralight mb-8 text-white tracking-tight">
+              Klaar voor Excellentie?
+            </h2>
+            <p className="text-white/80 text-xl mb-12 leading-relaxed font-light">
+              Transformeer uw digitale visie in meetbare bedrijfsimpact. Uw ambitie verdient uitzonderlijke uitvoering.
+            </p>
+            
             <ProjectRequestDialog 
-              buttonText={t('diensten.cta.button')}
-              buttonClassName="bg-gradient-to-r from-[#F7E69B] via-[#F7E69B]/90 to-[#F7E69B] hover:from-[#F7E69B]/90 hover:via-[#F7E69B]/80 hover:to-[#F7E69B]/90 text-[#1C2C55] px-16 py-8 text-xl rounded-full shadow-2xl hover:shadow-3xl transition-all duration-700 font-semibold tracking-wide border border-[#F7E69B]/30"
+              buttonText="Begin Uw Transformatie"
+              buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-10 py-4 rounded-2xl font-medium"
             />
           </motion.div>
-        </motion.div>
+        </div>
       </section>
-    </div>
+    </main>
   );
 }
