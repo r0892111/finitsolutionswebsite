@@ -156,9 +156,6 @@ const translations = {
     'diensten.cta.title': 'Klaar voor Excellentie?',
     'diensten.cta.subtitle': 'Transformeer uw digitale visie in meetbare bedrijfsimpact. Uw ambitie verdient uitzonderlijke uitvoering.',
     'diensten.cta.button': 'Begin Uw Transformatie'
-    
-    // Diensten Page Content
-    'diensten.hero.badge': 'Maatwerk proces',
     'diensten.hero.title': 'Van Idee tot Impact',
     'diensten.hero.description': 'Ontdek hoe wij samen met u van uitdaging naar oplossing gaan — kort, duidelijk en resultaatgericht.',
     'diensten.hero.scroll': 'Ontdek het proces',
