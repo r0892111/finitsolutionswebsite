@@ -7,13 +7,89 @@ import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { useProcessScroll } from "@/hooks/useProcessScroll";
 import { useProcessAutoplay } from "@/hooks/useProcessAutoplay";
-import { processSteps } from "@/lib/diensten/process-data";
-import { StepLayoutOne } from "@/components/diensten/step-layouts/StepLayoutOne";
-import { StepLayoutTwo } from "@/components/diensten/step-layouts/StepLayoutTwo";
-import { StepLayoutThree } from "@/components/diensten/step-layouts/StepLayoutThree";
-import { StepLayoutFour } from "@/components/diensten/step-layouts/StepLayoutFour";
-import { StepLayoutFive } from "@/components/diensten/step-layouts/StepLayoutFive";
 
+const processSteps = [
+  {
+    id: 1,
+    title: "Probleem Identificatie",
+    subtitle: "Ontdekken & Analyseren",
+    description: "We beginnen met een grondige analyse van uw huidige situatie en identificeren de kernuitdagingen.",
+    icon: Search,
+    accent: "from-blue-500 to-blue-600",
+    details: [
+      "Uitgebreide stakeholder interviews",
+      "Analyse van bestaande systemen en workflows",
+      "Identificatie van pijnpunten en inefficiënties",
+      "Documentatie van huidige processen"
+    ],
+    useCase: "Een advocatenkantoor worstelt met het snel vinden van relevante juridische informatie verspreid over verschillende documenten en systemen.",
+    visual: "analysis"
+  },
+  {
+    id: 2,
+    title: "Oplossing Ontwerp",
+    subtitle: "Strategisch Plannen",
+    description: "Op basis van onze bevindingen ontwerpen we een op maat gemaakte oplossing die perfect aansluit bij uw behoeften.",
+    icon: Lightbulb,
+    accent: "from-amber-500 to-orange-500",
+    details: [
+      "Technische architectuur en systeemontwerp",
+      "User experience en interface planning",
+      "Integratiestrategie met bestaande systemen",
+      "Projectplanning en milestone definitie"
+    ],
+    useCase: "We stellen een AI-gedreven kennisbank voor die alle juridische documenten indexeert en doorzoekbaar maakt via natuurlijke taal.",
+    visual: "design"
+  },
+  {
+    id: 3,
+    title: "Ontwikkeling",
+    subtitle: "Bouwen & Integreren",
+    description: "Ons ervaren team bouwt uw oplossing met de nieuwste technologieën en best practices.",
+    icon: Code,
+    accent: "from-green-500 to-emerald-600",
+    details: [
+      "Agile ontwikkeling met regelmatige updates",
+      "Moderne technologieën en frameworks",
+      "Veilige en schaalbare architectuur",
+      "Continue integratie en deployment"
+    ],
+    useCase: "We ontwikkelen een RAG-systeem dat documenten ingesteert, indexeert en een intuïtieve chat-interface biedt voor juridische zoekopdrachten.",
+    visual: "development"
+  },
+  {
+    id: 4,
+    title: "Testing & Validatie",
+    subtitle: "Kwaliteit Verzekeren",
+    description: "Uitgebreide tests zorgen ervoor dat uw oplossing perfect functioneert voordat we live gaan.",
+    icon: TestTube,
+    accent: "from-purple-500 to-violet-600",
+    details: [
+      "Geautomatiseerde en handmatige testing",
+      "Performance en security audits",
+      "User acceptance testing",
+      "Bug fixes en optimalisaties"
+    ],
+    useCase: "We testen de zoeknauwkeurigheid, gebruikersinterface en beveiligingsprotocollen met echte juridische cases.",
+    visual: "testing"
+  },
+  {
+    id: 5,
+    title: "Lancering & Ondersteuning",
+    subtitle: "Live Gaan & Groeien",
+    description: "We lanceren uw oplossing en bieden continue ondersteuning voor optimale prestaties.",
+    icon: Rocket,
+    accent: "from-red-500 to-pink-600",
+    details: [
+      "Geleidelijke uitrol en go-live ondersteuning",
+      "Training en documentatie voor gebruikers",
+      "Monitoring en performance optimalisatie",
+      "Continue ondersteuning en updates"
+    ],
+    useCase: "Het systeem wordt gelanceerd met training voor alle advocaten, en we monitoren de prestaties om verder te optimaliseren.",
+    visual: "launch"
+  }
+];
 
 export default function DienstenPage() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -194,24 +270,6 @@ export default function DienstenPage() {
               const isVisible = visibleSteps.has(index);
               const isActive = activeStep === index;
 
-              // Use different layout components for each step
-              const renderStepLayout = () => {
-                switch (step.id) {
-                  case 1:
-                    return <StepLayoutOne step={step} isEven={index % 2 === 0} />;
-                  case 2:
-                    return <StepLayoutTwo step={step} isEven={index % 2 === 0} />;
-                  case 3:
-                    return <StepLayoutThree step={step} isEven={index % 2 === 0} />;
-                  case 4:
-                    return <StepLayoutFour step={step} isEven={index % 2 === 0} />;
-                  case 5:
-                    return <StepLayoutFive step={step} isEven={index % 2 === 0} />;
-                  default:
-                    return null;
-                }
-              };
-
               return (
                 <motion.div
                   key={step.id}
@@ -223,9 +281,117 @@ export default function DienstenPage() {
                     scale: isActive ? 1.01 : 1
                   }}
                   transition={{ duration: 0.5 }}
-                  className="relative"
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
                 >
-                  {renderStepLayout()}
+                  {/* Left Column - Process Info */}
+                  <div className="space-y-8">
+                    <div className="inline-flex items-center gap-4 px-6 py-3 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 shadow-xl step-number-marker">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${step.accent} flex items-center justify-center shadow-lg`}>
+                        <IconComponent className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="text-lg font-bold text-white">Stap {step.id}</div>
+                        <div className="text-sm text-white/70">{step.subtitle}</div>
+                      </div>
+                    </div>
+
+                    <h2 className="text-5xl md:text-6xl font-extralight text-white tracking-tight leading-tight">
+                      {step.title}
+                    </h2>
+                    
+                    <p className="text-xl text-white/80 font-light leading-relaxed">
+                      {step.description}
+                    </p>
+
+                    <div className="grid grid-cols-1 gap-4">
+                      {step.details.map((detail, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: i * 0.1 }}
+                          className="flex items-center gap-4 p-4 rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 shadow-lg"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shadow">
+                            <span className="text-white text-sm font-bold">✓</span>
+                          </div>
+                          <span className="text-white/90 font-medium">{detail}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Column - Client Case */}
+                  <div className="relative">
+                    <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/25">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/25 to-white/15 flex items-center justify-center border border-white/30 shadow-lg">
+                          <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center">
+                            <div className="w-2 h-2 rounded-full bg-white"></div>
+                          </div>
+                        </div>
+                        <h4 className="text-lg font-bold text-white">Client Case</h4>
+                      </div>
+                      <p className="text-white/90 italic leading-relaxed mb-6">&ldquo;{step.useCase}&rdquo;</p>
+                      
+                      {/* Step-specific visual examples */}
+                      <div className="mt-6">
+                        {step.id === 1 && (
+                          <div className="grid grid-cols-1 gap-2">
+                            {["Versnipperde info", "Handmatige stappen", "Onvoldoende vindbaarheid"].map((item, i) => (
+                              <div key={i} className="flex items-center justify-between rounded-md border border-white/20 px-3 py-2 bg-white/10">
+                                <span className="text-sm text-white/80">{item}</span>
+                                <span className="text-amber-400">⚠️</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {step.id === 2 && (
+                          <div className="grid grid-cols-3 gap-2">
+                            {["Scope", "Integraties", "RBAC", "Chat", "E-mail", "Workflows"].map((tag, i) => (
+                              <div key={i} className="rounded-md bg-white/20 border border-white/30 px-2 py-2 text-center text-xs font-medium text-white">
+                                {tag}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {step.id === 3 && (
+                          <div className="rounded-md bg-slate-900/50 text-slate-200 text-xs font-mono p-3 border border-white/20">
+                            <div>ingest_sources()</div>
+                            <div>index_documents()</div>
+                            <div>build_chat_interface()</div>
+                            <div>rag.generate(query, context)</div>
+                          </div>
+                        )}
+                        
+                        {step.id === 4 && (
+                          <div className="flex flex-wrap gap-2">
+                            {["Login OK", "RBAC OK", "Kwaliteit ↑", "E-mail voorstel OK"].map((badge, i) => (
+                              <span key={i} className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-300 border border-green-400/30">
+                                {badge}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {step.id === 5 && (
+                          <div className="h-20 flex items-end gap-2">
+                            {[30, 45, 60, 80].map((height, i) => (
+                              <div key={i} className="flex-1 bg-white/20 border border-white/30 rounded">
+                                <div
+                                  className="w-full bg-gradient-to-t from-blue-400 to-white rounded-b"
+                                  style={{ height: `${height}%` }}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </motion.div>
               );
             })}
