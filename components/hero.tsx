@@ -19,7 +19,6 @@ import { useLanguage } from "@/contexts/language-context";
  * so they sit exactly on top of the existing network lines and hubs.
  */
 function MagicVisual() {
-  const reduce = useReducedMotion();
 
   return (
     <div className="relative w-[320px] md:w-[640px] aspect-[818/768] select-none">
@@ -31,103 +30,6 @@ function MagicVisual() {
         draggable={false}
       />
 
-      {/* SVG overlay for inward pulsing system */}
-      <svg
-        className="absolute inset-0 z-20 pointer-events-none"
-        viewBox="0 0 818 768"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <defs>
-          {/* Glow for animated elements */}
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="1.3" result="b" />
-            <feMerge>
-              <feMergeNode in="b" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-
-          {/* Simple gradient for moving pulses */}
-          <linearGradient id="pulseGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="rgba(59,130,246,0)" />
-            <stop offset="50%" stopColor="rgba(59,130,246,0.9)" />
-            <stop offset="100%" stopColor="rgba(34,211,238,0)" />
-          </linearGradient>
-        </defs>
-
-        {/* Main hub coordinates */}
-        <circle cx="409" cy="384" r="0" fill="none" id="hub" />
-
-        {/* Paths from corners → center (approximate to artwork lines) */}
-        {[
-          // TL → center
-          "M 160 150 C 205 260, 230 285, 260 300 C 300 320, 350 360, 409 384",
-          // TR → center
-          "M 658 150 C 620 260, 590 285, 560 300 C 520 320, 470 360, 409 384",
-          // BL → center
-          "M 160 618 C 205 510, 230 485, 260 470 C 300 450, 350 410, 409 384",
-          // BR → center
-          "M 658 618 C 620 510, 590 485, 560 470 C 520 450, 470 410, 409 384",
-          // Mid top
-          "M 409 230 C 409 300, 409 350, 409 384",
-          // Mid bottom
-          "M 409 538 C 409 468, 409 418, 409 384",
-          // Mid left
-          "M 205 384 C 330 384, 380 384, 409 384",
-          // Mid right
-          "M 614 384 C 488 384, 438 384, 409 384",
-        ].map((d, i) => (
-          <g key={i}>
-            {/* Subtle base line glow */}
-            <path
-              d={d}
-              stroke="rgba(147,197,253,0.25)"
-              strokeWidth={2}
-              fill="none"
-              filter="url(#glow)"
-            />
-            {/* Animated pulse moving inward */}
-            {!reduce && (
-              <circle r="5" fill="url(#pulseGrad)" filter="url(#glow)">
-                <animateMotion
-                  dur="2.4s"
-                  repeatCount="indefinite"
-                  rotate="auto"
-                  keyPoints="0;1"
-                  keyTimes="0;1"
-                >
-                  <mpath xlinkHref={`#p${i}`} />
-                </animateMotion>
-              </circle>
-            )}
-            {/* Invisible path ref */}
-            <path id={`p${i}`} d={d} fill="none" stroke="none" />
-          </g>
-        ))}
-      </svg>
-
-      {/* Central hub pulse */}
-      <motion.div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
-        animate={
-          reduce
-            ? {}
-            : {
-                scale: [1, 1.2, 1],
-                opacity: [0.7, 1, 0.7],
-              }
-        }
-        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-        style={{
-          width: 40,
-          height: 40,
-          borderRadius: "9999px",
-          boxShadow:
-            "0 0 22px rgba(147,197,253,0.9), 0 0 44px rgba(59,130,246,0.5)",
-          background:
-            "radial-gradient(circle, rgba(255,255,255,0.95), rgba(59,130,246,0.4))",
-        }}
-      />
     </div>
   );
 }
