@@ -170,7 +170,13 @@ export default function MarketplacePage() {
                     </div>
                     
                     <h3 className="finit-h2 mb-2" style={{ color: '#1C2C55' }}>
-                      VoiceLink
+                      <Image
+                        src="/Finit Voicelink Blue@4x.png"
+                        alt="VoiceLink"
+                        width={180}
+                        height={60}
+                        className="object-contain"
+                      />
                     </h3>
                     
                     <p className="finit-body mb-3" style={{ color: '#202226' }}>
