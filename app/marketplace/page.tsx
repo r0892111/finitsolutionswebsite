@@ -254,7 +254,6 @@ export default function MarketplacePage() {
 
       {/* All Services Grid */}
       <section className="pb-20 md:pb-28">
-        <div className="container mx-auto px-4">
           {/* Section Header */}
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900">
@@ -444,7 +443,6 @@ export default function MarketplacePage() {
               </p>
             </div>
           )}
-        </div>
       </section>
 
       {/* CTA Section */}
