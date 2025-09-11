@@ -70,36 +70,30 @@ export function Navbar() {
           </div>
 
           <div className=" lg:flex hidden items-center bg-gray-900/20 backdrop-blur-sm rounded-full px-2 py-1 mr-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 transition-all duration-200"
-              >
-                {item.name}
-              </Link>
-            ))}
+            <Link
+              href="/diensten"
+              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 transition-all duration-200"
+            >
+              Tailored IT Solutions
+            </Link>
+            <Link
+              href="/marketplace"
+              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 transition-all duration-200"
+            >
+              Marketplace
+            </Link>
+            <Link
+              href="/about"
+              className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 transition-all duration-200"
+            >
+              About Us
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center">
             {/* Navigation Pills Container */}
 
-            {/* CTA Button */}
-            <Button
-              onClick={handleContactClick}
-              className={`border ${
-                scrolled ? "bg-blue-900" : "bg-transparent"
-              } border-blue-900 text-white px-6 py-2 rounded-full font-medium transition-colors`}
-            >
-              Register
-            </Button>
-            <Button
-              onClick={handleContactClick}
-              className="bg-blue-900 hover:bg-blue-800 text-white px-6 py-2 mx-2 rounded-full font-medium transition-colors"
-            >
-              Login
-            </Button>
           </nav>
           {/* Mobile Navigation Toggle */}
           <div className="flex lg:hidden items-center space-x-4">
@@ -140,20 +134,6 @@ export function Navbar() {
                 {item.name}
               </Link>
             ))}
-            <div className="flex justify-center items-center gap-x-4   pr-4">
-              <Button
-                onClick={handleContactClick}
-                className="bg-blue-900 hover:bg-blue-800 text-white w-full text-lg py-6 rounded-full"
-              >
-                Register
-              </Button>
-              <Button
-                onClick={handleContactClick}
-                className="bg-blue-900 hover:bg-blue-800 text-white w-full text-lg py-6 rounded-full"
-              >
-                Login
-              </Button>
-            </div>
           </nav>
         </div>
       </div>
