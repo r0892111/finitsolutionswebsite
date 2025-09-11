@@ -74,7 +74,7 @@ export default function MarketplacePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-6 flex w-full items-center justify-center gap-6 md:gap-8"
+            className="mb-6 mt-12 flex w-full items-center justify-center gap-6 md:gap-8"
           >
             <Image
               src="/Finit Marketplace White.svg"
