@@ -86,6 +86,155 @@ function MagicVisual() {
         className="w-full h-full object-contain pointer-events-none"
         draggable={false}
       />
+        
+        {/* Animated overlay elements for subtle pulsing */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none z-20"
+          viewBox="0 0 818 768"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <defs>
+            {/* Subtle glow filter */}
+            <filter id="subtleGlow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feMerge> 
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+            
+            {/* Radial gradient for pulsing elements */}
+            <radialGradient id="pulseGradient" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="rgba(59,130,246,0.4)" />
+              <stop offset="70%" stopColor="rgba(22,44,85,0.2)" />
+              <stop offset="100%" stopColor="transparent" />
+            </radialGradient>
+            
+            {/* Accent glow gradient */}
+            <radialGradient id="accentGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="rgba(247,230,155,0.3)" />
+              <stop offset="100%" stopColor="transparent" />
+            </radialGradient>
+          </defs>
+
+          {/* Central database pulsing glow */}
+          <circle 
+            cx="409" 
+            cy="384" 
+            r="25" 
+            fill="url(#pulseGradient)" 
+            filter="url(#subtleGlow)"
+            opacity="0.6"
+          >
+            <animate 
+              attributeName="r" 
+              values="20;35;20" 
+              dur="6s" 
+              repeatCount="indefinite"
+            />
+            <animate 
+              attributeName="opacity" 
+              values="0.3;0.8;0.3" 
+              dur="6s" 
+              repeatCount="indefinite"
+            />
+          </circle>
+
+          {/* Server nodes pulsing - positioned at approximate server locations */}
+          {[
+            { cx: 160, cy: 150, delay: "0s" },    // Top-left server
+            { cx: 658, cy: 150, delay: "2s" },    // Top-right server
+            { cx: 160, cy: 618, delay: "4s" },    // Bottom-left server
+            { cx: 658, cy: 618, delay: "1s" },    // Bottom-right server
+            { cx: 409, cy: 230, delay: "3s" },    // Top-center server
+            { cx: 409, cy: 538, delay: "5s" },    // Bottom-center server
+          ].map((node, index) => (
+            <circle
+              key={index}
+              cx={node.cx}
+              cy={node.cy}
+              r="8"
+              fill="url(#accentGlow)"
+              filter="url(#subtleGlow)"
+              opacity="0.4"
+            >
+              <animate 
+                attributeName="r" 
+                values="6;12;6" 
+                dur="8s" 
+                begin={node.delay}
+                repeatCount="indefinite"
+              />
+              <animate 
+                attributeName="opacity" 
+                values="0.2;0.6;0.2" 
+                dur="8s" 
+                begin={node.delay}
+                repeatCount="indefinite"
+              />
+            </circle>
+          ))}
+
+          {/* Connection line pulses - subtle data flow indication */}
+          {[
+            "M 160 150 C 205 260, 230 285, 260 300 C 300 320, 350 360, 409 384",
+            "M 658 150 C 620 260, 590 285, 560 300 C 520 320, 470 360, 409 384",
+            "M 160 618 C 205 510, 230 485, 260 470 C 300 450, 350 410, 409 384",
+            "M 658 618 C 620 510, 590 485, 560 470 C 520 450, 470 410, 409 384",
+          ].map((path, index) => (
+            <g key={index}>
+              {/* Subtle pulsing line overlay */}
+              <path
+                d={path}
+                stroke="rgba(59,130,246,0.3)"
+                strokeWidth="1"
+                fill="none"
+                filter="url(#subtleGlow)"
+                opacity="0.5"
+              >
+                <animate 
+                  attributeName="opacity" 
+                  values="0.2;0.7;0.2" 
+                  dur="10s" 
+                  begin={`${index * 2.5}s`}
+                  repeatCount="indefinite"
+                />
+              </path>
+            </g>
+          ))}
+
+          {/* Ambient data particles - very subtle */}
+          {[
+            { cx: 300, cy: 200, delay: "0s" },
+            { cx: 518, cy: 200, delay: "3s" },
+            { cx: 300, cy: 568, delay: "6s" },
+            { cx: 518, cy: 568, delay: "1.5s" },
+          ].map((particle, index) => (
+            <circle
+              key={index}
+              cx={particle.cx}
+              cy={particle.cy}
+              r="2"
+              fill="rgba(247,230,155,0.6)"
+              opacity="0.3"
+            >
+              <animate 
+                attributeName="r" 
+                values="1;4;1" 
+                dur="12s" 
+                begin={particle.delay}
+                repeatCount="indefinite"
+              />
+              <animate 
+                attributeName="opacity" 
+                values="0.1;0.6;0.1" 
+                dur="12s" 
+                begin={particle.delay}
+                repeatCount="indefinite"
+              />
+            </circle>
+          ))}
+        </svg>
       </div>
       
       {/* Subtle ambient light reflection on top */}
