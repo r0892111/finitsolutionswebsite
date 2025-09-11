@@ -22,7 +22,7 @@ export function Navbar() {
     return null;
   }
   const navItems = [
-    { name: "Dienster", href: "/diensten" },
+    { name: "Diensten", href: "/diensten" },
     { name: "Blog", href: "/blog" },
     { name: "Over Ons", href: "/about" },
   ];
