@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { useProcessScroll } from "@/hooks/useProcessScroll";
 import { useProcessAutoplay } from "@/hooks/useProcessAutoplay";
+import { useLanguage } from "@/contexts/language-context";
 
 const processSteps = [
   {
@@ -96,6 +97,7 @@ export default function DienstenPage() {
   const [hasStarted, setHasStarted] = useState(false);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const processRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   const { activeStep, setActiveStep, visibleSteps } = useProcessScroll(stepRefs, isPlaying);
 
@@ -133,7 +135,7 @@ export default function DienstenPage() {
           >
             <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white/20 text-white border border-white/30 mb-8 backdrop-blur-sm">
               <Cog className="h-4 w-4 mr-2" />
-              <span>Maatwerk proces</span>
+              <span>{t('diensten.hero.badge')}</span>
               <ChevronRight className="h-4 w-4 ml-2" />
             </div>
           </motion.div>
@@ -144,7 +146,7 @@ export default function DienstenPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-6xl md:text-7xl lg:text-8xl font-extralight mb-12 text-center text-white tracking-tight"
           >
-            Van Idee tot Impact
+            {t('diensten.hero.title')}
           </motion.h1>
           
           <motion.p
@@ -153,8 +155,7 @@ export default function DienstenPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-white/90 text-2xl mb-20 max-w-5xl mx-auto text-center leading-relaxed font-light tracking-wide"
           >
-            Ontdek hoe wij samen met u van uitdaging naar oplossing gaan — kort, duidelijk en
-            resultaatgericht.
+            {t('diensten.hero.description')}
           </motion.p>
 
           {/* Process Preview */}
@@ -192,10 +193,10 @@ export default function DienstenPage() {
                     
                     <div className="space-y-2">
                       <div className="text-lg font-semibold text-white tracking-wide group-hover:text-white/90 transition-colors duration-300">
-                        {step.title}
+                        {t(`diensten.step${step.id}.title`)}
                       </div>
                       <div className="text-base text-white/80 font-light tracking-wide leading-relaxed">
-                        {step.subtitle}
+                        {t(`diensten.step${step.id}.subtitle`)}
                       </div>
                     </div>
                   </motion.div>
@@ -215,7 +216,7 @@ export default function DienstenPage() {
               onClick={scrollToProcess}
               className="group flex flex-col items-center gap-3 mx-auto text-white/80 hover:text-white transition-colors duration-300"
             >
-              <span className="text-base font-light tracking-wide">Ontdek het proces</span>
+              <span className="text-base font-light tracking-wide">{t('diensten.hero.scroll')}</span>
               <motion.div
                 animate={{ y: [0, 8, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
@@ -252,10 +253,10 @@ export default function DienstenPage() {
             className="text-center mb-20"
           >
             <h2 className="text-4xl md:text-5xl font-extralight mb-8 text-white tracking-tight">
-              Ons Bewezen Proces
+              {t('diensten.process.title')}
             </h2>
             <p className="text-white/80 text-xl mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-              Een gestructureerde aanpak die zorgt voor resultaten
+              {t('diensten.process.subtitle')}
             </p>
 
             {/* Controls */}
@@ -291,20 +292,20 @@ export default function DienstenPage() {
                       </div>
                       <div>
                         <div className="text-lg font-bold text-white">Stap {step.id}</div>
-                        <div className="text-sm text-white/70">{step.subtitle}</div>
+                        <div className="text-sm text-white/70">{t(`diensten.step${step.id}.subtitle`)}</div>
                       </div>
                     </div>
 
                     <h2 className="text-5xl md:text-6xl font-extralight text-white tracking-tight leading-tight">
-                      {step.title}
+                      {t(`diensten.step${step.id}.title`)}
                     </h2>
                     
                     <p className="text-xl text-white/80 font-light leading-relaxed">
-                      {step.description}
+                      {t(`diensten.step${step.id}.description`)}
                     </p>
 
                     <div className="grid grid-cols-1 gap-4">
-                      {step.details.map((detail, i) => (
+                      {[1, 2, 3, 4].map((detailNum, i) => (
                         <motion.div
                           key={i}
                           initial={{ opacity: 0, y: 20 }}
@@ -316,7 +317,7 @@ export default function DienstenPage() {
                           <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shadow">
                             <span className="text-white text-sm font-bold">✓</span>
                           </div>
-                          <span className="text-white/90 font-medium">{detail}</span>
+                          <span className="text-white/90 font-medium">{t(`diensten.step${step.id}.detail${detailNum}`)}</span>
                         </motion.div>
                       ))}
                     </div>
@@ -331,9 +332,9 @@ export default function DienstenPage() {
                             <div className="w-2 h-2 rounded-full bg-white"></div>
                           </div>
                         </div>
-                        <h4 className="text-lg font-bold text-white">Client Case</h4>
+                        <h4 className="text-lg font-bold text-white">{t('diensten.clientcase')}</h4>
                       </div>
-                      <p className="text-white/90 italic leading-relaxed mb-6">&ldquo;{step.useCase}&rdquo;</p>
+                      <p className="text-white/90 italic leading-relaxed mb-6">&ldquo;{t(`diensten.step${step.id}.usecase`)}&rdquo;</p>
                       
                       {/* Step-specific visual examples */}
                       <div className="mt-6">
@@ -409,26 +410,26 @@ export default function DienstenPage() {
             transition={{ duration: 1 }}
           >
             <h2 className="text-5xl md:text-6xl font-extralight mb-8 text-white tracking-tight">
-              Waarom ons proces werkt
+              {t('diensten.benefits.title')}
             </h2>
             <p className="text-white/80 text-xl max-w-4xl mx-auto mb-20 font-light leading-relaxed tracking-wide">
-              Bewezen resultaten door een gestructureerde aanpak, continue samenwerking en focus op meetbare impact.
+              {t('diensten.benefits.subtitle')}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {[
               {
-                title: "Echte samenwerking",
-                description: "We werken niet voor u, maar met u — uw expertise gecombineerd met onze technische kennis voor optimale resultaten."
+                title: t('diensten.benefits.collaboration.title'),
+                description: t('diensten.benefits.collaboration.description')
               },
               {
-                title: "Snelle resultaten", 
-                description: "Door onze agile aanpak ziet u snel concrete vooruitgang en kunt u tijdig bijsturen voor maximale impact."
+                title: t('diensten.benefits.speed.title'),
+                description: t('diensten.benefits.speed.description')
               },
               {
-                title: "Meetbare impact",
-                description: "Elke oplossing wordt gebouwd met duidelijke KPI's en meetbare verbeteringen die uw ROI aantonen."
+                title: t('diensten.benefits.impact.title'),
+                description: t('diensten.benefits.impact.description')
               }
             ].map((benefit, i) => (
               <motion.div
@@ -459,14 +460,14 @@ export default function DienstenPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <h2 className="text-4xl md:text-5xl font-extralight mb-8 text-white tracking-tight">
-              Klaar voor Excellentie?
+              {t('diensten.cta.final.title')}
             </h2>
             <p className="text-white/80 text-xl mb-12 leading-relaxed font-light">
-              Transformeer uw digitale visie in meetbare bedrijfsimpact. Uw ambitie verdient uitzonderlijke uitvoering.
+              {t('diensten.cta.final.description')}
             </p>
             
             <ProjectRequestDialog 
-              buttonText="Begin Uw Transformatie"
+              buttonText={t('diensten.cta.final.button')}
               buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-10 py-4 rounded-2xl font-medium"
             />
           </motion.div>
