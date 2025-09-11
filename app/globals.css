@@ -226,8 +226,8 @@
 
     /* 2) bottom-right navy vignette */
     radial-gradient(720px 560px at 92% 92%,
-      rgba(28,44,85,0.85) 0%,
-      rgba(28,44,85,0.00) 55%),
+      rgba(28,44,85,0.95) 0%,
+      rgba(28,44,85,0.20) 70%),
 
     /* 3) top-right warm glow */
     radial-gradient(900px 700px at 100% 0%,
@@ -241,12 +241,12 @@
 
     /* 5) top-left navy haze */
     radial-gradient(1000px 800px at -8% -10%,
-      rgba(28,44,85,0.80) 0%,
-      rgba(28,44,85,0.00) 55%),
+      rgba(28,44,85,0.90) 0%,
+      rgba(28,44,85,0.15) 65%),
 
     /* 6) soft base tilt from navy -> white -> yellow */
     linear-gradient(135deg,
-      rgba(28,44,85,0.35) 0%,
+      rgba(28,44,85,0.55) 0%,
       rgba(255,255,255,0.75) 50%,
       rgba(247,230,155,0.40) 100%);
 
