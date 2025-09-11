@@ -75,35 +75,26 @@ export default function MarketplacePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-6"
+              className="mb-6 flex items-center justify-center gap-6"
             >
               <Image
                 src="/Finit Marketplace White.svg"
                 alt="Finit Marketplace"
                 width={180}
                 height={90}
-                className="mx-auto mb-6 opacity-90"
+                className="opacity-90"
                 priority
               />
+              <div className="text-left">
+                <h1 className="finit-h1 text-white mb-2">
+                  Plug & play <span className="finit-highlight">AI solutions</span>
+                </h1>
+                <p className="finit-body text-white/90">
+                  Enterprise-grade AI tools die direct integreren met uw bestaande systemen
+                </p>
+              </div>
             </motion.div>
             
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="finit-h1 text-white mb-4"
-            >
-              Plug & play <span className="finit-highlight">AI solutions</span>
-            </motion.h1>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="finit-body text-white/90 max-w-2xl mx-auto"
-            >
-              Enterprise-grade AI tools die direct integreren met uw bestaande systemen
-            </motion.p>
           </div>
         </div>
       </section>
