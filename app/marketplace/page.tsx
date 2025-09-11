@@ -181,49 +181,6 @@ export default function MarketplacePage() {
 
   return (
     <main className="pt-20 bg-gradient-to-br from-slate-50 via-white to-slate-50 min-h-screen relative">
-      {/* Coming Soon Overlay - Moved to top */}
-      <div className="fixed top-20 left-0 right-0 bottom-0 z-50 bg-white/95 backdrop-blur-sm flex items-center justify-center">
-        <div className="text-center max-w-2xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6 md:space-y-8"
-          >
-            <div className="w-20 h-20 md:w-24 md:h-24 mx-auto bg-gradient-to-r from-primary to-blue-600 rounded-full flex items-center justify-center shadow-lg">
-              <Sparkles className="w-10 h-10 md:w-12 md:h-12 text-white" />
-            </div>
-            
-            <div className="space-y-3 md:space-y-4">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-slate-900 via-primary to-slate-900 bg-clip-text text-transparent">
-                Binnenkort Beschikbaar
-              </h1>
-              <p className="text-lg md:text-xl text-slate-600 leading-relaxed px-4">
-                Onze AI SaaS Marketplace is in ontwikkeling. We werken hard aan een collectie van premium AI-oplossingen die uw bedrijf naar het volgende niveau tillen.
-              </p>
-            </div>
-            
-          
-            
-            <div className="space-y-3 md:space-y-4 px-4">
-              <p className="text-slate-600">
-                Wilt u als eerste op de hoogte worden gesteld van de lancering?
-              </p>
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-primary to-blue-600 shadow-lg hover:shadow-xl transition-all duration-300 text-base md:text-lg px-6 md:px-8 py-3 md:py-4"
-                onClick={() => window.location.href = '/#contact'}
-              >
-                Houd me op de hoogte
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-      
-      {/* Blurred Background Content */}
-      <div className="blur-sm pointer-events-none">
       {/* Hero Section */}
       <section className="relative py-20 md:py-28 overflow-hidden">
         {/* Background Elements */}
@@ -527,7 +484,6 @@ export default function MarketplacePage() {
           </motion.div>
         </div>
       </section>
-      </div>
     </main>
   );
 }
