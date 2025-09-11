@@ -139,7 +139,14 @@ export default function MarketplacePage() {
                   />
                   
                   {/* Overlay with product logo */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <Image
+                    src="/finit voicelink 1.JPG"
+                    alt="VoiceLink Interface"
+                    fill
+                    className="object-contain p-4 rounded-xl"
+                    sizes="(max-width: 1024px) 100vw, 42vw"
+                    unoptimized
+                  />
                   
                   {/* Status and CTA in top corners */}
                   <div className="absolute top-4 left-4">
