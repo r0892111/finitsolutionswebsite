@@ -297,7 +297,25 @@ export default function MarketplacePage() {
                         variant="ghost" 
                         size="sm"
                         className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-medium"
-                        onClick={() => window.location.href = '/#contact'}
+                        onClick={() => {
+                          if (window.location.pathname === '/') {
+                            const contactSection = document.getElementById('contact');
+                            if (contactSection) {
+                              contactSection.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          } else {
+                            window.location.href = '/#contact';
+                          }
+                        }}
+                          if (window.location.pathname === '/') {
+                            const contactSection = document.getElementById('contact');
+                            if (contactSection) {
+                              contactSection.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          } else {
+                            window.location.href = '/#contact';
+                          }
+                        }}
                       >
                         Interesse?
                         <ArrowRight className="h-3 w-3 ml-1" />
@@ -381,7 +399,16 @@ export default function MarketplacePage() {
                 size="lg" 
                 className="text-white shadow-soft hover:shadow-lg transition-all duration-300 font-medium px-8"
                 style={{ backgroundColor: '#1C2C55' }}
-                onClick={() => window.location.href = '/#contact'}
+                onClick={() => {
+                  if (window.location.pathname === '/') {
+                    const contactSection = document.getElementById('contact');
+                    if (contactSection) {
+                      contactSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  } else {
+                    window.location.href = '/#contact';
+                  }
+                }}
               >
                 Neem contact op
                 <ArrowRight className="ml-2 h-5 w-5" />
