@@ -462,7 +462,7 @@ export default function DienstenPage() {
               Klaar voor Excellentie?
             </h2>
             <p className="text-white/80 text-xl mb-12 leading-relaxed font-light">
-              Transformeeer uw digitale visie in meetbare bedrijfsimpact. Uw ambitie verdient uitzonderlijke uitvoering.
+              Transformeer uw digitale visie in meetbare bedrijfsimpact. Uw ambitie verdient uitzonderlijke uitvoering.
             </p>
             
             <ProjectRequestDialog 
