@@ -24,7 +24,7 @@ export function Hero() {
           >
             <div className="inline-flex items-center px-4 py-2 rounded-full text-[12px] font-semibold bg-white text-blue-700 border border-blue-200">
               <Zap className="h-4 w-4 mr-2" />
-              <span>AI & Automatisering voor KMOs</span>
+              <span>Where the Future Begins</span>
             </div>
           </motion.div>
 
