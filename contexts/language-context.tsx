@@ -30,10 +30,10 @@ const translations = {
     
     // Hero
     'hero.badge': 'Where the Future Begins',
-    'hero.title.line1': 'Artificiële Arbeidskrachten',
-    'hero.title.line2': 'die je bedrijf automatiseren',
-    'hero.title.line3': 'en opschalen.',
-    'hero.subtitle': 'Wij bouwen AI-gestuurde software bovenop de systemen die je al gebruikt.\nOns doel is inefficiënties te elimineren en een krachtige hefboom\nvoor de groei van je bedrijf te creëren.',
+    'hero.title.line1': 'AI Workforces',
+    'hero.title.line2': 'that automate',
+    'hero.title.line3': 'and scale your business.',
+    'hero.subtitle': 'We build AI-powered software on top of the systems you already use.\nOur goal is to eliminate inefficiencies and unlock powerful leverage\nfor your company\'s growth.',
     'hero.cta.primary': 'Get Started',
     'hero.cta.secondary': 'Learn More',
     
@@ -42,7 +42,7 @@ const translations = {
     'about.title': 'Zorg dat uw concurrent u niet voor is.',
     'about.description': 'Van AI Agents die automatisch rapporten genereren en uw planning optimaliseren tot spraaktechnologie die uw CRM up-to-date houdt - efficiëntie wordt vandaag de dag steeds belangrijker. Wij zorgen ervoor dat u de trein niet mist.',
     'about.spotlight.title': 'IN DE KIJKER',
-    'about.spotlight.product': 'VoiceLink',
+    'about.spotlight.product': 'Voice-to-CRM',
     'about.spotlight.description': 'Uw verkopers spreken tijdens de autorit hun klantbezoek in - klantnaam, offertebedrag, vervolgafspraken - en alles staat automatisch op de juiste plaats in het CRM. Meer tijd voor klanten, minder tijd aan administratie. Uw salesteam kan een extra klantbezoek per dag doen, terwijl u als manager het complete overzicht heeft.',
     'about.tagline': 'Uw team verdient betere tools. Wij bouwen ze.',
     'about.cta': 'Leer ons kennen',
@@ -104,7 +104,7 @@ const translations = {
     
     // Hero
     'hero.badge': 'Where the Future Begins',
-    'hero.title.line1': 'Artificial Workforces',
+    'hero.title.line1': 'AI Workforces',
     'hero.title.line2': 'that automate',
     'hero.title.line3': 'and scale your business.',
     'hero.subtitle': 'We build AI-powered software on top of the systems you already use.\nOur goal is to eliminate inefficiencies and unlock powerful leverage\nfor your company\'s growth.',
@@ -116,7 +116,7 @@ const translations = {
     'about.title': 'Don\'t let your competitors get ahead.',
     'about.description': 'From AI Agents that automatically generate reports and optimize your planning to voice technology that keeps your CRM up-to-date - efficiency is becoming increasingly important today. We make sure you don\'t miss the train.',
     'about.spotlight.title': 'FEATURED',
-    'about.spotlight.product': 'VoiceLink',
+    'about.spotlight.product': 'Voice-to-CRM',
     'about.spotlight.description': 'Your salespeople speak their client visits during the drive - client name, quote amount, follow-up appointments - and everything is automatically placed in the right place in the CRM. More time for clients, less time on administration. Your sales team can make an extra client visit per day, while you as a manager have the complete overview.',
     'about.tagline': 'Your team deserves better tools. We build them.',
     'about.cta': 'Get to know us',
