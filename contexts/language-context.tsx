@@ -162,10 +162,8 @@ interface LanguageProviderProps {
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
   const [language, setLanguage] = useState<Language>('en');
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     // Check for stored language preference
     const stored = localStorage.getItem('finit-language');
     if (stored && (stored === 'nl' || stored === 'en')) {
@@ -181,10 +179,6 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations['nl']] || key;
   };
-
-  if (!mounted) {
-    return <>{children}</>;
-  }
 
   return (
     <LanguageContext.Provider
