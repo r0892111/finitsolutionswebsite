@@ -343,7 +343,7 @@ export default function DienstenPage() {
                             {["Versnipperde info", "Handmatige stappen", "Onvoldoende vindbaarheid"].map((item, i) => (
                               <div key={i} className="flex items-center justify-between rounded-md border border-white/20 px-3 py-2 bg-white/10">
                                 <span className="text-sm text-white/80">{item}</span>
-                                <span className="text-amber-400">⚠️</span>
+                                <span className="text-amber-400"></span>
                               </div>
                             ))}
                           </div>
