@@ -66,44 +66,44 @@ export default function MarketplacePage() {
   ];
 
   return (
-  <main className="pt-20 bg-white min-h-screen font-general-sans">
-    <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
-      <div className="w-full">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-6 mt-12 flex w-full items-center justify-center gap-6 md:gap-8"
-          >
-            <Image
-              src="/Finit Marketplace White.svg"
-              alt="Finit Marketplace"
-              width={220}
-              height={110}
-              className="opacity-90"
-              priority
-            />
+    <main className="pt-20 bg-white min-h-screen font-general-sans">
+      <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
+        <div className="w-full">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-6 mt-12 flex w-full items-center justify-center gap-6 md:gap-8"
+            >
+              <Image
+                src="/Finit Marketplace White.svg"
+                alt="Finit Marketplace"
+                width={220}
+                height={110}
+                className="opacity-90"
+                priority
+              />
 
-            {/* Robust vertical divider */}
-            <div
-              aria-hidden="true"
-              className="hidden md:block self-stretch border-l-4 mx-4 rounded-full"
-              style={{ borderColor: 'rgba(255, 255, 255, 0.9)' }}
-            />
+              {/* Robust vertical divider */}
+              <div
+                aria-hidden="true"
+                className="hidden md:block self-stretch border-l-4 mx-4 rounded-full"
+                style={{ borderColor: 'rgba(255, 255, 255, 0.9)' }}
+              />
 
-            <div className="text-left min-w-0 flex-1 md:min-w-[700px]">
-              <h1 className="finit-h1 text-white mb-2">
-                Plug &amp; play <span className="finit-highlight">AI solutions</span>
-              </h1>
-              <p className="finit-body text-white/90">
-                Enterprise-grade AI tools die direct integreren met uw bestaande systemen
-              </p>
-            </div>
-          </motion.div>
+              <div className="text-left min-w-0 flex-1 md:min-w-[700px]">
+                <h1 className="finit-h1 text-white mb-2">
+                  Plug &amp; play <span className="finit-highlight">AI solutions</span>
+                </h1>
+                <p className="finit-body text-white/90">
+                  Enterprise-grade AI tools die direct integreren met uw bestaande systemen
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
       {/* Featured Product - VoiceLink */}
       <section className="py-8 bg-white">
@@ -298,15 +298,6 @@ export default function MarketplacePage() {
                         size="sm"
                         className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-medium"
                         onClick={() => {
-                          if (window.location.pathname === '/') {
-                            const contactSection = document.getElementById('contact');
-                            if (contactSection) {
-                              contactSection.scrollIntoView({ behavior: 'smooth' });
-                            }
-                          } else {
-                            window.location.href = '/#contact';
-                          }
-                        }}
                           if (window.location.pathname === '/') {
                             const contactSection = document.getElementById('contact');
                             if (contactSection) {
