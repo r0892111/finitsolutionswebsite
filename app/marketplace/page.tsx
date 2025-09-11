@@ -78,7 +78,7 @@ export default function MarketplacePage() {
               className="mb-6"
             >
               <Image
-                src="/Finit Marketplace White@4x.png"
+                src="/Finit Marketplace White.svg"
                 alt="Finit Marketplace"
                 width={180}
                 height={90}
