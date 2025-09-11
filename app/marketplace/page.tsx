@@ -109,9 +109,9 @@ export default function MarketplacePage() {
       </section>
 
       {/* Featured Product - VoiceLink */}
-      <section className="py-12 bg-white">
+      <section className="py-8 bg-white">
         <div className="container mx-auto px-4">
-          <div className="mb-8">
+          <div className="mb-6">
             <div className="flex items-center gap-3 mb-4">
               <Badge className="bg-green-100 text-green-800 border-green-200">
                 <CheckCircle2 className="h-3 w-3 mr-1" />
@@ -119,21 +119,21 @@ export default function MarketplacePage() {
               </Badge>
               <Badge variant="outline">Featured</Badge>
             </div>
-            <h2 className="finit-h2" style={{ color: '#1C2C55' }}>
+            <h2 className="finit-h2 mb-2" style={{ color: '#1C2C55' }}>
               Meest populaire oplossing
             </h2>
           </div>
 
-          <Card className="overflow-hidden bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-300">
+          <Card className="overflow-hidden bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-300 rounded-xl">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
               {/* Product Image - 5/12 width */}
               <div className="lg:col-span-5 relative">
-                <div className="aspect-[4/3] lg:aspect-auto lg:h-full relative overflow-hidden">
+                <div className="aspect-[4/3] lg:aspect-auto lg:h-full relative overflow-hidden rounded-l-xl">
                   <Image
                     src="/finit voicelink 1@4x-100.jpg"
                     alt="VoiceLink Interface"
                     fill
-                    className="object-cover"
+                    className="object-contain p-4"
                     sizes="(max-width: 1024px) 100vw, 42vw"
                     unoptimized
                   />
@@ -165,55 +165,36 @@ export default function MarketplacePage() {
               </div>
 
               {/* Product Details - 7/12 width */}
-              <div className="lg:col-span-7 p-8 lg:p-10">
+              <div className="lg:col-span-7 p-6 lg:p-8">
                 <div className="h-full flex flex-col">
                   {/* Header */}
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between mb-4">
+                  <div className="mb-4">
+                    <div className="flex items-center mb-3">
                       <Badge className="bg-blue-50 text-blue-700 border-blue-200">
                         Sales & CRM
                       </Badge>
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          ))}
-                        </div>
-                        <span className="text-sm text-gray-600">4.9 (127 reviews)</span>
-                      </div>
                     </div>
                     
-                    <h3 className="finit-h2 mb-3" style={{ color: '#1C2C55' }}>
+                    <h3 className="finit-h2 mb-2" style={{ color: '#1C2C55' }}>
                       VoiceLink
                     </h3>
                     
-                    <p className="finit-body mb-4" style={{ color: '#202226' }}>
+                    <p className="finit-body mb-3" style={{ color: '#202226' }}>
                       WhatsApp spraakberichten worden automatisch omgezet naar CRM-data. Klantnaam, offertebedrag, vervolgafspraken - alles op de juiste plaats.
                     </p>
                     
-                    <div className="text-2xl font-bold mb-6" style={{ color: '#1C2C55' }}>
-                      Vanaf €49/maand
-                    </div>
-                  </div>
-
-                  {/* Key Metrics */}
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="text-center p-3 bg-gray-50 rounded-lg">
-                      <div className="text-lg font-bold" style={{ color: '#1C2C55' }}>2 uur</div>
-                      <div className="text-xs text-gray-600">bespaard/dag</div>
-                    </div>
-                    <div className="text-center p-3 bg-gray-50 rounded-lg">
-                      <div className="text-lg font-bold" style={{ color: '#1C2C55' }}>90%</div>
-                      <div className="text-xs text-gray-600">minder fouten</div>
-                    </div>
-                    <div className="text-center p-3 bg-gray-50 rounded-lg">
-                      <div className="text-lg font-bold" style={{ color: '#1C2C55' }}>95%</div>
-                      <div className="text-xs text-gray-600">adoptie rate</div>
+                    <div className="mb-4">
+                      <div className="text-2xl font-bold" style={{ color: '#1C2C55' }}>
+                        Vanaf €29,90/maand
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        Volume kortingen beschikbaar
+                      </div>
                     </div>
                   </div>
 
                   {/* Features */}
-                  <div className="mb-6">
+                  <div className="mb-4">
                     <h4 className="font-medium mb-3" style={{ color: '#1C2C55' }}>Belangrijkste features:</h4>
                     <div className="grid grid-cols-2 gap-2">
                       {featuredProducts[0].features.map((feature, idx) => (
