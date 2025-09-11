@@ -204,6 +204,83 @@
   background-size: 200% 200%;
 }
 
+/* Finit Aurora Background */
+:root {
+  --navy: #1C2C55;        /* rgb(28,44,85)   */
+  --yellow: #F7E69B;      /* rgb(247,230,155)*/
+  --charcoal: #202226;    /* rgb(32,34,38)   */
+  --white: #FFFFFF;
+}
+
+/* Soft aurora background */
+.bg-finit-aurora {
+  /* base fill so banding is minimized */
+  background-color: var(--white);
+
+  /* stacked backgrounds; last is bottom-most */
+  background-image:
+    /* 1) subtle overall vignette */
+    radial-gradient(1200px 900px at 50% 50%,
+      rgba(32,34,38,0.00) 60%,
+      rgba(32,34,38,0.06) 100%),
+
+    /* 2) bottom-right navy vignette */
+    radial-gradient(720px 560px at 92% 92%,
+      rgba(28,44,85,0.60) 0%,
+      rgba(28,44,85,0.00) 60%),
+
+    /* 3) top-right warm glow */
+    radial-gradient(900px 700px at 100% 0%,
+      rgba(247,230,155,0.70) 0%,
+      rgba(247,230,155,0.00) 60%),
+
+    /* 4) center-left bright white hotspot */
+    radial-gradient(700px 520px at 36% 58%,
+      rgba(255,255,255,0.95) 0%,
+      rgba(255,255,255,0.00) 70%),
+
+    /* 5) top-left navy haze */
+    radial-gradient(1000px 800px at -8% -10%,
+      rgba(28,44,85,0.65) 0%,
+      rgba(28,44,85,0.00) 60%),
+
+    /* 6) soft base tilt from navy -> white -> yellow */
+    linear-gradient(135deg,
+      rgba(28,44,85,0.18) 0%,
+      rgba(255,255,255,0.88) 55%,
+      rgba(247,230,155,0.20) 100%);
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Optional: micro-noise to prevent gradient banding (very subtle) */
+.bg-finit-aurora::before {
+  content: "";
+  position: absolute; 
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  mix-blend-mode: soft-light;
+}
+
+/* Optional: watermark logo in bottom-right */
+.bg-finit-aurora::after {
+  content: "";
+  position: absolute;
+  right: -6vw;
+  bottom: -6vh;
+  width: 42vw;
+  height: 42vw;
+  background: url("/Finit Logomark@4x.png") no-repeat center/contain;
+  opacity: 0.06;
+  pointer-events: none;
+}
 /* Premium Apple-inspired animations */
 @keyframes float-slow {
   0%, 100% { 

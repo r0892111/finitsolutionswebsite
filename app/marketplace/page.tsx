@@ -67,7 +67,7 @@ export default function MarketplacePage() {
 
   return (
   <main className="pt-20 bg-white min-h-screen font-general-sans">
-    <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12" style={{ backgroundColor: '#1C2C55' }}>
+    <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
       <div className="w-full">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
