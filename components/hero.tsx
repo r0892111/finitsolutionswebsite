@@ -22,12 +22,79 @@ function MagicVisual() {
 
   return (
     <div className="relative w-[320px] md:w-[640px] aspect-[818/768] select-none">
+      {/* Multi-layered 3D shadow system */}
+      <div className="absolute inset-0 z-0">
+        {/* Primary depth shadow - large and soft */}
+        <div 
+          className="absolute inset-0 rounded-3xl blur-3xl opacity-40"
+          style={{
+            background: 'radial-gradient(ellipse 80% 60% at 50% 70%, rgba(22,44,85,0.6) 0%, rgba(22,44,85,0.3) 40%, transparent 70%)',
+            transform: 'translateY(20px) scale(1.1)'
+          }}
+        />
+        
+        {/* Secondary ambient shadow - medium spread */}
+        <div 
+          className="absolute inset-0 rounded-2xl blur-2xl opacity-30"
+          style={{
+            background: 'radial-gradient(ellipse 70% 50% at 50% 65%, rgba(59,130,246,0.5) 0%, rgba(22,44,85,0.4) 35%, transparent 65%)',
+            transform: 'translateY(15px) scale(1.05)'
+          }}
+        />
+        
+        {/* Tertiary contact shadow - sharp and close */}
+        <div 
+          className="absolute inset-0 rounded-xl blur-xl opacity-50"
+          style={{
+            background: 'radial-gradient(ellipse 60% 40% at 50% 60%, rgba(22,44,85,0.8) 0%, rgba(22,44,85,0.5) 25%, transparent 50%)',
+            transform: 'translateY(8px)'
+          }}
+        />
+        
+        {/* Accent glow shadow using brand accent color */}
+        <div 
+          className="absolute inset-0 rounded-2xl blur-2xl opacity-20"
+          style={{
+            background: 'radial-gradient(ellipse 90% 70% at 50% 50%, rgba(247,230,155,0.6) 0%, rgba(247,230,155,0.3) 30%, transparent 60%)',
+            transform: 'translateY(5px) scale(0.95)'
+          }}
+        />
+        
+        {/* Subtle rim lighting effect */}
+        <div 
+          className="absolute inset-0 rounded-3xl opacity-25"
+          style={{
+            background: 'conic-gradient(from 0deg at 50% 50%, rgba(147,197,253,0.4) 0deg, transparent 60deg, rgba(59,130,246,0.3) 120deg, transparent 180deg, rgba(22,44,85,0.4) 240deg, transparent 300deg, rgba(147,197,253,0.4) 360deg)',
+            transform: 'translateY(12px) scale(1.08)',
+            filter: 'blur(20px)'
+          }}
+        />
+      </div>
+      
+      {/* Elevated content container with subtle lift effect */}
+      <div 
+        className="relative z-10"
+        style={{
+          filter: 'drop-shadow(0 25px 50px rgba(22,44,85,0.15)) drop-shadow(0 10px 25px rgba(22,44,85,0.1))',
+          transform: 'translateZ(0)' // Force hardware acceleration
+        }}
+      >
       {/* Base artwork */}
       <img
         src="/about-image.png"
         alt="Connected data infrastructure"
-        className="absolute inset-0 w-full h-full object-contain z-10 pointer-events-none"
+        className="w-full h-full object-contain pointer-events-none"
         draggable={false}
+      />
+      </div>
+      
+      {/* Subtle ambient light reflection on top */}
+      <div 
+        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-3/4 h-1/3 z-5 pointer-events-none opacity-20"
+        style={{
+          background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(247,230,155,0.4) 0%, transparent 70%)',
+          filter: 'blur(15px)'
+        }}
       />
 
     </div>
