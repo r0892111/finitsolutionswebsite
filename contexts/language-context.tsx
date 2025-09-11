@@ -30,9 +30,9 @@ const translations = {
     
     // Hero
     'hero.badge': 'Where the Future Begins',
-    'hero.title.line1': 'Artificiële Werkkrachten die je bedrijf automatiseren en opschalen.',
-    'hero.title.line2': '',
-    'hero.title.line3': '',
+    'hero.title.line1': 'Artificiële Werkkrachten',
+    'hero.title.line2': 'die je bedrijf automatiseren',
+    'hero.title.line3': 'en opschalen.',
     'hero.subtitle': 'Wij bouwen AI-gestuurde software bovenop de systemen die je al gebruikt.\nOns doel is inefficiënties te elimineren en een krachtige hefboom\nvoor de groei van je bedrijf te creëren.',
     'hero.cta.primary': 'Get Started',
     'hero.cta.secondary': 'Learn More',
@@ -104,9 +104,9 @@ const translations = {
     
     // Hero
     'hero.badge': 'Where the Future Begins',
-    'hero.title.line1': 'Artificial Workforces that automate and scale your business.',
-    'hero.title.line2': '',
-    'hero.title.line3': '',
+    'hero.title.line1': 'AI Workforces',
+    'hero.title.line2': 'that automate',
+    'hero.title.line3': 'and scale your business.',
     'hero.subtitle': 'We build AI-powered software on top of the systems you already use.\nOur goal is to eliminate inefficiencies and unlock powerful leverage\nfor your company\'s growth.',
     'hero.cta.primary': 'Get Started',
     'hero.cta.secondary': 'Learn More',
