@@ -57,16 +57,20 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 pt-4"
           >
-            <Button
-              size="lg"
-              className="bg-gray-400 hover:bg-gray-500 text-white px-8 py-4 text-lg rounded-full font-medium"
-            >
-              Get Started
-            </Button>
+            <ProjectRequestDialog 
+              buttonText="Get Started"
+              buttonClassName="bg-gray-400 hover:bg-gray-500 text-white px-8 py-4 text-lg rounded-full font-medium"
+            />
             <Button
               size="lg"
               variant="outline"
               className="border-gray-300 text-gray-700 hover:bg-blue-800 px-8 py-4 text-lg rounded-full font-medium"
+              onClick={() => {
+                const aboutSection = document.getElementById('about');
+                if (aboutSection) {
+                  aboutSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
               Learn More
             </Button>
