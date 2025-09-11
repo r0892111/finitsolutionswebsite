@@ -25,25 +25,25 @@ interface Service {
 }
 
 const services: Service[] = [
-  // Integration Tools
   {
-    id: "voice-to-crm",
-    name: "Voice-to-CRM",
+    id: "voicelink",
+    name: "VoiceLink",
     description: "Transformeer spraaknotities automatisch naar gestructureerde CRM-data. Uw verkopers spreken, wij zorgen dat het CRM klopt.",
-    category: "Integration Tools",
+    category: "Sales & CRM",
     status: "available",
     features: ["Spraakherkenning", "CRM-integratie", "Automatische data-entry", "Multi-platform support"],
     image: "https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg",
     icon: Mic,
     route: "/voice-to-crm",
-    featured: true
+    featured: true,
+    external: false
   },
   {
     id: "api-connector-hub",
     name: "API Connector Hub",
     description: "Verbind al uw systemen naadloos met onze intelligente API-orchestratie platform. Geen technische kennis vereist.",
     category: "Integration Tools",
-    status: "available",
+    status: "coming-soon",
     features: ["Drag & drop integraties", "Real-time sync", "Error handling", "Monitoring dashboard"],
     image: "https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg",
     icon: Globe,
@@ -54,32 +54,30 @@ const services: Service[] = [
     name: "Data Sync Pro",
     description: "Houd al uw bedrijfsdata gesynchroniseerd tussen verschillende platforms met intelligente conflict-resolutie.",
     category: "Integration Tools",
-    status: "beta",
+    status: "coming-soon",
     features: ["Bi-directionele sync", "Conflict resolutie", "Scheduled updates", "Audit trails"],
     image: "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg",
     icon: Database,
     route: "/marketplace/data-sync-pro"
   },
 
-  // Automation
   {
     id: "workflow-automator",
     name: "Workflow Automator",
     description: "Automatiseer complexe bedrijfsprocessen met onze visuele workflow builder. Van eenvoudige taken tot enterprise-workflows.",
     category: "Automation",
-    status: "available",
+    status: "coming-soon",
     features: ["Visual workflow builder", "Conditional logic", "Multi-step processes", "Team collaboration"],
     image: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg",
     icon: Workflow,
-    route: "/marketplace/workflow-automator",
-    featured: true
+    route: "/marketplace/workflow-automator"
   },
   {
     id: "smart-scheduler",
     name: "Smart Scheduler",
     description: "AI-gedreven planning die automatisch optimale tijdslots vindt voor meetings, taken en resources.",
     category: "Automation",
-    status: "available",
+    status: "coming-soon",
     features: ["AI scheduling", "Resource optimization", "Calendar integration", "Conflict prevention"],
     image: "https://images.pexels.com/photos/1181298/pexels-photo-1181298.jpeg",
     icon: Calendar,
@@ -90,7 +88,7 @@ const services: Service[] = [
     name: "Document Processor",
     description: "Automatische verwerking en extractie van data uit documenten met AI-powered OCR en intelligente classificatie.",
     category: "Automation",
-    status: "beta",
+    status: "coming-soon",
     features: ["OCR technology", "Smart classification", "Data extraction", "Bulk processing"],
     image: "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg",
     icon: FileText,
@@ -108,25 +106,23 @@ const services: Service[] = [
     route: "/marketplace/email-automation-suite"
   },
 
-  // Reporting & Analytics
   {
     id: "business-intelligence-hub",
     name: "Business Intelligence Hub",
     description: "Transformeer uw data in actionable insights met onze AI-powered analytics platform en real-time dashboards.",
     category: "Reporting & Analytics",
-    status: "available",
+    status: "coming-soon",
     features: ["Real-time dashboards", "Predictive analytics", "Custom reports", "Data visualization"],
     image: "https://images.pexels.com/photos/669610/pexels-photo-669610.jpeg",
     icon: BarChart3,
-    route: "/marketplace/business-intelligence-hub",
-    featured: true
+    route: "/marketplace/business-intelligence-hub"
   },
   {
     id: "performance-tracker",
     name: "Performance Tracker",
     description: "Monitor en analyseer team performance met geavanceerde metrics en AI-gedreven aanbevelingen voor verbetering.",
     category: "Reporting & Analytics",
-    status: "available",
+    status: "coming-soon",
     features: ["Team metrics", "Performance insights", "Goal tracking", "Improvement suggestions"],
     image: "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg",
     icon: TrendingUp,
@@ -137,7 +133,7 @@ const services: Service[] = [
     name: "Financial Insights",
     description: "Geavanceerde financiële analytics met cashflow voorspellingen en automatische rapportage voor CFO's.",
     category: "Reporting & Analytics",
-    status: "beta",
+    status: "coming-soon",
     features: ["Cashflow predictions", "Automated reporting", "Risk analysis", "Budget optimization"],
     image: "https://images.pexels.com/photos/164527/pexels-photo-164527.jpeg",
     icon: PieChart,
@@ -155,13 +151,12 @@ const services: Service[] = [
     route: "/marketplace/customer-analytics"
   },
 
-  // Security & Compliance
   {
     id: "compliance-monitor",
     name: "Compliance Monitor",
     description: "Automatische monitoring van GDPR, ISO en andere compliance vereisten met real-time alerts en rapportage.",
     category: "Security & Compliance",
-    status: "available",
+    status: "coming-soon",
     features: ["GDPR monitoring", "Automated audits", "Compliance reports", "Risk assessment"],
     image: "https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg",
     icon: Shield,
@@ -172,7 +167,7 @@ const services: Service[] = [
     name: "Security Scanner",
     description: "Proactieve beveiligingsscans van uw digitale infrastructuur met AI-gedreven threat detection.",
     category: "Security & Compliance",
-    status: "beta",
+    status: "coming-soon",
     features: ["Threat detection", "Vulnerability scanning", "Security reports", "Automated patching"],
     image: "https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg",
     icon: Lock,
@@ -190,13 +185,12 @@ const services: Service[] = [
     route: "/marketplace/access-control-manager"
   },
 
-  // Customer Support
   {
     id: "ai-support-assistant",
     name: "AI Support Assistant",
     description: "Intelligente chatbot die uw kennisbank leert en klanten 24/7 ondersteunt met menselijke handoff wanneer nodig.",
     category: "Customer Support",
-    status: "available",
+    status: "coming-soon",
     features: ["24/7 availability", "Knowledge base training", "Human handoff", "Multi-language support"],
     image: "https://images.pexels.com/photos/8439093/pexels-photo-8439093.jpeg",
     icon: Bot,
@@ -207,7 +201,7 @@ const services: Service[] = [
     name: "Ticket Intelligence",
     description: "Automatische ticket classificatie, prioritering en routing met AI-gedreven oplossingsvoorstellen.",
     category: "Customer Support",
-    status: "beta",
+    status: "coming-soon",
     features: ["Auto-classification", "Smart routing", "Priority scoring", "Solution suggestions"],
     image: "https://images.pexels.com/photos/1181715/pexels-photo-1181715.jpeg",
     icon: Headphones,
@@ -226,7 +220,7 @@ const services: Service[] = [
   }
 ];
 
-const categories = ["Alle", "Integration Tools", "Automation", "Reporting & Analytics", "Security & Compliance", "Customer Support"];
+const categories = ["Alle", "Sales & CRM", "Integration Tools", "Automation", "Reporting & Analytics", "Security & Compliance", "Customer Support"];
 
 const statusColors = {
   available: "bg-emerald-100 text-emerald-800 border-emerald-200",
@@ -285,7 +279,7 @@ export default function MarketplacePage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-5xl md:text-6xl font-bold mb-6 text-center bg-gradient-to-r from-slate-900 via-primary to-slate-900 bg-clip-text text-transparent"
           >
-            Finit Solutions Catalogue
+            Finit Solutions Marketplace
           </motion.h1>
           
           <motion.p
@@ -294,8 +288,8 @@ export default function MarketplacePage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-slate-600 text-xl mb-12 max-w-3xl mx-auto text-center leading-relaxed"
           >
-            Ontdek onze complete collectie van AI-oplossingen en SaaS-services. 
-            Van integraties tot automatisering - alles wat uw bedrijf nodig heeft op één plek.
+            Ontdek onze curated collectie van AI-oplossingen en SaaS-services. 
+            Professionele tools die uw bedrijfsprocessen transformeren.
           </motion.p>
 
           {/* Search and Filter */}
@@ -342,10 +336,10 @@ export default function MarketplacePage() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900">
-                Uitgelichte Oplossingen
+                Nu Beschikbaar
               </h2>
               <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-                Onze meest populaire en bewezen AI-oplossingen
+                Onze eerste SaaS-oplossing is live en klaar voor gebruik
               </p>
             </div>
 
@@ -363,9 +357,9 @@ export default function MarketplacePage() {
                       <Card className="h-full hover:shadow-2xl transition-all duration-500 cursor-pointer group relative overflow-hidden bg-white/90 backdrop-blur-sm border-slate-200/50 ring-2 ring-primary/20">
                         {/* Featured Badge */}
                         <div className="absolute top-4 left-4 z-10">
-                          <div className="bg-gradient-to-r from-primary to-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                          <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                             <Sparkles className="h-3 w-3" />
-                            FEATURED
+                            LIVE
                           </div>
                         </div>
 
@@ -437,7 +431,7 @@ export default function MarketplacePage() {
           {/* Section Header */}
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900">
-              {selectedCategory === "Alle" ? "Alle Oplossingen" : selectedCategory}
+              {selectedCategory === "Alle" ? "Volledige Catalogus" : selectedCategory}
             </h2>
             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
               {filteredServices.length} oplossing{filteredServices.length !== 1 ? 'en' : ''} gevonden
@@ -469,7 +463,7 @@ export default function MarketplacePage() {
                         
                         {/* Status Badge */}
                         <div className="absolute bottom-4 left-4">
-                          <Badge className={`${statusColors[service.status]} font-semibold`}>
+                          <Badge className={`${statusColors[service.status]} font-semibold ${service.status === 'available' ? 'animate-pulse' : ''}`}>
                             {statusLabels[service.status]}
                           </Badge>
                         </div>
@@ -516,9 +510,13 @@ export default function MarketplacePage() {
                           <Button 
                             size="sm" 
                             variant="ghost"
-                            className="text-primary hover:text-primary/80 hover:bg-primary/5 p-0 h-auto font-semibold"
+                            className={`p-0 h-auto font-semibold ${
+                              service.status === 'available' 
+                                ? 'text-green-600 hover:text-green-700 hover:bg-green-50' 
+                                : 'text-primary hover:text-primary/80 hover:bg-primary/5'
+                            }`}
                           >
-                            Meer informatie
+                            {service.status === 'available' ? 'Bekijk nu' : 'Meer informatie'}
                           </Button>
                           <ArrowRight className="h-5 w-5 text-primary group-hover:translate-x-1 transition-transform duration-300" />
                         </div>
@@ -559,18 +557,18 @@ export default function MarketplacePage() {
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Mist er een oplossing?
+              Interesse in een specifieke oplossing?
             </h2>
             <p className="text-blue-100 text-xl mb-10 max-w-3xl mx-auto leading-relaxed">
-              We ontwikkelen voortdurend nieuwe AI-oplossingen op maat. 
-              Vertel ons wat u nodig heeft en we bouwen het voor u.
+              We ontwikkelen voortdurend nieuwe SaaS-oplossingen. 
+              Vertel ons wat u nodig heeft en we houden u op de hoogte van nieuwe releases.
             </p>
             <Button 
               size="lg" 
               className="bg-white text-primary hover:bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-8 py-4"
               onClick={() => window.location.href = '/#contact'}
             >
-              Bespreek uw behoeften
+              Neem contact op
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </motion.div>
