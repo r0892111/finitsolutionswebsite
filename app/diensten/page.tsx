@@ -270,6 +270,116 @@ export default function DienstenPage() {
               const isVisible = visibleSteps.has(index);
               const isActive = activeStep === index;
 
+              // Special layout for step 1
+              if (step.id === 1) {
+                return (
+                  <motion.div
+                    key={step.id}
+                    ref={(el) => (stepRefs.current[index] = el)}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{
+                      opacity: isVisible ? 1 : 0.35,
+                      y: isVisible ? 0 : 20,
+                      scale: isActive ? 1.01 : 1
+                    }}
+                    transition={{ duration: 0.5 }}
+                    className="relative"
+                  >
+                    {/* Creative Step 1 Layout */}
+                    <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/30 overflow-hidden">
+                      {/* Decorative background elements */}
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-full blur-3xl"></div>
+                      <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-primary/10 to-transparent rounded-full blur-2xl"></div>
+                      
+                      <div className="relative z-10">
+                        {/* Header with large step number */}
+                        <div className="flex items-start gap-8 mb-12">
+                          <div className="relative">
+                            <div className="text-8xl font-bold text-primary/20 leading-none">01</div>
+                            <div className="absolute top-4 left-4 w-16 h-16 rounded-2xl bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center shadow-xl step-number-marker">
+                              <IconComponent className="h-8 w-8 text-white" />
+                            </div>
+                          </div>
+                          
+                          <div className="flex-1 pt-4">
+                            <div className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+                              {step.subtitle}
+                            </div>
+                            <h2 className="finit-h1 mb-6" style={{ color: '#202226' }}>
+                              {step.title}
+                            </h2>
+                            <p className="finit-body mb-8" style={{ color: '#202226' }}>
+                              {step.description}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Two-column content */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                          {/* Left: Process details */}
+                          <div className="space-y-6">
+                            <h4 className="finit-h2 flex items-center gap-3" style={{ color: '#202226' }}>
+                              <div className="w-6 h-6 rounded-lg bg-primary flex items-center justify-center">
+                                <span className="text-white text-sm font-bold">⚡</span>
+                              </div>
+                              Onze Aanpak
+                            </h4>
+                            <div className="grid grid-cols-1 gap-4">
+                              {step.details.map((detail, i) => (
+                                <motion.div
+                                  key={i}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  whileInView={{ opacity: 1, x: 0 }}
+                                  viewport={{ once: true }}
+                                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                                  className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-primary/5 to-blue-500/5 border border-primary/10 hover:border-primary/20 transition-all duration-300"
+                                >
+                                  <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center shadow-lg">
+                                    <span className="text-white text-sm font-bold">✓</span>
+                                  </div>
+                                  <span className="finit-body font-medium" style={{ color: '#202226' }}>{detail}</span>
+                                </motion.div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Right: Client case with visual */}
+                          <div className="space-y-6">
+                            <div className="flex items-center gap-3 mb-6">
+                              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center border border-primary/20">
+                                <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                                  <div className="w-2 h-2 rounded-full bg-white"></div>
+                                </div>
+                              </div>
+                              <h4 className="finit-h2" style={{ color: '#202226' }}>Client Case</h4>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200 shadow-lg">
+                              <p className="finit-body italic mb-6" style={{ color: '#202226' }}>
+                                &ldquo;{step.useCase}&rdquo;
+                              </p>
+                              
+                              {/* Problem visualization */}
+                              <div className="space-y-3">
+                                <h5 className="text-sm font-semibold text-slate-700 mb-3">Geïdentificeerde Problemen:</h5>
+                                {["Versnipperde informatie", "Handmatige zoekprocessen", "Onvoldoende vindbaarheid"].map((item, i) => (
+                                  <div key={i} className="flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 shadow-sm">
+                                    <span className="text-sm font-medium" style={{ color: '#202226' }}>{item}</span>
+                                    <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center">
+                                      <span className="text-white text-xs font-bold">!</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              }
+
               return (
                 <motion.div
                   key={step.id}
