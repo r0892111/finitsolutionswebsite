@@ -32,7 +32,7 @@ const services: Service[] = [
     category: "Sales & CRM",
     status: "available",
     features: ["Spraakherkenning", "CRM-integratie", "Automatische data-entry", "Multi-platform support"],
-    image: "Finit Voicelink Blue@4x.png",
+    image: "/Finit Voicelink Blue@4x.png",
     icon: Mic,
     route: "https://voicelink.me/",
     featured: true,
