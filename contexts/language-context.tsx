@@ -155,7 +155,7 @@ const translations = {
     'diensten.step5.case.outcome': '95% adoptie rate binnen 3 weken, 45-minuut naar 3-minuut query reductie',
     'diensten.cta.title': 'Klaar voor Excellentie?',
     'diensten.cta.subtitle': 'Transformeer uw digitale visie in meetbare bedrijfsimpact. Uw ambitie verdient uitzonderlijke uitvoering.',
-    'diensten.cta.button': 'Begin Uw Transformatie'
+    'diensten.cta.button': 'Begin Uw Transformatie',
     'diensten.hero.title': 'Van Idee tot Impact',
     'diensten.hero.description': 'Ontdek hoe wij samen met u van uitdaging naar oplossing gaan — kort, duidelijk en resultaatgericht.',
     'diensten.hero.scroll': 'Ontdek het proces',
