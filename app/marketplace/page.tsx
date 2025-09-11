@@ -68,14 +68,14 @@ export default function MarketplacePage() {
   return (
     <main className="pt-20 bg-white min-h-screen font-general-sans">
       {/* Compact Hero Section */}
-      <section className="py-16 md:py-20" style={{ backgroundColor: '#1C2C55' }}>
-        <div className="container mx-auto px-4">
+      <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12" style={{ backgroundColor: '#1C2C55' }}>
+        <div className="w-full">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-6 flex items-center justify-center gap-8"
+              className="mb-6 flex items-center justify-center gap-8 w-full"
             >
               <Image
                 src="/Finit Marketplace White.svg"
@@ -87,7 +87,7 @@ export default function MarketplacePage() {
               />
               {/* Vertical separator line */}
               <div className="w-px h-16 bg-white/30"></div>
-              <div className="text-left min-w-0 flex-1 min-w-[400px]">
+              <div className="text-left min-w-0 flex-1 min-w-[500px] max-w-none">
                 <h1 className="finit-h1 text-white mb-2">
                   Plug & play <span className="finit-highlight">AI solutions</span>
                 </h1>
