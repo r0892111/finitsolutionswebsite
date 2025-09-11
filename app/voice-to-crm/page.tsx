@@ -375,7 +375,7 @@ export default function VoiceToCRMPage() {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="text-base sm:text-lg md:text-xl text-gray-700 mb-3 md:mb-4 leading-relaxed"
                 >
-                  Tijdens de rit spreken je verkopers <strong>hun klantbezoeken in</strong>. <strong>Onze AI zet alles automatisch om</strong> in volledige CRM-data: <strong>klantinfo, nota&apos;s, offertes, taken</strong> en <strong>opvolging</strong>. 
+                  Via WhatsApp sturen je verkopers <strong>een spraakbericht</strong> met hun klantbezoek. <strong>VoiceLink zet alles automatisch om</strong> in volledige CRM-data: <strong>klantinfo, nota&apos;s, offertes, taken</strong> en <strong>opvolging</strong>. Deze plug & play tool integreert met elk CRM naar keuze en is in <strong>slechts 3 minuten geïnstalleerd</strong>.
                 </motion.p>
 
                 <motion.p
@@ -384,7 +384,7 @@ export default function VoiceToCRMPage() {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="text-base sm:text-lg md:text-xl text-gray-700 mb-6 md:mb-8 leading-relaxed"
                 >
-                  Terwijl zij al onderweg zijn naar de volgende klant, worden <strong>notities direct doorgestuurd</strong>, <strong>afspraken gepland</strong> en <strong>updates gedeeld</strong> via e-mail, agenda, WhatsApp of Slack. <strong>De toekomst van sales is begonnen</strong>. Zorg dat je team <strong>niet achterblijft</strong>.
+                  Terwijl zij al onderweg zijn naar de volgende klant, worden <strong>notities direct doorgestuurd</strong>, <strong>afspraken gepland</strong> en <strong>updates gedeeld</strong> via e-mail, agenda of Slack. <strong>De toekomst van sales is begonnen</strong>. Zorg dat je team <strong>niet achterblijft</strong>.
                 </motion.p>
 
                 {/* Compact Expandable Hand-drawn Checkmark Sections */}
@@ -577,7 +577,7 @@ export default function VoiceToCRMPage() {
                           {isSubmitting ? 'Versturen...' : 'Versturen'}
                           <Send className="ml-2 h-4 w-4" />
                         </Button>
-
+                          Wil je weten hoe we VoiceLink binnen jouw bedrijf kunnen implementeren?
                         {/* Disclaimer */}
                         <p className="text-xs text-gray-500 italic text-center mt-4">
                           Je gegevens worden nooit gedeeld met derden.
@@ -619,7 +619,7 @@ export default function VoiceToCRMPage() {
                     {/* Right Section - Text and Phone */}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-3">
-                        Rechtstreeks bellen is ook mogelijk. <strong>Karel</strong> beantwoordt je vragen met plezier.
+                        Rechtstreeks bellen is ook mogelijk. <strong>Karel</strong> beantwoordt je VoiceLink vragen met plezier.
                       </p>
                       
                       <a 

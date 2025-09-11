@@ -167,13 +167,18 @@ export function About() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="pt-4"
+              className="pt-4 flex flex-col sm:flex-row gap-4"
             >
               <Link href="/about">
                 <Button size="lg">
                   {t('about.cta')}
                 </Button>
               </Link>
+              <a href="https://voicelink.me" target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline">
+                  {t('about.spotlight.cta')}
+                </Button>
+              </a>
             </motion.div>
           </div>
         </div>
