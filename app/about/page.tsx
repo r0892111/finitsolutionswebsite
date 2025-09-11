@@ -23,6 +23,13 @@ const team = [
     linkedin: "https://www.linkedin.com/in/karel-van-ransbeeck",
     description: "Met zijn natuurlijke talent voor klantencommunicatie en sterke sociale vaardigheden, vormt hij de brug tussen technologie en menselijke behoeften. Als medeoprichter legt hij de focus op het begrijpen van klantenwensen en het vertalen daarvan naar praktische oplossingen, waarbij klanttevredenheid en duurzame relaties centraal staan. Karel behaalde zijn diploma toegepaste informatica aan de UCLL in Keerbergen."
   },
+  {
+    name: "Jord Goossens",
+    role: "Chief Technology Officer",
+    image: "/jord.png",
+    linkedin: "https://www.linkedin.com/in/jord-goossens",
+    description: "Als Chief Technology Officer brengt Jord een schat aan ervaring mee in enterprise-level softwarearchitectuur en AI-implementaties. Met zijn diepgaande kennis van cloud-infrastructuur en machine learning zorgt hij ervoor dat onze technische oplossingen schaalbaar, veilig en toekomstbestendig zijn. Jord's strategische visie op technologie-innovatie vormt de ruggengraat van onze technische excellentie."
+  },
 ];
 
 export default function AboutPage() {
@@ -150,6 +157,7 @@ export default function AboutPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {team.map((member, index) => (
               <motion.div
                 key={member.name}
