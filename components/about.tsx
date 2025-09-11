@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { CheckCircle2, ChevronRight, Play, ChevronLeft } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,48 +12,22 @@ import { Button } from "@/components/ui/button";
 export function About() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
 
-  // Slideshow images F1 to F6
-  const slideshowImages = [
-    { src: "/slideshow/F1.jpg", alt: "Finit Solutions - Slide 1" },
-    { src: "/slideshow/F2.jpg", alt: "Finit Solutions - Slide 2" },
-    { src: "/slideshow/F3.jpg", alt: "Finit Solutions - Slide 3" },
-    { src: "/slideshow/F4.jpg", alt: "Finit Solutions - Slide 4" },
-    { src: "/slideshow/F5.jpg", alt: "Finit Solutions - Slide 5" },
-    { src: "/slideshow/F6.jpg", alt: "Finit Solutions - Slide 6" }
-  ];
+  // Video iframe component
+  const VideoIframe = () => (
+    <iframe 
+      width="1581" 
+      height="889" 
+      src="https://www.youtube.com/embed/L1BTq-44MCc" 
+      title="Voice-to-CRM: Laat AI Agents je CRM invullen" 
+      frameBorder="0" 
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+      referrerPolicy="strict-origin-when-cross-origin" 
+      allowFullScreen
+      className="w-full h-full rounded-2xl"
+    />
+  );
 
-  // Auto-advance slideshow
-  useEffect(() => {
-    if (!isPlaying) return;
-    
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slideshowImages.length);
-    }, 4000); // Change slide every 4 seconds
-
-    return () => clearInterval(interval);
-  }, [isPlaying, slideshowImages.length]);
-
-  const handleSlideClick = () => {
-    window.open('https://youtu.be/L1BTq-44MCc', '_blank');
-  };
-
-  const nextSlide = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentSlide((prev) => (prev + 1) % slideshowImages.length);
-  };
-
-  const prevSlide = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentSlide((prev) => (prev - 1 + slideshowImages.length) % slideshowImages.length);
-  };
-
-  const goToSlide = (index: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentSlide(index);
-  };
 
   // Complete integration logos list - All 32 integrations
   const integrationLogos = [
@@ -108,93 +82,14 @@ export function About() {
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary/10 rounded-full blur-xl animate-pulse" />
               <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
               
-              {/* Main slideshow container with 16:9 aspect ratio (1920x1080) */}
+              {/* Video iframe container with 16:9 aspect ratio */}
               <div 
-                className="relative bg-gradient-to-tr from-background via-muted to-background rounded-2xl overflow-hidden shadow-xl border cursor-pointer group"
-                onClick={handleSlideClick}
-                onMouseEnter={() => setIsPlaying(false)}
-                onMouseLeave={() => setIsPlaying(true)}
+                className="relative bg-gradient-to-tr from-background via-muted to-background rounded-2xl overflow-hidden shadow-xl border"
                 style={{ aspectRatio: '16/9' }}
               >
-                {/* Slideshow Images */}
-                <div className="relative w-full h-full">
-                  {slideshowImages.map((image, index) => (
-                    <div
-                      key={index}
-                      className={`absolute inset-0 transition-opacity duration-1000 ${
-                        index === currentSlide ? 'opacity-100' : 'opacity-0'
-                      }`}
-                    >
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        priority={index === 0}
-                        unoptimized
-                      />
-                    </div>
-                  ))}
-                  
-                  {/* Enhanced Video Overlay with Perfectly Centered Play Button */}
-                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all duration-300">
-                    {/* Perfect center container */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center text-white transform group-hover:scale-110 transition-transform duration-300">
-                        {/* Play button container with perfect centering */}
-                        <div className="relative flex items-center justify-center">
-                          {/* Outer glow ring - perfectly centered */}
-                          <div className="absolute w-24 h-24 md:w-28 md:h-28 bg-white/10 rounded-full animate-pulse"></div>
-                          
-                          {/* Main play button - perfectly centered */}
-                          <div className="relative w-24 h-24 md:w-28 md:h-28 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center border-4 border-white shadow-2xl group-hover:bg-white transition-all duration-300">
-                            <Play className="w-8 h-8 md:w-10 md:h-10 ml-1 text-gray-800" fill="currentColor" />
-                          </div>
-                          
-                          {/* Subtle pulse animation - perfectly centered */}
-                          <div className="absolute w-24 h-24 md:w-28 md:h-28 border-2 border-white/50 rounded-full animate-ping"></div>
-                        </div>
-                        
-                        {/* Video label */}
-                        <div className="mt-4 px-4 py-2 bg-black/60 backdrop-blur-sm rounded-full border border-white/30">
-                          <span className="text-sm md:text-base font-semibold">▶ Bekijk Video</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Navigation arrows */}
-                  <button
-                    onClick={prevSlide}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white/30"
-                  >
-                    <ChevronLeft className="w-5 h-5 text-white" />
-                  </button>
-                  
-                  <button
-                    onClick={nextSlide}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white/30"
-                  >
-                    <ChevronRight className="w-5 h-5 text-white" />
-                  </button>
-                </div>
+                <VideoIframe />
               </div>
               
-              {/* Progress dots - Now outside and below the slideshow */}
-              <div className="flex justify-center gap-2 mt-4">
-                {slideshowImages.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={(e) => goToSlide(index, e)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === currentSlide 
-                        ? 'bg-primary w-6' 
-                        : 'bg-muted-foreground/50 hover:bg-muted-foreground/75'
-                    }`}
-                  />
-                ))}
-              </div>
             </div>
           </motion.div>
           
