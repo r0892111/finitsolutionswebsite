@@ -35,7 +35,7 @@ export function Hero() {
             className="space-y-4"
           >
             <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight text-blue-900">
-              Building AI workforces
+              AI workforces
               <br className="md:block hidden" />
               <span className="font-semibold"> that automate </span>
               <br className="md:block hidden" />
