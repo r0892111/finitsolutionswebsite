@@ -915,7 +915,7 @@ export default function DienstenPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1.2, delay: 0.8 }}
-              className="bg-white/8 backdrop-blur-xl rounded-3xl p-12 border border-white/15 shadow-2xl max-w-5xl mx-auto"
+              className="bg-white/8 backdrop-blur-xl rounded-3xl p-12 border border-white/15 shadow-2xl max-w-5xl mx-auto mb-20"
             >
               <h3 className="text-3xl font-bold text-white mb-10 text-center">Transformation Complete</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
