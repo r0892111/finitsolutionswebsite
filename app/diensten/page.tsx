@@ -251,6 +251,18 @@ export default function DienstenPage() {
                               </div>
                               
                               <div className="space-y-4">
+                                {step.details.map((detail, i) => (
+                                  <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.6, delay: i * 0.1 }}
+                                    className="flex items-center gap-4 p-4 rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 shadow-lg"
+                                  >
+                                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shadow">
+                                      <span className="text-white text-sm font-bold">✓</span>
+                                    </div>
                                     <span className="finit-body font-medium leading-relaxed" style={{ color: '#202226' }}>{detail}</span>
                                   </motion.div>
                                 ))}
