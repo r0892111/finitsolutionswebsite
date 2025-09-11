@@ -127,7 +127,7 @@ export default function MarketplacePage() {
               <div className="lg:col-span-5 relative">
                 <div className="aspect-[4/3] lg:aspect-auto lg:h-full relative overflow-hidden rounded-l-xl bg-gray-50">
                   <Image
-                    src="/voicelink display.png"
+                    src="/voicelink disply.png"
                     alt="VoiceLink Interface"
                     fill
                     className="object-cover rounded-xl"
