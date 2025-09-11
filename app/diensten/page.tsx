@@ -285,24 +285,32 @@ export default function DienstenPage() {
                     transition={{ duration: 0.5 }}
                     className="relative"
                   >
-                    {/* Premium Step 1 Layout */}
+                    {/* Premium Gradient Step 1 Layout */}
                     <div className="relative overflow-hidden">
-                      {/* Main container with premium styling */}
-                      <div className="relative bg-white rounded-3xl shadow-4xl border border-white/50 overflow-hidden">
-                        {/* Subtle brand accent line */}
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+                      {/* Main container with sophisticated gradient background */}
+                      <div className="relative rounded-3xl shadow-4xl border border-white/30 overflow-hidden"
+                           style={{
+                             background: `
+                               radial-gradient(800px 600px at 20% 30%, rgba(28,44,85,0.95) 0%, rgba(28,44,85,0.15) 70%),
+                               radial-gradient(600px 400px at 80% 70%, rgba(247,230,155,0.25) 0%, rgba(247,230,155,0.05) 60%),
+                               radial-gradient(400px 300px at 50% 50%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)
+                             `
+                           }}>
                         
                         {/* Content container */}
-                        <div className="p-16">
-                          {/* Minimalist header */}
-                          <div className="flex items-center gap-6 mb-16 step-number-marker">
+                        <div className="p-16 relative">
+                          {/* Elegant header with large number */}
+                          <div className="flex items-start gap-8 mb-16 step-number-marker">
+                            {/* Large gradient number */}
                             <div className="relative">
-                              {/* Large step number with premium styling */}
-                              <div className="text-9xl font-bold leading-none" style={{ color: '#F7E69B' }}>01</div>
+                              <div className="text-9xl font-bold leading-none bg-gradient-to-br from-slate-300 via-slate-400 to-slate-500 bg-clip-text text-transparent opacity-40">
+                                01
+                              </div>
                             </div>
                             
-                            <div className="flex-1 pt-8">
-                              <div className="inline-block px-6 py-3 rounded-full text-sm font-medium mb-6 border" style={{ backgroundColor: '#F7E69B', color: '#1C2C55', borderColor: '#F7E69B' }}>
+                            {/* Title section */}
+                            <div className="flex-1 pt-4">
+                              <div className="inline-block px-6 py-3 rounded-full text-sm font-medium mb-6 bg-gradient-to-r from-slate-100 to-white border border-slate-200/50 shadow-sm" style={{ color: '#1C2C55' }}>
                                 {step.subtitle}
                               </div>
                               <h2 className="finit-h1 mb-6" style={{ color: '#1C2C55' }}>
@@ -316,10 +324,10 @@ export default function DienstenPage() {
 
                           {/* Two-column premium layout */}
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                            {/* Left: Methodology */}
+                            {/* Left: Methodology with gradient cards */}
                             <div className="space-y-8">
                               <div className="flex items-center gap-4 mb-8">
-                                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#1C2C55' }}></div>
+                                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-slate-400 to-slate-500"></div>
                                 <h3 className="finit-h2" style={{ color: '#1C2C55' }}>Methodologie</h3>
                               </div>
                               
@@ -332,36 +340,50 @@ export default function DienstenPage() {
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.6, delay: i * 0.1 }}
                                     className="flex items-start gap-4 p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg"
-                                    style={{ backgroundColor: '#F7E69B', borderColor: '#F7E69B' }}
+                                    style={{ 
+                                      background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(247,230,155,0.15) 100%)',
+                                      borderColor: 'rgba(28,44,85,0.1)'
+                                    }}
                                   >
-                                    <div className="w-8 h-8 rounded-xl flex items-center justify-center shadow-lg mt-1" style={{ backgroundColor: '#1C2C55' }}>
+                                    <div className="w-8 h-8 rounded-xl flex items-center justify-center shadow-lg mt-1 bg-gradient-to-br from-slate-600 to-slate-700">
                                       <div className="w-3 h-3 rounded-full bg-white"></div>
                                     </div>
-                                    <span className="finit-body font-medium leading-relaxed" style={{ color: '#1C2C55' }}>{detail}</span>
+                                    <span className="finit-body font-medium leading-relaxed" style={{ color: '#202226' }}>{detail}</span>
                                   </motion.div>
                                 ))}
                               </div>
                             </div>
 
-                            {/* Right: Client case */}
+                            {/* Right: Client case with sophisticated gradient */}
                             <div className="space-y-8">
                               <div className="flex items-center gap-4 mb-8">
-                                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#1C2C55' }}></div>
+                                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-slate-400 to-slate-500"></div>
                                 <h3 className="finit-h2" style={{ color: '#1C2C55' }}>Praktijkvoorbeeld</h3>
                               </div>
                               
-                              <div className="p-8 rounded-2xl border shadow-lg" style={{ backgroundColor: '#1C2C55', borderColor: '#1C2C55' }}>
+                              <div className="p-8 rounded-2xl border shadow-lg"
+                                   style={{ 
+                                     background: `
+                                       radial-gradient(400px 300px at 30% 20%, rgba(28,44,85,0.95) 0%, rgba(28,44,85,0.85) 100%),
+                                       linear-gradient(135deg, rgba(28,44,85,0.9) 0%, rgba(28,44,85,0.95) 100%)
+                                     `,
+                                     borderColor: 'rgba(28,44,85,0.3)'
+                                   }}>
                                 <p className="finit-body italic mb-8 text-white leading-relaxed">
                                   &ldquo;{step.useCase}&rdquo;
                                 </p>
                                 
-                                {/* Problem indicators with brand colors */}
+                                {/* Problem indicators with subtle gradients */}
                                 <div className="space-y-4">
                                   <h4 className="finit-body font-medium text-white/80 mb-4">Geïdentificeerde uitdagingen:</h4>
                                   {["Versnipperde informatie", "Handmatige processen", "Beperkte vindbaarheid"].map((item, i) => (
-                                    <div key={i} className="flex items-center justify-between p-4 rounded-xl border" style={{ backgroundColor: '#F7E69B', borderColor: '#F7E69B' }}>
+                                    <div key={i} className="flex items-center justify-between p-4 rounded-xl border transition-all duration-300 hover:shadow-md"
+                                         style={{ 
+                                           background: 'linear-gradient(135deg, rgba(247,230,155,0.9) 0%, rgba(247,230,155,0.7) 100%)',
+                                           borderColor: 'rgba(247,230,155,0.3)'
+                                         }}>
                                       <span className="finit-body font-medium" style={{ color: '#1C2C55' }}>{item}</span>
-                                      <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#1C2C55' }}>
+                                      <div className="w-6 h-6 rounded-full flex items-center justify-center bg-gradient-to-br from-slate-600 to-slate-700 shadow">
                                         <div className="w-2 h-2 rounded-full bg-white"></div>
                                       </div>
                                     </div>
