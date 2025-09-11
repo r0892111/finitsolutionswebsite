@@ -124,14 +124,14 @@ export default function MarketplacePage() {
           <Card className="overflow-hidden bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-300 rounded-xl">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
               {/* Product Image - 5/12 width */}
-              <div className="lg:col-span-5 relative">
+              <div className="lg:col-span-7 relative">
                 <div className="aspect-[4/3] lg:aspect-auto lg:h-full relative overflow-hidden rounded-l-xl bg-gray-50">
                   <Image
                     src="/voicelink display.png"
                     alt="VoiceLink Interface"
                     fill
                     className="object-cover rounded-xl"
-                    sizes="(max-width: 1024px) 100vw, 42vw"
+                    sizes="(max-width: 1024px) 100vw, 58vw"
                     unoptimized
                   />
                   
@@ -159,7 +159,7 @@ export default function MarketplacePage() {
               </div>
 
               {/* Product Details - 7/12 width */}
-              <div className="lg:col-span-7 p-6 lg:p-8">
+              <div className="lg:col-span-5 p-6 lg:p-8">
                 <div className="h-full flex flex-col">
                   {/* Header */}
                   <div className="mb-4">
