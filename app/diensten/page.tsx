@@ -361,7 +361,7 @@ export default function DienstenPage() {
 
         {/* Navigation dots */}
         <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl">
+          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl z-50">
             {processSteps.map((_, dotIndex) => (
               <motion.button
                 key={dotIndex}
@@ -482,7 +482,7 @@ export default function DienstenPage() {
 
         {/* Navigation dots */}
         <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl">
+          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl z-50">
             {processSteps.map((_, dotIndex) => (
               <motion.button
                 key={dotIndex}
@@ -629,7 +629,7 @@ export default function DienstenPage() {
 
         {/* Navigation dots */}
         <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl">
+          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl z-50">
             {processSteps.map((_, dotIndex) => (
               <motion.button
                 key={dotIndex}
@@ -767,7 +767,7 @@ export default function DienstenPage() {
 
         {/* Navigation dots */}
         <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl">
+          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl z-50">
             {processSteps.map((_, dotIndex) => (
               <motion.button
                 key={dotIndex}
@@ -947,7 +947,7 @@ export default function DienstenPage() {
 
         {/* Navigation dots */}
         <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl">
+          <div className="flex items-center space-x-4 bg-white/8 backdrop-blur-xl rounded-full px-10 py-5 border border-white/15 shadow-2xl z-50">
             {processSteps.map((_, dotIndex) => (
               <motion.button
                 key={dotIndex}
