@@ -19,82 +19,11 @@ import { ProjectRequestDialog } from "@/components/project-request-dialog";
  */
 function MagicVisual() {
   const reduce = useReducedMotion();
-  const ref = useRef<HTMLDivElement>(null);
 
-  // Minimal, gentle parallax that won’t break alignment
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const px = useSpring(mx, { stiffness: 50, damping: 20, mass: 0.5 });
-  const py = useSpring(my, { stiffness: 50, damping: 20, mass: 0.5 });
-  const parallax = (depth: number) => ({
-    x: useTransform(px, (v) => (reduce ? 0 : (v / 150) * depth)),
-    y: useTransform(py, (v) => (reduce ? 0 : (v / 150) * depth)),
-  });
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    const rect = ref.current?.getBoundingClientRect();
-    if (!rect) return;
-    mx.set(e.clientX - rect.left - rect.width / 2);
-    my.set(e.clientY - rect.top - rect.height / 2);
-  };
-
-  // Coordinates (roughly traced to match the PNG)
-  // Center database stack (hub)
-  const C = { x: 409, y: 384 };
-
-  // Corner hub centers (the tall stacks)
-  const TL = { x: 160, y: 150 };
-  const TR = { x: 658, y: 150 };
-  const BL = { x: 160, y: 618 };
-  const BR = { x: 658, y: 618 };
-
-  // Shorter platform nodes (mid edges) – optional highlights
-  const ML = { x: 205, y: 384 };
-  const MR = { x: 614, y: 384 };
-  const MT = { x: 409, y: 230 };
-  const MB = { x: 409, y: 538 };
-
-  // Paths that follow the drawn network lines (eyeballed to match angles/segments)
-  // Using polyline-like cubic curves to keep them smooth.
-  const paths = [
-    // Center to TL route
-    `M ${C.x} ${C.y} 
-     C 350 360, 300 320, 260 300
-     C 230 285, 205 260, ${TL.x} ${TL.y}`,
-    // Center to TR route
-    `M ${C.x} ${C.y} 
-     C 470 360, 520 320, 560 300
-     C 590 285, 620 260, ${TR.x} ${TR.y}`,
-    // Center to BL route
-    `M ${C.x} ${C.y}
-     C 350 410, 300 450, 260 470
-     C 230 485, 205 510, ${BL.x} ${BL.y}`,
-    // Center to BR route
-    `M ${C.x} ${C.y}
-     C 470 410, 520 450, 560 470
-     C 590 485, 620 510, ${BR.x} ${BR.y}`,
-
-    // Optional short runs to mid platforms to match the inner links
-    `M ${C.x} ${C.y} C 380 384, 330 384, ${ML.x} ${ML.y}`,
-    `M ${C.x} ${C.y} C 438 384, 488 384, ${MR.x} ${MR.y}`,
-    `M ${C.x} ${C.y} C 409 350, 409 300, ${MT.x} ${MT.y}`,
-    `M ${C.x} ${C.y} C 409 418, 409 468, ${MB.x} ${MB.y}`,
-  ];
-
-  // Node points to pulse
-  const nodes = [C, TL, TR, BL, BR, ML, MR, MT, MB];
-
-  const L1 = parallax(6); // background glow
-  const L2 = parallax(10); // lines
-  const L3 = parallax(14); // pulses
-
+  // Native image dimensions: 818 x 768 (keep overlays in same space)
   return (
-    <div
-      ref={ref}
-      onPointerMove={handlePointerMove}
-      className="relative w-[320px] md:w-[640px] aspect-[818/768] select-none"
-    >
-      {/* Base image at exact aspect ratio */}
+    <div className="relative w-[320px] md:w-[640px] aspect-[818/768] select-none">
+      {/* Base artwork */}
       <img
         src="/about-image.png"
         alt="Connected data infrastructure"
@@ -102,31 +31,57 @@ function MagicVisual() {
         draggable={false}
       />
 
-      {/* Soft vignette & ambient glow (kept subtle to not fight the artwork) */}
-      <motion.div
-        style={L1}
-        className="absolute inset-0 z-[5] pointer-events-none"
-      >
-        <div className="absolute inset-0 opacity-60">
-          <div className="absolute left-[40%] top-[38%] -translate-x-1/2 -translate-y-1/2 w-[45%] h-[45%] rounded-full blur-3xl"
-               style={{ background: "radial-gradient(circle at center, rgba(59,130,246,0.25), transparent 60%)" }}/>
-        </div>
-      </motion.div>
-
-      {/* Animated network lines + data flow */}
-      <motion.svg
-        style={L2}
+      {/* ===== Flow-on-lines layer (masked to the white wires in the PNG) ===== */}
+      <svg
         className="absolute inset-0 z-20 pointer-events-none"
         viewBox="0 0 818 768"
         preserveAspectRatio="xMidYMid meet"
       >
         <defs>
-          {/* Moving dash gradient that sits nicely on the existing light lines */}
-          <linearGradient id="flow" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="rgba(59,130,246,0.0)" />
-            <stop offset="50%" stopColor="rgba(59,130,246,0.85)" />
-            <stop offset="100%" stopColor="rgba(34,211,238,0.0)" />
+          {/* Load the same image into SVG for masking */}
+          <image id="art" href="/about-image.png" x="0" y="0" width="818" height="768" preserveAspectRatio="none" />
+
+          {/* Convert image to grayscale, then threshold so only very bright pixels (the white connectors)
+              become opaque in the mask. Adjust the slope/intercept for your asset if needed. */}
+          <filter id="toWhiteLines">
+            <feColorMatrix
+              type="matrix"
+              values="
+                0.2126 0.7152 0.0722 0 0
+                0.2126 0.7152 0.0722 0 0
+                0.2126 0.7152 0.0722 0 0
+                0       0       0       1 0"
+              result="lum"
+            />
+            {/* Hard-ish threshold near white; tweak slope/intercept to include/exclude bits */}
+            <feComponentTransfer>
+              <feFuncR type="linear" slope="6" intercept="-5" />
+              <feFuncG type="linear" slope="6" intercept="-5" />
+              <feFuncB type="linear" slope="6" intercept="-5" />
+              <feFuncA type="linear" slope="6" intercept="-5" />
+            </feComponentTransfer>
+          </filter>
+
+          {/* Use the filtered image as a luminance mask */}
+          <mask id="lineMask" maskUnits="userSpaceOnUse" x="0" y="0" width="818" height="768">
+            <use href="#art" filter="url(#toWhiteLines)" />
+          </mask>
+
+          {/* Flow textures: diagonal and orthogonal stripe gradients */}
+          <linearGradient id="stripeGradX" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="rgba(59,130,246,0)" />
+            <stop offset="40%" stopColor="rgba(59,130,246,0.85)" />
+            <stop offset="60%" stopColor="rgba(34,211,238,0.85)" />
+            <stop offset="100%" stopColor="rgba(34,211,238,0)" />
           </linearGradient>
+          <linearGradient id="stripeGradY" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(147,197,253,0)" />
+            <stop offset="45%" stopColor="rgba(147,197,253,0.9)" />
+            <stop offset="55%" stopColor="rgba(59,130,246,0.9)" />
+            <stop offset="100%" stopColor="rgba(59,130,246,0)" />
+          </linearGradient>
+
+          {/* Slight outer glow so the “wires” feel lit */}
           <filter id="glow">
             <feGaussianBlur stdDeviation="1.2" result="b" />
             <feMerge>
@@ -136,122 +91,85 @@ function MagicVisual() {
           </filter>
         </defs>
 
-        {paths.map((d, i) => (
+        {/* Two moving layers (different directions/speeds) clipped to the white lines.
+            Because they are masked, they ride *exactly* on the lines in your PNG. */}
+        <g mask="url(#lineMask)" filter="url(#glow)" opacity="0.95">
+          {/* Horizontal flow */}
+          <g>
+            <rect id="flowX" x="-818" y="0" width="1636" height="768" fill="url(#stripeGradX)">
+              {!reduce && (
+                <animate
+                  attributeName="x"
+                  from="-818"
+                  to="0"
+                  dur="2.8s"
+                  repeatCount="indefinite"
+                />
+              )}
+            </rect>
+          </g>
+
+          {/* Vertical flow */}
+          <g>
+            <rect id="flowY" x="0" y="-768" width="818" height="1536" fill="url(#stripeGradY)" opacity="0.6">
+              {!reduce && (
+                <animate
+                  attributeName="y"
+                  from="-768"
+                  to="0"
+                  dur="3.6s"
+                  repeatCount="indefinite"
+                />
+              )}
+            </rect>
+          </g>
+        </g>
+      </svg>
+
+      {/* ===== Optional: precise traveling packets on the four main spokes for extra depth ===== */}
+      <svg
+        className="absolute inset-0 z-30 pointer-events-none"
+        viewBox="0 0 818 768"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <defs>
+          <filter id="pktGlow">
+            <feGaussianBlur stdDeviation="1.3" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Handful of motion paths (approximate but aligned) */}
+        {[
+          // Center → TL
+          "M 409 384 C 350 360 300 320 260 300 C 230 285 205 260 160 150",
+          // Center → TR
+          "M 409 384 C 470 360 520 320 560 300 C 590 285 620 260 658 150",
+          // Center → BL
+          "M 409 384 C 350 410 300 450 260 470 C 230 485 205 510 160 618",
+          // Center → BR
+          "M 409 384 C 470 410 520 450 560 470 C 590 485 620 510 658 618",
+        ].map((d, i) => (
           <g key={i}>
-            {/* Subtle base highlight exactly on top of the art's lines */}
-            <path
-              d={d}
-              stroke="rgba(147,197,253,0.35)"
-              strokeWidth={2}
-              fill="none"
-              filter="url(#glow)"
-            />
-            {/* Animated flow (dashes) */}
-            <motion.path
-              d={d}
-              stroke="url(#flow)"
-              strokeWidth={2}
-              strokeDasharray="10 22"
-              strokeLinecap="round"
-              fill="none"
-              animate={{
-                strokeDashoffset: [0, -32],
-                opacity: [0.9, 0.7, 0.9],
-              }}
-              transition={{
-                duration: 2.6 + (i % 3) * 0.4,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            />
+            {!reduce && (
+              <circle r="4" fill="rgba(251,191,36,0.95)" filter="url(#pktGlow)">
+                <animateMotion dur={`${2.7 + i * 0.3}s`} repeatCount="indefinite" rotate="auto">
+                  <mpath xlinkHref={`#p${i}`} />
+                </animateMotion>
+              </circle>
+            )}
+            {/* invisible path holder */}
+            <path id={`p${i}`} d={d} fill="none" stroke="none" />
           </g>
         ))}
-
-        {/* Tiny traveling packets on the four main spokes */}
-        {[0, 1, 2, 3].map((i) => (
-          <motion.circle
-            key={`pkt-${i}`}
-            r={4}
-            fill="rgba(251,191,36,0.95)"
-            filter="url(#glow)"
-          >
-            <motion.animateMotion
-              dur={`${2.8 + i * 0.3}s`}
-              repeatCount="indefinite"
-              rotate="auto"
-              path={paths[i]}
-            />
-          </motion.circle>
-        ))}
-      </motion.svg>
-
-      {/* Node pulses (center + 4 hubs + mid nodes) */}
-      {nodes.map((n, i) => (
-        <motion.div
-          key={`node-${i}`}
-          style={L3}
-          className="absolute z-30 pointer-events-none"
-          style={{
-            ...L3,
-            left: `${(n.x / 818) * 100}%`,
-            top: `${(n.y / 768) * 100}%`,
-          }}
-        >
-          {/* anchor at center of node */}
-          <div
-            className="relative"
-            style={{
-              transform: "translate(-50%, -50%)",
-              width: 0,
-              height: 0,
-            }}
-          >
-            {/* inner glow */}
-            <div
-              className="absolute -translate-x-1/2 -translate-y-1/2"
-              style={{
-                left: 0,
-                top: 0,
-                width: i === 0 ? 18 : 10,
-                height: i === 0 ? 18 : 10,
-                borderRadius: "9999px",
-                boxShadow:
-                  "0 0 14px rgba(147,197,253,0.9), 0 0 28px rgba(59,130,246,0.45)",
-                background:
-                  i === 0
-                    ? "radial-gradient(circle, rgba(147,197,253,1), rgba(59,130,246,0.25))"
-                    : "radial-gradient(circle, rgba(59,130,246,0.9), rgba(59,130,246,0.2))",
-              }}
-            />
-            {/* ripple rings */}
-            {[0, 1, 2].map((r) => (
-              <motion.span
-                key={r}
-                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-400/40"
-                style={{
-                  left: 0,
-                  top: 0,
-                  width: i === 0 ? 36 : 22,
-                  height: i === 0 ? 36 : 22,
-                }}
-                animate={{
-                  scale: [1, 1.8, 1],
-                  opacity: [0.5, 0, 0.5],
-                }}
-                transition={{
-                  duration: 2.2 + r * 0.2,
-                  delay: r * 0.25 + (i % 3) * 0.1,
-                  repeat: Infinity,
-                  ease: "easeOut",
-                }}
-              />
-            ))}
-          </div>
-        </motion.div>
-      ))}
+      </svg>
     </div>
   );
 }
+
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
