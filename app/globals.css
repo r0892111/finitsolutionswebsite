@@ -306,6 +306,30 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Server pulse animation keyframes */
+@keyframes server-pulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 20px rgba(57, 86, 134, 0.3));
+    transform: scale(1);
+  }
+  25% { 
+    filter: drop-shadow(0 0 40px rgba(57, 86, 134, 0.6));
+    transform: scale(1.02);
+  }
+  50% { 
+    filter: drop-shadow(0 0 60px rgba(57, 86, 134, 0.4));
+    transform: scale(1.01);
+  }
+  75% { 
+    filter: drop-shadow(0 0 30px rgba(57, 86, 134, 0.5));
+    transform: scale(1.03);
+  }
+}
+
+.animate-server-pulse {
+  animation: server-pulse 4s ease-in-out infinite;
+}
+
 /* Enhanced backdrop blur support */
 @supports (backdrop-filter: blur(20px)) {
   .backdrop-blur-xl {

@@ -45,7 +45,7 @@ export function Hero() {
   {/* Subheading */}
   <p className="text-xl font-semibold lg:text-2xl text-blue-900 leading-relaxed max-w-2xl">
     We build AI-powered workforces that eliminate inefficiencies  
-    <br className="md:block hidden" /> and unlock powerful leverage for your company’s growth.
+    <br className="md:block hidden" /> and unlock powerful leverage for your company's growth.
   </p>
 </motion.div>
 
@@ -76,11 +76,26 @@ export function Hero() {
             </Button>
           </motion.div>
         </div>
-        <img
-            src="/about-image.png"
-            alt="3D Graphic"
-            className="w-[300px] md:w-[600px] h-auto motion-safe:animate-float"
-          />
+        <motion.img
+          animate={{
+            filter: [
+              "drop-shadow(0 0 20px rgba(57, 86, 134, 0.3))",
+              "drop-shadow(0 0 40px rgba(57, 86, 134, 0.6))",
+              "drop-shadow(0 0 60px rgba(57, 86, 134, 0.4))",
+              "drop-shadow(0 0 30px rgba(57, 86, 134, 0.5))",
+              "drop-shadow(0 0 20px rgba(57, 86, 134, 0.3))"
+            ],
+            scale: [1, 1.02, 1.01, 1.03, 1]
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          src="/about-image.png"
+          alt="3D Graphic"
+          className="w-[300px] md:w-[600px] h-auto"
+        />
       </div>
     </section>
   );
