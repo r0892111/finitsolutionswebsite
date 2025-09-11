@@ -143,7 +143,7 @@ export default function MarketplacePage() {
                     src="/finit voicelink 1.JPG"
                     alt="VoiceLink Interface"
                     fill
-                    className="object-contain p-4 rounded-xl"
+                    className="object-contain p-6 rounded-xl"
                     sizes="(max-width: 1024px) 100vw, 42vw"
                     unoptimized
                   />
