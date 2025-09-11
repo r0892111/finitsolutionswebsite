@@ -77,6 +77,12 @@ export function Navbar() {
             {/* Navigation Pills Container */}
             <div className="lg:flex hidden items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-2 py-1 border border-gray-200/50 shadow-sm">
               <Link
+                href="/"
+                className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
+              >
+                Home
+              </Link>
+              <Link
                 href="/diensten"
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
