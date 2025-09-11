@@ -88,7 +88,7 @@ export default function MarketplacePage() {
             {/* Robust vertical divider */}
             <div
               aria-hidden="true"
-              className="hidden md:block self-stretch border-l mx-4"
+              className="hidden md:block self-stretch border-l-4 mx-4 rounded-full"
               style={{ borderColor: 'rgba(255, 255, 255, 0.55)' }}
             />
 
