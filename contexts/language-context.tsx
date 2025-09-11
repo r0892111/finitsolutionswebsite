@@ -351,7 +351,7 @@ const translations = {
     'diensten.step5.case.outcome': '95% adoption rate within 3 weeks, 45-minute to 3-minute query reduction',
     'diensten.cta.title': 'Ready for Excellence?',
     'diensten.cta.subtitle': 'Transform your digital vision into measurable business impact. Your ambition deserves exceptional execution.',
-    'diensten.cta.button': 'Begin Your Transformation'
+    'diensten.cta.button': 'Begin Your Transformation',
     
     // Diensten Page Content
     'diensten.hero.badge': 'Custom process',
