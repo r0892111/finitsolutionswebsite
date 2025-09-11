@@ -14,7 +14,7 @@ export default function MarketplacePage() {
       name: "VoiceLink",
       tagline: "Voice-to-CRM automation",
       description: "WhatsApp spraakberichten worden automatisch omgezet naar CRM-data. Klantnaam, offertebedrag, vervolgafspraken - alles op de juiste plaats.",
-      image: "/finit voicelink 1@4x-100.jpg",
+      image: "/finit voicelink 1.JPG",
       logo: "/Finit Voicelink Blue@4x.png",
       category: "Sales & CRM",
       status: "live",
@@ -130,7 +130,7 @@ export default function MarketplacePage() {
               <div className="lg:col-span-5 relative">
                 <div className="aspect-[4/3] lg:aspect-auto lg:h-full relative overflow-hidden rounded-l-xl">
                   <Image
-                    src="/finit voicelink 1@4x-100.jpg"
+                    src="/finit voicelink 1.JPG"
                     alt="VoiceLink Interface"
                     fill
                     className="object-contain p-4"
