@@ -326,8 +326,10 @@ export default function DienstenPage() {
                   <div className="relative">
                     <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/25">
                       <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-                          <span className="text-white text-lg">🎯</span>
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/25 to-white/15 flex items-center justify-center border border-white/30 shadow-lg">
+                          <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center">
+                            <div className="w-2 h-2 rounded-full bg-white"></div>
+                          </div>
                         </div>
                         <h4 className="text-lg font-bold text-white">Client Case</h4>
                       </div>
