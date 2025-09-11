@@ -57,7 +57,7 @@ export function ProcessStep({ step, index, isVisible, isActive, layout }: Proces
           </div>
         </div>
 
-        <h2 className="finit-h1 tracking-tight leading-tight" style={{ color: '#202226' }}>{step.title}</h2>
+        <h2 className="finit-h1 text-white">{step.title}</h2>
 
         <div className="space-y-2">
           <h4 className="font-semibold text-slate-900 flex items-center gap-2 text-sm">
