@@ -89,7 +89,7 @@ export default function MarketplacePage() {
             <div
               aria-hidden="true"
               className="hidden md:block self-stretch border-l-4 mx-4 rounded-full"
-              style={{ borderColor: 'rgba(255, 255, 255, 0.55)' }}
+              style={{ borderColor: 'rgba(255, 255, 255, 1)' }}
             />
 
             <div className="text-left min-w-0 flex-1 md:min-w-[700px]">
