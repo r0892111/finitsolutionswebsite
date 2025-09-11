@@ -164,12 +164,12 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="space-y-4"
           >
-            <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold leading-tight whitespace-nowrap" style={{ color: 'rgb(28, 44, 85)' }}>
+            <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{ color: 'rgb(28, 44, 85)' }}>
               {t('hero.title.line1')}
-              <br />
-              <span className="font-semibold whitespace-nowrap">{t('hero.title.line2')} </span>
-              <br />
-              <span className="font-semibold whitespace-nowrap">{t('hero.title.line3')}</span>
+              <br className="md:block hidden" />
+              <span className="font-semibold">{t('hero.title.line2')} </span>
+              <br className="md:block hidden" />
+              <span className="font-semibold">{t('hero.title.line3')}</span>
             </h1>
             <p className="text-xl font-semibold lg:text-2xl leading-relaxed max-w-2xl" style={{ color: 'rgb(28, 44, 85)' }}>
               {t('hero.subtitle').split('\n').map((line, index) => (
