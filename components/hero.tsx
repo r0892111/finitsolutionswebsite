@@ -170,7 +170,7 @@ export function Hero() {
             </h1>
             <p className="text-xl font-semibold lg:text-2xl leading-relaxed max-w-2xl" style={{ color: 'rgb(28, 44, 85)' }}>
               We build AI-powered software on top of your current systems
-              <br className="md:block hidden" /> wchich unlocks powerful leverage
+              <br className="md:block hidden" /> which unlocks powerful leverage
               for your company&apos;s growth.
             </p>
           </motion.div>
