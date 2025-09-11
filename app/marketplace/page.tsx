@@ -346,38 +346,6 @@ export default function MarketplacePage() {
         </div>
       </section>
 
-      {/* Marketplace Stats */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {[
-              { label: "Actieve gebruikers", value: "2,400+", icon: Users },
-              { label: "Tijd bespaard", value: "15,000h", icon: Clock },
-              { label: "Gemiddelde ROI", value: "340%", icon: TrendingUp },
-              { label: "Uptime garantie", value: "99.9%", icon: Shield }
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="text-center"
-              >
-                <div className="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
-                  <stat.icon className="h-6 w-6" style={{ color: '#1C2C55' }} />
-                </div>
-                <div className="text-2xl font-bold mb-1" style={{ color: '#1C2C55' }}>
-                  {stat.value}
-                </div>
-                <div className="text-sm text-gray-600">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Why Choose Our Marketplace */}
       <section className="py-12" style={{ backgroundColor: '#1C2C55' }}>
