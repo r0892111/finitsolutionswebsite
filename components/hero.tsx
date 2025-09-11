@@ -164,7 +164,6 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="space-y-4"
           >
-            <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold leading-tight" style={{ color: 'rgb(28, 44, 85)' }}>
             <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold leading-tight whitespace-nowrap" style={{ color: 'rgb(28, 44, 85)' }}>
               {t('hero.title.line1')}
               <br />
