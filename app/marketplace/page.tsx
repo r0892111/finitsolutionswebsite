@@ -34,9 +34,9 @@ const services: Service[] = [
     features: ["Spraakherkenning", "CRM-integratie", "Automatische data-entry", "Multi-platform support"],
     image: "https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg",
     icon: Mic,
-    route: "/voice-to-crm",
+    route: "https://voicelink.me/",
     featured: true,
-    external: false
+    external: true
   }
 ];
 
@@ -268,81 +268,159 @@ export default function MarketplacePage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <Link href={service.route}>
-                    <Card className="h-full hover:shadow-2xl transition-all duration-500 cursor-pointer group relative overflow-hidden bg-white/80 backdrop-blur-sm border-slate-200/50">
-                      <div className="relative h-48 w-full overflow-hidden">
-                        <Image
-                          src={service.image}
-                          alt={service.name}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-110"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          unoptimized
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                        
-                        {/* Status Badge */}
-                        <div className="absolute bottom-4 left-4">
-                          <Badge className={`${statusColors[service.status]} font-semibold ${service.status === 'available' ? 'animate-pulse' : ''}`}>
-                            {statusLabels[service.status]}
-                          </Badge>
-                        </div>
+                  {service.external ? (
+                    <a href={service.route} target="_blank" rel="noopener noreferrer">
+                      <Card className="h-full hover:shadow-2xl transition-all duration-500 cursor-pointer group relative overflow-hidden bg-white/80 backdrop-blur-sm border-slate-200/50">
+                        <div className="relative h-48 w-full overflow-hidden">
+                          <Image
+                            src={service.image}
+                            alt={service.name}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            unoptimized
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                          
+                          {/* Status Badge */}
+                          <div className="absolute bottom-4 left-4">
+                            <Badge className={`${statusColors[service.status]} font-semibold ${service.status === 'available' ? 'animate-pulse' : ''}`}>
+                              {statusLabels[service.status]}
+                            </Badge>
+                          </div>
 
-                        {/* Icon */}
-                        <div className="absolute bottom-4 right-4">
-                          <div className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                            <IconComponent className="h-6 w-6 text-primary" />
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <CardContent className="p-6">
-                        <div className="mb-3">
-                          <Badge variant="secondary" className="text-xs font-medium bg-slate-100 text-slate-700">
-                            {service.category}
-                          </Badge>
-                        </div>
-                        
-                        <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
-                          {service.name}
-                        </h3>
-                        
-                        <p className="text-slate-600 mb-4 line-clamp-3 leading-relaxed text-sm">
-                          {service.description}
-                        </p>
-                        
-                        <div className="mb-4">
-                          <div className="flex flex-wrap gap-2">
-                            {service.features.slice(0, 3).map((feature, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs bg-slate-50 border-slate-200">
-                                {feature}
-                              </Badge>
-                            ))}
-                            {service.features.length > 3 && (
-                              <Badge variant="outline" className="text-xs bg-slate-50 border-slate-200">
-                                +{service.features.length - 3} meer
-                              </Badge>
-                            )}
+                          {/* Icon */}
+                          <div className="absolute bottom-4 right-4">
+                            <div className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                              <IconComponent className="h-6 w-6 text-primary" />
+                            </div>
                           </div>
                         </div>
                         
-                        <div className="flex items-center justify-between">
-                          <Button 
-                            size="sm" 
-                            variant="ghost"
-                            className={`p-0 h-auto font-semibold ${
-                              service.status === 'available' 
-                                ? 'text-green-600 hover:text-green-700 hover:bg-green-50' 
-                                : 'text-primary hover:text-primary/80 hover:bg-primary/5'
-                            }`}
-                          >
-                            {service.status === 'available' ? 'Bekijk nu' : 'Meer informatie'}
-                          </Button>
-                          <ArrowRight className="h-5 w-5 text-primary group-hover:translate-x-1 transition-transform duration-300" />
+                        <CardContent className="p-6">
+                          <div className="mb-3">
+                            <Badge variant="secondary" className="text-xs font-medium bg-slate-100 text-slate-700">
+                              {service.category}
+                            </Badge>
+                          </div>
+                          
+                          <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                            {service.name}
+                          </h3>
+                          
+                          <p className="text-slate-600 mb-4 line-clamp-3 leading-relaxed text-sm">
+                            {service.description}
+                          </p>
+                          
+                          <div className="mb-4">
+                            <div className="flex flex-wrap gap-2">
+                              {service.features.slice(0, 3).map((feature, idx) => (
+                                <Badge key={idx} variant="outline" className="text-xs bg-slate-50 border-slate-200">
+                                  {feature}
+                                </Badge>
+                              ))}
+                              {service.features.length > 3 && (
+                                <Badge variant="outline" className="text-xs bg-slate-50 border-slate-200">
+                                  +{service.features.length - 3} meer
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between">
+                            <Button 
+                              size="sm" 
+                              variant="ghost"
+                              className={`p-0 h-auto font-semibold ${
+                                service.status === 'available' 
+                                  ? 'text-green-600 hover:text-green-700 hover:bg-green-50' 
+                                  : 'text-primary hover:text-primary/80 hover:bg-primary/5'
+                              }`}
+                            >
+                              {service.status === 'available' ? 'Bekijk nu' : 'Meer informatie'}
+                            </Button>
+                            <ArrowRight className="h-5 w-5 text-primary group-hover:translate-x-1 transition-transform duration-300" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </a>
+                  ) : (
+                    <Link href={service.route}>
+                      <Card className="h-full hover:shadow-2xl transition-all duration-500 cursor-pointer group relative overflow-hidden bg-white/80 backdrop-blur-sm border-slate-200/50">
+                        <div className="relative h-48 w-full overflow-hidden">
+                          <Image
+                            src={service.image}
+                            alt={service.name}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            unoptimized
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                          
+                          {/* Status Badge */}
+                          <div className="absolute bottom-4 left-4">
+                            <Badge className={`${statusColors[service.status]} font-semibold ${service.status === 'available' ? 'animate-pulse' : ''}`}>
+                              {statusLabels[service.status]}
+                            </Badge>
+                          </div>
+
+                          {/* Icon */}
+                          <div className="absolute bottom-4 right-4">
+                            <div className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                              <IconComponent className="h-6 w-6 text-primary" />
+                            </div>
+                          </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
+                        
+                        <CardContent className="p-6">
+                          <div className="mb-3">
+                            <Badge variant="secondary" className="text-xs font-medium bg-slate-100 text-slate-700">
+                              {service.category}
+                            </Badge>
+                          </div>
+                          
+                          <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                            {service.name}
+                          </h3>
+                          
+                          <p className="text-slate-600 mb-4 line-clamp-3 leading-relaxed text-sm">
+                            {service.description}
+                          </p>
+                          
+                          <div className="mb-4">
+                            <div className="flex flex-wrap gap-2">
+                              {service.features.slice(0, 3).map((feature, idx) => (
+                                <Badge key={idx} variant="outline" className="text-xs bg-slate-50 border-slate-200">
+                                  {feature}
+                                </Badge>
+                              ))}
+                              {service.features.length > 3 && (
+                                <Badge variant="outline" className="text-xs bg-slate-50 border-slate-200">
+                                  +{service.features.length - 3} meer
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between">
+                            <Button 
+                              size="sm" 
+                              variant="ghost"
+                              className={`p-0 h-auto font-semibold ${
+                                service.status === 'available' 
+                                  ? 'text-green-600 hover:text-green-700 hover:bg-green-50' 
+                                  : 'text-primary hover:text-primary/80 hover:bg-primary/5'
+                              }`}
+                            >
+                              {service.status === 'available' ? 'Bekijk nu' : 'Meer informatie'}
+                            </Button>
+                            <ArrowRight className="h-5 w-5 text-primary group-hover:translate-x-1 transition-transform duration-300" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  )}
                 </motion.div>
               );
             })}
