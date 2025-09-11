@@ -73,9 +73,9 @@ function MagicVisual() {
       
       {/* Elevated content container with subtle lift effect */}
       <div 
-        className="relative z-10 animate-gentle-pulse"
+        className="relative z-10 animate-zoom-pulse"
         style={{
-          filter: 'drop-shadow(0 30px 60px rgba(22,44,85,0.25)) drop-shadow(0 15px 35px rgba(22,44,85,0.15)) drop-shadow(0 5px 15px rgba(22,44,85,0.1))',
+          filter: 'drop-shadow(0 35px 70px rgba(22,44,85,0.35)) drop-shadow(0 20px 45px rgba(22,44,85,0.25)) drop-shadow(0 8px 20px rgba(22,44,85,0.15))',
           transform: 'translateZ(0)' // Force hardware acceleration
         }}
       >
@@ -86,27 +86,37 @@ function MagicVisual() {
         className="w-full h-full object-contain pointer-events-none"
         draggable={false}
           style={{
-            filter: 'contrast(1.05) brightness(1.02) drop-shadow(0 8px 25px rgba(22,44,85,0.12))'
+            filter: 'contrast(1.08) brightness(1.05) drop-shadow(0 12px 30px rgba(22,44,85,0.18))'
           }}
       />
         
-        {/* Enhanced ambient glow overlay */}
+        {/* Enhanced pulsing ambient glow overlay */}
         <div 
-          className="absolute inset-0 pointer-events-none animate-ambient-glow"
+          className="absolute inset-0 pointer-events-none animate-ambient-glow-enhanced"
           style={{
-            background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(59,130,246,0.08) 0%, rgba(22,44,85,0.04) 40%, transparent 70%)',
-            filter: 'blur(8px)',
+            background: 'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(59,130,246,0.12) 0%, rgba(22,44,85,0.06) 40%, transparent 75%)',
+            filter: 'blur(10px)',
             mixBlendMode: 'overlay'
           }}
         />
         
-        {/* Subtle inner shadow for depth */}
+        {/* Enhanced inner shadow for 3D depth */}
         <div 
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 60%, rgba(22,44,85,0.06) 80%, rgba(22,44,85,0.12) 100%)',
-            filter: 'blur(4px)',
+            background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(22,44,85,0.08) 75%, rgba(22,44,85,0.18) 100%)',
+            filter: 'blur(6px)',
             mixBlendMode: 'multiply'
+          }}
+        />
+        
+        {/* Subtle highlight rim for 3D beveling effect */}
+        <div 
+          className="absolute inset-0 pointer-events-none animate-rim-highlight"
+          style={{
+            background: 'conic-gradient(from 45deg at 50% 50%, rgba(247,230,155,0.15) 0deg, transparent 90deg, rgba(247,230,155,0.1) 180deg, transparent 270deg, rgba(247,230,155,0.15) 360deg)',
+            filter: 'blur(12px)',
+            mixBlendMode: 'soft-light'
           }}
         />
       </div>
