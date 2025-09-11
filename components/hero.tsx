@@ -1,283 +1,261 @@
 "use client";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   motion,
+  useReducedMotion,
   useMotionValue,
   useSpring,
   useTransform,
-  useReducedMotion,
 } from "framer-motion";
 import { Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 
+/**
+ * MagicVisual is engineered to the bitmap used in the codebase:
+ * /about-image.png with intrinsic size ~818x768 (w x h).
+ * All overlays are drawn in the same coordinate system (viewBox 0 0 818 768)
+ * so they sit exactly on top of the existing network lines and hubs.
+ */
 function MagicVisual() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
 
-  // Mouse-parallax
+  // Minimal, gentle parallax that won’t break alignment
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const px = useSpring(mx, { stiffness: 60, damping: 20 });
-  const py = useSpring(my, { stiffness: 60, damping: 20 });
-
-  const layer = (depth: number) => ({
-    x: useTransform(px, (v) => (reduce ? 0 : (v / 100) * depth)),
-    y: useTransform(py, (v) => (reduce ? 0 : (v / 100) * depth)),
+  const px = useSpring(mx, { stiffness: 50, damping: 20, mass: 0.5 });
+  const py = useSpring(my, { stiffness: 50, damping: 20, mass: 0.5 });
+  const parallax = (depth: number) => ({
+    x: useTransform(px, (v) => (reduce ? 0 : (v / 150) * depth)),
+    y: useTransform(py, (v) => (reduce ? 0 : (v / 150) * depth)),
   });
 
-  const onPointerMove = (e: React.PointerEvent) => {
-    const rect = containerRef.current?.getBoundingClientRect();
+  const handlePointerMove = (e: React.PointerEvent) => {
+    const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    mx.set(x);
-    my.set(y);
+    mx.set(e.clientX - rect.left - rect.width / 2);
+    my.set(e.clientY - rect.top - rect.height / 2);
   };
 
-  // Seeded particles + comets
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 42 }).map((_, i) => ({
-        id: i,
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        size: 2 + Math.random() * 3,
-        delay: Math.random() * 2,
-        drift: 10 + Math.random() * 20,
-        duration: 4 + Math.random() * 4,
-        z: Math.floor(Math.random() * 3), // layer depth
-      })),
-    []
-  );
+  // Coordinates (roughly traced to match the PNG)
+  // Center database stack (hub)
+  const C = { x: 409, y: 384 };
 
-  const comets = useMemo(
-    () =>
-      Array.from({ length: 6 }).map((_, i) => ({
-        id: i,
-        delay: i * 0.8,
-        duration: 2.8 + (i % 3) * 0.6,
-        startX: -20 - i * 10,
-        startY: 10 + i * 12,
-        endX: 120,
-        endY: 60 + i * 6,
-      })),
-    []
-  );
+  // Corner hub centers (the tall stacks)
+  const TL = { x: 160, y: 150 };
+  const TR = { x: 658, y: 150 };
+  const BL = { x: 160, y: 618 };
+  const BR = { x: 658, y: 618 };
 
-  const L1 = layer(10);
-  const L2 = layer(20);
-  const L3 = layer(35);
+  // Shorter platform nodes (mid edges) – optional highlights
+  const ML = { x: 205, y: 384 };
+  const MR = { x: 614, y: 384 };
+  const MT = { x: 409, y: 230 };
+  const MB = { x: 409, y: 538 };
+
+  // Paths that follow the drawn network lines (eyeballed to match angles/segments)
+  // Using polyline-like cubic curves to keep them smooth.
+  const paths = [
+    // Center to TL route
+    `M ${C.x} ${C.y} 
+     C 350 360, 300 320, 260 300
+     C 230 285, 205 260, ${TL.x} ${TL.y}`,
+    // Center to TR route
+    `M ${C.x} ${C.y} 
+     C 470 360, 520 320, 560 300
+     C 590 285, 620 260, ${TR.x} ${TR.y}`,
+    // Center to BL route
+    `M ${C.x} ${C.y}
+     C 350 410, 300 450, 260 470
+     C 230 485, 205 510, ${BL.x} ${BL.y}`,
+    // Center to BR route
+    `M ${C.x} ${C.y}
+     C 470 410, 520 450, 560 470
+     C 590 485, 620 510, ${BR.x} ${BR.y}`,
+
+    // Optional short runs to mid platforms to match the inner links
+    `M ${C.x} ${C.y} C 380 384, 330 384, ${ML.x} ${ML.y}`,
+    `M ${C.x} ${C.y} C 438 384, 488 384, ${MR.x} ${MR.y}`,
+    `M ${C.x} ${C.y} C 409 350, 409 300, ${MT.x} ${MT.y}`,
+    `M ${C.x} ${C.y} C 409 418, 409 468, ${MB.x} ${MB.y}`,
+  ];
+
+  // Node points to pulse
+  const nodes = [C, TL, TR, BL, BR, ML, MR, MT, MB];
+
+  const L1 = parallax(6); // background glow
+  const L2 = parallax(10); // lines
+  const L3 = parallax(14); // pulses
 
   return (
     <div
-      ref={containerRef}
-      onPointerMove={onPointerMove}
-      className="relative w-[320px] md:w-[640px] aspect-[4/3] md:aspect-[16/12] select-none"
+      ref={ref}
+      onPointerMove={handlePointerMove}
+      className="relative w-[320px] md:w-[640px] aspect-[818/768] select-none"
     >
-      {/* Background image */}
+      {/* Base image at exact aspect ratio */}
       <img
         src="/about-image.png"
-        alt="AI Reactor"
+        alt="Connected data infrastructure"
         className="absolute inset-0 w-full h-full object-contain z-10 pointer-events-none"
         draggable={false}
       />
 
-      {/* Nebula glows */}
+      {/* Soft vignette & ambient glow (kept subtle to not fight the artwork) */}
       <motion.div
         style={L1}
-        className="absolute -inset-10 z-0 blur-3xl opacity-70"
+        className="absolute inset-0 z-[5] pointer-events-none"
       >
-        <div className="absolute left-0 top-8 w-72 h-72 rounded-full bg-[radial-gradient(closest-side,rgba(59,130,246,0.35),transparent_65%)]" />
-        <div className="absolute right-6 bottom-0 w-80 h-80 rounded-full bg-[radial-gradient(closest-side,rgba(56,189,248,0.3),transparent_65%)]" />
-        <div className="absolute left-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-[radial-gradient(closest-side,rgba(147,197,253,0.25),transparent_65%)]" />
+        <div className="absolute inset-0 opacity-60">
+          <div className="absolute left-[40%] top-[38%] -translate-x-1/2 -translate-y-1/2 w-[45%] h-[45%] rounded-full blur-3xl"
+               style={{ background: "radial-gradient(circle at center, rgba(59,130,246,0.25), transparent 60%)" }}/>
+        </div>
       </motion.div>
 
-      {/* Aurora ribbons */}
+      {/* Animated network lines + data flow */}
       <motion.svg
         style={L2}
         className="absolute inset-0 z-20 pointer-events-none"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
+        viewBox="0 0 818 768"
+        preserveAspectRatio="xMidYMid meet"
       >
         <defs>
-          <linearGradient id="aurora" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stopColor="rgba(59,130,246,0)" />
-            <stop offset="30%" stopColor="rgba(59,130,246,0.6)" />
-            <stop offset="70%" stopColor="rgba(34,211,238,0.6)" />
-            <stop offset="100%" stopColor="rgba(34,211,238,0)" />
+          {/* Moving dash gradient that sits nicely on the existing light lines */}
+          <linearGradient id="flow" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="rgba(59,130,246,0.0)" />
+            <stop offset="50%" stopColor="rgba(59,130,246,0.85)" />
+            <stop offset="100%" stopColor="rgba(34,211,238,0.0)" />
           </linearGradient>
-          <filter id="softGlow">
-            <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="1.2" result="b" />
             <feMerge>
-              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="b" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
         </defs>
-        {[12, 36, 60].map((y, idx) => (
-          <motion.path
-            key={y}
-            d={`M -10 ${y} C 20 ${y - 12} , 50 ${y + 12} , 110 ${y}`}
-            stroke="url(#aurora)"
-            strokeWidth={idx === 1 ? 1.8 : 1.2}
-            fill="none"
-            filter="url(#softGlow)"
-            strokeDasharray="12 18"
-            animate={{
-              strokeDashoffset: [0, -60],
-              pathLength: [0.9, 1, 0.9],
-              opacity: [0.6, 0.8, 0.6],
-            }}
-            transition={{
-              duration: 6 + idx * 1.5,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          />
+
+        {paths.map((d, i) => (
+          <g key={i}>
+            {/* Subtle base highlight exactly on top of the art's lines */}
+            <path
+              d={d}
+              stroke="rgba(147,197,253,0.35)"
+              strokeWidth={2}
+              fill="none"
+              filter="url(#glow)"
+            />
+            {/* Animated flow (dashes) */}
+            <motion.path
+              d={d}
+              stroke="url(#flow)"
+              strokeWidth={2}
+              strokeDasharray="10 22"
+              strokeLinecap="round"
+              fill="none"
+              animate={{
+                strokeDashoffset: [0, -32],
+                opacity: [0.9, 0.7, 0.9],
+              }}
+              transition={{
+                duration: 2.6 + (i % 3) * 0.4,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            />
+          </g>
+        ))}
+
+        {/* Tiny traveling packets on the four main spokes */}
+        {[0, 1, 2, 3].map((i) => (
+          <motion.circle
+            key={`pkt-${i}`}
+            r={4}
+            fill="rgba(251,191,36,0.95)"
+            filter="url(#glow)"
+          >
+            <motion.animateMotion
+              dur={`${2.8 + i * 0.3}s`}
+              repeatCount="indefinite"
+              rotate="auto"
+              path={paths[i]}
+            />
+          </motion.circle>
         ))}
       </motion.svg>
 
-      {/* Particle field */}
-      {particles.map((p) => {
-        const depth = p.z === 0 ? L1 : p.z === 1 ? L2 : L3;
-        return (
-          <motion.div
-            key={p.id}
-            style={depth}
-            className="absolute rounded-full"
-            initial={{ x: 0, y: 0, opacity: 0 }}
-            animate={{
-              x: [0, 0, 0],
-              y: [0, -p.drift, 0],
-              opacity: [0, 0.9, 0],
-              scale: [0.6, 1, 0.6],
-              filter: [
-                "drop-shadow(0 0 2px rgba(59,130,246,0.2))",
-                "drop-shadow(0 0 8px rgba(59,130,246,0.8))",
-                "drop-shadow(0 0 2px rgba(59,130,246,0.2))",
-              ],
-            }}
-            transition={{
-              duration: p.duration,
-              repeat: Infinity,
-              delay: p.delay,
-              ease: "easeInOut",
-            }}
-            style={{
-              ...depth,
-              left: `${p.left}%`,
-              top: `${p.top}%`,
-              width: p.size,
-              height: p.size,
-              background:
-                p.z === 2
-                  ? "radial-gradient(circle, rgba(251,191,36,0.95), rgba(251,191,36,0.2))"
-                  : "radial-gradient(circle, rgba(59,130,246,0.95), rgba(59,130,246,0.25))",
-            }}
-          />
-        );
-      })}
-
-      {/* Comets */}
-      {comets.map((c, i) => (
+      {/* Node pulses (center + 4 hubs + mid nodes) */}
+      {nodes.map((n, i) => (
         <motion.div
-          key={c.id}
-          className="absolute z-30"
-          initial={{ x: `${c.startX}%`, y: `${c.startY}%`, opacity: 0 }}
-          animate={{ x: `${c.endX}%`, y: `${c.endY}%`, opacity: [0, 1, 0] }}
-          transition={{
-            duration: c.duration,
-            delay: c.delay,
-            repeat: Infinity,
-            repeatDelay: 1.5,
-            ease: "easeOut",
+          key={`node-${i}`}
+          style={L3}
+          className="absolute z-30 pointer-events-none"
+          style={{
+            ...L3,
+            left: `${(n.x / 818) * 100}%`,
+            top: `${(n.y / 768) * 100}%`,
           }}
-          style={i % 2 === 0 ? L2 : L3}
         >
-          <div className="relative">
+          {/* anchor at center of node */}
+          <div
+            className="relative"
+            style={{
+              transform: "translate(-50%, -50%)",
+              width: 0,
+              height: 0,
+            }}
+          >
+            {/* inner glow */}
             <div
-              className="absolute -left-12 -top-1 w-14 h-[2px] blur-[1px]"
+              className="absolute -translate-x-1/2 -translate-y-1/2"
               style={{
+                left: 0,
+                top: 0,
+                width: i === 0 ? 18 : 10,
+                height: i === 0 ? 18 : 10,
+                borderRadius: "9999px",
+                boxShadow:
+                  "0 0 14px rgba(147,197,253,0.9), 0 0 28px rgba(59,130,246,0.45)",
                 background:
-                  "linear-gradient(90deg, rgba(59,130,246,0), rgba(59,130,246,0.85))",
+                  i === 0
+                    ? "radial-gradient(circle, rgba(147,197,253,1), rgba(59,130,246,0.25))"
+                    : "radial-gradient(circle, rgba(59,130,246,0.9), rgba(59,130,246,0.2))",
               }}
             />
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(147,197,253,1), rgba(59,130,246,0.2))",
-                boxShadow: "0 0 14px rgba(147,197,253,0.9)",
-              }}
-            />
+            {/* ripple rings */}
+            {[0, 1, 2].map((r) => (
+              <motion.span
+                key={r}
+                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-400/40"
+                style={{
+                  left: 0,
+                  top: 0,
+                  width: i === 0 ? 36 : 22,
+                  height: i === 0 ? 36 : 22,
+                }}
+                animate={{
+                  scale: [1, 1.8, 1],
+                  opacity: [0.5, 0, 0.5],
+                }}
+                transition={{
+                  duration: 2.2 + r * 0.2,
+                  delay: r * 0.25 + (i % 3) * 0.1,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                }}
+              />
+            ))}
           </div>
         </motion.div>
       ))}
-
-      {/* Reactor core */}
-      <motion.div
-        style={L3}
-        className="absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2"
-      >
-        <motion.div
-          className="relative w-16 h-16 rounded-full"
-          animate={{
-            rotate: reduce ? 0 : [0, 360],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          style={{
-            background:
-              "conic-gradient(from 0deg, rgba(59,130,246,0.3), rgba(34,211,238,0.7), rgba(59,130,246,0.3))",
-            boxShadow:
-              "0 0 24px rgba(59,130,246,0.8), 0 0 48px rgba(34,211,238,0.5)",
-          }}
-        >
-          <div className="absolute inset-2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.9),rgba(59,130,246,0.4))]" />
-        </motion.div>
-
-        {/* Expanding Waves */}
-        {[0, 1, 2].map((i) => (
-          <motion.div
-            key={i}
-            className="absolute left-1/2 top-1/2 rounded-full border border-blue-400/40"
-            style={{
-              width: 32,
-              height: 32,
-              x: "-50%",
-              y: "-50%",
-            }}
-            animate={{
-              scale: [1, 2.4, 1],
-              opacity: [0.7, 0, 0.7],
-              borderColor: [
-                "rgba(59,130,246,0.5)",
-                "rgba(59,130,246,0.15)",
-                "rgba(59,130,246,0.5)",
-              ],
-            }}
-            transition={{
-              duration: 3.2,
-              delay: i * 0.4,
-              repeat: Infinity,
-              ease: "easeOut",
-            }}
-          />
-        ))}
-      </motion.div>
     </div>
   );
 }
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
   return (
@@ -318,7 +296,7 @@ export function Hero() {
             </p>
           </motion.div>
 
-          {/* CTA Buttons */}
+          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -335,9 +313,7 @@ export function Hero() {
               className="border-gray-300 text-gray-700 hover:bg-blue-800 px-8 py-4 text-lg rounded-full font-medium"
               onClick={() => {
                 const aboutSection = document.getElementById("about");
-                if (aboutSection) {
-                  aboutSection.scrollIntoView({ behavior: "smooth" });
-                }
+                if (aboutSection) aboutSection.scrollIntoView({ behavior: "smooth" });
               }}
             >
               Learn More
@@ -345,7 +321,7 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Right Visual */}
+        {/* Right visual — now perfectly aligned to /about-image.png */}
         <div className="relative">
           <MagicVisual />
         </div>
