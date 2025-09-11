@@ -11,11 +11,13 @@ import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactFormSchema, type ContactForm } from "@/lib/schema";
+import { useLanguage } from "@/contexts/language-context";
 
 export function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const form = useForm<ContactForm>({
     resolver: zodResolver(contactFormSchema),
@@ -70,7 +72,7 @@ export function Contact() {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary mb-6"
           >
-            <span>Contact</span> <ChevronRight className="h-4 w-4 ml-1" />
+            <span>{t('contact.badge')}</span> <ChevronRight className="h-4 w-4 ml-1" />
           </motion.p>
           
           <motion.h2
@@ -80,9 +82,9 @@ export function Contact() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl md:text-4xl font-bold mb-6"
           >
-            Laten we samen bouwen aan{" "}
+            {t('contact.title').split(' ').slice(0, -2).join(' ')}{" "}
             <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-              uw toekomst
+              {t('contact.title').split(' ').slice(-2).join(' ')}
             </span>
           </motion.h2>
           
@@ -98,16 +100,16 @@ export function Contact() {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-bold mb-4">Stuur ons een bericht</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('contact.form.title')}</h3>
               <p className="text-muted-foreground mb-6">
-                Vertel ons over uw project en we nemen snel contact op voor een vrijblijvend gesprek.
+                {t('contact.form.description')}
               </p>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Naam</Label>
+                  <Label htmlFor="name">{t('contact.form.name')}</Label>
                   <Input
                     id="name"
                     placeholder="Jan Janssen"
@@ -118,7 +120,7 @@ export function Contact() {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">E-mail</Label>
+                  <Label htmlFor="email">{t('contact.form.email')}</Label>
                   <Input
                     id="email"
                     type="email"
@@ -132,7 +134,7 @@ export function Contact() {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="subject">Onderwerp</Label>
+                <Label htmlFor="subject">{t('contact.form.subject')}</Label>
                 <Input
                   id="subject"
                   placeholder="Waar kunnen we je mee helpen?"
@@ -144,7 +146,7 @@ export function Contact() {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="message">Bericht</Label>
+                <Label htmlFor="message">{t('contact.form.message')}</Label>
                 <Textarea
                   id="message"
                   placeholder="Vertel ons over uw project, uitdagingen of vragen..."
@@ -162,7 +164,7 @@ export function Contact() {
                 disabled={isSubmitting}
                 size="lg"
               >
-                {isSubmitting ? 'Versturen...' : 'Verstuur Bericht'}
+                {isSubmitting ? t('contact.form.submitting') : t('contact.form.submit')}
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </form>
@@ -176,9 +178,9 @@ export function Contact() {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-bold mb-4">Of geef ons gerust een seintje</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('contact.direct.title')}</h3>
               <p className="text-muted-foreground mb-8">
-                Liever direct contact? Bel ons voor een snelle chat over uw project of stuur een WhatsApp bericht.
+                {t('contact.direct.description')}
               </p>
             </div>
 
@@ -191,7 +193,7 @@ export function Contact() {
                     <Phone className="h-6 w-6 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-lg mb-2">Bel ons direct</h4>
+                    <h4 className="font-semibold text-lg mb-2">{t('contact.phone.title')}</h4>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <span className="text-muted-foreground text-sm">Karel:</span>
@@ -213,7 +215,7 @@ export function Contact() {
                       </div>
                     </div>
                     <p className="text-muted-foreground text-sm mt-2">
-                      Ook bereikbaar buiten de kantooruren
+                      {t('contact.phone.availability')}
                     </p>
                   </div>
                 </div>
@@ -226,10 +228,10 @@ export function Contact() {
                     <MessageCircle className="h-6 w-6 text-green-600" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-lg mb-2">WhatsApp</h4>
+                    <h4 className="font-semibold text-lg mb-2">{t('contact.whatsapp.title')}</h4>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-muted-foreground text-sm">Stuur een bericht naar:</span>
+                        <span className="text-muted-foreground text-sm">{t('contact.whatsapp.description')}</span>
                       </div>
                       <div className="flex items-center gap-4">
                         <a 
@@ -263,7 +265,7 @@ export function Contact() {
                     <Mail className="h-6 w-6 text-blue-600" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-lg mb-2">E-mail</h4>
+                    <h4 className="font-semibold text-lg mb-2">{t('contact.email.title')}</h4>
                     <a 
                       href="mailto:contact@finitsolutions.be" 
                       className="text-blue-600 hover:underline font-medium"
@@ -271,7 +273,7 @@ export function Contact() {
                       contact@finitsolutions.be
                     </a>
                     <p className="text-muted-foreground text-sm mt-2">
-                      We reageren binnen één werkdag
+                      {t('contact.email.response')}
                     </p>
                   </div>
                 </div>

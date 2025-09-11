@@ -6,10 +6,13 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/language-context";
+import { Globe } from "lucide-react";
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const { language, setLanguage, t } = useLanguage();
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -72,29 +75,80 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center">
             {/* Navigation Pills Container */}
-            <div className="lg:flex hidden items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-2 py-1 border border-gray-200/50 shadow-sm absolute left-1/2 transform -translate-x-1/2">
+            <div className="lg:flex hidden items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-2 py-1 border border-gray-200/50 shadow-sm">
               <Link
                 href="/diensten"
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
-                Tailored IT Solutions
+                {t('nav.services')}
               </Link>
               <Link
                 href="/marketplace"
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
-                Marketplace
+                {t('nav.marketplace')}
               </Link>
               <Link
                 href="/about"
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
-                About Us
+                {t('nav.about')}
               </Link>
             </div>
           </nav>
+
+          {/* Language Toggle & Mobile Menu */}
+          <div className="flex items-center gap-4">
+            {/* Language Toggle */}
+            <div className="hidden lg:flex items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-1 py-1 border border-gray-200/50 shadow-sm">
+              <button
+                onClick={() => setLanguage('en')}
+                className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-all duration-200 ${
+                  language === 'en' 
+                    ? 'bg-white text-blue-600 shadow-sm' 
+                    : 'text-gray-600 hover:text-blue-600'
+                }`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage('nl')}
+                className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-all duration-200 ${
+                  language === 'nl' 
+                    ? 'bg-white text-blue-600 shadow-sm' 
+                    : 'text-gray-600 hover:text-blue-600'
+                }`}
+              >
+                NL
+              </button>
+            </div>
+
           {/* Mobile Navigation Toggle */}
-          <div className="flex lg:hidden items-center space-x-4">
+            <div className="flex lg:hidden items-center space-x-4">
+              {/* Mobile Language Toggle */}
+              <div className="flex items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-1 py-1 border border-gray-200/50 shadow-sm">
+                <button
+                  onClick={() => setLanguage('en')}
+                  className={`px-2 py-1 text-[10px] font-semibold rounded-full transition-all duration-200 ${
+                    language === 'en' 
+                      ? 'bg-white text-blue-600 shadow-sm' 
+                      : 'text-gray-600 hover:text-blue-600'
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => setLanguage('nl')}
+                  className={`px-2 py-1 text-[10px] font-semibold rounded-full transition-all duration-200 ${
+                    language === 'nl' 
+                      ? 'bg-white text-blue-600 shadow-sm' 
+                      : 'text-gray-600 hover:text-blue-600'
+                  }`}
+                >
+                  NL
+                </button>
+              </div>
+
             <Button
               variant="ghost"
               size="icon"
@@ -135,6 +189,7 @@ export function Navbar() {
           </nav>
         </div>
       </div>
+    </div>
     </header>
   );
 }

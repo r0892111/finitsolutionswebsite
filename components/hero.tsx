@@ -10,6 +10,7 @@ import {
 import { Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
+import { useLanguage } from "@/contexts/language-context";
 
 /**
  * MagicVisual is engineered to the bitmap used in the codebase:
@@ -134,6 +135,8 @@ function MagicVisual() {
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
+  const { t } = useLanguage();
+
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
@@ -151,7 +154,7 @@ export function Hero() {
           >
             <div className="inline-flex items-center px-4 py-2 rounded-full text-[12px] font-semibold bg-white border border-blue-200" style={{ color: 'rgb(28, 44, 85)' }}>
               <Zap className="h-4 w-4 mr-2" />
-              <span>Where the Future Begins</span>
+              <span>{t('hero.badge')}</span>
             </div>
           </motion.div>
 
@@ -162,16 +165,19 @@ export function Hero() {
             className="space-y-4"
           >
             <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{ color: 'rgb(28, 44, 85)' }}>
-              AI Workforces
+              {t('hero.title.line1')}
               <br className="md:block hidden" />
-              <span className="font-semibold">that automate </span>
+              <span className="font-semibold">{t('hero.title.line2')} </span>
               <br className="md:block hidden" />
-              <span className="font-semibold">and scale your business.</span>
+              <span className="font-semibold">{t('hero.title.line3')}</span>
             </h1>
             <p className="text-xl font-semibold lg:text-2xl leading-relaxed max-w-2xl" style={{ color: 'rgb(28, 44, 85)' }}>
-              We build AI-powered software on top of the systems you already use.
-              <br className="md:block hidden" /> Our goal is to eliminate inefficiencies and unlock powerful leverage
-              for your company&apos;s growth.
+              {t('hero.subtitle').split('\n').map((line, index) => (
+                <span key={index}>
+                  {line}
+                  {index < t('hero.subtitle').split('\n').length - 1 && <br className="md:block hidden" />}
+                </span>
+              ))}
             </p>
           </motion.div>
 
@@ -183,7 +189,7 @@ export function Hero() {
             className="flex flex-col sm:flex-row gap-4 pt-4"
           >
             <ProjectRequestDialog
-              buttonText="Get Started"
+              buttonText={t('hero.cta.primary')}
               buttonClassName="bg-gray-400 hover:bg-gray-500 text-white px-8 py-4 text-lg rounded-full font-medium"
             />
             <Button
@@ -195,7 +201,7 @@ export function Hero() {
                 if (aboutSection) aboutSection.scrollIntoView({ behavior: "smooth" });
               }}
             >
-              Learn More
+              {t('hero.cta.secondary')}
             </Button>
           </motion.div>
         </div>

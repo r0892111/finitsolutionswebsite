@@ -9,6 +9,7 @@ import Script from 'next/script';
 import { ConsentProvider } from '@/contexts/consent-context';
 import { CookieBanner } from '@/components/cookie-banner';
 import { CookieSettingsModal } from '@/components/cookie-settings-modal';
+import { LanguageProvider } from '@/contexts/language-context';
 
 const inter = Inter({ subsets: ['latin'] });
 const montserrat = Montserrat({ 
@@ -139,15 +140,17 @@ export default function RootLayout({
           />
         </noscript>
         
-        <ConsentProvider>
-          <GADebug />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <CookieBanner />
-          <CookieSettingsModal />
-          <Toaster />
-        </ConsentProvider>
+        <LanguageProvider>
+          <ConsentProvider>
+            <GADebug />
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+            <CookieBanner />
+            <CookieSettingsModal />
+            <Toaster />
+          </ConsentProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -5,9 +5,11 @@ import Image from "next/image";
 import { Mail, Phone, MapPin, Linkedin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
+import { useLanguage } from "@/contexts/language-context";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
   
   return (
     <footer className="bg-background border-t relative">
@@ -30,7 +32,12 @@ export function Footer() {
               </div>
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs">
-              <strong>Slimme</strong> AI-oplossingen, op maat van <strong>jouw</strong> KMO.
+              {t('footer.tagline').split(' ').map((word, index) => {
+                if (word === 'Slimme' || word === 'Smart') return <strong key={index}>{word} </strong>;
+                if (word === 'jouw' || word === 'your') return <strong key={index}>{word} </strong>;
+                if (word === 'KMO.' || word === 'SME.') return <strong key={index}>{word}</strong>;
+                return word + ' ';
+              })}
             </p>
             <p className="text-muted-foreground text-sm">
               BTW: BE1020600643
@@ -50,14 +57,14 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Menu</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.menu')}</h3>
             <ul className="space-y-2">
               {[
                 { name: "Home", href: "/" },
-                { name: "Diensten", href: "/diensten" },
-                { name: "Marketplace", href: "/marketplace" },
+                { name: t('nav.services'), href: "/diensten" },
+                { name: t('nav.marketplace'), href: "/marketplace" },
                 { name: "Blog", href: "/blog" },
-                { name: "Over Ons", href: "/about" }
+                { name: t('nav.about'), href: "/about" }
               ].map((item) => (
                 <li key={item.name}>
                   <Link 
@@ -73,7 +80,7 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Diensten</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.services')}</h3>
             <ul className="space-y-2">
               {[
                 { name: "Sales & CRM", href: "/diensten" },
@@ -97,7 +104,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Contact</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.contact')}</h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
@@ -126,26 +133,26 @@ export function Footer() {
         
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} Finit Solutions. Alle rechten voorbehouden.
+            © {currentYear} Finit Solutions. {t('footer.copyright')}
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link 
               href="/privacy" 
               className="text-xs text-muted-foreground hover:text-primary transition-colors"
             >
-              Privacybeleid
+              {t('footer.privacy')}
             </Link>
             <Link 
               href="/cookieverklaring" 
               className="text-xs text-muted-foreground hover:text-primary transition-colors"
             >
-              Cookieverklaring
+              {t('footer.cookies')}
             </Link>
             <Link 
               href="/disclaimer" 
               className="text-xs text-muted-foreground hover:text-primary transition-colors"
             >
-              Disclaimer
+              {t('footer.disclaimer')}
             </Link>
             <CookieSettingsLink />
           </div>
