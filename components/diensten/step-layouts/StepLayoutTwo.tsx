@@ -60,7 +60,7 @@ export function StepLayoutTwo({ step, isEven }: StepLayoutTwoProps) {
         className="mt-16 bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl max-w-4xl mx-auto"
       >
         <h4 className="text-xl font-bold text-white mb-4">Client Case</h4>
-        <p className="text-slate-200 italic text-lg leading-relaxed">"{step.useCase}"</p>
+        <p className="text-slate-200 italic text-lg leading-relaxed">&ldquo;{step.useCase}&rdquo;</p>
       </motion.div>
     </div>
   );

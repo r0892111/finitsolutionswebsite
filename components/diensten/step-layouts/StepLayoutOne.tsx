@@ -71,22 +71,8 @@ export function StepLayoutOne({ step, isEven }: StepLayoutOneProps) {
             </div>
             <h4 className="text-lg font-bold text-[#202226]">Client Case</h4>
           </div>
-          <p className="text-slate-800 italic leading-relaxed mb-6">"{step.useCase}"</p>
+          <p className="text-slate-800 italic leading-relaxed mb-6">&ldquo;{step.useCase}&rdquo;</p>
           
-          <div className="grid grid-cols-3 gap-4">
-            <div className="text-center p-4 rounded-xl bg-[#1C2C55]/5">
-              <div className="text-2xl font-bold text-[#1C2C55]">{step.metrics.time}</div>
-              <div className="text-xs text-slate-600 uppercase tracking-wide">Tijdsduur</div>
-            </div>
-            <div className="text-center p-4 rounded-xl bg-[#1C2C55]/5">
-              <div className="text-sm font-bold text-[#202226]">{step.metrics.deliverable}</div>
-              <div className="text-xs text-slate-600 uppercase tracking-wide">Oplevering</div>
-            </div>
-            <div className="text-center p-4 rounded-xl bg-[#1C2C55]/5">
-              <div className="text-sm font-bold text-[#1C2C55]">{step.metrics.impact}</div>
-              <div className="text-xs text-slate-600 uppercase tracking-wide">Impact</div>
-            </div>
-          </div>
         </div>
       </motion.div>
     </div>
