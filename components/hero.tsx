@@ -37,9 +37,9 @@ export function Hero() {
   <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight text-blue-900">
     AI Workforces  
     <br className="md:block hidden" />
-    <span className="font-semibold">to automate and scale,</span>  
+    <span className="font-semibold">to automate </span>  
     <br className="md:block hidden" />
-    <span className="font-semibold">your business.</span>
+    <span className="font-semibold">and scale your business.</span>
   </h1>
 
   {/* Subheading */}
