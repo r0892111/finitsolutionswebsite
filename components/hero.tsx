@@ -44,9 +44,8 @@ export function Hero() {
 
             {/* Subheading */}
             <p className="text-xl font-semibold lg:text-2xl text-blue-900 leading-relaxed max-w-2xl">
-              We use AI and smart automation to eliminate{" "}
-              <br className="md:block hidden" /> inefficiency and give your
-              company powerful leverage.
+              Building AI workforces that automate{" "}
+              <br className="md:block hidden" /> and scale your business
             </p>
           </motion.div>
 
