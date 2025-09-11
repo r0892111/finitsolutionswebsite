@@ -104,7 +104,7 @@ const translations = {
     
     // Hero
     'hero.badge': 'Where the Future Begins',
-    'hero.title.line1': 'AI Workforces',
+    'hero.title.line1': 'Artificial Workforces',
     'hero.title.line2': 'that automate',
     'hero.title.line3': 'and scale your business.',
     'hero.subtitle': 'We build AI-powered software on top of the systems you already use.\nOur goal is to eliminate inefficiencies and unlock powerful leverage\nfor your company\'s growth.',
