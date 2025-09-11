@@ -108,25 +108,6 @@ export default function MarketplacePage() {
         </div>
       </section>
 
-      {/* Marketplace Navigation */}
-      <section className="py-8 bg-gray-50 border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap gap-3">
-              <Badge variant="secondary" className="bg-white border">Alle categorieën</Badge>
-              {categories.map((category) => (
-                <Badge key={category.name} className={`${category.color} border-0`}>
-                  {category.name} ({category.count})
-                </Badge>
-              ))}
-            </div>
-            <div className="text-sm text-gray-600">
-              4 oplossingen beschikbaar
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Featured Product - VoiceLink */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
