@@ -66,44 +66,44 @@ export default function MarketplacePage() {
   ];
 
   return (
-    <main className="pt-20 bg-white min-h-screen font-general-sans">
-      {/* Compact Hero Section */}
-      <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12" style={{ backgroundColor: '#1C2C55' }}>
-        <div className="w-full">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-6 flex items-center justify-center gap-8 w-full"
-            >
-              <Image
-                src="/Finit Marketplace White.svg"
-                alt="Finit Marketplace"
-                width={220}
-                height={110}
-                className="opacity-90 mr-4"
-                priority
-              />
-              {/* Vertical separator line */}
-              <div className="w-px h-16 bg-white/30"></div>
-              {/* Vertical separator line */}
-              <div className="w-px h-16 bg-white/30"></div>
-              {/* Vertical separator line */}
-              <div className="w-px h-16 bg-white/30"></div>
-              <div className="text-left min-w-0 flex-1 min-w-[700px] max-w-none">
-                <h1 className="finit-h1 text-white mb-2">
-                  Plug & play <span className="finit-highlight">AI solutions</span>
-                </h1>
-                <p className="finit-body text-white/90">
-                  Enterprise-grade AI tools die direct integreren met uw bestaande systemen
-                </p>
-              </div>
-            </motion.div>
-            
-          </div>
+  <main className="pt-20 bg-white min-h-screen font-general-sans">
+    {/* Compact Hero Section */}
+    <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12" style={{ backgroundColor: '#1C2C55' }}>
+      <div className="w-full">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-6 flex items-center justify-center w-full"
+          >
+            <Image
+              src="/Finit Marketplace White.svg"
+              alt="Finit Marketplace"
+              width={220}
+              height={110}
+              className="opacity-90 mr-6 md:mr-8"
+              priority
+            />
+
+            {/* Vertical divider */}
+            <div
+              aria-hidden="true"
+              className="w-px h-12 md:h-16 bg-white/30 mx-2 md:mx-4"
+            />
+
+            <div className="text-left min-w-0 flex-1 min-w-[700px]">
+              <h1 className="finit-h1 text-white mb-2">
+                Plug &amp; play <span className="finit-highlight">AI solutions</span>
+              </h1>
+              <p className="finit-body text-white/90">
+                Enterprise-grade AI tools die direct integreren met uw bestaande systemen
+              </p>
+            </div>
+          </motion.div>
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* Featured Product - VoiceLink */}
       <section className="py-8 bg-white">
