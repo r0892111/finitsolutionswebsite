@@ -251,16 +251,21 @@ export default function DienstenPage() {
                               </div>
                               
                               <div className="space-y-4">
-                                {step.details.map((detail, i) => (
+                                {step.details.slice(1).map((detail, i) => (
                                   <motion.div
                                     key={i}
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.6, delay: i * 0.1 }}
-                                    className="flex items-center gap-4 p-4 rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 shadow-lg"
+                                    className="flex items-center gap-4 p-6 rounded-xl shadow-lg border transition-all duration-300 hover:shadow-xl"
+                                    style={{
+                                      background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(247,230,155,0.15) 100%)',
+                                      borderColor: 'rgba(28,44,85,0.1)'
+                                    }}
                                   >
-                                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shadow">
+                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md"
+                                         style={{ background: 'linear-gradient(135deg, #1C2C55 0%, rgba(28,44,85,0.8) 100%)' }}>
                                       <span className="text-white text-sm font-bold">✓</span>
                                     </div>
                                     <span className="finit-body font-medium leading-relaxed" style={{ color: '#202226' }}>{detail}</span>
@@ -284,7 +289,15 @@ export default function DienstenPage() {
                                      `,
                                      borderColor: 'rgba(28,44,85,0.3)'
                                    }}>
-                                <p className="finit-body italic mb-8 text-white leading-relaxed">
+                                <div className="flex items-center gap-3 mb-6">
+                                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/25 to-white/15 flex items-center justify-center border border-white/30 shadow-lg">
+                                    <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center">
+                                      <div className="w-2 h-2 rounded-full bg-white"></div>
+                                    </div>
+                                  </div>
+                                  <h4 className="finit-h2 text-white">Client Case</h4>
+                                </div>
+                                <p className="finit-body text-white/90 italic mb-6 leading-relaxed">
                                   &ldquo;{step.useCase}&rdquo;
                                 </p>
                                 
@@ -309,6 +322,105 @@ export default function DienstenPage() {
                           </div>
                         </div>
                       </div>
+                    </div>
+                  </motion.div>
+                );
+              }
+
+              // Special centered layout for step 2
+              if (step.id === 2) {
+                return (
+                  <motion.div
+                    key={step.id}
+                    ref={(el) => (stepRefs.current[index] = el)}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{
+                      opacity: isVisible ? 1 : 0.35,
+                      y: isVisible ? 0 : 20,
+                      scale: isActive ? 1.01 : 1
+                    }}
+                    transition={{ duration: 0.5 }}
+                    className="relative"
+                  >
+                    {/* Centered Architectural Layout for Step 2 */}
+                    <div className="text-center max-w-6xl mx-auto">
+                      {/* Large centered number and header */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="mb-16 step-number-marker"
+                      >
+                        {/* Large gradient number */}
+                        <div className="text-9xl font-bold leading-none bg-gradient-to-br from-white/60 via-white/40 to-white/20 bg-clip-text text-transparent opacity-60 mb-8">
+                          02
+                        </div>
+                        
+                        {/* Centered badge and title */}
+                        <div className="inline-block px-6 py-3 rounded-full text-sm font-medium mb-8 bg-gradient-to-r from-white/20 to-white/10 border border-white/30 text-white backdrop-blur-sm shadow-xl">
+                          {step.subtitle}
+                        </div>
+                        
+                        <h2 className="text-6xl md:text-7xl font-extralight text-white mb-8 tracking-tight drop-shadow-lg">
+                          {step.title}
+                        </h2>
+                        
+                        <p className="text-2xl text-white/80 font-light leading-relaxed max-w-4xl mx-auto">
+                          {step.description}
+                        </p>
+                      </motion.div>
+
+                      {/* Grid-based methodology cards */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                        {step.details.map((detail, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: i * 0.2 }}
+                            whileHover={{ y: -8, scale: 1.02 }}
+                            className="bg-white/15 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300"
+                          >
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/30 to-white/10 flex items-center justify-center mb-4 shadow-lg border border-white/40">
+                              <span className="text-white font-bold text-lg">{i + 1}</span>
+                            </div>
+                            <p className="text-white font-light leading-relaxed text-sm">{detail}</p>
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Full-width client case */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, delay: 0.8 }}
+                        className="bg-white/15 backdrop-blur-xl rounded-3xl p-12 border border-white/25 shadow-2xl max-w-5xl mx-auto"
+                      >
+                        <div className="flex items-center justify-center gap-3 mb-8">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/25 to-white/15 flex items-center justify-center border border-white/40 shadow-lg">
+                            <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center">
+                              <div className="w-2 h-2 rounded-full bg-white"></div>
+                            </div>
+                          </div>
+                          <h4 className="text-2xl font-bold text-white">Client Case</h4>
+                        </div>
+                        
+                        <p className="text-white/90 italic text-xl leading-relaxed mb-8">
+                          &ldquo;{step.useCase}&rdquo;
+                        </p>
+                        
+                        {/* Architecture visualization tags */}
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                          {["Scope", "Integraties", "RBAC", "Chat", "E-mail", "Workflows"].map((tag, i) => (
+                            <div key={i} className="rounded-xl bg-gradient-to-r from-white/20 to-white/10 border border-white/30 px-4 py-3 text-center text-sm font-medium text-white backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                              {tag}
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
                     </div>
                   </motion.div>
                 );
