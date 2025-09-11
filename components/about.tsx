@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
@@ -139,7 +139,20 @@ export function About() {
               className="space-y-4"
             >
               {/* Simple "In de kijker" section */}
-              <div className="bg-card border border-border rounded-lg p-6">
+              <div className="bg-card border border-border rounded-lg p-6 relative">
+                {/* Prominent CTA Button in top right */}
+                <div className="absolute top-4 right-4">
+                  <a 
+                    href="https://voicelink.me" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-blue-600 text-white text-sm font-semibold rounded-full shadow-lg hover:shadow-xl hover:from-primary/90 hover:to-blue-600/90 transition-all duration-300 transform hover:scale-105"
+                  >
+                    <span>{t('about.spotlight.cta')}</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+                
                 <div className="mb-4">
                   <span className="inline-block px-3 py-1 bg-primary text-primary-foreground text-sm font-medium rounded-md">
                     {t('about.spotlight.title')}
