@@ -299,10 +299,6 @@ export default function DienstenPage() {
                             <div className="relative">
                               {/* Large step number with premium styling */}
                               <div className="text-9xl font-bold leading-none" style={{ color: '#F7E69B' }}>01</div>
-                              {/* Overlaid icon */}
-                              <div className="absolute top-6 left-6 w-20 h-20 rounded-2xl flex items-center justify-center shadow-2xl" style={{ backgroundColor: '#1C2C55' }}>
-                                <IconComponent className="h-10 w-10 text-white" />
-                              </div>
                             </div>
                             
                             <div className="flex-1 pt-8">
