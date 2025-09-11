@@ -30,7 +30,7 @@ const translations = {
     
     // Hero
     'hero.badge': 'Where the Future Begins',
-    'hero.title.line1': 'Artificiële Werkkrachten',
+    'hero.title.line1': 'Artificiële Arbeidskrachten',
     'hero.title.line2': 'die je bedrijf automatiseren',
     'hero.title.line3': 'en opschalen.',
     'hero.subtitle': 'Wij bouwen AI-gestuurde software bovenop de systemen die je al gebruikt.\nOns doel is inefficiënties te elimineren en een krachtige hefboom\nvoor de groei van je bedrijf te creëren.',
