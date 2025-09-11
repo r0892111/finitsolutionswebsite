@@ -103,7 +103,7 @@ export default function MarketplacePage() {
               className="finit-body text-white/90 max-w-2xl mx-auto"
             >
               Enterprise-grade AI tools die direct integreren met uw bestaande systemen
-            </p>
+            </motion.p>
           </div>
         </div>
       </section>
