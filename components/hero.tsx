@@ -73,9 +73,9 @@ function MagicVisual() {
       
       {/* Elevated content container with subtle lift effect */}
       <div 
-        className="relative z-10"
+        className="relative z-10 animate-gentle-pulse"
         style={{
-          filter: 'drop-shadow(0 25px 50px rgba(22,44,85,0.15)) drop-shadow(0 10px 25px rgba(22,44,85,0.1))',
+          filter: 'drop-shadow(0 30px 60px rgba(22,44,85,0.25)) drop-shadow(0 15px 35px rgba(22,44,85,0.15)) drop-shadow(0 5px 15px rgba(22,44,85,0.1))',
           transform: 'translateZ(0)' // Force hardware acceleration
         }}
       >
@@ -85,15 +85,38 @@ function MagicVisual() {
         alt="Connected data infrastructure"
         className="w-full h-full object-contain pointer-events-none"
         draggable={false}
+          style={{
+            filter: 'contrast(1.05) brightness(1.02) drop-shadow(0 8px 25px rgba(22,44,85,0.12))'
+          }}
       />
+        
+        {/* Enhanced ambient glow overlay */}
+        <div 
+          className="absolute inset-0 pointer-events-none animate-ambient-glow"
+          style={{
+            background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(59,130,246,0.08) 0%, rgba(22,44,85,0.04) 40%, transparent 70%)',
+            filter: 'blur(8px)',
+            mixBlendMode: 'overlay'
+          }}
+        />
+        
+        {/* Subtle inner shadow for depth */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 60%, rgba(22,44,85,0.06) 80%, rgba(22,44,85,0.12) 100%)',
+            filter: 'blur(4px)',
+            mixBlendMode: 'multiply'
+          }}
+        />
       </div>
       
       {/* Subtle ambient light reflection on top */}
       <div 
-        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-3/4 h-1/3 z-5 pointer-events-none opacity-20"
+        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-3/4 h-1/3 z-5 pointer-events-none opacity-25 animate-ambient-light"
         style={{
-          background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(247,230,155,0.4) 0%, transparent 70%)',
-          filter: 'blur(15px)'
+          background: 'radial-gradient(ellipse 85% 100% at 50% 0%, rgba(247,230,155,0.5) 0%, rgba(247,230,155,0.2) 50%, transparent 80%)',
+          filter: 'blur(18px)'
         }}
       />
 
