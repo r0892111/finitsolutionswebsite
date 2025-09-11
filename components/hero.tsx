@@ -76,26 +76,127 @@ export function Hero() {
             </Button>
           </motion.div>
         </div>
-        <motion.img
-          animate={{
-            filter: [
-              "drop-shadow(0 0 20px rgba(57, 86, 134, 0.3))",
-              "drop-shadow(0 0 40px rgba(57, 86, 134, 0.6))",
-              "drop-shadow(0 0 60px rgba(57, 86, 134, 0.4))",
-              "drop-shadow(0 0 30px rgba(57, 86, 134, 0.5))",
-              "drop-shadow(0 0 20px rgba(57, 86, 134, 0.3))"
-            ],
-            scale: [1, 1.02, 1.01, 1.03, 1]
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          src="/about-image.png"
-          alt="3D Graphic"
-          className="w-[300px] md:w-[600px] h-auto"
-        />
+        
+        {/* Hero Image with Dynamic Server Effects */}
+        <div className="relative w-[300px] md:w-[600px] h-auto">
+          <motion.img
+            src="/about-image.png"
+            alt="3D Graphic"
+            className="w-full h-auto relative z-10"
+          />
+          
+          {/* Dynamic Data Particles */}
+          <div className="absolute inset-0 pointer-events-none">
+            {/* Floating Data Particles */}
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={`particle-${i}`}
+                className="absolute w-2 h-2 bg-blue-400 rounded-full opacity-70"
+                style={{
+                  left: `${20 + (i * 10)}%`,
+                  top: `${30 + (i % 3) * 20}%`,
+                }}
+                animate={{
+                  y: [-20, -60, -20],
+                  opacity: [0, 1, 0],
+                  scale: [0.5, 1, 0.5]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  delay: i * 0.4,
+                  ease: "easeInOut"
+                }}
+              />
+            ))}
+            
+            {/* Data Stream Lines */}
+            {[...Array(4)].map((_, i) => (
+              <motion.div
+                key={`stream-${i}`}
+                className="absolute h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent"
+                style={{
+                  left: `${15 + (i * 20)}%`,
+                  top: `${40 + (i * 15)}%`,
+                  width: '60px'
+                }}
+                animate={{
+                  scaleX: [0, 1, 0],
+                  opacity: [0, 0.8, 0]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: i * 0.5,
+                  ease: "easeInOut"
+                }}
+              />
+            ))}
+            
+            {/* Pulsing Core */}
+            <motion.div
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-blue-500 rounded-full"
+              animate={{
+                scale: [1, 1.5, 1],
+                opacity: [0.6, 1, 0.6]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            
+            {/* Orbiting Data Points */}
+            {[...Array(3)].map((_, i) => (
+              <motion.div
+                key={`orbit-${i}`}
+                className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-yellow-400 rounded-full"
+                style={{
+                  transformOrigin: '0 0'
+                }}
+                animate={{
+                  rotate: 360
+                }}
+                transition={{
+                  duration: 4 + i,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                initial={{
+                  x: `${30 + (i * 15)}px`,
+                  y: `${-10 + (i * 5)}px`
+                }}
+              />
+            ))}
+            
+            {/* Network Connection Lines */}
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              {[...Array(3)].map((_, i) => (
+                <motion.line
+                  key={`connection-${i}`}
+                  x1={20 + (i * 25)}
+                  y1={30 + (i * 10)}
+                  x2={60 + (i * 15)}
+                  y2={70 - (i * 10)}
+                  stroke="rgba(59, 130, 246, 0.4)"
+                  strokeWidth="0.5"
+                  strokeDasharray="2,2"
+                  animate={{
+                    strokeDashoffset: [0, -10, 0],
+                    opacity: [0.2, 0.6, 0.2]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: i * 0.7,
+                    ease: "easeInOut"
+                  }}
+                />
+              ))}
+            </svg>
+          </div>
+        </div>
       </div>
     </section>
   );
