@@ -24,7 +24,7 @@ export function Hero() {
           >
             <div className="inline-flex items-center px-4 py-2 rounded-full text-[12px] font-semibold bg-white text-blue-700 border border-blue-200">
               <Zap className="h-4 w-4 mr-2" />
-              <span>Where the Future Begins</span>
+              <span>AI & Automatisering voor KMOs</span>
             </div>
           </motion.div>
 
@@ -35,17 +35,18 @@ export function Hero() {
             className="space-y-4"
           >
             <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight text-blue-900">
-              We build AI
+              Building AI workforces
               <br className="md:block hidden" />
-              <span className="font-semibold"> that works 24/7</span>
+              <span className="font-semibold"> that automate </span>
               <br className="md:block hidden" />
-              <span className="font-semibold"> for you.</span>
+              <span className="font-semibold"> and scale your business.</span>
             </h1>
 
             {/* Subheading */}
             <p className="text-xl font-semibold lg:text-2xl text-blue-900 leading-relaxed max-w-2xl">
               Building AI workforces that automate{" "}
-              <br className="md:block hidden" /> and scale your business
+              <br className="md:block hidden" /> inefficiency and give your
+              company powerful leverage.
             </p>
           </motion.div>
 
