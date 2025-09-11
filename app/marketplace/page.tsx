@@ -1,386 +1,471 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ExternalLink, CheckCircle2, Users, TrendingUp, Clock, Shield } from "lucide-react";
+import { ArrowRight, ExternalLink, CheckCircle2, Users, TrendingUp, Clock, Shield, Star, Zap, Brain, Database, MessageSquare, Calendar, BarChart3 } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export default function MarketplacePage() {
+  const featuredProducts = [
+    {
+      id: "voicelink",
+      name: "VoiceLink",
+      tagline: "Voice-to-CRM automation",
+      description: "WhatsApp spraakberichten worden automatisch omgezet naar CRM-data. Klantnaam, offertebedrag, vervolgafspraken - alles op de juiste plaats.",
+      image: "/finit voicelink 1@4x-100.jpg",
+      logo: "/Finit Voicelink Blue@4x.png",
+      category: "Sales & CRM",
+      status: "live",
+      price: "Vanaf €49/maand",
+      rating: 4.9,
+      reviews: 127,
+      features: ["WhatsApp integratie", "Automatische CRM-sync", "3 min installatie", "Alle CRM's ondersteund"],
+      metrics: {
+        timeSaved: "2 uur/dag",
+        accuracy: "90%",
+        adoption: "95%"
+      },
+      url: "https://voicelink.me"
+    }
+  ];
+
+  const comingSoonProducts = [
+    {
+      name: "DocuFlow AI",
+      tagline: "Intelligent document processing",
+      description: "Automatische verwerking en analyse van documenten met AI-gedreven data-extractie",
+      category: "Document Management",
+      icon: Database,
+      estimatedLaunch: "Q2 2025"
+    },
+    {
+      name: "MeetingMind",
+      tagline: "AI meeting assistant",
+      description: "Automatische notities, actiepunten en follow-ups voor al uw vergaderingen",
+      category: "Productivity",
+      icon: MessageSquare,
+      estimatedLaunch: "Q3 2025"
+    },
+    {
+      name: "InsightDash",
+      tagline: "Smart dashboard builder",
+      description: "Genereer real-time dashboards automatisch uit uw bestaande data bronnen",
+      category: "Business Intelligence",
+      icon: BarChart3,
+      estimatedLaunch: "Q4 2025"
+    }
+  ];
+
+  const categories = [
+    { name: "Sales & CRM", count: 1, color: "bg-blue-100 text-blue-800" },
+    { name: "Document Management", count: 1, color: "bg-green-100 text-green-800" },
+    { name: "Productivity", count: 1, color: "bg-purple-100 text-purple-800" },
+    { name: "Business Intelligence", count: 1, color: "bg-orange-100 text-orange-800" }
+  ];
+
   return (
     <main className="pt-20 bg-white min-h-screen font-general-sans">
-      {/* Hero Section - Dark Blue Canvas */}
-      <section className="relative py-24 md:py-32 overflow-hidden" style={{ backgroundColor: '#1C2C55' }}>
-        <div className="container mx-auto px-4 relative z-10">
+      {/* Compact Hero Section */}
+      <section className="py-16 md:py-20" style={{ backgroundColor: '#1C2C55' }}>
+        <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="mb-8"
+              transition={{ duration: 0.6 }}
+              className="mb-6"
             >
-              <div className="inline-block mb-8">
-                <Image
-                  src="/Finit Marketplace Blue@4x.png"
-                  alt="Finit Solutions Marketplace"
-                  width={240}
-                  height={120}
-                  className="object-contain opacity-90"
-                  priority
-                />
-              </div>
+              <Image
+                src="/Finit Marketplace Blue@4x.png"
+                alt="Finit Marketplace"
+                width={180}
+                height={90}
+                className="mx-auto mb-6 opacity-90"
+                priority
+              />
             </motion.div>
             
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="finit-h1 text-white mb-8"
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="finit-h1 text-white mb-4"
             >
               Plug & play <span className="finit-highlight">AI solutions</span>
             </motion.h1>
             
             <motion.p
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="finit-body text-white/90 max-w-3xl mx-auto"
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="finit-body text-white/90 max-w-2xl mx-auto"
             >
-              Ontdek onze curated collectie van enterprise-grade AI-oplossingen. 
-              Professionele tools die uw bedrijfsprocessen transformeren binnen minuten.
-            </motion.p>
+              Enterprise-grade AI tools die direct integreren met uw bestaande systemen
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Featured Product Section - VoiceLink */}
-      <section className="py-20 md:py-28 bg-white">
+      {/* Marketplace Navigation */}
+      <section className="py-8 bg-gray-50 border-b">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium bg-green-50 text-green-700 mb-8 border border-green-200">
-              <CheckCircle2 className="h-4 w-4 mr-2" />
-              <span>Nu beschikbaar</span>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-3">
+              <Badge variant="secondary" className="bg-white border">Alle categorieën</Badge>
+              {categories.map((category) => (
+                <Badge key={category.name} className={`${category.color} border-0`}>
+                  {category.name} ({category.count})
+                </Badge>
+              ))}
             </div>
-            <h2 className="finit-h2 mb-6" style={{ color: '#1C2C55' }}>
-              VoiceLink
-            </h2>
-            <p className="finit-body max-w-3xl mx-auto" style={{ color: '#202226' }}>
-              De eerste AI-oplossing uit onze marketplace. Transformeer spraaknotities automatisch naar gestructureerde CRM-data.
-            </p>
-          </motion.div>
+            <div className="text-sm text-gray-600">
+              4 oplossingen beschikbaar
+            </div>
+          </div>
+        </div>
+      </section>
 
-          {/* VoiceLink Product Card - Professional Layout */}
-          <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="max-w-6xl mx-auto"
-          >
-            <Card className="overflow-hidden bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-500">
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-                {/* Product Image - 2/5 width */}
-                <div className="lg:col-span-2 relative h-80 lg:h-96 overflow-hidden">
+      {/* Featured Product - VoiceLink */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Badge className="bg-green-100 text-green-800 border-green-200">
+                <CheckCircle2 className="h-3 w-3 mr-1" />
+                Live & beschikbaar
+              </Badge>
+              <Badge variant="outline">Featured</Badge>
+            </div>
+            <h2 className="finit-h2" style={{ color: '#1C2C55' }}>
+              Meest populaire oplossing
+            </h2>
+          </div>
+
+          <Card className="overflow-hidden bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-300">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+              {/* Product Image - 5/12 width */}
+              <div className="lg:col-span-5 relative">
+                <div className="aspect-[4/3] lg:aspect-auto lg:h-full relative overflow-hidden">
                   <Image
                     src="/finit voicelink 1@4x-100.jpg"
                     alt="VoiceLink Interface"
                     fill
                     className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    sizes="(max-width: 1024px) 100vw, 42vw"
                     unoptimized
                   />
                   
-                  {/* Status Badge - Professional positioning */}
-                  <div className="absolute top-6 left-6">
-                    <div className="bg-green-600 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 shadow-soft">
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
-                      LIVE
-                    </div>
+                  {/* Overlay with product logo */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute bottom-6 left-6">
+                    <Image
+                      src="/Finit Voicelink Blue@4x.png"
+                      alt="VoiceLink Logo"
+                      width={120}
+                      height={60}
+                      className="opacity-90"
+                      unoptimized
+                    />
                   </div>
-
-                  {/* CTA Button - Top Right */}
-                  <div className="absolute top-6 right-6">
+                  
+                  {/* Status and CTA in top corners */}
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-green-600 text-white border-0 shadow-lg">
+                      <div className="w-2 h-2 rounded-full bg-white mr-2"></div>
+                      LIVE
+                    </Badge>
+                  </div>
+                  
+                  <div className="absolute top-4 right-4">
                     <a 
                       href="https://voicelink.me" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 text-white text-sm font-medium rounded-full shadow-soft hover:shadow-lg transition-all duration-300"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-medium rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
                       style={{ backgroundColor: '#1C2C55' }}
                     >
-                      <span>Probeer nu</span>
+                      Probeer nu
                       <ExternalLink className="h-4 w-4" />
                     </a>
                   </div>
                 </div>
+              </div>
 
-                {/* Product Details - 3/5 width */}
-                <CardContent className="lg:col-span-3 p-12 lg:p-16 flex flex-col justify-center">
-                  <div className="space-y-8">
-                    {/* Category */}
-                    <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-50 border border-blue-200" style={{ color: '#1C2C55' }}>
-                      Sales & CRM
-                    </div>
-
-                    {/* Product Title and Description */}
-                    <div>
-                      <h3 className="finit-h2 mb-6" style={{ color: '#1C2C55' }}>
-                        VoiceLink
-                      </h3>
-                      <p className="finit-body mb-8" style={{ color: '#202226' }}>
-                        Uw verkopers sturen een WhatsApp spraakbericht met hun klantbezoek - klantnaam, 
-                        offertebedrag, vervolgafspraken - en alles staat automatisch op de juiste plaats 
-                        in uw CRM naar keuze.
-                      </p>
-                    </div>
-
-                    {/* Key Features */}
-                    <div className="space-y-6">
-                      <h4 className="text-lg font-medium" style={{ color: '#1C2C55' }}>Belangrijkste features:</h4>
-                      <div className="grid grid-cols-1 gap-4">
-                        {[
-                          "WhatsApp spraakherkenning",
-                          "Automatische CRM-integratie", 
-                          "3 minuten installatie",
-                          "Plug & play oplossing"
-                        ].map((feature, idx) => (
-                          <div key={idx} className="flex items-center gap-4">
-                            <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#1C2C55' }}>
-                              <CheckCircle2 className="h-4 w-4 text-white" />
-                            </div>
-                            <span className="finit-body font-medium" style={{ color: '#202226' }}>{feature}</span>
-                          </div>
-                        ))}
+              {/* Product Details - 7/12 width */}
+              <div className="lg:col-span-7 p-8 lg:p-10">
+                <div className="h-full flex flex-col">
+                  {/* Header */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <Badge className="bg-blue-50 text-blue-700 border-blue-200">
+                        Sales & CRM
+                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                          ))}
+                        </div>
+                        <span className="text-sm text-gray-600">4.9 (127 reviews)</span>
                       </div>
                     </div>
-
-                    {/* Value Proposition */}
-                    <div className="rounded-2xl p-6 border" style={{ backgroundColor: '#F7E69B', borderColor: '#1C2C55' }}>
-                      <p className="finit-body text-center font-medium" style={{ color: '#1C2C55' }}>
-                        "Meer tijd voor klanten, minder tijd aan administratie"
-                      </p>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                      <a 
-                        href="https://voicelink.me" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="flex-1"
-                      >
-                        <Button 
-                          size="lg" 
-                          className="w-full text-white shadow-soft hover:shadow-lg transition-all duration-300 text-lg py-4 rounded-2xl font-medium"
-                          style={{ backgroundColor: '#1C2C55' }}
-                        >
-                          <span>Ontdek VoiceLink</span>
-                          <ExternalLink className="ml-2 h-5 w-5" />
-                        </Button>
-                      </a>
-                      <Button 
-                        size="lg" 
-                        variant="outline"
-                        className="flex-1 text-lg py-4 rounded-2xl font-medium shadow-soft hover:shadow-lg transition-all duration-300"
-                        style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
-                        onClick={() => window.location.href = '/#contact'}
-                      >
-                        <span>Meer info</span>
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </Button>
+                    
+                    <h3 className="finit-h2 mb-3" style={{ color: '#1C2C55' }}>
+                      VoiceLink
+                    </h3>
+                    
+                    <p className="finit-body mb-4" style={{ color: '#202226' }}>
+                      WhatsApp spraakberichten worden automatisch omgezet naar CRM-data. Klantnaam, offertebedrag, vervolgafspraken - alles op de juiste plaats.
+                    </p>
+                    
+                    <div className="text-2xl font-bold mb-6" style={{ color: '#1C2C55' }}>
+                      Vanaf €49/maand
                     </div>
                   </div>
-                </CardContent>
+
+                  {/* Key Metrics */}
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="text-center p-3 bg-gray-50 rounded-lg">
+                      <div className="text-lg font-bold" style={{ color: '#1C2C55' }}>2 uur</div>
+                      <div className="text-xs text-gray-600">bespaard/dag</div>
+                    </div>
+                    <div className="text-center p-3 bg-gray-50 rounded-lg">
+                      <div className="text-lg font-bold" style={{ color: '#1C2C55' }}>90%</div>
+                      <div className="text-xs text-gray-600">minder fouten</div>
+                    </div>
+                    <div className="text-center p-3 bg-gray-50 rounded-lg">
+                      <div className="text-lg font-bold" style={{ color: '#1C2C55' }}>95%</div>
+                      <div className="text-xs text-gray-600">adoptie rate</div>
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  <div className="mb-6">
+                    <h4 className="font-medium mb-3" style={{ color: '#1C2C55' }}>Belangrijkste features:</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {featuredProducts[0].features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
+                          <span className="text-sm" style={{ color: '#202226' }}>{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 mt-auto">
+                    <a 
+                      href="https://voicelink.me" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex-1"
+                    >
+                      <Button 
+                        size="lg" 
+                        className="w-full text-white shadow-soft hover:shadow-lg transition-all duration-300 font-medium"
+                        style={{ backgroundColor: '#1C2C55' }}
+                      >
+                        Ontdek VoiceLink
+                        <ExternalLink className="ml-2 h-4 w-4" />
+                      </Button>
+                    </a>
+                    <Button 
+                      size="lg" 
+                      variant="outline"
+                      className="font-medium shadow-soft hover:shadow-lg transition-all duration-300"
+                      style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
+                      onClick={() => window.location.href = '/#contact'}
+                    >
+                      Meer info
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </Card>
-          </motion.div>
+            </div>
+          </Card>
         </div>
       </section>
 
-      {/* Performance Metrics Section */}
-      <section className="py-20 md:py-28 bg-gray-50">
+      {/* Coming Soon Products Grid */}
+      <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="text-center mb-16"
-          >
-            <h2 className="finit-h2 mb-6" style={{ color: '#1C2C55' }}>
-              Bewezen resultaten
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                Binnenkort beschikbaar
+              </Badge>
+            </div>
+            <h2 className="finit-h2" style={{ color: '#1C2C55' }}>
+              Nieuwe oplossingen in ontwikkeling
             </h2>
-            <p className="finit-body max-w-3xl mx-auto" style={{ color: '#202226' }}>
-              VoiceLink levert meetbare verbeteringen voor sales teams wereldwijd
+            <p className="finit-body mt-2" style={{ color: '#202226' }}>
+              Innovatieve AI-tools die binnenkort uw workflow zullen transformeren
             </p>
-          </motion.div>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {comingSoonProducts.map((product, index) => (
+              <motion.div
+                key={product.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="group"
+              >
+                <Card className="h-full bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-300 overflow-hidden">
+                  <CardContent className="p-6">
+                    {/* Icon and Category */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
+                        <product.icon className="h-6 w-6" style={{ color: '#1C2C55' }} />
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        {product.category}
+                      </Badge>
+                    </div>
+
+                    {/* Product Info */}
+                    <h3 className="text-lg font-bold mb-2 group-hover:text-blue-600 transition-colors" style={{ color: '#1C2C55' }}>
+                      {product.name}
+                    </h3>
+                    
+                    <p className="text-sm text-gray-600 mb-3 font-medium">
+                      {product.tagline}
+                    </p>
+                    
+                    <p className="finit-body mb-4 text-sm leading-relaxed" style={{ color: '#202226' }}>
+                      {product.description}
+                    </p>
+
+                    {/* Launch Timeline */}
+                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                      <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                        {product.estimatedLaunch}
+                      </Badge>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-medium"
+                        onClick={() => window.location.href = '/#contact'}
+                      >
+                        Interesse?
+                        <ArrowRight className="h-3 w-3 ml-1" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Marketplace Stats */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            {[
+              { label: "Actieve gebruikers", value: "2,400+", icon: Users },
+              { label: "Tijd bespaard", value: "15,000h", icon: Clock },
+              { label: "Gemiddelde ROI", value: "340%", icon: TrendingUp },
+              { label: "Uptime garantie", value: "99.9%", icon: Shield }
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="text-center"
+              >
+                <div className="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
+                  <stat.icon className="h-6 w-6" style={{ color: '#1C2C55' }} />
+                </div>
+                <div className="text-2xl font-bold mb-1" style={{ color: '#1C2C55' }}>
+                  {stat.value}
+                </div>
+                <div className="text-sm text-gray-600">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Our Marketplace */}
+      <section className="py-12" style={{ backgroundColor: '#1C2C55' }}>
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center mb-12">
+            <h2 className="finit-h2 text-white mb-4">
+              Waarom Finit Marketplace
+            </h2>
+            <p className="finit-body text-white/90">
+              Curated AI-oplossingen met enterprise-grade beveiliging en support
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                icon: Clock,
-                metric: "2 uur",
-                description: "Minder administratie per verkoper per dag",
-                color: "#1C2C55"
+                icon: Zap,
+                title: "Instant deployment",
+                description: "Alle oplossingen zijn plug & play - geen complexe implementatie nodig"
               },
               {
-                icon: TrendingUp,
-                metric: "25%",
-                description: "Hogere conversie door betere opvolging",
-                color: "#1C2C55"
+                icon: Shield,
+                title: "Enterprise security",
+                description: "GDPR-compliant met enterprise-grade beveiliging en data-bescherming"
               },
               {
                 icon: Users,
-                metric: "90%",
-                description: "Minder CRM-invoerfouten",
-                color: "#1C2C55"
+                title: "Expert support",
+                description: "Direct contact met ons team voor onboarding en continue ondersteuning"
               }
-            ].map((item, index) => (
+            ].map((benefit, index) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 60 }}
+                key={benefit.title}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="text-center"
               >
-                <Card className="bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-300 p-8">
-                  <CardContent className="p-0">
-                    <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
-                      <item.icon className="h-8 w-8" style={{ color: '#1C2C55' }} />
-                    </div>
-                    <div className="text-3xl font-bold mb-2" style={{ color: '#1C2C55' }}>
-                      {item.metric}
-                    </div>
-                    <p className="finit-body" style={{ color: '#202226' }}>
-                      {item.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                <div className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
+                  <benefit.icon className="h-8 w-8" style={{ color: '#1C2C55' }} />
+                </div>
+                <h3 className="text-lg font-medium text-white mb-3">
+                  {benefit.title}
+                </h3>
+                <p className="finit-body text-white/80">
+                  {benefit.description}
+                </p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Coming Soon Section - Dark Blue Canvas */}
-      <section className="py-20 md:py-28 relative overflow-hidden" style={{ backgroundColor: '#1C2C55' }}>
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 mb-8 border border-yellow-200">
-              <span>Binnenkort beschikbaar</span>
-            </div>
-            <h2 className="finit-h2 text-white mb-6">
-              Meer innovaties onderweg
-            </h2>
-            <p className="finit-body text-white/90 max-w-3xl mx-auto">
-              We ontwikkelen voortdurend nieuwe AI-oplossingen die uw bedrijfsprocessen transformeren. 
-              Blijf op de hoogte van onze nieuwste releases.
-            </p>
-          </motion.div>
-
-          {/* Preview Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[
-              {
-                title: "AI Document Processor",
-                description: "Automatische verwerking en analyse van documenten met intelligente data-extractie",
-                category: "Document Management",
-                icon: Shield
-              },
-              {
-                title: "Smart Dashboard Builder",
-                description: "Genereer real-time dashboards automatisch uit uw bestaande data bronnen",
-                category: "Business Intelligence", 
-                icon: TrendingUp
-              },
-              {
-                title: "AI Meeting Assistant",
-                description: "Automatische notities, actiepunten en follow-ups voor al uw vergaderingen",
-                category: "Productivity",
-                icon: Users
-              }
-            ].map((preview, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="group"
-              >
-                <Card className="h-full bg-white/95 backdrop-blur-sm border border-white/50 shadow-soft hover:shadow-lg transition-all duration-500 overflow-hidden">
-                  <CardContent className="p-8">
-                    {/* Icon */}
-                    <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
-                      <preview.icon className="h-8 w-8" style={{ color: '#1C2C55' }} />
-                    </div>
-
-                    {/* Category */}
-                    <div className="mb-4 text-center">
-                      <span className="inline-block px-4 py-2 rounded-full text-sm font-medium bg-gray-100" style={{ color: '#202226' }}>
-                        {preview.category}
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-xl font-medium mb-4 text-center group-hover:text-blue-600 transition-colors duration-300" style={{ color: '#1C2C55' }}>
-                      {preview.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="finit-body text-center mb-6" style={{ color: '#202226' }}>
-                      {preview.description}
-                    </p>
-
-                    {/* Coming Soon Badge */}
-                    <div className="text-center">
-                      <div className="inline-flex items-center px-4 py-2 rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200">
-                        <span className="text-sm font-medium">Binnenkort</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section - White Canvas */}
-      <section className="py-20 md:py-28 bg-white relative overflow-hidden">
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="max-w-4xl mx-auto"
-          >
-            <h2 className="finit-h2 mb-8" style={{ color: '#1C2C55' }}>
+      {/* CTA Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="finit-h2 mb-4" style={{ color: '#1C2C55' }}>
               Interesse in een specifieke oplossing?
             </h2>
-            <p className="finit-body mb-12" style={{ color: '#202226' }}>
-              We ontwikkelen voortdurend nieuwe enterprise-grade AI-oplossingen. 
-              Vertel ons wat u nodig heeft en we houden u op de hoogte van nieuwe releases.
+            <p className="finit-body mb-8" style={{ color: '#202226' }}>
+              Vertel ons wat u nodig heeft en we houden u op de hoogte van nieuwe releases
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="text-white shadow-soft hover:shadow-lg transition-all duration-300 text-lg px-10 py-4 rounded-2xl font-medium"
+                className="text-white shadow-soft hover:shadow-lg transition-all duration-300 font-medium px-8"
                 style={{ backgroundColor: '#1C2C55' }}
                 onClick={() => window.location.href = '/#contact'}
               >
@@ -395,7 +480,7 @@ export default function MarketplacePage() {
                 <Button 
                   size="lg" 
                   variant="outline"
-                  className="text-lg px-10 py-4 rounded-2xl font-medium shadow-soft hover:shadow-lg transition-all duration-300"
+                  className="font-medium shadow-soft hover:shadow-lg transition-all duration-300 px-8"
                   style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
                 >
                   Probeer VoiceLink
@@ -403,7 +488,7 @@ export default function MarketplacePage() {
                 </Button>
               </a>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </main>
