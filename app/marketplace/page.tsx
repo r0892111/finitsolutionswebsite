@@ -101,6 +101,21 @@ export default function MarketplacePage() {
           >
             Finit Solutions Marketplace
           </motion.h1>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex justify-center mb-6"
+          >
+            <Image
+              src="/Finit Marketplace Blue@4x.png"
+              alt="Finit Solutions Marketplace"
+              width={400}
+              height={200}
+              className="object-contain"
+              priority
+            />
+          </motion.div>
           
           <motion.p
             initial={{ opacity: 0, y: 20 }}
