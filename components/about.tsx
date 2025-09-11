@@ -8,10 +8,12 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/language-context";
 
 export function About() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const { t } = useLanguage();
 
   // Video iframe component
   const VideoIframe = () => (
@@ -106,7 +108,7 @@ export function About() {
                   size="sm"
                   className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors"
                 >
-                  <span>Diensten</span> <ChevronRight className="h-4 w-4 ml-1" />
+                  <span>{t('about.badge')}</span> <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </Link>
             </motion.div>
@@ -117,7 +119,7 @@ export function About() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-3xl md:text-4xl font-bold"
             >
-              Zorg dat uw concurrent u niet voor is.
+              {t('about.title')}
             </motion.h2>
             
             <motion.p
@@ -126,7 +128,7 @@ export function About() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-muted-foreground text-lg"
             >
-              Van AI Agents die automatisch rapporten genereren en uw planning optimaliseren tot spraaktechnologie die uw CRM up-to-date houdt - efficiëntie wordt vandaag de dag steeds belangrijker. Wij zorgen ervoor dat u de trein niet mist.
+              {t('about.description')}
 
             </motion.p>
             
@@ -140,14 +142,14 @@ export function About() {
               <div className="bg-card border border-border rounded-lg p-6">
                 <div className="mb-4">
                   <span className="inline-block px-3 py-1 bg-primary text-primary-foreground text-sm font-medium rounded-md">
-                    IN DE KIJKER
+                    {t('about.spotlight.title')}
                   </span>
                 </div>
                 
-                <h3 className="text-lg font-semibold mb-2">Voice-to-CRM</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('about.spotlight.product')}</h3>
                 
                 <p className="text-muted-foreground">
-                  Uw verkopers spreken tijdens de autorit hun klantbezoek in - klantnaam, offertebedrag, vervolgafspraken - en alles staat automatisch op de juiste plaats in het CRM. Meer tijd voor klanten, minder tijd aan administratie. Uw salesteam kan een extra klantbezoek per dag doen, terwijl u als manager het complete overzicht heeft.
+                  {t('about.spotlight.description')}
                 </p>
               </div>
             </motion.div>
@@ -158,7 +160,7 @@ export function About() {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="text-foreground text-lg font-semibold"
             >
-              Uw team verdient betere tools. Wij bouwen ze.
+              {t('about.tagline')}
             </motion.p>
             
             <motion.div
@@ -169,7 +171,7 @@ export function About() {
             >
               <Link href="/about">
                 <Button size="lg">
-                  Leer ons kennen
+                  {t('about.cta')}
                 </Button>
               </Link>
             </motion.div>
@@ -185,9 +187,9 @@ export function About() {
         >
           {/* Title */}
           <div className="text-center mb-12">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">We integreren met:</h3>
+            <h3 className="text-2xl md:text-3xl font-bold mb-4">{t('about.integrations.title')}</h3>
             <p className="text-muted-foreground text-lg">
-              Naadloze koppelingen met de tools die u al gebruikt
+              {t('about.integrations.subtitle')}
             </p>
           </div>
 
