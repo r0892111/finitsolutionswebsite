@@ -112,7 +112,7 @@ export function Contact() {
                   <Label htmlFor="name">{t('contact.form.name')}</Label>
                   <Input
                     id="name"
-                    placeholder="Jan Janssen"
+                    placeholder={t('contact.form.name.placeholder')}
                     {...register("name")}
                   />
                   {errors.name && (
@@ -124,7 +124,7 @@ export function Contact() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="jan@bedrijf.nl"
+                    placeholder={t('contact.form.email.placeholder')}
                     {...register("email")}
                   />
                   {errors.email && (
@@ -137,7 +137,7 @@ export function Contact() {
                 <Label htmlFor="subject">{t('contact.form.subject')}</Label>
                 <Input
                   id="subject"
-                  placeholder="Waar kunnen we je mee helpen?"
+                  placeholder={t('contact.form.subject.placeholder')}
                   {...register("subject")}
                 />
                 {errors.subject && (
@@ -149,7 +149,7 @@ export function Contact() {
                 <Label htmlFor="message">{t('contact.form.message')}</Label>
                 <Textarea
                   id="message"
-                  placeholder="Vertel ons over uw project, uitdagingen of vragen..."
+                  placeholder={t('contact.form.message.placeholder')}
                   className="min-h-[150px]"
                   {...register("message")}
                 />
