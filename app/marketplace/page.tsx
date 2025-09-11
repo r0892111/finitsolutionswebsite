@@ -222,7 +222,16 @@ export default function MarketplacePage() {
                       variant="outline"
                       className="font-medium shadow-soft hover:shadow-lg transition-all duration-300"
                       style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
-                      onClick={() => window.location.href = '/#contact'}
+                      onClick={() => {
+                        if (window.location.pathname === '/') {
+                          const contactSection = document.getElementById('contact');
+                          if (contactSection) {
+                            contactSection.scrollIntoView({ behavior: 'smooth' });
+                          }
+                        } else {
+                          window.location.href = '/#contact';
+                        }
+                      }}
                     >
                       Meer info
                       <ArrowRight className="ml-2 h-4 w-4" />
