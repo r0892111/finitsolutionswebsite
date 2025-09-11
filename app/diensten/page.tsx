@@ -332,22 +332,6 @@ export default function DienstenPage() {
                               </div>
                               
                               <div className="space-y-4">
-                                {step.details.map((detail, i) => (
-                                  <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.6, delay: i * 0.1 }}
-                                    className="flex items-start gap-4 p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg"
-                                    style={{ 
-                                      background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(247,230,155,0.15) 100%)',
-                                      borderColor: 'rgba(28,44,85,0.1)'
-                                    }}
-                                  >
-                                    <div className="w-8 h-8 rounded-xl flex items-center justify-center shadow-lg mt-1 bg-gradient-to-br from-slate-600 to-slate-700">
-                                      <div className="w-3 h-3 rounded-full bg-white"></div>
-                                    </div>
                                     <span className="finit-body font-medium leading-relaxed" style={{ color: '#202226' }}>{detail}</span>
                                   </motion.div>
                                 ))}
