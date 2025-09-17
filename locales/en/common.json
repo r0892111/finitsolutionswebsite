@@ -242,68 +242,6 @@
       "tryVoicelink": "Try VoiceLink"
     }
   },
-  "about": {
-    "hero": {
-      "badge": "About Us",
-      "title": "Young entrepreneurs with a mission",
-      "subtitle": "We are more than a company – we are a team of passionate tech enthusiasts who believe in the power of innovation."
-    },
-    "values": {
-      "title": "Our Values",
-      "subtitle": "The principles that drive us and determine our approach",
-      "resultOriented": {
-        "title": "Result-oriented",
-        "description": "We focus on measurable results that add real value to your business."
-      },
-      "collaboration": {
-        "title": "Collaboration",
-        "description": "We don't work for you, but with you. Your expertise combined with our technology."
-      },
-      "quality": {
-        "title": "Quality",
-        "description": "No compromises on quality. Every solution is thoroughly tested and optimized."
-      },
-      "passion": {
-        "title": "Passion",
-        "description": "Driven by passion for technology and the will to help businesses grow."
-      }
-    },
-    "story": {
-      "title": "Our Story",
-      "content": [
-        "What started as a dream of two best friends has today grown into a driven team. During our studies, we taught ourselves in the evenings, weekends and every free minute in between. Now we turn that knowledge into real results.",
-        "We are tech enthusiasts, problem solvers and entrepreneurs at heart. What binds us? A shared passion for digital innovation and the ambition to help businesses work more efficiently, smarter and faster.",
-        "Quality comes first with us. No empty promises or vague talk – but transparency, clear communication and full responsibility for everything we deliver. Whether it's an existing system that needs to be customized, or a completely custom solution from scratch: we think along, build, test and only deliver when it's really good.",
-        "The digital world is changing rapidly. We grow with it – and help you do the same.",
-        "Will you grow with us?"
-      ]
-    },
-    "team": {
-      "title": "Our Team",
-      "subtitle": "Meet the experts who make Finit Solutions what it is",
-      "members": {
-        "alex": {
-          "quote": "Technology should help people, not replace them. That's why we build AI solutions that enhance human creativity."
-        },
-        "karel": {
-          "quote": "Every client has a unique story. Our goal is to understand that story and use technology to make their dreams come true."
-        },
-        "jord": {
-          "quote": "Scalable technology starts with the right foundations. I ensure our systems grow with our ambitions."
-        }
-      },
-      "moreInfo": "More info",
-      "achievements": "Achievements",
-      "expertise": "Expertise",
-      "linkedinProfile": "View LinkedIn profile"
-    },
-    "cta": {
-      "title": "Ready to work together?",
-      "description": "Let's get to know each other and discover how we can help your business grow",
-      "startProject": "Start a project",
-      "directContact": "Direct contact"
-    }
-  },
   "blog": {
     "title": "Our Insights",
     "description": "Discover the latest developments in automation, AI and digital transformation. Practical insights for modern entrepreneurs.",
