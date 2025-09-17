@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { X, ChevronDown, ChevronUp } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface CategoryInfo {
   key: keyof ConsentChoices;
@@ -17,41 +18,43 @@ interface CategoryInfo {
   cookies: string[];
 }
 
-const categories: CategoryInfo[] = [
-  {
-    key: 'essential',
-    title: 'Essentieel (altijd actief)',
-    description: 'Nodig om de site te laten werken (beveiliging, load balancing, cookievoorkeuren).',
-    required: true,
-    cookies: ['fs_cookie_consent_v1', 'fs_cookie_consent_log_v1', 'PHPSESSID', '__Secure-*']
-  },
-  {
-    key: 'statistics',
-    title: 'Statistieken',
-    description: 'Helpen ons te begrijpen hoe de site gebruikt wordt (anonieme statistieken).',
-    required: false,
-    cookies: ['_ga', '_ga_*', '_gid', '_gat', '_gtag_*']
-  },
-  {
-    key: 'marketing',
-    title: 'Marketing',
-    description: 'Maakt gepersonaliseerde advertenties en metingen mogelijk.',
-    required: false,
-    cookies: ['_fbp', '_fbc', 'fr', 'ads/ga-audiences', 'IDE', 'test_cookie']
-  },
-  {
-    key: 'social',
-    title: 'Sociaal',
-    description: 'Voor het laden van externe media en deelknoppen.',
-    required: false,
-    cookies: ['VISITOR_INFO1_LIVE', 'YSC', 'CONSENT', 'SOCS']
-  }
-];
-
 export function CookieSettingsModal() {
   const { showSettings, choices, updateChoices, closeSettings, acceptAll, rejectAll } = useConsent();
   const [localChoices, setLocalChoices] = useState<ConsentChoices>(choices);
   const [expandedCategories, setExpandedCategories] = useState<{[key: string]: boolean}>({});
+  const t = useTranslations('cookies.settings');
+  const locale = useLocale();
+
+  const categories: CategoryInfo[] = [
+    {
+      key: 'essential',
+      title: t('categories.essential.title'),
+      description: t('categories.essential.description'),
+      required: true,
+      cookies: ['fs_cookie_consent_v1', 'fs_cookie_consent_log_v1', 'PHPSESSID', '__Secure-*']
+    },
+    {
+      key: 'statistics',
+      title: t('categories.statistics.title'),
+      description: t('categories.statistics.description'),
+      required: false,
+      cookies: ['_ga', '_ga_*', '_gid', '_gat', '_gtag_*']
+    },
+    {
+      key: 'marketing',
+      title: t('categories.marketing.title'),
+      description: t('categories.marketing.description'),
+      required: false,
+      cookies: ['_fbp', '_fbc', 'fr', 'ads/ga-audiences', 'IDE', 'test_cookie']
+    },
+    {
+      key: 'social',
+      title: t('categories.social.title'),
+      description: t('categories.social.description'),
+      required: false,
+      cookies: ['VISITOR_INFO1_LIVE', 'YSC', 'CONSENT', 'SOCS']
+    }
+  ];
 
   useEffect(() => {
     setLocalChoices(choices);
@@ -106,12 +109,12 @@ export function CookieSettingsModal() {
     <Dialog open={showSettings} onOpenChange={closeSettings}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">Cookie-instellingen</DialogTitle>
+          <DialogTitle className="text-xl font-semibold">{t('title')}</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-6">
           <p className="text-sm text-gray-600">
-            Maak je keuze per categorie. Je kan dit later altijd aanpassen via &apos;Cookie-instellingen&apos; onderaan de pagina.
+            {t('description')}
           </p>
 
           {/* Categories */}
@@ -130,7 +133,7 @@ export function CookieSettingsModal() {
                   <div className="ml-4">
                     {category.required ? (
                       <div className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                        Altijd actief
+                        {t('alwaysActive')}
                       </div>
                     ) : (
                       <Switch
@@ -148,7 +151,7 @@ export function CookieSettingsModal() {
                   className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
                   aria-expanded={expandedCategories[category.key]}
                 >
-                  <span>Bekijk cookies</span>
+                  <span>{t('viewCookies')}</span>
                   {expandedCategories[category.key] ? (
                     <ChevronUp className="h-4 w-4" />
                   ) : (
@@ -158,7 +161,7 @@ export function CookieSettingsModal() {
 
                 {expandedCategories[category.key] && (
                   <div className="mt-3 p-3 bg-gray-50 rounded border">
-                    <h5 className="text-sm font-medium text-gray-900 mb-2">Cookies in deze categorie:</h5>
+                    <h5 className="text-sm font-medium text-gray-900 mb-2">{t('cookiesInCategory')}</h5>
                     <ul className="text-xs text-gray-600 space-y-1">
                       {category.cookies.map((cookie, index) => (
                         <li key={index} className="font-mono">
@@ -175,7 +178,7 @@ export function CookieSettingsModal() {
           {/* Cookie Policy Link */}
           <div className="pt-4 border-t border-gray-200">
             <Link 
-              href="/cookieverklaring" 
+              href={`/${locale}/cookieverklaring`}
               className="text-sm text-primary hover:underline"
               target="_blank"
               rel="noopener noreferrer"
@@ -191,20 +194,20 @@ export function CookieSettingsModal() {
               onClick={handleRejectAll}
               className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 border border-gray-300"
             >
-              Alles weigeren
+              {t('rejectAll')}
             </Button>
             <Button
               variant="outline"
               onClick={handleSave}
               className="border-primary text-primary hover:bg-primary/5"
             >
-              Opslaan
+              {t('save')}
             </Button>
             <Button
               onClick={handleAcceptAll}
               className="bg-primary hover:bg-primary/90 text-white"
             >
-              Alles accepteren
+              {t('acceptAll')}
             </Button>
           </div>
         </div>

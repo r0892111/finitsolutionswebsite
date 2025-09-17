@@ -3,12 +3,12 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
-import { useLanguage } from "@/contexts/language-context";
+import { useTranslations } from 'next-intl';
 
 export function CTA() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.6 });
-  const { t } = useLanguage();
+  const t = useTranslations('cta');
 
   return (
     <section className="relative py-16 md:py-24 bg-muted">
@@ -21,7 +21,7 @@ export function CTA() {
             transition={{ duration: 0.5 }}
             className="text-3xl md:text-4xl font-bold mb-4"
           >
-            {t('cta.title')}
+            {t('title')}
           </motion.h2>
           
           <motion.p
@@ -30,7 +30,7 @@ export function CTA() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-muted-foreground mb-8 md:text-lg"
           >
-            {t('cta.description')}
+            {t('description')}
           </motion.p>
           
           <motion.div
@@ -39,7 +39,7 @@ export function CTA() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <ProjectRequestDialog buttonText={t('cta.button')} />
+            <ProjectRequestDialog buttonText={t('button')} />
           </motion.div>
         </div>
       </div>

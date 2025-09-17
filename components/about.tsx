@@ -8,12 +8,13 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/contexts/language-context";
+import { useTranslations, useLocale } from 'next-intl';
 
 export function About() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const { t } = useLanguage();
+  const t = useTranslations('about');
+  const locale = useLocale();
 
   // Video iframe component
   const VideoIframe = () => (
@@ -29,7 +30,6 @@ export function About() {
       className="w-full h-full rounded-2xl"
     />
   );
-
 
   // Complete integration logos list - All 32 integrations
   const integrationLogos = [
@@ -91,52 +91,47 @@ export function About() {
               >
                 <VideoIframe />
               </div>
-              
             </div>
           </motion.div>
           
           {/* Content Side - Now on the right */}
-          <div className="w-full lg:w-1/2 space-y-6">
+          <div className="w-full lg:w-1/2 space-y-8">
             <motion.div
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ duration: 0.5 }}
             >
-              <Link href="/diensten">
+              <Link href={`/${locale}/diensten`}>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors"
+                  className="inline-flex items-center px-4 py-2 rounded-full text-[12px] font-semibold bg-white border border-blue-200" style={{ color: 'rgb(28, 44, 85)' }}
                 >
-                  <span>{t('about.badge')}</span> <ChevronRight className="h-4 w-4 ml-1" />
+                  <span>{t('badge')}</span> <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </Link>
             </motion.div>
-            
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-3xl md:text-4xl font-bold"
-            >
-              {t('about.title')}
-            </motion.h2>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-muted-foreground text-lg"
-            >
-              {t('about.description')}
 
-            </motion.p>
-            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="space-y-4"
+            >
+              <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{ color: 'rgb(28, 44, 85)' }}>
+                {t('title')}
+              </h1>
+              <p className="text-xl font-semibold lg:text-2xl leading-relaxed max-w-2xl" style={{ color: 'rgb(28, 44, 85)' }}>
+                {t('description')}
+              </p>
+            </motion.div>
+
+            {/* CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="space-y-4"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-4 pt-4"
             >
               {/* Simple "In de kijker" section */}
               <div className="bg-card border border-border rounded-lg p-6 relative">
@@ -148,21 +143,21 @@ export function About() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-blue-600 text-white text-sm font-semibold rounded-full shadow-lg hover:shadow-xl hover:from-primary/90 hover:to-blue-600/90 transition-all duration-300 transform hover:scale-105"
                   >
-                    <span>{t('about.spotlight.cta')}</span>
+                    <span>{t('spotlight.cta')}</span>
                     <ArrowRight className="h-4 w-4" />
                   </a>
                 </div>
                 
                 <div className="mb-4">
                   <span className="inline-block px-3 py-1 bg-primary text-primary-foreground text-sm font-medium rounded-md">
-                    {t('about.spotlight.title')}
+                    {t('spotlight.title')}
                   </span>
                 </div>
                 
-                <h3 className="text-lg font-semibold mb-2">{t('about.spotlight.product')}</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('spotlight.product')}</h3>
                 
                 <p className="text-muted-foreground">
-                  {t('about.spotlight.description')}
+                  {t('spotlight.description')}
                 </p>
               </div>
             </motion.div>
@@ -173,7 +168,7 @@ export function About() {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="text-foreground text-lg font-semibold"
             >
-              {t('about.tagline')}
+              {t('tagline')}
             </motion.p>
             
             <motion.div
@@ -182,14 +177,14 @@ export function About() {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="pt-4 flex flex-col sm:flex-row gap-4"
             >
-              <Link href="/about">
+              <Link href={`/${locale}/about`}>
                 <Button size="lg">
-                  {t('about.cta')}
+                  {t('cta')}
                 </Button>
               </Link>
               <a href="https://voicelink.me" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" variant="outline">
-                  {t('about.spotlight.cta')}
+                  {t('spotlight.cta')}
                 </Button>
               </a>
             </motion.div>
@@ -201,13 +196,13 @@ export function About() {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-20 md:mt-32"
+          className="mt-12 md:mt-20"
         >
           {/* Title */}
           <div className="text-center mb-12">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">{t('about.integrations.title')}</h3>
+            <h3 className="text-2xl md:text-3xl font-bold mb-4">{t('integrations.title')}</h3>
             <p className="text-muted-foreground text-lg">
-              {t('about.integrations.subtitle')}
+              {t('integrations.subtitle')}
             </p>
           </div>
 
@@ -218,9 +213,6 @@ export function About() {
             <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
             
             {/* Scrolling logos container with precise width calculation */}
-            {/* Each logo: 128px (w-32) + 24px margins (mx-3 = 12px left+right) = 152px per logo */}
-            {/* 32 logos × 152px = 4864px for one complete set */}
-            {/* Two sets for seamless loop = 9728px total width */}
             <div className="flex animate-scroll-fast w-[9728px]">
               {/* First complete set - All 32 logos */}
               {integrationLogos.map((integration, index) => (
@@ -258,7 +250,7 @@ export function About() {
                 </div>
               ))}
               
-              {/* Second complete set for seamless infinite loop - All 32 logos again */}
+              {/* Second complete set for seamless infinite loop */}
               {integrationLogos.map((integration, index) => (
                 <div
                   key={`set2-${index}`}
@@ -334,9 +326,6 @@ export function About() {
         /* Responsive logo sizes */
         @media (max-width: 640px) {
           .animate-scroll-fast {
-            /* Adjust for smaller logos on mobile */
-            /* Mobile: w-20 h-16 + mx-3 = 80px + 24px = 104px per logo */
-            /* 32 logos × 104px = 3328px for one set */
             animation: scroll-fast-mobile 36s linear infinite;
           }
         }
