@@ -5,6 +5,13 @@ import { CTA } from "@/components/cta";
 import { Metadata } from "next";
 import {getTranslations} from 'next-intl/server';
 
+export async function generateStaticParams() {
+  return [
+    { locale: 'en' },
+    { locale: 'nl' }
+  ];
+}
+
 export async function generateMetadata({
   params: {locale}
 }: {
