@@ -668,4 +668,19 @@ export const blogPosts: BlogPost[] = [
   </section>
 </article>
     `,
-    publish
+    publishedAt: "2025-01-15",
+    featuredImage: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg",
+    author: {
+      name: "Karel Van Ransbeeck",
+      image: "/karel.png"
+    },
+    tags: ["AI", "Automatisering", "Technologie", "KMO"]
+  }
+];
+
+export const blogCategories: BlogCategory[] = [
+  { name: "AI & Automatisering", slug: "ai-automatisering" },
+  { name: "Technologie", slug: "technologie" },
+  { name: "KMO", slug: "kmo" },
+  { name: "Innovatie", slug: "innovatie" }
+];
