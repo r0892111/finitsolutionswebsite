@@ -323,6 +323,7 @@ export default function DienstenPage() {
       default:
         return null;
     }
+  };
 
   return (
     <main className="bg-finit-aurora min-h-screen">
@@ -456,7 +457,7 @@ export default function DienstenPage() {
                         <div className="space-y-4">
                           <div className="flex items-center gap-4">
                             <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${processSteps[activeStep - 1]?.accent} flex items-center justify-center shadow-lg`}>
-                              <processSteps[activeStep - 1]?.icon className="h-8 w-8 text-white" />
+                              {processSteps[activeStep - 1]?.icon && <processSteps[activeStep - 1].icon className="h-8 w-8 text-white" />}
                             </div>
                             <div>
                               <div className="text-2xl font-bold text-white">Fase {activeStep}</div>
