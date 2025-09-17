@@ -1,0 +1,401 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "marketplace": "Marketplace",
+    "about": "About Us",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "hero": {
+    "badge": "Where the Future Begins",
+    "title": {
+      "line1": "AI Workforces",
+      "line2": "that automate",
+      "line3": "and scale your business."
+    },
+    "subtitle": "We build AI-powered software on top of the systems you already use.\nOur goal is to eliminate inefficiencies and unlock powerful leverage\nfor your company's growth.",
+    "cta": {
+      "primary": "Get Started",
+      "secondary": "Learn More"
+    }
+  },
+  "about": {
+    "badge": "Services",
+    "title": "Don't let your competitors get ahead.",
+    "description": "From AI Agents that automatically generate reports and optimize your planning to voice technology that keeps your CRM up-to-date - efficiency is becoming increasingly important today. We make sure you don't miss the train.",
+    "spotlight": {
+      "title": "FEATURED",
+      "product": "VoiceLink",
+      "description": "Your salespeople send a WhatsApp voice message with their client visit details - client name, quote amount, follow-up appointments - and everything is automatically placed in the right place in your CRM. This plug & play tool integrates with any CRM and takes only 3 minutes to install. More time for clients, less time on administration.",
+      "cta": "Try VoiceLink"
+    },
+    "tagline": "Your team deserves better tools. We build them.",
+    "cta": "Get to know us",
+    "integrations": {
+      "title": "We integrate with:",
+      "subtitle": "Seamless connections with the tools you already use"
+    }
+  },
+  "contact": {
+    "badge": "Contact",
+    "title": "Let's build your future together",
+    "form": {
+      "title": "Send us a message",
+      "description": "Tell us about your project and we'll get in touch quickly for a no-obligation conversation.",
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "placeholders": {
+        "name": "John Doe",
+        "email": "john@company.com",
+        "subject": "How can we help you?",
+        "message": "Tell us about your project, challenges or questions..."
+      },
+      "submit": "Send Message",
+      "submitting": "Sending..."
+    },
+    "direct": {
+      "title": "Or feel free to give us a call",
+      "description": "Prefer direct contact? Call us for a quick chat about your project or send a WhatsApp message."
+    },
+    "phone": {
+      "title": "Call us directly",
+      "availability": "Also available outside office hours"
+    },
+    "whatsapp": {
+      "title": "WhatsApp",
+      "description": "Send a message to:"
+    },
+    "email": {
+      "title": "Email",
+      "response": "We respond within one business day"
+    }
+  },
+  "cta": {
+    "title": "Ready to save time?",
+    "description": "Schedule a no-obligation conversation and discover how we can help your business.",
+    "button": "Get in touch"
+  },
+  "footer": {
+    "tagline": "Smart AI solutions, tailored to your SME.",
+    "menu": "Menu",
+    "services": "Services",
+    "contact": "Contact",
+    "copyright": "All rights reserved.",
+    "privacy": "Privacy Policy",
+    "cookies": "Cookie Policy",
+    "disclaimer": "Disclaimer",
+    "cookieSettings": "Cookie Settings"
+  },
+  "diensten": {
+    "hero": {
+      "badge": "Custom process",
+      "title": "Strategic Excellence",
+      "description": "Transforming digital ambitions into measurable business outcomes through methodical excellence and innovative engineering.",
+      "scroll": "Explore the process"
+    },
+    "process": {
+      "title": "Our Proven Process",
+      "subtitle": "A structured approach that ensures results"
+    },
+    "benefits": {
+      "title": "Why our process works",
+      "subtitle": "Proven results through a structured approach, continuous collaboration and focus on measurable impact.",
+      "collaboration": {
+        "title": "True collaboration",
+        "description": "We don't work for you, but with you — your expertise combined with our technical knowledge for optimal results."
+      },
+      "speed": {
+        "title": "Fast results",
+        "description": "Through our agile approach you see concrete progress quickly and can adjust in time for maximum impact."
+      },
+      "impact": {
+        "title": "Measurable impact",
+        "description": "Every solution is built with clear KPIs and measurable improvements that demonstrate your ROI."
+      }
+    },
+    "cta": {
+      "final": {
+        "title": "Ready for Excellence?",
+        "description": "Transform your digital vision into measurable business impact. Your ambition deserves exceptional execution.",
+        "button": "Begin Your Transformation"
+      }
+    },
+    "steps": {
+      "1": {
+        "title": "Problem Identification",
+        "subtitle": "Discover & Analyze",
+        "description": "We start with a thorough analysis of your current situation and identify the core challenges.",
+        "details": [
+          "Extensive stakeholder interviews",
+          "Analysis of existing systems and workflows",
+          "Identification of pain points and inefficiencies",
+          "Documentation of current processes"
+        ],
+        "usecase": "A law firm struggles with quickly finding relevant legal information scattered across different documents and systems."
+      },
+      "2": {
+        "title": "Solution Design",
+        "subtitle": "Strategic Planning",
+        "description": "Based on our findings, we design a custom solution that perfectly fits your needs.",
+        "details": [
+          "Technical architecture and system design",
+          "User experience and interface planning",
+          "Integration strategy with existing systems",
+          "Project planning and milestone definition"
+        ],
+        "usecase": "We propose an AI-driven knowledge base that indexes all legal documents and makes them searchable via natural language."
+      },
+      "3": {
+        "title": "Development",
+        "subtitle": "Build & Integrate",
+        "description": "Our experienced team builds your solution with the latest technologies and best practices.",
+        "details": [
+          "Agile development with regular updates",
+          "Modern technologies and frameworks",
+          "Secure and scalable architecture",
+          "Continuous integration and deployment"
+        ],
+        "usecase": "We develop a RAG system that ingests documents, indexes them and provides an intuitive chat interface for legal queries."
+      },
+      "4": {
+        "title": "Testing & Validation",
+        "subtitle": "Quality Assurance",
+        "description": "Extensive testing ensures your solution works perfectly before we go live.",
+        "details": [
+          "Automated and manual testing",
+          "Performance and security audits",
+          "User acceptance testing",
+          "Bug fixes and optimizations"
+        ],
+        "usecase": "We test search accuracy, user interface and security protocols with real legal cases."
+      },
+      "5": {
+        "title": "Launch & Support",
+        "subtitle": "Go Live & Grow",
+        "description": "We launch your solution and provide continuous support for optimal performance.",
+        "details": [
+          "Gradual rollout and go-live support",
+          "Training and documentation for users",
+          "Monitoring and performance optimization",
+          "Continuous support and updates"
+        ],
+        "usecase": "The system is launched with training for all lawyers, and we monitor performance to further optimize."
+      }
+    },
+    "clientcase": "Client Case"
+  },
+  "marketplace": {
+    "hero": {
+      "title": "Plug & play AI solutions",
+      "subtitle": "Enterprise-grade AI tools that integrate directly with your existing systems"
+    },
+    "featured": {
+      "badge": "Live & available",
+      "title": "Most popular solution"
+    },
+    "voicelink": {
+      "tagline": "Voice-to-CRM automation",
+      "description": "Your salespeople send a WhatsApp voice message with their client visit details - client name, quote amount, follow-up appointments - and everything is automatically placed in the right place in your CRM of choice. This plug & play tool integrates with any CRM and takes only 3 minutes to install. More time for clients, less time on administration.",
+      "price": "From €29.90/month",
+      "priceNote": "Volume discounts available",
+      "features": [
+        "WhatsApp integration",
+        "Automatic CRM sync",
+        "3 min installation",
+        "All CRMs supported"
+      ],
+      "cta": {
+        "discover": "Discover VoiceLink",
+        "moreInfo": "More info"
+      }
+    },
+    "comingSoon": {
+      "badge": "Coming soon",
+      "title": "New solutions in development",
+      "subtitle": "Innovative AI tools that will transform your workflow soon"
+    },
+    "why": {
+      "title": "Why Finit Marketplace",
+      "subtitle": "Curated AI solutions with enterprise-grade security and support",
+      "benefits": {
+        "deployment": {
+          "title": "Instant deployment",
+          "description": "All solutions are plug & play - no complex implementation needed"
+        },
+        "security": {
+          "title": "Enterprise security",
+          "description": "GDPR-compliant with enterprise-grade security and data protection"
+        },
+        "support": {
+          "title": "Expert support",
+          "description": "Direct contact with our team for onboarding and continuous support"
+        }
+      }
+    },
+    "cta": {
+      "title": "Interested in a specific solution?",
+      "description": "Tell us what you need and we'll keep you updated on new releases",
+      "contact": "Get in touch",
+      "tryVoicelink": "Try VoiceLink"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "About Us",
+      "title": "Young entrepreneurs with a mission",
+      "subtitle": "We are more than a company – we are a team of passionate tech enthusiasts who believe in the power of innovation."
+    },
+    "values": {
+      "title": "Our Values",
+      "subtitle": "The principles that drive us and determine our approach",
+      "resultOriented": {
+        "title": "Result-oriented",
+        "description": "We focus on measurable results that add real value to your business."
+      },
+      "collaboration": {
+        "title": "Collaboration",
+        "description": "We don't work for you, but with you. Your expertise combined with our technology."
+      },
+      "quality": {
+        "title": "Quality",
+        "description": "No compromises on quality. Every solution is thoroughly tested and optimized."
+      },
+      "passion": {
+        "title": "Passion",
+        "description": "Driven by passion for technology and the will to help businesses grow."
+      }
+    },
+    "story": {
+      "title": "Our Story",
+      "content": [
+        "What started as a dream of two best friends has today grown into a driven team. During our studies, we taught ourselves in the evenings, weekends and every free minute in between. Now we turn that knowledge into real results.",
+        "We are tech enthusiasts, problem solvers and entrepreneurs at heart. What binds us? A shared passion for digital innovation and the ambition to help businesses work more efficiently, smarter and faster.",
+        "Quality comes first with us. No empty promises or vague talk – but transparency, clear communication and full responsibility for everything we deliver. Whether it's an existing system that needs to be customized, or a completely custom solution from scratch: we think along, build, test and only deliver when it's really good.",
+        "The digital world is changing rapidly. We grow with it – and help you do the same.",
+        "Will you grow with us?"
+      ]
+    },
+    "team": {
+      "title": "Our Team",
+      "subtitle": "Meet the experts who make Finit Solutions what it is",
+      "members": {
+        "alex": {
+          "quote": "Technology should help people, not replace them. That's why we build AI solutions that enhance human creativity."
+        },
+        "karel": {
+          "quote": "Every client has a unique story. Our goal is to understand that story and use technology to make their dreams come true."
+        },
+        "jord": {
+          "quote": "Scalable technology starts with the right foundations. I ensure our systems grow with our ambitions."
+        }
+      },
+      "moreInfo": "More info",
+      "achievements": "Achievements",
+      "expertise": "Expertise",
+      "linkedinProfile": "View LinkedIn profile"
+    },
+    "cta": {
+      "title": "Ready to work together?",
+      "description": "Let's get to know each other and discover how we can help your business grow",
+      "startProject": "Start a project",
+      "directContact": "Direct contact"
+    }
+  },
+  "blog": {
+    "title": "Our Insights",
+    "description": "Discover the latest developments in automation, AI and digital transformation. Practical insights for modern entrepreneurs.",
+    "articlesCount": "{count} article",
+    "articlesCountPlural": "{count} articles",
+    "sort": {
+      "newest": "Newest first",
+      "oldest": "Oldest first"
+    }
+  },
+  "common": {
+    "readMore": "Read more",
+    "learnMore": "Learn more",
+    "getStarted": "Get started",
+    "contactUs": "Contact us",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "sending": "Sending...",
+    "sent": "Sent",
+    "required": "Required",
+    "optional": "Optional",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "cookies": {
+    "banner": {
+      "title": "Cookies on this website",
+      "description": "We use cookies to make our site work properly (essential) and – with your consent – for statistics and marketing. You can always change your choices later.",
+      "acceptAll": "Accept all",
+      "rejectAll": "Reject all",
+      "settings": "Settings",
+      "policyLink": "Read our cookie policy"
+    },
+    "settings": {
+      "title": "Cookie settings",
+      "description": "Make your choice per category. You can always adjust this later via 'Cookie settings' at the bottom of the page.",
+      "categories": {
+        "essential": {
+          "title": "Essential (always active)",
+          "description": "Necessary to make the site work (security, load balancing, cookie preferences)."
+        },
+        "statistics": {
+          "title": "Statistics",
+          "description": "Help us understand how the site is used (anonymous statistics)."
+        },
+        "marketing": {
+          "title": "Marketing",
+          "description": "Enables personalized advertising and measurements."
+        },
+        "social": {
+          "title": "Social",
+          "description": "For loading external media and share buttons."
+        }
+      },
+      "viewCookies": "View cookies",
+      "cookiesInCategory": "Cookies in this category:",
+      "alwaysActive": "Always active",
+      "save": "Save",
+      "acceptAll": "Accept all",
+      "rejectAll": "Reject all"
+    }
+  },
+  "forms": {
+    "validation": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "subjectRequired": "Subject is required",
+      "messageRequired": "Message is required",
+      "messageMinLength": "Message must be at least 10 characters",
+      "phoneInvalid": "Please enter a valid phone number"
+    },
+    "success": {
+      "title": "Message sent",
+      "description": "We'll get back to you within one business day."
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "Please try again later or contact us directly."
+    }
+  },
+  "meta": {
+    "title": "Finit Solutions | Innovative Business Automation",
+    "description": "Finit Solutions helps businesses grow with smart automation, custom software and innovative SaaS solutions. Discover how we can optimize your business processes."
+  }
+}

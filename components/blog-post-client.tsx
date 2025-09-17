@@ -7,8 +7,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import { nl } from "date-fns/locale";
+import { nl, enUS } from "date-fns/locale";
 import { useRouter, usePathname } from "next/navigation";
+import { useLocale } from 'next-intl';
 import type { BlogPost } from "@/lib/types/blog";
 
 interface BlogPostClientProps {
@@ -19,19 +20,20 @@ export function BlogPostClient({ post }: BlogPostClientProps) {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const locale = useLocale();
 
   const handleContactClick = useCallback(() => {
     // If we're already on the homepage, just scroll to contact
-    if (pathname === '/') {
+    if (pathname === `/${locale}`) {
       const contactSection = document.getElementById('contact');
       if (contactSection) {
         contactSection.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
       // If we're on another page, navigate to homepage with hash
-      router.push('/#contact');
+      router.push(`/${locale}/#contact`);
     }
-  }, [pathname, router]);
+  }, [pathname, router, locale]);
 
   useEffect(() => {
     setMounted(true);
@@ -95,7 +97,7 @@ export function BlogPostClient({ post }: BlogPostClientProps) {
               className="flex items-center gap-2 mb-6"
             >
               <Link 
-                href="/blog"
+                href={`/${locale}/blog`}
                 className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
               >
                 <span>Blog</span> <ChevronRight className="h-4 w-4 ml-1" />
@@ -127,7 +129,9 @@ export function BlogPostClient({ post }: BlogPostClientProps) {
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5" />
                 <time>
-                  {format(new Date(post.publishedAt), 'd MMMM yyyy', { locale: nl })}
+                  {format(new Date(post.publishedAt), 'd MMMM yyyy', { 
+                    locale: locale === 'nl' ? nl : enUS 
+                  })}
                 </time>
               </div>
               <div className="flex items-center gap-2">
