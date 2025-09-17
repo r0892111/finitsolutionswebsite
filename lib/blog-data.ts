@@ -679,8 +679,24 @@ export const blogPosts: BlogPost[] = [
 ];
 
 export const blogCategories: BlogCategory[] = [
-  { name: "AI & Automatisering", slug: "ai-automatisering" },
-  { name: "Technologie", slug: "technologie" },
-  { name: "KMO", slug: "kmo" },
-  { name: "Innovatie", slug: "innovatie" }
+  {
+    name: 'AI & Automatisering',
+    slug: 'ai-automatisering',
+    description: 'Praktische AI, agents en automatisering voor KMO’s.'
+  },
+  {
+    name: 'Technologie',
+    slug: 'technologie',
+    description: 'Stack-keuzes, architectuur en development best practices.'
+  },
+  {
+    name: 'KMO',
+    slug: 'kmo',
+    description: 'Digitale strategie, efficiëntie en groei voor kmo-bedrijven.'
+  },
+  {
+    name: 'Innovatie',
+    slug: 'innovatie',
+    description: 'Nieuwe ideeën, pilots en lessons learned uit het veld.'
+  }
 ];
