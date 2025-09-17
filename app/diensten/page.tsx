@@ -204,6 +204,7 @@ export default function DienstenPage() {
             className="max-w-6xl mx-auto"
           >
             <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               {processSteps.map((step, index) => {
                 const IconComponent = step.icon;
                 const isActive = activeStep === step.id;
@@ -214,35 +215,32 @@ export default function DienstenPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                    className="bg-white/15 backdrop-blur-xl rounded-2xl border border-white/25 shadow-xl overflow-hidden"
+                    className="bg-white/15 backdrop-blur-xl rounded-2xl border border-white/25 shadow-xl overflow-hidden h-fit"
                   >
                     {/* Step Header - Always Visible */}
                     <button
                       onClick={() => toggleStep(step.id)}
-                      className="w-full p-6 md:p-8 text-left hover:bg-white/5 transition-all duration-300 group"
+                      className="w-full p-4 md:p-6 text-left hover:bg-white/5 transition-all duration-300 group"
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-6">
+                      <div className="flex flex-col items-center text-center">
                           {/* Step Icon and Number */}
-                          <div className="flex items-center gap-4">
-                            <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${step.accent} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300`}>
-                              <IconComponent className="h-8 w-8 text-white" />
-                            </div>
-                            <div className="text-lg font-bold text-white/80">
-                              Stap {step.id}
-                            </div>
+                          <div className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-r ${step.accent} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 mb-3`}>
+                            <IconComponent className="h-6 w-6 md:h-8 md:w-8 text-white" />
+                          </div>
+                          
+                          <div className="text-sm md:text-lg font-bold text-white/80 mb-2">
+                            Stap {step.id}
                           </div>
                           
                           {/* Step Title and Subtitle */}
-                          <div>
-                            <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-white/90 transition-colors">
+                          <div className="mb-3">
+                            <h3 className="text-lg md:text-xl font-bold text-white mb-1 group-hover:text-white/90 transition-colors">
                               {t(`diensten.step${step.id}.title`)}
                             </h3>
-                            <p className="text-white/70 text-lg font-light">
+                            <p className="text-white/70 text-sm md:text-base font-light">
                               {t(`diensten.step${step.id}.subtitle`)}
                             </p>
                           </div>
-                        </div>
                         
                         {/* Expand/Collapse Icon */}
                         <motion.div
@@ -250,7 +248,7 @@ export default function DienstenPage() {
                           transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                           className="text-white/60 group-hover:text-white/80 transition-colors"
                         >
-                          <ChevronDown className="h-8 w-8" />
+                          <ChevronDown className="h-5 w-5 md:h-6 md:w-6" />
                         </motion.div>
                       </div>
                     </button>
@@ -268,37 +266,37 @@ export default function DienstenPage() {
                           }}
                           className="overflow-hidden"
                         >
-                          <div className="px-6 md:px-8 pb-8">
+                          <div className="px-4 md:px-6 pb-6">
                             <div className="border-t border-white/20 pt-8">
-                              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                              <div className="space-y-6">
                                 {/* Left Column - Process Details */}
-                                <div className="space-y-6">
+                                <div className="space-y-4">
                                   <div>
-                                    <h4 className="text-xl font-bold text-white mb-4">
+                                    <h4 className="text-lg font-bold text-white mb-3">
                                       Wat we doen:
                                     </h4>
-                                    <p className="text-white/80 text-lg leading-relaxed mb-6">
+                                    <p className="text-white/80 text-sm md:text-base leading-relaxed mb-4">
                                       {t(`diensten.step${step.id}.description`)}
                                     </p>
                                   </div>
 
-                                  <div className="space-y-4">
-                                    <h5 className="text-lg font-semibold text-white">
+                                  <div className="space-y-3">
+                                    <h5 className="text-base font-semibold text-white">
                                       Onze aanpak:
                                     </h5>
-                                    <div className="grid grid-cols-1 gap-3">
+                                    <div className="space-y-2">
                                       {[1, 2, 3, 4].map((detailNum, i) => (
                                         <motion.div
                                           key={i}
                                           initial={{ opacity: 0, x: -20 }}
                                           animate={{ opacity: 1, x: 0 }}
                                           transition={{ duration: 0.4, delay: i * 0.1 }}
-                                          className="flex items-center gap-4 p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg"
+                                          className="flex items-center gap-3 p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg"
                                         >
-                                          <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shadow">
-                                            <span className="text-white text-sm font-bold">✓</span>
+                                          <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shadow">
+                                            <span className="text-white text-xs font-bold">✓</span>
                                           </div>
-                                          <span className="text-white/90 font-medium">
+                                          <span className="text-white/90 font-medium text-sm">
                                             {t(`diensten.step${step.id}.detail${detailNum}`)}
                                           </span>
                                         </motion.div>
@@ -308,17 +306,17 @@ export default function DienstenPage() {
                                 </div>
 
                                 {/* Right Column - Client Case & Visual */}
-                                <div className="space-y-6">
-                                  <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-xl">
+                                <div className="space-y-4">
+                                  <div className="bg-white/10 backdrop-blur-xl rounded-xl p-4 border border-white/20 shadow-xl">
                                     <div className="flex items-center gap-3 mb-4">
-                                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/25 to-white/15 flex items-center justify-center border border-white/30 shadow-lg">
-                                        <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center">
-                                          <div className="w-2 h-2 rounded-full bg-white"></div>
+                                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-white/25 to-white/15 flex items-center justify-center border border-white/30 shadow-lg">
+                                        <div className="w-4 h-4 rounded-full bg-white/30 flex items-center justify-center">
+                                          <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                                         </div>
                                       </div>
-                                      <h4 className="text-lg font-bold text-white">{t('diensten.clientcase')}</h4>
+                                      <h4 className="text-base font-bold text-white">{t('diensten.clientcase')}</h4>
                                     </div>
-                                    <p className="text-white/90 italic leading-relaxed mb-6">
+                                    <p className="text-white/90 italic leading-relaxed mb-4 text-sm">
                                       &ldquo;{t(`diensten.step${step.id}.usecase`)}&rdquo;
                                     </p>
                                     
@@ -327,7 +325,7 @@ export default function DienstenPage() {
                                       initial={{ opacity: 0, scale: 0.95 }}
                                       animate={{ opacity: 1, scale: 1 }}
                                       transition={{ duration: 0.4, delay: 0.2 }}
-                                      className="mt-6"
+                                      className="mt-4"
                                     >
                                       {renderStepVisual(step.id)}
                                     </motion.div>
@@ -342,6 +340,7 @@ export default function DienstenPage() {
                   </motion.div>
                 );
               })}
+            </div>
             </div>
           </motion.div>
         </div>
