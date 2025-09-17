@@ -21,13 +21,11 @@ export function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({
-  params
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  
   // Validate locale
-  if (!locales.includes(params.locale as any)) {
+  if (!locales.includes(locale as any)) {
     notFound();
   }
 
@@ -36,8 +34,7 @@ export async function generateMetadata({
     const keys = key.split('.');
     let value: any = messages;
     for (const k of keys) value = value?.[k];
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params;
+    return value;
   };
 
   return {
@@ -57,7 +54,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       images: [
         { url: '/Finit Logomark@4x.png', width: 1200, height: 1200, alt: 'Finit Solutions Logo' }
       ],
-      locale: params.locale === 'nl' ? 'nl_BE' : 'en_US',
+      locale: locale === 'nl' ? 'nl_BE' : 'en_US',
       type: 'website'
     }
   };
@@ -73,7 +70,7 @@ export default async function LocaleLayout({
   const { locale } = await params;
   
   // Validate locale
-  if (!locales.includes(params.locale as any)) {
+  if (!locales.includes(locale as any)) {
     notFound();
   }
 
