@@ -668,3 +668,5 @@ export const blogPosts: BlogPost[] = [
   </section>
 </article>
     `,
+  }
+]
