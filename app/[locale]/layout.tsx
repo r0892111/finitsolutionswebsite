@@ -36,7 +36,8 @@ export async function generateMetadata({
     const keys = key.split('.');
     let value: any = messages;
     for (const k of keys) value = value?.[k];
-    return value || key;
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
   };
 
   return {
@@ -67,8 +68,10 @@ export default async function LocaleLayout({
   params 
 }: { 
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
+  
   // Validate locale
   if (!locales.includes(params.locale as any)) {
     notFound();
