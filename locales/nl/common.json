@@ -35,6 +35,66 @@
     "integrations": {
       "title": "We integreren met:",
       "subtitle": "Naadloze koppelingen met de tools die u al gebruikt"
+    },
+    "hero": {
+      "badge": "Over Ons",
+      "title": "Jonge ondernemers met een missie",
+      "subtitle": "We zijn meer dan een bedrijf – we zijn een team van gepassioneerde techneuten die geloven in de kracht van innovatie."
+    },
+    "values": {
+      "title": "Onze Waarden",
+      "subtitle": "De principes die ons drijven en onze aanpak bepalen",
+      "resultOriented": {
+        "title": "Resultaatgericht",
+        "description": "We focussen op meetbare resultaten die echte waarde toevoegen aan uw bedrijf."
+      },
+      "collaboration": {
+        "title": "Samenwerking",
+        "description": "We werken niet voor u, maar met u. Uw expertise gecombineerd met onze technologie."
+      },
+      "quality": {
+        "title": "Kwaliteit",
+        "description": "Geen compromissen op kwaliteit. Elke oplossing wordt grondig getest en geoptimaliseerd."
+      },
+      "passion": {
+        "title": "Passie",
+        "description": "Gedreven door passie voor technologie en de wil om bedrijven te laten groeien."
+      }
+    },
+    "story": {
+      "title": "Ons Verhaal",
+      "content": [
+        "Wat begon als een droom van twee beste vrienden, is vandaag uitgegroeid tot een gedreven team. Gedurende onze studies hebben we onszelf bijgespijkerd in de avonden, weekenden en elke vrije minuut daartussen. Nu zetten we die kennis om in échte resultaten.",
+        "We zijn techneuten, probleemoplossers en ondernemers in hart en nieren. Wat ons bindt? Een gedeelde passie voor digitale innovatie en de ambitie om bedrijven te helpen efficiënter, slimmer en sneller te werken.",
+        "Kwaliteit staat bij ons voorop. Geen loze beloftes of wazige praat – maar transparantie, heldere communicatie en volledige verantwoordelijkheid voor alles wat we opleveren. Of het nu gaat om een bestaand systeem dat gepersonaliseerd moet worden, of een volledig maatwerkoplossing vanaf nul: we denken mee, bouwen, testen en leveren pas op als het écht goed zit.",
+        "De digitale wereld verandert razendsnel. Wij groeien mee – en helpen jou om dat ook te doen.",
+        "Groei je met ons mee?"
+      ]
+    },
+    "team": {
+      "title": "Ons Team",
+      "subtitle": "Maak kennis met de experts die Finit Solutions maken tot wat het is",
+      "members": {
+        "alex": {
+          "quote": "Technologie moet mensen helpen, niet vervangen. Daarom bouwen we AI-oplossingen die menselijke creativiteit versterken."
+        },
+        "karel": {
+          "quote": "Elke klant heeft een uniek verhaal. Ons doel is om dat verhaal te begrijpen en technologie in te zetten om hun dromen waar te maken."
+        },
+        "jord": {
+          "quote": "Schaalbare technologie begint met de juiste fundamenten. Ik zorg ervoor dat onze systemen groeien met onze ambities."
+        }
+      },
+      "moreInfo": "Meer info",
+      "achievements": "Prestaties",
+      "expertise": "Expertise",
+      "linkedinProfile": "Bekijk LinkedIn profiel"
+    },
+    "cta": {
+      "title": "Klaar om samen te werken?",
+      "description": "Laten we kennismaken en ontdekken hoe we uw bedrijf kunnen helpen groeien",
+      "startProject": "Start een project",
+      "directContact": "Direct contact"
     }
   },
   "contact": {
@@ -240,69 +300,6 @@
       "description": "Vertel ons wat u nodig heeft en we houden u op de hoogte van nieuwe releases",
       "contact": "Neem contact op",
       "tryVoicelink": "Probeer VoiceLink"
-    }
-  }
-}
-  "about": {
-    "hero": {
-      "badge": "Over Ons",
-      "title": "Jonge ondernemers met een missie",
-      "subtitle": "We zijn meer dan een bedrijf – we zijn een team van gepassioneerde techneuten die geloven in de kracht van innovatie."
-    },
-    "values": {
-      "title": "Onze Waarden",
-      "subtitle": "De principes die ons drijven en onze aanpak bepalen",
-      "resultOriented": {
-        "title": "Resultaatgericht",
-        "description": "We focussen op meetbare resultaten die echte waarde toevoegen aan uw bedrijf."
-      },
-      "collaboration": {
-        "title": "Samenwerking",
-        "description": "We werken niet voor u, maar met u. Uw expertise gecombineerd met onze technologie."
-      },
-      "quality": {
-        "title": "Kwaliteit",
-        "description": "Geen compromissen op kwaliteit. Elke oplossing wordt grondig getest en geoptimaliseerd."
-      },
-      "passion": {
-        "title": "Passie",
-        "description": "Gedreven door passie voor technologie en de wil om bedrijven te laten groeien."
-      }
-    },
-    "story": {
-      "title": "Ons Verhaal",
-      "content": [
-        "Wat begon als een droom van twee beste vrienden, is vandaag uitgegroeid tot een gedreven team. Gedurende onze studies hebben we onszelf bijgespijkerd in de avonden, weekenden en elke vrije minuut daartussen. Nu zetten we die kennis om in échte resultaten.",
-        "We zijn techneuten, probleemoplossers en ondernemers in hart en nieren. Wat ons bindt? Een gedeelde passie voor digitale innovatie en de ambitie om bedrijven te helpen efficiënter, slimmer en sneller te werken.",
-        "Kwaliteit staat bij ons voorop. Geen loze beloftes of wazige praat – maar transparantie, heldere communicatie en volledige verantwoordelijkheid voor alles wat we opleveren. Of het nu gaat om een bestaand systeem dat gepersonaliseerd moet worden, of een volledig maatwerkoplossing vanaf nul: we denken mee, bouwen, testen en leveren pas op als het écht goed zit.",
-        "De digitale wereld verandert razendsnel. Wij groeien mee – en helpen jou om dat ook te doen.",
-        "Groei je met ons mee?"
-      ]
-    },
-    "team": {
-      "title": "Ons Team",
-      "subtitle": "Maak kennis met de experts die Finit Solutions maken tot wat het is",
-      "members": {
-        "alex": {
-          "quote": "Technologie moet mensen helpen, niet vervangen. Daarom bouwen we AI-oplossingen die menselijke creativiteit versterken."
-        },
-        "karel": {
-          "quote": "Elke klant heeft een uniek verhaal. Ons doel is om dat verhaal te begrijpen en technologie in te zetten om hun dromen waar te maken."
-        },
-        "jord": {
-          "quote": "Schaalbare technologie begint met de juiste fundamenten. Ik zorg ervoor dat onze systemen groeien met onze ambities."
-        }
-      },
-      "moreInfo": "Meer info",
-      "achievements": "Prestaties",
-      "expertise": "Expertise",
-      "linkedinProfile": "Bekijk LinkedIn profiel"
-    },
-    "cta": {
-      "title": "Klaar om samen te werken?",
-      "description": "Laten we kennismaken en ontdekken hoe we uw bedrijf kunnen helpen groeien",
-      "startProject": "Start een project",
-      "directContact": "Direct contact"
     }
   },
   "blog": {
