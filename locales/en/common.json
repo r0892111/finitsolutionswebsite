@@ -189,7 +189,7 @@
   },
   "marketplace": {
     "hero": {
-      "title": "Plug & play AI-oplossingen",
+      "title": "Plug & play AI solutions",
       "subtitle": "Enterprise-grade AI tools that integrate directly with your existing systems"
     },
     "featured": {
@@ -241,8 +241,7 @@
       "contact": "Get in touch",
       "tryVoicelink": "Try VoiceLink"
     }
-  }
-}
+  },
   "blog": {
     "title": "Our Insights",
     "description": "Discover the latest developments in automation, AI and digital transformation. Practical insights for modern entrepreneurs.",

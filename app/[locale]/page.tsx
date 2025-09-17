@@ -4,7 +4,8 @@ import { Contact } from '@/components/contact';
 import { CTA } from '@/components/cta';
 import { locales } from '@/i18n';
 
-// Required for static export with dynamic routes
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
 export function generateStaticParams() {
   return locales.map((locale) => ({
     locale: locale,
