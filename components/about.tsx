@@ -8,13 +8,12 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { Button } from "@/components/ui/button";
-import { useTranslations, useLocale } from 'next-intl';
+import { useLanguage } from "@/contexts/language-context";
 
 export function About() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const t = useTranslations();
-  const locale = useLocale();
+  const { t } = useLanguage();
 
   // Video iframe component
   const VideoIframe = () => (
@@ -183,7 +182,7 @@ export function About() {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="pt-4 flex flex-col sm:flex-row gap-4"
             >
-              <Link href={`/${locale}/about`}>
+              <Link href="/about">
                 <Button size="lg">
                   {t('about.cta')}
                 </Button>

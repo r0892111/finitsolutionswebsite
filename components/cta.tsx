@@ -3,12 +3,12 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
-import { useTranslations } from 'next-intl';
+import { useLanguage } from "@/contexts/language-context";
 
 export function CTA() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.6 });
-  const t = useTranslations();
+  const { t } = useLanguage();
 
   return (
     <section className="relative py-16 md:py-24 bg-muted">
