@@ -1,21 +1,15 @@
 import {getRequestConfig} from 'next-intl/server';
 
-const SUPPORTED = ['en', 'nl'] as const;
-type SupportedLocale = (typeof SUPPORTED)[number];
-
-export const locales = SUPPORTED;
-export const defaultLocale: SupportedLocale = 'en';
+export const locales = ['en', 'nl'] as const;
+export const defaultLocale = 'en' as const;
 
 export default getRequestConfig(async ({locale}) => {
-  // Fallback voor veiligheid als er ooit iets anders wordt doorgegeven
-  const active: SupportedLocale = SUPPORTED.includes(locale as SupportedLocale)
-    ? (locale as SupportedLocale)
-    : defaultLocale;
-
-  const messages = (await import(`./locales/${active}/common.json`)).default;
+  // Validate that the incoming `locale` parameter is valid
+  if (!locales.includes(locale as any)) {
+    throw new Error(`Invalid locale: ${locale}`);
+  }
 
   return {
-    locale: active,
-    messages
+    messages: (await import(`./locales/${locale}/common.json`)).default
   };
 });

@@ -1,4 +1,3 @@
-// app/[locale]/layout.tsx
 import type { Metadata } from 'next';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
@@ -10,11 +9,16 @@ import { CookieBanner } from '@/components/cookie-banner';
 import { CookieSettingsModal } from '@/components/cookie-settings-modal';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+import { locales } from '@/i18n';
 
-// ✅ verplicht bij output: 'export'
+// Required for static export with dynamic routes
 export const dynamicParams = false;
+
 export function generateStaticParams() {
-  return [{ locale: 'en' }, { locale: 'nl' }];
+  return locales.map((locale) => ({
+    locale: locale,
+  }));
 }
 
 export async function generateMetadata({
@@ -22,6 +26,11 @@ export async function generateMetadata({
 }: {
   params: { locale: string };
 }): Promise<Metadata> {
+  // Validate locale
+  if (!locales.includes(params.locale as any)) {
+    notFound();
+  }
+
   const messages = await getMessages();
   const t = (key: string) => {
     const keys = key.split('.');
@@ -53,7 +62,18 @@ export async function generateMetadata({
   };
 }
 
-export default async function LocaleLayout({ children }: { children: React.ReactNode }) {
+export default async function LocaleLayout({ 
+  children, 
+  params 
+}: { 
+  children: React.ReactNode;
+  params: { locale: string };
+}) {
+  // Validate locale
+  if (!locales.includes(params.locale as any)) {
+    notFound();
+  }
+
   const messages = await getMessages();
 
   return (

@@ -189,7 +189,7 @@
   },
   "marketplace": {
     "hero": {
-      "title": "Plug & play AI solutions",
+      "title": "Plug & play AI-oplossingen",
       "subtitle": "Enterprise-grade AI tools that integrate directly with your existing systems"
     },
     "featured": {
@@ -198,7 +198,7 @@
     },
     "voicelink": {
       "tagline": "Voice-to-CRM automation",
-      "description": "Your salespeople send a WhatsApp voice message with their client visit details - client name, quote amount, follow-up appointments - and everything is automatically placed in the right place in your CRM of choice. This plug & play tool integrates with any CRM and takes only 3 minutes to install. More time for clients, less time on administration.",
+      "description": "Your salespeople send a WhatsApp voice message with their client visit details - client name, quote amount, follow-up appointments - and everything is automatically placed in the right place in your CRM. This plug & play tool integrates with any CRM and takes only 3 minutes to install. More time for clients, less time on administration.",
       "price": "From €29.90/month",
       "priceNote": "Volume discounts available",
       "features": [
@@ -241,7 +241,8 @@
       "contact": "Get in touch",
       "tryVoicelink": "Try VoiceLink"
     }
-  },
+  }
+}
   "blog": {
     "title": "Our Insights",
     "description": "Discover the latest developments in automation, AI and digital transformation. Practical insights for modern entrepreneurs.",
