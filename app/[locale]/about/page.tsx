@@ -18,7 +18,8 @@ const team = [
     linkedin: "https://www.linkedin.com/in/alex-otten-b5066a350/",
     description: "Alex behaalde zijn bachelor industrieel ingenieur aan de KU Leuven. Gedreven door de snelle evolutie van AI-technologie besloot hij zijn masterstudie halverwege stop te zetten om zich volledig te engageren en actief mee te bouwen aan deze innovatieve sector. Als gepassioneerde ondernemer zet hij zich in voor het realiseren van kwaliteitsvolle en betrouwbare systemen.",
     expertise: ["AI & Machine Learning", "Bedrijfsstrategie", "Innovatie Management", "Systeem Architectuur"],
-    achievements: ["Bachelor Industrieel Ingenieur KU Leuven", "AI Technology Pioneer", "Startup Entrepreneur"]
+    achievements: ["Bachelor Industrieel Ingenieur KU Leuven", "AI Technology Pioneer", "Startup Entrepreneur"],
+    quote: "Technologie moet mensen helpen, niet vervangen. Daarom bouwen we AI-oplossingen die menselijke creativiteit versterken."
   },
   {
     name: "Karel Van Ransbeeck",
@@ -27,7 +28,8 @@ const team = [
     linkedin: "https://www.linkedin.com/in/karel-van-ransbeeck",
     description: "Met zijn natuurlijke talent voor klantencommunicatie en sterke sociale vaardigheden, vormt hij de brug tussen technologie en menselijke behoeften. Als medeoprichter legt hij de focus op het begrijpen van klantenwensen en het vertalen daarvan naar praktische oplossingen, waarbij klanttevredenheid en duurzame relaties centraal staan. Karel behaalde zijn diploma toegepaste informatica aan de UCLL in Keerbergen.",
     expertise: ["Client Relations", "Business Development", "Project Management", "Toegepaste Informatica"],
-    achievements: ["Diploma Toegepaste Informatica UCLL", "Client Success Specialist", "Business Strategy Expert"]
+    achievements: ["Diploma Toegepaste Informatica UCLL", "Client Success Specialist", "Business Strategy Expert"],
+    quote: "Elke klant heeft een uniek verhaal. Ons doel is om dat verhaal te begrijpen en technologie in te zetten om hun dromen waar te maken."
   },
   {
     name: "Jord Goossens",
@@ -36,38 +38,39 @@ const team = [
     linkedin: "https://www.linkedin.com/in/jord-goossens/",
     description: "Als Chief Technology Officer brengt Jord een schat aan ervaring mee in enterprise-level softwarearchitectuur en AI-implementaties. Met zijn diepgaande kennis van cloud-infrastructuur en machine learning zorgt hij ervoor dat onze technische oplossingen schaalbaar, veilig en toekomstbestendig zijn. Jord's strategische visie op technologie-innovatie vormt de ruggengraat van onze technische excellentie.",
     expertise: ["Enterprise Architecture", "Cloud Infrastructure", "Machine Learning", "DevOps & Security"],
-    achievements: ["Enterprise Software Architect", "Cloud Infrastructure Expert", "AI Implementation Specialist"]
+    achievements: ["Enterprise Software Architect", "Cloud Infrastructure Expert", "AI Implementation Specialist"],
+    quote: "Schaalbare technologie begint met de juiste fundamenten. Ik zorg ervoor dat onze systemen groeien met onze ambities."
   },
+];
+
+const companyValues = [
+  {
+    icon: Target,
+    title: "Resultaatgericht",
+    description: "We focussen op meetbare resultaten die echte waarde toevoegen aan uw bedrijf."
+  },
+  {
+    icon: Users,
+    title: "Samenwerking",
+    description: "We werken niet voor u, maar met u. Uw expertise gecombineerd met onze technologie."
+  },
+  {
+    icon: Award,
+    title: "Kwaliteit",
+    description: "Geen compromissen op kwaliteit. Elke oplossing wordt grondig getest en geoptimaliseerd."
+  },
+  {
+    icon: Heart,
+    title: "Passie",
+    description: "Gedreven door passie voor technologie en de wil om bedrijven te laten groeien."
+  }
 ];
 
 export default function AboutPage() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const [selectedMember, setSelectedMember] = useState<typeof team[0] | null>(null);
-  const t = useTranslations('about');
-
-  const companyValues = [
-    {
-      icon: Target,
-      title: t('values.resultOriented.title'),
-      description: t('values.resultOriented.description')
-    },
-    {
-      icon: Users,
-      title: t('values.collaboration.title'),
-      description: t('values.collaboration.description')
-    },
-    {
-      icon: Award,
-      title: t('values.quality.title'),
-      description: t('values.quality.description')
-    },
-    {
-      icon: Heart,
-      title: t('values.passion.title'),
-      description: t('values.passion.description')
-    }
-  ];
+  const t = useTranslations();
 
   return (
     <main className="pt-20 bg-gradient-to-br from-slate-50 via-white to-slate-50 min-h-screen">
@@ -90,7 +93,7 @@ export default function AboutPage() {
             >
               <div className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium bg-gradient-to-r from-primary/10 to-blue-500/10 text-primary mb-8 border border-primary/20 shadow-lg backdrop-blur-sm">
                 <Users className="h-4 w-4 mr-2" />
-                <span>{t('hero.badge')}</span> 
+                <span>{t('nav.about')}</span> 
                 <ChevronRight className="h-4 w-4 ml-2" />
               </div>
             </motion.div>
@@ -101,7 +104,8 @@ export default function AboutPage() {
               transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="text-5xl md:text-6xl lg:text-7xl font-extralight mb-8 bg-gradient-to-r from-slate-900 via-primary to-slate-900 bg-clip-text text-transparent tracking-tight leading-tight"
             >
-              {t('hero.title')}
+              Jonge ondernemers
+              <span className="block font-light">met een missie</span>
             </motion.h1>
             
             <motion.p
@@ -110,7 +114,8 @@ export default function AboutPage() {
               transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="text-xl md:text-2xl text-slate-600 font-light leading-relaxed tracking-wide"
             >
-              {t('hero.subtitle')}
+              We zijn meer dan een bedrijf – we zijn een team van gepassioneerde techneuten 
+              die geloven in de kracht van innovatie.
             </motion.p>
           </div>
         </div>
@@ -127,10 +132,10 @@ export default function AboutPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-extralight mb-6 text-slate-900 tracking-tight">
-              {t('values.title')}
+              Onze Waarden
             </h2>
             <p className="text-xl text-slate-600 font-light max-w-3xl mx-auto leading-relaxed">
-              {t('values.subtitle')}
+              De principes die ons drijven en onze aanpak bepalen
             </p>
           </motion.div>
 
@@ -186,7 +191,7 @@ export default function AboutPage() {
               className="text-center mb-16"
             >
               <h2 className="text-5xl md:text-6xl font-extralight mb-8 text-white tracking-tight">
-                {t('story.title')}
+                Ons Verhaal
               </h2>
             </motion.div>
 
@@ -197,9 +202,30 @@ export default function AboutPage() {
               className="bg-white/10 backdrop-blur-xl rounded-3xl p-12 md:p-16 border border-white/20 shadow-2xl"
             >
               <div className="space-y-8 text-lg md:text-xl leading-relaxed font-light text-white/90">
-                {t.raw('story.content').map((paragraph: string, index: number) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
+                <p>
+                  Wat begon als een droom van twee beste vrienden, is vandaag uitgegroeid tot een gedreven team. Gedurende onze studies hebben we onszelf bijgespijkerd in de avonden, weekenden en elke vrije minuut daartussen. Nu zetten we die kennis om in échte resultaten.
+                </p>
+
+                <p>
+                  We zijn techneuten, probleemoplossers en ondernemers in hart en nieren. Wat ons bindt? Een gedeelde passie voor digitale innovatie en de ambitie om bedrijven te helpen efficiënter, slimmer en sneller te werken.
+                </p>
+
+                <p>
+                  Kwaliteit staat bij ons voorop. Geen loze beloftes of wazige praat – maar transparantie, heldere communicatie en volledige verantwoordelijkheid voor alles wat we opleveren. Of het nu gaat om een bestaand systeem dat gepersonaliseerd moet worden, of een volledig maatwerkoplossing vanaf nul: we denken mee, bouwen, testen en leveren pas op als het écht goed zit.
+                </p>
+
+                <p>
+                  De digitale wereld verandert razendsnel. Wij groeien mee – en helpen jou om dat ook te doen.
+                </p>
+
+                <motion.p
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ duration: 0.8, delay: 0.8 }}
+                  className="text-2xl md:text-3xl font-light text-center pt-8 text-white"
+                >
+                  Groei je met ons mee?
+                </motion.p>
               </div>
 
               <motion.div
@@ -209,7 +235,7 @@ export default function AboutPage() {
                 className="text-center mt-12"
               >
                 <ProjectRequestDialog 
-                  buttonText={t('cta.startProject')}
+                  buttonText="Neem contact op" 
                   buttonClassName="bg-white text-primary hover:bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-10 py-4 rounded-full"
                 />
               </motion.div>
@@ -229,10 +255,10 @@ export default function AboutPage() {
             className="text-center mb-16"
           >
             <h2 className="text-5xl md:text-6xl font-extralight mb-8 text-slate-900 tracking-tight">
-              {t('team.title')}
+              Ons Team
             </h2>
             <p className="text-xl text-slate-600 font-light max-w-3xl mx-auto leading-relaxed">
-              {t('team.subtitle')}
+              Maak kennis met de experts die Finit Solutions maken tot wat het is
             </p>
           </motion.div>
           
@@ -328,7 +354,7 @@ export default function AboutPage() {
                         size="sm"
                         className="text-primary hover:text-primary/80 hover:bg-primary/5 font-medium"
                       >
-                        {t('team.moreInfo')}
+                        Meer info
                         <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
                       </Button>
                     </div>
@@ -355,15 +381,15 @@ export default function AboutPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <h2 className="text-4xl md:text-5xl font-extralight mb-8 text-slate-900 tracking-tight">
-              {t('cta.title')}
+              Klaar om samen te werken?
             </h2>
             <p className="text-xl text-slate-600 font-light mb-12 leading-relaxed">
-              {t('cta.description')}
+              Laten we kennismaken en ontdekken hoe we uw bedrijf kunnen helpen groeien
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <ProjectRequestDialog 
-                buttonText={t('cta.startProject')}
+                buttonText="Start een project" 
                 buttonClassName="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-10 py-4 rounded-full"
               />
               <Button 
@@ -373,7 +399,7 @@ export default function AboutPage() {
                 onClick={() => window.location.href = 'mailto:contact@finitsolutions.be'}
               >
                 <Mail className="h-5 w-5 mr-2" />
-                {t('cta.directContact')}
+                Direct contact
               </Button>
             </div>
           </motion.div>
@@ -419,7 +445,7 @@ export default function AboutPage() {
                 {/* Quote */}
                 <div className="bg-slate-50 rounded-2xl p-6 border-l-4 border-primary">
                   <p className="text-slate-700 italic text-lg leading-relaxed">
-                    &ldquo;{t(`team.members.${selectedMember.name.toLowerCase().split(' ')[0]}.quote`)}&rdquo;
+                    &ldquo;{selectedMember.quote}&rdquo;
                   </p>
                 </div>
 
@@ -433,7 +459,7 @@ export default function AboutPage() {
 
                 {/* Expertise */}
                 <div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-4">{t('team.expertise')}</h4>
+                  <h4 className="text-xl font-bold text-slate-900 mb-4">Expertise</h4>
                   <div className="flex flex-wrap gap-3">
                     {selectedMember.expertise.map((skill, idx) => (
                       <span 
@@ -448,7 +474,7 @@ export default function AboutPage() {
 
                 {/* Achievements */}
                 <div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-4">{t('team.achievements')}</h4>
+                  <h4 className="text-xl font-bold text-slate-900 mb-4">Prestaties</h4>
                   <div className="space-y-3">
                     {selectedMember.achievements.map((achievement, idx) => (
                       <div key={idx} className="flex items-center gap-3">
@@ -470,7 +496,7 @@ export default function AboutPage() {
                     className="inline-flex items-center gap-3 text-primary hover:text-primary/80 transition-colors font-medium"
                   >
                     <Linkedin className="h-5 w-5" />
-                    {t('team.linkedinProfile')}
+                    Bekijk LinkedIn profiel
                   </a>
                 </div>
               </div>

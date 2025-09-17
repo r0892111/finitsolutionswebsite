@@ -1,7 +1,10 @@
-const withNextIntl = require('next-intl/plugin')('./i18n.ts');
+const createNextIntlPlugin = require('next-intl/plugin');
+
+const withNextIntl = createNextIntlPlugin('./i18n.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   trailingSlash: true,
   images: {
     unoptimized: true,
@@ -19,14 +22,15 @@ const nextConfig = {
     ]
   },
   typescript: {
-    ignoreBuildErrors: false
+    ignoreBuildErrors: false // Enable TypeScript error checking
   },
   eslint: {
-    ignoreDuringBuilds: false
+    ignoreDuringBuilds: false // Enable ESLint checking
   },
   experimental: {
     esmExternals: false
   },
+  // Add webpack configuration to handle cache issues
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {
       config.cache = {

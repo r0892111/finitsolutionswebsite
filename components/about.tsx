@@ -13,7 +13,7 @@ import { useTranslations, useLocale } from 'next-intl';
 export function About() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const t = useTranslations('about');
+  const t = useTranslations();
   const locale = useLocale();
 
   // Video iframe component
@@ -31,6 +31,7 @@ export function About() {
     />
   );
 
+
   // Complete integration logos list - All 32 integrations
   const integrationLogos = [
     { name: "Salesforce", logo: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg", color: "#00A1E0" },
@@ -39,13 +40,13 @@ export function About() {
     { name: "Outlook", logo: "https://upload.wikimedia.org/wikipedia/commons/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg", color: "#0078D4" },
     { name: "Gmail", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg", color: "#EA4335" },
     { name: "Microsoft Excel", logo: "https://upload.wikimedia.org/wikipedia/commons/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg", color: "#217346" },
-    { name: "Microsoft Word", logo: "/Microsoft_Office_Word_Logo.svg", color: "#2B579A" },
+    { name: "Microsoft Word", logo: "Microsoft_Office_Word_Logo.svg", color: "#2B579A" },
     { name: "Google Calendar", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg", color: "#4285F4" },
     { name: "Power BI", logo: "https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg", color: "#F2C811" },
     { name: "Pipedrive", logo: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Pipedrive_Logo.svg", color: "#FF6B35" },
-    { name: "Teamleader", logo: "/Logo_Teamleader_Default_CMYK.jpg", color: "#FF6900" },
+    { name: "Teamleader", logo: "Logo_Teamleader_Default_CMYK.jpg", color: "#FF6900" },
     { name: "HubSpot", logo: "https://upload.wikimedia.org/wikipedia/commons/3/3f/HubSpot_Logo.svg", color: "#FF7A59" },
-    { name: "Calendly", logo: "/calendly-logo-brandlogos.net_fftw0yxev.svg", color: "#006BFF" },
+    { name: "Calendly", logo: "calendly-logo-brandlogos.net_fftw0yxev.svg", color: "#006BFF" },
     { name: "Mailchimp", logo: "https://logos-world.net/wp-content/uploads/2021/02/Mailchimp-Logo.png", color: "#FFE01B" },
     { name: "Jira", logo: "https://upload.wikimedia.org/wikipedia/commons/8/82/Jira_%28Software%29_logo.svg", color: "#0052CC" },
     { name: "Slack", logo: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg", color: "#4A154B" },
@@ -57,10 +58,10 @@ export function About() {
     { name: "WhatsApp", logo: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", color: "#25D366" },
     { name: "Facebook", logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg", color: "#1877F2" },
     { name: "Instagram", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg", color: "#E4405F" },
-    { name: "Discord", logo: "/Discord-Symbol-Blurple.svg", color: "#5865F2" },
+    { name: "Discord", logo: "Discord-Symbol-Blurple.svg", color: "#5865F2" },
     { name: "Zoom", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg", color: "#2D8CFF" },
     { name: "Freshdesk", logo: "https://www.vectorlogo.zone/logos/freshdesk/freshdesk-ar21~bgwhite.svg", color: "#2ECC71" },
-    { name: "DocuSign", logo: "/docusign.svg", color: "#FFB81C" },
+    { name: "DocuSign", logo: "docusign.svg", color: "#FFB81C" },
     { name: "Notion", logo: "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png", color: "#000000" },
     { name: "Telegram", logo: "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg", color: "#0088CC" },
     { name: "Billit", logo: "https://www.billit.eu/media/xszb4oma/billit-logo-regular-3-4.svg", color: "#00A651" },
@@ -91,47 +92,52 @@ export function About() {
               >
                 <VideoIframe />
               </div>
+              
             </div>
           </motion.div>
           
           {/* Content Side - Now on the right */}
-          <div className="w-full lg:w-1/2 space-y-8">
+          <div className="w-full lg:w-1/2 space-y-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ duration: 0.5 }}
             >
-              <Link href={`/${locale}/diensten`}>
+              <Link href="/diensten">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="inline-flex items-center px-4 py-2 rounded-full text-[12px] font-semibold bg-white border border-blue-200" style={{ color: 'rgb(28, 44, 85)' }}
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors"
                 >
-                  <span>{t('badge')}</span> <ChevronRight className="h-4 w-4 ml-1" />
+                  <span>{t('about.badge')}</span> <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </Link>
             </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
+            
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="space-y-4"
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-3xl md:text-4xl font-bold"
             >
-              <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{ color: 'rgb(28, 44, 85)' }}>
-                {t('title')}
-              </h1>
-              <p className="text-xl font-semibold lg:text-2xl leading-relaxed max-w-2xl" style={{ color: 'rgb(28, 44, 85)' }}>
-                {t('description')}
-              </p>
-            </motion.div>
+              {t('about.title')}
+            </motion.h2>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-muted-foreground text-lg"
+            >
+              {t('about.description')}
 
-            {/* CTAs */}
+            </motion.p>
+            
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 pt-4"
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="space-y-4"
             >
               {/* Simple "In de kijker" section */}
               <div className="bg-card border border-border rounded-lg p-6 relative">
@@ -143,21 +149,21 @@ export function About() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-blue-600 text-white text-sm font-semibold rounded-full shadow-lg hover:shadow-xl hover:from-primary/90 hover:to-blue-600/90 transition-all duration-300 transform hover:scale-105"
                   >
-                    <span>{t('spotlight.cta')}</span>
+                    <span>{t('about.spotlight.cta')}</span>
                     <ArrowRight className="h-4 w-4" />
                   </a>
                 </div>
                 
                 <div className="mb-4">
                   <span className="inline-block px-3 py-1 bg-primary text-primary-foreground text-sm font-medium rounded-md">
-                    {t('spotlight.title')}
+                    {t('about.spotlight.title')}
                   </span>
                 </div>
                 
-                <h3 className="text-lg font-semibold mb-2">{t('spotlight.product')}</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('about.spotlight.product')}</h3>
                 
                 <p className="text-muted-foreground">
-                  {t('spotlight.description')}
+                  {t('about.spotlight.description')}
                 </p>
               </div>
             </motion.div>
@@ -168,7 +174,7 @@ export function About() {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="text-foreground text-lg font-semibold"
             >
-              {t('tagline')}
+              {t('about.tagline')}
             </motion.p>
             
             <motion.div
@@ -179,12 +185,12 @@ export function About() {
             >
               <Link href={`/${locale}/about`}>
                 <Button size="lg">
-                  {t('cta')}
+                  {t('about.cta')}
                 </Button>
               </Link>
               <a href="https://voicelink.me" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" variant="outline">
-                  {t('spotlight.cta')}
+                  {t('about.spotlight.cta')}
                 </Button>
               </a>
             </motion.div>
@@ -196,13 +202,13 @@ export function About() {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-12 md:mt-20"
+          className="mt-20 md:mt-32"
         >
           {/* Title */}
           <div className="text-center mb-12">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">{t('integrations.title')}</h3>
+            <h3 className="text-2xl md:text-3xl font-bold mb-4">{t('about.integrations.title')}</h3>
             <p className="text-muted-foreground text-lg">
-              {t('integrations.subtitle')}
+              {t('about.integrations.subtitle')}
             </p>
           </div>
 
@@ -213,6 +219,9 @@ export function About() {
             <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
             
             {/* Scrolling logos container with precise width calculation */}
+            {/* Each logo: 128px (w-32) + 24px margins (mx-3 = 12px left+right) = 152px per logo */}
+            {/* 32 logos × 152px = 4864px for one complete set */}
+            {/* Two sets for seamless loop = 9728px total width */}
             <div className="flex animate-scroll-fast w-[9728px]">
               {/* First complete set - All 32 logos */}
               {integrationLogos.map((integration, index) => (
@@ -250,7 +259,7 @@ export function About() {
                 </div>
               ))}
               
-              {/* Second complete set for seamless infinite loop */}
+              {/* Second complete set for seamless infinite loop - All 32 logos again */}
               {integrationLogos.map((integration, index) => (
                 <div
                   key={`set2-${index}`}
@@ -326,6 +335,9 @@ export function About() {
         /* Responsive logo sizes */
         @media (max-width: 640px) {
           .animate-scroll-fast {
+            /* Adjust for smaller logos on mobile */
+            /* Mobile: w-20 h-16 + mx-3 = 80px + 24px = 104px per logo */
+            /* 32 logos × 104px = 3328px for one set */
             animation: scroll-fast-mobile 36s linear infinite;
           }
         }

@@ -17,8 +17,7 @@ export function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const { toast } = useToast();
-  const t = useTranslations('contact');
-  const tForms = useTranslations('forms');
+  const t = useTranslations();
 
   const form = useForm<ContactForm>({
     resolver: zodResolver(contactFormSchema),
@@ -47,16 +46,16 @@ export function Contact() {
       }
 
       toast({
-        title: tForms('success.title'),
-        description: tForms('success.description'),
+        title: "Bericht verstuurd",
+        description: "We nemen binnen één werkdag contact met je op.",
       });
 
       reset();
     } catch (error) {
       console.error('Submission error:', error);
       toast({
-        title: tForms('error.title'),
-        description: tForms('error.description'),
+        title: "Er is iets misgegaan",
+        description: "Probeer het later opnieuw of neem direct contact met ons op.",
         variant: "destructive",
       });
     }
@@ -73,7 +72,7 @@ export function Contact() {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary mb-6"
           >
-            <span>{t('badge')}</span> <ChevronRight className="h-4 w-4 ml-1" />
+            <span>{t('contact.badge')}</span> <ChevronRight className="h-4 w-4 ml-1" />
           </motion.p>
           
           <motion.h2
@@ -83,8 +82,13 @@ export function Contact() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl md:text-4xl font-bold mb-6"
           >
-            {t('title')}
+            {t('contact.title').split(' ').slice(0, -2).join(' ')}{" "}
+            <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+              {t('contact.title').split(' ').slice(-2).join(' ')}
+            </span>
           </motion.h2>
+          
+          
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 max-w-6xl mx-auto">
@@ -96,61 +100,61 @@ export function Contact() {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-bold mb-4">{t('form.title')}</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('contact.form.title')}</h3>
               <p className="text-muted-foreground mb-6">
-                {t('form.description')}
+                {t('contact.form.description')}
               </p>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">{t('form.name')}</Label>
+                  <Label htmlFor="name">{t('contact.form.name')}</Label>
                   <Input
                     id="name"
-                    placeholder={t('form.placeholders.name')}
+                    placeholder={t('contact.form.placeholders.name')}
                     {...register("name")}
                   />
                   {errors.name && (
-                    <p className="text-sm text-destructive">{tForms('validation.nameRequired')}</p>
+                    <p className="text-sm text-destructive">{errors.name.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">{t('form.email')}</Label>
+                  <Label htmlFor="email">{t('contact.form.email')}</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder={t('form.placeholders.email')}
+                    placeholder={t('contact.form.placeholders.email')}
                     {...register("email")}
                   />
                   {errors.email && (
-                    <p className="text-sm text-destructive">{tForms('validation.emailInvalid')}</p>
+                    <p className="text-sm text-destructive">{errors.email.message}</p>
                   )}
                 </div>
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="subject">{t('form.subject')}</Label>
+                <Label htmlFor="subject">{t('contact.form.subject')}</Label>
                 <Input
                   id="subject"
-                  placeholder={t('form.placeholders.subject')}
+                  placeholder={t('contact.form.placeholders.subject')}
                   {...register("subject")}
                 />
                 {errors.subject && (
-                  <p className="text-sm text-destructive">{tForms('validation.subjectRequired')}</p>
+                  <p className="text-sm text-destructive">{errors.subject.message}</p>
                 )}
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="message">{t('form.message')}</Label>
+                <Label htmlFor="message">{t('contact.form.message')}</Label>
                 <Textarea
                   id="message"
-                  placeholder={t('form.placeholders.message')}
+                  placeholder={t('contact.form.placeholders.message')}
                   className="min-h-[150px]"
                   {...register("message")}
                 />
                 {errors.message && (
-                  <p className="text-sm text-destructive">{tForms('validation.messageRequired')}</p>
+                  <p className="text-sm text-destructive">{errors.message.message}</p>
                 )}
               </div>
               
@@ -160,7 +164,7 @@ export function Contact() {
                 disabled={isSubmitting}
                 size="lg"
               >
-                {isSubmitting ? t('form.submitting') : t('form.submit')}
+                {isSubmitting ? t('contact.form.submitting') : t('contact.form.submit')}
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </form>
@@ -174,9 +178,9 @@ export function Contact() {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-bold mb-4">{t('direct.title')}</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('contact.direct.title')}</h3>
               <p className="text-muted-foreground mb-8">
-                {t('direct.description')}
+                {t('contact.direct.description')}
               </p>
             </div>
 
@@ -189,7 +193,7 @@ export function Contact() {
                     <Phone className="h-6 w-6 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-lg mb-2">{t('phone.title')}</h4>
+                    <h4 className="font-semibold text-lg mb-2">{t('contact.phone.title')}</h4>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <span className="text-muted-foreground text-sm">Karel:</span>
@@ -211,7 +215,7 @@ export function Contact() {
                       </div>
                     </div>
                     <p className="text-muted-foreground text-sm mt-2">
-                      {t('phone.availability')}
+                      {t('contact.phone.availability')}
                     </p>
                   </div>
                 </div>
@@ -224,10 +228,10 @@ export function Contact() {
                     <MessageCircle className="h-6 w-6 text-green-600" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-lg mb-2">{t('whatsapp.title')}</h4>
+                    <h4 className="font-semibold text-lg mb-2">{t('contact.whatsapp.title')}</h4>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-muted-foreground text-sm">{t('whatsapp.description')}</span>
+                        <span className="text-muted-foreground text-sm">{t('contact.whatsapp.description')}</span>
                       </div>
                       <div className="flex items-center gap-4">
                         <a 
@@ -249,6 +253,7 @@ export function Contact() {
                         </a>
                       </div>
                     </div>
+                    
                   </div>
                 </div>
               </div>
@@ -260,7 +265,7 @@ export function Contact() {
                     <Mail className="h-6 w-6 text-blue-600" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-lg mb-2">{t('email.title')}</h4>
+                    <h4 className="font-semibold text-lg mb-2">{t('contact.email.title')}</h4>
                     <a 
                       href="mailto:contact@finitsolutions.be" 
                       className="text-blue-600 hover:underline font-medium"
@@ -268,7 +273,7 @@ export function Contact() {
                       contact@finitsolutions.be
                     </a>
                     <p className="text-muted-foreground text-sm mt-2">
-                      {t('email.response')}
+                      {t('contact.email.response')}
                     </p>
                   </div>
                 </div>

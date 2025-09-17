@@ -9,8 +9,31 @@ import { Badge } from "@/components/ui/badge";
 import { useTranslations, useLocale } from 'next-intl';
 
 export default function MarketplacePage() {
-  const t = useTranslations('marketplace');
+  const t = useTranslations();
   const locale = useLocale();
+
+  const featuredProducts = [
+    {
+      id: "voicelink",
+      name: "VoiceLink",
+      tagline: "Voice-to-CRM automation",
+      description: "WhatsApp spraakberichten worden automatisch omgezet naar CRM-data. Klantnaam, offertebedrag, vervolgafspraken - alles op de juiste plaats.",
+      image: "/voicelink display.png",
+      logo: "/Finit Voicelink Blue@4x.png",
+      category: "Sales & CRM",
+      status: "live",
+      price: "Vanaf €49/maand",
+      rating: 4.9,
+      reviews: 127,
+      features: ["WhatsApp integratie", "Automatische CRM-sync", "3 min installatie", "Alle CRM's ondersteund"],
+      metrics: {
+        timeSaved: "2 uur/dag",
+        accuracy: "90%",
+        adoption: "95%"
+      },
+      url: "https://voicelink.me"
+    }
+  ];
 
   const comingSoonProducts = [
     {
@@ -39,16 +62,12 @@ export default function MarketplacePage() {
     }
   ];
 
-  const handleContactClick = () => {
-    if (window.location.pathname === `/${locale}`) {
-      const contactSection = document.getElementById('contact');
-      if (contactSection) {
-        contactSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else {
-      window.location.href = `/${locale}/#contact`;
-    }
-  };
+  const categories = [
+    { name: "Sales & CRM", count: 1, color: "bg-blue-100 text-blue-800" },
+    { name: "Document Management", count: 1, color: "bg-green-100 text-green-800" },
+    { name: "Productivity", count: 1, color: "bg-purple-100 text-purple-800" },
+    { name: "Business Intelligence", count: 1, color: "bg-orange-100 text-orange-800" }
+  ];
 
   return (
     <main className="pt-20 bg-white min-h-screen font-general-sans">
@@ -79,10 +98,10 @@ export default function MarketplacePage() {
 
               <div className="text-left min-w-0 flex-1 md:min-w-[700px]">
                 <h1 className="finit-h1 text-white mb-2">
-                  {t('hero.title')}
+                  Plug & play <span className="finit-highlight">AI solutions</span>
                 </h1>
                 <p className="finit-body text-white/90">
-                  {t('hero.subtitle')}
+                  Enterprise-grade AI tools die direct integreren met uw bestaande systemen
                 </p>
               </div>
             </motion.div>
@@ -97,18 +116,18 @@ export default function MarketplacePage() {
             <div className="flex items-center gap-3 mb-4">
               <Badge className="bg-green-100 text-green-800 border-green-200">
                 <CheckCircle2 className="h-3 w-3 mr-1" />
-                {t('featured.badge')}
+                Live & beschikbaar
               </Badge>
               <Badge variant="outline">Featured</Badge>
             </div>
             <h2 className="finit-h2 mb-2" style={{ color: '#1C2C55' }}>
-              {t('featured.title')}
+              Meest populaire oplossing
             </h2>
           </div>
 
           <Card className="overflow-hidden bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-300 rounded-xl">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-              {/* Product Image - 7/12 width */}
+              {/* Product Image - 5/12 width */}
               <div className="lg:col-span-7 relative">
                 <div className="aspect-[4/3] lg:aspect-auto lg:h-full relative overflow-hidden rounded-l-xl bg-gray-50">
                   <Image
@@ -143,7 +162,7 @@ export default function MarketplacePage() {
                 </div>
               </div>
 
-              {/* Product Details - 5/12 width */}
+              {/* Product Details - 7/12 width */}
               <div className="lg:col-span-5 p-6 lg:p-8">
                 <div className="h-full flex flex-col">
                   {/* Header */}
@@ -159,15 +178,15 @@ export default function MarketplacePage() {
                     </h3>
                     
                     <p className="finit-body mb-3" style={{ color: '#202226' }}>
-                      {t('voicelink.description')}
+                      WhatsApp spraakberichten worden automatisch omgezet naar CRM-data. Klantnaam, offertebedrag, vervolgafspraken - alles op de juiste plaats.
                     </p>
                     
                     <div className="mb-4">
                       <div className="text-2xl font-bold" style={{ color: '#1C2C55' }}>
-                        {t('voicelink.price')}
+                        Vanaf €29,90/maand
                       </div>
                       <div className="text-sm text-gray-600">
-                        {t('voicelink.priceNote')}
+                        Volume kortingen beschikbaar
                       </div>
                     </div>
                   </div>
@@ -176,7 +195,7 @@ export default function MarketplacePage() {
                   <div className="mb-4">
                     <h4 className="font-medium mb-3" style={{ color: '#1C2C55' }}>Belangrijkste features:</h4>
                     <div className="grid grid-cols-2 gap-2">
-                      {t.raw('voicelink.features').map((feature: string, idx: number) => (
+                      {featuredProducts[0].features.map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-2">
                           <CheckCircle2 className="h-4 w-4 text-green-600" />
                           <span className="text-sm" style={{ color: '#202226' }}>{feature}</span>
@@ -198,7 +217,7 @@ export default function MarketplacePage() {
                         className="w-full text-white shadow-soft hover:shadow-lg transition-all duration-300 font-medium"
                         style={{ backgroundColor: '#1C2C55' }}
                       >
-                        {t('voicelink.cta.discover')}
+                        Ontdek VoiceLink
                         <ExternalLink className="ml-2 h-4 w-4" />
                       </Button>
                     </a>
@@ -207,9 +226,18 @@ export default function MarketplacePage() {
                       variant="outline"
                       className="font-medium shadow-soft hover:shadow-lg transition-all duration-300"
                       style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
-                      onClick={handleContactClick}
+                      onClick={() => {
+                        if (window.location.pathname === '/') {
+                          const contactSection = document.getElementById('contact');
+                          if (contactSection) {
+                            contactSection.scrollIntoView({ behavior: 'smooth' });
+                          }
+                        } else {
+                          window.location.href = '/#contact';
+                        }
+                      }}
                     >
-                      {t('voicelink.cta.moreInfo')}
+                      Meer info
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
@@ -226,14 +254,14 @@ export default function MarketplacePage() {
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
               <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
-                {t('comingSoon.badge')}
+                Binnenkort beschikbaar
               </Badge>
             </div>
             <h2 className="finit-h2" style={{ color: '#1C2C55' }}>
-              {t('comingSoon.title')}
+              Nieuwe oplossingen in ontwikkeling
             </h2>
             <p className="finit-body mt-2" style={{ color: '#202226' }}>
-              {t('comingSoon.subtitle')}
+              Innovatieve AI-tools die binnenkort uw workflow zullen transformeren
             </p>
           </div>
 
@@ -282,7 +310,16 @@ export default function MarketplacePage() {
                         variant="ghost" 
                         size="sm"
                         className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-medium"
-                        onClick={handleContactClick}
+                        onClick={() => {
+                          if (window.location.pathname === '/') {
+                            const contactSection = document.getElementById('contact');
+                            if (contactSection) {
+                              contactSection.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          } else {
+                            window.location.href = '/#contact';
+                          }
+                        }}
                       >
                         Interesse?
                         <ArrowRight className="h-3 w-3 ml-1" />
@@ -296,15 +333,16 @@ export default function MarketplacePage() {
         </div>
       </section>
 
+
       {/* Why Choose Our Marketplace */}
       <section className="py-12 bg-finit-aurora">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="finit-h2 text-white mb-4">
-              {t('why.title')}
+              Waarom Finit Marketplace
             </h2>
             <p className="finit-body text-white/90">
-              {t('why.subtitle')}
+              Curated AI-oplossingen met enterprise-grade beveiliging en support
             </p>
           </div>
 
@@ -312,18 +350,18 @@ export default function MarketplacePage() {
             {[
               {
                 icon: Zap,
-                title: t('why.benefits.deployment.title'),
-                description: t('why.benefits.deployment.description')
+                title: "Instant deployment",
+                description: "Alle oplossingen zijn plug & play - geen complexe implementatie nodig"
               },
               {
                 icon: Shield,
-                title: t('why.benefits.security.title'),
-                description: t('why.benefits.security.description')
+                title: "Enterprise security",
+                description: "GDPR-compliant met enterprise-grade beveiliging en data-bescherming"
               },
               {
                 icon: Users,
-                title: t('why.benefits.support.title'),
-                description: t('why.benefits.support.description')
+                title: "Expert support",
+                description: "Direct contact met ons team voor onboarding en continue ondersteuning"
               }
             ].map((benefit, index) => (
               <motion.div
@@ -354,10 +392,10 @@ export default function MarketplacePage() {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="finit-h2 mb-4" style={{ color: '#1C2C55' }}>
-              {t('cta.title')}
+              Interesse in een specifieke oplossing?
             </h2>
             <p className="finit-body mb-8" style={{ color: '#202226' }}>
-              {t('cta.description')}
+              Vertel ons wat u nodig heeft en we houden u op de hoogte van nieuwe releases
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -365,9 +403,18 @@ export default function MarketplacePage() {
                 size="lg" 
                 className="text-white shadow-soft hover:shadow-lg transition-all duration-300 font-medium px-8"
                 style={{ backgroundColor: '#1C2C55' }}
-                onClick={handleContactClick}
+                onClick={() => {
+                  if (window.location.pathname === '/') {
+                    const contactSection = document.getElementById('contact');
+                    if (contactSection) {
+                      contactSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  } else {
+                    window.location.href = '/#contact';
+                  }
+                }}
               >
-                {t('cta.contact')}
+                Neem contact op
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <a 
@@ -381,7 +428,7 @@ export default function MarketplacePage() {
                   className="font-medium shadow-soft hover:shadow-lg transition-all duration-300 px-8"
                   style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
                 >
-                  {t('cta.tryVoicelink')}
+                  Probeer VoiceLink
                   <ExternalLink className="ml-2 h-5 w-5" />
                 </Button>
               </a>

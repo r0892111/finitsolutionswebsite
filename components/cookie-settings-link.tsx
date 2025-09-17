@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 
 export function CookieSettingsLink() {
   const { openSettings } = useConsent();
-  const t = useTranslations('footer');
+  const t = useTranslations();
 
   return (
     <button
@@ -13,7 +13,7 @@ export function CookieSettingsLink() {
       className="text-xs text-muted-foreground hover:text-primary transition-colors underline"
       aria-label="Cookie-instellingen openen"
     >
-      {t('cookieSettings')}
+      {t('footer.cookieSettings')}
     </button>
   );
 }

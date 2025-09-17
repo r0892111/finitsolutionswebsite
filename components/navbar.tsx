@@ -1,20 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, Globe } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useTranslations, useLocale } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+import { useRouter, usePathname } from 'next/navigation';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const t = useTranslations('nav');
   const locale = useLocale();
+  const t = useTranslations();
   const router = useRouter();
 
   useEffect(() => {
@@ -25,35 +24,28 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const switchLanguage = (newLocale: string) => {
+    const currentPath = pathname.replace(/^\/(en|nl)/, '');
+    router.push(`/${newLocale}${currentPath}`);
+  };
+
   // Hide navbar completely on voice-to-crm page
   if (pathname === "/voice-to-crm") {
     return null;
   }
 
-  const navItems = [
-    { name: t('services'), href: `/${locale}/diensten` },
-    { name: t('blog'), href: `/${locale}/blog` },
-    { name: t('about'), href: `/${locale}/about` },
-  ];
-
   const handleContactClick = () => {
     // If we're already on the homepage, just scroll to contact
-    if (pathname === `/${locale}`) {
+    if (pathname === `/${locale}` || pathname === "/") {
       const contactSection = document.getElementById("contact");
       if (contactSection) {
         contactSection.scrollIntoView({ behavior: "smooth" });
       }
     } else {
       // If we're on another page, navigate to homepage with hash
-      router.push(`/${locale}/#contact`);
+      window.location.href = `/${locale}#contact`;
     }
     setIsOpen(false); // Close mobile menu if open
-  };
-
-  const switchLanguage = (newLocale: string) => {
-    // Get current path without locale
-    const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/';
-    router.push(`/${newLocale}${pathWithoutLocale}`);
   };
 
   return (
@@ -94,25 +86,25 @@ export function Navbar() {
                 href={`/${locale}`}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
-                {t('home')}
+                Home
               </Link>
               <Link
                 href={`/${locale}/diensten`}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
-                {t('services')}
+                {t('nav.services')}
               </Link>
               <Link
                 href={`/${locale}/marketplace`}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
-                {t('marketplace')}
+                {t('nav.marketplace')}
               </Link>
               <Link
                 href={`/${locale}/about`}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
-                {t('about')}
+                {t('nav.about')}
               </Link>
             </div>
           </nav>
@@ -143,7 +135,7 @@ export function Navbar() {
               </button>
             </div>
 
-            {/* Mobile Navigation Toggle */}
+          {/* Mobile Navigation Toggle */}
             <div className="flex lg:hidden items-center space-x-4">
               {/* Mobile Language Toggle */}
               <div className="flex items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-1 py-1 border border-gray-200/50 shadow-sm">
@@ -169,48 +161,58 @@ export function Navbar() {
                 </button>
               </div>
 
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsOpen(!isOpen)}
-                aria-label="Toggle Menu"
-                className="hover:bg-transparent text-gray-700 hover:text-blue-600"
-              >
-                {isOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Menu */}
-        <div
-          className={cn(
-            "lg:hidden fixed inset-x-0 bg-white/95 backdrop-blur-sm border-b transition-all duration-300 ease-in-out z-40",
-            isOpen
-              ? "top-20 opacity-100 visible"
-              : "-top-full opacity-0 invisible"
-          )}
-        >
-          <div className="max-w-7xl mx-auto px-6 py-6">
-            <nav className="flex flex-col space-y-6">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2"
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle Menu"
+              className="hover:bg-transparent text-gray-700 hover:text-blue-600"
+            >
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
           </div>
         </div>
       </div>
+      {/* Mobile Navigation Menu */}
+      <div
+        className={cn(
+          "lg:hidden fixed inset-x-0 bg-white/95 backdrop-blur-sm border-b transition-all duration-300 ease-in-out z-40",
+          isOpen
+            ? "top-20 opacity-100 visible"
+            : "-top-full opacity-0 invisible"
+        )}
+      >
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <nav className="flex flex-col space-y-6">
+            <Link
+              href={`/${locale}/diensten`}
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2"
+            >
+              {t('nav.services')}
+            </Link>
+            <Link
+              href={`/${locale}/blog`}
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2"
+            >
+              Blog
+            </Link>
+            <Link
+              href={`/${locale}/about`}
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2"
+            >
+              {t('nav.about')}
+            </Link>
+          </nav>
+        </div>
+      </div>
+    </div>
     </header>
   );
 }
