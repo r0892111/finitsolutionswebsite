@@ -144,9 +144,9 @@ export default async function RootLayout({
         {/* Google Analytics (keeping existing for compatibility) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-0ZT5ZRKWLV"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
