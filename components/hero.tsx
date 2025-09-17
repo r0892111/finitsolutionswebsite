@@ -67,11 +67,11 @@ export function Hero() {
             className="space-y-4"
           >
             <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{ color: 'rgb(28, 44, 85)' }}>
-              {t('hero.title.line1')}
+              AI Workforces
               <br className="md:block hidden" />
-              <span className="font-semibold">{t('hero.title.line2')} </span>
+              <span className="font-semibold">that automate </span>
               <br className="md:block hidden" />
-              <span className="font-semibold">{t('hero.title.line3')}</span>
+              <span className="font-semibold">and scale your business.</span>
             </h1>
             <p className="text-xl font-semibold lg:text-2xl leading-relaxed max-w-2xl" style={{ color: 'rgb(28, 44, 85)' }}>
               {t('hero.subtitle').split('\n').map((line, index) => (
