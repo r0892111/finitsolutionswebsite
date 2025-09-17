@@ -10,7 +10,7 @@ import {
 import { Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
-import { useLanguage } from "@/contexts/language-context";
+import { useTranslations } from 'next-intl';
 
 /**
  * MagicVisual is engineered to the bitmap used in the codebase:
@@ -37,7 +37,7 @@ function MagicVisual() {
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
-  const { t } = useLanguage();
+  const t = useTranslations();
 
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
