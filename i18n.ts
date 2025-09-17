@@ -6,6 +6,8 @@ const locales = ['en', 'nl'];
  
 export default getRequestConfig(async ({locale}) => {
   return {
-    messages: (await import(`./messages/${locale}.json`)).default
+    messages: (await import(`./locales/${locale}/common.json`)).default
   };
 });
+
+export { locales };
