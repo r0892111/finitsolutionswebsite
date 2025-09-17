@@ -1,21 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useLocale, useTranslations } from 'next-intl';
-import { useRouter, usePathname } from 'next/navigation';
-
+import { useLanguage } from "@/contexts/language-context";
+import { Globe } from "lucide-react";
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const locale = useLocale();
-  const t = useTranslations();
-  const router = useRouter();
-
+  const { language, setLanguage, t } = useLanguage();
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -23,31 +20,28 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const switchLanguage = (newLocale: string) => {
-    const currentPath = pathname.replace(/^\/(en|nl)/, '');
-    router.push(`/${newLocale}${currentPath}`);
-  };
-
   // Hide navbar completely on voice-to-crm page
   if (pathname === "/voice-to-crm") {
     return null;
   }
-
+  const navItems = [
+    { name: "Diensten", href: "/diensten" },
+    { name: "Blog", href: "/blog" },
+    { name: "Over Ons", href: "/about" },
+  ];
   const handleContactClick = () => {
     // If we're already on the homepage, just scroll to contact
-    if (pathname === `/${locale}` || pathname === "/") {
+    if (pathname === "/") {
       const contactSection = document.getElementById("contact");
       if (contactSection) {
         contactSection.scrollIntoView({ behavior: "smooth" });
       }
     } else {
       // If we're on another page, navigate to homepage with hash
-      window.location.href = `/${locale}#contact`;
+      window.location.href = "/#contact";
     }
     setIsOpen(false); // Close mobile menu if open
   };
-
   return (
     <header
       className={cn(
@@ -61,7 +55,7 @@ export function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link
-              href={`/${locale}`}
+              href="/"
               className="flex items-center justify-center h-full py-2"
               onClick={() => setIsOpen(false)}
             >
@@ -83,25 +77,25 @@ export function Navbar() {
             {/* Navigation Pills Container */}
             <div className="lg:flex hidden items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-2 py-1 border border-gray-200/50 shadow-sm">
               <Link
-                href={`/${locale}`}
+                href="/"
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
                 Home
               </Link>
               <Link
-                href={`/${locale}/diensten`}
+                href="/diensten"
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
                 {t('nav.services')}
               </Link>
               <Link
-                href={`/${locale}/marketplace`}
+                href="/marketplace"
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
                 {t('nav.marketplace')}
               </Link>
               <Link
-                href={`/${locale}/about`}
+                href="/about"
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
                 {t('nav.about')}
@@ -114,9 +108,9 @@ export function Navbar() {
             {/* Language Toggle */}
             <div className="hidden lg:flex items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-1 py-1 border border-gray-200/50 shadow-sm">
               <button
-                onClick={() => switchLanguage('en')}
+                onClick={() => setLanguage('en')}
                 className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-all duration-200 ${
-                  locale === 'en' 
+                  language === 'en' 
                     ? 'bg-white text-blue-600 shadow-sm' 
                     : 'text-gray-600 hover:text-blue-600'
                 }`}
@@ -124,9 +118,9 @@ export function Navbar() {
                 EN
               </button>
               <button
-                onClick={() => switchLanguage('nl')}
+                onClick={() => setLanguage('nl')}
                 className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-all duration-200 ${
-                  locale === 'nl' 
+                  language === 'nl' 
                     ? 'bg-white text-blue-600 shadow-sm' 
                     : 'text-gray-600 hover:text-blue-600'
                 }`}
@@ -140,9 +134,9 @@ export function Navbar() {
               {/* Mobile Language Toggle */}
               <div className="flex items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-1 py-1 border border-gray-200/50 shadow-sm">
                 <button
-                  onClick={() => switchLanguage('en')}
+                  onClick={() => setLanguage('en')}
                   className={`px-2 py-1 text-[10px] font-semibold rounded-full transition-all duration-200 ${
-                    locale === 'en' 
+                    language === 'en' 
                       ? 'bg-white text-blue-600 shadow-sm' 
                       : 'text-gray-600 hover:text-blue-600'
                   }`}
@@ -150,9 +144,9 @@ export function Navbar() {
                   EN
                 </button>
                 <button
-                  onClick={() => switchLanguage('nl')}
+                  onClick={() => setLanguage('nl')}
                   className={`px-2 py-1 text-[10px] font-semibold rounded-full transition-all duration-200 ${
-                    locale === 'nl' 
+                    language === 'nl' 
                       ? 'bg-white text-blue-600 shadow-sm' 
                       : 'text-gray-600 hover:text-blue-600'
                   }`}
@@ -188,27 +182,16 @@ export function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 py-6">
           <nav className="flex flex-col space-y-6">
-            <Link
-              href={`/${locale}/diensten`}
-              onClick={() => setIsOpen(false)}
-              className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2"
-            >
-              {t('nav.services')}
-            </Link>
-            <Link
-              href={`/${locale}/blog`}
-              onClick={() => setIsOpen(false)}
-              className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2"
-            >
-              Blog
-            </Link>
-            <Link
-              href={`/${locale}/about`}
-              onClick={() => setIsOpen(false)}
-              className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2"
-            >
-              {t('nav.about')}
-            </Link>
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2"
+              >
+                {item.name}
+              </Link>
+            ))}
           </nav>
         </div>
       </div>

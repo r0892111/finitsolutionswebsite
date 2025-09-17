@@ -11,13 +11,13 @@ import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactFormSchema, type ContactForm } from "@/lib/schema";
-import { useTranslations } from 'next-intl';
+import { useLanguage } from "@/contexts/language-context";
 
 export function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const { toast } = useToast();
-  const t = useTranslations();
+  const { t } = useLanguage();
 
   const form = useForm<ContactForm>({
     resolver: zodResolver(contactFormSchema),
@@ -112,7 +112,7 @@ export function Contact() {
                   <Label htmlFor="name">{t('contact.form.name')}</Label>
                   <Input
                     id="name"
-                    placeholder={t('contact.form.placeholders.name')}
+                    placeholder={t('contact.form.name.placeholder')}
                     {...register("name")}
                   />
                   {errors.name && (
@@ -124,7 +124,7 @@ export function Contact() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder={t('contact.form.placeholders.email')}
+                    placeholder={t('contact.form.email.placeholder')}
                     {...register("email")}
                   />
                   {errors.email && (
@@ -137,7 +137,7 @@ export function Contact() {
                 <Label htmlFor="subject">{t('contact.form.subject')}</Label>
                 <Input
                   id="subject"
-                  placeholder={t('contact.form.placeholders.subject')}
+                  placeholder={t('contact.form.subject.placeholder')}
                   {...register("subject")}
                 />
                 {errors.subject && (
@@ -149,7 +149,7 @@ export function Contact() {
                 <Label htmlFor="message">{t('contact.form.message')}</Label>
                 <Textarea
                   id="message"
-                  placeholder={t('contact.form.placeholders.message')}
+                  placeholder={t('contact.form.message.placeholder')}
                   className="min-h-[150px]"
                   {...register("message")}
                 />
