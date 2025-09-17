@@ -324,7 +324,6 @@ export default function DienstenPage() {
         return null;
     }
   };
-  };
 
   return (
     <main className="bg-finit-aurora min-h-screen">
