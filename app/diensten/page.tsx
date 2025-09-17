@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -20,8 +20,6 @@ import {
   Target,
   Clock,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 
@@ -68,8 +66,7 @@ const processSteps = [
     ],
     useCase:
       "Complexe juridische terminologie vereiste natuurlijke taalverwerking mogelijkheden",
-    solution:
-      "RAG architectuur met vector embeddings voor semantisch zoeken",
+    solution: "RAG architectuur met vector embeddings voor semantisch zoeken",
     outcome: "340% verbetering in zoek relevantie nauwkeurigheid",
     visual: "design",
     metrics: {
@@ -162,9 +159,22 @@ const processSteps = [
 export default function DienstenPage() {
   const [activeStep, setActiveStep] = useState<number | null>(null);
 
+  // ref for the expanded panel
+  const expandedRef = useRef<HTMLDivElement | null>(null);
+
   const toggleStep = (stepId: number) => {
-    setActiveStep(activeStep === stepId ? null : stepId);
+    setActiveStep((prev) => (prev === stepId ? null : stepId));
   };
+
+  // auto-scroll expanded content into view
+  useEffect(() => {
+    if (activeStep && expandedRef.current) {
+      expandedRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [activeStep]);
 
   const renderStepVisual = (stepId: number) => {
     switch (stepId) {
@@ -404,7 +414,13 @@ export default function DienstenPage() {
   return (
     <main className="bg-finit-aurora min-h-screen">
       {/* Enhanced Hero Section */}
-      <section className="relative py-24 md:py-32 overflow-hidden">
+      <section
+        className={`relative overflow-hidden ${
+          activeStep
+            ? "pt-10 md:pt-14 pb-16 md:pb-20"
+            : "py-24 md:py-32"
+        }`}
+      >
         {/* Sophisticated floating elements */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-primary/8 to-blue-500/8 rounded-full blur-3xl animate-float-slow"></div>
@@ -455,67 +471,72 @@ export default function DienstenPage() {
             transition={{ duration: 1, delay: 0.6 }}
             className="max-w-7xl mx-auto mb-12"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-              {processSteps.map((step, index) => {
-                const IconComponent = step.icon;
-                const isActive = activeStep === step.id;
+            {/* Sticky container so the buttons stay visible */}
+            <div className="sticky top-24 md:top-28 z-20">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+                {processSteps.map((step, index) => {
+                  const IconComponent = step.icon;
+                  const isActive = activeStep === step.id;
 
-                return (
-                  <motion.button
-                    key={step.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                    onClick={() => toggleStep(step.id)}
-                    whileHover={{ y: -4, scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`bg-white/15 backdrop-blur-xl rounded-2xl border border-white/25 shadow-xl overflow-hidden p-6 text-center hover:bg-white/20 transition-all duration-300 group relative ${
-                      isActive ? "ring-2 ring-white/50 bg-white/25 shadow-2xl" : ""
-                    }`}
-                  >
-                    {/* Gradient overlay for active state */}
-                    {isActive && (
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-primary/10 rounded-2xl"></div>
-                    )}
-
-                    {/* Step Icon */}
-                    <div
-                      className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${step.accent} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 mb-4 mx-auto relative z-10`}
+                  return (
+                    <motion.button
+                      key={step.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
+                      onClick={() => toggleStep(step.id)}
+                      whileHover={{ y: -4, scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`bg-white/15 backdrop-blur-xl rounded-2xl border border-white/25 shadow-xl overflow-hidden p-6 text-center hover:bg-white/20 transition-all duration-300 group relative ${
+                        isActive
+                          ? "ring-2 ring-white/50 bg-white/25 shadow-2xl"
+                          : ""
+                      }`}
                     >
-                      <IconComponent className="h-8 w-8 text-white" />
-                    </div>
+                      {/* Gradient overlay for active state */}
+                      {isActive && (
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-primary/10 rounded-2xl"></div>
+                      )}
 
-                    {/* Step Number Badge */}
-                    <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                      <span className="text-white font-bold text-sm">
-                        {step.id}
-                      </span>
-                    </div>
-
-                    {/* Step Content */}
-                    <div className="relative z-10">
-                      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-white/90 transition-colors">
-                        {step.title}
-                      </h3>
-                      <p className="text-white/70 text-sm font-light mb-4">
-                        {step.subtitle}
-                      </p>
-
-                      {/* Expand indicator */}
-                      <motion.div
-                        animate={{ rotate: isActive ? 180 : 0 }}
-                        transition={{
-                          duration: 0.3,
-                          ease: [0.25, 0.46, 0.45, 0.94],
-                        }}
-                        className="text-white/60 group-hover:text-white/80 transition-colors"
+                      {/* Step Icon */}
+                      <div
+                        className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${step.accent} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 mb-4 mx-auto relative z-10`}
                       >
-                        <ChevronDown className="h-5 w-5 mx-auto" />
-                      </motion.div>
-                    </div>
-                  </motion.button>
-                );
-              })}
+                        <IconComponent className="h-8 w-8 text-white" />
+                      </div>
+
+                      {/* Step Number Badge */}
+                      <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                        <span className="text-white font-bold text-sm">
+                          {step.id}
+                        </span>
+                      </div>
+
+                      {/* Step Content */}
+                      <div className="relative z-10">
+                        <h3 className="text-lg font-bold text-white mb-2 group-hover:text-white/90 transition-colors">
+                          {step.title}
+                        </h3>
+                        <p className="text-white/70 text-sm font-light mb-4">
+                          {step.subtitle}
+                        </p>
+
+                        {/* Expand indicator */}
+                        <motion.div
+                          animate={{ rotate: isActive ? 180 : 0 }}
+                          transition={{
+                            duration: 0.3,
+                            ease: [0.25, 0.46, 0.45, 0.94],
+                          }}
+                          className="text-white/60 group-hover:text-white/80 transition-colors"
+                        >
+                          <ChevronDown className="h-5 w-5 mx-auto" />
+                        </motion.div>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Full-Width Expanded Content */}
@@ -523,6 +544,8 @@ export default function DienstenPage() {
               {activeStep && (
                 <motion.div
                   key={activeStep}
+                  ref={expandedRef}
+                  className="w-full scroll-mt-24 md:scroll-mt-32"
                   initial={{ opacity: 0, y: 20, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -530,7 +553,6 @@ export default function DienstenPage() {
                     duration: 0.5,
                     ease: [0.25, 0.46, 0.45, 0.94],
                   }}
-                  className="w-full"
                 >
                   <div className="bg-white/15 backdrop-blur-xl rounded-3xl border border-white/25 shadow-2xl p-8 md:p-12 relative overflow-hidden">
                     {/* Background pattern */}
