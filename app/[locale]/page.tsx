@@ -3,11 +3,20 @@ import { About } from "@/components/about";
 import { Contact } from "@/components/contact";
 import { CTA } from "@/components/cta";
 import { Metadata } from "next";
+import {getTranslations} from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
-  description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen. Ontdek hoe wij uw bedrijfsprocessen kunnen optimaliseren.',
-};
+export async function generateMetadata({
+  params: {locale}
+}: {
+  params: {locale: string};
+}): Promise<Metadata> {
+  const t = await getTranslations({locale, namespace: 'metadata'});
+  
+  return {
+    title: t('home.title'),
+    description: t('home.description'),
+  };
+}
 
 export default function Home() {
   return (

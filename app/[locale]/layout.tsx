@@ -1,4 +1,4 @@
-import './globals.css';
+import '../globals.css';
 import type { Metadata } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
 import { Navbar } from '@/components/navbar';
@@ -9,7 +9,9 @@ import Script from 'next/script';
 import { ConsentProvider } from '@/contexts/consent-context';
 import { CookieBanner } from '@/components/cookie-banner';
 import { CookieSettingsModal } from '@/components/cookie-settings-modal';
-import { LanguageProvider } from '@/contexts/language-context';
+import {NextIntlClientProvider} from 'next-intl';
+import {getMessages, getTranslations} from 'next-intl/server';
+import {notFound} from 'next/navigation';
 
 const inter = Inter({ subsets: ['latin'] });
 const montserrat = Montserrat({ 
@@ -26,58 +28,77 @@ const generalSans = Inter({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
-  description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen. Ontdek hoe wij uw bedrijfsprocessen kunnen optimaliseren.',
-  metadataBase: new URL('https://finitsolutions.be'),
-  icons: {
-    icon: '/Finit Logomark@4x.png',
-    shortcut: '/Finit Logomark@4x.png',
-    apple: '/Finit Logomark@4x.png'
-  },
-  openGraph: {
-    title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
-    description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen. Ontdek hoe wij uw bedrijfsprocessen kunnen optimaliseren.',
-    url: 'https://finitsolutions.be',
-    siteName: 'Finit Solutions',
-    images: [
-      {
-        url: '/Finit Logomark@4x.png',
-        width: 1200,
-        height: 1200,
-        alt: 'Finit Solutions Logo',
-      },
-    ],
-    locale: 'nl_BE',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
-    description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen.',
-    images: ['/Finit Logomark@4x.png'],
-    creator: '@finitsolutions',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+export async function generateMetadata({
+  params: {locale}
+}: {
+  params: {locale: string};
+}): Promise<Metadata> {
+  const t = await getTranslations({locale, namespace: 'metadata'});
+  
+  return {
+    title: t('home.title'),
+    description: t('home.description'),
+    metadataBase: new URL('https://finitsolutions.be'),
+    icons: {
+      icon: '/Finit Logomark@4x.png',
+      shortcut: '/Finit Logomark@4x.png',
+      apple: '/Finit Logomark@4x.png'
+    },
+    openGraph: {
+      title: t('home.title'),
+      description: t('home.description'),
+      url: 'https://finitsolutions.be',
+      siteName: 'Finit Solutions',
+      images: [
+        {
+          url: '/Finit Logomark@4x.png',
+          width: 1200,
+          height: 1200,
+          alt: 'Finit Solutions Logo',
+        },
+      ],
+      locale: locale === 'nl' ? 'nl_BE' : 'en_US',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('home.title'),
+      description: t('home.description'),
+      images: ['/Finit Logomark@4x.png'],
+      creator: '@finitsolutions',
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
-};
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params: {locale}
 }: {
   children: React.ReactNode;
+  params: {locale: string};
 }) {
+  // Validate locale
+  if (locale !== 'en' && locale !== 'nl') {
+    notFound();
+  }
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
+
   return (
-    <html lang="nl">
+    <html lang={locale}>
       <head>
         {/* Comprehensive favicon configuration */}
         <link rel="icon" type="image/png" sizes="32x32" href="/Finit Logomark@4x.png" />
@@ -148,7 +169,7 @@ export default function RootLayout({
           />
         </noscript>
         
-        <LanguageProvider>
+        <NextIntlClientProvider messages={messages}>
           <ConsentProvider>
             <GADebug />
             <Navbar />
@@ -158,7 +179,7 @@ export default function RootLayout({
             <CookieSettingsModal />
             <Toaster />
           </ConsentProvider>
-        </LanguageProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

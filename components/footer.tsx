@@ -5,11 +5,12 @@ import Image from "next/image";
 import { Mail, Phone, MapPin, Linkedin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
-import { useLanguage } from "@/contexts/language-context";
+import { useTranslations, useLocale } from 'next-intl';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const { t } = useLanguage();
+  const t = useTranslations();
+  const locale = useLocale();
   
   return (
     <footer className="bg-background border-t relative">
@@ -18,7 +19,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <Link
-              href="/"
+              href={`/${locale}`}
               className="flex items-center"
             >
               <div className="w-32 h-auto relative">
@@ -60,11 +61,11 @@ export function Footer() {
             <h3 className="font-semibold text-lg mb-4">{t('footer.menu')}</h3>
             <ul className="space-y-2">
               {[
-                { name: "Home", href: "/" },
-                { name: t('nav.services'), href: "/diensten" },
-                { name: t('nav.marketplace'), href: "/marketplace" },
-                { name: "Blog", href: "/blog" },
-                { name: t('nav.about'), href: "/about" }
+                { name: "Home", href: `/${locale}` },
+                { name: t('nav.services'), href: `/${locale}/diensten` },
+                { name: t('nav.marketplace'), href: `/${locale}/marketplace` },
+                { name: "Blog", href: `/${locale}/blog` },
+                { name: t('nav.about'), href: `/${locale}/about` }
               ].map((item) => (
                 <li key={item.name}>
                   <Link 
@@ -83,12 +84,12 @@ export function Footer() {
             <h3 className="font-semibold text-lg mb-4">{t('footer.services')}</h3>
             <ul className="space-y-2">
               {[
-                { name: "Sales & CRM", href: "/diensten" },
-                { name: "Marketing & Content", href: "/diensten" },
-                { name: "Customer Support", href: "/diensten" },
-                { name: "Business Intelligence", href: "/diensten" },
-                { name: "Human Resources", href: "/diensten" },
-                { name: "Operations & Logistiek", href: "/diensten" }
+                { name: "Sales & CRM", href: `/${locale}/diensten` },
+                { name: "Marketing & Content", href: `/${locale}/diensten` },
+                { name: "Customer Support", href: `/${locale}/diensten` },
+                { name: "Business Intelligence", href: `/${locale}/diensten` },
+                { name: "Human Resources", href: `/${locale}/diensten` },
+                { name: "Operations & Logistiek", href: `/${locale}/diensten` }
               ].map((item) => (
                 <li key={item.name}>
                   <Link 
@@ -137,19 +138,19 @@ export function Footer() {
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link 
-              href="/privacy" 
+              href={`/${locale}/privacy`} 
               className="text-xs text-muted-foreground hover:text-primary transition-colors"
             >
               {t('footer.privacy')}
             </Link>
             <Link 
-              href="/cookieverklaring" 
+              href={`/${locale}/cookieverklaring`} 
               className="text-xs text-muted-foreground hover:text-primary transition-colors"
             >
               {t('footer.cookies')}
             </Link>
             <Link 
-              href="/disclaimer" 
+              href={`/${locale}/disclaimer`} 
               className="text-xs text-muted-foreground hover:text-primary transition-colors"
             >
               {t('footer.disclaimer')}
