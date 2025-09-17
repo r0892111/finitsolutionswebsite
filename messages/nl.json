@@ -1,0 +1,186 @@
+{
+  "nav": {
+    "services": "Tailored IT Solutions",
+    "marketplace": "Marketplace",
+    "about": "Over Ons"
+  },
+  "hero": {
+    "badge": "Where the Future Begins",
+    "title": {
+      "line1": "AI Workforces",
+      "line2": "that automate", 
+      "line3": "and scale your business."
+    },
+    "subtitle": "Wij bouwen AI-gestuurde software bovenop de systemen die je al gebruikt.\nOns doel is inefficiënties elimineren en krachtige hefbomen\nvoor de groei van je bedrijf ontgrendelen.",
+    "cta": {
+      "primary": "Aan de slag",
+      "secondary": "Meer weten"
+    }
+  },
+  "about": {
+    "badge": "Diensten",
+    "title": "Zorg dat uw concurrent u niet voor is.",
+    "description": "Van AI Agents die automatisch rapporten genereren en uw planning optimaliseren tot spraaktechnologie die uw CRM up-to-date houdt - efficiëntie wordt vandaag de dag steeds belangrijker. Wij zorgen ervoor dat u de trein niet mist.",
+    "spotlight": {
+      "title": "IN DE KIJKER",
+      "product": "VoiceLink",
+      "description": "Uw verkopers sturen een WhatsApp spraakbericht met hun klantbezoek - klantnaam, offertebedrag, vervolgafspraken - en alles staat automatisch op de juiste plaats in uw CRM. Deze plug & play tool integreert met elk CRM naar keuze en is in slechts 3 minuten geïnstalleerd. Meer tijd voor klanten, minder tijd aan administratie.",
+      "cta": "Probeer VoiceLink"
+    },
+    "tagline": "Uw team verdient betere tools. Wij bouwen ze.",
+    "cta": "Leer ons kennen",
+    "integrations": {
+      "title": "We integreren met:",
+      "subtitle": "Naadloze koppelingen met de tools die u al gebruikt"
+    }
+  },
+  "contact": {
+    "badge": "Contact",
+    "title": "Laten we samen bouwen aan uw toekomst",
+    "form": {
+      "title": "Stuur ons een bericht",
+      "description": "Vertel ons over uw project en we nemen snel contact op voor een vrijblijvend gesprek.",
+      "name": "Naam",
+      "email": "E-mail",
+      "subject": "Onderwerp", 
+      "message": "Bericht",
+      "placeholders": {
+        "name": "Jan Janssen",
+        "email": "jan@bedrijf.nl",
+        "subject": "Waar kunnen we je mee helpen?",
+        "message": "Vertel ons over uw project, uitdagingen of vragen..."
+      },
+      "submit": "Verstuur Bericht",
+      "submitting": "Versturen..."
+    },
+    "direct": {
+      "title": "Of geef ons gerust een seintje",
+      "description": "Liever direct contact? Bel ons voor een snelle chat over uw project of stuur een WhatsApp bericht."
+    },
+    "phone": {
+      "title": "Bel ons direct",
+      "availability": "Ook bereikbaar buiten de kantooruren"
+    },
+    "whatsapp": {
+      "title": "WhatsApp",
+      "description": "Stuur een bericht naar:"
+    },
+    "email": {
+      "title": "E-mail",
+      "response": "We reageren binnen één werkdag"
+    }
+  },
+  "cta": {
+    "title": "Klaar om tijd te besparen?",
+    "description": "Plan een vrijblijvend gesprek en ontdek hoe we jouw bedrijf kunnen helpen.",
+    "button": "Neem contact op"
+  },
+  "footer": {
+    "tagline": "Slimme AI-oplossingen, op maat van jouw KMO.",
+    "menu": "Menu",
+    "services": "Diensten",
+    "contact": "Contact",
+    "copyright": "Alle rechten voorbehouden.",
+    "privacy": "Privacybeleid",
+    "cookies": "Cookieverklaring",
+    "disclaimer": "Disclaimer",
+    "cookieSettings": "Cookie-instellingen"
+  },
+  "diensten": {
+    "hero": {
+      "badge": "Maatwerk proces",
+      "title": "Van Idee tot Impact",
+      "description": "Ontdek hoe wij samen met u van uitdaging naar oplossing gaan — kort, duidelijk en resultaatgericht.",
+      "scroll": "Ontdek het proces"
+    },
+    "process": {
+      "title": "Ons Bewezen Proces",
+      "subtitle": "Een gestructureerde aanpak die zorgt voor resultaten"
+    },
+    "steps": {
+      "1": {
+        "title": "Ontdekking",
+        "subtitle": "Analyseren & Begrijpen",
+        "description": "We analyseren uw huidige situatie en identificeren kernuitdagingen.",
+        "usecase": "Een advocatenkantoor worstelt met het vinden van juridische informatie over meerdere systemen."
+      },
+      "2": {
+        "title": "Ontwerp",
+        "subtitle": "Plannen & Architectuur",
+        "description": "We ontwerpen een op maat gemaakte oplossing die perfect bij uw behoeften past.",
+        "usecase": "We stellen een AI-kennisbank voor doorzoekbare juridische documenten voor."
+      },
+      "3": {
+        "title": "Ontwikkelen",
+        "subtitle": "Bouwen & Integreren",
+        "description": "Ons team bouwt uw oplossing met moderne technologieën.",
+        "usecase": "We ontwikkelen een RAG-systeem met intuïtieve chat-interface."
+      },
+      "4": {
+        "title": "Testen",
+        "subtitle": "Valideren & Optimaliseren",
+        "description": "Uitgebreide tests zorgen voor perfecte functionaliteit voor lancering.",
+        "usecase": "We testen nauwkeurigheid en beveiliging met echte juridische cases."
+      },
+      "5": {
+        "title": "Lanceren",
+        "subtitle": "Implementeren & Ondersteunen",
+        "description": "We lanceren uw oplossing en bieden doorlopende ondersteuning.",
+        "usecase": "Systeem wordt gelanceerd met training en prestatiemonitoring."
+      }
+    },
+    "benefits": {
+      "title": "Waarom ons proces werkt",
+      "subtitle": "Bewezen resultaten door gestructureerde aanpak en meetbare impact",
+      "items": {
+        "collaboration": {
+          "title": "Echte samenwerking",
+          "description": "We werken met u samen, uw expertise gecombineerd met onze technische kennis."
+        },
+        "speed": {
+          "title": "Snelle resultaten",
+          "description": "Agile aanpak levert snel concrete vooruitgang met tijdige aanpassingen."
+        },
+        "impact": {
+          "title": "Meetbare impact",
+          "description": "Elke oplossing bevat duidelijke KPI's en meetbare ROI-verbeteringen."
+        }
+      }
+    },
+    "caseStudy": {
+      "title": "Succesverhaal",
+      "subtitle": "Juridisch Kennisbeheersysteem",
+      "challenge": "Advocatenkantoor met 120+ advocaten worstelt met documentopvraging over 15+ systemen, 4 uur dagelijks per advocaat.",
+      "solution": "AI-gedreven uniforme kennisbank met natuurlijke taalzoekopdrachten en intelligente documentindexering.",
+      "results": {
+        "efficiency": "85% reductie in zoektijd",
+        "adoption": "95% gebruikersadoptie in 3 weken",
+        "accuracy": "99,8% zoeknauwkeurigheid",
+        "time": "45min → 3min gemiddelde querytijd"
+      }
+    },
+    "cta": {
+      "title": "Klaar voor Excellentie?",
+      "description": "Transformeer uw digitale visie in meetbare bedrijfsimpact.",
+      "button": "Begin Uw Transformatie"
+    }
+  },
+  "metadata": {
+    "home": {
+      "title": "Finit Solutions | Innovatieve Bedrijfsautomatisering",
+      "description": "Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen. Ontdek hoe wij uw bedrijfsprocessen kunnen optimaliseren."
+    },
+    "diensten": {
+      "title": "Maatwerk Proces | Finit Solutions - Van Idee tot Impact",
+      "description": "Ontdek ons bewezen maatwerk proces: van probleem identificatie tot continue verbetering. Een interactief verhaal van hoe wij samen met u van uitdaging naar oplossing gaan."
+    },
+    "marketplace": {
+      "title": "AI SaaS Marketplace | Finit Solutions - Plug & Play AI Oplossingen",
+      "description": "Ontdek onze collectie van plug & play AI-oplossingen. Van Voice-to-CRM tot Smart Dashboards - klaar om direct te gebruiken zonder complexe implementatie."
+    },
+    "about": {
+      "title": "Over Ons | Finit Solutions - Jonge Ondernemers met een Missie",
+      "description": "Maak kennis met het team achter Finit Solutions. Jonge ondernemers gepassioneerd door technologie en innovatie, die bedrijven helpen groeien met slimme automatisering."
+    }
+  }
+}

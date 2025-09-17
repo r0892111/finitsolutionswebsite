@@ -24,14 +24,14 @@ export function ProjectRequestDialog({
 
   const handleContactClick = () => {
     // If we're already on the homepage, just scroll to contact
-    if (pathname === `/${locale}`) {
+    if (pathname === `/${locale}` || pathname === '/') {
       const contactSection = document.getElementById('contact');
       if (contactSection) {
         contactSection.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
       // If we're on another page, navigate to homepage with hash
-      router.push(`/${locale}/#contact`);
+      router.push(`/${locale}#contact`);
     }
   };
 

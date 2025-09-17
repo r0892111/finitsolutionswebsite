@@ -10,8 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { nl, enUS } from "date-fns/locale";
-import { useTranslations, useLocale } from 'next-intl';
+import { nl } from "date-fns/locale";
 
 type SortOption = "newest" | "oldest";
 
@@ -19,8 +18,6 @@ export default function BlogPage() {
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const t = useTranslations('blog');
-  const locale = useLocale();
 
   useEffect(() => {
     setMounted(true);
@@ -39,16 +36,9 @@ export default function BlogPage() {
   });
 
   const sortOptions = [
-    { value: "newest" as SortOption, label: t('sort.newest') },
-    { value: "oldest" as SortOption, label: t('sort.oldest') }
+    { value: "newest" as SortOption, label: "Nieuwste eerst" },
+    { value: "oldest" as SortOption, label: "Oudste eerst" }
   ];
-
-  const getArticleCountText = (count: number) => {
-    if (count === 1) {
-      return t('articlesCount', { count });
-    }
-    return t('articlesCountPlural', { count });
-  };
 
   // Simple loading state without complex animations
   if (!mounted) {
@@ -97,7 +87,7 @@ export default function BlogPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold mb-6"
           >
-            {t('title')}
+            Onze Inzichten
           </motion.h1>
           
           <motion.p
@@ -106,14 +96,15 @@ export default function BlogPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-muted-foreground text-lg mb-12 max-w-2xl"
           >
-            {t('description')}
+            Ontdek de laatste ontwikkelingen in automatisering, AI en digitale transformatie. 
+            Praktische inzichten voor moderne ondernemers.
           </motion.p>
 
           {/* Sorting Controls */}
           <div className="flex items-center justify-between mb-12">
             <div className="flex items-center gap-4">
               <span className="text-sm text-muted-foreground">
-                {getArticleCountText(sortedPosts.length)}
+                {sortedPosts.length} artikel{sortedPosts.length !== 1 ? 'en' : ''}
               </span>
             </div>
             
@@ -162,7 +153,7 @@ export default function BlogPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 + (index * 0.1) }}
               >
-                <Link href={`/${locale}/blog/${post.slug}`}>
+                <Link href={`/blog/${post.slug}`}>
                   <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                     <div className="relative h-48 w-full">
                       <Image
@@ -204,9 +195,7 @@ export default function BlogPage() {
                           <span className="text-sm">{post.author.name}</span>
                         </div>
                         <time className="text-sm text-muted-foreground">
-                          {format(new Date(post.publishedAt), 'd MMMM yyyy', { 
-                            locale: locale === 'nl' ? nl : enUS 
-                          })}
+                          {format(new Date(post.publishedAt), 'd MMMM yyyy', { locale: nl })}
                         </time>
                       </div>
                     </CardContent>

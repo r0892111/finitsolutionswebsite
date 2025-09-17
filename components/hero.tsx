@@ -10,7 +10,7 @@ import {
 import { Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
-import { useTranslations, useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 /**
  * MagicVisual is engineered to the bitmap used in the codebase:
@@ -19,6 +19,7 @@ import { useTranslations, useLocale } from 'next-intl';
  * so they sit exactly on top of the existing network lines and hubs.
  */
 function MagicVisual() {
+
   return (
     <div className="relative w-[320px] md:w-[640px] aspect-[818/768] select-none">
       {/* Base artwork */}
@@ -28,14 +29,15 @@ function MagicVisual() {
         className="absolute inset-0 w-full h-full object-contain z-10 pointer-events-none"
         draggable={false}
       />
+
     </div>
   );
 }
 
+
 export function Hero() {
   const [mounted, setMounted] = useState(false);
-  const t = useTranslations('hero');
-  const locale = useLocale();
+  const t = useTranslations();
 
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
@@ -54,7 +56,7 @@ export function Hero() {
           >
             <div className="inline-flex items-center px-4 py-2 rounded-full text-[12px] font-semibold bg-white border border-blue-200" style={{ color: 'rgb(28, 44, 85)' }}>
               <Zap className="h-4 w-4 mr-2" />
-              <span>{t('badge')}</span>
+              <span>{t('hero.badge')}</span>
             </div>
           </motion.div>
 
@@ -65,17 +67,17 @@ export function Hero() {
             className="space-y-4"
           >
             <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{ color: 'rgb(28, 44, 85)' }}>
-              {t('title.line1')}
+              {t('hero.title.line1')}
               <br className="md:block hidden" />
-              <span className="font-semibold">{t('title.line2')} </span>
+              <span className="font-semibold">{t('hero.title.line2')} </span>
               <br className="md:block hidden" />
-              <span className="font-semibold">{t('title.line3')}</span>
+              <span className="font-semibold">{t('hero.title.line3')}</span>
             </h1>
             <p className="text-xl font-semibold lg:text-2xl leading-relaxed max-w-2xl" style={{ color: 'rgb(28, 44, 85)' }}>
-              {t('subtitle').split('\n').map((line, index) => (
+              {t('hero.subtitle').split('\n').map((line, index) => (
                 <span key={index}>
                   {line}
-                  {index < t('subtitle').split('\n').length - 1 && <br className="md:block hidden" />}
+                  {index < t('hero.subtitle').split('\n').length - 1 && <br className="md:block hidden" />}
                 </span>
               ))}
             </p>
@@ -89,7 +91,7 @@ export function Hero() {
             className="flex flex-col sm:flex-row gap-4 pt-4"
           >
             <ProjectRequestDialog
-              buttonText={t('cta.primary')}
+              buttonText={t('hero.cta.primary')}
               buttonClassName="bg-gray-400 hover:bg-gray-500 text-white px-8 py-4 text-lg rounded-full font-medium"
             />
             <Button
@@ -101,7 +103,7 @@ export function Hero() {
                 if (aboutSection) aboutSection.scrollIntoView({ behavior: "smooth" });
               }}
             >
-              {t('cta.secondary')}
+              {t('hero.cta.secondary')}
             </Button>
           </motion.div>
         </div>

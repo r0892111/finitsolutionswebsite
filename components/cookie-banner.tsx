@@ -4,12 +4,9 @@ import { useConsent } from '@/contexts/consent-context';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import Link from 'next/link';
-import { useTranslations, useLocale } from 'next-intl';
 
 export function CookieBanner() {
   const { showBanner, acceptAll, rejectAll, openSettings, closeBanner } = useConsent();
-  const t = useTranslations('cookies.banner');
-  const locale = useLocale();
 
   if (!showBanner) return null;
 
@@ -20,16 +17,16 @@ export function CookieBanner() {
           {/* Content */}
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {t('title')}
+              Cookies op deze website
             </h3>
             <p className="text-sm text-gray-600 leading-relaxed">
-              {t('description')}
+              We gebruiken cookies om onze site goed te laten werken (essentieel) en – mits jouw toestemming – voor statistieken en marketing. Je kan je keuzes later altijd wijzigen.
             </p>
             <Link 
-              href={`/${locale}/cookieverklaring`}
+              href="/cookieverklaring" 
               className="text-sm text-primary hover:underline mt-2 inline-block"
             >
-              {t('policyLink')}
+              Lees onze cookieverklaring
             </Link>
           </div>
 
@@ -40,20 +37,20 @@ export function CookieBanner() {
               onClick={rejectAll}
               className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 border border-gray-300"
             >
-              {t('rejectAll')}
+              Alles weigeren
             </Button>
             <Button
               variant="outline"
               onClick={openSettings}
               className="border-primary text-primary hover:bg-primary/5"
             >
-              {t('settings')}
+              Instellingen
             </Button>
             <Button
               onClick={acceptAll}
               className="bg-primary hover:bg-primary/90 text-white"
             >
-              {t('acceptAll')}
+              Alles accepteren
             </Button>
           </div>
         </div>

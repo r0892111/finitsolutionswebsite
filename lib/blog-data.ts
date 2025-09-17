@@ -668,35 +668,4 @@ export const blogPosts: BlogPost[] = [
   </section>
 </article>
     `,
-    publishedAt: "2025-01-15",
-    featuredImage: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg",
-    author: {
-      name: "Karel Van Ransbeeck",
-      image: "/karel.png"
-    },
-    tags: ["AI", "Automatisering", "Technologie", "KMO"]
-  }
-];
-
-export const blogCategories: BlogCategory[] = [
-  {
-    name: 'AI & Automatisering',
-    slug: 'ai-automatisering',
-    description: 'Praktische AI, agents en automatisering voor KMO’s.'
-  },
-  {
-    name: 'Technologie',
-    slug: 'technologie',
-    description: 'Stack-keuzes, architectuur en development best practices.'
-  },
-  {
-    name: 'KMO',
-    slug: 'kmo',
-    description: 'Digitale strategie, efficiëntie en groei voor kmo-bedrijven.'
-  },
-  {
-    name: 'Innovatie',
-    slug: 'innovatie',
-    description: 'Nieuwe ideeën, pilots en lessons learned uit het veld.'
-  }
-];
+    publish
