@@ -11,6 +11,7 @@ import { Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { useLanguage } from "@/contexts/language-context";
+import Image from "next/image";
 
 /**
  * MagicVisual is engineered to the bitmap used in the codebase:
@@ -23,11 +24,15 @@ function MagicVisual() {
   return (
     <div className="relative w-[320px] md:w-[640px] aspect-[818/768] select-none">
       {/* Base artwork */}
-      <img
+      <Image
         src="/about-image.png"
         alt="Connected data infrastructure"
+        width={818}
+        height={768}
         className="absolute inset-0 w-full h-full object-contain z-10 pointer-events-none"
         draggable={false}
+        priority
+        unoptimized
       />
 
     </div>
