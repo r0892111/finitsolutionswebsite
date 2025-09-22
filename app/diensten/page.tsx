@@ -158,6 +158,7 @@ const processSteps = [
 
 export default function DienstenPage() {
   const [activeStep, setActiveStep] = useState<number | null>(null);
+  const [showOverlay, setShowOverlay] = useState(true); // Full-page popup overlay
 
   // ref for the expanded panel
   const expandedRef = useRef<HTMLDivElement | null>(null);
@@ -377,7 +378,7 @@ export default function DienstenPage() {
       case 5:
         return (
           <div className="space-y-4">
-            <div className="h-32 flex items-end gap-3 p-4 bg-gradient-to-t from-slate-100 to-white border border-slate-200 rounded-lg">
+            <div className="h-32 flex items-end gap-3 p-4 bg-gradient-to-t from-slate-100 to-white border border-slate-2 00 rounded-lg">
               {[30, 45, 60, 80, 95].map((height, i) => (
                 <motion.div
                   key={i}
@@ -413,12 +414,82 @@ export default function DienstenPage() {
 
   return (
     <main className="bg-finit-aurora min-h-screen">
+      {/* === Full-page Overlay Popup === */}
+      <AnimatePresence>
+        {showOverlay && (
+          <motion.div
+            key="site-overlay"
+            className="fixed inset-0 z-[100] flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            aria-modal="true"
+            role="dialog"
+          >
+            {/* Backdrop */}
+            <motion.div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+            {/* Modal content */}
+            <motion.div
+              className="relative mx-4 max-w-lg w-full rounded-3xl border border-white/20 bg-white/10 backdrop-blur-xl shadow-2xl text-white"
+              initial={{ scale: 0.95, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.98, y: 10, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 200, damping: 22 }}
+            >
+              {/* Close (optional — remove to make non-dismissible) */}
+              {/* <button
+                onClick={() => setShowOverlay(false)}
+                aria-label="Close maintenance notice"
+                className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 hover:bg-white/15 transition"
+              >
+                <X className="h-5 w-5" />
+              </button> */}
+
+              <div className="p-8 md:p-10 text-center">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15 border border-white/25 shadow">
+                  <motion.span
+                    aria-hidden="true"
+                    initial={{ rotate: 0 }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+                    className="inline-flex"
+                  >
+                    <Cog className="h-8 w-8" />
+                  </motion.span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-light tracking-wide">
+                  We are currently still working on our website
+                </h2>
+                <p className="mt-3 text-white/80">
+                  Some areas may be incomplete while we polish the experience.
+                </p>
+
+                {/* Optional action row */}
+                <div className="mt-7 flex justify-center">
+  <a
+    href="/"
+    className="px-6 py-3 rounded-xl bg-white text-slate-900 font-medium shadow hover:shadow-lg transition border border-white/50"
+  >
+    Go Back
+  </a>
+</div>
+
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* === End Full-page Overlay Popup === */}
+
       {/* Enhanced Hero Section */}
       <section
         className={`relative overflow-hidden ${
-          activeStep
-            ? "pt-10 md:pt-14 pb-16 md:pb-20"
-            : "py-24 md:py-32"
+          activeStep ? "pt-10 md:pt-14 pb-16 md:pb-20" : "py-24 md:py-32"
         }`}
       >
         {/* Sophisticated floating elements */}
