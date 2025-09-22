@@ -668,5 +668,12 @@ export const blogPosts: BlogPost[] = [
   </section>
 </article>
     `,
+    publishedAt: "2025-06-10",
+    featuredImage: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg",
+    author: {
+      name: "Karel Van Ransbeeck",
+      image: "/karel.png"
+    },
+    tags: ["AI", "Automatisering", "Technologie", "KMO"]
   }
 ]
