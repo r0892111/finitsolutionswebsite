@@ -76,8 +76,6 @@ export default function AboutPage() {
             >
               {t('about.page.title.line1')}{" "}
               <span className="finit-highlight">{t('about.page.title.highlight')}</span>
-              <br />
-              {t('about.page.title.line2')}
             </motion.h1>
             
             <motion.p
