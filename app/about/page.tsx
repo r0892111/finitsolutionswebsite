@@ -307,72 +307,60 @@ export default function AboutPage() {
 
       {/* Team Member Detail Modal */}
       <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-2xl border border-white/20 shadow-4xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl border border-white/30">
           {selectedMember && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <DialogHeader className="text-center pb-8 relative">
-                {/* Aurora background elements */}
-                <div className="absolute -top-4 -left-4 w-32 h-32 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-full blur-2xl animate-pulse" />
-                <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 rounded-full blur-xl animate-pulse" />
-                
-                <div className="relative w-40 h-40 mx-auto mb-8">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-blue-600 to-primary rounded-full p-1.5 shadow-2xl animate-brand-glow">
-                    <div className="w-full h-full rounded-full overflow-hidden bg-white shadow-inner">
+              <DialogHeader className="text-center pb-6">
+                <div className="relative w-32 h-32 mx-auto mb-6">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-blue-600 rounded-full p-1 shadow-xl">
+                    <div className="w-full h-full rounded-full overflow-hidden bg-white">
                       <Image
                         src={selectedMember.image}
                         alt={selectedMember.name}
                         fill
                         className="object-cover rounded-full"
-                        sizes="160px"
+                        sizes="128px"
                       />
                     </div>
                   </div>
                 </div>
                 
-                <DialogTitle className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
+                <DialogTitle className="finit-h2 text-slate-900 mb-2">
                   {selectedMember.name}
                 </DialogTitle>
                 
-                <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg">
-                  <p className="text-gray-800 font-semibold">
+                <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-500/10 border border-primary/20">
+                  <p className="text-primary font-semibold text-sm">
                     {t(`about.team.roles.${selectedMember.role.toLowerCase().replace(/\s+/g, '_')}`)}
                   </p>
                 </div>
               </DialogHeader>
 
-              <div className="space-y-8 relative">
+              <div className="space-y-8">
                 {/* Quote */}
 
                 {/* Full Description */}
-                <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
-                  <h4 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                      <span className="text-primary text-sm">👤</span>
-                    </div>
+                <div>
+                  <h4 className="finit-h2 text-slate-900 mb-4">
                     {t('about.modal.about')} {selectedMember.name.split(' ')[0]}
                   </h4>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-slate-600 finit-body">
                     {t(`about.team.descriptions.${selectedMember.name.toLowerCase().replace(/\s+/g, '_')}`)}
                   </p>
                 </div>
 
                 {/* Expertise */}
-                <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
-                  <h4 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                      <span className="text-primary text-sm">🎯</span>
-                    </div>
-                    {t('about.modal.expertise')}
-                  </h4>
-                  <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <h4 className="finit-h2 text-slate-900 mb-4">{t('about.modal.expertise')}</h4>
+                  <div className="flex flex-wrap gap-3">
                     {selectedMember.expertise.map((skill, idx) => (
                       <span 
                         key={idx} 
-                        className="px-4 py-3 bg-white/60 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 backdrop-blur-sm text-center hover:bg-white/80 transition-colors duration-200"
+                        className="px-4 py-2 bg-gradient-to-r from-primary/10 to-blue-500/10 text-primary rounded-full text-sm font-medium border border-primary/20 backdrop-blur-sm"
                       >
                         {skill}
                       </span>
@@ -381,32 +369,27 @@ export default function AboutPage() {
                 </div>
 
                 {/* Achievements */}
-                <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
-                  <h4 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                      <Award className="h-4 w-4 text-white" />
-                    </div>
-                    {t('about.modal.achievements')}
-                  </h4>
-                  <div className="space-y-4">
+                <div>
+                  <h4 className="finit-h2 text-slate-900 mb-4">{t('about.modal.achievements')}</h4>
+                  <div className="space-y-3">
                     {selectedMember.achievements.map((achievement, idx) => (
-                      <div key={idx} className="flex items-center gap-4 p-3 rounded-xl bg-white/60 border border-gray-200">
-                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
-                          <span className="text-green-600 text-xs font-bold">✓</span>
+                      <div key={idx} className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center shadow">
+                          <Award className="h-4 w-4 text-white" />
                         </div>
-                        <span className="text-gray-800 font-medium">{achievement}</span>
+                        <span className="text-slate-700 font-medium finit-body">{achievement}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* LinkedIn Link */}
-                <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
+                <div className="pt-6 border-t border-slate-200">
                   <a 
                     href={selectedMember.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 text-gray-800 hover:text-primary transition-colors font-medium w-full justify-center py-2"
+                    className="inline-flex items-center gap-3 text-primary hover:text-primary/80 transition-colors font-medium finit-body"
                   >
                     <Linkedin className="h-5 w-5" />
                     {t('about.modal.linkedin')}
