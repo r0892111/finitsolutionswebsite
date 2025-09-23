@@ -43,7 +43,7 @@ export default function MarketplacePage() {
       description: "Automatische verwerking en analyse van documenten met AI-gedreven data-extractie",
       category: "Document Management",
       icon: Database,
-      estimatedLaunch: "Q2 2025"
+      estimatedLaunch: "Q1 2026"
     },
     {
       name: "MeetingMind",
@@ -51,7 +51,7 @@ export default function MarketplacePage() {
       description: "Automatische notities, actiepunten en follow-ups voor al uw vergaderingen",
       category: "Productivity",
       icon: MessageSquare,
-      estimatedLaunch: "Q3 2025"
+      estimatedLaunch: "Q3 2026"
     }
   ], []);
 
