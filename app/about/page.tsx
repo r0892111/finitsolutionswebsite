@@ -342,11 +342,6 @@ export default function AboutPage() {
 
               <div className="space-y-8">
                 {/* Quote */}
-                <div className="bg-gradient-to-r from-primary/5 to-blue-500/5 rounded-2xl p-6 border-l-4 border-primary backdrop-blur-sm">
-                  <p className="text-slate-700 italic finit-body">
-                    &ldquo;{selectedMember.quote}&rdquo;
-                  </p>
-                </div>
 
                 {/* Full Description */}
                 <div>
