@@ -314,12 +314,12 @@ export default function AboutPage() {
 
       {/* Team Member Detail Modal */}
       <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-finit-aurora backdrop-blur-xl border border-white/30">
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto bg-finit-aurora backdrop-blur-xl border border-white/30 fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-50">
           {selectedMember && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
             >
               <DialogHeader className="text-center pb-6">
                 <div className="relative w-32 h-32 mx-auto mb-6">
@@ -331,6 +331,7 @@ export default function AboutPage() {
                         fill
                         className="object-cover"
                         sizes="128px"
+                        priority
                       />
                     </div>
                   </div>
