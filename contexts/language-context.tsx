@@ -120,7 +120,7 @@ const translations = {
     'about.modal.expertise': 'Expertise',
     'about.modal.achievements': 'Prestaties',
     'about.modal.linkedin': 'Bekijk LinkedIn profiel',
-    'marketplace.book.meeting': 'Plan meeting'
+    'marketplace.book.meeting': 'Plan meeting',
     
     // Marketplace Page
     'marketplace.hero.badge': 'AI Marketplace',
