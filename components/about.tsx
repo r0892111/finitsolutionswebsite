@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,10 +9,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/language-context";
+import { useMemo } from "react";
 
 export function About() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const shouldReduceMotion = useReducedMotion();
   const { t } = useLanguage();
 
   // Video iframe component
@@ -31,7 +33,7 @@ export function About() {
   );
 
 
-  // Complete integration logos list - All 32 integrations
+  // Optimized integration logos list - Reduced to essential ones for performance
   const integrationLogos = [
     { name: "Salesforce", logo: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg", color: "#00A1E0" },
     { name: "SAP", logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg", color: "#0FAAFF" },
@@ -47,25 +49,21 @@ export function About() {
     { name: "HubSpot", logo: "https://upload.wikimedia.org/wikipedia/commons/3/3f/HubSpot_Logo.svg", color: "#FF7A59" },
     { name: "Calendly", logo: "calendly-logo-brandlogos.net_fftw0yxev.svg", color: "#006BFF" },
     { name: "Mailchimp", logo: "https://logos-world.net/wp-content/uploads/2021/02/Mailchimp-Logo.png", color: "#FFE01B" },
-    { name: "Jira", logo: "https://upload.wikimedia.org/wikipedia/commons/8/82/Jira_%28Software%29_logo.svg", color: "#0052CC" },
     { name: "Slack", logo: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg", color: "#4A154B" },
     { name: "Shopify", logo: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg", color: "#96BF48" },
-    { name: "Google Workspace", logo: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Workspace_Logo.svg", color: "#4285F4" },
-    { name: "Zendesk", logo: "https://upload.wikimedia.org/wikipedia/commons/c/c8/Zendesk_logo.svg", color: "#03363D" },
-    { name: "Twilio", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Twilio-logo-red.svg", color: "#F22F46" },
-    { name: "Meta", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg", color: "#1877F2" },
     { name: "WhatsApp", logo: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", color: "#25D366" },
-    { name: "Facebook", logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg", color: "#1877F2" },
-    { name: "Instagram", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg", color: "#E4405F" },
-    { name: "Discord", logo: "Discord-Symbol-Blurple.svg", color: "#5865F2" },
     { name: "Zoom", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg", color: "#2D8CFF" },
-    { name: "Freshdesk", logo: "https://www.vectorlogo.zone/logos/freshdesk/freshdesk-ar21~bgwhite.svg", color: "#2ECC71" },
-    { name: "DocuSign", logo: "docusign.svg", color: "#FFB81C" },
     { name: "Notion", logo: "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png", color: "#000000" },
-    { name: "Telegram", logo: "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg", color: "#0088CC" },
-    { name: "Billit", logo: "https://www.billit.eu/media/xszb4oma/billit-logo-regular-3-4.svg", color: "#00A651" },
-    { name: "Pinecone", logo: "https://www.pinecone.io/images/pinecone-logo.svg", color: "#6366F1" }
+    { name: "Microsoft Teams", logo: "https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg", color: "#6264A7" },
+    { name: "Asana", logo: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Asana_logo.svg", color: "#F06A6A" }
   ];
+
+  // Memoize animation variants to prevent recreation
+  const animationVariants = useMemo(() => ({
+    initial: shouldReduceMotion ? {} : { opacity: 0, x: -50 },
+    animate: shouldReduceMotion ? {} : { opacity: 1, x: 0 },
+    transition: shouldReduceMotion ? {} : { duration: 0.8, delay: 0.2 }
+  }), [shouldReduceMotion]);
 
   return (
     <section id="about" className="relative py-20 md:py-32 bg-background">
@@ -74,9 +72,7 @@ export function About() {
           {/* Slideshow Side - Now on the left */}
           <motion.div
             ref={ref}
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            {...animationVariants}
             className="w-full lg:w-1/2"
           >
             <div className="relative">
@@ -98,9 +94,9 @@ export function About() {
           {/* Content Side - Now on the right */}
           <div className="w-full lg:w-1/2 space-y-6">
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.5 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0 }}
+              animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1 } : {})}
+              transition={shouldReduceMotion ? {} : { duration: 0.5 }}
             >
               <Link href="/diensten">
                 <Button
@@ -114,18 +110,18 @@ export function About() {
             </motion.div>
             
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+              animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1, y: 0 } : {})}
+              transition={shouldReduceMotion ? {} : { duration: 0.5, delay: 0.1 }}
               className="text-3xl md:text-4xl font-bold"
             >
               {t('about.title')}
             </motion.h2>
             
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+              animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1, y: 0 } : {})}
+              transition={shouldReduceMotion ? {} : { duration: 0.5, delay: 0.2 }}
               className="text-muted-foreground text-lg"
             >
               {t('about.description')}
@@ -133,9 +129,9 @@ export function About() {
             </motion.p>
             
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+              animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1, y: 0 } : {})}
+              transition={shouldReduceMotion ? {} : { duration: 0.5, delay: 0.3 }}
               className="space-y-4"
             >
               {/* Simple "In de kijker" section */}
@@ -168,18 +164,18 @@ export function About() {
             </motion.div>
             
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+              animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1, y: 0 } : {})}
+              transition={shouldReduceMotion ? {} : { duration: 0.5, delay: 0.4 }}
               className="text-foreground text-lg font-semibold"
             >
               {t('about.tagline')}
             </motion.p>
             
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.5 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+              animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1, y: 0 } : {})}
+              transition={shouldReduceMotion ? {} : { duration: 0.5, delay: 0.5 }}
               className="pt-4 flex flex-col sm:flex-row gap-4"
             >
               <Link href="/about">
@@ -198,9 +194,9 @@ export function About() {
 
         {/* Logo Carousel Section */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          initial={shouldReduceMotion ? {} : { opacity: 0, y: 40 }}
+          animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1, y: 0 } : {})}
+          transition={shouldReduceMotion ? {} : { duration: 0.8, delay: 0.6 }}
           className="mt-20 md:mt-32"
         >
           {/* Title */}
@@ -218,11 +214,8 @@ export function About() {
             <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
             
             {/* Scrolling logos container with precise width calculation */}
-            {/* Each logo: 128px (w-32) + 24px margins (mx-3 = 12px left+right) = 152px per logo */}
-            {/* 32 logos × 152px = 4864px for one complete set */}
-            {/* Two sets for seamless loop = 9728px total width */}
-            <div className="flex animate-scroll-fast w-[9728px]">
-              {/* First complete set - All 32 logos */}
+            <div className="flex animate-scroll-fast" style={{ width: `${integrationLogos.length * 152 * 2}px` }}>
+              {/* First complete set */}
               {integrationLogos.map((integration, index) => (
                 <div
                   key={`set1-${index}`}
@@ -232,6 +225,7 @@ export function About() {
                     <Image
                       src={integration.logo}
                       alt={`${integration.name} logo`}
+                      loading="lazy"
                       fill
                       className="object-contain transition-all duration-300 p-4"
                       sizes="(max-width: 640px) 80px, 128px"
@@ -258,7 +252,7 @@ export function About() {
                 </div>
               ))}
               
-              {/* Second complete set for seamless infinite loop - All 32 logos again */}
+              {/* Second complete set for seamless infinite loop */}
               {integrationLogos.map((integration, index) => (
                 <div
                   key={`set2-${index}`}
@@ -268,6 +262,7 @@ export function About() {
                     <Image
                       src={integration.logo}
                       alt={`${integration.name} logo`}
+                      loading="lazy"
                       fill
                       className="object-contain transition-all duration-300 p-4"
                       sizes="(max-width: 640px) 80px, 128px"
@@ -319,12 +314,16 @@ export function About() {
             transform: translateX(0);
           }
           100% {
-            transform: translateX(-4864px);
+            transform: translateX(-${integrationLogos.length * 152}px);
           }
         }
         
         .animate-scroll-fast {
           animation: scroll-fast 36s linear infinite;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+          .animate-scroll-fast { animation: none; }
         }
         
         .animate-scroll-fast:hover {
@@ -334,9 +333,6 @@ export function About() {
         /* Responsive logo sizes */
         @media (max-width: 640px) {
           .animate-scroll-fast {
-            /* Adjust for smaller logos on mobile */
-            /* Mobile: w-20 h-16 + mx-3 = 80px + 24px = 104px per logo */
-            /* 32 logos × 104px = 3328px for one set */
             animation: scroll-fast-mobile 36s linear infinite;
           }
         }
@@ -346,7 +342,7 @@ export function About() {
             transform: translateX(0);
           }
           100% {
-            transform: translateX(-3328px);
+            transform: translateX(-${integrationLogos.length * 104}px);
           }
         }
       `}</style>
