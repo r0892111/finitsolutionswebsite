@@ -21,6 +21,8 @@ const MagicVisual = dynamic(() => import("./magic-visual"), {
 });
 
 /**
+ * Hero component
+ */
 export function Hero() {
   const [mounted, setMounted] = useState(false);
   const shouldReduceMotion = useReducedMotion();
