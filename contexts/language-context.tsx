@@ -119,7 +119,7 @@ const translations = {
     'about.modal.about': 'Over',
     'about.modal.expertise': 'Expertise',
     'about.modal.achievements': 'Prestaties',
-    'about.modal.linkedin': 'Bekijk LinkedIn profiel'
+    'about.modal.linkedin': 'Bekijk LinkedIn profiel',
     'marketplace.book.meeting': 'Plan meeting'
   },
   en: {
