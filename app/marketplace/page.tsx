@@ -60,6 +60,16 @@ export default function MarketplacePage() {
     }
   ], []);
 
+  // Memoize CRM integrations to prevent recreation
+  const crmIntegrations = useMemo(() => [
+    { name: "Salesforce", logo: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg", color: "#00A1E0" },
+    { name: "Odoo", logo: "https://upload.wikimedia.org/wikipedia/commons/5/50/Odoo_logo.svg", color: "#714B67" },
+    { name: "Pipedrive", logo: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Pipedrive_Logo.svg", color: "#FF6B35" },
+    { name: "Teamleader", logo: "/Logo_Teamleader_Default_CMYK.jpg", color: "#FF6900" },
+    { name: "HubSpot", logo: "https://upload.wikimedia.org/wikipedia/commons/3/3f/HubSpot_Logo.svg", color: "#FF7A59" },
+    { name: "Microsoft Dynamics", logo: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Microsoft_Dynamics_Logo.svg", color: "#00BCF2" }
+  ], []);
+
   const categories = useMemo(() => [
     { name: "Sales & CRM", count: 1, color: "bg-blue-100 text-blue-800" },
     { name: "Document Management", count: 1, color: "bg-green-100 text-green-800" },
@@ -273,8 +283,8 @@ export default function MarketplacePage() {
                   <CardContent className="p-6">
                     {/* Icon and Category */}
                     <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-                        <product.icon className="h-6 w-6 text-blue-600" />
+                      <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
+                        <product.icon className="h-6 w-6" style={{ color: '#1C2C55' }} />
                       </div>
                       <Badge variant="outline" className="text-xs">
                         {product.category}
@@ -296,8 +306,8 @@ export default function MarketplacePage() {
 
                     {/* Launch Timeline */}
                     <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                      <span className="text-sm font-medium text-gray-600">
-                        Verwacht: {product.estimatedLaunch}
+                      <span className="text-sm font-medium" style={{ color: '#1C2C55' }}>
+                        {product.estimatedLaunch}
                       </span>
                       <Button 
                         size="sm" 
