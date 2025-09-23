@@ -14,7 +14,7 @@ export function Footer() {
   return (
     <footer className="bg-background border-t relative">
       <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <Link
@@ -56,7 +56,7 @@ export function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="md:justify-self-center">
             <h3 className="font-semibold text-lg mb-4">{t('footer.menu')}</h3>
             <ul className="space-y-2">
               {[
@@ -78,32 +78,8 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Services */}
-          <div>
-            <h3 className="font-semibold text-lg mb-4">{t('footer.services')}</h3>
-            <ul className="space-y-2">
-              {[
-                { name: "Sales & CRM", href: "/diensten" },
-                { name: "Marketing & Content", href: "/diensten" },
-                { name: "Customer Support", href: "/diensten" },
-                { name: "Business Intelligence", href: "/diensten" },
-                { name: "Human Resources", href: "/diensten" },
-                { name: "Operations & Logistiek", href: "/diensten" }
-              ].map((item) => (
-                <li key={item.name}>
-                  <Link 
-                    href={item.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Contact */}
-          <div>
+          <div className="md:justify-self-end">
             <h3 className="font-semibold text-lg mb-4">{t('footer.contact')}</h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">

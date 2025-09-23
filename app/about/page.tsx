@@ -2,12 +2,13 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { ChevronRight, Linkedin, X, MapPin, Mail, Phone, Award, Users, Target, Heart } from "lucide-react";
+import { ChevronRight, Linkedin, X, MapPin, Mail, Phone, Award, Users, Target, Heart, Calendar } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useLanguage } from "@/contexts/language-context";
 
 const team = [
   {
@@ -42,56 +43,26 @@ const team = [
   },
 ];
 
-const companyValues = [
-  {
-    icon: Target,
-    title: "Resultaatgericht",
-    description: "We focussen op meetbare resultaten die echte waarde toevoegen aan uw bedrijf."
-  },
-  {
-    icon: Users,
-    title: "Samenwerking",
-    description: "We werken niet voor u, maar met u. Uw expertise gecombineerd met onze technologie."
-  },
-  {
-    icon: Award,
-    title: "Kwaliteit",
-    description: "Geen compromissen op kwaliteit. Elke oplossing wordt grondig getest en geoptimaliseerd."
-  },
-  {
-    icon: Heart,
-    title: "Passie",
-    description: "Gedreven door passie voor technologie en de wil om bedrijven te laten groeien."
-  }
-];
-
 export default function AboutPage() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const [selectedMember, setSelectedMember] = useState<typeof team[0] | null>(null);
+  const { t } = useLanguage();
 
   return (
-    <main className="pt-20 bg-gradient-to-br from-slate-50 via-white to-slate-50 min-h-screen">
-      {/* Hero Section with Enhanced Design */}
-      <section className="relative py-24 md:py-32 overflow-hidden">
-        {/* Sophisticated Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-primary/8 to-blue-500/8 rounded-full blur-3xl animate-float-slow"></div>
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-purple-500/6 to-primary/6 rounded-full blur-3xl animate-float-medium"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-amber-500/4 to-yellow-500/4 rounded-full blur-3xl animate-float-fast"></div>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
+    <main className="pt-20 bg-finit-aurora min-h-screen font-general-sans">
+      {/* Hero Section with Aurora Background */}
+      <section className="relative py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora overflow-hidden">
+        <div className="w-full">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="mb-8"
+              className="mb-6 mt-12"
             >
-              <div className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium bg-gradient-to-r from-primary/10 to-blue-500/10 text-primary mb-8 border border-primary/20 shadow-lg backdrop-blur-sm">
+              <div className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium bg-white/20 text-white mb-8 border border-white/30 shadow-lg backdrop-blur-sm">
                 <Users className="h-4 w-4 mr-2" />
-                <span>Over Ons</span> 
+                <span>{t('about.page.badge')}</span> 
                 <ChevronRight className="h-4 w-4 ml-2" />
               </div>
             </motion.div>
@@ -100,86 +71,28 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="text-5xl md:text-6xl lg:text-7xl font-extralight mb-8 bg-gradient-to-r from-slate-900 via-primary to-slate-900 bg-clip-text text-transparent tracking-tight leading-tight"
+              className="finit-h1 text-white mb-6"
             >
-              Jonge ondernemers
-              <span className="block font-light">met een missie</span>
+              {t('about.page.title.line1')}
+              <br />
+              <span className="finit-highlight mt-4 inline-block">{t('about.page.title.highlight')}</span>
             </motion.h1>
             
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="text-xl md:text-2xl text-slate-600 font-light leading-relaxed tracking-wide"
+              className="finit-body text-white/90 max-w-3xl mx-auto"
             >
-              We zijn meer dan een bedrijf – we zijn een team van gepassioneerde techneuten 
-              die geloven in de kracht van innovatie.
+              {t('about.page.subtitle')}
             </motion.p>
           </div>
         </div>
       </section>
 
-      {/* Company Values Section */}
-      <section className="py-20 md:py-28">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-extralight mb-6 text-slate-900 tracking-tight">
-              Onze Waarden
-            </h2>
-            <p className="text-xl text-slate-600 font-light max-w-3xl mx-auto leading-relaxed">
-              De principes die ons drijven en onze aanpak bepalen
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {companyValues.map((value, index) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="group"
-              >
-                <Card className="h-full bg-white/80 backdrop-blur-sm border-slate-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden">
-                  <CardContent className="p-8 text-center">
-                    <motion.div
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      transition={{ duration: 0.3 }}
-                      className="w-16 h-16 rounded-2xl bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl"
-                    >
-                      <value.icon className="h-8 w-8 text-white" />
-                    </motion.div>
-                    <h3 className="text-xl font-bold mb-4 text-slate-900 group-hover:text-primary transition-colors">
-                      {value.title}
-                    </h3>
-                    <p className="text-slate-600 leading-relaxed font-light">
-                      {value.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Story Section with Enhanced Typography */}
-      <section className="py-20 md:py-28 bg-gradient-to-r from-slate-900 via-primary to-slate-900 relative overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-float-slow"></div>
-          <div className="absolute bottom-20 right-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-float-medium"></div>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
+      {/* Story Section with Aurora Background */}
+      <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora relative overflow-hidden">
+        <div className="w-full">
           <div className="max-w-5xl mx-auto">
             <motion.div
               ref={ref}
@@ -188,8 +101,8 @@ export default function AboutPage() {
               transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="text-center mb-16"
             >
-              <h2 className="text-5xl md:text-6xl font-extralight mb-8 text-white tracking-tight">
-                Ons Verhaal
+              <h2 className="finit-h1 text-white">
+                {t('about.story.title')}
               </h2>
             </motion.div>
 
@@ -197,32 +110,32 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 1, delay: 0.3 }}
-              className="bg-white/10 backdrop-blur-xl rounded-3xl p-12 md:p-16 border border-white/20 shadow-2xl"
+              className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/25 shadow-2xl"
             >
-              <div className="space-y-8 text-lg md:text-xl leading-relaxed font-light text-white/90">
+              <div className="space-y-6 finit-body text-gray-800">
                 <p>
-                  Wat begon als een droom van twee beste vrienden, is vandaag uitgegroeid tot een gedreven team. Gedurende onze studies hebben we onszelf bijgespijkerd in de avonden, weekenden en elke vrije minuut daartussen. Nu zetten we die kennis om in échte resultaten.
+                  {t('about.story.paragraph1')}
                 </p>
 
                 <p>
-                  We zijn techneuten, probleemoplossers en ondernemers in hart en nieren. Wat ons bindt? Een gedeelde passie voor digitale innovatie en de ambitie om bedrijven te helpen efficiënter, slimmer en sneller te werken.
+                  {t('about.story.paragraph2')}
                 </p>
 
                 <p>
-                  Kwaliteit staat bij ons voorop. Geen loze beloftes of wazige praat – maar transparantie, heldere communicatie en volledige verantwoordelijkheid voor alles wat we opleveren. Of het nu gaat om een bestaand systeem dat gepersonaliseerd moet worden, of een volledig maatwerkoplossing vanaf nul: we denken mee, bouwen, testen en leveren pas op als het écht goed zit.
+                  {t('about.story.paragraph3')}
                 </p>
 
                 <p>
-                  De digitale wereld verandert razendsnel. Wij groeien mee – en helpen jou om dat ook te doen.
+                  {t('about.story.paragraph4')}
                 </p>
 
                 <motion.p
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ duration: 0.8, delay: 0.8 }}
-                  className="text-2xl md:text-3xl font-light text-center pt-8 text-white"
+                  className="finit-h2 text-center pt-6 text-gray-800"
                 >
-                  Groei je met ons mee?
+                  {t('about.story.cta')}
                 </motion.p>
               </div>
 
@@ -230,11 +143,11 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.8, delay: 1 }}
-                className="text-center mt-12"
+                className="text-center mt-8"
               >
                 <ProjectRequestDialog 
-                  buttonText="Neem contact op" 
-                  buttonClassName="bg-white text-primary hover:bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-10 py-4 rounded-full"
+                  buttonText={t('about.story.button')}
+                  buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
                 />
               </motion.div>
             </motion.div>
@@ -242,9 +155,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team Section with Interactive Cards */}
-      <section className="py-20 md:py-32">
-        <div className="container mx-auto px-4">
+      {/* Team Section with Aurora Background */}
+      <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
+        <div className="w-full">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -252,11 +165,11 @@ export default function AboutPage() {
             transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-extralight mb-8 text-slate-900 tracking-tight">
-              Ons Team
+            <h2 className="finit-h1 text-gray-800 mb-6">
+              {t('about.team.title')}
             </h2>
-            <p className="text-xl text-slate-600 font-light max-w-3xl mx-auto leading-relaxed">
-              Maak kennis met de experts die Finit Solutions maken tot wat het is
+            <p className="finit-body text-gray-700 max-w-3xl mx-auto">
+              {t('about.team.subtitle')}
             </p>
           </motion.div>
           
@@ -268,93 +181,56 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                whileHover={{ y: -12, scale: 1.02 }}
-                className="group cursor-pointer"
-                onClick={() => setSelectedMember(member)}
+                className="group"
               >
-                <Card className="h-full bg-white/90 backdrop-blur-sm border-slate-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden relative">
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-lg transition-shadow duration-200 overflow-hidden relative hover:-translate-y-1">
                   
-                  <CardContent className="p-8 relative z-10">
-                    {/* Profile Image - Highlighted */}
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.3 }}
-                      className="relative mb-6"
-                    >
-                      <div className="relative w-24 h-24 mx-auto">
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary to-blue-600 rounded-full p-1 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                          <div className="w-full h-full rounded-full overflow-hidden bg-white">
+                  <CardContent className="p-10 relative z-10">
+                    {/* Profile Image */}
+                    <div className="relative mb-6">
+                      <div className="relative w-32 h-32 mx-auto">
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-white/20 rounded-xl p-1 shadow-lg">
+                          <div className="w-full h-full rounded-lg overflow-hidden bg-white">
                             <Image
                               src={member.image}
                               alt={member.name}
                               fill
-                              className="object-cover"
-                              sizes="96px"
+                              className="object-cover rounded-lg"
+                              sizes="128px"
                             />
                           </div>
                         </div>
-                        {/* Pulsing ring effect */}
-                        <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
-                    </motion.div>
+                    </div>
 
-                    {/* Name and Role - Highlighted */}
+                    {/* Name and Role */}
                     <div className="text-center mb-6">
-                      <h3 className="text-2xl font-bold text-slate-900 group-hover:text-primary transition-colors duration-300 mb-2">
+                      <h3 className="finit-h2 text-gray-800 mb-2">
                         {member.name}
                       </h3>
-                      <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-500/10 border border-primary/20">
-                        <p className="text-primary font-semibold text-sm tracking-wide">
-                          {member.role}
+                      <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 border border-white/30 backdrop-blur-sm">
+                        <p className="text-gray-800 font-medium text-sm">
+                          {t(`about.team.roles.${member.role.toLowerCase().replace(/\s+/g, '_')}`)}
                         </p>
                       </div>
                     </div>
 
                     {/* Brief Description */}
-                    <p className="text-slate-600 text-sm leading-relaxed mb-6 line-clamp-3">
-                      {member.description}
+                    <p className="text-gray-700 text-sm leading-relaxed mb-6">
+                      {t(`about.team.descriptions.${member.name.toLowerCase().replace(/\s+/g, '_')}`)}
                     </p>
 
-                    {/* Expertise Tags */}
-                    <div className="flex flex-wrap gap-2 mb-6 justify-center">
-                      {member.expertise.slice(0, 2).map((skill, idx) => (
-                        <span 
-                          key={idx} 
-                          className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-medium"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                      {member.expertise.length > 2 && (
-                        <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
-                          +{member.expertise.length - 2} meer
-                        </span>
-                      )}
-                    </div>
-
                     {/* Action Area */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-center">
                       <a 
                         href={member.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary hover:text-primary/80 transition-colors p-2 rounded-lg hover:bg-primary/5"
+                        className="text-gray-800 hover:text-gray-700 transition-colors duration-150 p-2 rounded-lg hover:bg-white/10 backdrop-blur-sm"
                         aria-label={`${member.name}'s LinkedIn profile`}
-                        onClick={(e) => e.stopPropagation()}
                       >
                         <Linkedin className="h-5 w-5" />
                       </a>
-                      
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="text-primary hover:text-primary/80 hover:bg-primary/5 font-medium"
-                      >
-                        Meer info
-                        <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -364,13 +240,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Contact CTA Section */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-slate-100 to-white relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-10 right-10 w-72 h-72 bg-gradient-to-r from-primary/8 to-blue-500/8 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
+      {/* Contact CTA Section with Aurora Background */}
+      <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora relative overflow-hidden">
+        <div className="w-full">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -378,196 +250,32 @@ export default function AboutPage() {
             transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h2 className="text-4xl md:text-5xl font-extralight mb-8 text-slate-900 tracking-tight">
-              Klaar om samen te werken?
+            <h2 className="finit-h1 text-gray-800 mb-6">
+              {t('about.cta.title')}
             </h2>
-            <p className="text-xl text-slate-600 font-light mb-12 leading-relaxed">
-              Laten we kennismaken en ontdekken hoe we uw bedrijf kunnen helpen groeien
+            <p className="finit-body text-gray-700 mb-12">
+              {t('about.cta.description')}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <ProjectRequestDialog 
-                buttonText="Start een project" 
-                buttonClassName="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-10 py-4 rounded-full"
+                buttonText={t('about.cta.primary')}
+                buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
               />
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="border-slate-300 text-slate-700 hover:bg-slate-100 shadow-lg hover:shadow-xl transition-all duration-300 text-lg px-10 py-4 rounded-full"
-                onClick={() => window.location.href = 'mailto:contact@finitsolutions.be'}
+              <a 
+                href="https://calendly.com/alex-finitsolutions/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center h-11 px-8 py-4 border border-gray-300 text-gray-800 hover:bg-white/10 shadow-lg hover:shadow-xl transition-all duration-300 finit-body rounded-full backdrop-blur-sm font-medium"
               >
-                <Mail className="h-5 w-5 mr-2" />
-                Direct contact
-              </Button>
+                <Calendar className="h-5 w-5 mr-2" />
+                {t('about.cta.secondary')}
+              </a>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Team Member Detail Modal */}
-      <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          {selectedMember && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <DialogHeader className="text-center pb-6">
-                <div className="relative w-32 h-32 mx-auto mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-blue-600 rounded-full p-1 shadow-xl">
-                    <div className="w-full h-full rounded-full overflow-hidden bg-white">
-                      <Image
-                        src={selectedMember.image}
-                        alt={selectedMember.name}
-                        fill
-                        className="object-cover"
-                        sizes="128px"
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <DialogTitle className="text-3xl font-bold text-slate-900 mb-2">
-                  {selectedMember.name}
-                </DialogTitle>
-                
-                <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-500/10 border border-primary/20">
-                  <p className="text-primary font-semibold">
-                    {selectedMember.role}
-                  </p>
-                </div>
-              </DialogHeader>
-
-              <div className="space-y-8">
-                {/* Quote */}
-                <div className="bg-slate-50 rounded-2xl p-6 border-l-4 border-primary">
-                  <p className="text-slate-700 italic text-lg leading-relaxed">
-                    &ldquo;{selectedMember.quote}&rdquo;
-                  </p>
-                </div>
-
-                {/* Full Description */}
-                <div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-4">Over {selectedMember.name.split(' ')[0]}</h4>
-                  <p className="text-slate-600 leading-relaxed">
-                    {selectedMember.description}
-                  </p>
-                </div>
-
-                {/* Expertise */}
-                <div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-4">Expertise</h4>
-                  <div className="flex flex-wrap gap-3">
-                    {selectedMember.expertise.map((skill, idx) => (
-                      <span 
-                        key={idx} 
-                        className="px-4 py-2 bg-gradient-to-r from-primary/10 to-blue-500/10 text-primary rounded-full text-sm font-medium border border-primary/20"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Achievements */}
-                <div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-4">Prestaties</h4>
-                  <div className="space-y-3">
-                    {selectedMember.achievements.map((achievement, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center shadow">
-                          <Award className="h-4 w-4 text-white" />
-                        </div>
-                        <span className="text-slate-700 font-medium">{achievement}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* LinkedIn Link */}
-                <div className="pt-6 border-t border-slate-200">
-                  <a 
-                    href={selectedMember.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 text-primary hover:text-primary/80 transition-colors font-medium"
-                  >
-                    <Linkedin className="h-5 w-5" />
-                    Bekijk LinkedIn profiel
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      <style jsx>{`
-        @keyframes float-slow {
-          0%, 100% { 
-            transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
-          }
-          25% { 
-            transform: translate3d(20px, -15px, 0) rotate(1deg) scale(1.02);
-          }
-          50% { 
-            transform: translate3d(40px, 5px, 0) rotate(0deg) scale(1);
-          }
-          75% { 
-            transform: translate3d(20px, 20px, 0) rotate(-1deg) scale(0.98);
-          }
-        }
-
-        @keyframes float-medium {
-          0%, 100% { 
-            transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
-          }
-          33% { 
-            transform: translate3d(-25px, -10px, 0) rotate(-2deg) scale(1.03);
-          }
-          66% { 
-            transform: translate3d(25px, 15px, 0) rotate(2deg) scale(0.97);
-          }
-        }
-
-        @keyframes float-fast {
-          0%, 100% { 
-            transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
-          }
-          20% { 
-            transform: translate3d(15px, -20px, 0) rotate(3deg) scale(1.05);
-          }
-          40% { 
-            transform: translate3d(-10px, 10px, 0) rotate(-1deg) scale(0.95);
-          }
-          60% { 
-            transform: translate3d(20px, 5px, 0) rotate(2deg) scale(1.02);
-          }
-          80% { 
-            transform: translate3d(-15px, -5px, 0) rotate(-2deg) scale(0.98);
-          }
-        }
-
-        .animate-float-slow {
-          animation: float-slow 20s ease-in-out infinite;
-        }
-
-        .animate-float-medium {
-          animation: float-medium 15s ease-in-out infinite;
-        }
-
-        .animate-float-fast {
-          animation: float-fast 12s ease-in-out infinite;
-        }
-
-        .line-clamp-3 {
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      `}</style>
     </main>
   );
 }
