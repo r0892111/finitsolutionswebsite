@@ -296,10 +296,26 @@ export default function MarketplacePage() {
 
                     {/* Launch Timeline */}
                     <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                      <span className="text-sm text-gray-500">Verwacht:</span>
                       <span className="text-sm font-medium" style={{ color: '#1C2C55' }}>
                         {product.estimatedLaunch}
                       </span>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        className="text-xs"
+                        onClick={() => {
+                          if (window.location.pathname === '/') {
+                            const contactSection = document.getElementById('contact');
+                            if (contactSection) {
+                              contactSection.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          } else {
+                            window.location.href = '/#contact';
+                          }
+                        }}
+                      >
+                        Meer info
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -331,7 +347,7 @@ export default function MarketplacePage() {
               {
                 icon: Shield,
                 title: "Enterprise Security",
-                description: "Voldoet aan de hoogste beveiligingsstandaarden voor zakelijk gebruik"
+                description: "Alle tools voldoen aan de hoogste beveiligingsstandaarden"
               },
               {
                 icon: Users,
