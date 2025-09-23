@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { ChevronRight, Linkedin, X, MapPin, Mail, Phone, Award, Users, Target, Heart } from "lucide-react";
+import { ChevronRight, Linkedin, X, MapPin, Mail, Phone, Award, Users, Target, Heart, Calendar } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
@@ -262,15 +262,15 @@ export default function AboutPage() {
                 buttonText={t('about.cta.primary')}
                 buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
               />
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="border-gray-300 text-gray-800 hover:bg-white/10 shadow-lg hover:shadow-xl transition-all duration-300 finit-body px-8 py-4 rounded-full backdrop-blur-sm"
-                onClick={() => window.location.href = 'mailto:contact@finitsolutions.be'}
+              <a 
+                href="https://calendly.com/alex-finitsolutions/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center h-11 px-8 py-4 border border-gray-300 text-gray-800 hover:bg-white/10 shadow-lg hover:shadow-xl transition-all duration-300 finit-body rounded-full backdrop-blur-sm font-medium"
               >
-                <Mail className="h-5 w-5 mr-2" />
-                {t('about.cta.secondary')}
-              </Button>
+                <Calendar className="h-5 w-5 mr-2" />
+                Book an online meeting
+              </a>
             </div>
           </motion.div>
         </div>
