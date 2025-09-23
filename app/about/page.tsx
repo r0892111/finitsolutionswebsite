@@ -315,7 +315,7 @@ export default function AboutPage() {
 
       {/* Team Member Detail Modal */}
       <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-finit-aurora border border-white/30 backdrop-blur-xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-finit-aurora backdrop-blur-xl border border-white/20 shadow-2xl">
           {selectedMember && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -338,12 +338,12 @@ export default function AboutPage() {
                   </div>
                 </div>
                 
-                <DialogTitle className="finit-h2 text-slate-900 mb-2">
+                <DialogTitle className="finit-h2 text-white mb-2">
                   {selectedMember.name}
                 </DialogTitle>
                 
-                <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/30 border border-white/40 backdrop-blur-sm">
-                  <p className="text-slate-800 font-medium text-sm">
+                <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 border border-white/30 backdrop-blur-sm">
+                  <p className="text-white font-semibold text-sm">
                     {t(`about.team.roles.${selectedMember.role.toLowerCase().replace(/\s+/g, '_')}`)}
                   </p>
                 </div>
@@ -351,30 +351,30 @@ export default function AboutPage() {
 
               <div className="space-y-8">
                 {/* Quote */}
-                <div className="bg-white/20 rounded-2xl p-6 border-l-4 border-white/50 backdrop-blur-sm">
-                  <p className="text-slate-800 italic finit-body">
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                  <p className="text-white/90 italic finit-body">
                     &ldquo;{selectedMember.quote}&rdquo;
                   </p>
                 </div>
 
                 {/* Full Description */}
                 <div>
-                  <h4 className="finit-h2 text-slate-800 mb-4">
+                  <h4 className="finit-h2 text-white mb-4">
                     {t('about.modal.about')} {selectedMember.name.split(' ')[0]}
                   </h4>
-                  <p className="text-slate-700 finit-body">
+                  <p className="text-white/80 finit-body">
                     {t(`about.team.descriptions.${selectedMember.name.toLowerCase().replace(/\s+/g, '_')}`)}
                   </p>
                 </div>
 
                 {/* Expertise */}
                 <div>
-                  <h4 className="finit-h2 text-slate-800 mb-4">{t('about.modal.expertise')}</h4>
+                  <h4 className="finit-h2 text-white mb-4">{t('about.modal.expertise')}</h4>
                   <div className="flex flex-wrap gap-3">
                     {selectedMember.expertise.map((skill, idx) => (
                       <span 
                         key={idx} 
-                        className="px-4 py-2 bg-white/25 text-slate-800 rounded-full text-sm font-medium border border-white/30 backdrop-blur-sm"
+                        className="px-4 py-2 bg-white/15 text-white rounded-full text-sm font-medium border border-white/25 backdrop-blur-sm"
                       >
                         {skill}
                       </span>
@@ -384,28 +384,28 @@ export default function AboutPage() {
 
                 {/* Achievements */}
                 <div>
-                  <h4 className="finit-h2 text-slate-800 mb-4">{t('about.modal.achievements')}</h4>
+                  <h4 className="finit-h2 text-white mb-4">{t('about.modal.achievements')}</h4>
                   <div className="space-y-3">
                     {selectedMember.achievements.map((achievement, idx) => (
                       <div key={idx} className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white/25 flex items-center justify-center shadow border border-white/30">
-                          <Award className="h-4 w-4 text-slate-700" />
+                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shadow border border-white/30">
+                          <Award className="h-4 w-4 text-white" />
                         </div>
-                        <span className="text-slate-800 font-medium finit-body">{achievement}</span>
+                        <span className="text-white/90 font-medium finit-body">{achievement}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* LinkedIn Link */}
-                <div className="pt-6 border-t border-slate-200">
+                <div className="pt-6 border-t border-white/20">
                   <motion.a 
                     href={selectedMember.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="inline-flex items-center gap-3 text-slate-700 hover:text-slate-800 transition-colors font-medium finit-body"
+                    whileHover={{ scale: 1.01 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="inline-flex items-center gap-3 text-white hover:text-white/80 transition-colors font-medium finit-body"
                   >
                     <Linkedin className="h-5 w-5" />
                     {t('about.modal.linkedin')}
