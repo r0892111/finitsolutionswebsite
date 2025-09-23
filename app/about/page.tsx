@@ -199,15 +199,15 @@ export default function AboutPage() {
                     >
                       <div className="relative w-32 h-32 mx-auto">
                         <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-white/20 rounded-xl p-1 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/25 to-white/15 rounded-xl p-1 shadow-lg group-hover:shadow-lg transition-shadow duration-200">
+                          <div className="absolute inset-0 bg-gradient-to-r from-white/25 to-white/15 rounded-xl p-1 shadow-lg group-hover:shadow-lg transition-shadow duration-200">
                             <Image
                               src={member.image}
                               alt={member.name}
                               fill
                               className="object-cover rounded-lg"
                               sizes="128px"
+                              priority={index === 0}
                             />
-                            priority={index === 0}
                           </div>
                         </div>
                       </div>
@@ -394,20 +394,22 @@ export default function AboutPage() {
                         <span className="text-slate-800 font-medium finit-body">{achievement}</span>
                       </div>
                     ))}
-              <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative">
+                  </div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+
                 {/* LinkedIn Link */}
                 <div className="pt-6 border-t border-slate-200">
-                  <a 
+                  <motion.a 
                     href={selectedMember.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
                     className="inline-flex items-center gap-3 text-slate-700 hover:text-slate-800 transition-colors font-medium finit-body"
                   >
                     <Linkedin className="h-5 w-5" />
                     {t('about.modal.linkedin')}
-                  </a>
+                  </motion.a>
                 </div>
               </div>
             </motion.div>
