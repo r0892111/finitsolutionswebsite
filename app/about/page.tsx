@@ -205,7 +205,7 @@ export default function AboutPage() {
                               src={member.image}
                               alt={member.name}
                               fill
-                              className="object-cover"
+                              className="object-cover rounded-lg"
                               sizes="128px"
                             />
                           </div>
