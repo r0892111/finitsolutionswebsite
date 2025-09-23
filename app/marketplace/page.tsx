@@ -6,9 +6,12 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/language-context";
 import { useMemo } from "react";
 
 export default function MarketplacePage() {
+  const { t } = useLanguage();
+
   // Memoize static data to prevent recreation on re-renders
   const featuredProducts = useMemo(() => [
     {
