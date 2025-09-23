@@ -220,7 +220,7 @@ const translations = {
     'about.modal.about': 'About',
     'about.modal.expertise': 'Expertise',
     'about.modal.achievements': 'Achievements',
-    'about.modal.linkedin': 'View LinkedIn profile'
+    'about.modal.linkedin': 'View LinkedIn profile',
     'marketplace.book.meeting': 'Book meeting'
   }
 };
