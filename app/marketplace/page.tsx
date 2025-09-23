@@ -227,7 +227,7 @@ export default function MarketplacePage() {
                         className="w-full font-medium shadow-soft hover:shadow-lg transition-all duration-300 text-xs"
                         style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
                       >
-                        Book online meeting
+                        {t('marketplace.book.online.meeting')}
                         <Calendar className="ml-2 h-4 w-4" />
                       </Button>
                     </a>
