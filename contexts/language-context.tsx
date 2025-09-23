@@ -121,6 +121,7 @@ const translations = {
     'about.modal.achievements': 'Prestaties',
     'about.modal.linkedin': 'Bekijk LinkedIn profiel',
     'marketplace.book.meeting': 'Plan meeting',
+    'marketplace.book.online.meeting': 'Plan online meeting',
     
     // Marketplace Page
     'marketplace.hero.badge': 'AI Marketplace',
@@ -265,6 +266,7 @@ const translations = {
     'about.modal.achievements': 'Achievements',
     'about.modal.linkedin': 'View LinkedIn profile',
     'marketplace.book.meeting': 'Book meeting',
+    'marketplace.book.online.meeting': 'Book online meeting',
     
     // Marketplace Page
     'marketplace.hero.badge': 'AI Marketplace',
