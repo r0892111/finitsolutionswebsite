@@ -272,9 +272,9 @@ export default function MarketplacePage() {
                 <Card className="h-full bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-300 overflow-hidden">
                   <CardContent className="p-6">
                     {/* Icon and Category */}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
+                        <product.icon className="h-6 w-6 text-blue-600" />
                       </div>
                       <Badge variant="outline" className="text-xs">
                         {product.category}
@@ -283,24 +283,39 @@ export default function MarketplacePage() {
 
                     {/* Product Info */}
                     <h3 className="text-lg font-bold mb-2 group-hover:text-blue-600 transition-colors" style={{ color: '#1C2C55' }}>
-                {/* Optimized scrolling logos container */}
-                <div className="flex animate-scroll-crm" style={{ width: `${crmIntegrations.length * 2 * 152}px` }}>
+                      {product.name}
+                    </h3>
                     
                     <p className="text-sm text-gray-600 mb-3 font-medium">
                       {product.tagline}
                     </p>
-                      className="relative flex items-center justify-center w-24 h-16 sm:w-32 sm:h-20 bg-white rounded-lg shadow-sm border border-gray-200 shrink-0 mx-2 sm:mx-3"
+                    
                     <p className="finit-body mb-4 text-sm leading-relaxed" style={{ color: '#202226' }}>
                       {product.description}
                     </p>
 
                     {/* Launch Timeline */}
                     <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                          className="object-contain p-3 sm:p-4"
-                        {product.estimatedLaunch}
-                          loading="lazy"
+                      <span className="text-sm font-medium text-gray-600">
+                        Verwacht: {product.estimatedLaunch}
+                      </span>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        className="text-xs"
+                        onClick={() => {
+                          if (window.location.pathname === '/') {
+                            const contactSection = document.getElementById('contact');
+                            if (contactSection) {
+                              contactSection.scrollIntoView({ behavior: 'smooth' });
+                            }
                           } else {
                             window.location.href = '/#contact';
+                          }
+                        }}
+                      >
+                        Interesse?
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -308,8 +323,7 @@ export default function MarketplacePage() {
             ))}
           </div>
         </div>
-                      className="relative flex items-center justify-center w-24 h-16 sm:w-32 sm:h-20 bg-white rounded-lg shadow-sm border border-gray-200 shrink-0 mx-2 sm:mx-3"
-
+      </section>
 
       {/* Why Choose Our Marketplace */}
       <section className="py-12 bg-finit-aurora">
@@ -327,12 +341,28 @@ export default function MarketplacePage() {
             {[
               {
                 icon: Zap,
-                          className="object-contain p-3 sm:p-4"
+                title: "Plug & Play",
                 description: "Alle oplossingen zijn plug & play - geen complexe implementatie nodig"
-                          loading="lazy"
               },
+              {
+                icon: Shield,
+                title: "Enterprise Security",
+                description: "Voldoet aan de hoogste beveiligingsstandaarden voor zakelijk gebruik"
+              },
+              {
+                icon: Users,
+                title: "Expert Support",
+                description: "Dedicated support van AI-specialisten voor elke oplossing"
+              }
+            ].map((benefit, index) => (
               <motion.div
                 key={benefit.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="text-center"
+              >
                 <div className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
                   <benefit.icon className="h-8 w-8" style={{ color: '#1C2C55' }} />
                 </div>
