@@ -182,23 +182,16 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                whileHover={{ y: -8, scale: 1.02 }}
                 className="group cursor-pointer"
                 onClick={() => setSelectedMember(member)}
               >
-                <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden relative">
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-lg transition-shadow duration-200 overflow-hidden relative hover:-translate-y-1">
                   
                   <CardContent className="p-8 relative z-10">
                     {/* Profile Image */}
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.3 }}
-                      className="relative mb-6"
-                    >
+                    <div className="relative mb-6">
                       <div className="relative w-32 h-32 mx-auto">
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-white/20 rounded-xl p-1 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-white/20 rounded-xl p-1 shadow-lg">
                           <div className="w-full h-full rounded-lg overflow-hidden bg-white">
                             <Image
                               src={member.image}
@@ -210,11 +203,11 @@ export default function AboutPage() {
                           </div>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
 
                     {/* Name and Role */}
                     <div className="text-center mb-6">
-                      <h3 className="finit-h2 text-gray-800 group-hover:text-gray-700 transition-colors duration-300 mb-2">
+                      <h3 className="finit-h2 text-gray-800 mb-2">
                         {member.name}
                       </h3>
                       <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 border border-white/30 backdrop-blur-sm">
@@ -252,7 +245,7 @@ export default function AboutPage() {
                         href={member.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-800 hover:text-gray-700 transition-colors p-2 rounded-lg hover:bg-white/10 backdrop-blur-sm"
+                        className="text-gray-800 hover:text-gray-700 transition-colors duration-150 p-2 rounded-lg hover:bg-white/10 backdrop-blur-sm"
                         aria-label={`${member.name}'s LinkedIn profile`}
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -262,10 +255,10 @@ export default function AboutPage() {
                       <Button 
                         variant="ghost" 
                         size="sm"
-                        className="text-gray-800 hover:text-gray-700 hover:bg-white/10 font-medium backdrop-blur-sm"
+                        className="text-gray-800 hover:text-gray-700 hover:bg-white/10 font-medium backdrop-blur-sm transition-colors duration-150"
                       >
                         {t('about.team.more_info')}
-                        <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
+                        <ChevronRight className="h-4 w-4 ml-1" />
                       </Button>
                     </div>
                   </CardContent>
