@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ExternalLink, CheckCircle2, Users, TrendingUp, Clock, Shield, Zap, Database, MessageSquare, BarChart3 } from "lucide-react";
+import { ArrowRight, ExternalLink, CheckCircle2, Users, TrendingUp, Clock, Shield, Zap, Database, MessageSquare, BarChart3, Calendar } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -299,23 +299,15 @@ export default function MarketplacePage() {
                       <span className="text-sm font-medium" style={{ color: '#1C2C55' }}>
                         {product.estimatedLaunch}
                       </span>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        className="text-xs"
-                        onClick={() => {
-                          if (window.location.pathname === '/') {
-                            const contactSection = document.getElementById('contact');
-                            if (contactSection) {
-                              contactSection.scrollIntoView({ behavior: 'smooth' });
-                            }
-                          } else {
-                            window.location.href = '/#contact';
-                          }
-                        }}
+                      <a 
+                        href="https://calendly.com/alex-finitsolutions/30min"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 text-xs gap-1"
                       >
-                        Meer info
-                      </Button>
+                        <Calendar className="h-3 w-3" />
+                        {t('marketplace.book.meeting')}
+                      </a>
                     </div>
                   </CardContent>
                 </Card>
