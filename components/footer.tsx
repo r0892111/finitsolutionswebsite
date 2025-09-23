@@ -78,30 +78,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Services */}
-          <div>
-            <h3 className="font-semibold text-lg mb-4">{t('footer.services')}</h3>
-            <ul className="space-y-2">
-              {[
-                { name: "Sales & CRM", href: "/diensten" },
-                { name: "Marketing & Content", href: "/diensten" },
-                { name: "Customer Support", href: "/diensten" },
-                { name: "Business Intelligence", href: "/diensten" },
-                { name: "Human Resources", href: "/diensten" },
-                { name: "Operations & Logistiek", href: "/diensten" }
-              ].map((item) => (
-                <li key={item.name}>
-                  <Link 
-                    href={item.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Contact */}
           <div>
             <h3 className="font-semibold text-lg mb-4">{t('footer.contact')}</h3>
