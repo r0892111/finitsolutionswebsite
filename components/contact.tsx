@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useCallback } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { ChevronRight, ArrowRight, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ import { useLanguage } from "@/contexts/language-context";
 export function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const shouldReduceMotion = useReducedMotion();
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -31,7 +32,7 @@ export function Contact() {
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = form;
 
-  const onSubmit = async (data: ContactForm) => {
+  const onSubmit = useCallback(async (data: ContactForm) => {
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -59,7 +60,7 @@ export function Contact() {
         variant: "destructive",
       });
     }
-  };
+  }, [toast, reset]);
 
   return (
     <section id="contact" className="relative py-12 md:py-16 bg-background">
@@ -67,9 +68,9 @@ export function Contact() {
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-12">
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.5 }}
+            initial={shouldReduceMotion ? {} : { opacity: 0 }}
+            animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1 } : {})}
+            transition={shouldReduceMotion ? {} : { duration: 0.5 }}
             className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary mb-6"
           >
             <span>{t('contact.badge')}</span> <ChevronRight className="h-4 w-4 ml-1" />
@@ -77,9 +78,9 @@ export function Contact() {
           
           <motion.h2
             ref={ref}
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+            animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1, y: 0 } : {})}
+            transition={shouldReduceMotion ? {} : { duration: 0.5, delay: 0.1 }}
             className="text-3xl md:text-4xl font-bold mb-6"
           >
             {t('contact.title').split(' ').slice(0, -2).join(' ')}{" "}
@@ -94,9 +95,9 @@ export function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 max-w-6xl mx-auto">
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            initial={shouldReduceMotion ? {} : { opacity: 0, x: -30 }}
+            animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1, x: 0 } : {})}
+            transition={shouldReduceMotion ? {} : { duration: 0.6, delay: 0.3 }}
             className="space-y-8"
           >
             <div>
@@ -172,9 +173,9 @@ export function Contact() {
 
           {/* Direct Contact Info */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            initial={shouldReduceMotion ? {} : { opacity: 0, x: 30 }}
+            animate={shouldReduceMotion ? {} : (isInView ? { opacity: 1, x: 0 } : {})}
+            transition={shouldReduceMotion ? {} : { duration: 0.6, delay: 0.4 }}
             className="space-y-8"
           >
             <div>
