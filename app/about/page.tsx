@@ -119,58 +119,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Company Values Section */}
-      <section className="py-20 md:py-28">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-extralight mb-6 text-slate-900 tracking-tight">
-              Onze Waarden
-            </h2>
-            <p className="text-xl text-slate-600 font-light max-w-3xl mx-auto leading-relaxed">
-              De principes die ons drijven en onze aanpak bepalen
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {companyValues.map((value, index) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="group"
-              >
-                <Card className="h-full bg-white/80 backdrop-blur-sm border-slate-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden">
-                  <CardContent className="p-8 text-center">
-                    <motion.div
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      transition={{ duration: 0.3 }}
-                      className="w-16 h-16 rounded-2xl bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl"
-                    >
-                      <value.icon className="h-8 w-8 text-white" />
-                    </motion.div>
-                    <h3 className="text-xl font-bold mb-4 text-slate-900 group-hover:text-primary transition-colors">
-                      {value.title}
-                    </h3>
-                    <p className="text-slate-600 leading-relaxed font-light">
-                      {value.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Story Section with Enhanced Typography */}
       <section className="py-20 md:py-28 bg-gradient-to-r from-slate-900 via-primary to-slate-900 relative overflow-hidden">
         {/* Background Elements */}
