@@ -38,7 +38,7 @@ export default function MarketplacePage() {
 
   const comingSoonProducts = useMemo(() => [
     {
-      name: "DocuFlow AI",
+      name: "FilePilot",
       tagline: "Intelligent document processing",
       description: "Automatische verwerking en analyse van documenten met AI-gedreven data-extractie",
       category: "Document Management",
@@ -298,19 +298,10 @@ export default function MarketplacePage() {
                     </p>
 
                     {/* Launch Timeline */}
-                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                    <div className="flex items-center justify-center mt-auto pt-4 border-t border-gray-100">
                       <span className="text-sm font-medium" style={{ color: '#1C2C55' }}>
                         {product.estimatedLaunch}
                       </span>
-                      <a 
-                        href="https://calendly.com/alex-finitsolutions/30min"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 text-xs gap-1"
-                      >
-                        <Calendar className="h-3 w-3" />
-                        {t('marketplace.book.meeting')}
-                      </a>
                     </div>
                   </CardContent>
                 </Card>
