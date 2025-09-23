@@ -52,14 +52,6 @@ export default function MarketplacePage() {
       category: "Productivity",
       icon: MessageSquare,
       estimatedLaunch: "Q3 2025"
-    },
-    {
-      name: "InsightDash",
-      tagline: "Smart dashboard builder",
-      description: "Genereer real-time dashboards automatisch uit uw bestaande data bronnen",
-      category: "Business Intelligence",
-      icon: BarChart3,
-      estimatedLaunch: "Q4 2025"
     }
   ], []);
 
