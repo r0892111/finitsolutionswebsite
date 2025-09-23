@@ -8,6 +8,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { Zap } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { useLanguage } from "@/contexts/language-context";
@@ -103,12 +104,16 @@ export function Hero() {
               size="lg"
               variant="outline"
               className="border-gray-300 text-gray-700 hover:bg-blue-800 px-8 py-4 text-lg rounded-full font-medium"
-              onClick={() => {
-                const aboutSection = document.getElementById("about");
-                if (aboutSection) aboutSection.scrollIntoView({ behavior: "smooth" });
-              }}
             >
-              {t('hero.cta.secondary')}
+              <a 
+                href="https://calendly.com/alex-finitsolutions/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <Calendar className="h-5 w-5" />
+                {t('hero.cta.meeting')}
+              </a>
             </Button>
           </motion.div>
         </div>
