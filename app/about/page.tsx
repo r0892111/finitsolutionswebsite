@@ -338,7 +338,7 @@ export default function AboutPage() {
                 </DialogTitle>
                 
                 <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg">
-                  <p className="text-white font-semibold">
+                  <p className="text-gray-800 font-semibold">
                     {t(`about.team.roles.${selectedMember.role.toLowerCase().replace(/\s+/g, '_')}`)}
                   </p>
                 </div>
@@ -348,23 +348,23 @@ export default function AboutPage() {
                 {/* Quote */}
 
                 {/* Full Description */}
-                <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
-                  <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
-                      <span className="text-white text-sm">👤</span>
+                <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
+                  <h4 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                      <span className="text-primary text-sm">👤</span>
                     </div>
                     {t('about.modal.about')} {selectedMember.name.split(' ')[0]}
                   </h4>
-                  <p className="text-white/90 leading-relaxed">
+                  <p className="text-gray-700 leading-relaxed">
                     {t(`about.team.descriptions.${selectedMember.name.toLowerCase().replace(/\s+/g, '_')}`)}
                   </p>
                 </div>
 
                 {/* Expertise */}
-                <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
-                  <h4 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
-                      <span className="text-white text-sm">🎯</span>
+                <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
+                  <h4 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                      <span className="text-primary text-sm">🎯</span>
                     </div>
                     {t('about.modal.expertise')}
                   </h4>
@@ -372,7 +372,7 @@ export default function AboutPage() {
                     {selectedMember.expertise.map((skill, idx) => (
                       <span 
                         key={idx} 
-                        className="px-4 py-3 bg-white/20 text-white rounded-xl text-sm font-medium border border-white/30 backdrop-blur-sm text-center hover:bg-white/30 transition-colors duration-200"
+                        className="px-4 py-3 bg-white/60 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 backdrop-blur-sm text-center hover:bg-white/80 transition-colors duration-200"
                       >
                         {skill}
                       </span>
@@ -381,32 +381,32 @@ export default function AboutPage() {
                 </div>
 
                 {/* Achievements */}
-                <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
-                  <h4 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
+                  <h4 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
                       <Award className="h-4 w-4 text-white" />
                     </div>
                     {t('about.modal.achievements')}
                   </h4>
                   <div className="space-y-4">
                     {selectedMember.achievements.map((achievement, idx) => (
-                      <div key={idx} className="flex items-center gap-4 p-3 rounded-xl bg-white/10 border border-white/20">
-                        <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center">
-                          <span className="text-white text-xs font-bold">✓</span>
+                      <div key={idx} className="flex items-center gap-4 p-3 rounded-xl bg-white/60 border border-gray-200">
+                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                          <span className="text-green-600 text-xs font-bold">✓</span>
                         </div>
-                        <span className="text-white font-medium">{achievement}</span>
+                        <span className="text-gray-800 font-medium">{achievement}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* LinkedIn Link */}
-                <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
+                <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
                   <a 
                     href={selectedMember.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 text-white hover:text-white/80 transition-colors font-medium w-full justify-center py-2"
+                    className="inline-flex items-center gap-3 text-gray-800 hover:text-primary transition-colors font-medium w-full justify-center py-2"
                   >
                     <Linkedin className="h-5 w-5" />
                     {t('about.modal.linkedin')}
