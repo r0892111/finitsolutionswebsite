@@ -264,7 +264,7 @@ const translations = {
     'about.modal.expertise': 'Expertise',
     'about.modal.achievements': 'Achievements',
     'about.modal.linkedin': 'View LinkedIn profile',
-    'marketplace.book.meeting': 'Book meeting'
+    'marketplace.book.meeting': 'Book meeting',
     
     // Marketplace Page
     'marketplace.hero.badge': 'AI Marketplace',
