@@ -118,7 +118,6 @@ export function Hero() {
           {mounted && <MagicVisual />}
         </div>
       </div>
-      </div>
     </section>
   );
 }
