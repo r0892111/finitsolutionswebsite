@@ -46,7 +46,6 @@ const team = [
 export default function AboutPage() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const [selectedMember, setSelectedMember] = useState<typeof team[0] | null>(null);
   const { t } = useLanguage();
 
   return (
@@ -182,12 +181,11 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="group cursor-pointer"
-                onClick={() => setSelectedMember(member)}
+                className="group"
               >
                 <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-lg transition-shadow duration-200 overflow-hidden relative hover:-translate-y-1">
                   
-                  <CardContent className="p-8 relative z-10">
+                  <CardContent className="p-10 relative z-10">
                     {/* Profile Image */}
                     <div className="relative mb-6">
                       <div className="relative w-32 h-32 mx-auto">
@@ -218,31 +216,21 @@ export default function AboutPage() {
                     </div>
 
                     {/* Brief Description */}
-                    <p className="text-gray-700 text-sm leading-relaxed mb-6 line-clamp-3">
+                    <p className="text-gray-700 text-sm leading-relaxed mb-6">
                       {t(`about.team.descriptions.${member.name.toLowerCase().replace(/\s+/g, '_')}`)}
                     </p>
 
                     {/* Action Area */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-center">
                       <a 
                         href={member.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-gray-800 hover:text-gray-700 transition-colors duration-150 p-2 rounded-lg hover:bg-white/10 backdrop-blur-sm"
                         aria-label={`${member.name}'s LinkedIn profile`}
-                        onClick={(e) => e.stopPropagation()}
                       >
                         <Linkedin className="h-5 w-5" />
                       </a>
-                      
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="text-gray-800 hover:text-gray-700 hover:bg-white/10 font-medium backdrop-blur-sm transition-colors duration-150"
-                      >
-                        {t('about.team.more_info')}
-                        <ChevronRight className="h-4 w-4 ml-1" />
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -288,71 +276,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team Member Detail Modal */}
-      <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl border border-white/30">
-          {selectedMember && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <DialogHeader className="text-center pb-6">
-                <div className="relative w-32 h-32 mx-auto mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-blue-600 rounded-full p-1 shadow-xl">
-                    <div className="w-full h-full rounded-full overflow-hidden bg-white">
-                      <Image
-                        src={selectedMember.image}
-                        alt={selectedMember.name}
-                        fill
-                        className="object-cover rounded-full"
-                        sizes="128px"
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <DialogTitle className="finit-h2 text-slate-900 mb-2">
-                  {selectedMember.name}
-                </DialogTitle>
-                
-                <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-500/10 border border-primary/20">
-                  <p className="text-primary font-semibold text-sm">
-                    {t(`about.team.roles.${selectedMember.role.toLowerCase().replace(/\s+/g, '_')}`)}
-                  </p>
-                </div>
-              </DialogHeader>
-
-              <div className="space-y-8">
-                {/* Quote */}
-
-                {/* Full Description */}
-                <div>
-                  <h4 className="finit-h2 text-slate-900 mb-4">
-                    {t('about.modal.about')} {selectedMember.name.split(' ')[0]}
-                  </h4>
-                  <p className="text-slate-600 finit-body">
-                    {t(`about.team.descriptions.${selectedMember.name.toLowerCase().replace(/\s+/g, '_')}`)}
-                  </p>
-                </div>
-
-                {/* LinkedIn Link */}
-                <div className="pt-6 border-t border-slate-200">
-                  <a 
-                    href={selectedMember.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 text-primary hover:text-primary/80 transition-colors font-medium finit-body"
-                  >
-                    <Linkedin className="h-5 w-5" />
-                    {t('about.modal.linkedin')}
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </DialogContent>
-      </Dialog>
     </main>
   );
 }
