@@ -74,7 +74,8 @@ export default function AboutPage() {
               transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="finit-h1 text-white mb-6"
             >
-              {t('about.page.title.line1')}{" "}
+              {t('about.page.title.line1')}
+              <br />
               <span className="finit-highlight">{t('about.page.title.highlight')}</span>
             </motion.h1>
             
