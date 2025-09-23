@@ -2,12 +2,8 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
-  compress: true,
-  poweredByHeader: false,
   images: {
     unoptimized: true,
-    formats: ['image/webp', 'image/avif'],
-    minimumCacheTTL: 60,
     remotePatterns: [
       {
         protocol: 'https',
@@ -21,9 +17,6 @@ const nextConfig = {
       'www.teamleader.eu'
     ]
   },
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
   typescript: {
     ignoreBuildErrors: false // Enable TypeScript error checking
   },
@@ -31,9 +24,7 @@ const nextConfig = {
     ignoreDuringBuilds: false // Enable ESLint checking
   },
   experimental: {
-    esmExternals: false,
-    optimizeCss: true,
-    scrollRestoration: true
+    esmExternals: false
   },
   // Add webpack configuration to handle cache issues
   webpack: (config, { dev, isServer }) => {
@@ -45,24 +36,6 @@ const nextConfig = {
         }
       };
     }
-    
-    // Optimize bundle size
-    if (!dev && !isServer) {
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              chunks: 'all',
-            },
-          },
-        },
-      };
-    }
-    
     return config;
   }
 };
