@@ -1,14 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ExternalLink, CheckCircle2, Users, TrendingUp, Clock, Shield, Star, Zap, Brain, Database, MessageSquare, Calendar, BarChart3 } from "lucide-react";
+import { ArrowRight, ExternalLink, CheckCircle2, Users, TrendingUp, Clock, Shield, Zap, Database, MessageSquare, BarChart3 } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useMemo } from "react";
 
 export default function MarketplacePage() {
-  const featuredProducts = [
+  // Memoize static data to prevent recreation on re-renders
+  const featuredProducts = useMemo(() => [
     {
       id: "voicelink",
       name: "VoiceLink",
@@ -29,9 +31,9 @@ export default function MarketplacePage() {
       },
       url: "https://voicelink.me"
     }
-  ];
+  ], []);
 
-  const comingSoonProducts = [
+  const comingSoonProducts = useMemo(() => [
     {
       name: "DocuFlow AI",
       tagline: "Intelligent document processing",
@@ -56,26 +58,21 @@ export default function MarketplacePage() {
       icon: BarChart3,
       estimatedLaunch: "Q4 2025"
     }
-  ];
+  ], []);
 
-  const categories = [
+  const categories = useMemo(() => [
     { name: "Sales & CRM", count: 1, color: "bg-blue-100 text-blue-800" },
     { name: "Document Management", count: 1, color: "bg-green-100 text-green-800" },
     { name: "Productivity", count: 1, color: "bg-purple-100 text-purple-800" },
     { name: "Business Intelligence", count: 1, color: "bg-orange-100 text-orange-800" }
-  ];
+  ], []);
 
   return (
     <main className="pt-20 bg-white min-h-screen font-general-sans">
       <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
         <div className="w-full">
           <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-6 mt-12 flex w-full items-center justify-center gap-6 md:gap-8"
-            >
+            <div className="mb-6 mt-12 flex w-full items-center justify-center gap-6 md:gap-8">
               <Image
                 src="/Finit Marketplace White.svg"
                 alt="Finit Marketplace"
@@ -100,7 +97,7 @@ export default function MarketplacePage() {
                   Enterprise-grade AI tools die direct integreren met uw bestaande systemen
                 </p>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -132,13 +129,14 @@ export default function MarketplacePage() {
                     fill
                     className="object-cover rounded-xl"
                     sizes="(max-width: 1024px) 100vw, 58vw"
+                    priority
                     unoptimized
                   />
                   
                   {/* Status and CTA in top corners */}
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-green-600 text-white border-0 shadow-lg">
-                      <div className="w-2 h-2 rounded-full bg-white mr-2"></div>
+                      <div className="w-2 h-2 rounded-full bg-white mr-2" aria-hidden="true"></div>
                       LIVE
                     </Badge>
                   </div>
@@ -265,18 +263,17 @@ export default function MarketplacePage() {
             {comingSoonProducts.map((product, index) => (
               <motion.div
                 key={product.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -4, scale: 1.02 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.4 }}
                 className="group"
               >
                 <Card className="h-full bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-300 overflow-hidden">
                   <CardContent className="p-6">
                     {/* Icon and Category */}
                     <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
+                      <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
                         <product.icon className="h-6 w-6" style={{ color: '#1C2C55' }} />
                       </div>
                       <Badge variant="outline" className="text-xs">
@@ -299,13 +296,14 @@ export default function MarketplacePage() {
 
                     {/* Launch Timeline */}
                     <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                      <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Clock className="h-4 w-4" />
                         {product.estimatedLaunch}
-                      </Badge>
+                      </div>
                       <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-medium"
+                        size="sm" 
+                        variant="outline"
+                        className="text-xs"
                         onClick={() => {
                           if (window.location.pathname === '/') {
                             const contactSection = document.getElementById('contact');
@@ -317,8 +315,7 @@ export default function MarketplacePage() {
                           }
                         }}
                       >
-                        Interesse?
-                        <ArrowRight className="h-3 w-3 ml-1" />
+                        Meer info
                       </Button>
                     </div>
                   </CardContent>
@@ -328,7 +325,6 @@ export default function MarketplacePage() {
           </div>
         </div>
       </section>
-
 
       {/* Why Choose Our Marketplace */}
       <section className="py-12 bg-finit-aurora">
@@ -346,18 +342,18 @@ export default function MarketplacePage() {
             {[
               {
                 icon: Zap,
-                title: "Instant deployment",
+                title: "Plug & Play",
                 description: "Alle oplossingen zijn plug & play - geen complexe implementatie nodig"
               },
               {
                 icon: Shield,
-                title: "Enterprise security",
-                description: "GDPR-compliant met enterprise-grade beveiliging en data-bescherming"
+                title: "Enterprise Security",
+                description: "Alle tools voldoen aan de hoogste beveiligingsstandaarden"
               },
               {
                 icon: Users,
-                title: "Expert support",
-                description: "Direct contact met ons team voor onboarding en continue ondersteuning"
+                title: "Expert Support",
+                description: "Dedicated support van AI-specialisten voor elke oplossing"
               }
             ].map((benefit, index) => (
               <motion.div
@@ -365,7 +361,7 @@ export default function MarketplacePage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="text-center"
               >
                 <div className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
