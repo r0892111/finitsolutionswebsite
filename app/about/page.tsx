@@ -198,20 +198,18 @@ export default function AboutPage() {
                       transition={{ duration: 0.3 }}
                       className="relative mb-6"
                     >
-                      <div className="relative w-24 h-24 mx-auto">
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-white/20 rounded-full p-1 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                          <div className="w-full h-full rounded-full overflow-hidden bg-white">
+                      <div className="relative w-32 h-32 mx-auto">
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-white/20 rounded-xl p-1 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                          <div className="w-full h-full rounded-lg overflow-hidden bg-white">
                             <Image
                               src={member.image}
                               alt={member.name}
                               fill
                               className="object-cover"
-                              sizes="96px"
+                              sizes="128px"
                             />
                           </div>
                         </div>
-                        {/* Pulsing ring effect */}
-                        <div className="absolute inset-0 rounded-full border-2 border-white/50 animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
                     </motion.div>
 
