@@ -209,7 +209,7 @@ const translations = {
     'about.team.more_info': 'More info',
     'about.team.roles.co-founder': 'Co-founder',
     'about.team.roles.chief_technology_officer': 'Chief Technology Officer',
-    'about.team.descriptions.alex_otten': 'Alex obtained his bachelor\'s degree in industrial engineering at KU Leuven. Driven by the rapid evolution of AI technology, he decided to stop his master\'s studies halfway to fully engage and actively help build this innovative sector.',
+    'about.team.descriptions.alex_otten': 'Alex obtained his bachelor\'s degree in industrial engineering (advanced robotics) at KU Leuven. Driven by the rapid evolution of AI technology, he decided to stop his master\'s studies halfway to fully engage and actively help build this innovative sector.',
     'about.team.descriptions.karel_van_ransbeeck': 'With his natural talent for client communication and strong social skills, he forms the bridge between technology and human needs. As co-founder, he focuses on understanding customer needs.',
     'about.team.descriptions.jord_goossens': 'As Chief Technology Officer, Jord brings a wealth of experience in enterprise-level software architecture and AI implementations. With his deep knowledge, he ensures our solutions are scalable and secure.',
     'about.cta.title': 'Ready to work together?',
