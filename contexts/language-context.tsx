@@ -120,6 +120,7 @@ const translations = {
     'about.modal.expertise': 'Expertise',
     'about.modal.achievements': 'Prestaties',
     'about.modal.linkedin': 'Bekijk LinkedIn profiel'
+    'marketplace.book.meeting': 'Plan meeting'
   },
   en: {
     // Navbar
@@ -220,6 +221,7 @@ const translations = {
     'about.modal.expertise': 'Expertise',
     'about.modal.achievements': 'Achievements',
     'about.modal.linkedin': 'View LinkedIn profile'
+    'marketplace.book.meeting': 'Book meeting'
   }
 };
 
