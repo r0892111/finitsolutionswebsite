@@ -1,27 +1,37 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ExternalLink, CheckCircle2, Users, TrendingUp, Clock, Shield, Star, Zap, Brain, Database, MessageSquare, Calendar, BarChart3 } from "lucide-react";
+import { ArrowRight, ExternalLink, CheckCircle2, Users, TrendingUp, Clock, Shield, Zap, Database, MessageSquare, BarChart3, Calendar } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/language-context";
+import { useMemo } from "react";
 
 export default function MarketplacePage() {
-  const featuredProducts = [
+  const { t } = useLanguage();
+
+  // Memoize static data to prevent recreation on re-renders
+  const featuredProducts = useMemo(() => [
     {
       id: "voicelink",
-      name: "VoiceLink",
-      tagline: "Voice-to-CRM automation",
-      description: "WhatsApp spraakberichten worden automatisch omgezet naar CRM-data. Klantnaam, offertebedrag, vervolgafspraken - alles op de juiste plaats.",
+      name: t('marketplace.voicelink.name'),
+      tagline: t('marketplace.voicelink.tagline'),
+      description: t('marketplace.voicelink.description'),
       image: "/voicelink display.png",
       logo: "/Finit Voicelink Blue@4x.png",
-      category: "Sales & CRM",
+      category: t('marketplace.voicelink.category'),
       status: "live",
-      price: "Vanaf €49/maand",
+      price: t('marketplace.featured.price'),
       rating: 4.9,
       reviews: 127,
-      features: ["WhatsApp integratie", "Automatische CRM-sync", "3 min installatie", "Alle CRM's ondersteund"],
+      features: [
+        t('marketplace.voicelink.features.whatsapp'),
+        t('marketplace.voicelink.features.sync'),
+        t('marketplace.voicelink.features.install'),
+        t('marketplace.voicelink.features.support')
+      ],
       metrics: {
         timeSaved: "2 uur/dag",
         accuracy: "90%",
@@ -29,53 +39,40 @@ export default function MarketplacePage() {
       },
       url: "https://voicelink.me"
     }
-  ];
+  ], [t]);
 
-  const comingSoonProducts = [
+  const comingSoonProducts = useMemo(() => [
     {
-      name: "DocuFlow AI",
-      tagline: "Intelligent document processing",
-      description: "Automatische verwerking en analyse van documenten met AI-gedreven data-extractie",
-      category: "Document Management",
+      name: t('marketplace.products.filepilot.name'),
+      tagline: t('marketplace.products.filepilot.tagline'),
+      description: t('marketplace.products.filepilot.description'),
+      category: t('marketplace.products.filepilot.category'),
       icon: Database,
-      estimatedLaunch: "Q2 2025"
+      estimatedLaunch: "Q1 2026"
     },
     {
-      name: "MeetingMind",
-      tagline: "AI meeting assistant",
-      description: "Automatische notities, actiepunten en follow-ups voor al uw vergaderingen",
-      category: "Productivity",
+      name: t('marketplace.products.meetingmind.name'),
+      tagline: t('marketplace.products.meetingmind.tagline'),
+      description: t('marketplace.products.meetingmind.description'),
+      category: t('marketplace.products.meetingmind.category'),
       icon: MessageSquare,
-      estimatedLaunch: "Q3 2025"
-    },
-    {
-      name: "InsightDash",
-      tagline: "Smart dashboard builder",
-      description: "Genereer real-time dashboards automatisch uit uw bestaande data bronnen",
-      category: "Business Intelligence",
-      icon: BarChart3,
-      estimatedLaunch: "Q4 2025"
+      estimatedLaunch: "Q3 2026"
     }
-  ];
+  ], [t]);
 
-  const categories = [
-    { name: "Sales & CRM", count: 1, color: "bg-blue-100 text-blue-800" },
-    { name: "Document Management", count: 1, color: "bg-green-100 text-green-800" },
-    { name: "Productivity", count: 1, color: "bg-purple-100 text-purple-800" },
+  const categories = useMemo(() => [
+    { name: t('marketplace.voicelink.category'), count: 1, color: "bg-blue-100 text-blue-800" },
+    { name: t('marketplace.products.filepilot.category'), count: 1, color: "bg-green-100 text-green-800" },
+    { name: t('marketplace.products.meetingmind.category'), count: 1, color: "bg-purple-100 text-purple-800" },
     { name: "Business Intelligence", count: 1, color: "bg-orange-100 text-orange-800" }
-  ];
+  ], [t]);
 
   return (
     <main className="pt-20 bg-white min-h-screen font-general-sans">
       <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
         <div className="w-full">
           <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-6 mt-12 flex w-full items-center justify-center gap-6 md:gap-8"
-            >
+            <div className="mb-6 mt-12 flex w-full items-center justify-center gap-6 md:gap-8">
               <Image
                 src="/Finit Marketplace White.svg"
                 alt="Finit Marketplace"
@@ -93,14 +90,14 @@ export default function MarketplacePage() {
               />
 
               <div className="text-left min-w-0 flex-1 md:min-w-[700px]">
-                <h1 className="finit-h1 text-white mb-2">
-                  Plug &amp; play <span className="finit-highlight">AI solutions</span>
+                <h1 className="finit-h1 text-white mb-2 whitespace-nowrap">
+                  {t('marketplace.hero.title').split(' ').slice(0, -2).join(' ')} <span className="finit-highlight">{t('marketplace.hero.title').split(' ').slice(-2).join(' ')}</span>
                 </h1>
                 <p className="finit-body text-white/90">
-                  Enterprise-grade AI tools die direct integreren met uw bestaande systemen
+                  {t('marketplace.hero.subtitle')}
                 </p>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -112,12 +109,12 @@ export default function MarketplacePage() {
             <div className="flex items-center gap-3 mb-4">
               <Badge className="bg-green-100 text-green-800 border-green-200">
                 <CheckCircle2 className="h-3 w-3 mr-1" />
-                Live & beschikbaar
+                {t('marketplace.featured.badge')}
               </Badge>
               <Badge variant="outline">Featured</Badge>
             </div>
             <h2 className="finit-h2 mb-2" style={{ color: '#1C2C55' }}>
-              Meest populaire oplossing
+              {t('marketplace.featured.title')}
             </h2>
           </div>
 
@@ -132,13 +129,14 @@ export default function MarketplacePage() {
                     fill
                     className="object-cover rounded-xl"
                     sizes="(max-width: 1024px) 100vw, 58vw"
+                    priority
                     unoptimized
                   />
                   
                   {/* Status and CTA in top corners */}
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-green-600 text-white border-0 shadow-lg">
-                      <div className="w-2 h-2 rounded-full bg-white mr-2"></div>
+                      <div className="w-2 h-2 rounded-full bg-white mr-2" aria-hidden="true"></div>
                       LIVE
                     </Badge>
                   </div>
@@ -165,31 +163,31 @@ export default function MarketplacePage() {
                   <div className="mb-4">
                     <div className="flex items-center mb-3">
                       <Badge className="bg-blue-50 text-blue-700 border-blue-200">
-                        Sales & CRM
+                        {featuredProducts[0].category}
                       </Badge>
                     </div>
                     
                     <h3 className="finit-h2 mb-2" style={{ color: '#1C2C55' }}>
-                      VoiceLink
+                      {featuredProducts[0].name}
                     </h3>
                     
                     <p className="finit-body mb-3" style={{ color: '#202226' }}>
-                      WhatsApp spraakberichten worden automatisch omgezet naar CRM-data. Klantnaam, offertebedrag, vervolgafspraken - alles op de juiste plaats.
+                      {featuredProducts[0].description}
                     </p>
                     
                     <div className="mb-4">
                       <div className="text-2xl font-bold" style={{ color: '#1C2C55' }}>
-                        Vanaf €29,90/maand
+                        {featuredProducts[0].price}
                       </div>
                       <div className="text-sm text-gray-600">
-                        Volume kortingen beschikbaar
+                        {t('marketplace.featured.volume')}
                       </div>
                     </div>
                   </div>
 
                   {/* Features */}
                   <div className="mb-4">
-                    <h4 className="font-medium mb-3" style={{ color: '#1C2C55' }}>Belangrijkste features:</h4>
+                    <h4 className="font-medium mb-3" style={{ color: '#1C2C55' }}>{t('marketplace.featured.features')}</h4>
                     <div className="grid grid-cols-2 gap-2">
                       {featuredProducts[0].features.map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-2">
@@ -206,36 +204,33 @@ export default function MarketplacePage() {
                       href="https://voicelink.me" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex-1"
+                      className="flex-[1.2]"
                     >
                       <Button 
                         size="lg" 
                         className="w-full text-white shadow-soft hover:shadow-lg transition-all duration-300 font-medium"
                         style={{ backgroundColor: '#1C2C55' }}
                       >
-                        Ontdek VoiceLink
+                        {t('marketplace.featured.discover')}
                         <ExternalLink className="ml-2 h-4 w-4" />
                       </Button>
                     </a>
-                    <Button 
-                      size="lg" 
-                      variant="outline"
-                      className="font-medium shadow-soft hover:shadow-lg transition-all duration-300"
-                      style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
-                      onClick={() => {
-                        if (window.location.pathname === '/') {
-                          const contactSection = document.getElementById('contact');
-                          if (contactSection) {
-                            contactSection.scrollIntoView({ behavior: 'smooth' });
-                          }
-                        } else {
-                          window.location.href = '/#contact';
-                        }
-                      }}
+                    <a 
+                      href="https://calendly.com/alex-finitsolutions/30min" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex-1"
                     >
-                      Meer info
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                      <Button 
+                        size="lg" 
+                        variant="outline"
+                        className="w-full font-medium shadow-soft hover:shadow-lg transition-all duration-300 text-xs"
+                        style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
+                      >
+                        {t('marketplace.book.online.meeting')}
+                        <Calendar className="ml-2 h-4 w-4" />
+                      </Button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -250,14 +245,14 @@ export default function MarketplacePage() {
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
               <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
-                Binnenkort beschikbaar
+                {t('marketplace.coming_soon.badge')}
               </Badge>
             </div>
             <h2 className="finit-h2" style={{ color: '#1C2C55' }}>
-              Nieuwe oplossingen in ontwikkeling
+              {t('marketplace.coming_soon.title')}
             </h2>
             <p className="finit-body mt-2" style={{ color: '#202226' }}>
-              Innovatieve AI-tools die binnenkort uw workflow zullen transformeren
+              {t('marketplace.coming_soon.subtitle')}
             </p>
           </div>
 
@@ -265,18 +260,17 @@ export default function MarketplacePage() {
             {comingSoonProducts.map((product, index) => (
               <motion.div
                 key={product.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -4, scale: 1.02 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.4 }}
                 className="group"
               >
                 <Card className="h-full bg-white border border-gray-200 shadow-soft hover:shadow-lg transition-all duration-300 overflow-hidden">
                   <CardContent className="p-6">
                     {/* Icon and Category */}
                     <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
+                      <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
                         <product.icon className="h-6 w-6" style={{ color: '#1C2C55' }} />
                       </div>
                       <Badge variant="outline" className="text-xs">
@@ -298,28 +292,10 @@ export default function MarketplacePage() {
                     </p>
 
                     {/* Launch Timeline */}
-                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                      <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                    <div className="flex items-center justify-center mt-auto pt-4 border-t border-gray-100">
+                      <span className="text-sm font-medium" style={{ color: '#1C2C55' }}>
                         {product.estimatedLaunch}
-                      </Badge>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-medium"
-                        onClick={() => {
-                          if (window.location.pathname === '/') {
-                            const contactSection = document.getElementById('contact');
-                            if (contactSection) {
-                              contactSection.scrollIntoView({ behavior: 'smooth' });
-                            }
-                          } else {
-                            window.location.href = '/#contact';
-                          }
-                        }}
-                      >
-                        Interesse?
-                        <ArrowRight className="h-3 w-3 ml-1" />
-                      </Button>
+                      </span>
                     </div>
                   </CardContent>
                 </Card>
@@ -329,16 +305,15 @@ export default function MarketplacePage() {
         </div>
       </section>
 
-
       {/* Why Choose Our Marketplace */}
       <section className="py-12 bg-finit-aurora">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="finit-h2 text-white mb-4">
-              Waarom Finit Marketplace
+              {t('marketplace.why.title')}
             </h2>
             <p className="finit-body text-white/90">
-              Curated AI-oplossingen met enterprise-grade beveiliging en support
+              {t('marketplace.why.subtitle')}
             </p>
           </div>
 
@@ -346,18 +321,18 @@ export default function MarketplacePage() {
             {[
               {
                 icon: Zap,
-                title: "Instant deployment",
-                description: "Alle oplossingen zijn plug & play - geen complexe implementatie nodig"
+                title: t('marketplace.why.plug_play.title'),
+                description: t('marketplace.why.plug_play.description')
               },
               {
                 icon: Shield,
-                title: "Enterprise security",
-                description: "GDPR-compliant met enterprise-grade beveiliging en data-bescherming"
+                title: t('marketplace.why.security.title'),
+                description: t('marketplace.why.security.description')
               },
               {
                 icon: Users,
-                title: "Expert support",
-                description: "Direct contact met ons team voor onboarding en continue ondersteuning"
+                title: t('marketplace.why.support.title'),
+                description: t('marketplace.why.support.description')
               }
             ].map((benefit, index) => (
               <motion.div
@@ -365,7 +340,7 @@ export default function MarketplacePage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="text-center"
               >
                 <div className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#F7E69B' }}>
@@ -388,10 +363,10 @@ export default function MarketplacePage() {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="finit-h2 mb-4" style={{ color: '#1C2C55' }}>
-              Interesse in een specifieke oplossing?
+              {t('marketplace.cta.title')}
             </h2>
             <p className="finit-body mb-8" style={{ color: '#202226' }}>
-              Vertel ons wat u nodig heeft en we houden u op de hoogte van nieuwe releases
+              {t('marketplace.cta.subtitle')}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -410,7 +385,7 @@ export default function MarketplacePage() {
                   }
                 }}
               >
-                Neem contact op
+                {t('marketplace.cta.contact')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <a 
@@ -424,7 +399,7 @@ export default function MarketplacePage() {
                   className="font-medium shadow-soft hover:shadow-lg transition-all duration-300 px-8"
                   style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
                 >
-                  Probeer VoiceLink
+                  {t('marketplace.cta.try_voicelink')}
                   <ExternalLink className="ml-2 h-5 w-5" />
                 </Button>
               </a>
