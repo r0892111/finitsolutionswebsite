@@ -204,7 +204,7 @@ export default function MarketplacePage() {
                       href="https://voicelink.me" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex-1"
+                      className="flex-[1.2]"
                     >
                       <Button 
                         size="lg" 
@@ -215,25 +215,22 @@ export default function MarketplacePage() {
                         <ExternalLink className="ml-2 h-4 w-4" />
                       </Button>
                     </a>
-                    <Button 
-                      size="lg" 
-                      variant="outline"
-                      className="font-medium shadow-soft hover:shadow-lg transition-all duration-300"
-                      style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
-                      onClick={() => {
-                        if (window.location.pathname === '/') {
-                          const contactSection = document.getElementById('contact');
-                          if (contactSection) {
-                            contactSection.scrollIntoView({ behavior: 'smooth' });
-                          }
-                        } else {
-                          window.location.href = '/#contact';
-                        }
-                      }}
+                    <a 
+                      href="https://calendly.com/alex-finitsolutions/30min" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex-1"
                     >
-                      {t('marketplace.featured.more_info')}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                      <Button 
+                        size="lg" 
+                        variant="outline"
+                        className="w-full font-medium shadow-soft hover:shadow-lg transition-all duration-300 text-xs"
+                        style={{ borderColor: '#1C2C55', color: '#1C2C55' }}
+                      >
+                        Book online meeting
+                        <Calendar className="ml-2 h-4 w-4" />
+                      </Button>
+                    </a>
                   </div>
                 </div>
               </div>
