@@ -81,7 +81,7 @@ export function Footer() {
           {/* Contact */}
           <div className="text-center md:text-right md:flex-1">
             <h3 className="font-semibold text-lg mb-4">{t('footer.contact')}</h3>
-            <ul className="space-y-3">
+            <ul className="space-y-3 text-center md:text-right">
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                 <span className="text-muted-foreground text-sm">
