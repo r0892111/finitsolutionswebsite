@@ -222,23 +222,6 @@ export default function AboutPage() {
                       {t(`about.team.descriptions.${member.name.toLowerCase().replace(/\s+/g, '_')}`)}
                     </p>
 
-                    {/* Expertise Tags */}
-                    <div className="flex flex-wrap gap-2 mb-6 justify-center">
-                      {member.expertise.slice(0, 2).map((skill, idx) => (
-                        <span 
-                          key={idx} 
-                          className="px-3 py-1 bg-white/20 text-gray-800 rounded-full text-xs font-medium border border-white/30 backdrop-blur-sm"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                      {member.expertise.length > 2 && (
-                        <span className="px-3 py-1 bg-white/30 text-gray-800 rounded-full text-xs font-medium border border-white/40 backdrop-blur-sm">
-                          +{member.expertise.length - 2} {t('about.team.more')}
-                        </span>
-                      )}
-                    </div>
-
                     {/* Action Area */}
                     <div className="flex items-center justify-between">
                       <a 
@@ -351,36 +334,6 @@ export default function AboutPage() {
                   <p className="text-slate-600 finit-body">
                     {t(`about.team.descriptions.${selectedMember.name.toLowerCase().replace(/\s+/g, '_')}`)}
                   </p>
-                </div>
-
-                {/* Expertise */}
-                <div>
-                  <h4 className="finit-h2 text-slate-900 mb-4">{t('about.modal.expertise')}</h4>
-                  <div className="flex flex-wrap gap-3">
-                    {selectedMember.expertise.map((skill, idx) => (
-                      <span 
-                        key={idx} 
-                        className="px-4 py-2 bg-gradient-to-r from-primary/10 to-blue-500/10 text-primary rounded-full text-sm font-medium border border-primary/20 backdrop-blur-sm"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Achievements */}
-                <div>
-                  <h4 className="finit-h2 text-slate-900 mb-4">{t('about.modal.achievements')}</h4>
-                  <div className="space-y-3">
-                    {selectedMember.achievements.map((achievement, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center shadow">
-                          <Award className="h-4 w-4 text-white" />
-                        </div>
-                        <span className="text-slate-700 font-medium finit-body">{achievement}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
                 {/* LinkedIn Link */}
