@@ -14,9 +14,9 @@ export function Footer() {
   return (
     <footer className="bg-background border-t relative">
       <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 md:gap-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
-          <div className="space-y-4 text-center md:text-left md:flex-1">
+          <div className="space-y-4">
             <Link
               href="/"
               className="flex items-center"
@@ -56,7 +56,7 @@ export function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="text-center md:flex-1">
+          <div>
             <h3 className="font-semibold text-lg mb-4">{t('footer.menu')}</h3>
             <ul className="space-y-2">
               {[
@@ -79,9 +79,9 @@ export function Footer() {
           </div>
 
           {/* Contact */}
-          <div className="text-center md:text-right md:flex-1">
+          <div>
             <h3 className="font-semibold text-lg mb-4">{t('footer.contact')}</h3>
-            <ul className="space-y-3 text-center md:text-right">
+            <ul className="space-y-3">
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                 <span className="text-muted-foreground text-sm">
