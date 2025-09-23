@@ -307,60 +307,72 @@ export default function AboutPage() {
 
       {/* Team Member Detail Modal */}
       <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl border border-white/30">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-2xl border border-white/20 shadow-4xl">
           {selectedMember && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <DialogHeader className="text-center pb-6">
-                <div className="relative w-32 h-32 mx-auto mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-blue-600 rounded-full p-1 shadow-xl">
-                    <div className="w-full h-full rounded-full overflow-hidden bg-white">
+              <DialogHeader className="text-center pb-8 relative">
+                {/* Aurora background elements */}
+                <div className="absolute -top-4 -left-4 w-32 h-32 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-full blur-2xl animate-pulse" />
+                <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 rounded-full blur-xl animate-pulse" />
+                
+                <div className="relative w-40 h-40 mx-auto mb-8">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-blue-600 to-primary rounded-full p-1.5 shadow-2xl animate-brand-glow">
+                    <div className="w-full h-full rounded-full overflow-hidden bg-white shadow-inner">
                       <Image
                         src={selectedMember.image}
                         alt={selectedMember.name}
                         fill
                         className="object-cover rounded-full"
-                        sizes="128px"
+                        sizes="160px"
                       />
                     </div>
                   </div>
                 </div>
                 
-                <DialogTitle className="finit-h2 text-slate-900 mb-2">
+                <DialogTitle className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
                   {selectedMember.name}
                 </DialogTitle>
                 
-                <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-500/10 border border-primary/20">
-                  <p className="text-primary font-semibold text-sm">
+                <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg">
+                  <p className="text-white font-semibold">
                     {t(`about.team.roles.${selectedMember.role.toLowerCase().replace(/\s+/g, '_')}`)}
                   </p>
                 </div>
               </DialogHeader>
 
-              <div className="space-y-8">
+              <div className="space-y-8 relative">
                 {/* Quote */}
 
                 {/* Full Description */}
-                <div>
-                  <h4 className="finit-h2 text-slate-900 mb-4">
+                <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
+                  <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                      <span className="text-white text-sm">👤</span>
+                    </div>
                     {t('about.modal.about')} {selectedMember.name.split(' ')[0]}
                   </h4>
-                  <p className="text-slate-600 finit-body">
+                  <p className="text-white/90 leading-relaxed">
                     {t(`about.team.descriptions.${selectedMember.name.toLowerCase().replace(/\s+/g, '_')}`)}
                   </p>
                 </div>
 
                 {/* Expertise */}
-                <div>
-                  <h4 className="finit-h2 text-slate-900 mb-4">{t('about.modal.expertise')}</h4>
-                  <div className="flex flex-wrap gap-3">
+                <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
+                  <h4 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                      <span className="text-white text-sm">🎯</span>
+                    </div>
+                    {t('about.modal.expertise')}
+                  </h4>
+                  <div className="grid grid-cols-2 gap-3">
                     {selectedMember.expertise.map((skill, idx) => (
                       <span 
                         key={idx} 
-                        className="px-4 py-2 bg-gradient-to-r from-primary/10 to-blue-500/10 text-primary rounded-full text-sm font-medium border border-primary/20 backdrop-blur-sm"
+                        className="px-4 py-3 bg-white/20 text-white rounded-xl text-sm font-medium border border-white/30 backdrop-blur-sm text-center hover:bg-white/30 transition-colors duration-200"
                       >
                         {skill}
                       </span>
@@ -369,27 +381,32 @@ export default function AboutPage() {
                 </div>
 
                 {/* Achievements */}
-                <div>
-                  <h4 className="finit-h2 text-slate-900 mb-4">{t('about.modal.achievements')}</h4>
-                  <div className="space-y-3">
+                <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
+                  <h4 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                      <Award className="h-4 w-4 text-white" />
+                    </div>
+                    {t('about.modal.achievements')}
+                  </h4>
+                  <div className="space-y-4">
                     {selectedMember.achievements.map((achievement, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center shadow">
-                          <Award className="h-4 w-4 text-white" />
+                      <div key={idx} className="flex items-center gap-4 p-3 rounded-xl bg-white/10 border border-white/20">
+                        <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center">
+                          <span className="text-white text-xs font-bold">✓</span>
                         </div>
-                        <span className="text-slate-700 font-medium finit-body">{achievement}</span>
+                        <span className="text-white font-medium">{achievement}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* LinkedIn Link */}
-                <div className="pt-6 border-t border-slate-200">
+                <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-6 border border-white/25 shadow-xl">
                   <a 
                     href={selectedMember.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 text-primary hover:text-primary/80 transition-colors font-medium finit-body"
+                    className="inline-flex items-center gap-3 text-white hover:text-white/80 transition-colors font-medium w-full justify-center py-2"
                   >
                     <Linkedin className="h-5 w-5" />
                     {t('about.modal.linkedin')}
