@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Calendar } from "lucide-react";
+import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { useLanguage } from "@/contexts/language-context";
 
 export function CTA() {
@@ -39,15 +39,7 @@ export function CTA() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <a
-              href="https://calendly.com/alex-finitsolutions/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-md font-medium transition-colors"
-            >
-              <Calendar className="h-4 w-4" />
-              Book an online meeting
-            </a>
+            <ProjectRequestDialog buttonText={t('cta.button')} />
           </motion.div>
         </div>
       </div>
