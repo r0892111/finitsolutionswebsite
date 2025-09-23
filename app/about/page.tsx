@@ -322,7 +322,7 @@ export default function AboutPage() {
                         src={selectedMember.image}
                         alt={selectedMember.name}
                         fill
-                        className="object-cover"
+                        className="object-cover rounded-full"
                         sizes="128px"
                       />
                     </div>
