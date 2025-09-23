@@ -296,9 +296,10 @@ export default function MarketplacePage() {
 
                     {/* Launch Timeline */}
                     <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                      <span className="text-sm font-medium" style={{ color: '#1C2C55' }}>
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Clock className="h-4 w-4" />
                         {product.estimatedLaunch}
-                      </span>
+                      </div>
                       <Button 
                         size="sm" 
                         variant="outline"
