@@ -90,7 +90,7 @@ export default function MarketplacePage() {
               />
 
               <div className="text-left min-w-0 flex-1 md:min-w-[700px]">
-                <h1 className="finit-h1 text-white mb-2">
+                <h1 className="finit-h1 text-white mb-2 whitespace-nowrap">
                   {t('marketplace.hero.title').split(' ').slice(0, -2).join(' ')} <span className="finit-highlight">{t('marketplace.hero.title').split(' ').slice(-2).join(' ')}</span>
                 </h1>
                 <p className="finit-body text-white/90">
