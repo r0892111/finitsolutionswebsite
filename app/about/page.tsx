@@ -269,7 +269,7 @@ export default function AboutPage() {
                 className="inline-flex items-center justify-center h-11 px-8 py-4 border border-gray-300 text-gray-800 hover:bg-white/10 shadow-lg hover:shadow-xl transition-all duration-300 finit-body rounded-full backdrop-blur-sm font-medium"
               >
                 <Calendar className="h-5 w-5 mr-2" />
-                Book an online meeting
+                {t('about.cta.secondary')}
               </a>
             </div>
           </motion.div>
