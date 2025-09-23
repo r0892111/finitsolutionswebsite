@@ -89,7 +89,7 @@ export default function RootLayout({
         {/* Google Tag Manager */}
         <Script
           id="google-tag-manager"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -123,9 +123,9 @@ export default function RootLayout({
         {/* Google Analytics (keeping existing for compatibility) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-0ZT5ZRKWLV"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
         />
-        <Script id="google-analytics" strategy="lazyOnload">
+        <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -136,13 +136,6 @@ export default function RootLayout({
             });
           `}
         </Script>
-        
-        {/* Preload critical resources */}
-        <link rel="preload" href="/about-bg.png" as="image" />
-        <link rel="preload" href="/about-image.png" as="image" />
-        <link rel="preload" href="/Finit Logo Blue@4x.png" as="image" />
-        <link rel="dns-prefetch" href="//images.pexels.com" />
-        <link rel="dns-prefetch" href="//upload.wikimedia.org" />
       </head>
       <body className={`${inter.className} ${montserrat.variable} ${generalSans.variable}`}>
         {/* Google Tag Manager (noscript) */}
