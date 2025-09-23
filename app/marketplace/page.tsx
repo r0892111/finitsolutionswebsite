@@ -348,7 +348,7 @@ export default function MarketplacePage() {
               {
                 icon: Shield,
                 title: "Enterprise Security",
-                description: "Alle tools voldoen aan de hoogste beveiligingsstandaarden"
+                description: "Voldoet aan de hoogste beveiligingsstandaarden voor zakelijk gebruik"
               },
               {
                 icon: Users,
