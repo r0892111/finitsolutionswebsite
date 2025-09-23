@@ -7,7 +7,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { Zap } from "lucide-react";
+import { Zap, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { useLanguage } from "@/contexts/language-context";
@@ -95,14 +95,19 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 pt-4"
           >
-            <ProjectRequestDialog
-              buttonText={t('hero.cta.primary')}
-              buttonClassName="bg-gray-400 hover:bg-gray-500 text-white px-8 py-4 text-lg rounded-full font-medium"
-            />
+            <a
+              href="https://calendly.com/alex-finitsolutions/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-gray-400 hover:bg-gray-500 text-white px-8 py-4 text-lg rounded-full font-medium transition-colors"
+            >
+              <Calendar className="h-5 w-5" />
+              Book a meeting
+            </a>
             <Button
               size="lg"
               variant="outline"
-              className="border-gray-300 text-gray-700 hover:bg-blue-800 px-8 py-4 text-lg rounded-full font-medium"
+              className="border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 text-lg rounded-full font-medium"
               onClick={() => {
                 const aboutSection = document.getElementById("about");
                 if (aboutSection) aboutSection.scrollIntoView({ behavior: "smooth" });

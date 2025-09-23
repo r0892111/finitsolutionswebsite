@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ExternalLink, CheckCircle2, Users, TrendingUp, Clock, Shield, Zap, Database, MessageSquare, BarChart3 } from "lucide-react";
+import { ArrowRight, ExternalLink, CheckCircle2, Users, TrendingUp, Clock, Shield, Zap, Database, MessageSquare, BarChart3, Calendar } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -303,18 +303,16 @@ export default function MarketplacePage() {
                         size="sm" 
                         variant="outline"
                         className="text-xs"
-                        onClick={() => {
-                          if (window.location.pathname === '/') {
-                            const contactSection = document.getElementById('contact');
-                            if (contactSection) {
-                              contactSection.scrollIntoView({ behavior: 'smooth' });
-                            }
-                          } else {
-                            window.location.href = '/#contact';
-                          }
-                        }}
                       >
-                        Meer info
+                        <a
+                          href="https://calendly.com/alex-finitsolutions/30min"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1"
+                        >
+                          <Calendar className="h-3 w-3" />
+                          Book meeting
+                        </a>
                       </Button>
                     </div>
                   </CardContent>
@@ -390,24 +388,16 @@ export default function MarketplacePage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="text-white shadow-soft hover:shadow-lg transition-all duration-300 font-medium px-8"
+              <a
+                href="https://calendly.com/alex-finitsolutions/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-white shadow-soft hover:shadow-lg transition-all duration-300 font-medium px-8 py-3 rounded-md"
                 style={{ backgroundColor: '#1C2C55' }}
-                onClick={() => {
-                  if (window.location.pathname === '/') {
-                    const contactSection = document.getElementById('contact');
-                    if (contactSection) {
-                      contactSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  } else {
-                    window.location.href = '/#contact';
-                  }
-                }}
               >
-                Neem contact op
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+                <Calendar className="h-5 w-5" />
+                Book an online meeting
+              </a>
               <a 
                 href="https://voicelink.me" 
                 target="_blank" 
