@@ -49,7 +49,6 @@ export function Hero() {
 
   return (
     <section className="relative md:min-h-screen overflow-hidden">
-      <div className="max-w-[1500px] gap-20 md:gap-0 px-4 md:px-10 mx-auto md:flex-row flex-col-reverse flex items-center justify-between py-20 md:py-0 md:h-screen lg:px-8">
         <div className="absolute inset-0 bg-[url('/about-bg.png')] bg-cover z-[-1] bg-center"></div>
 
         {/* Left Content */}
