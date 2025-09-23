@@ -112,9 +112,9 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 1, delay: 0.3 }}
-              className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/25 shadow-2xl"
+              className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/25 shadow-2xl"
             >
-              <div className="space-y-6 finit-body text-white/90">
+              <div className="space-y-6 finit-body text-gray-800">
                 <p>
                   {t('about.story.paragraph1')}
                 </p>
@@ -135,7 +135,7 @@ export default function AboutPage() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ duration: 0.8, delay: 0.8 }}
-                  className="finit-h2 text-center pt-6 text-white"
+                  className="finit-h2 text-center pt-6 text-gray-800"
                 >
                   {t('about.story.cta')}
                 </motion.p>
@@ -167,10 +167,10 @@ export default function AboutPage() {
             transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="text-center mb-16"
           >
-            <h2 className="finit-h1 text-white mb-6">
+            <h2 className="finit-h1 text-gray-800 mb-6">
               {t('about.team.title')}
             </h2>
-            <p className="finit-body text-white/90 max-w-3xl mx-auto">
+            <p className="finit-body text-gray-700 max-w-3xl mx-auto">
               {t('about.team.subtitle')}
             </p>
           </motion.div>
@@ -217,18 +217,18 @@ export default function AboutPage() {
 
                     {/* Name and Role */}
                     <div className="text-center mb-6">
-                      <h3 className="finit-h2 text-white group-hover:text-white/90 transition-colors duration-300 mb-2">
+                      <h3 className="finit-h2 text-gray-800 group-hover:text-gray-700 transition-colors duration-300 mb-2">
                         {member.name}
                       </h3>
                       <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 border border-white/30 backdrop-blur-sm">
-                        <p className="text-white font-medium text-sm">
+                        <p className="text-gray-800 font-medium text-sm">
                           {t(`about.team.roles.${member.role.toLowerCase().replace(/\s+/g, '_')}`)}
                         </p>
                       </div>
                     </div>
 
                     {/* Brief Description */}
-                    <p className="text-white/80 text-sm leading-relaxed mb-6 line-clamp-3">
+                    <p className="text-gray-700 text-sm leading-relaxed mb-6 line-clamp-3">
                       {t(`about.team.descriptions.${member.name.toLowerCase().replace(/\s+/g, '_')}`)}
                     </p>
 
@@ -237,13 +237,13 @@ export default function AboutPage() {
                       {member.expertise.slice(0, 2).map((skill, idx) => (
                         <span 
                           key={idx} 
-                          className="px-3 py-1 bg-white/20 text-white rounded-full text-xs font-medium border border-white/30 backdrop-blur-sm"
+                          className="px-3 py-1 bg-white/20 text-gray-800 rounded-full text-xs font-medium border border-white/30 backdrop-blur-sm"
                         >
                           {skill}
                         </span>
                       ))}
                       {member.expertise.length > 2 && (
-                        <span className="px-3 py-1 bg-white/30 text-white rounded-full text-xs font-medium border border-white/40 backdrop-blur-sm">
+                        <span className="px-3 py-1 bg-white/30 text-gray-800 rounded-full text-xs font-medium border border-white/40 backdrop-blur-sm">
                           +{member.expertise.length - 2} {t('about.team.more')}
                         </span>
                       )}
@@ -255,7 +255,7 @@ export default function AboutPage() {
                         href={member.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-white hover:text-white/80 transition-colors p-2 rounded-lg hover:bg-white/10 backdrop-blur-sm"
+                        className="text-gray-800 hover:text-gray-700 transition-colors p-2 rounded-lg hover:bg-white/10 backdrop-blur-sm"
                         aria-label={`${member.name}'s LinkedIn profile`}
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -265,7 +265,7 @@ export default function AboutPage() {
                       <Button 
                         variant="ghost" 
                         size="sm"
-                        className="text-white hover:text-white/80 hover:bg-white/10 font-medium backdrop-blur-sm"
+                        className="text-gray-800 hover:text-gray-700 hover:bg-white/10 font-medium backdrop-blur-sm"
                       >
                         {t('about.team.more_info')}
                         <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
@@ -289,10 +289,10 @@ export default function AboutPage() {
             transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h2 className="finit-h1 text-white mb-6">
+            <h2 className="finit-h1 text-gray-800 mb-6">
               {t('about.cta.title')}
             </h2>
-            <p className="finit-body text-white/90 mb-12">
+            <p className="finit-body text-gray-700 mb-12">
               {t('about.cta.description')}
             </p>
             
@@ -304,7 +304,7 @@ export default function AboutPage() {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-white/30 text-white hover:bg-white/10 shadow-lg hover:shadow-xl transition-all duration-300 finit-body px-8 py-4 rounded-full backdrop-blur-sm"
+                className="border-gray-300 text-gray-800 hover:bg-white/10 shadow-lg hover:shadow-xl transition-all duration-300 finit-body px-8 py-4 rounded-full backdrop-blur-sm"
                 onClick={() => window.location.href = 'mailto:contact@finitsolutions.be'}
               >
                 <Mail className="h-5 w-5 mr-2" />
