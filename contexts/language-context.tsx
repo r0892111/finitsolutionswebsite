@@ -366,7 +366,7 @@ const translations = {
     'marketplace.voicelink.features.whatsapp': 'WhatsApp integration',
     'marketplace.voicelink.features.sync': 'Automatic CRM sync',
     'marketplace.voicelink.features.install': '3 min installation',
-    'marketplace.voicelink.features.support': 'All CRMs supported'
+    'marketplace.voicelink.features.support': 'All CRMs supported',
     
     // Diensten Page
     'diensten.hero.title': 'Tailored IT Solutions',
