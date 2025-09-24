@@ -221,11 +221,11 @@ export default function TailoredITSolutionsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-slate-800/85 backdrop-blur-xl rounded-2xl border border-slate-600/40 shadow-xl overflow-hidden"
+                  className="bg-white/15 backdrop-blur-xl rounded-2xl border border-white/25 shadow-xl overflow-hidden"
                 >
                   <button
                     onClick={() => toggleSection(section.key)}
-                    className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-slate-700/50 transition-colors group"
+                    className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-white/5 transition-colors group"
                   >
                     <div className="flex-1">
                       <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-2 group-hover:opacity-90 transition-colors text-white">
@@ -239,10 +239,10 @@ export default function TailoredITSolutionsPage() {
                       <motion.div
                         animate={{ rotate: expandedSections[section.key] ? 180 : 0 }}
                         transition={{ duration: 0.3 }}
-                        className="w-10 h-10 rounded-full flex items-center justify-center border bg-gradient-to-br from-primary/30 to-blue-600/30"
-                        style={{ borderColor: 'rgba(255,255,255,0.3)' }}
+                        className="w-10 h-10 rounded-full flex items-center justify-center border bg-gradient-to-br from-white/80 via-blue-50/60 to-primary/20"
+                        style={{ borderColor: '#1C2C55' }}
                       >
-                        <ChevronDown className="h-5 w-5 text-white" />
+                        <ChevronDown className="h-5 w-5" style={{ color: '#1C2C55' }} />
                       </motion.div>
                     </div>
                   </button>
@@ -260,8 +260,8 @@ export default function TailoredITSolutionsPage() {
                         className="overflow-hidden"
                       >
                         <div className="px-6 md:px-8 pb-6 md:pb-8">
-                          <div className="bg-slate-700/80 rounded-xl p-6 border border-slate-500/50">
-                            <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/90">
+                          <div className="bg-white/90 rounded-xl p-6 border" style={{ borderColor: '#1C2C55' }}>
+                            <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed" style={{ color: '#202226' }}>
                               {section.content}
                             </p>
                           </div>
