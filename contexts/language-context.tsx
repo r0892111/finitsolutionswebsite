@@ -165,6 +165,62 @@ const translations = {
     'marketplace.voicelink.features.sync': 'Automatische CRM-sync',
     'marketplace.voicelink.features.install': '3 min installatie',
     'marketplace.voicelink.features.support': 'Alle CRM\'s ondersteund'
+    
+    // Diensten Page
+    'diensten.hero.title': 'Maatwerk IT Oplossingen',
+    'diensten.hero.highlight': 'Gebouwd voor Impact',
+    'diensten.hero.description': 'Snel, direct en gebouwd voor de volgende generatie automatisering. Wij specialiseren ons in AI-automatisering en moderne CRM-systemen die transformeren hoe uw bedrijf opereert.',
+    'diensten.why.title': 'Waarom Kiezen voor Finit Solutions',
+    'diensten.why.subtitle': 'Ontdek wat ons anders maakt en hoe wij uitzonderlijke resultaten leveren voor onze klanten.',
+    'diensten.benefits.title': 'De Voordelen voor Onze Klanten',
+    'diensten.benefits.subtitle': 'Directe verbeteringen die zich in de tijd opstapelen tot duurzame concurrentievoordelen.',
+    'diensten.cta.title': 'Klaar om Uw Bedrijf te Transformeren?',
+    'diensten.cta.description': 'Wij zijn geen traditioneel IT-bedrijf. Wij zijn modern, snel en gespecialiseerd in AI-automatisering en CRM. Met Finit Solutions heeft u een partner die volledig toegewijd is aan uw succes—vandaag en in de toekomst.',
+    'diensten.cta.button': 'Start Uw Transformatie',
+    
+    // Expandable Sections
+    'diensten.sections.who_we_are.title': 'Wie Wij Zijn',
+    'diensten.sections.who_we_are.preview': 'Jong, ambitieus en gedreven bedrijf gericht op automatiseringstechnologieën van de volgende generatie.',
+    'diensten.sections.who_we_are.content': 'Finit Solutions is een jong, ambitieus en gedreven bedrijf gericht op de volgende generatie automatiseringstechnologieën. In tegenstelling tot traditionele IT-providers die belemmerd worden door bureaucratie, zijn wij snel, direct en gebouwd voor impact. Onze expertise ligt in AI-automatisering en moderne CRM-systemen, ontworpen voor een nieuwe manier van werken: cloud-ready, workflow-gericht en modulair.',
+    
+    'diensten.sections.how_we_work.title': 'Hoe Wij Werken',
+    'diensten.sections.how_we_work.preview': 'Wij lossen problemen stap voor stap op, bouwen in modules in plaats van massieve "alles of niets" projecten.',
+    'diensten.sections.how_we_work.content': 'Wij geloven in het stap voor stap oplossen van problemen. In plaats van één massief "alles of niets" project aan te pakken, bouwen wij in modules—kleine, geteste componenten die samen verbinden tot een web van efficiëntie. Deze aanpak geeft onze klanten vroege snelle overwinningen, lager risico door bewezen stappen, en flexibiliteit om zich aan te passen aan nieuwe behoeften wanneer deze verschijnen. Elke fase levert meetbare waarde, zodat klanten direct impact zien.',
+    
+    'diensten.sections.innovation.title': 'Innovatie & Bewijs van Expertise',
+    'diensten.sections.innovation.preview': 'Innovatie door slimme combinaties van bewezen technologieën, geïllustreerd door VoiceLink.me.',
+    'diensten.sections.innovation.content': 'Bij Finit laten we u niet van tools wisselen. Wij zorgen ervoor dat uw bestaande stack harder werkt. VoiceLink laat vertegenwoordigers snelle updates spreken in WhatsApp, en die notities synchroniseren automatisch naar uw CRM: Teamleader, Pipedrive, Salesforce, Odoo, HubSpot, en meer. Geen nieuwe inboxen. Geen extra apps. Geen gewoontewijzigingen. Wij verwijderen knelpunten door bewezen systemen te verbinden en verspreide gesprekken om te zetten in schone, bruikbare data. Dezelfde aanpak stuurt elk project: vind de wrijving, automatiseer binnen uw stack, en lever resultaten die blijven. Als een systeem een API heeft, kunnen wij het integreren.',
+    
+    'diensten.sections.what_sets_apart.title': 'Wat Ons Onderscheidt',
+    'diensten.sections.what_sets_apart.preview': 'Diepe CRM-kennis, AI-automatisering expertise, en cloud-ready oplossingen zonder bureaucratie.',
+    'diensten.sections.what_sets_apart.content': 'Diepe CRM-kennis – Wij weten hoe we het volledige potentieel van CRM-systemen kunnen ontgrendelen. AI-automatisering pioniers – Wij passen AI toe in echte processen, en zetten geavanceerde technologie om in dagelijkse efficiëntie. Cloud-ready & workflow-gericht – Onze systemen zijn ontworpen voor de omgeving van vandaag en de groei van morgen. Efficiëntie ontgrendelingen – Wij detecteren knelpunten die anderen missen en ontwerpen langetermijnoplossingen. Snelle levering – Zonder de bureaucratie van grote bedrijven, leveren wij sneller en directer.',
+    
+    'diensten.sections.philosophy.title': 'Onze Filosofie',
+    'diensten.sections.philosophy.preview': 'Wij maken werk soepeler zonder te veranderen hoe teams opereren, automatiseren achtergrondtaken.',
+    'diensten.sections.philosophy.content': 'Wij vinden niet opnieuw uit hoe teams werken—wij maken hun werk soepeler. De tools die mensen al kennen blijven hetzelfde, maar wij automatiseren repetitieve, lage-waarde taken op de achtergrond. Dit betekent minder energie verspild aan administratie, en meer tijd voor betekenisvolle interacties.',
+    
+    'diensten.sections.commitment.title': 'Toewijding aan Klanten',
+    'diensten.sections.commitment.preview': 'Toegewijde partners met directe communicatie en langetermijnrelatie focus.',
+    'diensten.sections.commitment.content': 'Wij zijn toegewijde partners, beschikbaar wanneer nodig. Wij communiceren direct, nemen snelle beslissingen, en streven naar langetermijnrelaties die continu nieuwe efficiënties ontgrendelen naarmate behoeften evolueren.',
+    
+    // Benefits
+    'diensten.benefits.quick_wins.title': 'Snelle Overwinningen Vroeg',
+    'diensten.benefits.quick_wins.description': 'Zie directe verbeteringen met onze modulaire aanpak die waarde levert vanaf dag één.',
+    'diensten.benefits.lower_risk.title': 'Lager Risico',
+    'diensten.benefits.lower_risk.description': 'Bewezen stappen en geteste componenten verminderen implementatierisico aanzienlijk.',
+    'diensten.benefits.flexible_adaptation.title': 'Flexibele Aanpassing',
+    'diensten.benefits.flexible_adaptation.description': 'Pas gemakkelijk aan nieuwe behoeften aan wanneer deze verschijnen met onze modulaire architectuur.',
+    'diensten.benefits.measurable_value.title': 'Meetbare Waarde',
+    'diensten.benefits.measurable_value.description': 'Elke fase levert concrete, meetbare verbeteringen aan uw operaties.',
+    'diensten.benefits.fast_delivery.title': 'Snelle Levering',
+    'diensten.benefits.fast_delivery.description': 'Zonder bureaucratie leveren wij oplossingen sneller en directer.',
+    'diensten.benefits.ai_automation.title': 'AI Automatisering',
+    'diensten.benefits.ai_automation.description': 'Zet geavanceerde technologie om in dagelijkse efficiëntie met praktische AI-implementaties.',
+    
+    // Trust Indicators
+    'diensten.trust.gdpr': 'GDPR Conform',
+    'diensten.trust.uptime': '99,9% Uptime',
+    'diensten.trust.support': '24/7 Ondersteuning'
   },
   en: {
     // Navbar
@@ -310,6 +366,62 @@ const translations = {
     'marketplace.voicelink.features.sync': 'Automatic CRM sync',
     'marketplace.voicelink.features.install': '3 min installation',
     'marketplace.voicelink.features.support': 'All CRMs supported'
+    
+    // Diensten Page
+    'diensten.hero.title': 'Tailored IT Solutions',
+    'diensten.hero.highlight': 'Built for Impact',
+    'diensten.hero.description': 'Fast, direct, and built for the next generation of automation. We specialize in AI automation and modern CRM systems that transform how your business operates.',
+    'diensten.why.title': 'Why Choose Finit Solutions',
+    'diensten.why.subtitle': 'Discover what makes us different and how we deliver exceptional results for our clients.',
+    'diensten.benefits.title': 'The Benefits for Our Clients',
+    'diensten.benefits.subtitle': 'Immediate improvements that compound over time into sustainable competitive advantages.',
+    'diensten.cta.title': 'Ready to Transform Your Business?',
+    'diensten.cta.description': 'We are not a traditional IT firm. We are modern, fast, and specialized in AI automation and CRM. With Finit Solutions, you have a partner fully committed to your success—today and in the future.',
+    'diensten.cta.button': 'Start Your Transformation',
+    
+    // Expandable Sections
+    'diensten.sections.who_we_are.title': 'Who We Are',
+    'diensten.sections.who_we_are.preview': 'Young, ambitious, and driven company focused on next-generation automation technologies.',
+    'diensten.sections.who_we_are.content': 'Finit Solutions is a young, ambitious, and driven company focused on the next generation of automation technologies. Unlike traditional IT providers weighed down by bureaucracy, we are fast, direct, and built for impact. Our expertise lies in AI automation and modern CRM systems, designed for a new way of working: cloud-ready, workflow-focused, and modular.',
+    
+    'diensten.sections.how_we_work.title': 'How We Work',
+    'diensten.sections.how_we_work.preview': 'We solve problems step by step, building in modules rather than massive "all or nothing" projects.',
+    'diensten.sections.how_we_work.content': 'We believe in solving problems step by step. Instead of tackling one massive "all or nothing" project, we build in modules—small, tested components that connect together into a web of efficiency. This approach gives our clients quick wins early on, lower risk through proven steps, and flexibility to adapt to new needs as they appear. Each phase delivers measurable value, so clients see impact right away.',
+    
+    'diensten.sections.innovation.title': 'Innovation & Proof of Expertise',
+    'diensten.sections.innovation.preview': 'Innovation through smart combinations of proven technologies, exemplified by VoiceLink.me.',
+    'diensten.sections.innovation.content': 'At Finit, we don\'t make you switch tools. We make your existing stack work harder. VoiceLink lets reps speak quick updates in WhatsApp, and those notes sync automatically to your CRM: Teamleader, Pipedrive, Salesforce, Odoo, HubSpot, and more. No new inboxes. No extra apps. No habit changes. We remove bottlenecks by connecting proven systems and turning scattered conversations into clean, actionable data. The same approach guides every project: find the friction, automate within your stack, and deliver results that last. If a system has an API, we can integrate it.',
+    
+    'diensten.sections.what_sets_apart.title': 'What Sets Us Apart',
+    'diensten.sections.what_sets_apart.preview': 'Deep CRM knowledge, AI automation expertise, and cloud-ready solutions without bureaucracy.',
+    'diensten.sections.what_sets_apart.content': 'Deep CRM knowledge – We know how to unlock the full potential of CRM systems. AI automation pioneers – We apply AI in real processes, turning advanced tech into daily efficiency. Cloud-ready & workflow-focused – Our systems are designed for today\'s environment and tomorrow\'s growth. Efficiency unlocks – We detect bottlenecks others miss and design long-term solutions. Fast delivery – Without the bureaucracy of big firms, we deliver quicker and more directly.',
+    
+    'diensten.sections.philosophy.title': 'Our Philosophy',
+    'diensten.sections.philosophy.preview': 'We make work smoother without changing how teams operate, automating background tasks.',
+    'diensten.sections.philosophy.content': 'We don\'t reinvent how teams work—we make their work smoother. The tools people already know stay the same, but we automate repetitive, low-value tasks in the background. This means less energy wasted on admin, and more time for meaningful interactions.',
+    
+    'diensten.sections.commitment.title': 'Commitment to Clients',
+    'diensten.sections.commitment.preview': 'Dedicated partners with direct communication and long-term relationship focus.',
+    'diensten.sections.commitment.content': 'We are dedicated partners, available whenever needed. We communicate directly, make fast decisions, and aim for long-term relationships that continuously unlock new efficiencies as needs evolve.',
+    
+    // Benefits
+    'diensten.benefits.quick_wins.title': 'Quick Wins Early On',
+    'diensten.benefits.quick_wins.description': 'See immediate improvements with our modular approach that delivers value from day one.',
+    'diensten.benefits.lower_risk.title': 'Lower Risk',
+    'diensten.benefits.lower_risk.description': 'Proven steps and tested components reduce implementation risk significantly.',
+    'diensten.benefits.flexible_adaptation.title': 'Flexible Adaptation',
+    'diensten.benefits.flexible_adaptation.description': 'Easily adapt to new needs as they appear with our modular architecture.',
+    'diensten.benefits.measurable_value.title': 'Measurable Value',
+    'diensten.benefits.measurable_value.description': 'Each phase delivers concrete, measurable improvements to your operations.',
+    'diensten.benefits.fast_delivery.title': 'Fast Delivery',
+    'diensten.benefits.fast_delivery.description': 'Without bureaucracy, we deliver solutions quicker and more directly.',
+    'diensten.benefits.ai_automation.title': 'AI Automation',
+    'diensten.benefits.ai_automation.description': 'Turn advanced technology into daily efficiency with practical AI implementations.',
+    
+    // Trust Indicators
+    'diensten.trust.gdpr': 'GDPR Compliant',
+    'diensten.trust.uptime': '99.9% Uptime',
+    'diensten.trust.support': '24/7 Support'
   }
 };
 
