@@ -8,12 +8,10 @@ import {
   Zap, 
   CheckCircle2, 
   ArrowRight,
-  Globe,
   MessageSquare,
   Users,
   Settings,
-  BarChart3,
-  Phone
+  BarChart3
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,57 +21,37 @@ export function KnowledgeCopilotUseCase() {
   const features = [
     {
       icon: Database,
-      title: "Connects to your tools",
-      description: "If a system has an API, we can plug it in."
+      title: "Connects to your existing tools",
+      description: "Works with your current systems - no need to change anything"
     },
     {
       icon: MessageSquare,
-      title: "Understands your content",
-      description: "AI reads your docs and past emails so you can ask questions in normal language and get precise, source-backed answers."
+      title: "Understands your business",
+      description: "AI learns from your documents and emails to give smart answers"
     },
     {
       icon: Mail,
-      title: "Writes with context",
-      description: "Inside a clean inbox, the assistant suggests reply drafts you can edit and send."
+      title: "Helps write better emails",
+      description: "Suggests professional email replies you can edit and send"
     },
     {
       icon: Zap,
-      title: "Sends data to the right place",
-      description: "The AI cleans, labels, and routes information to your CRM or other systems—automatically."
-    },
-    {
-      icon: Shield,
-      title: "You stay in control",
-      description: "Clear role-based permissions, human-in-the-loop for sensitive cases, plus logging and audit trails."
+      title: "Saves information automatically",
+      description: "Important details get saved to the right place without manual work"
     }
   ];
 
   const benefits = [
-    "Faster replies, fewer tabs, consistent quality",
-    "Less searching; knowledge reused across the team",
-    "Security by design (only the right people see the right data)",
-    "Practical, affordable front-ends your team actually uses"
-  ];
-
-  const expansionAreas = [
-    {
-      category: "More systems",
-      items: ["ERP", "ticketing/ITSM", "e-signature", "data warehouse", "telephony", "Teams/Slack"]
-    },
-    {
-      category: "More channels", 
-      items: ["website chat", "WhatsApp or voice notes that create CRM updates"]
-    },
-    {
-      category: "More workflows",
-      items: ["auto-triage of cases", "task creation and approvals", "onboarding playbooks", "field-service guides", "finance collections", "procurement Q&A", "multilingual support"]
-    }
+    "Reply to emails faster with better quality",
+    "Find information quickly without searching through files",
+    "Your data stays secure - only authorized people see what they need",
+    "Simple interfaces that your team will actually want to use"
   ];
 
   return (
     <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
       <div className="w-full">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -84,19 +62,19 @@ export function KnowledgeCopilotUseCase() {
           >
             <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/20 text-white mb-8 border border-white/30 shadow-lg backdrop-blur-sm">
               <Database className="h-4 w-4 mr-2" />
-              <span className="font-medium">Use Case</span>
+              <span className="font-medium">Use Case Example</span>
             </div>
             
             <h2 className="finit-h1 text-white mb-6">
-              Knowledge & Email Co-Pilot
+              Knowledge & Email Assistant
             </h2>
             
             <p className="finit-body max-w-4xl mx-auto mb-8" style={{ color: '#36454F' }}>
-              One place where your team can find answers and draft great emails using the tools and data you already have: SharePoint documents, email history, CRM, and internal systems.
+              One smart system where your team can find answers and write better emails using the tools and information you already have.
             </p>
           </motion.div>
 
-          {/* Main Content Grid */}
+          {/* Main Content */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
             
             {/* How It Works */}
@@ -106,7 +84,7 @@ export function KnowledgeCopilotUseCase() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
+              <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-8 border border-white/25 shadow-xl">
                 <h3 className="finit-h2 mb-8" style={{ color: '#36454F' }}>How it works</h3>
                 
                 <div className="space-y-6">
@@ -141,7 +119,7 @@ export function KnowledgeCopilotUseCase() {
               className="space-y-8"
             >
               {/* Benefits */}
-              <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
+              <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-8 border border-white/25 shadow-xl">
                 <h3 className="finit-h2 mb-6" style={{ color: '#36454F' }}>What you get</h3>
                 
                 <div className="space-y-4">
@@ -161,49 +139,62 @@ export function KnowledgeCopilotUseCase() {
                 </div>
               </div>
 
-              {/* Simple Web Apps */}
-              <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
-                <h3 className="finit-h2 mb-4" style={{ color: '#36454F' }}>Simple web apps & interfaces</h3>
+              {/* Simple Apps */}
+              <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-8 border border-white/25 shadow-xl">
+                <h3 className="finit-h2 mb-4" style={{ color: '#36454F' }}>Easy-to-use interfaces</h3>
                 <p className="text-sm leading-relaxed mb-4" style={{ color: '#36454F' }}>
-                  We quickly build lightweight web apps and UIs so your users can interact with the assistant and your data in a simple, focused way—think dashboards, inboxes, checklists, forms, customer portals.
+                  We build simple web apps so your team can easily use the AI assistant - like dashboards, email inboxes, and forms.
                 </p>
                 <p className="text-sm leading-relaxed" style={{ color: '#36454F' }}>
-                  Thanks to AI-assisted development, these interfaces are delivered faster and at a lower cost than traditional builds, without sacrificing quality or security.
+                  These are built quickly and cost-effectively, without compromising on quality or security.
                 </p>
               </div>
             </motion.div>
           </div>
 
-          {/* Expansion Possibilities */}
+          {/* Future Possibilities - Simplified */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl mb-12"
+            className="bg-white/90 backdrop-blur-xl rounded-2xl p-8 border border-white/25 shadow-xl mb-12"
           >
-            <h3 className="finit-h2 mb-8 text-center" style={{ color: '#36454F' }}>Where this can go next</h3>
+            <h3 className="finit-h2 mb-8 text-center" style={{ color: '#36454F' }}>This can grow with your business</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {expansionAreas.map((area, index) => (
-                <motion.div
-                  key={area.category}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.1 * index }}
-                  className="text-center"
-                >
-                  <h4 className="font-medium mb-4" style={{ color: '#36454F' }}>{area.category}</h4>
-                  <div className="space-y-2">
-                    {area.items.map((item, itemIndex) => (
-                      <div key={itemIndex} className="text-white/80 text-sm bg-white/10 rounded-lg px-3 py-2 border border-white/20">
-                        <span style={{ color: '#36454F' }}>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
+              <div className="text-center">
+                <h4 className="font-medium mb-4" style={{ color: '#36454F' }}>Connect more systems</h4>
+                <div className="space-y-2">
+                  {["Your accounting software", "Customer support tools", "Document signing", "Phone systems"].map((item, index) => (
+                    <div key={index} className="text-sm bg-white/60 rounded-lg px-3 py-2 border border-white/20">
+                      <span style={{ color: '#36454F' }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <h4 className="font-medium mb-4" style={{ color: '#36454F' }}>Add more ways to communicate</h4>
+                <div className="space-y-2">
+                  {["Website chat", "WhatsApp integration", "Voice messages", "Mobile apps"].map((item, index) => (
+                    <div key={index} className="text-sm bg-white/60 rounded-lg px-3 py-2 border border-white/20">
+                      <span style={{ color: '#36454F' }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <h4 className="font-medium mb-4" style={{ color: '#36454F' }}>Automate more tasks</h4>
+                <div className="space-y-2">
+                  {["Sort customer requests", "Create tasks automatically", "Help with onboarding", "Multi-language support"].map((item, index) => (
+                    <div key={index} className="text-sm bg-white/60 rounded-lg px-3 py-2 border border-white/20">
+                      <span style={{ color: '#36454F' }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </motion.div>
 
@@ -213,18 +204,18 @@ export function KnowledgeCopilotUseCase() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-center bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl"
+            className="text-center bg-white/90 backdrop-blur-xl rounded-2xl p-8 border border-white/25 shadow-xl"
           >
             <p className="finit-body mb-6 max-w-4xl mx-auto" style={{ color: '#36454F' }}>
-              In short: we connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place, and your team works faster with higher quality.
+              We connect your existing systems, use AI to make sense of your data, and build simple interfaces so your team can work faster and smarter.
             </p>
             
             <p className="text-sm mb-8" style={{ color: '#36454F' }}>
-              This is just one example. We tailor it to your setup and processes.
+              This is just one example - we customize everything to fit your specific business needs.
             </p>
 
             <ProjectRequestDialog 
-              buttonText="Explore This Solution"
+              buttonText="Learn More About This Solution"
               buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
             />
           </motion.div>
