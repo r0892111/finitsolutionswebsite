@@ -149,4 +149,91 @@ export function KnowledgeCopilotUseCase() {
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, x: 20 }}
-                      while
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.1 * index }}
+                      className="flex items-center gap-3"
+                    >
+                      <CheckCircle2 className="h-5 w-5 text-white flex-shrink-0" />
+                      <span className="text-sm" style={{ color: '#36454F' }}>{benefit}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Simple Web Apps */}
+              <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
+                <h3 className="finit-h2 mb-4" style={{ color: '#36454F' }}>Simple web apps & interfaces</h3>
+                <p className="text-sm leading-relaxed mb-4" style={{ color: '#36454F' }}>
+                  We quickly build lightweight web apps and UIs so your users can interact with the assistant and your data in a simple, focused way—think dashboards, inboxes, checklists, forms, customer portals.
+                </p>
+                <p className="text-xs" style={{ color: '#36454F' }}>
+                  Thanks to AI-assisted development, these interfaces are delivered faster and at a lower cost than traditional builds, without sacrificing quality or security.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Expansion Areas */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mb-16"
+          >
+            <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
+              <h3 className="finit-h2 mb-6 text-center" style={{ color: '#36454F' }}>Where this can expand</h3>
+              <p className="text-center mb-8 max-w-3xl mx-auto" style={{ color: '#36454F' }}>
+                This is just one example. We can adapt this solution to work with your specific tools and processes.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+                  <h4 className="font-semibold mb-3" style={{ color: '#36454F' }}>Connect More Tools</h4>
+                  <p className="text-sm" style={{ color: '#36454F' }}>
+                    Link with your accounting software, project management tools, or any system with an API.
+                  </p>
+                </div>
+                
+                <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+                  <h4 className="font-semibold mb-3" style={{ color: '#36454F' }}>Add More Channels</h4>
+                  <p className="text-sm" style={{ color: '#36454F' }}>
+                    Enable website chat, WhatsApp integration, or voice messages that automatically update your systems.
+                  </p>
+                </div>
+                
+                <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+                  <h4 className="font-semibold mb-3" style={{ color: '#36454F' }}>Automate More Tasks</h4>
+                  <p className="text-sm" style={{ color: '#36454F' }}>
+                    Set up automatic case sorting, task creation, onboarding processes, and customer support workflows.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Summary */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="text-center"
+          >
+            <p className="finit-body max-w-4xl mx-auto mb-8" style={{ color: '#36454F' }}>
+              We connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place—and your team works faster with higher quality.
+            </p>
+            
+            <ProjectRequestDialog>
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
+                Explore This Solution
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </ProjectRequestDialog>
+          </motion.div>
+        </div>
+      </div>
