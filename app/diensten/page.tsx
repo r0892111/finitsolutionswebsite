@@ -260,9 +260,9 @@ export default function TailoredITSolutionsPage() {
                         className="overflow-hidden"
                       >
                         <div className="px-6 md:px-8 pb-6 md:pb-8">
-                      <div className="absolute inset-0 bg-gradient-to-br from-slate-800/60 to-slate-900/40"></div>
+                          <div className="bg-white/90 rounded-xl p-6 border" style={{ borderColor: '#1C2C55' }}>
                             <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed" style={{ color: '#202226' }}>
-                        <div className="text-center text-white/80">
+                              {section.content}
                             </p>
                           </div>
                         </div>
