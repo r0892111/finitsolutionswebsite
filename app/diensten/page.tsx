@@ -179,7 +179,7 @@ export default function TailoredITSolutionsPage() {
               <ProjectRequestDialog 
                 buttonText="Start Your Project"
                 buttonClassName="backdrop-blur-xl hover:bg-white border shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
-                style={{ backgroundColor: '#F7E69B', color: '#1C2C55', borderColor: '#1C2C55' }}
+                buttonProps={{ style: { backgroundColor: '#F7E69B', color: '#1C2C55', borderColor: '#1C2C55' } }}
               />
               <a 
                 href="https://calendly.com/alex-finitsolutions/30min"
@@ -458,7 +458,7 @@ export default function TailoredITSolutionsPage() {
               <ProjectRequestDialog 
                 buttonText="Start Your Transformation"
                 buttonClassName="backdrop-blur-xl hover:bg-white border shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
-                style={{ backgroundColor: '#F7E69B', color: '#1C2C55', borderColor: '#1C2C55' }}
+                buttonProps={{ style: { backgroundColor: '#F7E69B', color: '#1C2C55', borderColor: '#1C2C55' } }}
               />
               <a 
                 href="https://calendly.com/alex-finitsolutions/30min"
