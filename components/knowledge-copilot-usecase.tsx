@@ -226,6 +226,32 @@ export function KnowledgeCopilotUseCase() {
               We connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place—and your team works faster with higher quality.
             </p>
           </motion.div>
+
+          {/* Marketplace CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 1.0 }}
+            className="text-center"
+          >
+            <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/25 shadow-2xl">
+              <h3 className="finit-h2 mb-4" style={{ color: '#36454F' }}>
+                Looking for a plug-and-play, online-purchasable solution?
+              </h3>
+              <p className="finit-body mb-8" style={{ color: '#36454F' }}>
+                Check out our marketplace for ready-to-use AI tools that integrate instantly with your existing systems.
+              </p>
+              <a href="/marketplace">
+                <button className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium">
+                  Visit Marketplace
+                  <svg className="ml-2 h-5 w-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </button>
+              </a>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
