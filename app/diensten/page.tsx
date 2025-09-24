@@ -221,11 +221,11 @@ export default function TailoredITSolutionsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-white/15 backdrop-blur-xl rounded-2xl border border-white/25 shadow-xl overflow-hidden"
+                  className="bg-white/25 backdrop-blur-xl rounded-2xl border border-white/30 shadow-xl overflow-hidden"
                 >
                   <button
                     onClick={() => toggleSection(section.key)}
-                    className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-white/5 transition-colors group"
+                    className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-white/10 transition-colors group"
                   >
                     <div className="flex-1">
                       <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-2 group-hover:opacity-90 transition-colors text-white">
