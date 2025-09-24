@@ -178,7 +178,7 @@ export default function TailoredITSolutionsPage() {
               className="flex flex-col sm:flex-row gap-6 justify-center"
             >
               <ProjectRequestDialog 
-                buttonText="Start Your Project"
+                buttonText={t('project.start')}
                 buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
               />
               <a 

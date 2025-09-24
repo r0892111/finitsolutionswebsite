@@ -223,6 +223,9 @@ const translations = {
     'diensten.trust.uptime': '99,9% Uptime',
     'diensten.trust.support': '24/7 Ondersteuning',
     
+    // Project Request Button
+    'project.start': 'Start je project',
+    
     // Knowledge Copilot Use Case
     'knowledge_copilot.badge': 'Use Case',
     'knowledge_copilot.title': 'Kennis & E-mail Co-Pilot',
@@ -458,6 +461,9 @@ const translations = {
     'diensten.trust.gdpr': 'GDPR Compliant',
     'diensten.trust.uptime': '99.9% Uptime',
     'diensten.trust.support': '24/7 Support',
+    
+    // Project Request Button
+    'project.start': 'Start Your Project',
     
     // Knowledge Copilot Use Case
     'knowledge_copilot.badge': 'Use Case',
