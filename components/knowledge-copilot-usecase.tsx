@@ -254,6 +254,3 @@ export function KnowledgeCopilotUseCase() {
           </motion.div>
         </div>
       </div>
-    </section>
-  );
-}
