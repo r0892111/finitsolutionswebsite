@@ -19,56 +19,44 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
+import { useLanguage } from "@/contexts/language-context";
 
 export function KnowledgeCopilotUseCase() {
+  const { t } = useLanguage();
+  
   const features = [
     {
       icon: Database,
-      title: "Connects to your tools",
-      description: "If a system has an API, we can plug it in."
+      title: t('knowledge_copilot.features.connects_tools'),
+      description: t('knowledge_copilot.features.connects_tools_description')
     },
     {
       icon: MessageSquare,
-      title: "Understands your content",
-      description: "AI reads your docs and past emails so you can ask questions in normal language and get precise, source-backed answers."
+      title: t('knowledge_copilot.features.understands_content'),
+      description: t('knowledge_copilot.features.understands_content_description')
     },
     {
       icon: Mail,
-      title: "Writes with context",
-      description: "Inside a clean inbox, the assistant suggests reply drafts you can edit and send."
+      title: t('knowledge_copilot.features.writes_context'),
+      description: t('knowledge_copilot.features.writes_context_description')
     },
     {
       icon: Zap,
-      title: "Sends data to the right place",
-      description: "The AI cleans, labels, and routes information to your CRM or other systems—automatically."
+      title: t('knowledge_copilot.features.sends_data'),
+      description: t('knowledge_copilot.features.sends_data_description')
     },
     {
       icon: Shield,
-      title: "You stay in control",
-      description: "Clear role-based permissions, human-in-the-loop for sensitive cases, plus logging and audit trails."
+      title: t('knowledge_copilot.features.stay_control'),
+      description: t('knowledge_copilot.features.stay_control_description')
     }
   ];
 
   const benefits = [
-    "Faster replies, fewer tabs, consistent quality",
-    "Less searching; knowledge reused across the team",
-    "Security by design (only the right people see the right data)",
-    "Practical, affordable front-ends your team actually uses"
-  ];
-
-  const expansionAreas = [
-    {
-      category: "More systems",
-      items: ["ERP", "ticketing/ITSM", "e-signature", "data warehouse", "telephony", "Teams/Slack"]
-    },
-    {
-      category: "More channels", 
-      items: ["website chat", "WhatsApp or voice notes that create CRM updates"]
-    },
-    {
-      category: "More workflows",
-      items: ["auto-triage of cases", "task creation and approvals", "onboarding playbooks", "field-service guides", "finance collections", "procurement Q&A", "multilingual support"]
-    }
+    t('knowledge_copilot.benefits.faster_replies'),
+    t('knowledge_copilot.benefits.less_searching'),
+    t('knowledge_copilot.benefits.security_design'),
+    t('knowledge_copilot.benefits.practical_frontends')
   ];
 
   return (
@@ -85,15 +73,15 @@ export function KnowledgeCopilotUseCase() {
           >
             <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/20 text-white mb-8 border border-white/30 shadow-lg backdrop-blur-sm">
               <Database className="h-4 w-4 mr-2" />
-              <span className="font-medium">Use Case</span>
+              <span className="font-medium">{t('knowledge_copilot.badge')}</span>
             </div>
             
             <h2 className="finit-h1 text-white mb-6">
-              Knowledge & Email Co-Pilot
+              {t('knowledge_copilot.title')}
             </h2>
             
             <p className="finit-body max-w-4xl mx-auto mb-8" style={{ color: '#36454F' }}>
-              One place where your team can find answers and draft great emails using the tools and data you already have—SharePoint documents, email history, CRM, and internal systems.
+              {t('knowledge_copilot.description')}
             </p>
           </motion.div>
 
@@ -108,7 +96,7 @@ export function KnowledgeCopilotUseCase() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
-                <h3 className="finit-h2 mb-8" style={{ color: '#36454F' }}>How it works</h3>
+                <h3 className="finit-h2 mb-8" style={{ color: '#36454F' }}>{t('knowledge_copilot.how_it_works')}</h3>
                 
                 <div className="space-y-6">
                   {features.map((feature, index) => (
@@ -143,7 +131,7 @@ export function KnowledgeCopilotUseCase() {
             >
               {/* Benefits */}
               <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
-                <h3 className="finit-h2 mb-6" style={{ color: '#36454F' }}>What you get</h3>
+                <h3 className="finit-h2 mb-6" style={{ color: '#36454F' }}>{t('knowledge_copilot.what_you_get')}</h3>
                 
                 <div className="space-y-4">
                   {benefits.map((benefit, index) => (
@@ -164,12 +152,12 @@ export function KnowledgeCopilotUseCase() {
 
               {/* Simple Web Apps */}
               <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
-                <h3 className="finit-h2 mb-4" style={{ color: '#36454F' }}>Simple web apps & interfaces</h3>
+                <h3 className="finit-h2 mb-4" style={{ color: '#36454F' }}>{t('knowledge_copilot.simple_web_apps')}</h3>
                 <p className="text-sm leading-relaxed mb-4" style={{ color: '#36454F' }}>
-                  We quickly build lightweight web apps and UIs so your users can interact with the assistant and your data in a simple, focused way—think dashboards, inboxes, checklists, forms, customer portals.
+                  {t('knowledge_copilot.simple_web_apps_description')}
                 </p>
                 <p className="text-xs" style={{ color: '#36454F' }}>
-                  Thanks to AI-assisted development, these interfaces are delivered faster and at a lower cost than traditional builds, without sacrificing quality or security.
+                  {t('knowledge_copilot.simple_web_apps_note')}
                 </p>
               </div>
             </motion.div>
@@ -184,30 +172,30 @@ export function KnowledgeCopilotUseCase() {
             className="mb-16"
           >
             <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
-              <h3 className="finit-h2 mb-6 text-center" style={{ color: '#36454F' }}>Where this can expand</h3>
+              <h3 className="finit-h2 mb-6 text-center" style={{ color: '#36454F' }}>{t('knowledge_copilot.where_expand')}</h3>
               <p className="text-center mb-8 max-w-3xl mx-auto" style={{ color: '#36454F' }}>
-                This is just one example. We can adapt this solution to work with your specific tools and processes.
+                {t('knowledge_copilot.expand_description')}
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
-                  <h4 className="font-semibold mb-3" style={{ color: '#36454F' }}>Connect More Tools</h4>
+                  <h4 className="font-semibold mb-3" style={{ color: '#36454F' }}>{t('knowledge_copilot.connect_more_tools')}</h4>
                   <p className="text-sm" style={{ color: '#36454F' }}>
-                    Link with your accounting software, project management tools, or any system with an API.
+                    {t('knowledge_copilot.connect_more_tools_description')}
                   </p>
                 </div>
                 
                 <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
-                  <h4 className="font-semibold mb-3" style={{ color: '#36454F' }}>Add More Channels</h4>
+                  <h4 className="font-semibold mb-3" style={{ color: '#36454F' }}>{t('knowledge_copilot.add_more_channels')}</h4>
                   <p className="text-sm" style={{ color: '#36454F' }}>
-                    Enable website chat, WhatsApp integration, or voice messages that automatically update your systems.
+                    {t('knowledge_copilot.add_more_channels_description')}
                   </p>
                 </div>
                 
                 <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
-                  <h4 className="font-semibold mb-3" style={{ color: '#36454F' }}>Automate More Tasks</h4>
+                  <h4 className="font-semibold mb-3" style={{ color: '#36454F' }}>{t('knowledge_copilot.automate_more_tasks')}</h4>
                   <p className="text-sm" style={{ color: '#36454F' }}>
-                    Set up automatic case sorting, task creation, onboarding processes, and customer support workflows.
+                    {t('knowledge_copilot.automate_more_tasks_description')}
                   </p>
                 </div>
               </div>
@@ -235,14 +223,14 @@ export function KnowledgeCopilotUseCase() {
           >
             <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/25 shadow-2xl">
               <h3 className="finit-h2 mb-4" style={{ color: '#36454F' }}>
-                Looking for a plug-and-play, online-purchasable solution instead?
+                {t('knowledge_copilot.marketplace_cta_title')}
               </h3>
               <p className="finit-body mb-8" style={{ color: '#36454F' }}>
-                Check out our marketplace for ready-to-use AI tools that integrate instantly with your existing systems.
+                {t('knowledge_copilot.marketplace_cta_description')}
               </p>
               <a href="/marketplace">
                 <button className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium">
-                  Visit Marketplace
+                  {t('knowledge_copilot.visit_marketplace')}
                   <svg className="ml-2 h-5 w-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>

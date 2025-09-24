@@ -221,7 +221,42 @@ const translations = {
     // Trust Indicators
     'diensten.trust.gdpr': 'GDPR Conform',
     'diensten.trust.uptime': '99,9% Uptime',
-    'diensten.trust.support': '24/7 Ondersteuning'
+    'diensten.trust.support': '24/7 Ondersteuning',
+    
+    // Knowledge Copilot Use Case
+    'knowledge_copilot.badge': 'Use Case',
+    'knowledge_copilot.title': 'Kennis & E-mail Co-Pilot',
+    'knowledge_copilot.description': 'Eén plek waar uw team antwoorden kan vinden en geweldige e-mails kan opstellen met de tools en data die u al heeft—SharePoint documenten, e-mailgeschiedenis, CRM en interne systemen.',
+    'knowledge_copilot.how_it_works': 'Hoe het werkt',
+    'knowledge_copilot.what_you_get': 'Wat u krijgt',
+    'knowledge_copilot.simple_web_apps': 'Eenvoudige web apps & interfaces',
+    'knowledge_copilot.simple_web_apps_description': 'We bouwen snel lichtgewicht web apps en UI\'s zodat uw gebruikers op een eenvoudige, gerichte manier kunnen interageren met de assistent en uw data—denk aan dashboards, inboxen, checklists, formulieren, klantportalen.',
+    'knowledge_copilot.simple_web_apps_note': 'Dankzij AI-ondersteunde ontwikkeling worden deze interfaces sneller en tegen lagere kosten geleverd dan traditionele builds, zonder kwaliteit of veiligheid op te offeren.',
+    'knowledge_copilot.where_expand': 'Waar dit kan uitbreiden',
+    'knowledge_copilot.expand_description': 'Dit is slechts één voorbeeld. We kunnen deze oplossing aanpassen om te werken met uw specifieke tools en processen.',
+    'knowledge_copilot.connect_more_tools': 'Verbind Meer Tools',
+    'knowledge_copilot.connect_more_tools_description': 'Koppel met uw boekhoudsoftware, projectmanagementtools, of elk systeem met een API.',
+    'knowledge_copilot.add_more_channels': 'Voeg Meer Kanalen Toe',
+    'knowledge_copilot.add_more_channels_description': 'Schakel website chat, WhatsApp integratie, of spraakberichten in die automatisch uw systemen bijwerken.',
+    'knowledge_copilot.automate_more_tasks': 'Automatiseer Meer Taken',
+    'knowledge_copilot.automate_more_tasks_description': 'Stel automatische case sortering, taakcreatie, onboarding processen en klantenservice workflows in.',
+    'knowledge_copilot.marketplace_cta_title': 'Op zoek naar een plug-and-play, online aankoopbare oplossing?',
+    'knowledge_copilot.marketplace_cta_description': 'Bekijk onze marketplace voor kant-en-klare AI tools die direct integreren met uw bestaande systemen.',
+    'knowledge_copilot.visit_marketplace': 'Bezoek Marketplace',
+    'knowledge_copilot.features.connects_tools': 'Verbindt met uw tools',
+    'knowledge_copilot.features.connects_tools_description': 'Als een systeem een API heeft, kunnen we het aansluiten.',
+    'knowledge_copilot.features.understands_content': 'Begrijpt uw content',
+    'knowledge_copilot.features.understands_content_description': 'AI leest uw documenten en eerdere e-mails zodat u vragen kunt stellen in normale taal en precieze, brongestuurde antwoorden krijgt.',
+    'knowledge_copilot.features.writes_context': 'Schrijft met context',
+    'knowledge_copilot.features.writes_context_description': 'Binnen een schone inbox stelt de assistent antwoordconcepten voor die u kunt bewerken en verzenden.',
+    'knowledge_copilot.features.sends_data': 'Stuurt data naar de juiste plaats',
+    'knowledge_copilot.features.sends_data_description': 'De AI reinigt, labelt en routeert informatie naar uw CRM of andere systemen—automatisch.',
+    'knowledge_copilot.features.stay_control': 'U blijft in controle',
+    'knowledge_copilot.features.stay_control_description': 'Duidelijke rolgebaseerde machtigingen, human-in-the-loop voor gevoelige gevallen, plus logging en audit trails.',
+    'knowledge_copilot.benefits.faster_replies': 'Snellere antwoorden, minder tabbladen, consistente kwaliteit',
+    'knowledge_copilot.benefits.less_searching': 'Minder zoeken; kennis hergebruikt binnen het team',
+    'knowledge_copilot.benefits.security_design': 'Veiligheid by design (alleen de juiste mensen zien de juiste data)',
+    'knowledge_copilot.benefits.practical_frontends': 'Praktische, betaalbare front-ends die uw team daadwerkelijk gebruikt'
   },
   en: {
     // Navbar
@@ -422,7 +457,42 @@ const translations = {
     // Trust Indicators
     'diensten.trust.gdpr': 'GDPR Compliant',
     'diensten.trust.uptime': '99.9% Uptime',
-    'diensten.trust.support': '24/7 Support'
+    'diensten.trust.support': '24/7 Support',
+    
+    // Knowledge Copilot Use Case
+    'knowledge_copilot.badge': 'Use Case',
+    'knowledge_copilot.title': 'Knowledge & Email Co-Pilot',
+    'knowledge_copilot.description': 'One place where your team can find answers and draft great emails using the tools and data you already have—SharePoint documents, email history, CRM, and internal systems.',
+    'knowledge_copilot.how_it_works': 'How it works',
+    'knowledge_copilot.what_you_get': 'What you get',
+    'knowledge_copilot.simple_web_apps': 'Simple web apps & interfaces',
+    'knowledge_copilot.simple_web_apps_description': 'We quickly build lightweight web apps and UIs so your users can interact with the assistant and your data in a simple, focused way—think dashboards, inboxes, checklists, forms, customer portals.',
+    'knowledge_copilot.simple_web_apps_note': 'Thanks to AI-assisted development, these interfaces are delivered faster and at a lower cost than traditional builds, without sacrificing quality or security.',
+    'knowledge_copilot.where_expand': 'Where this can expand',
+    'knowledge_copilot.expand_description': 'This is just one example. We can adapt this solution to work with your specific tools and processes.',
+    'knowledge_copilot.connect_more_tools': 'Connect More Tools',
+    'knowledge_copilot.connect_more_tools_description': 'Link with your accounting software, project management tools, or any system with an API.',
+    'knowledge_copilot.add_more_channels': 'Add More Channels',
+    'knowledge_copilot.add_more_channels_description': 'Enable website chat, WhatsApp integration, or voice messages that automatically update your systems.',
+    'knowledge_copilot.automate_more_tasks': 'Automate More Tasks',
+    'knowledge_copilot.automate_more_tasks_description': 'Set up automatic case sorting, task creation, onboarding processes, and customer support workflows.',
+    'knowledge_copilot.marketplace_cta_title': 'Looking for a plug-and-play, online-purchasable solution instead?',
+    'knowledge_copilot.marketplace_cta_description': 'Check out our marketplace for ready-to-use AI tools that integrate instantly with your existing systems.',
+    'knowledge_copilot.visit_marketplace': 'Visit Marketplace',
+    'knowledge_copilot.features.connects_tools': 'Connects to your tools',
+    'knowledge_copilot.features.connects_tools_description': 'If a system has an API, we can plug it in.',
+    'knowledge_copilot.features.understands_content': 'Understands your content',
+    'knowledge_copilot.features.understands_content_description': 'AI reads your docs and past emails so you can ask questions in normal language and get precise, source-backed answers.',
+    'knowledge_copilot.features.writes_context': 'Writes with context',
+    'knowledge_copilot.features.writes_context_description': 'Inside a clean inbox, the assistant suggests reply drafts you can edit and send.',
+    'knowledge_copilot.features.sends_data': 'Sends data to the right place',
+    'knowledge_copilot.features.sends_data_description': 'The AI cleans, labels, and routes information to your CRM or other systems—automatically.',
+    'knowledge_copilot.features.stay_control': 'You stay in control',
+    'knowledge_copilot.features.stay_control_description': 'Clear role-based permissions, human-in-the-loop for sensitive cases, plus logging and audit trails.',
+    'knowledge_copilot.benefits.faster_replies': 'Faster replies, fewer tabs, consistent quality',
+    'knowledge_copilot.benefits.less_searching': 'Less searching; knowledge reused across the team',
+    'knowledge_copilot.benefits.security_design': 'Security by design (only the right people see the right data)',
+    'knowledge_copilot.benefits.practical_frontends': 'Practical, affordable front-ends your team actually uses'
   }
 };
 
