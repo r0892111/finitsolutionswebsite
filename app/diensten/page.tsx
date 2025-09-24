@@ -306,7 +306,7 @@ export default function TailoredITSolutionsPage() {
               >
                 <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
                   <CardContent className="p-8 relative z-10">
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 border shadow-lg" style={{ backgroundColor: '#F7E69B', borderColor: '#1C2C55' }}>
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 border shadow-lg bg-gradient-to-br from-white/80 via-blue-50/60 to-primary/20" style={{ borderColor: '#1C2C55' }}>
                       <benefit.icon className="h-6 w-6" style={{ color: '#1C2C55' }} />
                     </div>
                     <h3 className="finit-h2 mb-4 group-hover:opacity-90 transition-colors" style={{ color: '#202226' }}>
@@ -354,7 +354,7 @@ export default function TailoredITSolutionsPage() {
                 <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
                   <CardContent className="p-8 relative z-10">
                     <div className="flex items-start gap-6">
-                      <div className="w-14 h-14 rounded-xl flex items-center justify-center border shadow-lg flex-shrink-0" style={{ backgroundColor: '#F7E69B', borderColor: '#1C2C55' }}>
+                      <div className="w-14 h-14 rounded-xl flex items-center justify-center border shadow-lg flex-shrink-0 bg-gradient-to-br from-white/80 via-blue-50/60 to-primary/20" style={{ borderColor: '#1C2C55' }}>
                         <item.icon className="h-7 w-7" style={{ color: '#1C2C55' }} />
                       </div>
                       <div className="flex-1">
