@@ -80,8 +80,8 @@ const useCaseData = {
 export function ExpandableUseCase() {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleExpanded = () => {
-    setIsExpanded(!isExpanded);
+  const handleToggle = () => {
+    setIsExpanded(prev => !prev);
   };
 
   return (
@@ -130,7 +130,7 @@ export function ExpandableUseCase() {
             className="bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-slate-600/50 shadow-xl overflow-hidden"
           >
             <button
-              onClick={toggleExpanded}
+              onClick={handleToggle}
               className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-black/10 transition-colors group"
             >
               <div className="flex items-center gap-4">
