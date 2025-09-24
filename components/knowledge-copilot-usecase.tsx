@@ -222,9 +222,7 @@ export function KnowledgeCopilotUseCase() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="text-center"
           >
-            <p className="finit-body max-w-4xl mx-auto mb-8" style={{ color: '#36454F' }}>
-              We connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place—and your team works faster with higher quality.
-            </p>
+            
           </motion.div>
 
           {/* Marketplace CTA */}
