@@ -54,7 +54,7 @@ const expandableSections = [
     key: 'philosophy',
     title: 'Our Philosophy',
     preview: 'We make work smoother without changing how teams operate, automating background tasks.',
-    content: `We don't reinvent how teams work—we make their work smoother. The tools people already know stay the same, but we automate repetitive, low-value tasks in the background. This means less energy wasted on admin, and more time for meaningful interactions.`
+    content: `We don't reinvent how teams work, we make their work smoother. The tools people already know stay the same, but we automate repetitive, low-value tasks in the background. This means less energy wasted on admin, and more time for meaningful interactions.`
   },
   {
     key: 'commitment',
