@@ -91,7 +91,7 @@ export function KnowledgeCopilotUseCase() {
               Knowledge & Email Co-Pilot
             </h2>
             
-            <p className="finit-body max-w-4xl mx-auto text-white/90 mb-8">
+            <p className="finit-body max-w-4xl mx-auto mb-8" style={{ color: '#36454F' }}>
               One place where your team can find answers and draft great emails using the tools and data you already have—SharePoint documents, email history, CRM, and internal systems.
             </p>
           </motion.div>
@@ -107,7 +107,7 @@ export function KnowledgeCopilotUseCase() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
-                <h3 className="finit-h2 text-white mb-8">How it works</h3>
+                <h3 className="finit-h2 mb-8" style={{ color: '#36454F' }}>How it works</h3>
                 
                 <div className="space-y-6">
                   {features.map((feature, index) => (
@@ -123,8 +123,8 @@ export function KnowledgeCopilotUseCase() {
                         <feature.icon className="h-6 w-6" style={{ color: '#1C2C55' }} />
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-medium text-white mb-2">{feature.title}</h4>
-                        <p className="text-white/80 text-sm leading-relaxed">{feature.description}</p>
+                        <h4 className="font-medium mb-2" style={{ color: '#36454F' }}>{feature.title}</h4>
+                        <p className="text-sm leading-relaxed" style={{ color: '#36454F' }}>{feature.description}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -142,7 +142,7 @@ export function KnowledgeCopilotUseCase() {
             >
               {/* Benefits */}
               <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
-                <h3 className="finit-h2 text-white mb-6">What you get</h3>
+                <h3 className="finit-h2 mb-6" style={{ color: '#36454F' }}>What you get</h3>
                 
                 <div className="space-y-4">
                   {benefits.map((benefit, index) => (
@@ -155,7 +155,7 @@ export function KnowledgeCopilotUseCase() {
                       className="flex items-start gap-3"
                     >
                       <CheckCircle2 className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                      <span className="text-white/90 text-sm leading-relaxed">{benefit}</span>
+                      <span className="text-sm leading-relaxed" style={{ color: '#36454F' }}>{benefit}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -163,11 +163,11 @@ export function KnowledgeCopilotUseCase() {
 
               {/* Simple Web Apps */}
               <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl">
-                <h3 className="finit-h2 text-white mb-4">Simple web apps & interfaces</h3>
-                <p className="text-white/90 text-sm leading-relaxed mb-4">
+                <h3 className="finit-h2 mb-4" style={{ color: '#36454F' }}>Simple web apps & interfaces</h3>
+                <p className="text-sm leading-relaxed mb-4" style={{ color: '#36454F' }}>
                   We quickly build lightweight web apps and UIs so your users can interact with the assistant and your data in a simple, focused way—think dashboards, inboxes, checklists, forms, customer portals.
                 </p>
-                <p className="text-white/80 text-sm leading-relaxed">
+                <p className="text-sm leading-relaxed" style={{ color: '#36454F' }}>
                   Thanks to AI-assisted development, these interfaces are delivered faster and at a lower cost than traditional builds, without sacrificing quality or security.
                 </p>
               </div>
@@ -182,7 +182,7 @@ export function KnowledgeCopilotUseCase() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl mb-12"
           >
-            <h3 className="finit-h2 text-white mb-8 text-center">Where this can go next</h3>
+            <h3 className="finit-h2 mb-8 text-center" style={{ color: '#36454F' }}>Where this can go next</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {expansionAreas.map((area, index) => (
@@ -194,11 +194,11 @@ export function KnowledgeCopilotUseCase() {
                   transition={{ duration: 0.6, delay: 0.1 * index }}
                   className="text-center"
                 >
-                  <h4 className="font-medium text-white mb-4">{area.category}</h4>
+                  <h4 className="font-medium mb-4" style={{ color: '#36454F' }}>{area.category}</h4>
                   <div className="space-y-2">
                     {area.items.map((item, itemIndex) => (
                       <div key={itemIndex} className="text-white/80 text-sm bg-white/10 rounded-lg px-3 py-2 border border-white/20">
-                        {item}
+                        <span style={{ color: '#36454F' }}>{item}</span>
                       </div>
                     ))}
                   </div>
@@ -215,11 +215,11 @@ export function KnowledgeCopilotUseCase() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="text-center bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl"
           >
-            <p className="finit-body text-white/90 mb-6 max-w-4xl mx-auto">
+            <p className="finit-body mb-6 max-w-4xl mx-auto" style={{ color: '#36454F' }}>
               In short: we connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place—and your team works faster with higher quality.
             </p>
             
-            <p className="text-white/80 text-sm mb-8">
+            <p className="text-sm mb-8" style={{ color: '#36454F' }}>
               This is just one example. We tailor it to your setup and processes.
             </p>
 
