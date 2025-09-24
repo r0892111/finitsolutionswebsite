@@ -36,7 +36,7 @@ const expandableSections = [
     key: 'how-we-work',
     title: 'How We Work',
     preview: 'We solve problems step by step, building in modules rather than massive "all or nothing" projects.',
-    content: `We believe in solving problems step by step. Instead of tackling one massive "all or nothing" project, we build in modules—small, tested components that connect together into a web of efficiency. This approach gives our clients quick wins early on, lower risk through proven steps, and flexibility to adapt to new needs as they appear. Each phase delivers measurable value, so clients see impact right away.`
+    content: `We believe in solving problems step by step. Instead of tackling one massive "all or nothing" project, we build in modules: small, tested components that connect together into a web of efficiency. This approach gives our clients quick wins early on, lower risk through proven steps, and flexibility to adapt to new needs as they appear. Each phase delivers measurable value, so clients see impact right away.`
   },
   {
     key: 'innovation',
