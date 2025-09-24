@@ -229,7 +229,7 @@ export function KnowledgeCopilotUseCase() {
             <ProjectRequestDialog>
               <Button 
                 size="lg" 
-                className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 font-general-sans font-normal text-base px-8 py-4 rounded-full"
               >
                 Explore This Solution
                 <ArrowRight className="ml-2 h-4 w-4" />
