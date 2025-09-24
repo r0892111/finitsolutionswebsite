@@ -330,7 +330,7 @@ export default function TailoredITSolutionsPage() {
      
 
       {/* Final CTA Section */}
-      <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora relative overflow-hidden">
+      <section className="py-8 md:py-12 px-4 md:px-8 lg:px-12 bg-finit-aurora relative overflow-hidden">
         <div className="w-full">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
