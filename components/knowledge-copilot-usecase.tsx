@@ -189,6 +189,10 @@ export function KnowledgeCopilotUseCase() {
                 This is just one example. We can adapt this solution to work with your specific tools and processes.
               </p>
               
+              <p className="text-center mb-8 max-w-4xl mx-auto finit-body" style={{ color: '#36454F' }}>
+                We connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place—and your team works faster with higher quality.
+              </p>
+              
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
                   <h4 className="font-semibold mb-3" style={{ color: '#36454F' }}>Connect More Tools</h4>
