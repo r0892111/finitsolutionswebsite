@@ -154,7 +154,7 @@ export function KnowledgeCopilotUseCase() {
                       transition={{ duration: 0.5, delay: 0.1 * index }}
                       className="flex items-start gap-3"
                     >
-                      <CheckCircle2 className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                      <CheckCircle2 className="h-5 w-5 text-white mt-0.5 flex-shrink-0" />
                       <span className="text-sm leading-relaxed" style={{ color: '#36454F' }}>{benefit}</span>
                     </motion.div>
                   ))}
