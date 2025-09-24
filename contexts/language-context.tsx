@@ -165,7 +165,8 @@ const translations = {
     'marketplace.voicelink.features.sync': 'Automatische CRM-sync',
     'marketplace.voicelink.features.install': '3 min installatie',
     'marketplace.voicelink.features.support': 'Alle CRM\'s ondersteund'
-    
+,
+
     // Diensten Page
     'diensten.hero.title': 'Maatwerk IT Oplossingen',
     'diensten.hero.highlight': 'Gebouwd voor Impact',
