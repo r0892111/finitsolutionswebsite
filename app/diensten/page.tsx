@@ -315,12 +315,6 @@ export default function TailoredITSolutionsPage() {
                     <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/80">
                       {benefit.description}
                     </p>
-                    <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-3 group-hover:opacity-90 transition-colors" style={{ color: '#202226' }}>
-                      {benefit.title}
-                    </h3>
-                    <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed" style={{ color: '#202226' }}>
-                      {benefit.description}
-                    </p>
                   </CardContent>
                 </Card>
               </motion.div>
