@@ -225,16 +225,6 @@ export function KnowledgeCopilotUseCase() {
             <p className="finit-body max-w-4xl mx-auto mb-8" style={{ color: '#36454F' }}>
               We connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place—and your team works faster with higher quality.
             </p>
-            
-            <ProjectRequestDialog>
-              <Button 
-                size="lg" 
-                className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
-              >
-                Explore This Solution
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </ProjectRequestDialog>
           </motion.div>
         </div>
       </div>
