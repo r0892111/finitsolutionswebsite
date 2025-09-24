@@ -239,8 +239,8 @@ export default function TailoredITSolutionsPage() {
                       <motion.div
                         animate={{ rotate: expandedSections[section.key] ? 180 : 0 }}
                         transition={{ duration: 0.3 }}
-                        className="w-10 h-10 rounded-full flex items-center justify-center border"
-                        style={{ backgroundColor: '#F7E69B', borderColor: '#1C2C55' }}
+                        className="w-10 h-10 rounded-full flex items-center justify-center border bg-gradient-to-br from-white/80 via-blue-50/60 to-primary/20"
+                        style={{ borderColor: '#1C2C55' }}
                       >
                         <ChevronDown className="h-5 w-5" style={{ color: '#1C2C55' }} />
                       </motion.div>
