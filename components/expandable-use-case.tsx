@@ -84,10 +84,6 @@ export function ExpandableUseCase() {
     setIsExpanded(!isExpanded);
   };
 
-  const toggleExpanded = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   return (
     <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
       <div className="w-full">
