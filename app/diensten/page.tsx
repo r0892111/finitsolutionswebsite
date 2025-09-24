@@ -23,6 +23,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { useLanguage } from "@/contexts/language-context";
+import { ExpandableUseCase } from "@/components/expandable-use-case";
 
 const expandableSections = [
   {
@@ -322,56 +323,8 @@ export default function TailoredITSolutionsPage() {
         </div>
       </section>
 
-      {/* What Sets Us Apart */}
-      <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
-        <div className="w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="text-center mb-16"
-          >
-            <h2 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight mb-4 text-white">
-              What Sets Us Apart
-            </h2>
-            <p className="font-general-sans font-normal text-base md:text-lg leading-relaxed max-w-3xl mx-auto text-white/90">
-              Modern expertise without the bureaucracy of traditional IT firms.
-            </p>
-          </motion.div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {differentiators.map((item, index) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="group"
-              >
-                <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
-                  <CardContent className="p-6 relative z-10">
-                    <div className="flex items-start gap-6">
-                      <div className="w-14 h-14 rounded-xl flex items-center justify-center border shadow-lg flex-shrink-0 bg-gradient-to-br from-white/80 via-blue-50/60 to-primary/20" style={{ borderColor: '#1C2C55' }}>
-                        <item.icon className="h-7 w-7" style={{ color: '#1C2C55' }} />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-3 group-hover:opacity-90 transition-colors text-white">
-                          {item.title}
-                        </h3>
-                        <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/80">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Use Case Section */}
+      <ExpandableUseCase />
 
       {/* VoiceLink Showcase */}
       <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
