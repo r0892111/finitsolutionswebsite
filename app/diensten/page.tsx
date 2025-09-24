@@ -408,8 +408,7 @@ export default function TailoredITSolutionsPage() {
                     >
                       <Button 
                         size="lg" 
-                        className="backdrop-blur-xl hover:bg-white border shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium w-full sm:w-auto"
-                        style={{ backgroundColor: '#F7E69B', color: '#1C2C55', borderColor: '#1C2C55' }}
+                        className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
                       >
                         Try VoiceLink
                         <ArrowRight className="ml-2 h-5 w-5" />
@@ -455,15 +454,13 @@ export default function TailoredITSolutionsPage() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <ProjectRequestDialog 
                 buttonText="Start Your Transformation"
-                buttonClassName="backdrop-blur-xl hover:bg-white border shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
-                buttonProps={{ style: { backgroundColor: '#F7E69B', color: '#1C2C55', borderColor: '#1C2C55' } }}
+                buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
               />
               <a 
                 href="https://calendly.com/alex-finitsolutions/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center h-11 px-8 py-4 border shadow-lg hover:shadow-xl transition-all duration-300 finit-body rounded-full backdrop-blur-sm font-medium"
-                style={{ borderColor: '#202226', color: '#202226', backgroundColor: 'rgba(255,255,255,0.9)' }}
+                className="inline-flex items-center justify-center h-11 px-8 py-4 border border-gray-300 text-gray-800 hover:bg-white/10 shadow-lg hover:shadow-xl transition-all duration-300 finit-body rounded-full backdrop-blur-sm font-medium"
               >
                 <Calendar className="h-5 w-5 mr-2" />
                 {t('hero.cta.meeting')}
