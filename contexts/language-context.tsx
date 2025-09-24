@@ -165,6 +165,101 @@ const translations = {
     'marketplace.voicelink.features.sync': 'Automatische CRM-sync',
     'marketplace.voicelink.features.install': '3 min installatie',
     'marketplace.voicelink.features.support': 'Alle CRM\'s ondersteund'
+,
+
+    // Diensten Page
+    'diensten.hero.title': 'Maatwerk IT Oplossingen',
+    'diensten.hero.highlight': 'Gebouwd voor Impact',
+    'diensten.hero.description': 'Snel, direct en gebouwd voor de volgende generatie automatisering. Wij specialiseren ons in AI-automatisering en moderne CRM-systemen die transformeren hoe uw bedrijf opereert.',
+    'diensten.why.title': 'Waarom Kiezen voor Finit Solutions',
+    'diensten.why.subtitle': 'Ontdek wat ons anders maakt en hoe wij uitzonderlijke resultaten leveren voor onze klanten.',
+    'diensten.benefits.title': 'De Voordelen voor Onze Klanten',
+    'diensten.benefits.subtitle': 'Directe verbeteringen die zich in de tijd opstapelen tot duurzame concurrentievoordelen.',
+    'diensten.cta.title': 'Klaar om Uw Bedrijf te Transformeren?',
+    'diensten.cta.description': 'Wij zijn geen traditioneel IT-bedrijf. Wij zijn modern, snel en gespecialiseerd in AI-automatisering en CRM. Met Finit Solutions heeft u een partner die volledig toegewijd is aan uw succes—vandaag en in de toekomst.',
+    'diensten.cta.button': 'Start Uw Transformatie',
+    
+    // Expandable Sections
+    'diensten.sections.who_we_are.title': 'Wie Wij Zijn',
+    'diensten.sections.who_we_are.preview': 'Jong, ambitieus en gedreven bedrijf gericht op automatiseringstechnologieën van de volgende generatie.',
+    'diensten.sections.who_we_are.content': 'Finit Solutions is een jong, ambitieus en gedreven bedrijf gericht op de volgende generatie automatiseringstechnologieën. In tegenstelling tot traditionele IT-providers die belemmerd worden door bureaucratie, zijn wij snel, direct en gebouwd voor impact. Onze expertise ligt in AI-automatisering en moderne CRM-systemen, ontworpen voor een nieuwe manier van werken: cloud-ready, workflow-gericht en modulair.',
+    
+    'diensten.sections.how_we_work.title': 'Hoe Wij Werken',
+    'diensten.sections.how_we_work.preview': 'Wij lossen problemen stap voor stap op, bouwen in modules in plaats van massieve "alles of niets" projecten.',
+    'diensten.sections.how_we_work.content': 'Wij geloven in het stap voor stap oplossen van problemen. In plaats van één massief "alles of niets" project aan te pakken, bouwen wij in modules—kleine, geteste componenten die samen verbinden tot een web van efficiëntie. Deze aanpak geeft onze klanten vroege snelle overwinningen, lager risico door bewezen stappen, en flexibiliteit om zich aan te passen aan nieuwe behoeften wanneer deze verschijnen. Elke fase levert meetbare waarde, zodat klanten direct impact zien.',
+    
+    'diensten.sections.innovation.title': 'Innovatie & Bewijs van Expertise',
+    'diensten.sections.innovation.preview': 'Innovatie door slimme combinaties van bewezen technologieën, geïllustreerd door VoiceLink.me.',
+    'diensten.sections.innovation.content': 'Bij Finit laten we u niet van tools wisselen. Wij zorgen ervoor dat uw bestaande stack harder werkt. VoiceLink laat vertegenwoordigers snelle updates spreken in WhatsApp, en die notities synchroniseren automatisch naar uw CRM: Teamleader, Pipedrive, Salesforce, Odoo, HubSpot, en meer. Geen nieuwe inboxen. Geen extra apps. Geen gewoontewijzigingen. Wij verwijderen knelpunten door bewezen systemen te verbinden en verspreide gesprekken om te zetten in schone, bruikbare data. Dezelfde aanpak stuurt elk project: vind de wrijving, automatiseer binnen uw stack, en lever resultaten die blijven. Als een systeem een API heeft, kunnen wij het integreren.',
+    
+    'diensten.sections.what_sets_apart.title': 'Wat Ons Onderscheidt',
+    'diensten.sections.what_sets_apart.preview': 'Diepe CRM-kennis, AI-automatisering expertise, en cloud-ready oplossingen zonder bureaucratie.',
+    'diensten.sections.what_sets_apart.content': 'Diepe CRM-kennis – Wij weten hoe we het volledige potentieel van CRM-systemen kunnen ontgrendelen. AI-automatisering pioniers – Wij passen AI toe in echte processen, en zetten geavanceerde technologie om in dagelijkse efficiëntie. Cloud-ready & workflow-gericht – Onze systemen zijn ontworpen voor de omgeving van vandaag en de groei van morgen. Efficiëntie ontgrendelingen – Wij detecteren knelpunten die anderen missen en ontwerpen langetermijnoplossingen. Snelle levering – Zonder de bureaucratie van grote bedrijven, leveren wij sneller en directer.',
+    
+    'diensten.sections.philosophy.title': 'Onze Filosofie',
+    'diensten.sections.philosophy.preview': 'Wij maken werk soepeler zonder te veranderen hoe teams opereren, automatiseren achtergrondtaken.',
+    'diensten.sections.philosophy.content': 'Wij vinden niet opnieuw uit hoe teams werken—wij maken hun werk soepeler. De tools die mensen al kennen blijven hetzelfde, maar wij automatiseren repetitieve, lage-waarde taken op de achtergrond. Dit betekent minder energie verspild aan administratie, en meer tijd voor betekenisvolle interacties.',
+    
+    'diensten.sections.commitment.title': 'Toewijding aan Klanten',
+    'diensten.sections.commitment.preview': 'Toegewijde partners met directe communicatie en langetermijnrelatie focus.',
+    'diensten.sections.commitment.content': 'Wij zijn toegewijde partners, beschikbaar wanneer nodig. Wij communiceren direct, nemen snelle beslissingen, en streven naar langetermijnrelaties die continu nieuwe efficiënties ontgrendelen naarmate behoeften evolueren.',
+    
+    // Benefits
+    'diensten.benefits.quick_wins.title': 'Snelle Overwinningen Vroeg',
+    'diensten.benefits.quick_wins.description': 'Zie directe verbeteringen met onze modulaire aanpak die waarde levert vanaf dag één.',
+    'diensten.benefits.lower_risk.title': 'Lager Risico',
+    'diensten.benefits.lower_risk.description': 'Bewezen stappen en geteste componenten verminderen implementatierisico aanzienlijk.',
+    'diensten.benefits.flexible_adaptation.title': 'Flexibele Aanpassing',
+    'diensten.benefits.flexible_adaptation.description': 'Pas gemakkelijk aan nieuwe behoeften aan wanneer deze verschijnen met onze modulaire architectuur.',
+    'diensten.benefits.measurable_value.title': 'Meetbare Waarde',
+    'diensten.benefits.measurable_value.description': 'Elke fase levert concrete, meetbare verbeteringen aan uw operaties.',
+    'diensten.benefits.fast_delivery.title': 'Snelle Levering',
+    'diensten.benefits.fast_delivery.description': 'Zonder bureaucratie leveren wij oplossingen sneller en directer.',
+    'diensten.benefits.ai_automation.title': 'AI Automatisering',
+    'diensten.benefits.ai_automation.description': 'Zet geavanceerde technologie om in dagelijkse efficiëntie met praktische AI-implementaties.',
+    
+    // Trust Indicators
+    'diensten.trust.gdpr': 'GDPR Conform',
+    'diensten.trust.uptime': '99,9% Uptime',
+    'diensten.trust.support': '24/7 Ondersteuning',
+    
+    // Project Request Button
+    'project.start': 'Start je project',
+    
+    // Knowledge Copilot Use Case
+    'knowledge_copilot.badge': 'Use Case',
+    'knowledge_copilot.title': 'Kennis & E-mail Co-Pilot',
+    'knowledge_copilot.description': 'Eén plek waar uw team antwoorden kan vinden en geweldige e-mails kan opstellen met de tools en data die u al heeft—SharePoint documenten, e-mailgeschiedenis, CRM en interne systemen.',
+    'knowledge_copilot.how_it_works': 'Hoe het werkt',
+    'knowledge_copilot.what_you_get': 'Wat u krijgt',
+    'knowledge_copilot.simple_web_apps': 'Eenvoudige web apps & interfaces',
+    'knowledge_copilot.simple_web_apps_description': 'We bouwen snel lichtgewicht web apps en UI\'s zodat uw gebruikers op een eenvoudige, gerichte manier kunnen interageren met de assistent en uw data—denk aan dashboards, inboxen, checklists, formulieren, klantportalen.',
+    'knowledge_copilot.simple_web_apps_note': 'Dankzij AI-ondersteunde ontwikkeling worden deze interfaces sneller en tegen lagere kosten geleverd dan traditionele builds, zonder kwaliteit of veiligheid op te offeren.',
+    'knowledge_copilot.where_expand': 'Waar dit kan uitbreiden',
+    'knowledge_copilot.expand_description': 'Dit is slechts één voorbeeld. We kunnen deze oplossing aanpassen om te werken met uw specifieke tools en processen.',
+    'knowledge_copilot.connect_more_tools': 'Verbind Meer Tools',
+    'knowledge_copilot.connect_more_tools_description': 'Koppel met uw boekhoudsoftware, projectmanagementtools, of elk systeem met een API.',
+    'knowledge_copilot.add_more_channels': 'Voeg Meer Kanalen Toe',
+    'knowledge_copilot.add_more_channels_description': 'Schakel website chat, WhatsApp integratie, of spraakberichten in die automatisch uw systemen bijwerken.',
+    'knowledge_copilot.automate_more_tasks': 'Automatiseer Meer Taken',
+    'knowledge_copilot.automate_more_tasks_description': 'Stel automatische case sortering, taakcreatie, onboarding processen en klantenservice workflows in.',
+    'knowledge_copilot.marketplace_cta_title': 'Op zoek naar een plug-and-play, online aankoopbare oplossing?',
+    'knowledge_copilot.marketplace_cta_description': 'Bekijk onze marketplace voor kant-en-klare AI tools die direct integreren met uw bestaande systemen.',
+    'knowledge_copilot.visit_marketplace': 'Bezoek Marketplace',
+    'knowledge_copilot.features.connects_tools': 'Verbindt met uw tools',
+    'knowledge_copilot.features.connects_tools_description': 'Als een systeem een API heeft, kunnen we het aansluiten.',
+    'knowledge_copilot.features.understands_content': 'Begrijpt uw content',
+    'knowledge_copilot.features.understands_content_description': 'AI leest uw documenten en eerdere e-mails zodat u vragen kunt stellen in normale taal en precieze, brongestuurde antwoorden krijgt.',
+    'knowledge_copilot.features.writes_context': 'Schrijft met context',
+    'knowledge_copilot.features.writes_context_description': 'Binnen een schone inbox stelt de assistent antwoordconcepten voor die u kunt bewerken en verzenden.',
+    'knowledge_copilot.features.sends_data': 'Stuurt data naar de juiste plaats',
+    'knowledge_copilot.features.sends_data_description': 'De AI reinigt, labelt en routeert informatie naar uw CRM of andere systemen—automatisch.',
+    'knowledge_copilot.features.stay_control': 'U blijft in controle',
+    'knowledge_copilot.features.stay_control_description': 'Duidelijke rolgebaseerde machtigingen, human-in-the-loop voor gevoelige gevallen, plus logging en audit trails.',
+    'knowledge_copilot.benefits.faster_replies': 'Snellere antwoorden, minder tabbladen, consistente kwaliteit',
+    'knowledge_copilot.benefits.less_searching': 'Minder zoeken; kennis hergebruikt binnen het team',
+    'knowledge_copilot.benefits.security_design': 'Veiligheid by design (alleen de juiste mensen zien de juiste data)',
+    'knowledge_copilot.benefits.practical_frontends': 'Praktische, betaalbare front-ends die uw team daadwerkelijk gebruikt'
   },
   en: {
     // Navbar
@@ -309,7 +404,101 @@ const translations = {
     'marketplace.voicelink.features.whatsapp': 'WhatsApp integration',
     'marketplace.voicelink.features.sync': 'Automatic CRM sync',
     'marketplace.voicelink.features.install': '3 min installation',
-    'marketplace.voicelink.features.support': 'All CRMs supported'
+    'marketplace.voicelink.features.support': 'All CRMs supported',
+    
+    // Diensten Page
+    'diensten.hero.title': 'Tailored IT Solutions',
+    'diensten.hero.highlight': 'Built for Impact',
+    'diensten.hero.description': 'Fast, direct, and built for the next generation of automation. We specialize in AI automation and modern CRM systems that transform how your business operates.',
+    'diensten.why.title': 'Why Choose Finit Solutions',
+    'diensten.why.subtitle': 'Discover what makes us different and how we deliver exceptional results for our clients.',
+    'diensten.benefits.title': 'The Benefits for Our Clients',
+    'diensten.benefits.subtitle': 'Immediate improvements that compound over time into sustainable competitive advantages.',
+    'diensten.cta.title': 'Ready to Transform Your Business?',
+    'diensten.cta.description': 'We are not a traditional IT firm. We are modern, fast, and specialized in AI automation and CRM. With Finit Solutions, you have a partner fully committed to your success—today and in the future.',
+    'diensten.cta.button': 'Start Your Transformation',
+    
+    // Expandable Sections
+    'diensten.sections.who_we_are.title': 'Who We Are',
+    'diensten.sections.who_we_are.preview': 'Young, ambitious, and driven company focused on next-generation automation technologies.',
+    'diensten.sections.who_we_are.content': 'Finit Solutions is a young, ambitious, and driven company focused on the next generation of automation technologies. Unlike traditional IT providers weighed down by bureaucracy, we are fast, direct, and built for impact. Our expertise lies in AI automation and modern CRM systems, designed for a new way of working: cloud-ready, workflow-focused, and modular.',
+    
+    'diensten.sections.how_we_work.title': 'How We Work',
+    'diensten.sections.how_we_work.preview': 'We solve problems step by step, building in modules rather than massive "all or nothing" projects.',
+    'diensten.sections.how_we_work.content': 'We believe in solving problems step by step. Instead of tackling one massive "all or nothing" project, we build in modules—small, tested components that connect together into a web of efficiency. This approach gives our clients quick wins early on, lower risk through proven steps, and flexibility to adapt to new needs as they appear. Each phase delivers measurable value, so clients see impact right away.',
+    
+    'diensten.sections.innovation.title': 'Innovation & Proof of Expertise',
+    'diensten.sections.innovation.preview': 'Innovation through smart combinations of proven technologies, exemplified by VoiceLink.me.',
+    'diensten.sections.innovation.content': 'At Finit, we don\'t make you switch tools. We make your existing stack work harder. VoiceLink lets reps speak quick updates in WhatsApp, and those notes sync automatically to your CRM: Teamleader, Pipedrive, Salesforce, Odoo, HubSpot, and more. No new inboxes. No extra apps. No habit changes. We remove bottlenecks by connecting proven systems and turning scattered conversations into clean, actionable data. The same approach guides every project: find the friction, automate within your stack, and deliver results that last. If a system has an API, we can integrate it.',
+    
+    'diensten.sections.what_sets_apart.title': 'What Sets Us Apart',
+    'diensten.sections.what_sets_apart.preview': 'Deep CRM knowledge, AI automation expertise, and cloud-ready solutions without bureaucracy.',
+    'diensten.sections.what_sets_apart.content': 'Deep CRM knowledge – We know how to unlock the full potential of CRM systems. AI automation pioneers – We apply AI in real processes, turning advanced tech into daily efficiency. Cloud-ready & workflow-focused – Our systems are designed for today\'s environment and tomorrow\'s growth. Efficiency unlocks – We detect bottlenecks others miss and design long-term solutions. Fast delivery – Without the bureaucracy of big firms, we deliver quicker and more directly.',
+    
+    'diensten.sections.philosophy.title': 'Our Philosophy',
+    'diensten.sections.philosophy.preview': 'We make work smoother without changing how teams operate, automating background tasks.',
+    'diensten.sections.philosophy.content': 'We don\'t reinvent how teams work—we make their work smoother. The tools people already know stay the same, but we automate repetitive, low-value tasks in the background. This means less energy wasted on admin, and more time for meaningful interactions.',
+    
+    'diensten.sections.commitment.title': 'Commitment to Clients',
+    'diensten.sections.commitment.preview': 'Dedicated partners with direct communication and long-term relationship focus.',
+    'diensten.sections.commitment.content': 'We are dedicated partners, available whenever needed. We communicate directly, make fast decisions, and aim for long-term relationships that continuously unlock new efficiencies as needs evolve.',
+    
+    // Benefits
+    'diensten.benefits.quick_wins.title': 'Quick Wins Early On',
+    'diensten.benefits.quick_wins.description': 'See immediate improvements with our modular approach that delivers value from day one.',
+    'diensten.benefits.lower_risk.title': 'Lower Risk',
+    'diensten.benefits.lower_risk.description': 'Proven steps and tested components reduce implementation risk significantly.',
+    'diensten.benefits.flexible_adaptation.title': 'Flexible Adaptation',
+    'diensten.benefits.flexible_adaptation.description': 'Easily adapt to new needs as they appear with our modular architecture.',
+    'diensten.benefits.measurable_value.title': 'Measurable Value',
+    'diensten.benefits.measurable_value.description': 'Each phase delivers concrete, measurable improvements to your operations.',
+    'diensten.benefits.fast_delivery.title': 'Fast Delivery',
+    'diensten.benefits.fast_delivery.description': 'Without bureaucracy, we deliver solutions quicker and more directly.',
+    'diensten.benefits.ai_automation.title': 'AI Automation',
+    'diensten.benefits.ai_automation.description': 'Turn advanced technology into daily efficiency with practical AI implementations.',
+    
+    // Trust Indicators
+    'diensten.trust.gdpr': 'GDPR Compliant',
+    'diensten.trust.uptime': '99.9% Uptime',
+    'diensten.trust.support': '24/7 Support',
+    
+    // Project Request Button
+    'project.start': 'Start Your Project',
+    
+    // Knowledge Copilot Use Case
+    'knowledge_copilot.badge': 'Use Case',
+    'knowledge_copilot.title': 'Knowledge & Email Co-Pilot',
+    'knowledge_copilot.description': 'One place where your team can find answers and draft great emails using the tools and data you already have—SharePoint documents, email history, CRM, and internal systems.',
+    'knowledge_copilot.how_it_works': 'How it works',
+    'knowledge_copilot.what_you_get': 'What you get',
+    'knowledge_copilot.simple_web_apps': 'Simple web apps & interfaces',
+    'knowledge_copilot.simple_web_apps_description': 'We quickly build lightweight web apps and UIs so your users can interact with the assistant and your data in a simple, focused way—think dashboards, inboxes, checklists, forms, customer portals.',
+    'knowledge_copilot.simple_web_apps_note': 'Thanks to AI-assisted development, these interfaces are delivered faster and at a lower cost than traditional builds, without sacrificing quality or security.',
+    'knowledge_copilot.where_expand': 'Where this can expand',
+    'knowledge_copilot.expand_description': 'This is just one example. We can adapt this solution to work with your specific tools and processes.',
+    'knowledge_copilot.connect_more_tools': 'Connect More Tools',
+    'knowledge_copilot.connect_more_tools_description': 'Link with your accounting software, project management tools, or any system with an API.',
+    'knowledge_copilot.add_more_channels': 'Add More Channels',
+    'knowledge_copilot.add_more_channels_description': 'Enable website chat, WhatsApp integration, or voice messages that automatically update your systems.',
+    'knowledge_copilot.automate_more_tasks': 'Automate More Tasks',
+    'knowledge_copilot.automate_more_tasks_description': 'Set up automatic case sorting, task creation, onboarding processes, and customer support workflows.',
+    'knowledge_copilot.marketplace_cta_title': 'Looking for a plug-and-play, online-purchasable solution instead?',
+    'knowledge_copilot.marketplace_cta_description': 'Check out our marketplace for ready-to-use AI tools that integrate instantly with your existing systems.',
+    'knowledge_copilot.visit_marketplace': 'Visit Marketplace',
+    'knowledge_copilot.features.connects_tools': 'Connects to your tools',
+    'knowledge_copilot.features.connects_tools_description': 'If a system has an API, we can plug it in.',
+    'knowledge_copilot.features.understands_content': 'Understands your content',
+    'knowledge_copilot.features.understands_content_description': 'AI reads your docs and past emails so you can ask questions in normal language and get precise, source-backed answers.',
+    'knowledge_copilot.features.writes_context': 'Writes with context',
+    'knowledge_copilot.features.writes_context_description': 'Inside a clean inbox, the assistant suggests reply drafts you can edit and send.',
+    'knowledge_copilot.features.sends_data': 'Sends data to the right place',
+    'knowledge_copilot.features.sends_data_description': 'The AI cleans, labels, and routes information to your CRM or other systems—automatically.',
+    'knowledge_copilot.features.stay_control': 'You stay in control',
+    'knowledge_copilot.features.stay_control_description': 'Clear role-based permissions, human-in-the-loop for sensitive cases, plus logging and audit trails.',
+    'knowledge_copilot.benefits.faster_replies': 'Faster replies, fewer tabs, consistent quality',
+    'knowledge_copilot.benefits.less_searching': 'Less searching; knowledge reused across the team',
+    'knowledge_copilot.benefits.security_design': 'Security by design (only the right people see the right data)',
+    'knowledge_copilot.benefits.practical_frontends': 'Practical, affordable front-ends your team actually uses'
   }
 };
 
