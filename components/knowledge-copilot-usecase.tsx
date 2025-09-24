@@ -235,7 +235,7 @@ export function KnowledgeCopilotUseCase() {
           >
             <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/25 shadow-2xl">
               <h3 className="finit-h2 mb-4" style={{ color: '#36454F' }}>
-                Looking for a plug-and-play, online-purchasable solution?
+                Looking for a plug-and-play, online-purchasable solution instead?
               </h3>
               <p className="finit-body mb-8" style={{ color: '#36454F' }}>
                 Check out our marketplace for ready-to-use AI tools that integrate instantly with your existing systems.
