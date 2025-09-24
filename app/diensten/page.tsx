@@ -457,15 +457,13 @@ export default function TailoredITSolutionsPage() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <ProjectRequestDialog 
                 buttonText="Start Your Transformation"
-                buttonClassName="backdrop-blur-xl hover:bg-white border shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
-                style={{ backgroundColor: '#F7E69B', color: '#1C2C55', borderColor: '#1C2C55' }}
+                buttonClassName="backdrop-blur-xl hover:bg-white border border-[#1C2C55] shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium bg-gradient-to-r from-yellow-200 via-white to-yellow-200 text-[#1C2C55]"
               />
               <a 
                 href="https://calendly.com/alex-finitsolutions/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center h-11 px-8 py-4 border shadow-lg hover:shadow-xl transition-all duration-300 finit-body rounded-full backdrop-blur-sm font-medium"
-                style={{ borderColor: '#202226', color: '#202226', backgroundColor: 'rgba(255,255,255,0.9)' }}
+                className="inline-flex items-center justify-center h-11 px-8 py-4 border border-[#202226] shadow-lg hover:shadow-xl transition-all duration-300 finit-body rounded-full backdrop-blur-sm font-medium text-[#202226] bg-white/90"
               >
                 <Calendar className="h-5 w-5 mr-2" />
                 {t('hero.cta.meeting')}
