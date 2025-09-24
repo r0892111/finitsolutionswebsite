@@ -41,7 +41,7 @@ const expandableSections = [
     key: 'innovation',
     title: 'Innovation & Proof of Expertise',
     preview: 'Innovation through smart combinations of proven technologies, exemplified by VoiceLink.me.',
-    content: `Innovation at Finit is never about reinventing the wheel. Instead, we combine proven technologies in smarter ways to remove bottlenecks. A clear example is our product VoiceLink.me, which enables voice-driven updates for sales teams directly into their CRM. By rethinking communication flows, we turned wasted time into efficiency. This same philosophy applies to every client: identify the friction, apply creative automation, and deliver lasting results.`
+    content: `At Finit, we don’t make you switch tools. We make your existing stack work harder. VoiceLink lets reps speak quick updates in WhatsApp, and those notes sync automatically to your CRM: Teamleader, Pipedrive, Salesforce, Odoo, HubSpot, and more. No new inboxes. No extra apps. No habit changes. We remove bottlenecks by connecting proven systems and turning scattered conversations into clean, actionable data. The same approach guides every project: find the friction, automate within your stack, and deliver results that last. If a system has an API, we can integrate it.`
   },
   {
     key: 'what-sets-us-apart',
