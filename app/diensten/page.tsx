@@ -260,11 +260,10 @@ export default function TailoredITSolutionsPage() {
                         className="overflow-hidden"
                       >
                         <div className="px-6 md:px-8 pb-6 md:pb-8">
-                      <div className="absolute inset-0 bg-gradient-to-br from-slate-800/60 to-slate-900/40"></div>
-                            <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed" style={{ color: '#202226' }}>
-                        <div className="text-center text-white/80">
-                            </p>
-                          </div>
+                          <div className="absolute inset-0 bg-gradient-to-br from-slate-800/60 to-slate-900/40 rounded-b-2xl"></div>
+                          <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white relative z-10">
+                            {section.content}
+                          </p>
                         </div>
                       </motion.div>
                     )}
