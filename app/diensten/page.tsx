@@ -221,11 +221,11 @@ export default function TailoredITSolutionsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-slate-800/85 backdrop-blur-xl rounded-2xl border border-slate-600/40 shadow-xl overflow-hidden"
+                  className="bg-white/15 backdrop-blur-xl rounded-2xl border border-white/25 shadow-xl overflow-hidden"
                 >
                   <button
                     onClick={() => toggleSection(section.key)}
-                    className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-slate-700/50 transition-colors group"
+                    className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-white/5 transition-colors group"
                   >
                     <div className="flex-1">
                       <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-2 group-hover:opacity-90 transition-colors text-white">
@@ -239,10 +239,10 @@ export default function TailoredITSolutionsPage() {
                       <motion.div
                         animate={{ rotate: expandedSections[section.key] ? 180 : 0 }}
                         transition={{ duration: 0.3 }}
-                        className="w-10 h-10 rounded-full flex items-center justify-center border bg-gradient-to-br from-primary/30 to-blue-600/30"
-                        style={{ borderColor: 'rgba(255,255,255,0.3)' }}
+                        className="w-10 h-10 rounded-full flex items-center justify-center border bg-gradient-to-br from-white/80 via-blue-50/60 to-primary/20"
+                        style={{ borderColor: '#1C2C55' }}
                       >
-                        <ChevronDown className="h-5 w-5 text-white" />
+                        <ChevronDown className="h-5 w-5" style={{ color: '#1C2C55' }} />
                       </motion.div>
                     </div>
                   </button>
@@ -260,8 +260,8 @@ export default function TailoredITSolutionsPage() {
                         className="overflow-hidden"
                       >
                         <div className="px-6 md:px-8 pb-6 md:pb-8">
-                          <div className="bg-slate-700/80 rounded-xl p-6 border border-slate-500/50">
-                            <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/90">
+                          <div className="bg-white/90 rounded-xl p-6 border" style={{ borderColor: '#1C2C55' }}>
+                            <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed" style={{ color: '#202226' }}>
                               {section.content}
                             </p>
                           </div>
@@ -304,7 +304,6 @@ export default function TailoredITSolutionsPage() {
                 transition={{ duration: 0.8, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="group"
               >
-                <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
                 <Card className="h-full bg-slate-800/90 backdrop-blur-xl border border-slate-600/50 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
                   <CardContent className="p-6 relative z-10">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 border shadow-lg bg-gradient-to-br from-primary/30 to-blue-600/30" style={{ borderColor: 'rgba(255,255,255,0.3)' }}>
@@ -352,7 +351,6 @@ export default function TailoredITSolutionsPage() {
                 transition={{ duration: 0.8, delay: index * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="group"
               >
-                <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
                 <Card className="h-full bg-slate-800/90 backdrop-blur-xl border border-slate-600/50 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
                   <CardContent className="p-6 relative z-10">
                     <div className="flex items-start gap-6">
@@ -386,11 +384,10 @@ export default function TailoredITSolutionsPage() {
               viewport={{ once: true }}
               transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/25 shadow-2xl"
-              className="bg-slate-800/90 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-slate-600/50 shadow-2xl"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                  <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-500/30 text-green-100 border border-green-400/50 mb-6">
+                  <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-500/20 text-green-100 border border-green-400/30 mb-6">
                     <CheckCircle2 className="h-4 w-4 mr-2" />
                     <span className="font-general-sans font-normal text-sm">Live Product</span>
                   </div>
@@ -411,7 +408,7 @@ export default function TailoredITSolutionsPage() {
                     >
                       <Button 
                         size="lg" 
-                        className="bg-primary/90 backdrop-blur-xl text-white hover:bg-primary border border-primary/50 shadow-xl hover:shadow-2xl transition-all duration-300 font-general-sans font-normal text-base px-8 py-4 rounded-full"
+                        className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 font-general-sans font-normal text-base px-8 py-4 rounded-full"
                       >
                         Try VoiceLink
                         <ArrowRight className="ml-2 h-5 w-5" />
@@ -421,10 +418,10 @@ export default function TailoredITSolutionsPage() {
                 </div>
                 
                 <div className="relative">
-                  <div className="aspect-[4/3] relative overflow-hidden rounded-2xl bg-slate-700/80 border border-slate-500/50 shadow-xl">
+                  <div className="aspect-[4/3] relative overflow-hidden rounded-2xl bg-white/10 border border-white/20 shadow-xl">
                     <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
                     <div className="flex items-center justify-center h-full">
-                      <div className="text-center text-white/80">
+                      <div className="text-center text-white/60">
                         <Workflow className="h-16 w-16 mx-auto mb-4" />
                         <p className="font-general-sans font-normal text-base">VoiceLink Demo</p>
                       </div>
