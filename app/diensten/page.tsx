@@ -205,10 +205,10 @@ export default function TailoredITSolutionsPage() {
               transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="text-center mb-16"
             >
-              <h2 className="finit-h1 mb-6" style={{ color: '#202226' }}>
+              <h2 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight mb-4 text-white">
                 Why Choose Finit Solutions
               </h2>
-              <p className="finit-body max-w-3xl mx-auto" style={{ color: '#202226' }}>
+              <p className="font-general-sans font-normal text-base md:text-lg leading-relaxed max-w-3xl mx-auto text-white/90">
                 Discover what makes us different and how we deliver exceptional results for our clients.
               </p>
             </motion.div>
@@ -228,10 +228,10 @@ export default function TailoredITSolutionsPage() {
                     className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-white/5 transition-colors group"
                   >
                     <div className="flex-1">
-                      <h3 className="finit-h2 mb-2 group-hover:opacity-90 transition-colors" style={{ color: '#202226' }}>
+                      <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-2 group-hover:opacity-90 transition-colors text-white">
                         {section.title}
                       </h3>
-                      <p className="finit-body leading-relaxed" style={{ color: '#202226' }}>
+                      <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/80">
                         {section.preview}
                       </p>
                     </div>
@@ -261,7 +261,7 @@ export default function TailoredITSolutionsPage() {
                       >
                         <div className="px-6 md:px-8 pb-6 md:pb-8">
                           <div className="bg-white/90 rounded-xl p-6 border" style={{ borderColor: '#1C2C55' }}>
-                            <p className="finit-body leading-relaxed" style={{ color: '#202226' }}>
+                            <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed" style={{ color: '#202226' }}>
                               {section.content}
                             </p>
                           </div>
@@ -286,10 +286,10 @@ export default function TailoredITSolutionsPage() {
             transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="text-center mb-16"
           >
-            <h2 className="finit-h1 mb-6" style={{ color: '#202226' }}>
+            <h2 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight mb-4 text-white">
               The Benefits for Our Clients
             </h2>
-            <p className="finit-body max-w-3xl mx-auto" style={{ color: '#202226' }}>
+            <p className="font-general-sans font-normal text-base md:text-lg leading-relaxed max-w-3xl mx-auto text-white/90">
               Immediate improvements that compound over time into sustainable competitive advantages.
             </p>
           </motion.div>
@@ -305,14 +305,14 @@ export default function TailoredITSolutionsPage() {
                 className="group"
               >
                 <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
-                  <CardContent className="p-8 relative z-10">
+                  <CardContent className="p-6 relative z-10">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 border shadow-lg bg-gradient-to-br from-white/80 via-blue-50/60 to-primary/20" style={{ borderColor: '#1C2C55' }}>
                       <benefit.icon className="h-6 w-6" style={{ color: '#1C2C55' }} />
                     </div>
-                    <h3 className="finit-h2 mb-4 group-hover:opacity-90 transition-colors" style={{ color: '#202226' }}>
+                    <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-3 group-hover:opacity-90 transition-colors text-white">
                       {benefit.title}
                     </h3>
-                    <p className="finit-body leading-relaxed" style={{ color: '#202226' }}>
+                    <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/80">
                       {benefit.description}
                     </p>
                   </CardContent>
@@ -333,10 +333,10 @@ export default function TailoredITSolutionsPage() {
             transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="text-center mb-16"
           >
-            <h2 className="finit-h1 mb-6" style={{ color: '#202226' }}>
+            <h2 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight mb-4 text-white">
               What Sets Us Apart
             </h2>
-            <p className="finit-body max-w-3xl mx-auto" style={{ color: '#202226' }}>
+            <p className="font-general-sans font-normal text-base md:text-lg leading-relaxed max-w-3xl mx-auto text-white/90">
               Modern expertise without the bureaucracy of traditional IT firms.
             </p>
           </motion.div>
@@ -352,16 +352,16 @@ export default function TailoredITSolutionsPage() {
                 className="group"
               >
                 <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
-                  <CardContent className="p-8 relative z-10">
+                  <CardContent className="p-6 relative z-10">
                     <div className="flex items-start gap-6">
                       <div className="w-14 h-14 rounded-xl flex items-center justify-center border shadow-lg flex-shrink-0 bg-gradient-to-br from-white/80 via-blue-50/60 to-primary/20" style={{ borderColor: '#1C2C55' }}>
                         <item.icon className="h-7 w-7" style={{ color: '#1C2C55' }} />
                       </div>
                       <div className="flex-1">
-                        <h3 className="finit-h2 mb-3 group-hover:opacity-90 transition-colors" style={{ color: '#202226' }}>
+                        <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-3 group-hover:opacity-90 transition-colors text-white">
                           {item.title}
                         </h3>
-                        <p className="finit-body leading-relaxed" style={{ color: '#202226' }}>
+                        <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/80">
                           {item.description}
                         </p>
                       </div>
@@ -389,14 +389,14 @@ export default function TailoredITSolutionsPage() {
                 <div>
                   <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-500/20 text-green-100 border border-green-400/30 mb-6">
                     <CheckCircle2 className="h-4 w-4 mr-2" />
-                    <span className="text-sm font-medium">Live Product</span>
+                    <span className="font-general-sans font-normal text-sm">Live Product</span>
                   </div>
                   
-                  <h3 className="finit-h1 text-white mb-6">
+                  <h3 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight text-white mb-4">
                     VoiceLink.me
                   </h3>
                   
-                  <p className="finit-body mb-8 leading-relaxed" style={{ color: '#202226' }}>
+                  <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed mb-6 text-white/90">
                     A clear example of our innovation philosophy: VoiceLink enables voice-driven updates for sales teams directly into their CRM. By rethinking communication flows, we turned wasted time into efficiency.
                   </p>
                   
@@ -408,7 +408,7 @@ export default function TailoredITSolutionsPage() {
                     >
                       <Button 
                         size="lg" 
-                        className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
+                        className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 font-general-sans font-normal text-base px-8 py-4 rounded-full"
                       >
                         Try VoiceLink
                         <ArrowRight className="ml-2 h-5 w-5" />
@@ -423,7 +423,7 @@ export default function TailoredITSolutionsPage() {
                     <div className="flex items-center justify-center h-full">
                       <div className="text-center text-white/60">
                         <Workflow className="h-16 w-16 mx-auto mb-4" />
-                        <p className="finit-body">VoiceLink Demo</p>
+                        <p className="font-general-sans font-normal text-base">VoiceLink Demo</p>
                       </div>
                     </div>
                   </div>
@@ -444,23 +444,23 @@ export default function TailoredITSolutionsPage() {
             transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h2 className="finit-h1 mb-6" style={{ color: '#202226' }}>
+            <h2 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight mb-4 text-white">
               Ready to Transform Your Business?
             </h2>
-            <p className="finit-body mb-12 max-w-3xl mx-auto" style={{ color: '#202226' }}>
+            <p className="font-general-sans font-normal text-base md:text-lg leading-relaxed mb-8 max-w-3xl mx-auto text-white/90">
               We are not a traditional IT firm. We are modern, fast, and specialized in AI automation and CRM. With Finit Solutions, you have a partner fully committed to your success—today and in the future.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <ProjectRequestDialog 
                 buttonText="Start Your Transformation"
-                buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
+                buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 font-general-sans font-normal text-base px-8 py-4 rounded-full"
               />
               <a 
                 href="https://calendly.com/alex-finitsolutions/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center h-11 px-8 py-4 border border-gray-300 text-gray-800 hover:bg-white/10 shadow-lg hover:shadow-xl transition-all duration-300 finit-body rounded-full backdrop-blur-sm font-medium"
+                className="inline-flex items-center justify-center h-11 px-8 py-4 border border-gray-300 text-gray-800 hover:bg-white/10 shadow-lg hover:shadow-xl transition-all duration-300 font-general-sans font-normal text-base rounded-full backdrop-blur-sm"
               >
                 <Calendar className="h-5 w-5 mr-2" />
                 {t('hero.cta.meeting')}
@@ -473,20 +473,19 @@ export default function TailoredITSolutionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex items-center justify-center gap-8 mt-12"
-              style={{ color: '#202226' }}
+              className="flex items-center justify-center gap-8 mt-8 text-white/70"
             >
               <div className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
-                <span className="text-sm">GDPR Compliant</span>
+                <span className="font-general-sans font-normal text-sm">GDPR Compliant</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5" />
-                <span className="text-sm">99.9% Uptime</span>
+                <span className="font-general-sans font-normal text-sm">99.9% Uptime</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                <span className="text-sm">24/7 Support</span>
+                <span className="font-general-sans font-normal text-sm">24/7 Support</span>
               </div>
             </motion.div>
           </motion.div>
