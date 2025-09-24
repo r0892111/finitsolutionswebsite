@@ -155,7 +155,7 @@ export default function TailoredITSolutionsPage() {
               transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="finit-h1 text-white mb-6"
             >
-              <span>Tailored IT Solutions</span>
+              Tailored IT Solutions
               <br />
               <span className="finit-highlight mt-4 inline-block" style={{ backgroundColor: '#F7E69B', color: '#1C2C55' }}>Built for Impact</span>
             </motion.h1>
@@ -225,7 +225,7 @@ export default function TailoredITSolutionsPage() {
                 >
                   <button
                     onClick={() => toggleSection(section.key)}
-                    className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-white/5 transition-colors group"
+                    className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-black/10 transition-colors group"
                   >
                     <div className="flex-1">
                       <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-2 group-hover:opacity-90 transition-colors text-white">
@@ -260,8 +260,8 @@ export default function TailoredITSolutionsPage() {
                         className="overflow-hidden"
                       >
                         <div className="px-6 md:px-8 pb-6 md:pb-8">
-                          <div className="bg-white/90 rounded-xl p-6 border" style={{ borderColor: '#1C2C55' }}>
-                            <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed" style={{ color: '#202226' }}>
+                          <div className="bg-slate-800/90 backdrop-blur-sm rounded-xl p-6 border border-slate-600/50 shadow-lg">
+                            <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white">
                               {section.content}
                             </p>
                           </div>
@@ -304,10 +304,10 @@ export default function TailoredITSolutionsPage() {
                 transition={{ duration: 0.8, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="group"
               >
-                <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
+                <Card className="h-full bg-slate-800/80 backdrop-blur-xl border border-slate-600/50 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
                   <CardContent className="p-6 relative z-10">
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 border shadow-lg bg-gradient-to-br from-primary/30 to-blue-600/30" style={{ borderColor: 'rgba(255,255,255,0.3)' }}>
-                      <benefit.icon className="h-6 w-6 text-white" />
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 border shadow-lg bg-gradient-to-br from-primary/20 to-blue-600/20 border-primary/30">
+                      <benefit.icon className="h-6 w-6 text-primary" />
                     </div>
                     <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-3 group-hover:opacity-90 transition-colors text-white">
                       {benefit.title}
@@ -351,11 +351,11 @@ export default function TailoredITSolutionsPage() {
                 transition={{ duration: 0.8, delay: index * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="group"
               >
-                <Card className="h-full bg-white/15 backdrop-blur-xl border border-white/25 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
+                <Card className="h-full bg-slate-800/80 backdrop-blur-xl border border-slate-600/50 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative hover:-translate-y-1">
                   <CardContent className="p-6 relative z-10">
                     <div className="flex items-start gap-6">
-                      <div className="w-14 h-14 rounded-xl flex items-center justify-center border shadow-lg flex-shrink-0 bg-gradient-to-br from-white/80 via-blue-50/60 to-primary/20" style={{ borderColor: '#1C2C55' }}>
-                        <item.icon className="h-7 w-7" style={{ color: '#1C2C55' }} />
+                      <div className="w-14 h-14 rounded-xl flex items-center justify-center border shadow-lg flex-shrink-0 bg-gradient-to-br from-primary/20 to-blue-600/20 border-primary/30">
+                        <item.icon className="h-7 w-7 text-primary" />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-3 group-hover:opacity-90 transition-colors text-white">
@@ -383,7 +383,7 @@ export default function TailoredITSolutionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/25 shadow-2xl"
+              className="bg-slate-800/80 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-slate-600/50 shadow-2xl"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
@@ -392,11 +392,11 @@ export default function TailoredITSolutionsPage() {
                     <span className="font-general-sans font-normal text-sm">Live Product</span>
                   </div>
                   
-                  <h3 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight text-white mb-4">
+                  <h3 className="font-general-sans font-medium text-xl md:text-2xl leading-tight text-white mb-4">
                     VoiceLink.me
                   </h3>
                   
-                  <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed mb-6 text-white/90">
+                  <p className="font-general-sans font-normal text-sm leading-relaxed mb-6 text-white/90">
                     A clear example of our innovation philosophy: VoiceLink enables voice-driven updates for sales teams directly into their CRM. By rethinking communication flows, we turned wasted time into efficiency.
                   </p>
                   
@@ -418,12 +418,12 @@ export default function TailoredITSolutionsPage() {
                 </div>
                 
                 <div className="relative">
-                  <div className="aspect-[4/3] relative overflow-hidden rounded-2xl bg-white/10 border border-white/20 shadow-xl">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
+                  <div className="aspect-[4/3] relative overflow-hidden rounded-2xl bg-slate-700/50 border border-slate-600/50 shadow-xl">
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-600/20 to-transparent"></div>
                     <div className="flex items-center justify-center h-full">
                       <div className="text-center text-white/60">
                         <Workflow className="h-16 w-16 mx-auto mb-4" />
-                        <p className="font-general-sans font-normal text-base">VoiceLink Demo</p>
+                        <p className="font-general-sans font-normal text-sm">VoiceLink Demo</p>
                       </div>
                     </div>
                   </div>
