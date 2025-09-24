@@ -92,7 +92,7 @@ export function KnowledgeCopilotUseCase() {
             </h2>
             
             <p className="finit-body max-w-4xl mx-auto mb-8" style={{ color: '#36454F' }}>
-              One place where your team can find answers and draft great emails using the tools and data you already have—SharePoint documents, email history, CRM, and internal systems.
+              One place where your team can find answers and draft great emails using the tools and data you already have: SharePoint documents, email history, CRM, and internal systems.
             </p>
           </motion.div>
 
@@ -216,7 +216,7 @@ export function KnowledgeCopilotUseCase() {
             className="text-center bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl"
           >
             <p className="finit-body mb-6 max-w-4xl mx-auto" style={{ color: '#36454F' }}>
-              In short: we connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place—and your team works faster with higher quality.
+              In short: we connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place, and your team works faster with higher quality.
             </p>
             
             <p className="text-sm mb-8" style={{ color: '#36454F' }}>
