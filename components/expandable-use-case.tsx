@@ -78,13 +78,10 @@ const useCaseData = {
 };
 
 export function ExpandableUseCase() {
-  const [expandedSections, setExpandedSections] = useState<{[key: string]: boolean}>({});
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleSection = (sectionKey: string) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [sectionKey]: !prev[sectionKey]
-    }));
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
   };
 
   return (
@@ -124,141 +121,167 @@ export function ExpandableUseCase() {
             </div>
           </motion.div>
 
-          {/* Expandable Sections */}
-          <div className="space-y-6">
-            {useCaseData.sections.map((section, index) => (
-              <motion.div
-                key={section.key}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-slate-600/50 shadow-xl overflow-hidden"
-              >
-                <button
-                  onClick={() => toggleSection(section.key)}
-                  className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-black/10 transition-colors group"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center border shadow-lg bg-gradient-to-br from-primary/30 to-blue-600/30 border-slate-600/50">
-                      <section.icon className="h-6 w-6 text-white" />
-                    </div>
-                    <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight group-hover:opacity-90 transition-colors text-white">
-                      {section.title}
-                    </h3>
-                  </div>
-                  <div className="flex-shrink-0 ml-6">
-                    <motion.div
-                      animate={{ rotate: expandedSections[section.key] ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="w-10 h-10 rounded-full flex items-center justify-center border bg-gradient-to-br from-primary/30 to-blue-600/30 border-slate-600/50"
-                    >
-                      <ChevronDown className="h-5 w-5 text-white" />
-                    </motion.div>
-                  </div>
-                </button>
-                
-                <AnimatePresence>
-                  {expandedSections[section.key] && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ 
-                        duration: 0.4,
-                        ease: [0.04, 0.62, 0.23, 0.98]
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-6 md:px-8 pb-6 md:pb-8">
-                        <div className="bg-slate-700/80 rounded-b-2xl p-6 relative z-10">
-                          {section.content && (
-                            <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/90 mb-4">
-                              {section.content}
-                            </p>
-                          )}
-                          
-                          {section.items && (
-                            <div className="space-y-4">
-                              {section.items.map((item, idx) => (
-                                <div key={idx} className="flex items-start gap-3">
-                                  <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center mt-0.5 flex-shrink-0">
-                                    <span className="text-white text-xs font-bold">✓</span>
-                                  </div>
-                                  <div>
-                                    <h4 className="font-general-sans font-medium text-sm text-white mb-1">
-                                      {item.title}
-                                    </h4>
-                                    <p className="font-general-sans font-normal text-sm leading-relaxed text-white/80">
-                                      {item.description}
-                                    </p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-
-                          {section.subsections && (
-                            <div className="space-y-6">
-                              {section.subsections.map((subsection, idx) => (
-                                <div key={idx}>
-                                  <h4 className="font-general-sans font-medium text-sm text-white mb-3">
-                                    {subsection.title}:
-                                  </h4>
-                                  <div className="flex flex-wrap gap-2">
-                                    {subsection.items.map((item, itemIdx) => (
-                                      <span 
-                                        key={itemIdx}
-                                        className="px-3 py-1 bg-primary/20 text-white/90 rounded-full text-xs font-medium border border-primary/30"
-                                      >
-                                        {item}
-                                      </span>
-                                    ))}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-
-                          {typeof section.items === 'object' && !Array.isArray(section.items) && (
-                            <div className="space-y-3">
-                              {(section.items as string[]).map((item, idx) => (
-                                <div key={idx} className="flex items-start gap-3">
-                                  <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center mt-0.5 flex-shrink-0">
-                                    <span className="text-white text-xs font-bold">✓</span>
-                                  </div>
-                                  <p className="font-general-sans font-normal text-sm leading-relaxed text-white/90">
-                                    {item}
-                                  </p>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Bottom Summary */}
+          {/* Single Expandable Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-12 bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-slate-600/50 shadow-xl p-6 md:p-8"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-slate-600/50 shadow-xl overflow-hidden"
           >
-            <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/90 text-center">
-              <strong>This is just one example.</strong> We tailor it to your setup and processes.
-            </p>
-            <div className="mt-6 text-center">
-              <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/90">
-                <strong>In short:</strong> we connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place—and your team works faster with higher quality.
-              </p>
-            </div>
+            <button
+              onClick={toggleExpanded}
+              className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-black/10 transition-colors group"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center border shadow-lg bg-gradient-to-br from-primary/30 to-blue-600/30 border-slate-600/50">
+                  <Settings className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight group-hover:opacity-90 transition-colors text-white">
+                  Complete Solution Overview
+                </h3>
+              </div>
+              <div className="flex-shrink-0 ml-6">
+                <motion.div
+                  animate={{ rotate: isExpanded ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-10 h-10 rounded-full flex items-center justify-center border bg-gradient-to-br from-primary/30 to-blue-600/30 border-slate-600/50"
+                >
+                  <ChevronDown className="h-5 w-5 text-white" />
+                </motion.div>
+              </div>
+            </button>
+            
+            <AnimatePresence>
+              {isExpanded && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ 
+                    duration: 0.4,
+                    ease: [0.04, 0.62, 0.23, 0.98]
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-6 md:px-8 pb-6 md:pb-8">
+                    <div className="bg-slate-700/80 rounded-b-2xl p-6 relative z-10 space-y-8">
+                      
+                      {/* How it works section */}
+                      <div>
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="w-8 h-8 rounded-lg bg-primary/30 flex items-center justify-center">
+                            <Settings className="h-5 w-5 text-white" />
+                          </div>
+                          <h4 className="font-general-sans font-medium text-lg text-white">
+                            How it works (plain language)
+                          </h4>
+                        </div>
+                        <div className="space-y-4">
+                          {useCaseData.sections[0].items?.map((item, idx) => (
+                            <div key={idx} className="flex items-start gap-3">
+                              <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center mt-0.5 flex-shrink-0">
+                                <span className="text-white text-xs font-bold">✓</span>
+                              </div>
+                              <div>
+                                <h5 className="font-general-sans font-medium text-sm text-white mb-1">
+                                  {item.title}
+                                </h5>
+                                <p className="font-general-sans font-normal text-sm leading-relaxed text-white/80">
+                                  {item.description}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Simple web apps section */}
+                      <div>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-8 h-8 rounded-lg bg-primary/30 flex items-center justify-center">
+                            <Globe className="h-5 w-5 text-white" />
+                          </div>
+                          <h4 className="font-general-sans font-medium text-lg text-white">
+                            Simple web apps & interfaces (fast and affordable)
+                          </h4>
+                        </div>
+                        <p className="font-general-sans font-normal text-sm leading-relaxed text-white/90 ml-11">
+                          {useCaseData.sections[1].content}
+                        </p>
+                      </div>
+
+                      {/* What you get section */}
+                      <div>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-8 h-8 rounded-lg bg-primary/30 flex items-center justify-center">
+                            <Zap className="h-5 w-5 text-white" />
+                          </div>
+                          <h4 className="font-general-sans font-medium text-lg text-white">
+                            What you get
+                          </h4>
+                        </div>
+                        <div className="space-y-3 ml-11">
+                          {useCaseData.sections[2].items?.map((item, idx) => (
+                            <div key={idx} className="flex items-start gap-3">
+                              <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center mt-0.5 flex-shrink-0">
+                                <span className="text-white text-xs font-bold">✓</span>
+                              </div>
+                              <p className="font-general-sans font-normal text-sm leading-relaxed text-white/90">
+                                {item}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Where this can go next section */}
+                      <div>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-8 h-8 rounded-lg bg-primary/30 flex items-center justify-center">
+                            <ArrowRight className="h-5 w-5 text-white" />
+                          </div>
+                          <h4 className="font-general-sans font-medium text-lg text-white">
+                            Where this can go next (subtle ideas)
+                          </h4>
+                        </div>
+                        <div className="space-y-6 ml-11">
+                          {useCaseData.sections[3].subsections?.map((subsection, idx) => (
+                            <div key={idx}>
+                              <h5 className="font-general-sans font-medium text-sm text-white mb-3">
+                                {subsection.title}:
+                              </h5>
+                              <div className="flex flex-wrap gap-2">
+                                {subsection.items.map((item, itemIdx) => (
+                                  <span 
+                                    key={itemIdx}
+                                    className="px-3 py-1 bg-primary/20 text-white/90 rounded-full text-xs font-medium border border-primary/30"
+                                  >
+                                    {item}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Bottom Summary */}
+                      <div className="border-t border-slate-600/30 pt-6">
+                        <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/90 text-center mb-4">
+                          <strong>This is just one example.</strong> We tailor it to your setup and processes.
+                        </p>
+                        <div className="bg-slate-600/30 rounded-xl p-4">
+                          <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/90 text-center">
+                            <strong>In short:</strong> we connect your systems, use AI to process the data, and provide fast, affordable interfaces so information lands in the right place—and your team works faster with higher quality.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </div>
       </div>
