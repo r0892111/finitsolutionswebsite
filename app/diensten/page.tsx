@@ -28,72 +28,72 @@ import { KnowledgeCopilotUseCase } from "@/components/knowledge-copilot-usecase"
 const expandableSections = [
   {
     key: 'who-we-are',
-    title: 'Who We Are',
-    preview: 'Young, ambitious, and driven company focused on next-generation automation technologies.',
-    content: `Finit Solutions is a young, ambitious, and driven company focused on the next generation of automation technologies. Unlike traditional IT providers weighed down by bureaucracy, we are fast, direct, and built for impact. Our expertise lies in AI automation and modern CRM systems, designed for a new way of working: cloud-ready, workflow-focused, and modular.`
+    title: 'diensten.sections.who_we_are.title',
+    preview: 'diensten.sections.who_we_are.preview',
+    content: 'diensten.sections.who_we_are.content'
   },
   {
     key: 'how-we-work',
-    title: 'How We Work',
-    preview: 'We solve problems step by step, building in modules rather than massive "all or nothing" projects.',
-    content: `We believe in solving problems step by step. Instead of tackling one massive "all or nothing" project, we build in modules—small, tested components that connect together into a web of efficiency. This approach gives our clients quick wins early on, lower risk through proven steps, and flexibility to adapt to new needs as they appear. Each phase delivers measurable value, so clients see impact right away.`
+    title: 'diensten.sections.how_we_work.title',
+    preview: 'diensten.sections.how_we_work.preview',
+    content: 'diensten.sections.how_we_work.content'
   },
   {
     key: 'innovation',
-    title: 'Innovation & Proof of Expertise',
-    preview: 'Innovation through smart combinations of proven technologies, exemplified by VoiceLink.me.',
-    content: `At Finit, we don't make you switch tools. We make your existing stack work harder. VoiceLink lets reps speak quick updates in WhatsApp, and those notes sync automatically to your CRM: Teamleader, Pipedrive, Salesforce, Odoo, HubSpot, and more. No new inboxes. No extra apps. No habit changes. We remove bottlenecks by connecting proven systems and turning scattered conversations into clean, actionable data. The same approach guides every project: find the friction, automate within your stack, and deliver results that last. If a system has an API, we can integrate it.`
+    title: 'diensten.sections.innovation.title',
+    preview: 'diensten.sections.innovation.preview',
+    content: 'diensten.sections.innovation.content'
   },
   {
     key: 'what-sets-us-apart',
-    title: 'What Sets Us Apart',
-    preview: 'Deep CRM knowledge, AI automation expertise, and cloud-ready solutions without bureaucracy.',
-    content: `Deep CRM knowledge – We know how to unlock the full potential of CRM systems. AI automation pioneers – We apply AI in real processes, turning advanced tech into daily efficiency. Cloud-ready & workflow-focused – Our systems are designed for today's environment and tomorrow's growth. Efficiency unlocks – We detect bottlenecks others miss and design long-term solutions. Fast delivery – Without the bureaucracy of big firms, we deliver quicker and more directly.`
+    title: 'diensten.sections.what_sets_apart.title',
+    preview: 'diensten.sections.what_sets_apart.preview',
+    content: 'diensten.sections.what_sets_apart.content'
   },
   {
     key: 'philosophy',
-    title: 'Our Philosophy',
-    preview: 'We make work smoother without changing how teams operate, automating background tasks.',
-    content: `We don't reinvent how teams work—we make their work smoother. The tools people already know stay the same, but we automate repetitive, low-value tasks in the background. This means less energy wasted on admin, and more time for meaningful interactions.`
+    title: 'diensten.sections.philosophy.title',
+    preview: 'diensten.sections.philosophy.preview',
+    content: 'diensten.sections.philosophy.content'
   },
   {
     key: 'commitment',
-    title: 'Commitment to Clients',
-    preview: 'Dedicated partners with direct communication and long-term relationship focus.',
-    content: `We are dedicated partners, available whenever needed. We communicate directly, make fast decisions, and aim for long-term relationships that continuously unlock new efficiencies as needs evolve.`
+    title: 'diensten.sections.commitment.title',
+    preview: 'diensten.sections.commitment.preview',
+    content: 'diensten.sections.commitment.content'
   }
 ];
 
 const benefits = [
   {
     icon: Clock,
-    title: "Quick Wins Early On",
-    description: "See immediate improvements with our modular approach that delivers value from day one."
+    title: "diensten.benefits.quick_wins.title",
+    description: "diensten.benefits.quick_wins.description"
   },
   {
     icon: Shield,
-    title: "Lower Risk",
-    description: "Proven steps and tested components reduce implementation risk significantly."
+    title: "diensten.benefits.lower_risk.title",
+    description: "diensten.benefits.lower_risk.description"
   },
   {
     icon: Workflow,
-    title: "Flexible Adaptation",
-    description: "Easily adapt to new needs as they appear with our modular architecture."
+    title: "diensten.benefits.flexible_adaptation.title",
+    description: "diensten.benefits.flexible_adaptation.description"
   },
   {
     icon: TrendingUp,
-    title: "Measurable Value",
-    description: "Each phase delivers concrete, measurable improvements to your operations."
+    title: "diensten.benefits.measurable_value.title",
+    description: "diensten.benefits.measurable_value.description"
   },
   {
     icon: Zap,
-    title: "Fast Delivery",
-    description: "Without bureaucracy, we deliver solutions quicker and more directly."
+    title: "diensten.benefits.fast_delivery.title",
+    description: "diensten.benefits.fast_delivery.description"
   },
   {
     icon: Brain,
-    title: "AI Automation",
-    description: "Turn advanced technology into daily efficiency with practical AI implementations."
+    title: "diensten.benefits.ai_automation.title",
+    description: "diensten.benefits.ai_automation.description"
   }
 ];
 
@@ -156,9 +156,9 @@ export default function TailoredITSolutionsPage() {
               transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="finit-h1 text-white mb-6"
             >
-              <span>Tailored IT Solutions</span>
+              <span>{t('diensten.hero.title')}</span>
               <br />
-              <span className="finit-highlight mt-4 inline-block" style={{ backgroundColor: '#F7E69B', color: '#1C2C55' }}>Built for Impact</span>
+              <span className="finit-highlight mt-4 inline-block" style={{ backgroundColor: '#F7E69B', color: '#1C2C55' }}>{t('diensten.hero.highlight')}</span>
             </motion.h1>
             
             <motion.p
@@ -168,7 +168,7 @@ export default function TailoredITSolutionsPage() {
               className="finit-body max-w-3xl mx-auto mb-8"
               style={{ color: '#202226' }}
             >
-              Fast, direct, and built for the next generation of automation. We specialize in AI automation and modern CRM systems that transform how your business operates.
+              {t('diensten.hero.description')}
             </motion.p>
 
             <motion.div
@@ -207,10 +207,10 @@ export default function TailoredITSolutionsPage() {
               className="text-center mb-16"
             >
               <h2 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight mb-4 text-white">
-                Why Choose Finit Solutions
+                {t('diensten.why.title')}
               </h2>
               <p className="font-general-sans font-normal text-base md:text-lg leading-relaxed max-w-3xl mx-auto text-white/90">
-                Discover what makes us different and how we deliver exceptional results for our clients.
+                {t('diensten.why.subtitle')}
               </p>
             </motion.div>
 
@@ -230,10 +230,10 @@ export default function TailoredITSolutionsPage() {
                   >
                     <div className="flex-1">
                       <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-2 group-hover:opacity-90 transition-colors text-white">
-                        {section.title}
+                        {t(section.title)}
                       </h3>
                       <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/80">
-                        {section.preview}
+                        {t(section.preview)}
                       </p>
                     </div>
                     <div className="flex-shrink-0 ml-6">
@@ -263,7 +263,7 @@ export default function TailoredITSolutionsPage() {
                         <div className="px-6 md:px-8 pb-6 md:pb-8">
                           <div className="bg-white/90 rounded-xl p-6 border" style={{ borderColor: '#1C2C55' }}>
                             <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed" style={{ color: '#202226' }}>
-                              {section.content}
+                              {t(section.content)}
                             </p>
                           </div>
                         </div>
@@ -288,10 +288,10 @@ export default function TailoredITSolutionsPage() {
             className="text-center mb-16"
           >
             <h2 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight mb-4 text-white">
-              The Benefits for Our Clients
+              {t('diensten.benefits.title')}
             </h2>
             <p className="font-general-sans font-normal text-base md:text-lg leading-relaxed max-w-3xl mx-auto text-white/90">
-              Immediate improvements that compound over time into sustainable competitive advantages.
+              {t('diensten.benefits.subtitle')}
             </p>
           </motion.div>
           
@@ -311,10 +311,10 @@ export default function TailoredITSolutionsPage() {
                       <benefit.icon className="h-6 w-6" style={{ color: '#1C2C55' }} />
                     </div>
                     <h3 className="font-general-sans font-medium text-lg md:text-xl leading-tight mb-3 group-hover:opacity-90 transition-colors text-white">
-                      {benefit.title}
+                      {t(benefit.title)}
                     </h3>
                     <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed text-white/80">
-                      {benefit.description}
+                      {t(benefit.description)}
                     </p>
                   </CardContent>
                 </Card>
@@ -340,15 +340,15 @@ export default function TailoredITSolutionsPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <h2 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight mb-4 text-white">
-              Ready to Transform Your Business?
+              {t('diensten.cta.title')}
             </h2>
             <p className="font-general-sans font-normal text-base md:text-lg leading-relaxed mb-8 max-w-3xl mx-auto text-white/90">
-              We are not a traditional IT firm. We are modern, fast, and specialized in AI automation and CRM. With Finit Solutions, you have a partner fully committed to your success—today and in the future.
+              {t('diensten.cta.description')}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <ProjectRequestDialog 
-                buttonText="Start Your Transformation"
+                buttonText={t('diensten.cta.button')}
                 buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 font-general-sans font-normal text-base px-8 py-4 rounded-full"
               />
               <a 
@@ -372,15 +372,15 @@ export default function TailoredITSolutionsPage() {
             >
               <div className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
-                <span className="font-general-sans font-normal text-sm">GDPR Compliant</span>
+                <span className="font-general-sans font-normal text-sm">{t('diensten.trust.gdpr')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5" />
-                <span className="font-general-sans font-normal text-sm">99.9% Uptime</span>
+                <span className="font-general-sans font-normal text-sm">{t('diensten.trust.uptime')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                <span className="font-general-sans font-normal text-sm">24/7 Support</span>
+                <span className="font-general-sans font-normal text-sm">{t('diensten.trust.support')}</span>
               </div>
             </motion.div>
           </motion.div>
