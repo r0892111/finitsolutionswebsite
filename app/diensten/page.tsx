@@ -327,7 +327,65 @@ export default function TailoredITSolutionsPage() {
       {/* Knowledge & Email Co-Pilot Use Case */}
       <KnowledgeCopilotUseCase />
 
-      
+      {/* VoiceLink Showcase */}
+      <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora">
+        <div className="w-full">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/25 shadow-2xl"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                  <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-500/20 text-green-100 border border-green-400/30 mb-6">
+                    <CheckCircle2 className="h-4 w-4 mr-2" />
+                    <span className="font-general-sans font-normal text-sm">Live Product</span>
+                  </div>
+                  
+                  <h3 className="font-general-sans font-medium text-2xl md:text-3xl leading-tight text-white mb-4">
+                    VoiceLink.me
+                  </h3>
+                  
+                  <p className="font-general-sans font-normal text-sm md:text-base leading-relaxed mb-6 text-white/90">
+                    A clear example of our innovation philosophy: VoiceLink enables voice-driven updates for sales teams directly into their CRM. By rethinking communication flows, we turned wasted time into efficiency.
+                  </p>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <a 
+                      href="https://voicelink.me" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      <Button 
+                        size="lg" 
+                        className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 font-general-sans font-normal text-base px-8 py-4 rounded-full"
+                      >
+                        Try VoiceLink
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </a>
+                  </div>
+                </div>
+                
+                <div className="relative">
+                  <div className="aspect-[4/3] relative overflow-hidden rounded-2xl bg-white/10 border border-white/20 shadow-xl">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
+                    <div className="flex items-center justify-center h-full">
+                      <div className="text-center text-white/60">
+                        <Workflow className="h-16 w-16 mx-auto mb-4" />
+                        <p className="font-general-sans font-normal text-base">VoiceLink Demo</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* Final CTA Section */}
       <section className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-finit-aurora relative overflow-hidden">
