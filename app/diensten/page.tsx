@@ -155,7 +155,7 @@ export default function TailoredITSolutionsPage() {
               transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="finit-h1 text-white mb-6"
             >
-              <span>Tailored IT Solutions</span>
+              Tailored IT Solutions
               <br />
               <span className="finit-highlight mt-4 inline-block" style={{ backgroundColor: '#F7E69B', color: '#1C2C55' }}>Built for Impact</span>
             </motion.h1>
