@@ -73,7 +73,7 @@ export function Hero() {
             className="space-y-4"
           >
             <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{ color: 'rgb(28, 44, 85)' }}>
-              AI Workforces
+              AI Workforces{" "}
               <br className="md:block hidden" />
               <span className="font-semibold">that automate </span>
               <br className="md:block hidden" />
