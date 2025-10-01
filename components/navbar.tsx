@@ -25,9 +25,10 @@ export function Navbar() {
     return null;
   }
   const navItems = [
-    { name: "Diensten", href: "/diensten" },
-    { name: "Blog", href: "/blog" },
-    { name: "Over Ons", href: "/about" },
+    { name: "Home", href: "/" },
+    { name: t('nav.services'), href: "/diensten" },
+    { name: t('nav.marketplace'), href: "/marketplace" },
+    { name: t('nav.about'), href: "/about" },
   ];
   const handleContactClick = () => {
     // If we're already on the homepage, just scroll to contact
