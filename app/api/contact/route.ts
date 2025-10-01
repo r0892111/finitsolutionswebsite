@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     // Validate the incoming data
     const validatedData = contactFormSchema.parse(data);
     
-    const response = await fetch('https://alexfinit.app.n8n.cloud/webhook/0406b6df-c785-4ad5-90dc-360cf6067730', {
+    const response = await fetch('https://alexfinit.app.n8n.cloud/webhook/03451c85-9d5c-4463-884a-7689e19b0917', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
