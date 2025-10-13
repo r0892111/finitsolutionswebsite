@@ -33,22 +33,28 @@ export function Contact() {
 
   const onSubmit = async (data: ContactForm) => {
     try {
-      const response = await fetch('/api/contact', {
+      console.log('Submitting form data:', data);
+
+      // Call webhook directly since this is a static export
+      const response = await fetch('https://alexfinit.app.n8n.cloud/webhook/03451c85-9d5c-4463-884a-7689e19b0917', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      console.log('Webhook response status:', response.status);
 
       if (!response.ok) {
-        console.error('Response not OK:', result);
-        throw new Error(result.error || 'Submission failed');
+        console.error('Webhook returned non-OK status:', response.status);
+        throw new Error(`Submission failed with status ${response.status}`);
       }
 
-      console.log('Form submitted successfully:', result);
+      // Try to parse response
+      const responseText = await response.text();
+      console.log('Webhook response:', responseText);
 
       toast({
         title: "Bericht verstuurd",
@@ -60,7 +66,7 @@ export function Contact() {
       console.error('Submission error:', error);
       toast({
         title: "Er is iets misgegaan",
-        description: error instanceof Error ? error.message : "Probeer het later opnieuw of neem direct contact met ons op.",
+        description: "Probeer het later opnieuw of neem direct contact met ons op.",
         variant: "destructive",
       });
     }
