@@ -41,9 +41,14 @@ export function Contact() {
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error('Submission failed');
+        console.error('Response not OK:', result);
+        throw new Error(result.error || 'Submission failed');
       }
+
+      console.log('Form submitted successfully:', result);
 
       toast({
         title: "Bericht verstuurd",
@@ -55,7 +60,7 @@ export function Contact() {
       console.error('Submission error:', error);
       toast({
         title: "Er is iets misgegaan",
-        description: "Probeer het later opnieuw of neem direct contact met ons op.",
+        description: error instanceof Error ? error.message : "Probeer het later opnieuw of neem direct contact met ons op.",
         variant: "destructive",
       });
     }
