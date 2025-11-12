@@ -132,6 +132,14 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
       color: "from-yellow-500 to-amber-500",
       optional: true,
     },
+    {
+    id: "company_website",
+    label: "Wat is de website van je bedrijf?",
+    type: "text",
+    icon: Globe,
+    color: "from-indigo-500 to-blue-500",
+    placeholder: "https://www.jouwbedrijf.be",
+  }
   ];
 
   const totalSteps = questions.length + 1;
