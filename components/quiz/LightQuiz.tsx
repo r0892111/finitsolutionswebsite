@@ -202,8 +202,15 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
 
       console.log("Backend response:", backendData);
 
+      // Backend returns an array, get the first item
+      const summaryData = Array.isArray(backendData) ? backendData[0] : backendData;
+
+      if (!summaryData) {
+        throw new Error("No data received from server");
+      }
+
       // Pass backend data to summary
-      onComplete(backendData);
+      onComplete(summaryData);
     } catch (error) {
       console.error("Submission error:", error);
       toast({
