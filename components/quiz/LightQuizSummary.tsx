@@ -1,26 +1,37 @@
 "use client";
 
-import { CheckCircle, TrendingUp, Zap } from "lucide-react";
+import { CheckCircle, TrendingUp, Zap, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LightQuizSummary as SummaryData } from "@/lib/quiz-calculator";
+
+interface BackendSummaryData {
+  quiz: string;
+  efficiency_score: number;
+  ai_readiness: string;
+  summary: {
+    intro: string;
+    current_state: string;
+    ai_potential: string;
+    closing: string;
+  };
+  quick_wins: string[];
+  recommendation_tagline: string;
+}
 
 interface LightQuizSummaryProps {
-  data: SummaryData;
+  data: BackendSummaryData;
   onRestart: () => void;
 }
 
 export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
   const getReadinessColor = (readiness: string) => {
-    switch (readiness) {
-      case "High":
-        return "text-green-600 bg-green-100";
-      case "Medium":
-        return "text-yellow-600 bg-yellow-100";
-      case "Low":
-        return "text-red-600 bg-red-100";
-      default:
-        return "text-gray-600 bg-gray-100";
+    const normalized = readiness.toLowerCase();
+    if (normalized.includes("hoog") || normalized.includes("high")) {
+      return "text-green-600 bg-green-100";
+    } else if (normalized.includes("gemiddeld") || normalized.includes("medium")) {
+      return "text-yellow-600 bg-yellow-100";
+    } else {
+      return "text-red-600 bg-red-100";
     }
   };
 
@@ -28,6 +39,12 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
     if (score >= 70) return "text-green-600";
     if (score >= 40) return "text-yellow-600";
     return "text-red-600";
+  };
+
+  const getScoreDescription = (score: number) => {
+    if (score >= 70) return "Uitstekend potentieel voor automatisering!";
+    if (score >= 40) return "Goed potentieel met concrete mogelijkheden";
+    return "Er zijn interessante kansen voor verbetering";
   };
 
   return (
@@ -46,14 +63,12 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
               <TrendingUp className="w-6 h-6 text-blue-600" />
               <h3 className="text-xl font-semibold text-gray-700">Efficiency Potentieel</h3>
             </div>
-            <div className={`text-6xl font-bold ${getScoreColor(data.efficiencyScore)}`}>
-              {data.efficiencyScore}
+            <div className={`text-6xl font-bold ${getScoreColor(data.efficiency_score)}`}>
+              {data.efficiency_score}
               <span className="text-3xl">/100</span>
             </div>
             <p className="text-sm text-gray-600 mt-2">
-              {data.efficiencyScore >= 70 && "Uitstekend potentieel voor automatisering!"}
-              {data.efficiencyScore >= 40 && data.efficiencyScore < 70 && "Goed potentieel met concrete mogelijkheden"}
-              {data.efficiencyScore < 40 && "Er zijn interessante kansen voor verbetering"}
+              {getScoreDescription(data.efficiency_score)}
             </p>
           </div>
 
@@ -63,10 +78,22 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
               <Zap className="w-6 h-6 text-purple-600" />
               <h3 className="text-xl font-semibold text-gray-700">AI Readiness</h3>
             </div>
-            <div className={`inline-block px-6 py-3 rounded-full text-2xl font-bold ${getReadinessColor(data.aiReadiness)}`}>
-              {data.aiReadiness === "High" && "Hoog"}
-              {data.aiReadiness === "Medium" && "Gemiddeld"}
-              {data.aiReadiness === "Low" && "Laag"}
+            <div className={`inline-block px-6 py-3 rounded-full text-2xl font-bold ${getReadinessColor(data.ai_readiness)}`}>
+              {data.ai_readiness}
+            </div>
+          </div>
+
+          {/* Summary Section */}
+          <div className="bg-gradient-to-br from-slate-50 to-white p-6 rounded-xl border border-slate-200">
+            <div className="flex items-center gap-2 mb-4">
+              <Info className="w-5 h-5 text-blue-600" />
+              <h3 className="text-lg font-semibold text-gray-800">Jouw situatie</h3>
+            </div>
+            <div className="space-y-3 text-gray-700">
+              <p className="leading-relaxed">{data.summary.intro}</p>
+              <p className="leading-relaxed"><strong>Huidige staat:</strong> {data.summary.current_state}</p>
+              <p className="leading-relaxed"><strong>AI potentieel:</strong> {data.summary.ai_potential}</p>
+              <p className="leading-relaxed font-medium text-blue-900">{data.summary.closing}</p>
             </div>
           </div>
 
@@ -77,7 +104,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
               <h3 className="text-xl font-semibold text-gray-700">Quick Wins voor jou</h3>
             </div>
             <ul className="space-y-3">
-              {data.quickWins.map((win, index) => (
+              {data.quick_wins.map((win, index) => (
                 <li key={index} className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
                   <span className="flex-shrink-0 w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
                     {index + 1}
@@ -87,6 +114,15 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
               ))}
             </ul>
           </div>
+
+          {/* Recommendation Tagline */}
+          {data.recommendation_tagline && (
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 p-5 rounded-xl border-l-4 border-green-500">
+              <p className="text-gray-800 font-medium text-lg">
+                💡 {data.recommendation_tagline}
+              </p>
+            </div>
+          )}
 
           {/* CTA */}
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl text-center">

@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { calculateLightQuizSummary } from "@/lib/quiz-calculator";
 
 interface LightQuizProps {
   onComplete: (data: any) => void;
@@ -180,6 +179,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Accept": "application/json",
           },
           body: JSON.stringify(payload),
         }
@@ -189,8 +189,21 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
         throw new Error("Submission failed");
       }
 
-      const summary = calculateLightQuizSummary(answers);
-      onComplete(summary);
+      // Get response from backend
+      const responseText = await response.text();
+      let backendData;
+
+      try {
+        backendData = JSON.parse(responseText);
+      } catch (e) {
+        console.error("Failed to parse backend response:", responseText);
+        throw new Error("Invalid response from server");
+      }
+
+      console.log("Backend response:", backendData);
+
+      // Pass backend data to summary
+      onComplete(backendData);
     } catch (error) {
       console.error("Submission error:", error);
       toast({
