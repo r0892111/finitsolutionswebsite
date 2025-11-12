@@ -475,29 +475,6 @@ function KMOQuizContent() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-4 bg-gray-900 text-gray-400">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="text-2xl font-bold text-white">QAIMO</div>
-            </div>
-
-            <div className="flex gap-6 text-sm">
-              <Link href="/privacy" className="hover:text-white transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/algemene-voorwaarden" className="hover:text-white transition-colors">
-                Algemene Voorwaarden
-              </Link>
-            </div>
-
-            <div className="text-sm">
-              © 2025 QAIMO. Alle rechten voorbehouden.
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
