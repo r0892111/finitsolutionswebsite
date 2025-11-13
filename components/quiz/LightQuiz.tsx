@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, ListChecks, Check, Globe } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, Lightbulb, ListChecks, Check, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     ai_experience: "",
     data_central: "",
     investment_readiness: "",
+    biggest_gain: "",
     tools_in_use: [],
     company_website: "",
   });
@@ -125,6 +126,15 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     ],
   },
   {
+    id: "biggest_gain",
+    label: "Wat zou de grootste winst opleveren als het geautomatiseerd werd?",
+    type: "text",
+    icon: Lightbulb,
+    color: "from-yellow-500 to-amber-500",
+    optional: true,
+    placeholder: "Bv. offertes opmaken, facturen, planning, support…",
+  },
+  {
     id: "tools_in_use",
     label: "Welke tools gebruik je vandaag?",
     type: "multiselect",
@@ -156,7 +166,8 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
   }
 ];
 
-  const totalSteps = questions.length + 1;
+  const totalQuestions = questions.length;
+  const totalSteps = totalQuestions + 1;
 
   const handleAnswerChange = (questionId: string, value: any) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
@@ -443,7 +454,9 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     );
   };
 
-  const progress = ((currentStep + 1) / totalSteps) * 100;
+  const progress = currentStep < totalQuestions
+    ? ((currentStep + 1) / totalQuestions) * 100
+    : 100;
 
   return (
     <div className="w-full max-w-3xl mx-auto">
@@ -453,14 +466,20 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
           <div className="flex items-center gap-3">
             <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Light Scan</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-500">Vraag</span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{currentStep + 1}</span>
-              <span className="text-sm text-gray-400">/</span>
-              <span className="text-sm font-semibold text-gray-600">{totalSteps}</span>
+          {currentStep < totalQuestions ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-500">Vraag</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{currentStep + 1}</span>
+                <span className="text-sm text-gray-400">/</span>
+                <span className="text-sm font-semibold text-gray-600">{totalQuestions}</span>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600">Contactgegevens</span>
+            </div>
+          )}
         </div>
 
         {/* Progress Bar */}
