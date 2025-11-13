@@ -302,7 +302,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               </Label>
               {question.optional && (
                 <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium text-gray-500 bg-gray-100 rounded-full">
-                  optioneellll
+                  optioneel
                 </span>
               )}
             </div>
@@ -341,7 +341,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               value={answers[question.id] || ""}
               onChange={(e) => handleAnswerChange(question.id, e.target.value)}
               placeholder={question.placeholder || "Je antwoord..."}
-              className="w-full h-12 text-base text-gray-900 bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/95 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm placeholder:text-gray-400"
+              className="w-full h-12 text-base text-gray-900 bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-black/95 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm placeholder:text-gray-400"
             />
           )}
 
