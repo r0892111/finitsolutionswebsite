@@ -28,6 +28,20 @@ function KMOQuizContent() {
     }
   }, [searchParams]);
 
+  // Hide navbar and footer when in quiz modes
+  useEffect(() => {
+    const isQuizMode = mode === "light" || mode === "deep-dive";
+    if (isQuizMode) {
+      document.body.classList.add("quiz-active");
+    } else {
+      document.body.classList.remove("quiz-active");
+    }
+
+    return () => {
+      document.body.classList.remove("quiz-active");
+    };
+  }, [mode]);
+
   const handleModeSelect = (selectedMode: "light" | "deep-dive") => {
     setMode(selectedMode);
   };
@@ -52,16 +66,18 @@ function KMOQuizContent() {
 
   if (mode === "light") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              QAIMO Efficiency Scan
-            </h1>
-            <p className="text-lg text-gray-600">
-              Ontdek het AI en automatisering potentieel van je bedrijf
-            </p>
-          </div>
+      <div className="min-h-screen relative overflow-hidden">
+        {/* Glassmorphism Background */}
+        <div className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
+          {/* Ambient bokeh orbs */}
+          <div className="absolute top-20 left-10 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-purple-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }} />
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-cyan-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }} />
+          {/* Noise texture */}
+          <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'3.5\' numOctaves=\'4\' /%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\' /%3E%3C/svg%3E")' }} />
+        </div>
+
+        <div className="relative z-10 py-12 px-4">
           <LightQuiz onComplete={handleLightQuizComplete} onBack={handleRestart} />
         </div>
       </div>
