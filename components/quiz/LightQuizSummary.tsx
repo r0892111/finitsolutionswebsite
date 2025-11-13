@@ -472,7 +472,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
               </div>
 
               {/* Right rail (4/12) */}
-              <div className="col-span-12 xl:col-span-4 space-y-6 xl:pr-80 2xl:pr-96">
+              <div className="col-span-12 xl:col-span-4 space-y-6">
                 {/* ROI */}
                 <Card className="border border-blue-200/60 bg-blue-50/60">
                   <CardHeader className="pb-2">
