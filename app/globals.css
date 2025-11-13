@@ -56,6 +56,12 @@
   }
 }
 
+/* Hide navbar and footer during quiz */
+body.quiz-active nav,
+body.quiz-active footer {
+  display: none !important;
+}
+
 /* Finit Brand Typography System */
 .finit-h1 {
   font-family: var(--font-general-sans);
