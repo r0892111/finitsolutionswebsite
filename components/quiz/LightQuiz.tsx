@@ -458,7 +458,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
   return (
     <div className="w-full max-w-3xl mx-auto">
       {/* Sticky Progress Header */}
-      <div className="sticky top-0 z-10 mb-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/50 p-4">
+      <div className="sticky top-4 z-10 mb-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/50 p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Light Scan</span>
