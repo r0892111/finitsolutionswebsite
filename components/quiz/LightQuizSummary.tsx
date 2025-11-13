@@ -15,6 +15,8 @@ import {
   Gauge,
   Calculator,
   ArrowRight,
+  Rocket,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -420,16 +422,48 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
               </div>
             )}
 
-            {/* CTA */}
+            {/* Deep Dive CTA - Very Noticeable */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-1 shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-transparent to-yellow-400/20 animate-pulse" />
+              <div className="relative rounded-3xl bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-8 md:p-10">
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <div className="flex-shrink-0">
+                    <div className="w-20 h-20 rounded-full bg-yellow-400 flex items-center justify-center shadow-xl animate-bounce">
+                      <Rocket className="w-10 h-10 text-blue-900" />
+                    </div>
+                  </div>
+                  <div className="flex-1 text-center md:text-left">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                      Klaar voor de Deep-Dive Scan?
+                    </h3>
+                    <p className="text-blue-100 text-lg mb-1">
+                      Ontdek je volledige automatiseringspotentieel met een uitgebreid PDF-rapport
+                    </p>
+                    <p className="text-yellow-300 font-semibold text-base">
+                      ✓ Concrete roadmap  ✓ ROI berekeningen  ✓ Prioriteiten overzicht
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <Button
+                      onClick={onRestart}
+                      size="lg"
+                      className="bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-bold text-lg px-8 py-6 h-auto rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
+                    >
+                      Start Deep-Dive Scan
+                      <ChevronRight className="w-6 h-6 ml-2" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Secondary CTA */}
             <div className="rounded-2xl bg-white/60 backdrop-blur p-6 text-center border border-white/40">
-              <h4 className="text-lg font-semibold mb-2">Wil je meer weten?</h4>
+              <h4 className="text-lg font-semibold mb-2">Liever persoonlijk contact?</h4>
               <p className="text-slate-600 mb-4">
-                Doe de Deep-Dive Scan voor een uitgebreid PDF-rapport met concrete aanbevelingen en een roadmap.
+                Neem contact op voor een vrijblijvend gesprek over je automatiseringskansen.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button onClick={onRestart} variant="outline" size="lg">
-                  Terug naar start
-                </Button>
                 <Button
                   onClick={() => (window.location.href = "/#contact")}
                   className="bg-blue-600 hover:bg-blue-700"
