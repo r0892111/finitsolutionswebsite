@@ -45,7 +45,7 @@ export function FinitChatbot({ autoOpen = false }: FinitChatbotProps) {
 
     try {
       const response = await fetch(
-        "https://alexfinit.app.n8n.cloud/webhook-test/10c67ee4-cf80-4a5a-bebd-3dd48e2fd34d",
+        "https://alexfinit.app.n8n.cloud/webhook/10c67ee4-cf80-4a5a-bebd-3dd48e2fd34d",
         {
           method: "POST",
           headers: {
