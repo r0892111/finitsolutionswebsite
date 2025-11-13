@@ -235,7 +235,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
       };
 
       const response = await fetch(
-        "https://alexfinit.app.n8n.cloud/webhook-test/2e2d8a56-43a4-48ef-996a-f20779fd7e39",
+        "https://alexfinit.app.n8n.cloud/webhook/2e2d8a56-43a4-48ef-996a-f20779fd7e39",
         {
           method: "POST",
           headers: {
