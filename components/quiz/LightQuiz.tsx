@@ -458,6 +458,37 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     ? ((currentStep + 1) / totalQuestions) * 100
     : 100;
 
+  if (isSubmitting) {
+    return (
+      <div className="w-full max-w-3xl mx-auto">
+        <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 p-12 md:p-16">
+          <div className="flex flex-col items-center justify-center space-y-8">
+            <div className="relative">
+              <div className="w-24 h-24 rounded-full border-4 border-blue-100 animate-pulse"></div>
+              <div className="absolute inset-0 w-24 h-24 rounded-full border-4 border-transparent border-t-blue-600 animate-spin"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Sparkles className="w-10 h-10 text-blue-600 animate-pulse" strokeWidth={2} />
+              </div>
+            </div>
+
+            <div className="text-center space-y-3">
+              <h3 className="text-2xl font-bold text-gray-900">Je aanvraag wordt verwerkt</h3>
+              <p className="text-base text-gray-600 max-w-md">
+                We analyseren je antwoorden en stellen je persoonlijk rapport samen...
+              </p>
+            </div>
+
+            <div className="flex gap-2">
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-3xl mx-auto">
       {/* Sticky Progress Header */}
