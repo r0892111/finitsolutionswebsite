@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, Lightbulb, Globe, ListChecks } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, Lightbulb, Globe, ListChecks, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -29,6 +28,8 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     data_central: "",
     investment_readiness: "",
     biggest_gain: "",
+    tools_in_use: [],
+    company_website: "",
   });
   const [contactInfo, setContactInfo] = useState({
     companyName: "",
@@ -126,7 +127,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
   },
   {
     id: "biggest_gain",
-    label: "Wat zou de grootste winst opleveren als het geautomatiseerd werd? (optioneel)",
+    label: "Wat zou de grootste winst opleveren als het geautomatiseerd werd?",
     type: "text",
     icon: Lightbulb,
     color: "from-yellow-500 to-amber-500",
@@ -135,17 +136,18 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
   },
   {
     id: "tools_in_use",
-    label: "Welke tools gebruik je vandaag? (meerdere mogelijk)",
+    label: "Welke tools gebruik je vandaag?",
     type: "multiselect",
     icon: ListChecks,
     color: "from-fuchsia-500 to-pink-500",
+    optional: true,
     options: [
       { value: "crm", label: "CRM (HubSpot, Pipedrive, Salesforce)" },
       { value: "erp", label: "ERP/Boekhouding (Odoo, Exact, SAP B1)" },
       { value: "rpa", label: "Workflow/RPA (Zapier, Make, Power Automate)" },
       { value: "ai_assistant", label: "AI-assistent (ChatGPT, Copilot, Gemini)" },
       { value: "bi", label: "Data & BI (Power BI, Looker Studio, Tableau)" },
-      { value: "marketing_auto", label: "Marketing automation (Mailchimp, HubSpot, ActiveCampaign)" },
+      { value: "marketing_auto", label: "Marketing automation (Mailchimp, HubSpot)" },
       { value: "support", label: "Support/Chatbot (Zendesk, Intercom)" },
       { value: "docs", label: "Documentverwerking (DocuSign, OCR)" },
       { value: "custom", label: "Custom scripts (Python, Apps Script)" },
@@ -159,6 +161,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     type: "text",
     icon: Globe,
     color: "from-indigo-500 to-blue-500",
+    optional: true,
     placeholder: "https://www.jouwbedrijf.be",
   }
 ];
@@ -167,6 +170,16 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
 
   const handleAnswerChange = (questionId: string, value: any) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
+  };
+
+  const handleMultiSelectToggle = (questionId: string, value: string) => {
+    setAnswers(prev => {
+      const current = prev[questionId] || [];
+      const newValue = current.includes(value)
+        ? current.filter((v: string) => v !== value)
+        : [...current, value];
+      return { ...prev, [questionId]: newValue };
+    });
   };
 
   const handleNext = () => {
@@ -275,35 +288,43 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     return (
       <div
         key={currentStep}
-        className={`space-y-6 animate-in ${direction === 'forward' ? 'slide-in-from-right' : 'slide-in-from-left'} fade-in duration-500`}
+        className={`space-y-8 animate-in ${direction === 'forward' ? 'slide-in-from-right-4' : 'slide-in-from-left-4'} fade-in duration-300`}
       >
-        <div className="flex items-start gap-4">
-          <div className={`flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br ${question.color} flex items-center justify-center shadow-lg transform transition-transform hover:scale-110 duration-300`}>
-            <Icon className="w-6 h-6 text-white" />
-          </div>
-          <div className="flex-1">
-            <Label className="text-xl font-semibold text-gray-800 leading-relaxed">
-              {question.label}
-            </Label>
-            <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-transparent rounded-full mt-2" />
+        {/* Question Header */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className={`flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br ${question.color} flex items-center justify-center shadow-sm`}>
+              <Icon className="w-5 h-5 text-white" strokeWidth={2.5} />
+            </div>
+            <div className="flex-1">
+              <Label className="text-lg md:text-xl font-semibold text-gray-900 leading-snug">
+                {question.label}
+              </Label>
+              {question.optional && (
+                <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium text-gray-500 bg-gray-100 rounded-full">
+                  optioneel
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="pl-16">
+        {/* Input Area */}
+        <div className="space-y-3">
           {question.type === "select" && (
             <Select
               value={answers[question.id]}
               onValueChange={(value) => handleAnswerChange(question.id, value)}
             >
-              <SelectTrigger className="w-full h-14 text-base border-2 hover:border-blue-400 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+              <SelectTrigger className="w-full h-12 text-base bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/80 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm">
                 <SelectValue placeholder="Selecteer een optie" />
               </SelectTrigger>
-              <SelectContent>
-                {question.options?.map((option, index) => (
+              <SelectContent className="bg-white/95 backdrop-blur-md border-gray-200/50 shadow-xl">
+                {question.options?.map((option) => (
                   <SelectItem
                     key={option.value}
                     value={option.value}
-                    className="text-base py-3 cursor-pointer hover:bg-blue-50 transition-colors duration-150"
+                    className="text-base py-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50 transition-colors duration-150"
                   >
                     <div className="flex items-center gap-2">
                       <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${question.color}`} />
@@ -314,25 +335,54 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               </SelectContent>
             </Select>
           )}
+
           {question.type === "text" && (
             <Input
               value={answers[question.id] || ""}
               onChange={(e) => handleAnswerChange(question.id, e.target.value)}
-              placeholder="Je antwoord..."
-              className="w-full h-14 text-base border-2 hover:border-blue-400 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              placeholder={question.placeholder || "Je antwoord..."}
+              className="w-full h-12 text-base bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/80 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm placeholder:text-gray-400"
             />
+          )}
+
+          {question.type === "multiselect" && (
+            <div className="space-y-2">
+              <div className="flex flex-wrap gap-2">
+                {question.options?.map((option) => {
+                  const isSelected = (answers[question.id] || []).includes(option.value);
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => handleMultiSelectToggle(question.id, option.value)}
+                      className={`
+                        px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
+                        ${isSelected
+                          ? `bg-gradient-to-r ${question.color} text-white shadow-md scale-[0.98] ring-2 ring-offset-1 ring-blue-500/30`
+                          : 'bg-white/60 backdrop-blur-sm text-gray-700 border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/80 shadow-sm'
+                        }
+                      `}
+                    >
+                      <span className="flex items-center gap-2">
+                        {isSelected && <Check className="w-4 h-4" strokeWidth={2.5} />}
+                        {option.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           )}
         </div>
 
-        {answers[question.id] && (
-          <div className="pl-16 animate-in slide-in-from-top fade-in duration-300">
-            <div className="flex items-center gap-2 text-sm text-green-600 font-medium">
-              <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
+        {/* Confirmation Indicator */}
+        {answers[question.id] && answers[question.id] !== "" && (question.type !== "multiselect" || answers[question.id].length > 0) && (
+          <div className="animate-in slide-in-from-top-2 fade-in duration-300">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 border border-green-100">
+              <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center">
+                <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
               </div>
-              Antwoord opgeslagen
+              <span className="text-sm font-medium text-green-700">Opgeslagen</span>
             </div>
           </div>
         )}
@@ -342,35 +392,37 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
 
   const renderContactForm = () => {
     return (
-      <div className="space-y-6 animate-in slide-in-from-right fade-in duration-500">
-        <div className="text-center space-y-2 mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 mb-4 shadow-lg">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      <div className="space-y-8 animate-in slide-in-from-right-4 fade-in duration-300">
+        {/* Header */}
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 shadow-md mb-2">
+            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold text-gray-800">Bijna klaar!</h3>
-          <p className="text-gray-600">Vul je contactgegevens in om je resultaten te ontvangen</p>
+          <h3 className="text-2xl font-bold text-gray-900">Bijna klaar</h3>
+          <p className="text-base text-gray-600 max-w-md mx-auto">Vul je contactgegevens in om je resultaten te ontvangen</p>
         </div>
 
+        {/* Form Fields */}
         <div className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="companyName" className="text-base font-medium text-gray-700">
-              Bedrijfsnaam *
+            <Label htmlFor="companyName" className="text-base font-semibold text-gray-800">
+              Bedrijfsnaam
             </Label>
             <Input
               id="companyName"
               value={contactInfo.companyName}
               onChange={(e) => setContactInfo(prev => ({ ...prev, companyName: e.target.value }))}
               placeholder="Je bedrijfsnaam"
-              className="h-12 text-base border-2 hover:border-blue-400 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="h-12 text-base bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/80 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-base font-medium text-gray-700">
-              E-mailadres *
+            <Label htmlFor="email" className="text-base font-semibold text-gray-800">
+              E-mailadres
             </Label>
             <Input
               id="email"
@@ -378,21 +430,21 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               value={contactInfo.email}
               onChange={(e) => setContactInfo(prev => ({ ...prev, email: e.target.value }))}
               placeholder="naam@bedrijf.be"
-              className="h-12 text-base border-2 hover:border-blue-400 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="h-12 text-base bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/80 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm"
               required
             />
           </div>
 
-          <div className="flex items-start gap-3 p-4 rounded-lg bg-blue-50 border border-blue-100">
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50/80 backdrop-blur-sm border border-blue-100/50">
             <Checkbox
               id="gdpr"
               checked={contactInfo.gdprConsent}
               onCheckedChange={(checked) =>
                 setContactInfo(prev => ({ ...prev, gdprConsent: checked as boolean }))
               }
-              className="mt-1"
+              className="mt-0.5 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
             />
-            <Label htmlFor="gdpr" className="text-sm text-gray-700 cursor-pointer leading-relaxed">
+            <Label htmlFor="gdpr" className="text-sm text-gray-700 cursor-pointer leading-relaxed font-medium">
               Ik ga ermee akkoord dat mijn gegevens gebruikt worden voor contactname over dit rapport
             </Label>
           </div>
@@ -404,47 +456,47 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
   return (
-    <Card className="w-full shadow-xl border-0 overflow-hidden">
-      <div className={`h-1 bg-gradient-to-r ${currentStep < questions.length ? questions[currentStep].color : 'from-blue-500 to-purple-500'} transition-all duration-500`}
-           style={{ width: `${progress}%` }}
-      />
-
-      <CardHeader className="pb-6 pt-8">
-        <div className="flex items-center justify-between mb-4">
-          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-            Light Scan
-          </CardTitle>
+    <div className="w-full max-w-3xl mx-auto">
+      {/* Sticky Progress Header */}
+      <div className="sticky top-0 z-10 mb-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/50 p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Light Scan</span>
+          </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-500">Stap</span>
-            <div className="flex items-center gap-1">
-              <span className="text-2xl font-bold text-blue-600">{currentStep + 1}</span>
-              <span className="text-lg text-gray-400">/</span>
-              <span className="text-lg text-gray-600">{totalSteps}</span>
+            <span className="text-sm font-medium text-gray-500">Vraag</span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{currentStep + 1}</span>
+              <span className="text-sm text-gray-400">/</span>
+              <span className="text-sm font-semibold text-gray-600">{totalSteps}</span>
             </div>
           </div>
         </div>
 
-        <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden shadow-inner">
+        {/* Progress Bar */}
+        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden shadow-inner">
           <div
-            className={`h-2.5 rounded-full transition-all duration-500 ease-out bg-gradient-to-r ${currentStep < questions.length ? questions[currentStep].color : 'from-blue-500 to-purple-500'}`}
+            className={`h-full rounded-full transition-all duration-500 ease-out bg-gradient-to-r ${currentStep < questions.length ? questions[currentStep].color : 'from-blue-500 to-purple-500'} shadow-sm`}
             style={{ width: `${progress}%` }}
           />
         </div>
-      </CardHeader>
+      </div>
 
-      <CardContent className="px-8 pb-8">
-        <div className="min-h-[280px]">
+      {/* Main Content Card */}
+      <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 p-8 md:p-10">
+        <div className="min-h-[320px]">
           {currentStep < questions.length ? renderQuestion() : renderContactForm()}
         </div>
 
-        <div className="flex justify-between pt-8 mt-8 border-t">
+        {/* Navigation */}
+        <div className="flex justify-between gap-4 pt-8 mt-8 border-t border-gray-200/50">
           <Button
-            variant="outline"
+            variant="ghost"
             onClick={currentStep === 0 ? onBack : handlePrevious}
             disabled={isSubmitting}
-            className="h-12 px-6 text-base font-medium hover:bg-gray-50 transition-all duration-200"
+            className="h-11 px-5 text-base font-semibold text-gray-700 hover:bg-gray-100/80 transition-all duration-200 rounded-xl"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" />
+            <ArrowLeft className="w-4 h-4 mr-2" strokeWidth={2.5} />
             {currentStep === 0 ? "Terug" : "Vorige"}
           </Button>
 
@@ -452,20 +504,20 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
             <Button
               onClick={handleNext}
               disabled={isSubmitting}
-              className={`h-12 px-8 text-base font-medium bg-gradient-to-r ${questions[currentStep].color} hover:opacity-90 transition-all duration-200 shadow-md hover:shadow-lg`}
+              className={`h-11 px-6 text-base font-semibold bg-gradient-to-r ${questions[currentStep].color} hover:opacity-90 transition-all duration-200 shadow-md hover:shadow-lg rounded-xl`}
             >
               Volgende
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <ArrowRight className="w-4 h-4 ml-2" strokeWidth={2.5} />
             </Button>
           ) : (
             <Button
               onClick={handleSubmit}
-              disabled={isSubmitting}
-              className="h-12 px-8 text-base font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 transition-all duration-200 shadow-md hover:shadow-lg"
+              disabled={isSubmitting || !contactInfo.gdprConsent}
+              className="h-11 px-6 text-base font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 disabled:opacity-50 transition-all duration-200 shadow-md hover:shadow-lg rounded-xl"
             >
               {isSubmitting ? (
                 <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
@@ -474,13 +526,13 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               ) : (
                 <>
                   Bekijk resultaat
-                  <Sparkles className="w-5 h-5 ml-2" />
+                  <Sparkles className="w-4 h-4 ml-2" strokeWidth={2.5} />
                 </>
               )}
             </Button>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
