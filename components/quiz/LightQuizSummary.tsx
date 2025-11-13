@@ -165,7 +165,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
   return (
     // ✅ offset voor vaste navbar (fallback 72px). Ook correcte anchor-offset met scroll-mt.
     <>
-      <FinitChatbot />
+      <FinitChatbot autoOpen={true} />
       <section
         id="scan-result"
         aria-labelledby="scan-title"
