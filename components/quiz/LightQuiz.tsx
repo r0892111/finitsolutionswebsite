@@ -316,7 +316,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               value={answers[question.id]}
               onValueChange={(value) => handleAnswerChange(question.id, value)}
             >
-              <SelectTrigger className="w-full h-12 text-base text-gray-900 bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/95 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm">
+              <SelectTrigger className="w-full h-12 text-base text-gray-900 dark:text-grey-100 bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/95 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm">
                 <SelectValue placeholder="Selecteer een optie" />
               </SelectTrigger>
               <SelectContent className="bg-white/95 backdrop-blur-md border-gray-200/50 shadow-xl">
@@ -341,7 +341,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               value={answers[question.id] || ""}
               onChange={(e) => handleAnswerChange(question.id, e.target.value)}
               placeholder={question.placeholder || "Je antwoord..."}
-              className="w-full h-12 text-base text-gray-900 bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-black/95 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm placeholder:text-gray-400"
+              className="w-full h-12 text-base text-gray-900 bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/95 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm placeholder:text-gray-400"
             />
           )}
 
