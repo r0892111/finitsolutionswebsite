@@ -302,7 +302,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               </Label>
               {question.optional && (
                 <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium text-gray-500 bg-gray-100 rounded-full">
-                  optioneel
+                  optioneellll
                 </span>
               )}
             </div>
