@@ -158,20 +158,35 @@ function KMOQuizContent() {
             Op <strong>drie minuten</strong> tijd krijg je persoonlijk advies over AI voor jouw KMO.
           </p>
 
-          <div className="flex justify-center">
-            <Button
-              size="lg"
-              onClick={() => handleStartFromLanding("light")}
-              aria-label="Start gratis scan — 3 minuten"
-              className="h-14 md:h-16 px-8 md:px-10 text-lg md:text-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl transition-all duration-200 min-h-[44px]"
-            >
-              <Zap className="w-5 h-5 mr-2" />
-              Start gratis scan — 3 minuten
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
+          <div className="flex justify-center mb-6">
+            <div className="relative group">
+              <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-2xl blur-xl opacity-75 group-hover:opacity-100 transition-all duration-500 animate-pulse" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-pink-400 to-blue-400 rounded-2xl opacity-0 group-hover:opacity-70 blur-lg transition-all duration-300 animate-spin-slow" style={{ animationDuration: '8s' }} />
+              <Button
+                size="lg"
+                onClick={() => handleStartFromLanding("light")}
+                aria-label="Start gratis scan — 3 minuten"
+                className="relative h-16 md:h-20 px-10 md:px-14 text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 hover:from-blue-700 hover:via-purple-700 hover:to-blue-700 shadow-2xl hover:shadow-3xl transition-all duration-300 min-h-[44px] group-hover:scale-105 animate-gradient-x bg-[length:200%_auto]"
+              >
+                <Zap className="w-6 h-6 mr-3 animate-pulse drop-shadow-glow" />
+                <span className="drop-shadow-sm">Start gratis scan — 3 minuten</span>
+                <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform duration-300 animate-pulse" style={{ animationDelay: '0.5s' }} />
+              </Button>
+            </div>
           </div>
 
-          <p className="text-sm text-gray-500 mt-4">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="flex -space-x-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white shadow-lg animate-bounce" style={{ animationDelay: '0s', animationDuration: '2s' }} />
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white shadow-lg animate-bounce" style={{ animationDelay: '0.2s', animationDuration: '2s' }} />
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 border-2 border-white shadow-lg animate-bounce" style={{ animationDelay: '0.4s', animationDuration: '2s' }} />
+            </div>
+            <p className="text-base font-semibold text-gray-700 animate-fade-in">
+              <span className="text-green-600">250+</span> bedrijven gingen je voor
+            </p>
+          </div>
+
+          <p className="text-sm text-gray-500">
             Direct resultaat · Geen verkooppraatje · Persoonlijke aanbevelingen
           </p>
         </div>
