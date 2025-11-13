@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, Lightbulb, Globe, ListChecks, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, Lightbulb, ListChecks, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,6 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     investment_readiness: "",
     biggest_gain: "",
     tools_in_use: [],
-    company_website: "",
   });
   const [contactInfo, setContactInfo] = useState({
     companyName: "",
@@ -155,15 +154,6 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
       { value: "other", label: "Andere" },
     ],
   },
-  {
-    id: "company_website",
-    label: "Wat is de website van je bedrijf?",
-    type: "text",
-    icon: Globe,
-    color: "from-indigo-500 to-blue-500",
-    optional: true,
-    placeholder: "https://www.jouwbedrijf.be",
-  }
 ];
 
   const totalSteps = questions.length + 1;
@@ -400,8 +390,8 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold text-gray-900">Bijna klaar</h3>
-          <p className="text-base text-gray-600 max-w-md mx-auto">Vul je contactgegevens in om je resultaten te ontvangen</p>
+          <h3 className="text-2xl font-bold text-gray-900">Ontvang je persoonlijk advies</h3>
+          <p className="text-base text-gray-600 max-w-md mx-auto">Vul je contactgegevens in om je op maat gemaakt AI-automatiseringsrapport te ontvangen</p>
         </div>
 
         {/* Form Fields */}
