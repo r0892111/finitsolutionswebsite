@@ -160,7 +160,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     icon: Globe,
     color: "from-indigo-500 to-blue-500",
     placeholder: "https://www.jouwbedrijf.be",
-  },
+  }
 ];
 
   const totalSteps = questions.length + 1;
