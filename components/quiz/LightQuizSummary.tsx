@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FinitChatbot } from "./FinitChatbot";
 
 interface BackendSummaryData {
   quiz?: string;
@@ -163,12 +164,14 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
 
   return (
     // ✅ offset voor vaste navbar (fallback 72px). Ook correcte anchor-offset met scroll-mt.
-    <section
-      id="scan-result"
-      aria-labelledby="scan-title"
-      className="pt-[var(--nav-h,72px)] scroll-mt-[var(--nav-h,72px)]"
-    >
-      <div className="space-y-6">
+    <>
+      <FinitChatbot />
+      <section
+        id="scan-result"
+        aria-labelledby="scan-title"
+        className="pt-[var(--nav-h,72px)] scroll-mt-[var(--nav-h,72px)]"
+      >
+        <div className="space-y-6">
         <Card className="border border-white/30 bg-white/60 backdrop-blur-xl shadow-2xl">
           <CardHeader className="text-center">
             <CardTitle id="scan-title" className="text-3xl mb-2 bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
@@ -440,5 +443,6 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
         </Card>
       </div>
     </section>
+    </>
   );
 }
