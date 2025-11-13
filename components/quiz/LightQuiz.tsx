@@ -316,7 +316,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               value={answers[question.id]}
               onValueChange={(value) => handleAnswerChange(question.id, value)}
             >
-              <SelectTrigger className="w-full h-12 text-base bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/80 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm">
+              <SelectTrigger className="w-full h-12 text-base text-gray-900 bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/95 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm">
                 <SelectValue placeholder="Selecteer een optie" />
               </SelectTrigger>
               <SelectContent className="bg-white/95 backdrop-blur-md border-gray-200/50 shadow-xl">
@@ -341,7 +341,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               value={answers[question.id] || ""}
               onChange={(e) => handleAnswerChange(question.id, e.target.value)}
               placeholder={question.placeholder || "Je antwoord..."}
-              className="w-full h-12 text-base bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/80 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm placeholder:text-gray-400"
+              className="w-full h-12 text-base text-gray-900 bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/95 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm placeholder:text-gray-400"
             />
           )}
 
@@ -359,7 +359,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
                         px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
                         ${isSelected
                           ? `bg-gradient-to-r ${question.color} text-white shadow-md scale-[0.98] ring-2 ring-offset-1 ring-blue-500/30`
-                          : 'bg-white/60 backdrop-blur-sm text-gray-700 border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/80 shadow-sm'
+                          : 'bg-white/80 backdrop-blur-sm text-gray-900 border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/95 shadow-sm'
                         }
                       `}
                     >
@@ -415,7 +415,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               value={contactInfo.companyName}
               onChange={(e) => setContactInfo(prev => ({ ...prev, companyName: e.target.value }))}
               placeholder="Je bedrijfsnaam"
-              className="h-12 text-base bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/80 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm"
+              className="h-12 text-base text-gray-900 bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/95 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm"
               required
             />
           </div>
@@ -430,7 +430,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               value={contactInfo.email}
               onChange={(e) => setContactInfo(prev => ({ ...prev, email: e.target.value }))}
               placeholder="naam@bedrijf.be"
-              className="h-12 text-base bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/80 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm"
+              className="h-12 text-base text-gray-900 bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/70 hover:bg-white/95 transition-all duration-200 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 shadow-sm"
               required
             />
           </div>
