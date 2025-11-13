@@ -97,6 +97,33 @@ body.quiz-active footer {
   font-weight: 700;
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 3s ease infinite;
+}
+
 .bg-grid-pattern {
   background-size: 40px 40px;
   background-image: linear-gradient(to right, theme('colors.foreground/5') 1px, transparent 1px),
