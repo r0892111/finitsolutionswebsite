@@ -202,7 +202,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
         </div>
 
         {/* ===== Dashboard grid ===== */}
-        <div className="mx-auto max-w-[1400px] px-4 py-6">
+        <div className="mx-auto max-w-* px-4 py-6">
           <div className="grid grid-cols-12 gap-6">
             {/* ===== Left rail: the meat (8/12) ===== */}
             <div className="col-span-12 xl:col-span-8 space-y-6">
