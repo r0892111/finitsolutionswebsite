@@ -11,8 +11,12 @@ interface Message {
   content: string;
 }
 
-export function FinitChatbot() {
-  const [isOpen, setIsOpen] = useState(true);
+interface FinitChatbotProps {
+  autoOpen?: boolean;
+}
+
+export function FinitChatbot({ autoOpen = false }: FinitChatbotProps) {
+  const [isOpen, setIsOpen] = useState(autoOpen);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
