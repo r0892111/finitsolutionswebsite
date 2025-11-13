@@ -324,7 +324,7 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
                   <SelectItem
                     key={option.value}
                     value={option.value}
-                    className="text-base py-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50 transition-colors duration-150"
+                    className="text-base py-3 cursor-pointer text-gray-900 hover:bg-gray-50 hover:text-gray-900 focus:bg-gray-50 focus:text-gray-900 transition-colors duration-150"
                   >
                     <div className="flex items-center gap-2">
                       <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${question.color}`} />
