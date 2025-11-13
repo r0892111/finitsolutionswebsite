@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, Lightbulb, ListChecks, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, ListChecks, Check, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -27,8 +27,8 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     ai_experience: "",
     data_central: "",
     investment_readiness: "",
-    biggest_gain: "",
     tools_in_use: [],
+    company_website: "",
   });
   const [contactInfo, setContactInfo] = useState({
     companyName: "",
@@ -125,15 +125,6 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     ],
   },
   {
-    id: "biggest_gain",
-    label: "Wat zou de grootste winst opleveren als het geautomatiseerd werd?",
-    type: "text",
-    icon: Lightbulb,
-    color: "from-yellow-500 to-amber-500",
-    optional: true,
-    placeholder: "Bv. offertes opmaken, facturen, planning, support…",
-  },
-  {
     id: "tools_in_use",
     label: "Welke tools gebruik je vandaag?",
     type: "multiselect",
@@ -154,6 +145,15 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
       { value: "other", label: "Andere" },
     ],
   },
+  {
+    id: "company_website",
+    label: "Wat is de website van je bedrijf?",
+    type: "text",
+    icon: Globe,
+    color: "from-indigo-500 to-blue-500",
+    optional: true,
+    placeholder: "https://www.jouwbedrijf.be",
+  }
 ];
 
   const totalSteps = questions.length + 1;
