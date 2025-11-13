@@ -150,8 +150,12 @@ function KMOQuizContent() {
         </div>
 
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight max-w-4xl mx-auto">
-            Elke dag hetzelfde admin-gedoe… en toch blijft het traag?
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-[1.15] max-w-4xl mx-auto">
+            <span className="text-gray-900">Elke dag hetzelfde </span>
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">admin-gedoe</span>
+            <span className="text-gray-900">… en toch blijft het </span>
+            <span className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">traag</span>
+            <span className="text-gray-900">?</span>
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
