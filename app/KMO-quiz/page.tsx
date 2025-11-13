@@ -143,7 +143,7 @@ function KMOQuizContent() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-24 pb-20 px-4">
+      <section className="relative overflow-hidden min-h-screen flex items-center justify-center px-4">
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-3xl" />
