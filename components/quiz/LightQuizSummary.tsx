@@ -690,13 +690,19 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
                         </div>
                       </div>
                       <Button
-                        onClick={onRestart}
-                        size="lg"
-                        className="bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-bold px-6 h-11 rounded-xl shadow-xl"
-                      >
-                        Start
-                        <ChevronRight className="w-5 h-5 ml-1" />
-                      </Button>
+  onClick={() =>
+    window.open(
+      "https://calendly.com/karel-finitsolutions/rl-30-minuten-kennismaking-finit-solutions",
+      "_blank",
+      "noopener,noreferrer"
+    )
+  }
+  size="lg"
+  className="bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-bold px-6 h-11 rounded-xl shadow-xl"
+>
+  Plan gratis 30 min call
+  <ChevronRight className="w-5 h-5 ml-1" />
+</Button>
                     </div>
                   </CardContent>
                 </Card>

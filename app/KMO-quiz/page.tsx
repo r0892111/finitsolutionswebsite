@@ -177,17 +177,6 @@ function KMOQuizContent() {
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="flex -space-x-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white shadow-lg animate-bounce" style={{ animationDelay: '0s', animationDuration: '2s' }} />
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white shadow-lg animate-bounce" style={{ animationDelay: '0.2s', animationDuration: '2s' }} />
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 border-2 border-white shadow-lg animate-bounce" style={{ animationDelay: '0.4s', animationDuration: '2s' }} />
-            </div>
-            <p className="text-base font-semibold text-gray-700 animate-fade-in">
-              <span className="text-green-600">250+</span> bedrijven gingen je voor
-            </p>
-          </div>
-
           <p className="text-sm text-gray-500">
             Direct resultaat · Geen verkooppraatje · Persoonlijke aanbevelingen
           </p>
