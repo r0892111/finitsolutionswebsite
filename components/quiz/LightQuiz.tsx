@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, Lightbulb, ListChecks, Check, Globe, AlertTriangle, Files, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -18,7 +18,6 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState(0);
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
   const [answers, setAnswers] = useState<Record<string, any>>({
     sector: "",
@@ -37,28 +36,6 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     email: "",
     gdprConsent: false,
   });
-
-  useEffect(() => {
-    if (isSubmitting) {
-      setLoadingProgress(0);
-      const duration = 60000; // 60 seconds
-      const intervalTime = 100; // Update every 100ms
-      const increment = (100 / duration) * intervalTime;
-
-      const interval = setInterval(() => {
-        setLoadingProgress((prev) => {
-          const next = prev + increment;
-          if (next >= 100) {
-            clearInterval(interval);
-            return 100;
-          }
-          return next;
-        });
-      }, intervalTime);
-
-      return () => clearInterval(interval);
-    }
-  }, [isSubmitting]);
 
   const questions = [
   {
@@ -613,18 +590,6 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               <h3 className="text-2xl font-bold text-gray-900">Je aanvraag wordt verwerkt</h3>
               <p className="text-base text-gray-600 max-w-md">
                 We analyseren je antwoorden en stellen je persoonlijk rapport samen...
-              </p>
-            </div>
-
-            <div className="w-full max-w-md space-y-2">
-              <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-100 ease-linear"
-                  style={{ width: `${loadingProgress}%` }}
-                ></div>
-              </div>
-              <p className="text-sm text-gray-500 text-center">
-                {Math.round(loadingProgress)}% voltooid
               </p>
             </div>
 
