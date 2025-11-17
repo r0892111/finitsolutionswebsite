@@ -104,10 +104,8 @@ function KMOQuizContent() {
 
   if (mode === "light-summary" && summaryData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          <LightQuizSummary data={summaryData} onRestart={handleRestart} />
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
+        <LightQuizSummary data={summaryData} onRestart={handleRestart} />
       </div>
     );
   }
@@ -143,110 +141,59 @@ function KMOQuizContent() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-24 pb-20 px-4">
+      <section className="relative overflow-hidden min-h-screen flex items-center justify-center px-4">
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight max-w-4xl mx-auto">
-            Elke dag hetzelfde admin-gedoe… en toch blijft het traag?
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-[1.15] max-w-4xl mx-auto">
+            <span className="text-gray-900">Elke dag hetzelfde </span>
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">admin-gedoe</span>
+            <span className="text-gray-900">… en toch blijft het </span>
+            <span className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">traag</span>
+            <span className="text-gray-900">?</span>
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
             Op <strong>drie minuten</strong> tijd krijg je persoonlijk advies over AI voor jouw KMO.
           </p>
 
-          <div className="flex justify-center">
-            <Button
-              size="lg"
-              onClick={() => handleStartFromLanding("light")}
-              aria-label="Start gratis scan — 3 minuten"
-              className="h-14 md:h-16 px-8 md:px-10 text-lg md:text-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl transition-all duration-200 min-h-[44px]"
-            >
-              <Zap className="w-5 h-5 mr-2" />
-              Start gratis scan — 3 minuten
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
+          <div className="flex justify-center mb-6">
+            <div className="relative group">
+              <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-2xl blur-xl opacity-75 group-hover:opacity-100 transition-all duration-500 animate-pulse" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-pink-400 to-blue-400 rounded-2xl opacity-0 group-hover:opacity-70 blur-lg transition-all duration-300 animate-spin-slow" style={{ animationDuration: '8s' }} />
+              <Button
+                size="lg"
+                onClick={() => handleStartFromLanding("light")}
+                aria-label="Start gratis scan — 3 minuten"
+                className="relative h-16 md:h-20 px-10 md:px-14 text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 hover:from-blue-700 hover:via-purple-700 hover:to-blue-700 shadow-2xl hover:shadow-3xl transition-all duration-300 min-h-[44px] group-hover:scale-105 animate-gradient-x bg-[length:200%_auto]"
+              >
+                <Zap className="w-6 h-6 mr-3 animate-pulse drop-shadow-glow" />
+                <span className="drop-shadow-sm">Start gratis scan — 3 minuten</span>
+                <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform duration-300 animate-pulse" style={{ animationDelay: '0.5s' }} />
+              </Button>
+            </div>
           </div>
 
-          <p className="text-sm text-gray-500 mt-4">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="flex -space-x-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white shadow-lg animate-bounce" style={{ animationDelay: '0s', animationDuration: '2s' }} />
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white shadow-lg animate-bounce" style={{ animationDelay: '0.2s', animationDuration: '2s' }} />
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 border-2 border-white shadow-lg animate-bounce" style={{ animationDelay: '0.4s', animationDuration: '2s' }} />
+            </div>
+            <p className="text-base font-semibold text-gray-700 animate-fade-in">
+              <span className="text-green-600">250+</span> bedrijven gingen je voor
+            </p>
+          </div>
+
+          <p className="text-sm text-gray-500">
             Direct resultaat · Geen verkooppraatje · Persoonlijke aanbevelingen
           </p>
         </div>
       </section>
 
-      {/* UPDATED VALUE PROP */}
-      <section className="relative py-20 px-4 bg-slate-900 overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-10 left-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
-          <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-cyan-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
-        </div>
-
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Wat je krijgt in 3 minuten
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="text-center group">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300 animate-float" style={{ animationDelay: '0s' }}>
-                <Search className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">
-                Proces & administratie
-              </h3>
-              <p className="text-gray-300 leading-relaxed">
-                waar dubbel werk en overtypen zitten
-              </p>
-            </div>
-
-            <div className="text-center group">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300 animate-float" style={{ animationDelay: '0.5s' }}>
-                <Target className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">
-                AI-readiness
-              </h3>
-              <p className="text-gray-300 leading-relaxed">
-                data, tools en team: ben je er klaar voor?
-              </p>
-            </div>
-
-            <div className="text-center group">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-500 mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300 animate-float" style={{ animationDelay: '1s' }}>
-                <TrendingUp className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">
-                3 concrete quick wins
-              </h3>
-              <p className="text-gray-300 leading-relaxed">
-                voor de komende 30 dagen
-              </p>
-            </div>
-          </div>
-
-          <div className="flex justify-center mt-12">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-500 animate-gradient-x" />
-              <Button
-                size="lg"
-                onClick={() => handleStartFromLanding("light")}
-                aria-label="Start gratis scan"
-                className="relative h-14 md:h-16 px-8 md:px-10 text-lg md:text-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-2xl hover:shadow-3xl transition-all duration-200 min-h-[44px] group-hover:scale-105"
-              >
-                <Zap className="w-5 h-5 mr-2 animate-pulse" />
-                Start gratis scan
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* UPDATED SOCIAL PROOF */}
       <section className="py-20 px-4 bg-gradient-to-br from-slate-50 to-blue-50">
