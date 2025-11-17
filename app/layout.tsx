@@ -1,6 +1,5 @@
-'use client';
-
 import './globals.css';
+import type { Metadata } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
@@ -12,8 +11,6 @@ import { CookieBanner } from '@/components/cookie-banner';
 import { CookieSettingsModal } from '@/components/cookie-settings-modal';
 import { LanguageProvider } from '@/contexts/language-context';
 import { FinitChatbot } from '@/components/quiz/FinitChatbot';
-import { LoadingScreen } from '@/components/loading-screen';
-import { useState, useEffect } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 const montserrat = Montserrat({ 
@@ -30,13 +27,56 @@ const generalSans = Inter({
   display: 'swap',
 });
 
+export const metadata: Metadata = {
+  title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
+  description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen. Ontdek hoe wij uw bedrijfsprocessen kunnen optimaliseren.',
+  metadataBase: new URL('https://finitsolutions.be'),
+  icons: {
+    icon: '/Finit Logomark@4x.png',
+    shortcut: '/Finit Logomark@4x.png',
+    apple: '/Finit Logomark@4x.png'
+  },
+  openGraph: {
+    title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
+    description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen. Ontdek hoe wij uw bedrijfsprocessen kunnen optimaliseren.',
+    url: 'https://finitsolutions.be',
+    siteName: 'Finit Solutions',
+    images: [
+      {
+        url: '/Finit Logomark@4x.png',
+        width: 1200,
+        height: 1200,
+        alt: 'Finit Solutions Logo',
+      },
+    ],
+    locale: 'nl_BE',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
+    description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen.',
+    images: ['/Finit Logomark@4x.png'],
+    creator: '@finitsolutions',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [isLoading, setIsLoading] = useState(true);
-
   return (
     <html lang="nl">
       <head>
@@ -101,16 +141,14 @@ export default function RootLayout({
       <body className={`${inter.className} ${montserrat.variable} ${generalSans.variable}`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
-          <iframe
+          <iframe 
             src="https://www.googletagmanager.com/ns.html?id=GTM-MQNHSC66"
-            height="0"
-            width="0"
+            height="0" 
+            width="0" 
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-
-        {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
-
+        
         <LanguageProvider>
           <ConsentProvider>
             <GADebug />
