@@ -533,3 +533,90 @@ html {
 .drop-shadow-glow {
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
 }
+
+/* Print styles for PDF export */
+@media print {
+  /* Hide everything by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Hide navigation, footer, chatbot, buttons */
+  nav,
+  footer,
+  button:not(.print-include),
+  .cookie-banner,
+  [class*="chatbot"],
+  [class*="Chatbot"],
+  .sticky {
+    display: none !important;
+  }
+
+  /* Show only the print content */
+  #print-content,
+  #print-content * {
+    visibility: visible;
+  }
+
+  /* Position print content at top of page */
+  #print-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white;
+  }
+
+  /* Remove animations and transitions */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Ensure proper page breaks */
+  .print-page-break {
+    page-break-after: always;
+  }
+
+  /* Remove background colors and patterns */
+  .bg-finit-aurora,
+  .backdrop-blur-xl,
+  .backdrop-blur {
+    background: white !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Optimize card styles for print */
+  .card,
+  [class*="Card"] {
+    border: 1px solid #e5e7eb !important;
+    box-shadow: none !important;
+    background: white !important;
+    page-break-inside: avoid;
+  }
+
+  /* Ensure readable text */
+  body {
+    color: black !important;
+    background: white !important;
+  }
+
+  /* Fix grid layout for print */
+  #print-content .grid-cols-12 > * {
+    grid-column: span 12 !important;
+  }
+
+  /* Remove unnecessary margins */
+  @page {
+    margin: 1.5cm;
+  }
+
+  /* Hide specific print utilities */
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .print\:block {
+    display: block !important;
+  }
+}
