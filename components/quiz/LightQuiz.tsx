@@ -39,19 +39,34 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
 
   const questions = [
   {
-    id: "sector",
-    label: "In welke sector is je bedrijf actief?",
-    type: "select",
-    icon: Building2,
-    color: "from-blue-500 to-cyan-500",
-    options: [
-      { value: "production", label: "Productie" },
-      { value: "services", label: "Diensten" },
-      { value: "retail", label: "Retail & E-commerce" },
-      { value: "construction", label: "Bouw" },
-      { value: "other", label: "Anders" },
-    ],
-  },
+  id: "sector",
+  label: "In welke sector is je bedrijf actief?",
+  type: "select",
+  icon: Building2,
+  color: "from-blue-500 to-cyan-500",
+  options: [
+    { value: "manufacturing", label: "Productie / Industrie" },
+    { value: "professional_services", label: "Professionele diensten (consulting, agency…)" },
+    { value: "retail", label: "Retail & E-commerce" },
+    { value: "logistics", label: "Logistiek / Transport" },
+    { value: "construction", label: "Bouw & Installatie" },
+    { value: "healthcare", label: "Zorg & welzijn" },
+    { value: "public_nonprofit", label: "Overheid / Non-profit / Onderwijs" },
+    { value: "software_saas", label: "Software / SaaS / IT" },
+    { value: "other", label: "Anders" },
+  ],
+  extra: {
+    b2b_b2c: {
+      type: "select",
+      label: "Bedien je vooral B2B of B2C?",
+      options: [
+        { value: "b2b", label: "Voornamelijk B2B" },
+        { value: "b2c", label: "Voornamelijk B2C" },
+        { value: "both", label: "Beide" },
+      ]
+    }
+  }
+},
   {
     id: "fte",
     label: "Hoeveel medewerkers (FTE) heeft je bedrijf?",
