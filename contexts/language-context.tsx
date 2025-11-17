@@ -507,9 +507,11 @@ interface LanguageProviderProps {
 }
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>('nl');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Check for stored language preference
     const stored = localStorage.getItem('finit-language');
     if (stored && (stored === 'nl' || stored === 'en')) {
@@ -519,7 +521,9 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
-    localStorage.setItem('finit-language', lang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('finit-language', lang);
+    }
   };
 
   const t = (key: string): string => {
