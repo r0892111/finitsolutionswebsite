@@ -104,10 +104,8 @@ function KMOQuizContent() {
 
   if (mode === "light-summary" && summaryData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          <LightQuizSummary data={summaryData} onRestart={handleRestart} />
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
+        <LightQuizSummary data={summaryData} onRestart={handleRestart} />
       </div>
     );
   }
