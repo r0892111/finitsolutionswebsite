@@ -29,6 +29,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FinitChatbot } from "./FinitChatbot";
 
+// NEW: libs to generate a PDF of #print-content
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
 interface BackendSummaryData {
   version?: string;
   quiz?: string;
@@ -205,8 +209,41 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
     };
   }, [employees, hours, rate, score]);
 
-  const exportToPDF = () => {
-    window.print();
+  // UPDATED: generate & download a PDF from #print-content
+  const exportToPDF = async () => {
+    const element = document.getElementById("print-content");
+    if (!element) return;
+
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        scrollY: -window.scrollY,
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      // If content is taller than one page, we can add pages in a simple loop
+      let position = 0;
+      let remainingHeight = pdfHeight;
+
+      while (remainingHeight > 0) {
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+        remainingHeight -= pdf.internal.pageSize.getHeight();
+        if (remainingHeight > 0) {
+          pdf.addPage();
+          position = 0;
+        }
+      }
+
+      pdf.save("efficiency-scan-rapport.pdf");
+    } catch (err) {
+      console.error("PDF export failed", err);
+    }
   };
 
   return (
