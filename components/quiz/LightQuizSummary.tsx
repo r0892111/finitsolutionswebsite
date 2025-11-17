@@ -282,7 +282,25 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
 
         {/* ===== Dashboard grid – full width ===== */}
         <FullBleed>
-          <div className="px-6 py-6 mt-16">
+          <div id="print-content" className="px-6 py-6 mt-16">
+            {/* Print-only header */}
+            <div className="hidden print:block mb-8 pb-6 border-b-2 border-gray-300">
+              <h1 className="text-3xl font-bold text-slate-800 mb-2">
+                Je Efficiency Scan Resultaat
+              </h1>
+              <p className="text-lg text-slate-600 mb-4">{scoreCopy(score)}</p>
+              <div className="grid grid-cols-4 gap-4 mt-6">
+                {kpis.map((k) => (
+                  <div key={k.label} className="border border-slate-200 rounded-lg p-3">
+                    <div className="text-sm text-slate-600 mb-1">{k.label}</div>
+                    <div className={`text-xl font-semibold ${k.tone}`}>
+                      {k.value}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="grid grid-cols-12 gap-6">
               {/* Left rail (8/12) */}
               <div className="col-span-12 xl:col-span-8 space-y-6">
@@ -672,7 +690,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
                 )}
 
                 {/* CTAs */}
-                <Card className="relative overflow-hidden border-0 shadow-2xl">
+                <Card className="relative overflow-hidden border-0 shadow-2xl print:hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800" />
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-transparent to-yellow-400/20 animate-pulse" />
                   <CardContent className="relative p-8">
