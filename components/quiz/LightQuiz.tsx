@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, Lightbulb, Globe, ListChecks, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Users, Clock, Cog, Sparkles, Database, TrendingUp, Lightbulb, ListChecks, Check, Globe, AlertTriangle, Files, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -39,122 +39,237 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
 
   const questions = [
   {
-    id: "sector",
-    label: "In welke sector is je bedrijf actief?",
-    type: "select",
-    icon: Building2,
-    color: "from-blue-500 to-cyan-500",
-    options: [
-      { value: "production", label: "Productie" },
-      { value: "services", label: "Diensten" },
-      { value: "retail", label: "Retail & E-commerce" },
-      { value: "construction", label: "Bouw" },
-      { value: "other", label: "Anders" },
-    ],
-  },
+  id: "sector",
+  label: "In welke sector is je bedrijf actief?",
+  type: "select",
+  icon: Building2,
+  color: "from-blue-500 to-cyan-500",
+  options: [
+    { value: "manufacturing", label: "Productie / Industrie" },
+    { value: "professional_services", label: "Professionele diensten (consulting, agency…)" },
+    { value: "retail", label: "Retail & E-commerce" },
+    { value: "logistics", label: "Logistiek / Transport" },
+    { value: "construction", label: "Bouw & Installatie" },
+    { value: "healthcare", label: "Zorg & welzijn" },
+    { value: "public_nonprofit", label: "Overheid / Non-profit / Onderwijs" },
+    { value: "software_saas", label: "Software / SaaS / IT" },
+    { value: "other", label: "Anders" },
+  ],
+  extra: {
+    b2b_b2c: {
+      type: "select",
+      label: "Bedien je vooral B2B of B2C?",
+      options: [
+        { value: "b2b", label: "Voornamelijk B2B" },
+        { value: "b2c", label: "Voornamelijk B2C" },
+        { value: "both", label: "Beide" },
+      ]
+    }
+  }
+},
   {
-    id: "fte",
-    label: "Hoeveel medewerkers (FTE) heeft je bedrijf?",
-    type: "select",
-    icon: Users,
-    color: "from-emerald-500 to-teal-500",
-    options: [
-      { value: "1-5", label: "1–5" },
-      { value: "6-20", label: "6–20" },
-      { value: "21-50", label: "21–50" },
-      { value: "50+", label: "50+" },
-    ],
-  },
+  id: "fte",
+  label: "Hoeveel medewerkers (FTE) heeft je bedrijf ongeveer?",
+  type: "select",
+  icon: Users,
+  color: "from-emerald-500 to-teal-500",
+  options: [
+    { value: "1-5", label: "1–5" },
+    { value: "6-20", label: "6–20" },
+    { value: "21-50", label: "21–50" },
+    { value: "51-200", label: "51–200" },
+    { value: "201-1000", label: "201–1000" },
+    { value: "1000+", label: "1000+" },
+  ],
+},
+{
+  id: "operational_fte",
+  label: "Hoeveel daarvan doen vooral administratief of operationeel werk?",
+  type: "select",
+  icon: Users,
+  color: "from-emerald-500 to-teal-500",
+  options: [
+    { value: "<5", label: "Minder dan 5 FTE" },
+    { value: "5-20", label: "5–20 FTE" },
+    { value: "21-50", label: "21–50 FTE" },
+    { value: "50+", label: "50+ FTE" },
+  ],
+},
   {
-    id: "admin_hours",
-    label: "Hoeveel uren per week besteed je aan handmatig administratief of datawerk?",
-    type: "select",
-    icon: Clock,
-    color: "from-amber-500 to-orange-500",
-    options: [
-      { value: "<5", label: "<5 uur" },
-      { value: "5-10", label: "5–10 uur" },
-      { value: ">10", label: ">10 uur" },
-    ],
-  },
+  id: "priority_processes",
+  label: "In welke processen wil je vooral vooruitgang boeken?",
+  type: "multiselect",
+  icon: Cog,
+  color: "from-blue-500 to-indigo-500",
+  options: [
+    { value: "sales", label: "Sales & offertes" },
+    { value: "invoicing", label: "Facturatie & boekhouding" },
+    { value: "planning", label: "Planning & projecten" },
+    { value: "logistics", label: "Logistiek & voorraad" },
+    { value: "hr", label: "HR & onboarding" },
+    { value: "support", label: "Klantenservice & support" },
+    { value: "reporting", label: "Rapportage & BI" },
+    { value: "other", label: "Andere" },
+  ],
+},
+    {
+  id: "pain_points",
+  label: "Waar loop je vandaag vooral op vast?",
+  type: "multiselect",
+  icon: AlertTriangle,
+  color: "from-red-500 to-orange-500",
+  options: [
+    { value: "double_entry", label: "Dubbele invoer in verschillende systemen" },
+    { value: "searching_info", label: "Tijd verliezen met zoeken naar info (mail, Excel…)" },
+    { value: "slow_approvals", label: "Traag goedkeurings- en beslissingsproces" },
+    { value: "manual_copy_paste", label: "Veel copy-paste werk tussen tools" },
+    { value: "no_overview", label: "Geen goed overzicht/rapportage" },
+    { value: "compliance", label: "Compliance / audit / dataveiligheid" },
+  ],
+},
+    {
+  id: "volume_documents",
+  label: "Ongeveer hoeveel documenten (offertes, facturen, orders, contracten…) verwerk je per maand?",
+  type: "select",
+  icon: Files,
+  color: "from-amber-500 to-orange-500",
+  options: [
+    { value: "<50", label: "Minder dan 50" },
+    { value: "50-200", label: "50–200" },
+    { value: "201-500", label: "201–500" },
+    { value: "501-2000", label: "501–2.000" },
+    { value: ">2000", label: "Meer dan 2.000" },
+  ],
+},
   {
-    id: "current_automation",
-    label: "Automatiseer je al repetitieve taken?",
-    type: "select",
-    icon: Cog,
-    color: "from-violet-500 to-purple-500",
-    options: [
-      { value: "yes-broadly", label: "Ja, op grotere schaal" },
-      { value: "few-tools", label: "Enkele tools" },
-      { value: "no", label: "Nee" },
-    ],
-  },
+  id: "admin_hours",
+  label: "Geschat: hoeveel uren per week besteedt je volledige team aan handmatig administratief of datawerk?",
+  type: "select",
+  icon: Clock,
+  color: "from-amber-500 to-orange-500",
+  options: [
+    { value: "<10", label: "Minder dan 10 uur" },
+    { value: "10-25", label: "10–25 uur" },
+    { value: "26-50", label: "26–50 uur" },
+    { value: "51-100", label: "51–100 uur" },
+    { value: ">100", label: "Meer dan 100 uur" },
+  ],
+},
   {
-    id: "ai_experience",
-    label: "Heb je al AI-tools geprobeerd?",
-    type: "select",
-    icon: Sparkles,
-    color: "from-pink-500 to-rose-500",
-    options: [
-      { value: "yes-regularly", label: "Ja, regelmatig" },
-      { value: "a-bit", label: "Een beetje" },
-      { value: "not-yet", label: "Nog niet" },
-    ],
-  },
+  id: "current_automation",
+  label: "Hoe ver ben je vandaag met het automatiseren van repetitieve taken?",
+  type: "select",
+  icon: Cog,
+  color: "from-violet-500 to-purple-500",
+  options: [
+    { value: "mature", label: "We hebben al veel geautomatiseerd (flows/RPA in productie)" },
+    { value: "some", label: "Enkele geautomatiseerde flows, maar er is nog veel manueel werk" },
+    { value: "experiments", label: "We hebben wat geëxperimenteerd maar niks structureels" },
+    { value: "none", label: "Nog niets geautomatiseerd" },
+    { value: "blocked", label: "We hebben geprobeerd, maar liepen vast op tools/tijd/expertise" },
+  ],
+},
   {
-    id: "data_central",
-    label: "Worden kernbedrijfsgegevens centraal beheerd (CRM/ERP/cloud)?",
-    type: "select",
-    icon: Database,
-    color: "from-sky-500 to-blue-500",
-    options: [
-      { value: "yes", label: "Ja" },
-      { value: "partially", label: "Gedeeltelijk" },
-      { value: "no", label: "Nee" },
-    ],
-  },
+  id: "ai_experience",
+  label: "Hoe gebruik je vandaag AI-tools in je organisatie?",
+  type: "select",
+  icon: Sparkles,
+  color: "from-pink-500 to-rose-500",
+  options: [
+    { value: "core_processes", label: "Regelmatig én in kernprocessen (bv. support, rapporten, documenten)" },
+    { value: "experiments", label: "Regelmatig, maar vooral experimenteel naast het dagelijks werk" },
+    { value: "few_tests", label: "Een paar keer getest" },
+    { value: "interested", label: "Nog niet, maar wel geïnteresseerd" },
+    { value: "sceptical", label: "Nog niet en eerder sceptisch" },
+  ],
+},
   {
-    id: "investment_readiness",
-    label: "Hoe open sta je om binnen 6 maanden te investeren in automatisering/AI?",
-    type: "select",
-    icon: TrendingUp,
-    color: "from-green-500 to-emerald-500",
-    options: [
-      { value: "very-open", label: "Zeer open" },
-      { value: "unsure", label: "Onzeker" },
-      { value: "not-right-away", label: "Niet meteen" },
-    ],
-  },
+  id: "data_central",
+  label: "Hoe worden kernbedrijfsgegevens vandaag beheerd?",
+  type: "select",
+  icon: Database,
+  color: "from-sky-500 to-blue-500",
+  options: [
+    { value: "single_system", label: "Grotendeels centraal in één kernsysteem (CRM/ERP/cloud)" },
+    { value: "few_systems", label: "In enkele gekoppelde systemen (bv. CRM + boekhouding)" },
+    { value: "many_systems", label: "Verspreid over veel systemen zonder goede koppeling" },
+    { value: "spreadsheets", label: "Voornamelijk in Excel/Sheets en e-mail" },
+    { value: "paper", label: "Nog veel op papier / niet gedigitaliseerd" },
+  ],
+},
+    {
+  id: "internal_it",
+  label: "Wie beheert vandaag IT en automatisering bij jullie?",
+  type: "select",
+  icon: UserCog,
+  color: "from-slate-500 to-slate-700",
+  options: [
+    { value: "dedicated_team", label: "Eigen IT/automatiseringsteam" },
+    { value: "tech_savvy_person", label: "Eén of enkele technisch sterke mensen naast hun hoofdrol" },
+    { value: "external_partner", label: "Voornamelijk externe partner(s)" },
+    { value: "nobody", label: "Niemand specifiek" },
+  ],
+},
   {
-    id: "biggest_gain",
-    label: "Wat zou de grootste winst opleveren als het geautomatiseerd werd?",
-    type: "text",
-    icon: Lightbulb,
-    color: "from-yellow-500 to-amber-500",
-    optional: true,
-    placeholder: "Bv. offertes opmaken, facturen, planning, support…",
-  },
+  id: "investment_readiness",
+  label: "Hoe waarschijnlijk is het dat je binnen 6 maanden investeert in automatisering/AI?",
+  type: "select",
+  icon: TrendingUp,
+  color: "from-green-500 to-emerald-500",
+  options: [
+    { value: "very-open", label: "Zeer waarschijnlijk" },
+    { value: "maybe", label: "Misschien, hangt af van ROI en timing" },
+    { value: "not-right-away", label: "Waarschijnlijk later dan 6 maanden" },
+  ],
+},
+{
+  id: "budget_range",
+  label: "Met welke orde van grootte van investering voel je je comfortabel (eenmalig of per jaar)?",
+  type: "select",
+  icon: TrendingUp,
+  color: "from-green-500 to-emerald-500",
+  optional: true,
+  options: [
+    { value: "<5k", label: "Tot €5.000" },
+    { value: "5-25k", label: "€5.000 – €25.000" },
+    { value: "25-100k", label: "€25.000 – €100.000" },
+    { value: ">100k", label: "Meer dan €100.000" },
+  ],
+},
   {
-    id: "tools_in_use",
-    label: "Welke tools gebruik je vandaag?",
-    type: "multiselect",
-    icon: ListChecks,
-    color: "from-fuchsia-500 to-pink-500",
-    optional: true,
-    options: [
-      { value: "crm", label: "CRM (HubSpot, Pipedrive, Salesforce)" },
-      { value: "erp", label: "ERP/Boekhouding (Odoo, Exact, SAP B1)" },
-      { value: "rpa", label: "Workflow/RPA (Zapier, Make, Power Automate)" },
-      { value: "ai_assistant", label: "AI-assistent (ChatGPT, Copilot, Gemini)" },
-      { value: "bi", label: "Data & BI (Power BI, Looker Studio, Tableau)" },
-      { value: "marketing_auto", label: "Marketing automation (Mailchimp, HubSpot)" },
-      { value: "support", label: "Support/Chatbot (Zendesk, Intercom)" },
-      { value: "docs", label: "Documentverwerking (DocuSign, OCR)" },
-      { value: "custom", label: "Custom scripts (Python, Apps Script)" },
-      { value: "none", label: "Geen van bovenstaande" },
-      { value: "other", label: "Andere" },
-    ],
-  },
+  id: "biggest_gain",
+  label: "Welke 1–3 taken of processen zouden de grootste winst opleveren als ze geautomatiseerd worden?",
+  type: "text",
+  icon: Lightbulb,
+  color: "from-yellow-500 to-amber-500",
+  optional: false, // als je het durft 🙂
+  placeholder: "Bv. offertes opmaken, facturatie, planning, rapportage, klantenservice…",
+},
+  {
+  id: "tools_in_use",
+  label: "Welke tools gebruik je vandaag in je organisatie?",
+  type: "multiselect",
+  icon: ListChecks,
+  color: "from-fuchsia-500 to-pink-500",
+  optional: true,
+  options: [
+    { value: "crm", label: "CRM (HubSpot, Pipedrive, Salesforce…)" },
+    { value: "erp", label: "ERP / Boekhouding (Odoo, Exact, SAP B1…)" },
+    { value: "rpa", label: "Workflow / RPA (Zapier, Make, Power Automate…)" },
+    { value: "ai_assistant", label: "AI-assistent (ChatGPT, Copilot, Gemini…)" },
+    { value: "bi", label: "Data & BI (Power BI, Looker Studio, Tableau…)" },
+    { value: "marketing_auto", label: "Marketing automation (Mailchimp, HubSpot…)" },
+    { value: "support", label: "Support / Chatbot (Zendesk, Intercom…)" },
+    { value: "docs", label: "Documentverwerking & e-sign (DocuSign, OCR…)" },
+    { value: "project_mgmt", label: "Project- & taakbeheer (Asana, Jira, Monday…)" },
+    { value: "collab", label: "Communicatie & samenwerking (Teams, Slack…)" },
+    { value: "storage", label: "Bestandsopslag (SharePoint, Google Drive…)" },
+    { value: "hr", label: "HR / Payroll (SD Worx, Officient…)" },
+    { value: "custom", label: "Custom scripts of interne tools (Python, Apps Script…)" },
+    { value: "none", label: "Geen van bovenstaande" },
+    { value: "other", label: "Andere" },
+  ],
+},
   {
     id: "company_website",
     label: "Wat is de website van je bedrijf?",
@@ -166,7 +281,8 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
   }
 ];
 
-  const totalSteps = questions.length + 1;
+  const totalQuestions = questions.length;
+  const totalSteps = totalQuestions + 1;
 
   const handleAnswerChange = (questionId: string, value: any) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
@@ -400,8 +516,8 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold text-gray-900">Bijna klaar</h3>
-          <p className="text-base text-gray-600 max-w-md mx-auto">Vul je contactgegevens in om je resultaten te ontvangen</p>
+          <h3 className="text-2xl font-bold text-gray-900">Ontvang je persoonlijk advies</h3>
+          <p className="text-base text-gray-600 max-w-md mx-auto">Vul je contactgegevens in om je op maat gemaakt AI-automatiseringsrapport te ontvangen</p>
         </div>
 
         {/* Form Fields */}
@@ -453,7 +569,40 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
     );
   };
 
-  const progress = ((currentStep + 1) / totalSteps) * 100;
+  const progress = currentStep < totalQuestions
+    ? ((currentStep + 1) / totalQuestions) * 100
+    : 100;
+
+  if (isSubmitting) {
+    return (
+      <div className="w-full max-w-3xl mx-auto">
+        <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 p-12 md:p-16">
+          <div className="flex flex-col items-center justify-center space-y-8">
+            <div className="relative">
+              <div className="w-24 h-24 rounded-full border-4 border-blue-100 animate-pulse"></div>
+              <div className="absolute inset-0 w-24 h-24 rounded-full border-4 border-transparent border-t-blue-600 animate-spin"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Sparkles className="w-10 h-10 text-blue-600 animate-pulse" strokeWidth={2} />
+              </div>
+            </div>
+
+            <div className="text-center space-y-3">
+              <h3 className="text-2xl font-bold text-gray-900">Je aanvraag wordt verwerkt</h3>
+              <p className="text-base text-gray-600 max-w-md">
+                We analyseren je antwoorden en stellen je persoonlijk rapport samen...
+              </p>
+            </div>
+
+            <div className="flex gap-2">
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-3xl mx-auto">
@@ -463,14 +612,20 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
           <div className="flex items-center gap-3">
             <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Light Scan</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-500">Vraag</span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{currentStep + 1}</span>
-              <span className="text-sm text-gray-400">/</span>
-              <span className="text-sm font-semibold text-gray-600">{totalSteps}</span>
+          {currentStep < totalQuestions ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-500">Vraag</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{currentStep + 1}</span>
+                <span className="text-sm text-gray-400">/</span>
+                <span className="text-sm font-semibold text-gray-600">{totalQuestions}</span>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600">Contactgegevens</span>
+            </div>
+          )}
         </div>
 
         {/* Progress Bar */}
