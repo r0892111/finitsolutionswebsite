@@ -42,7 +42,11 @@ function MagicVisual() {
 
 
 export function Hero() {
+  const [mounted, setMounted] = useState(false);
   const { t } = useLanguage();
+
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
 
   return (
     <section className="relative md:min-h-screen overflow-hidden">
