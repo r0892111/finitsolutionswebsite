@@ -262,18 +262,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
                     ))}
                   </div>
 
-                  {/* Export Button */}
-                  <div className="col-span-12 lg:col-span-2 flex justify-end">
-                    <Button
-                      onClick={exportToPDF}
-                      variant="outline"
-                      size="lg"
-                      className="w-full lg:w-auto border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 hover:border-blue-300"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Exporteer PDF
-                    </Button>
-                  </div>
+                 
                 </div>
               </div>
             </div>
@@ -282,7 +271,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
 
         {/* ===== Dashboard grid – full width ===== */}
         <FullBleed>
-          <div className="px-6 py-6 mt-8">
+          <div className="px-6 py-6 mt-16">
             <div className="grid grid-cols-12 gap-6">
               {/* Left rail (8/12) */}
               <div className="col-span-12 xl:col-span-8 space-y-6">
