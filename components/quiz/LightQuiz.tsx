@@ -178,14 +178,14 @@ export function LightQuiz({ onComplete, onBack }: LightQuizProps) {
   ],
 },
   {
-    id: "biggest_gain",
-    label: "Wat zou de grootste winst opleveren als het geautomatiseerd werd?",
-    type: "text",
-    icon: Lightbulb,
-    color: "from-yellow-500 to-amber-500",
-    optional: true,
-    placeholder: "Bv. offertes opmaken, facturen, planning, support…",
-  },
+  id: "biggest_gain",
+  label: "Welke 1–3 taken of processen zouden de grootste winst opleveren als ze geautomatiseerd worden?",
+  type: "text",
+  icon: Lightbulb,
+  color: "from-yellow-500 to-amber-500",
+  optional: false, // als je het durft 🙂
+  placeholder: "Bv. offertes opmaken, facturatie, planning, rapportage, klantenservice…",
+},
   {
     id: "tools_in_use",
     label: "Welke tools gebruik je vandaag?",
