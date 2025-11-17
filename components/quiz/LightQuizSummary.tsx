@@ -15,6 +15,7 @@ import {
   ArrowRight,
   Rocket,
   ChevronRight,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -204,6 +205,10 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
     };
   }, [employees, hours, rate, score]);
 
+  const exportToPDF = () => {
+    window.print();
+  };
+
   return (
     <>
       <FinitChatbot autoOpen={true} />
@@ -219,7 +224,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
               <div className="px-6 py-3">
                 <div className="grid grid-cols-12 gap-4 items-center">
                   {/* Score + titel */}
-                  <div className="col-span-12 md:col-span-4 flex items-center gap-4">
+                  <div className="col-span-12 lg:col-span-3 flex items-center gap-4">
                     <ProgressRing value={clamp(score)} />
                     <div>
                       <h1
@@ -239,8 +244,8 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
                     </div>
                   </div>
 
-                  {/* KPI’s */}
-                  <div className="col-span-12 md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {/* KPI's */}
+                  <div className="col-span-12 lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {kpis.map((k) => (
                       <div
                         key={k.label}
@@ -256,6 +261,19 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
                       </div>
                     ))}
                   </div>
+
+                  {/* Export Button */}
+                  <div className="col-span-12 lg:col-span-2 flex justify-end">
+                    <Button
+                      onClick={exportToPDF}
+                      variant="outline"
+                      size="lg"
+                      className="w-full lg:w-auto border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 hover:border-blue-300"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Exporteer PDF
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -264,7 +282,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
 
         {/* ===== Dashboard grid – full width ===== */}
         <FullBleed>
-          <div className="px-6 py-6 mt-4">
+          <div className="px-6 py-6 mt-8">
             <div className="grid grid-cols-12 gap-6">
               {/* Left rail (8/12) */}
               <div className="col-span-12 xl:col-span-8 space-y-6">
@@ -680,22 +698,6 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
                         <ChevronRight className="w-5 h-5 ml-1" />
                       </Button>
                     </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-white/60 backdrop-blur p-0 border border-white/40">
-                  <CardContent className="p-6 text-center">
-                    <h4 className="text-lg font-semibold mb-2">Liever persoonlijk contact?</h4>
-                    <p className="text-slate-600 mb-4">
-                      Plan een vrijblijvend gesprek over je automatiseringskansen.
-                    </p>
-                    <Button
-                      onClick={() => (window.location.href = "/#contact")}
-                      className="bg-blue-600 hover:bg-blue-700"
-                      size="lg"
-                    >
-                      Neem contact op
-                    </Button>
                   </CardContent>
                 </Card>
               </div>
