@@ -282,7 +282,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
 
         {/* ===== Dashboard grid – full width ===== */}
         <FullBleed>
-          <div className="px-6 py-6 mt-10">
+          <div className="px-6 py-6 mt-14">
             <div className="grid grid-cols-12 gap-6">
               {/* Left rail (8/12) */}
               <div className="col-span-12 xl:col-span-8 space-y-6">
