@@ -1,8 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
-import { Navbar } from '@/components/navbar';
-import { Footer } from '@/components/footer';
 import { GADebug } from '@/components/ga-debug';
 import { Toaster } from '@/components/ui/toaster';
 import Script from 'next/script';
@@ -152,9 +150,7 @@ export default function RootLayout({
         <LanguageProvider>
           <ConsentProvider>
             <GADebug />
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
+            {children}
             <CookieBanner />
             <CookieSettingsModal />
             <Toaster />
