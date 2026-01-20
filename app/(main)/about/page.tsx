@@ -263,7 +263,7 @@ export default function AboutPage() {
                 buttonClassName="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium"
               />
               <a 
-                href="https://calendly.com/alex-finitsolutions/30min"
+                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center h-11 px-8 py-4 border border-gray-300 text-gray-800 hover:bg-white/10 shadow-lg hover:shadow-xl transition-all duration-300 finit-body rounded-full backdrop-blur-sm font-medium"
