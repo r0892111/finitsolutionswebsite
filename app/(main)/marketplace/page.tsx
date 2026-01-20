@@ -216,7 +216,7 @@ export default function MarketplacePage() {
                       </Button>
                     </a>
                     <a 
-                      href="https://calendly.com/alex-finitsolutions/30min" 
+                      href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="flex-1"

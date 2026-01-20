@@ -568,7 +568,7 @@ export function AIDesignLanding() {
 
           <div className="flex items-center gap-4">
             <a
-              href="https://calendly.com/alex-finitsolutions/30min"
+              href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
               target="_blank"
               rel="noopener noreferrer"
               className="hidden md:flex items-center gap-2 bg-[#1A2D63] text-white px-6 py-3 rounded-full text-sm font-medium hover:scale-105 transition-transform shadow-lg shadow-[#1A2D63]/20"
@@ -649,7 +649,7 @@ export function AIDesignLanding() {
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <a
-                href="https://calendly.com/alex-finitsolutions/30min"
+                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group w-full sm:w-auto bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
@@ -922,7 +922,7 @@ export function AIDesignLanding() {
               </div>
 
               <a
-                href="https://calendly.com/alex-finitsolutions/30min"
+                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-[#1A2D63] text-white px-10 py-5 rounded-full text-lg font-bold hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
@@ -1027,7 +1027,7 @@ export function AIDesignLanding() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
-                  href="https://calendly.com/alex-finitsolutions/30min"
+                  href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
