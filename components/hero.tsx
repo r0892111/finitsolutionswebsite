@@ -106,7 +106,7 @@ export function Hero() {
               className="border-gray-300 text-gray-700 hover:bg-blue-800 px-8 py-4 text-lg rounded-full font-medium"
             >
               <a 
-                href="https://calendly.com/alex-finitsolutions/30min"
+                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"

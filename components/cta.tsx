@@ -42,7 +42,7 @@ export function CTA() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <a 
-              href="https://calendly.com/alex-finitsolutions/30min"
+              href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
               target="_blank"
               rel="noopener noreferrer"
             >
