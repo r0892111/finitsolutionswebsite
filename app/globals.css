@@ -563,3 +563,13 @@ html {
 .drop-shadow-glow {
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
 }
+
+/* Grid movement animation for hero */
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(40px, 40px);
+  }
+}

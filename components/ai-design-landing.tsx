@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback, MutableRefObject } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { gsap, useGSAP, ScrollTrigger, MorphSVGPlugin, MotionPathPlugin } from '@/lib/gsap';
 import {
   ArrowRight,
@@ -19,7 +20,12 @@ import {
   X,
   Sparkles,
   ExternalLink,
-  Mail
+  Mail,
+  ChevronDown,
+  Target,
+  UserCheck,
+  Plug,
+  Headphones
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -89,25 +95,80 @@ const processSteps = [
     icon: MessageSquare,
     step: "01",
     title: "Gratis Consult",
-    description: "We analyseren je huidige processen en identificeren waar AI het meeste impact heeft."
+    shortDescription: "Analyse van je processen en mogelijkheden",
+    description: "We analyseren je huidige processen en identificeren waar AI het meeste impact heeft.",
+    details: [
+      "Uitgebreide analyse van je huidige workflows en systemen",
+      "Identificatie van repetitieve taken die geautomatiseerd kunnen worden",
+      "Bepaling van de grootste pijnpunten in je dagelijkse processen",
+      "ROI-inschatting voor verschillende automatiseringsmogelijkheden",
+      "Concreet actieplan op maat van jouw bedrijf"
+    ]
   },
   {
     icon: Settings,
     step: "02",
     title: "Ontwerp op Maat",
-    description: "We bouwen AI-agents specifiek voor jouw workflow, geen one-size-fits-all."
+    shortDescription: "Custom AI-agents voor jouw workflow",
+    description: "We bouwen AI-agents specifiek voor jouw workflow, geen one-size-fits-all.",
+    details: [
+      "Custom AI-agents ontworpen voor jouw specifieke use cases",
+      "Integratie met je bestaande tools en systemen",
+      "Flexibele architectuur die meegroeit met je bedrijf",
+      "Iteratief proces met regelmatige feedback momenten",
+      "Uitgebreide testing voordat we live gaan"
+    ]
   },
   {
     icon: Link2,
     step: "03",
     title: "Naadloze Integratie",
-    description: "Alles koppelt met tools die je al gebruikt: CRM, email, Excel, boekhouding."
+    shortDescription: "Koppeling met al je bestaande tools",
+    description: "Alles koppelt met tools die je al gebruikt: CRM, email, Excel, boekhouding.",
+    details: [
+      "Directe koppelingen met je CRM, email, spreadsheets",
+      "Automatische data synchronisatie tussen systemen",
+      "Geen dubbel werk of handmatige data-invoer meer",
+      "Veilige en betrouwbare connecties (GDPR-compliant)",
+      "Technische support tijdens en na implementatie"
+    ]
   },
   {
     icon: Rocket,
     step: "04",
     title: "Tijd Terug",
-    description: "Jij focust op groei, de AI handelt de rest af. 24/7, zonder fouten."
+    shortDescription: "Focussen op groei, AI regelt de rest",
+    description: "Jij focust op groei, de AI handelt de rest af. 24/7, zonder fouten.",
+    details: [
+      "AI draait continu, ook buiten kantooruren",
+      "Directe kostenbesparing door tijdwinst",
+      "Menselijke fouten worden geëlimineerd",
+      "Schaalbaar zonder extra personeel aan te nemen",
+      "Real-time monitoring en rapportage van resultaten"
+    ]
+  }
+];
+
+const differentiators = [
+  {
+    icon: Target,
+    title: "Maatwerk voor Vlaamse KMO's",
+    description: "Oplossingen die passen bij jouw specifieke workflow en processen"
+  },
+  {
+    icon: UserCheck,
+    title: "Geen technische kennis vereist",
+    description: "Wij regelen alles van A tot Z, jij focust op je core business"
+  },
+  {
+    icon: Plug,
+    title: "Volledige integratie",
+    description: "Koppelt naadloos met tools die je al gebruikt: CRM, email, Excel, boekhouding"
+  },
+  {
+    icon: Headphones,
+    title: "Support in het Nederlands",
+    description: "Belgisch team, 24/7 bereikbaar, begrijpt jouw KMO-uitdagingen"
   }
 ];
 
@@ -125,32 +186,6 @@ const transformationAfter = [
   "Schalen zonder extra personeel"
 ];
 
-const testimonials = [
-  {
-    quote: "Finit Solutions heeft onze bedrijfsprocessen compleet getransformeerd. Eindelijk heb ik mijn avonden terug.",
-    author: "Thomas Janssens",
-    position: "CEO, TechVision BV",
-    context: "Software, 25 medewerkers",
-    avatar: "TJ",
-    outcome: "Processen 3x sneller"
-  },
-  {
-    quote: "Als ondernemer was ik altijd op zoek naar manieren om tijd te besparen. Finit heeft dit mogelijk gemaakt met hun slimme automatiseringsoplossingen.",
-    author: "Lisa van den Berg",
-    position: "Eigenaar, Digital Solutions",
-    context: "Marketing, 8 medewerkers",
-    avatar: "LB",
-    outcome: "10+ uur/week bespaard"
-  },
-  {
-    quote: "De persoonlijke aanpak en technische expertise van Finit Solutions hebben ons overtuigd. Ze denken echt mee over de beste oplossing.",
-    author: "Mark de Vries",
-    position: "Directeur, InnovateNow",
-    context: "Consultancy, 15 medewerkers",
-    avatar: "MV",
-    outcome: "Geen gemiste leads meer"
-  }
-];
 
 // --- Utility Components ---
 
@@ -421,80 +456,18 @@ const LogoCarousel = ({ carouselRef }: LogoCarouselProps) => {
 
 export function AIDesignLanding() {
   const [scrolled, setScrolled] = useState(false);
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [activeStep, setActiveStep] = useState<number | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const rightPanelRef = useRef<HTMLDivElement>(null);
 
   const heroRef = useRef(null);
   const heroImageRef = useRef(null);
   const heroTextRef = useRef(null);
-  const introRef = useRef(null);
-  const leftCurtainRef = useRef(null);
-  const rightCurtainRef = useRef(null);
   const logoCarouselRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
   const footerWaveRef = useRef<SVGPathElement>(null);
 
-  // Hero animation - curtain split effect
-  useGSAP(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: heroRef.current,
-        start: "top top",
-        end: "+=150%",
-        scrub: 1,
-        pin: true,
-        anticipatePin: 1,
-      }
-    });
-
-    if (leftCurtainRef.current) {
-      tl.to(leftCurtainRef.current, { xPercent: -100, ease: "power2.inOut" }, 0);
-    }
-    if (rightCurtainRef.current) {
-      tl.to(rightCurtainRef.current, { xPercent: 100, ease: "power2.inOut" }, 0);
-    }
-
-    if (heroTextRef.current) {
-      const textElements = (heroTextRef.current as HTMLElement).children;
-      tl.to(textElements, {
-        x: '-100vw',
-        rotationY: 45,
-        opacity: 0,
-        skewX: 5,
-        stagger: 0.02,
-        ease: "power2.inOut",
-        transformOrigin: "left center"
-      }, 0);
-    }
-
-    if (heroImageRef.current) {
-      tl.to(heroImageRef.current, {
-        x: '100vw',
-        rotationY: -45,
-        filter: "blur(5px)",
-        opacity: 0.5,
-        ease: "power2.inOut",
-        transformOrigin: "right center"
-      }, 0);
-    }
-
-    if (introRef.current) {
-      tl.fromTo(introRef.current,
-        { y: "30%", scale: 0.95 },
-        { y: "0%", scale: 1, ease: "power2.out" },
-        0
-      );
-    }
-
-    // Fade logo carousel quickly at the very start of the scroll
-    if (logoCarouselRef.current) {
-      tl.to(logoCarouselRef.current, {
-        opacity: 0,
-        duration: 0.15, // Only takes 15% of the total scroll animation
-        ease: "power2.in",
-      }, 0); // Starts at the same time as everything else, but ends much sooner
-    }
-
-  }, { scope: heroRef });
+  // No scroll animation - just normal scroll
 
 
   // Footer bounce animation
@@ -528,14 +501,6 @@ export function AIDesignLanding() {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Auto-rotate testimonials
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 6000);
-    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -586,56 +551,15 @@ export function AIDesignLanding() {
       {/* ============================================ */}
       {/* HERO SECTION - Keep animation, update copy  */}
       {/* ============================================ */}
-      <header ref={heroRef} className="relative min-h-screen max-w-[100vw] mx-auto flex flex-col justify-center overflow-hidden" style={{ perspective: '1000px' }}>
+      <header ref={heroRef} className="relative min-h-screen max-w-[100vw] mx-auto flex flex-col justify-center overflow-hidden">
 
         {/* Floating Logo Carousel - Background animation */}
         <LogoCarousel carouselRef={logoCarouselRef} />
 
-        {/* Rising Card - Problem Teaser (replaces quote) */}
-        <div
-          ref={introRef}
-          className="absolute bottom-0 left-0 right-0 h-full z-0 bg-[#F0F4F8] text-[#1A2D63] flex items-center justify-center rounded-t-[1.5rem] md:rounded-t-[3rem] shadow-[0_-20px_60px_rgba(26,45,99,0.1)] border-t border-[#1A2D63]/5 overflow-hidden"
-          style={{ transform: "translateY(30%) scale(0.95)" }}
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full h-full flex flex-col justify-center relative z-10 py-16 md:py-0">
-            <div className="flex flex-col items-center text-center">
-              <div className="space-y-6 sm:space-y-8 md:space-y-10 max-w-4xl mx-auto">
-                <div className="flex items-center justify-center gap-2 sm:gap-4 text-[#1A2D63]">
-                  <span className="h-[1px] w-6 sm:w-12 bg-[#1A2D63]"></span>
-                  <span className="font-mono text-xs sm:text-sm tracking-wider uppercase font-semibold">Herken je dit?</span>
-                  <span className="h-[1px] w-6 sm:w-12 bg-[#1A2D63]"></span>
-                </div>
-
-                <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-newsreader text-[#1A2D63] leading-[1.15] sm:leading-[1.1] px-2">
-                  Te veel tijd kwijt aan taken die een computer beter kan doen?
-                </h2>
-
-                <p className="font-instrument text-base sm:text-lg md:text-xl text-[#1A2D63]/70 font-medium leading-relaxed px-2 max-w-2xl mx-auto">
-                  Data invoeren, follow-ups bijhouden, rapportages maken... Terwijl jij je zou moeten focussen op groei.
-                </p>
-
-                <div className="pt-6 sm:pt-8">
-                  <a
-                    href="#problem"
-                    className="inline-flex items-center gap-2 bg-[#1A2D63] text-white px-6 py-3 rounded-full font-medium hover:scale-105 transition-transform"
-                  >
-                    Ontdek de oplossing
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Curtain Panels */}
-        <div ref={leftCurtainRef} className="absolute top-0 left-0 w-[50.5%] h-full bg-[#FDFBF7] z-[5] pointer-events-none origin-left"></div>
-        <div ref={rightCurtainRef} className="absolute top-0 right-0 w-[50.5%] h-full bg-[#FDFBF7] z-[5] pointer-events-none origin-right"></div>
-
         {/* Hero Content */}
-        <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 lg:gap-4 items-center min-h-screen py-20 md:py-0 w-full relative z-10" style={{ transformStyle: 'preserve-3d' }}>
+        <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 lg:gap-4 items-center min-h-screen py-20 md:py-0 w-full relative z-10">
           {/* Left Content */}
-          <div ref={heroTextRef} className="lg:col-span-6 relative z-10 will-change-transform" style={{ transformStyle: 'preserve-3d' }}>
+          <div ref={heroTextRef} className="lg:col-span-6 relative z-10">
             <div className="h-[5.5rem] sm:h-[7rem] md:h-[8.5rem] lg:h-[10rem] xl:h-[11rem] flex flex-col justify-end mb-5 sm:mb-6 md:mb-8">
               <h1 className="font-newsreader text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] leading-[1] tracking-tight text-[#1A2D63]">
                 <span className="block font-extralight">Automate</span>
@@ -661,236 +585,610 @@ export function AIDesignLanding() {
             </div>
           </div>
 
-          {/* Right Content - Abstract Hero Image */}
-          <div ref={heroImageRef} className="lg:col-span-6 relative h-[320px] sm:h-[400px] md:h-[480px] lg:h-[540px] xl:h-[600px] 2xl:h-[660px] w-full will-change-transform">
-            <div className="absolute inset-0 rounded-t-[3rem] sm:rounded-t-[4rem] md:rounded-t-[5rem] lg:rounded-t-[6rem] rounded-b-xl sm:rounded-b-2xl overflow-hidden border border-[#1A2D63]/10 bg-[#F0F4F8]">
-              <img
-                src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/ce8677f5-f08e-41ee-b50a-35874bebd9e3/generated-images/generated-29d0da8e-473e-4ff5-b24a-cdd6a97a756d.png"
-                alt="Abstract Art Hero"
-                className="w-full h-full object-cover opacity-90 mix-blend-multiply transition-transform duration-[2s] ease-out"
+          {/* Right Content - Dynamic Animated Design */}
+          <div ref={heroImageRef} className="lg:col-span-6 relative h-[320px] sm:h-[400px] md:h-[480px] lg:h-[540px] xl:h-[600px] 2xl:h-[660px] w-full overflow-visible">
+            <div className="absolute inset-0 rounded-t-[3rem] sm:rounded-t-[4rem] md:rounded-t-[5rem] lg:rounded-t-[6rem] rounded-b-xl sm:rounded-b-2xl overflow-visible bg-transparent">
+              {/* Animated Background Shapes */}
+              <svg className="absolute -inset-[60px] w-[calc(100%+120px)] h-[calc(100%+120px)]" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#1A2D63" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#475D8F" stopOpacity="0.3" />
+                  </linearGradient>
+                  <linearGradient id="gradient2" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#1A2D63" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#2A4488" stopOpacity="0.28" />
+                  </linearGradient>
+                </defs>
+                
+                {/* Animated Circle 1 */}
+                <motion.circle
+                  cx="200"
+                  cy="150"
+                  r="90"
+                  fill="url(#gradient1)"
+                  initial={{ x: 0, y: 0 }}
+                  animate={{
+                    x: [0, 30, -20, 0],
+                    y: [0, -25, 15, 0],
+                  }}
+                  transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                
+                {/* Animated Circle 2 */}
+                <motion.circle
+                  cx="600"
+                  cy="300"
+                  r="110"
+                  fill="url(#gradient2)"
+                  initial={{ x: 0, y: 0 }}
+                  animate={{
+                    x: [0, -40, 25, 0],
+                    y: [0, 30, -20, 0],
+                  }}
+                  transition={{
+                    duration: 25,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2
+                  }}
+                />
+                
+                {/* Animated Circle 3 */}
+                <motion.circle
+                  cx="400"
+                  cy="450"
+                  r="75"
+                  fill="url(#gradient1)"
+                  initial={{ x: 0, y: 0 }}
+                  animate={{
+                    x: [0, 20, -15, 0],
+                    y: [0, -30, 20, 0],
+                  }}
+                  transition={{
+                    duration: 18,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 4
+                  }}
+                />
+                
+                {/* Floating Lines */}
+                <motion.path
+                  d="M 100 200 Q 300 100 500 200 T 700 200"
+                  stroke="#1A2D63"
+                  strokeWidth="2"
+                  fill="none"
+                  strokeOpacity="0.1"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{
+                    pathLength: [0, 1, 0],
+                    opacity: [0, 0.15, 0],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                
+                <motion.path
+                  d="M 150 400 Q 350 300 550 400 T 750 400"
+                  stroke="#475D8F"
+                  strokeWidth="2"
+                  fill="none"
+                  strokeOpacity="0.08"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{
+                    pathLength: [0, 1, 0],
+                    opacity: [0, 0.12, 0],
+                  }}
+                  transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2
+                  }}
+                />
+              </svg>
+              
+              {/* Animated Grid Pattern Overlay */}
+              <div 
+                className="absolute -inset-[60px] w-[calc(100%+120px)] h-[calc(100%+120px)] opacity-[0.03]"
+                style={{
+                  backgroundImage: `
+                    linear-gradient(#1A2D63 1px, transparent 1px),
+                    linear-gradient(90deg, #1A2D63 1px, transparent 1px)
+                  `,
+                  backgroundSize: '40px 40px',
+                  animation: shouldReduceMotion ? 'none' : 'gridMove 20s linear infinite'
+                }}
               />
-
+              
+              {/* Floating Particles */}
+              {[...Array(6)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 rounded-full bg-[#1A2D63]"
+                  style={{
+                    left: `${20 + i * 15}%`,
+                    top: `${30 + (i % 3) * 20}%`,
+                    opacity: 0.15
+                  }}
+                  animate={{
+                    y: [0, -30, 0],
+                    x: [0, 15, 0],
+                    scale: [1, 1.2, 1],
+                    opacity: [0.15, 0.25, 0.15],
+                  }}
+                  transition={{
+                    duration: 4 + i * 0.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: i * 0.3
+                  }}
+                />
+              ))}
             </div>
-            {/* Bottom blur overlay - outside container to blur frame too */}
+            
+            {/* Bottom blur overlay */}
             <div className="absolute inset-x-0 bottom-0 h-20 backdrop-blur-[6px] rounded-b-xl sm:rounded-b-2xl pointer-events-none" style={{ maskImage: 'linear-gradient(to top, black 40%, transparent 100%)' }}></div>
             <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#FDFBF7] to-transparent rounded-b-xl sm:rounded-b-2xl pointer-events-none"></div>
           </div>
         </div>
+
       </header>
 
-      {/* Spacer after hero */}
-      <div className="h-24 bg-[#F0F4F8]"></div>
-
       {/* ============================================ */}
-      {/* PROBLEM-AGITATE SECTION                     */}
+      {/* HOW IT WORKS SECTION - Process Steps         */}
       {/* ============================================ */}
-      <section id="problem" className="py-20 md:py-32 px-6 md:px-12 bg-[#FDFBF7] relative">
-        <div className="max-w-[1200px] mx-auto">
+      <section id="process" className="py-12 md:py-[60px] px-6 md:px-[80px] bg-[#F0F4F8] relative border-t border-[#1A2D63]/5">
+        <div className="max-w-[1400px] mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-3 mb-4 text-[#1A2D63]/60">
-              <div className="h-[1px] w-12 bg-[#1A2D63]/30"></div>
-              <span className="text-sm font-medium uppercase tracking-widest">Het Probleem</span>
-              <div className="h-[1px] w-12 bg-[#1A2D63]/30"></div>
-            </div>
-            <h2 className="font-newsreader text-3xl md:text-4xl lg:text-5xl text-[#1A2D63] mb-6">
-              Als ondernemer herken je dit...
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-newsreader text-[#1A2D63] leading-[1.2] sm:leading-[1.15] px-2 mb-6 max-w-4xl mx-auto">
+              <span className="block mb-2">Hoe kan je AI implementeren</span>
+              <span className="block">
+                in je bedrijf 
+                <span className="relative inline-block mx-2">
+                  <span className="relative z-10">zonder alles om te gooien?</span>
+                  <svg 
+                    className="absolute -bottom-1 left-0 w-full h-[0.4em] z-0 text-[#1A2D63]/20" 
+                    viewBox="0 0 200 20" 
+                    preserveAspectRatio="none"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path 
+                      d="M5 15 Q50 5 100 10 T195 8" 
+                      stroke="currentColor" 
+                      strokeWidth="8" 
+                      strokeLinecap="round"
+                      fill="none"
+                    />
+                  </svg>
+                </span>
+              </span>
             </h2>
-          </div>
-
-          {/* Pain Points Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-16">
-            {painPoints.map((pain, index) => (
-              <div key={index} className="bg-white p-8 rounded-2xl border border-[#1A2D63]/10 shadow-sm hover:shadow-lg transition-shadow group">
-                <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mb-6 group-hover:bg-red-100 transition-colors">
-                  <pain.icon className="w-7 h-7 text-red-500" />
-                </div>
-                <h3 className="font-newsreader text-xl md:text-2xl text-[#1A2D63] mb-3">{pain.title}</h3>
-                <p className="text-[#1A2D63]/70 leading-relaxed">{pain.description}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Transition */}
-          <div className="text-center">
-            <div className="inline-block bg-[#1A2D63] text-white px-8 py-4 rounded-2xl">
-              <p className="font-newsreader text-xl md:text-2xl">
-                Wat als AI dit allemaal kon overnemen?
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================ */}
-      {/* HOW IT WORKS SECTION                        */}
-      {/* ============================================ */}
-      <section className="py-20 md:py-32 px-6 md:px-12 bg-[#F0F4F8] relative border-t border-[#1A2D63]/5">
-        <div className="max-w-[1200px] mx-auto">
-          {/* Section Header */}
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-3 mb-4 text-[#1A2D63]/60">
-              <div className="h-[1px] w-12 bg-[#1A2D63]/30"></div>
-              <span className="text-sm font-medium uppercase tracking-widest">Het Proces</span>
-              <div className="h-[1px] w-12 bg-[#1A2D63]/30"></div>
-            </div>
-            <h2 className="font-newsreader text-3xl md:text-4xl lg:text-5xl text-[#1A2D63] mb-6">
-              Van idee naar werkende AI in 4 stappen
-            </h2>
-            <p className="text-[#1A2D63]/70 text-lg max-w-2xl mx-auto">
-              Geen complexe trajecten. Wij maken het proces eenvoudig en toegankelijk.
+            <p className="text-[#1A2D63]/70 text-lg max-w-2xl mx-auto mt-4">
+              Van eerste gesprek tot volledige implementatie - in vier duidelijke stappen
             </p>
           </div>
 
-          {/* Process Steps */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {processSteps.map((step, index) => (
-              <div key={index} className="relative">
-                {/* Connector line (desktop) */}
-                {index < processSteps.length - 1 && (
-                  <div className="hidden lg:block absolute top-12 left-[60%] w-[80%] h-[2px] bg-[#1A2D63]/10"></div>
-                )}
-
-                <div className="bg-white p-6 md:p-8 rounded-2xl border border-[#1A2D63]/10 shadow-sm hover:shadow-lg transition-all relative z-10 h-full">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-full bg-[#1A2D63] flex items-center justify-center text-white">
-                      <step.icon className="w-5 h-5" />
-                    </div>
-                    <span className="font-mono text-sm text-[#1A2D63]/40">{step.step}</span>
-                  </div>
-                  <h3 className="font-newsreader text-xl md:text-2xl text-[#1A2D63] mb-3">{step.title}</h3>
-                  <p className="text-[#1A2D63]/70 leading-relaxed text-sm md:text-base">{step.description}</p>
-                </div>
+          {/* Side-by-Side Process Layout */}
+          <div className="flex flex-col lg:flex-row gap-6 md:gap-10 relative">
+            {/* LEFT PANEL - Compact Cards */}
+            <div className="w-full lg:w-[40%] lg:min-w-[400px] flex flex-col gap-4 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0">
+              {/* Mobile: Horizontal Scroll */}
+              <div className="flex lg:flex-col gap-4 lg:gap-4 min-w-max lg:min-w-0">
+              {processSteps.map((step, index) => {
+                const isActive = activeStep === index;
+                const handleClick = () => {
+                  setActiveStep(isActive ? null : index);
+                  if (rightPanelRef.current) {
+                    rightPanelRef.current.scrollTop = 0;
+                  }
+                };
+                
+                const handleKeyDown = (e: React.KeyboardEvent) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleClick();
+                  } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const nextIndex = e.key === 'ArrowDown' 
+                      ? (index + 1) % processSteps.length
+                      : (index - 1 + processSteps.length) % processSteps.length;
+                    const nextCard = document.querySelector(`[data-step-index="${nextIndex}"]`) as HTMLElement;
+                    nextCard?.focus();
+                  }
+                };
+                
+                return (
+                  <motion.div
+                    key={`step-${step.step}-${index}`}
+                    initial={{ opacity: 0, x: shouldReduceMotion ? 0 : -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: shouldReduceMotion ? 0 : 0.3, delay: index * 0.1 }}
+                    className="w-[280px] lg:w-full shrink-0 lg:shrink"
+                  >
+                    <motion.button
+                      onClick={handleClick}
+                      onKeyDown={handleKeyDown}
+                      type="button"
+                      data-step-index={index}
+                      aria-selected={isActive}
+                      aria-expanded={isActive}
+                      className={`group relative w-full h-[120px] bg-white border rounded-2xl p-6 text-left transition-all duration-200 ease-out cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:ring-offset-2 ${
+                        isActive 
+                          ? 'border-l-4 border-l-[#1A2D63] bg-[#F9FAFB] shadow-[0_4px_16px_rgba(0,0,0,0.15)]' 
+                          : 'border border-[#E5E7EB] shadow-[0_1px_3px_rgba(0,0,0,0.08)] hover:translate-x-1 hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] hover:border-[#1A2D63]/30'
+                      }`}
+                      whileHover={!isActive ? { x: shouldReduceMotion ? 0 : 4 } : {}}
+                      whileTap={{ scale: 0.98 }}
+                      style={{ willChange: 'transform' }}
+                    >
+                      {/* Step Number Badge */}
+                      <div className="absolute -top-2 -left-2 w-8 h-8 rounded-full bg-[#1A2D63] flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                        {step.step}
+                      </div>
+                      
+                      {/* Click Indicator - Arrow icon */}
+                      {!isActive && (
+                        <motion.div
+                          initial={{ opacity: 0, x: -5 }}
+                          whileHover={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#1A2D63]/10 flex items-center justify-center group-hover:bg-[#1A2D63]/20 transition-colors"
+                        >
+                          <ChevronDown className="w-3 h-3 text-[#1A2D63] rotate-[-90deg]" />
+                        </motion.div>
+                      )}
+                      
+                      <div className="flex items-start gap-4 h-full pr-8">
+                        {/* Icon */}
+                        <motion.div 
+                          className="w-10 h-10 rounded-full bg-[#F8F9FB] flex items-center justify-center shrink-0 group-hover:bg-[#1A2D63]/5 transition-colors"
+                          whileHover={!isActive ? { scale: 1.1 } : {}}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <step.icon className="w-5 h-5 text-[#1A2D63]" />
+                        </motion.div>
+                        
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-semibold text-[#1A2D63] mb-1 group-hover:text-[#1A2D63] transition-colors">{step.title}</h3>
+                          <p className="text-sm text-[#1A2D63]/70 line-clamp-1 group-hover:text-[#1A2D63]/80 transition-colors">{step.shortDescription}</p>
+                          {!isActive && (
+                            <span className="text-xs text-[#1A2D63]/50 mt-1 block group-hover:text-[#1A2D63]/60 transition-colors">
+                              Klik voor details
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </motion.button>
+                  </motion.div>
+                );
+              })}
               </div>
-            ))}
+            </div>
+
+            {/* RIGHT PANEL - Detail View */}
+            <motion.div
+              ref={rightPanelRef}
+              className="w-full lg:w-[60%] lg:sticky lg:top-[100px] bg-white border border-[#E5E7EB] rounded-[20px] p-6 md:p-12 min-h-[500px] shadow-[0_4px_24px_rgba(0,0,0,0.08)]"
+              style={{ willChange: 'transform, opacity' }}
+            >
+              <AnimatePresence mode="wait">
+                {activeStep === null ? (
+                  // PLACEHOLDER STATE
+                  <motion.div
+                    key="placeholder"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}
+                    className="h-full flex flex-col items-center justify-center py-4"
+                  >
+                    {/* Logo */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: shouldReduceMotion ? 0 : 0.4 }}
+                      className="mb-6"
+                    >
+                      <img
+                        src="/Finit Logo Blue@4x.png"
+                        alt="Finit Solutions"
+                        className="h-10 md:h-12 w-auto object-contain"
+                      />
+                    </motion.div>
+                    
+                    <h2 className="text-xl md:text-2xl font-bold text-[#1A2D63] text-center mb-3">
+                      Waarom kiezen voor ons?
+                    </h2>
+                    
+                    <p className="text-sm md:text-base text-[#1A2D63]/70 text-center mb-6 max-w-xl">
+                      Ontdek wat ons uniek maakt
+                    </p>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 max-w-[550px] w-full">
+                      {differentiators.map((diff, idx) => (
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ 
+                            duration: shouldReduceMotion ? 0 : 0.3, 
+                            delay: idx * 0.1 
+                          }}
+                          className="text-center"
+                        >
+                          <motion.div
+                            className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#F8F9FB] flex items-center justify-center mx-auto mb-3"
+                            whileHover={{ scale: 1.05, backgroundColor: 'rgba(26, 45, 99, 0.05)' }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <diff.icon className="w-6 h-6 md:w-7 md:h-7 text-[#1A2D63]" />
+                          </motion.div>
+                          <h3 className="text-base md:text-lg font-semibold text-[#1A2D63] mb-1">{diff.title}</h3>
+                          <p className="text-xs md:text-sm text-[#1A2D63]/75 leading-relaxed">{diff.description}</p>
+                        </motion.div>
+                      ))}
+                    </div>
+                    
+                    <motion.p 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="text-xs text-[#1A2D63]/50 text-center mt-6 flex items-center justify-center gap-2"
+                    >
+                      <span>👈</span>
+                      <span>Klik op een stap voor details</span>
+                    </motion.p>
+                  </motion.div>
+                ) : (
+                  // ACTIVE STATE - Step Details
+                  <motion.div
+                    key={`step-${activeStep}`}
+                    initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -20 }}
+                    transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}
+                    className="h-full"
+                  >
+                    {(() => {
+                      const step = processSteps[activeStep];
+                      return (
+                        <>
+                          {/* Large Icon */}
+                          <motion.div
+                            initial={{ scale: 0.9 }}
+                            animate={{ scale: 1 }}
+                            transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}
+                            className="w-16 h-16 md:w-[100px] md:h-[100px] rounded-full bg-[#F8F9FB] flex items-center justify-center mb-4 md:mb-6"
+                          >
+                            <step.icon className="w-8 h-8 md:w-20 md:h-20 text-[#1A2D63]" />
+                          </motion.div>
+                          
+                          {/* Title */}
+                          <h2 className="text-2xl md:text-[32px] font-bold text-[#1A2D63] mb-3 md:mb-4">
+                            {step.title}
+                          </h2>
+                          
+                          {/* Description */}
+                          <p className="text-base md:text-lg text-[#1A2D63]/80 leading-relaxed mb-6 md:mb-8">
+                            {step.description}
+                          </p>
+                          
+                          {/* Bullet Points */}
+                          <ul className="space-y-4 mb-10">
+                            {step.details?.map((detail, detailIndex) => (
+                              <motion.li
+                                key={detailIndex}
+                                initial={{ opacity: 0, x: shouldReduceMotion ? 0 : -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ 
+                                  duration: shouldReduceMotion ? 0 : 0.3,
+                                  delay: detailIndex * 0.05
+                                }}
+                                className="flex items-start gap-3"
+                              >
+                                <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center shrink-0 mt-0.5">
+                                  <Check className="w-3 h-3 text-white" />
+                                </div>
+                                <span className="text-base text-[#1A2D63]/85 leading-relaxed">{detail}</span>
+                              </motion.li>
+                            ))}
+                          </ul>
+                          
+                          {/* CTA Button */}
+                          <motion.a
+                            href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-[#1A2D63] text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-[#2A4488] transition-colors shadow-lg"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <Calendar className="w-5 h-5" />
+                            Plan een gratis consult
+                          </motion.a>
+                        </>
+                      );
+                    })()}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </div>
+
+          {/* CTA Buttons after Process */}
+          <div className="text-center mt-12 md:mt-16">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full font-medium hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/20"
+              >
+                <Calendar className="w-5 h-5" />
+                <span>Plan een gratis consult</span>
+                <ArrowRight className="w-5 h-5" />
+              </a>
+              <a
+                href="#use-cases"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const element = document.getElementById('use-cases');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                className="inline-flex items-center gap-2 border-2 border-[#1A2D63]/20 text-[#1A2D63] px-8 py-4 rounded-full font-medium hover:bg-[#1A2D63]/5 hover:border-[#1A2D63]/40 transition-colors"
+              >
+                <span>Bekijk echte voorbeelden</span>
+                <ExternalLink className="w-5 h-5" />
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ============================================ */}
-      {/* TRANSFORMATION SECTION                      */}
+      {/* USE CASES SECTION                          */}
       {/* ============================================ */}
-      <section className="py-20 md:py-32 px-6 md:px-12 bg-[#FDFBF7] relative border-t border-[#1A2D63]/5">
-        <div className="max-w-[1000px] mx-auto">
+      <section id="use-cases" className="py-20 md:py-32 px-6 md:px-12 bg-[#F0F4F8] relative border-t border-[#1A2D63]/5">
+        <div className="max-w-[1400px] mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16">
             <div className="flex items-center justify-center gap-3 mb-4 text-[#1A2D63]/60">
               <div className="h-[1px] w-12 bg-[#1A2D63]/30"></div>
-              <span className="text-sm font-medium uppercase tracking-widest">De Transformatie</span>
+              <span className="text-sm font-medium uppercase tracking-widest">Echte Voorbeelden</span>
               <div className="h-[1px] w-12 bg-[#1A2D63]/30"></div>
             </div>
-            <h2 className="font-newsreader text-3xl md:text-4xl lg:text-5xl text-[#1A2D63]">
-              Van overweldigd naar geautomatiseerd
+            <h2 className="font-newsreader text-3xl md:text-4xl lg:text-5xl text-[#1A2D63] mb-4">
+              Hoe klanten AI gebruiken
             </h2>
+            <p className="text-[#1A2D63]/70 text-lg max-w-2xl mx-auto">
+              Ontdek hoe bedrijven uit verschillende sectoren AI inzetten om hun processen te automatiseren
+            </p>
           </div>
 
-          {/* Before/After Comparison */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
-            {/* Before */}
-            <div className="bg-red-50 p-8 md:p-10 rounded-2xl border border-red-100">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                  <X className="w-5 h-5 text-red-500" />
-                </div>
-                <h3 className="font-newsreader text-2xl text-red-700">Nu</h3>
+          {/* Use Cases Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {/* Use Case 1 */}
+            <div className="bg-white p-6 md:p-8 rounded-2xl border-2 border-[#1A2D63]/10 shadow-sm hover:shadow-xl hover:border-[#1A2D63]/30 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/10 to-blue-600/5 flex items-center justify-center mb-4">
+                <MessageSquare className="w-6 h-6 text-[#1A2D63]" />
               </div>
-              <div className="space-y-4">
-                {transformationBefore.map((item, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-red-200 flex items-center justify-center shrink-0 mt-0.5">
-                      <X className="w-3 h-3 text-red-600" />
-                    </div>
-                    <span className="text-red-800">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* After */}
-            <div className="bg-green-50 p-8 md:p-10 rounded-2xl border border-green-100">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                  <Check className="w-5 h-5 text-green-600" />
-                </div>
-                <h3 className="font-newsreader text-2xl text-green-700">Met Finit</h3>
-              </div>
-              <div className="space-y-4">
-                {transformationAfter.map((item, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-green-200 flex items-center justify-center shrink-0 mt-0.5">
-                      <Check className="w-3 h-3 text-green-700" />
-                    </div>
-                    <span className="text-green-800">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================ */}
-      {/* SOCIAL PROOF SECTION                        */}
-      {/* ============================================ */}
-      <section className="py-20 md:py-32 px-6 bg-[#F0F4F8] border-t border-[#1A2D63]/5">
-        <div className="max-w-5xl mx-auto">
-          {/* Header with Stats */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-4 bg-[#1A2D63] text-white px-6 py-3 rounded-full mb-8">
-              <span className="font-newsreader text-2xl font-bold">50+</span>
-              <span className="text-white/80">ondernemers gingen je voor</span>
-            </div>
-            <h2 className="font-newsreader text-3xl md:text-4xl text-[#1A2D63] mb-4">Wat onze klanten zeggen</h2>
-          </div>
-
-          {/* Active Testimonial */}
-          <div className="relative">
-            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-[#1A2D63]/10">
-              {/* Quote */}
-              <div className="flex justify-center mb-8">
-                <div className="w-12 h-12 bg-[#1A2D63]/5 rounded-full flex items-center justify-center">
-                  <Quote className="w-5 h-5 text-[#1A2D63]" />
-                </div>
-              </div>
-
-              <h3 className="font-newsreader text-xl md:text-2xl lg:text-3xl leading-relaxed mb-8 text-[#1A2D63] max-w-3xl mx-auto text-center">
-                &ldquo;{testimonials[activeTestimonial].quote}&rdquo;
+              <h3 className="font-newsreader text-xl md:text-2xl text-[#1A2D63] mb-3">
+                Automatische Lead Follow-up
               </h3>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#1A2D63] bg-[#1A2D63]/10 flex items-center justify-center">
-                    <span className="font-newsreader text-lg text-[#1A2D63] font-bold">{testimonials[activeTestimonial].avatar}</span>
-                  </div>
-                  <div className="text-left">
-                    <p className="font-bold text-[#1A2D63] font-newsreader text-lg">{testimonials[activeTestimonial].author}</p>
-                    <p className="text-sm text-[#1A2D63]/60">{testimonials[activeTestimonial].position}</p>
-                    <p className="text-xs text-[#1A2D63]/40">{testimonials[activeTestimonial].context}</p>
-                  </div>
-                </div>
-
-                {/* Outcome Badge */}
-                <div className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
-                  {testimonials[activeTestimonial].outcome}
-                </div>
+              <p className="text-[#1A2D63]/70 leading-relaxed mb-4">
+                Een sales team gebruikt AI om automatisch follow-up emails te sturen aan prospects op basis van hun interactie met eerdere berichten.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-[#1A2D63]/60">
+                <span className="font-semibold">Resultaat:</span>
+                <span>40% meer conversies</span>
               </div>
             </div>
 
-            {/* Navigation Dots */}
-            <div className="flex justify-center gap-3 mt-8">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === activeTestimonial
-                      ? 'bg-[#1A2D63] w-8'
-                      : 'bg-[#1A2D63]/20 hover:bg-[#1A2D63]/40'
-                  }`}
-                />
-              ))}
+            {/* Use Case 2 */}
+            <div className="bg-white p-6 md:p-8 rounded-2xl border-2 border-[#1A2D63]/10 shadow-sm hover:shadow-xl hover:border-[#1A2D63]/30 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/10 to-green-600/5 flex items-center justify-center mb-4">
+                <Settings className="w-6 h-6 text-[#1A2D63]" />
+              </div>
+              <h3 className="font-newsreader text-xl md:text-2xl text-[#1A2D63] mb-3">
+                CRM Data Synchronisatie
+              </h3>
+              <p className="text-[#1A2D63]/70 leading-relaxed mb-4">
+                Een bedrijf automatiseert het invoeren van klantgegevens vanuit emails en gesprekken direct in hun CRM systeem.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-[#1A2D63]/60">
+                <span className="font-semibold">Resultaat:</span>
+                <span>15 uur/week bespaard</span>
+              </div>
+            </div>
+
+            {/* Use Case 3 */}
+            <div className="bg-white p-6 md:p-8 rounded-2xl border-2 border-[#1A2D63]/10 shadow-sm hover:shadow-xl hover:border-[#1A2D63]/30 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-600/5 flex items-center justify-center mb-4">
+                <Clock className="w-6 h-6 text-[#1A2D63]" />
+              </div>
+              <h3 className="font-newsreader text-xl md:text-2xl text-[#1A2D63] mb-3">
+                Intelligente Afsprakenplanning
+              </h3>
+              <p className="text-[#1A2D63]/70 leading-relaxed mb-4">
+                AI analyseert beschikbaarheid en voorkeuren om automatisch de beste tijdstippen voor meetings voor te stellen.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-[#1A2D63]/60">
+                <span className="font-semibold">Resultaat:</span>
+                <span>90% minder back-and-forth</span>
+              </div>
+            </div>
+
+            {/* Use Case 4 */}
+            <div className="bg-white p-6 md:p-8 rounded-2xl border-2 border-[#1A2D63]/10 shadow-sm hover:shadow-xl hover:border-[#1A2D63]/30 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/10 to-orange-600/5 flex items-center justify-center mb-4">
+                <Link2 className="w-6 h-6 text-[#1A2D63]" />
+              </div>
+              <h3 className="font-newsreader text-xl md:text-2xl text-[#1A2D63] mb-3">
+                Multi-System Integratie
+              </h3>
+              <p className="text-[#1A2D63]/70 leading-relaxed mb-4">
+                Automatische synchronisatie tussen Excel, CRM en facturatiesysteem - één invoer, alles bijgewerkt.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-[#1A2D63]/60">
+                <span className="font-semibold">Resultaat:</span>
+                <span>0% data fouten</span>
+              </div>
+            </div>
+
+            {/* Use Case 5 */}
+            <div className="bg-white p-6 md:p-8 rounded-2xl border-2 border-[#1A2D63]/10 shadow-sm hover:shadow-xl hover:border-[#1A2D63]/30 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500/10 to-red-600/5 flex items-center justify-center mb-4">
+                <Rocket className="w-6 h-6 text-[#1A2D63]" />
+              </div>
+              <h3 className="font-newsreader text-xl md:text-2xl text-[#1A2D63] mb-3">
+                Klantenservice Automatisering
+              </h3>
+              <p className="text-[#1A2D63]/70 leading-relaxed mb-4">
+                AI beantwoordt veelgestelde vragen en routeert complexe vragen naar het juiste teamlid.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-[#1A2D63]/60">
+                <span className="font-semibold">Resultaat:</span>
+                <span>60% snellere reactietijd</span>
+              </div>
+            </div>
+
+            {/* Use Case 6 */}
+            <div className="bg-white p-6 md:p-8 rounded-2xl border-2 border-[#1A2D63]/10 shadow-sm hover:shadow-xl hover:border-[#1A2D63]/30 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/10 to-teal-600/5 flex items-center justify-center mb-4">
+                <TrendingDown className="w-6 h-6 text-[#1A2D63]" />
+              </div>
+              <h3 className="font-newsreader text-xl md:text-2xl text-[#1A2D63] mb-3">
+                Rapportage Automatisering
+              </h3>
+              <p className="text-[#1A2D63]/70 leading-relaxed mb-4">
+                Automatische generatie van wekelijkse rapporten door data uit verschillende bronnen te combineren.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-[#1A2D63]/60">
+                <span className="font-semibold">Resultaat:</span>
+                <span>5 uur/week teruggewonnen</span>
+              </div>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -939,32 +1237,6 @@ export function AIDesignLanding() {
       </section>
 
       {/* ============================================ */}
-      {/* PLUG & PLAY TEASER                          */}
-      {/* ============================================ */}
-      <section className="py-12 px-6 md:px-12 bg-[#F0F4F8] border-t border-[#1A2D63]/5">
-        <div className="max-w-[1000px] mx-auto">
-          <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#1A2D63]/10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-[#1A2D63]/5 flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-[#1A2D63]" />
-              </div>
-              <div>
-                <h3 className="font-newsreader text-xl text-[#1A2D63]">Geen tijd voor maatwerk?</h3>
-                <p className="text-[#1A2D63]/60 text-sm">Probeer onze kant-en-klare AI-tools</p>
-              </div>
-            </div>
-            <a
-              href="/marketplace"
-              className="inline-flex items-center gap-2 border border-[#1A2D63]/20 px-6 py-3 rounded-full text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-colors font-medium"
-            >
-              Bekijk de Marketplace
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================ */}
       {/* FOOTER with Kasparov Quote                  */}
       {/* ============================================ */}
       <footer ref={footerRef} className="bg-[#1A2D63] text-white pt-16 md:pt-20 pb-12 md:pb-16 px-6 relative overflow-visible mt-16 md:mt-20 lg:mt-24">
@@ -988,71 +1260,87 @@ export function AIDesignLanding() {
         <div className="max-w-[1400px] mx-auto relative z-10">
           {/* Kasparov Quote Card */}
           <div className="mb-12 md:mb-16">
-            <div className="bg-[#0F1C40] rounded-2xl p-6 md:p-8 border border-white/10 max-w-2xl mx-auto relative overflow-hidden">
-              {/* Chess piece background */}
-              <div className="absolute right-0 top-0 w-32 h-32 md:w-40 md:h-40 opacity-10">
-                <img
-                  src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/ce8677f5-f08e-41ee-b50a-35874bebd9e3/generated-images/generated-58f1aff4-5041-49a6-a449-dbf5df0da054.png"
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </div>
+            <motion.div 
+              className="bg-gradient-to-br from-[#0F1C40] to-[#1A2D63] rounded-3xl p-8 md:p-10 border border-white/10 max-w-2xl mx-auto relative overflow-hidden shadow-2xl"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* Decorative gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5 opacity-50"></div>
+              
+              {/* Subtle pattern */}
+              <div className="absolute inset-0 opacity-[0.03]" style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+              }}></div>
 
               <div className="relative z-10">
-                <Quote className="w-8 h-8 text-white/20 mb-4" />
-                <blockquote className="font-newsreader text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed mb-6 italic">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                >
+                  <Quote className="w-10 h-10 md:w-12 md:h-12 text-white/30 mb-6" />
+                </motion.div>
+                <motion.blockquote 
+                  className="font-newsreader text-xl md:text-2xl lg:text-3xl text-white leading-relaxed mb-8 italic font-light"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                >
                   &ldquo;AI will not replace humans, but those who use AI will replace those who don&apos;t.&rdquo;
-                </blockquote>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                    <span className="font-newsreader text-sm font-bold">GK</span>
+                </motion.blockquote>
+                <motion.div 
+                  className="flex items-center gap-4 pt-4 border-t border-white/10"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5, duration: 0.4 }}
+                >
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center border border-white/20 overflow-hidden">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Garry_Kasparov_2007.jpg/800px-Garry_Kasparov_2007.jpg"
+                      alt="Garry Kasparov"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div>
-                    <p className="text-white font-medium">Garry Kasparov</p>
-                    <p className="text-white/50 text-sm">Schaakgrootmeester & Strateeg</p>
+                    <p className="text-white font-semibold text-base">Garry Kasparov</p>
+                    <p className="text-white/60 text-sm">Schaakgrootmeester & Strateeg</p>
                   </div>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Footer CTA */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-newsreader leading-tight mb-4">
-                Klaar om uw bedrijf <br/>te automatiseren?
-              </h2>
-              <p className="text-white/70 text-base md:text-lg mb-6 max-w-md">
-                Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <a
-                  href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                >
-                  <Calendar className="w-4 h-4" />
-                  Plan een gesprek
-                </a>
-                <a
-                  href="mailto:contact@finitsolutions.be"
-                  className="border border-white/20 px-6 py-3 rounded-full text-base font-medium hover:bg-white/5 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Mail className="w-4 h-4" />
-                  contact@finitsolutions.be
-                </a>
-              </div>
-            </div>
-
-            <div className="relative flex justify-center lg:justify-end">
-              <div className="w-36 h-36 md:w-44 md:h-44 bg-[#0F1C40] rounded-full p-6 flex items-center justify-center relative overflow-hidden shadow-2xl border border-white/5">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#475D8F]/20 to-transparent"></div>
-                <div className="text-center relative z-10 text-white">
-                  <span className="block text-3xl md:text-4xl font-newsreader mb-1">50+</span>
-                  <span className="block text-xs md:text-sm font-instrument uppercase tracking-widest text-white/70">Klanten</span>
-                </div>
-              </div>
+          <div>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-newsreader leading-tight mb-4 text-center lg:text-left">
+              Klaar om uw bedrijf <br/>te automatiseren?
+            </h2>
+            <p className="text-white/70 text-base md:text-lg mb-6 max-w-md text-center lg:text-left mx-auto lg:mx-0">
+              Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+              <a
+                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
+              >
+                <Calendar className="w-4 h-4" />
+                Plan een gesprek
+              </a>
+              <a
+                href="mailto:contact@finitsolutions.be"
+                className="border border-white/20 px-6 py-3 rounded-full text-base font-medium hover:bg-white/5 transition-colors flex items-center justify-center gap-2"
+              >
+                <Mail className="w-4 h-4" />
+                contact@finitsolutions.be
+              </a>
             </div>
           </div>
 
