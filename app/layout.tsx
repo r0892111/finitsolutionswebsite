@@ -8,7 +8,6 @@ import { ConsentProvider } from '@/contexts/consent-context';
 import { CookieBanner } from '@/components/cookie-banner';
 import { CookieSettingsModal } from '@/components/cookie-settings-modal';
 import { LanguageProvider } from '@/contexts/language-context';
-import { FinitChatbot } from '@/components/quiz/FinitChatbot';
 
 const inter = Inter({ subsets: ['latin'] });
 const montserrat = Montserrat({ 
@@ -168,7 +167,6 @@ export default function RootLayout({
             <CookieBanner />
             <CookieSettingsModal />
             <Toaster />
-            <FinitChatbot />
           </ConsentProvider>
         </LanguageProvider>
       </body>

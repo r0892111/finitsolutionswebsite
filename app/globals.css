@@ -565,11 +565,34 @@ html {
 }
 
 /* Grid movement animation for hero */
-@keyframes gridMove {
-  0% {
-    transform: translate(0, 0);
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
   }
-  100% {
-    transform: translate(40px, 40px);
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Use Cases Section - Flow Diagram Animation */
+@keyframes flowDown {
+  0% { 
+    top: 0; 
+    opacity: 1; 
+  }
+  100% { 
+    top: 100%; 
+    opacity: 0; 
+  }
+}
+
+/* Use Cases Section - Carousel Progress Bar */
+@keyframes carouselProgress {
+  from { 
+    transform: scaleX(0); 
+  }
+  to { 
+    transform: scaleX(1); 
   }
 }
