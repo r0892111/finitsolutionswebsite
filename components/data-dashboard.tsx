@@ -217,13 +217,13 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
     const emailTypeData: Record<string, number> = {};
     let otherCount = 0;
     
-    Object.entries(emailTypeDataRaw).forEach(([type, count]) => {
+    for (const [type, count] of Object.entries(emailTypeDataRaw) as [string, number][]) {
       if (count <= 2) {
         otherCount += count;
       } else {
         emailTypeData[type] = count;
       }
-    });
+    }
     
     if (otherCount > 0) {
       emailTypeData['Other'] = otherCount;
@@ -274,28 +274,28 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
         canAutoAnswer: { yes: canAutoAnswer, no: filteredData.length - canAutoAnswer },
         isCustomerEmail: { yes: isCustomerEmail, no: filteredData.length - isCustomerEmail },
       },
-      timeSeries: Object.entries(timeSeriesData)
+      timeSeries: (Object.entries(timeSeriesData) as [string, number][])
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([date, count]) => ({ date, count })),
     };
 
     // Add optional charts if data exists
     if (Object.keys(senderData).length > 0) {
-      result.senders = Object.entries(senderData)
+      result.senders = (Object.entries(senderData) as [string, number][])
         .sort(([, a], [, b]) => b - a)
         .slice(0, 10)
         .map(([name, value]) => ({ name, value }));
     }
 
     if (Object.keys(recipientData).length > 0) {
-      result.recipients = Object.entries(recipientData)
+      result.recipients = (Object.entries(recipientData) as [string, number][])
         .sort(([, a], [, b]) => b - a)
         .slice(0, 10)
         .map(([name, value]) => ({ name, value }));
     }
 
     if (Object.keys(threadData).length > 0) {
-      result.threads = Object.entries(threadData)
+      result.threads = (Object.entries(threadData) as [string, number][])
         .sort(([, a], [, b]) => b - a)
         .slice(0, 10)
         .map(([name, value]) => ({ name, value }));
@@ -329,7 +329,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
           case 'boolean':
             return value ? 'Yes' : 'No';
           case 'date':
-            return value ? format(new Date(value), 'PPpp') : '-';
+            return value ? format(new Date(value as string | number), 'PPpp') : '-';
           case 'json':
             return <pre className="text-xs bg-muted p-2 rounded max-w-xs overflow-auto">{JSON.stringify(value, null, 2)}</pre>;
           default:
@@ -696,7 +696,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                   <CardContent>
                     {chartData.category.length > 0 ? (
                       <ChartContainer
-                        config={chartData.category.reduce((acc, item) => {
+                        config={chartData.category.reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
                           acc[item.name] = { label: item.name };
                           return acc;
                         }, {} as Record<string, { label: string }>)}
@@ -713,7 +713,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                             fill="#8884d8"
                             dataKey="value"
                           >
-                            {chartData.category.map((entry, index) => (
+                            {chartData.category.map((entry: { name: string; value: number }, index: number) => (
                               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                           </Pie>
@@ -738,7 +738,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                   <CardContent>
                     {chartData.sentiment.length > 0 ? (
                       <ChartContainer
-                        config={chartData.sentiment.reduce((acc, item) => {
+                        config={chartData.sentiment.reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
                           acc[item.name] = { label: item.name };
                           return acc;
                         }, {} as Record<string, { label: string }>)}
@@ -755,7 +755,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                             fill="#8884d8"
                             dataKey="value"
                           >
-                            {chartData.sentiment.map((entry, index) => (
+                            {chartData.sentiment.map((entry: { name: string; value: number }, index: number) => (
                               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                           </Pie>
@@ -780,7 +780,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                   <CardContent>
                     {chartData.automation.length > 0 ? (
                       <ChartContainer
-                        config={chartData.automation.reduce((acc, item) => {
+                        config={chartData.automation.reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
                           acc[item.name] = { label: item.name };
                           return acc;
                         }, {} as Record<string, { label: string }>)}
@@ -808,20 +808,20 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                   <CardHeader>
                     <CardTitle className="text-lg">Email Type Distribution</CardTitle>
                     <CardDescription>
-                      {chartData.emailType.filter(e => e.name !== 'Other').length} email types shown
-                      {chartData.emailType.find(e => e.name === 'Other') && (
+                      {chartData.emailType.filter((e: { name: string; value: number }) => e.name !== 'Other').length} email types shown
+                      {chartData.emailType.find((e: { name: string; value: number }) => e.name === 'Other') && (
                         <span className="text-muted-foreground ml-2">
-                          ({chartData.emailType.find(e => e.name === 'Other')?.value} other types grouped)
+                          ({chartData.emailType.find((e: { name: string; value: number }) => e.name === 'Other')?.value} other types grouped)
                         </span>
                       )}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {chartData.emailType.filter(e => e.name !== 'Other').length > 0 ? (
+                    {chartData.emailType.filter((e: { name: string; value: number }) => e.name !== 'Other').length > 0 ? (
                       <ChartContainer
                         config={chartData.emailType
-                          .filter(e => e.name !== 'Other')
-                          .reduce((acc, item) => {
+                          .filter((e: { name: string; value: number }) => e.name !== 'Other')
+                          .reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
                             acc[item.name] = { label: item.name };
                             return acc;
                           }, {} as Record<string, { label: string }>)}
@@ -829,7 +829,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                       >
                         <PieChart>
                           <Pie
-                            data={chartData.emailType.filter(e => e.name !== 'Other')}
+                            data={chartData.emailType.filter((e: { name: string; value: number }) => e.name !== 'Other')}
                             cx="50%"
                             cy="50%"
                             labelLine={false}
@@ -839,8 +839,8 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                             dataKey="value"
                           >
                             {chartData.emailType
-                              .filter(e => e.name !== 'Other')
-                              .map((entry, index) => (
+                              .filter((e: { name: string; value: number }) => e.name !== 'Other')
+                              .map((entry: { name: string; value: number }, index: number) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                               ))}
                           </Pie>
