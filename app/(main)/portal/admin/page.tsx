@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/auth-context';
@@ -40,29 +40,7 @@ export default function AdminDashboardPage() {
     }
   }, [isAuthenticated, isAdmin, authLoading, router]);
 
-  useEffect(() => {
-    if (isAdmin && isAuthenticated) {
-      fetchUsers();
-    }
-  }, [isAdmin, isAuthenticated]);
-
-  useEffect(() => {
-    // Filter users based on search query
-    if (searchQuery.trim() === '') {
-      setFilteredUsers(users);
-    } else {
-      const query = searchQuery.toLowerCase();
-      setFilteredUsers(
-        users.filter(
-          (u) =>
-            u.email.toLowerCase().includes(query) ||
-            u.id.toLowerCase().includes(query)
-        )
-      );
-    }
-  }, [searchQuery, users]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setIsLoading(true);
       
@@ -146,7 +124,29 @@ export default function AdminDashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [supabase, toast, t]);
+
+  useEffect(() => {
+    if (isAdmin && isAuthenticated) {
+      fetchUsers();
+    }
+  }, [isAdmin, isAuthenticated, fetchUsers]);
+
+  useEffect(() => {
+    // Filter users based on search query
+    if (searchQuery.trim() === '') {
+      setFilteredUsers(users);
+    } else {
+      const query = searchQuery.toLowerCase();
+      setFilteredUsers(
+        users.filter(
+          (u) =>
+            u.email.toLowerCase().includes(query) ||
+            u.id.toLowerCase().includes(query)
+        )
+      );
+    }
+  }, [searchQuery, users]);
 
   const handleLogout = () => {
     logout();

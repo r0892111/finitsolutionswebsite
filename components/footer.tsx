@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Calendar, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
 import { useLanguage } from "@/contexts/language-context";
@@ -80,10 +81,13 @@ export function Footer() {
         {/* Footer Bottom */}
         <div className="mt-8 pt-5 border-t border-white/10 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3 text-sm text-white/60">
-            <img
+            <Image
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
+              width={120}
+              height={28}
               className="h-7 w-auto object-contain brightness-0 invert"
+              unoptimized
             />
             <span>BTW: BE1020600643</span>
           </div>

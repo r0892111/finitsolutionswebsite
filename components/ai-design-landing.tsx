@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { gsap, useGSAP, ScrollTrigger, MorphSVGPlugin, MotionPathPlugin, DrawSVGPlugin } from '@/lib/gsap';
 import {
@@ -441,7 +442,7 @@ const LogoCarousel = ({
       tweensRef.current.forEach(tween => tween.kill());
       tweensRef.current = [];
     };
-  }, [isMounted, resizeKey, spacingMultiplier]);
+  }, [isMounted, resizeKey, spacingMultiplier, durationSeconds]);
 
   // Use all logos for the carousel
   const displayLogos = logos ?? integrationLogos;
@@ -516,10 +517,13 @@ const LogoCarousel = ({
           }}
         >
           <div className="w-full h-full rounded-xl bg-white shadow-lg border border-[#1A2D63]/5 p-2.5 flex items-center justify-center">
-            <img
+            <Image
               src={logo.logo}
               alt={logo.name}
+              width={74}
+              height={74}
               className="w-full h-full object-contain"
+              unoptimized
             />
           </div>
         </div>
@@ -2512,10 +2516,13 @@ export function AIDesignLanding() {
       >
         <div className="max-w-[1400px] mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img
+            <Image
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
+              width={120}
+              height={40}
               className="h-8 md:h-10 w-auto object-contain"
+              unoptimized
             />
           </div>
 
@@ -2762,10 +2769,13 @@ export function AIDesignLanding() {
           {/* Footer Bottom */}
           <div className="mt-10 pt-6 border-t border-white/10 flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:justify-between md:text-left">
             <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-white/60">
-              <img
+              <Image
                 src="/Finit Logo Blue@4x.png"
                 alt="Finit Logo"
+                width={120}
+                height={32}
                 className="h-8 w-auto object-contain brightness-0 invert"
+                unoptimized
               />
             </div>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 md:gap-6">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/auth-context';
@@ -39,13 +39,7 @@ export default function UserDetailClient({ userId }: UserDetailClientProps) {
     }
   }, [isAuthenticated, isAdmin, authLoading, router]);
 
-  useEffect(() => {
-    if (isAdmin && isAuthenticated && userId) {
-      fetchUserDetails();
-    }
-  }, [isAdmin, isAuthenticated, userId]);
-
-  const fetchUserDetails = async () => {
+  const fetchUserDetails = useCallback(async () => {
     try {
       setIsLoading(true);
       const { createClient } = await import('@/lib/supabase/client');
@@ -84,7 +78,13 @@ export default function UserDetailClient({ userId }: UserDetailClientProps) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    if (isAdmin && isAuthenticated && userId) {
+      fetchUserDetails();
+    }
+  }, [isAdmin, isAuthenticated, userId, fetchUserDetails]);
 
   if (authLoading || isLoading) {
     return (
