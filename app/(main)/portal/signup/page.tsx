@@ -89,6 +89,7 @@ function SignupForm() {
       // Check if this is an invite flow
       const tokenHash = searchParams.get('token_hash');
       const type = searchParams.get('type');
+      const code = searchParams.get('code');
       
       let signupOptions: any = {
         emailRedirectTo: `${window.location.origin}/portal/auth/callback`,

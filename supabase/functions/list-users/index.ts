@@ -26,10 +26,35 @@ Deno.serve(async (req) => {
       )
     }
 
+    // Get Supabase URL and service role key
+    // Edge Functions automatically provide SUPABASE_URL and SUPABASE_ANON_KEY
+    // SUPABASE_SERVICE_ROLE_KEY must be set as a secret
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    
+    if (!supabaseUrl) {
+      console.error('Missing SUPABASE_URL environment variable')
+      return new Response(
+        JSON.stringify({ error: 'Server configuration error: Missing Supabase URL' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+    
+    if (!serviceRoleKey) {
+      console.error('Missing SUPABASE_SERVICE_ROLE_KEY secret')
+      return new Response(
+        JSON.stringify({ error: 'Server configuration error: Missing service role key' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+    
+    console.log('Supabase URL:', supabaseUrl)
+    console.log('Service role key present:', !!serviceRoleKey)
+
     // Create Supabase client with service role for admin access
     const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      supabaseUrl,
+      serviceRoleKey,
       {
         auth: {
           autoRefreshToken: false,
@@ -40,11 +65,21 @@ Deno.serve(async (req) => {
 
     // Verify the user making the request is an admin
     const token = authHeader.replace('Bearer ', '')
+    
+    // Try to get user with the token
     const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token)
     
-    if (authError || !user) {
+    if (authError) {
+      console.error('Auth error:', authError.message)
       return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
+        JSON.stringify({ error: `Invalid JWT: ${authError.message}` }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+    
+    if (!user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized: User not found' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
