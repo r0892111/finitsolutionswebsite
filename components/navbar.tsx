@@ -7,12 +7,14 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/language-context";
-import { Globe } from "lucide-react";
+import { Globe, Lock } from "lucide-react";
+import { useAuth } from "@/contexts/auth-context";
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
+  const { isAuthenticated } = useAuth();
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -100,6 +102,13 @@ export function Navbar() {
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
                 {t('nav.about')}
+              </Link>
+              <Link
+                href="/portal"
+                className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200 flex items-center gap-1.5"
+              >
+                <Lock className="h-3 w-3" />
+                {isAuthenticated ? t('nav.portal') : t('nav.portalLogin')}
               </Link>
             </div>
           </nav>
@@ -193,6 +202,14 @@ export function Navbar() {
                 {item.name}
               </Link>
             ))}
+            <Link
+              href="/portal"
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2 flex items-center gap-2"
+            >
+              <Lock className="h-4 w-4" />
+              {isAuthenticated ? t('nav.portal') : t('nav.portalLogin')}
+            </Link>
           </nav>
         </div>
       </div>
