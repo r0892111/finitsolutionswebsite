@@ -81,6 +81,9 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [showFilters, setShowFilters] = useState(false);
   const [activeTab, setActiveTab] = useState('table');
+  // Chart-specific filters: key is chart identifier, value is array of filters
+  const [chartFilters, setChartFilters] = useState<Record<string, FilterState[]>>({});
+  const [showChartFilters, setShowChartFilters] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     fetchData();
@@ -127,24 +130,11 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
     }
   };
 
-  // Filter and search data
-  const filteredData = useMemo(() => {
-    let result = [...data];
+  // Helper function to apply filters to data
+  const applyFiltersToData = (dataToFilter: any[], filtersToApply: FilterState[]): any[] => {
+    let result = [...dataToFilter];
 
-    // Apply search query
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter((row) => {
-        return config.fields.some((field) => {
-          const value = row[field.key];
-          if (value === null || value === undefined) return false;
-          return String(value).toLowerCase().includes(query);
-        });
-      });
-    }
-
-    // Apply filters
-    filters.forEach((filter) => {
+    filtersToApply.forEach((filter) => {
       const field = config.fields.find((f) => f.key === filter.field);
       if (!field) return;
 
@@ -175,7 +165,109 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
     });
 
     return result;
+  };
+
+  // Filter and search data
+  const filteredData = useMemo(() => {
+    let result = [...data];
+
+    // Apply search query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter((row) => {
+        return config.fields.some((field) => {
+          const value = row[field.key];
+          if (value === null || value === undefined) return false;
+          return String(value).toLowerCase().includes(query);
+        });
+      });
+    }
+
+    // Apply global filters
+    result = applyFiltersToData(result, filters);
+
+    return result;
   }, [data, searchQuery, filters, config.fields]);
+
+  // Get filtered data for a specific chart
+  const getChartFilteredData = (chartId: string): any[] => {
+    const chartSpecificFilters = chartFilters[chartId] || [];
+    return applyFiltersToData(filteredData, chartSpecificFilters);
+  };
+
+  // Calculate chart data for a specific chart
+  const calculateChartData = (chartId: string, dataToUse: any[]): any => {
+    switch (chartId) {
+      case 'category': {
+        const categoryData = dataToUse.reduce((acc, row) => {
+          const cat = row.category || 'Unknown';
+          acc[cat] = (acc[cat] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+        return Object.entries(categoryData).map(([name, value]) => ({ name, value }));
+      }
+      case 'sentiment': {
+        const sentimentData = dataToUse.reduce((acc, row) => {
+          const sent = row.sentiment || 'Unknown';
+          acc[sent] = (acc[sent] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+        return Object.entries(sentimentData).map(([name, value]) => ({ name, value }));
+      }
+      case 'automation': {
+        const automationData = dataToUse.reduce((acc, row) => {
+          const auto = row.automation_potential || 'Unknown';
+          acc[auto] = (acc[auto] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+        return Object.entries(automationData).map(([name, value]) => ({ name, value }));
+      }
+      case 'emailType': {
+        const emailTypeDataRaw = dataToUse.reduce((acc, row) => {
+          const type = row.email_type || 'Unknown';
+          acc[type] = (acc[type] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+        const emailTypeData: Record<string, number> = {};
+        let otherCount = 0;
+        for (const [type, count] of Object.entries(emailTypeDataRaw) as [string, number][]) {
+          if (count <= 2) {
+            otherCount += count;
+          } else {
+            emailTypeData[type] = count;
+          }
+        }
+        if (otherCount > 0) {
+          emailTypeData['Other'] = otherCount;
+        }
+        return Object.entries(emailTypeData).map(([name, value]) => ({ name, value }));
+      }
+      case 'timeSeries': {
+        const timeSeriesData = dataToUse.reduce((acc, row) => {
+          const dateValue = row.date || row.created_at;
+          if (!dateValue) return acc;
+          const date = format(new Date(dateValue), 'yyyy-MM-dd');
+          acc[date] = (acc[date] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+        return (Object.entries(timeSeriesData) as [string, number][])
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([date, count]) => ({ date, count }));
+      }
+      case 'booleans': {
+        const canAutoInvoice = dataToUse.filter(r => r.can_auto_invoice === true).length;
+        const canAutoAnswer = dataToUse.filter(r => r.can_auto_answer === true).length;
+        const isCustomerEmail = dataToUse.filter(r => r.is_customer_email === true).length;
+        return {
+          canAutoInvoice: { yes: canAutoInvoice, no: dataToUse.length - canAutoInvoice },
+          canAutoAnswer: { yes: canAutoAnswer, no: dataToUse.length - canAutoAnswer },
+          isCustomerEmail: { yes: isCustomerEmail, no: dataToUse.length - isCustomerEmail },
+        };
+      }
+      default:
+        return [];
+    }
+  };
 
   // Chart data calculations
   const chartData = useMemo(() => {
@@ -409,6 +501,159 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
       }
     });
     return Array.from(values).sort();
+  };
+
+  // Chart filter management
+  const addChartFilter = (chartId: string) => {
+    const currentFilters = chartFilters[chartId] || [];
+    setChartFilters({
+      ...chartFilters,
+      [chartId]: [...currentFilters, { field: config.fields[0]?.key || '', operator: 'equals', value: '' }],
+    });
+    setShowChartFilters({ ...showChartFilters, [chartId]: true });
+  };
+
+  const removeChartFilter = (chartId: string, index: number) => {
+    const currentFilters = chartFilters[chartId] || [];
+    setChartFilters({
+      ...chartFilters,
+      [chartId]: currentFilters.filter((_, i) => i !== index),
+    });
+  };
+
+  const updateChartFilter = (chartId: string, index: number, updates: Partial<FilterState>) => {
+    const currentFilters = chartFilters[chartId] || [];
+    const newFilters = [...currentFilters];
+    newFilters[index] = { ...newFilters[index], ...updates };
+    setChartFilters({
+      ...chartFilters,
+      [chartId]: newFilters,
+    });
+  };
+
+  // Render chart filter UI
+  const renderChartFilters = (chartId: string) => {
+    const chartSpecificFilters = chartFilters[chartId] || [];
+    const isShowing = showChartFilters[chartId] || false;
+
+    return (
+      <div className="mb-4 space-y-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setShowChartFilters({ ...showChartFilters, [chartId]: !isShowing });
+            if (!isShowing && chartSpecificFilters.length === 0) {
+              addChartFilter(chartId);
+            }
+          }}
+          className="w-full"
+        >
+          <Filter className="h-4 w-4 mr-2" />
+          {t('dashboard.filters.title') || 'Filters'}
+          {chartSpecificFilters.length > 0 && (
+            <Badge variant="secondary" className="ml-2">
+              {chartSpecificFilters.length}
+            </Badge>
+          )}
+        </Button>
+
+        {isShowing && (
+          <div className="border rounded-lg p-3 space-y-2 bg-muted/50">
+            {chartSpecificFilters.map((filter, index) => {
+              const field = config.fields.find((f) => f.key === filter.field);
+              const filterableFields = config.fields.filter((f) => f.filterable);
+
+              return (
+                <div key={index} className="flex gap-2 items-end">
+                  <div className="flex-1">
+                    <Select
+                      value={filter.field}
+                      onValueChange={(value) => updateChartFilter(chartId, index, { field: value, value: '' })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {filterableFields.map((f) => (
+                          <SelectItem key={f.key} value={f.key}>
+                            {f.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="w-32">
+                    <Select
+                      value={filter.operator}
+                      onValueChange={(value: FilterState['operator']) => updateChartFilter(chartId, index, { operator: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="equals">Equals</SelectItem>
+                        <SelectItem value="contains">Contains</SelectItem>
+                        {field?.type === 'number' || field?.type === 'date' ? (
+                          <>
+                            <SelectItem value="gt">Greater than</SelectItem>
+                            <SelectItem value="lt">Less than</SelectItem>
+                            <SelectItem value="gte">Greater or equal</SelectItem>
+                            <SelectItem value="lte">Less or equal</SelectItem>
+                          </>
+                        ) : null}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex-1">
+                    {field?.type === 'select' ? (
+                      <Select
+                        value={filter.value}
+                        onValueChange={(value) => updateChartFilter(chartId, index, { value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select value" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {getUniqueValues(filter.field).map((val) => (
+                            <SelectItem key={val} value={val}>
+                              {val}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Input
+                        type={field?.type === 'number' ? 'number' : field?.type === 'date' ? 'date' : 'text'}
+                        value={filter.value}
+                        onChange={(e) => updateChartFilter(chartId, index, { value: e.target.value })}
+                        placeholder={t('dashboard.filters.valuePlaceholder') || 'Enter value'}
+                      />
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeChartFilter(chartId, index)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              );
+            })}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => addChartFilter(chartId)}
+              className="w-full"
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              {t('dashboard.filters.add') || '+ Add Filter'}
+            </Button>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -691,20 +936,27 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">Category Distribution</CardTitle>
-                    <CardDescription>{chartData.category.length} categories</CardDescription>
+                    <CardDescription>{(() => {
+                      const chartFilteredData = getChartFilteredData('category');
+                      return calculateChartData('category', chartFilteredData).length;
+                    })()} categories</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {chartData.category.length > 0 ? (
-                      <ChartContainer
-                        config={chartData.category.reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
-                          acc[item.name] = { label: item.name };
-                          return acc;
-                        }, {} as Record<string, { label: string }>)}
-                        className="h-[400px] w-full"
-                      >
-                        <PieChart>
-                          <Pie
-                            data={chartData.category}
+                    {renderChartFilters('category')}
+                    {(() => {
+                      const chartFilteredData = getChartFilteredData('category');
+                      const categoryChartData = calculateChartData('category', chartFilteredData);
+                      return categoryChartData.length > 0 ? (
+                        <ChartContainer
+                          config={categoryChartData.reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
+                            acc[item.name] = { label: item.name };
+                            return acc;
+                          }, {} as Record<string, { label: string }>)}
+                          className="h-[400px] w-full"
+                        >
+                          <PieChart>
+                            <Pie
+                              data={categoryChartData}
                             cx="50%"
                             cy="50%"
                             labelLine={false}
@@ -713,7 +965,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                             fill="#8884d8"
                             dataKey="value"
                           >
-                            {chartData.category.map((entry: { name: string; value: number }, index: number) => (
+                            {categoryChartData.map((entry: { name: string; value: number }, index: number) => (
                               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                           </Pie>
@@ -721,11 +973,12 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                           <Legend />
                         </PieChart>
                       </ChartContainer>
-                    ) : (
-                      <div className="h-[400px] flex items-center justify-center text-muted-foreground">
-                        No category data available
-                      </div>
-                    )}
+                      ) : (
+                        <div className="h-[400px] flex items-center justify-center text-muted-foreground">
+                          No category data available
+                        </div>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
 
@@ -733,41 +986,49 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">Sentiment Distribution</CardTitle>
-                    <CardDescription>{chartData.sentiment.length} sentiment types</CardDescription>
+                    <CardDescription>{(() => {
+                      const chartFilteredData = getChartFilteredData('sentiment');
+                      return calculateChartData('sentiment', chartFilteredData).length;
+                    })()} sentiment types</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {chartData.sentiment.length > 0 ? (
-                      <ChartContainer
-                        config={chartData.sentiment.reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
-                          acc[item.name] = { label: item.name };
-                          return acc;
-                        }, {} as Record<string, { label: string }>)}
-                        className="h-[400px] w-full"
-                      >
-                        <PieChart>
-                          <Pie
-                            data={chartData.sentiment}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                            outerRadius={100}
-                            fill="#8884d8"
-                            dataKey="value"
-                          >
-                            {chartData.sentiment.map((entry: { name: string; value: number }, index: number) => (
-                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                          </Pie>
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <Legend />
-                        </PieChart>
-                      </ChartContainer>
-                    ) : (
-                      <div className="h-[400px] flex items-center justify-center text-muted-foreground">
-                        No sentiment data available
-                      </div>
-                    )}
+                    {renderChartFilters('sentiment')}
+                    {(() => {
+                      const chartFilteredData = getChartFilteredData('sentiment');
+                      const sentimentChartData = calculateChartData('sentiment', chartFilteredData);
+                      return sentimentChartData.length > 0 ? (
+                        <ChartContainer
+                          config={sentimentChartData.reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
+                            acc[item.name] = { label: item.name };
+                            return acc;
+                          }, {} as Record<string, { label: string }>)}
+                          className="h-[400px] w-full"
+                        >
+                          <PieChart>
+                            <Pie
+                              data={sentimentChartData}
+                              cx="50%"
+                              cy="50%"
+                              labelLine={false}
+                              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                              outerRadius={100}
+                              fill="#8884d8"
+                              dataKey="value"
+                            >
+                              {sentimentChartData.map((entry: { name: string; value: number }, index: number) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                              ))}
+                            </Pie>
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Legend />
+                          </PieChart>
+                        </ChartContainer>
+                      ) : (
+                        <div className="h-[400px] flex items-center justify-center text-muted-foreground">
+                          No sentiment data available
+                        </div>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
 
@@ -775,31 +1036,39 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">Automation Potential</CardTitle>
-                    <CardDescription>{chartData.automation.length} automation levels</CardDescription>
+                    <CardDescription>{(() => {
+                      const chartFilteredData = getChartFilteredData('automation');
+                      return calculateChartData('automation', chartFilteredData).length;
+                    })()} automation levels</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {chartData.automation.length > 0 ? (
-                      <ChartContainer
-                        config={chartData.automation.reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
-                          acc[item.name] = { label: item.name };
-                          return acc;
-                        }, {} as Record<string, { label: string }>)}
-                        className="h-[400px] w-full"
-                      >
-                        <BarChart data={chartData.automation}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="name" />
-                          <YAxis />
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <Legend />
-                          <Bar dataKey="value" fill="hsl(var(--primary))" />
-                        </BarChart>
-                      </ChartContainer>
-                    ) : (
-                      <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                        No automation data available
-                      </div>
-                    )}
+                    {renderChartFilters('automation')}
+                    {(() => {
+                      const chartFilteredData = getChartFilteredData('automation');
+                      const automationChartData = calculateChartData('automation', chartFilteredData);
+                      return automationChartData.length > 0 ? (
+                        <ChartContainer
+                          config={automationChartData.reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
+                            acc[item.name] = { label: item.name };
+                            return acc;
+                          }, {} as Record<string, { label: string }>)}
+                          className="h-[400px] w-full"
+                        >
+                          <BarChart data={automationChartData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Legend />
+                            <Bar dataKey="value" fill="hsl(var(--primary))" />
+                          </BarChart>
+                        </ChartContainer>
+                      ) : (
+                        <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                          No automation data available
+                        </div>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
 
@@ -808,51 +1077,64 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                   <CardHeader>
                     <CardTitle className="text-lg">Email Type Distribution</CardTitle>
                     <CardDescription>
-                      {chartData.emailType.filter((e: { name: string; value: number }) => e.name !== 'Other').length} email types shown
-                      {chartData.emailType.find((e: { name: string; value: number }) => e.name === 'Other') && (
-                        <span className="text-muted-foreground ml-2">
-                          ({chartData.emailType.find((e: { name: string; value: number }) => e.name === 'Other')?.value} other types grouped)
-                        </span>
-                      )}
+                      {(() => {
+                        const chartFilteredData = getChartFilteredData('emailType');
+                        const emailTypeChartData = calculateChartData('emailType', chartFilteredData);
+                        const filteredEmailTypes = emailTypeChartData.filter((e: { name: string; value: number }) => e.name !== 'Other');
+                        const otherEntry = emailTypeChartData.find((e: { name: string; value: number }) => e.name === 'Other');
+                        return (
+                          <>
+                            {filteredEmailTypes.length} email types shown
+                            {otherEntry && (
+                              <span className="text-muted-foreground ml-2">
+                                ({otherEntry.value} other types grouped)
+                              </span>
+                            )}
+                          </>
+                        );
+                      })()}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {chartData.emailType.filter((e: { name: string; value: number }) => e.name !== 'Other').length > 0 ? (
-                      <ChartContainer
-                        config={chartData.emailType
-                          .filter((e: { name: string; value: number }) => e.name !== 'Other')
-                          .reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
-                            acc[item.name] = { label: item.name };
-                            return acc;
-                          }, {} as Record<string, { label: string }>)}
-                        className="h-[400px] w-full"
-                      >
-                        <PieChart>
-                          <Pie
-                            data={chartData.emailType.filter((e: { name: string; value: number }) => e.name !== 'Other')}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                            outerRadius={100}
-                            fill="#8884d8"
-                            dataKey="value"
-                          >
-                            {chartData.emailType
-                              .filter((e: { name: string; value: number }) => e.name !== 'Other')
-                              .map((entry: { name: string; value: number }, index: number) => (
+                    {renderChartFilters('emailType')}
+                    {(() => {
+                      const chartFilteredData = getChartFilteredData('emailType');
+                      const emailTypeChartData = calculateChartData('emailType', chartFilteredData);
+                      const filteredEmailTypes = emailTypeChartData.filter((e: { name: string; value: number }) => e.name !== 'Other');
+                      return filteredEmailTypes.length > 0 ? (
+                        <ChartContainer
+                          config={filteredEmailTypes
+                            .reduce((acc: Record<string, { label: string }>, item: { name: string; value: number }) => {
+                              acc[item.name] = { label: item.name };
+                              return acc;
+                            }, {} as Record<string, { label: string }>)}
+                          className="h-[400px] w-full"
+                        >
+                          <PieChart>
+                            <Pie
+                              data={filteredEmailTypes}
+                              cx="50%"
+                              cy="50%"
+                              labelLine={false}
+                              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                              outerRadius={100}
+                              fill="#8884d8"
+                              dataKey="value"
+                            >
+                              {filteredEmailTypes.map((entry: { name: string; value: number }, index: number) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                               ))}
-                          </Pie>
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <Legend />
-                        </PieChart>
-                      </ChartContainer>
-                    ) : (
-                      <div className="h-[400px] flex items-center justify-center text-muted-foreground">
-                        No email type data available
-                      </div>
-                    )}
+                            </Pie>
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Legend />
+                          </PieChart>
+                        </ChartContainer>
+                      ) : (
+                        <div className="h-[400px] flex items-center justify-center text-muted-foreground">
+                          No email type data available
+                        </div>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
 
@@ -863,27 +1145,38 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                     <CardDescription>Automation capabilities</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <ChartContainer
-                      config={{
-                        yes: { label: 'Yes' },
-                        no: { label: 'No' },
-                      }}
-                      className="h-[400px] w-full"
-                    >
-                      <BarChart data={[
-                        { name: 'Can Auto Invoice', yes: chartData.booleans.canAutoInvoice.yes, no: chartData.booleans.canAutoInvoice.no },
-                        { name: 'Can Auto Answer', yes: chartData.booleans.canAutoAnswer.yes, no: chartData.booleans.canAutoAnswer.no },
-                        { name: 'Is Customer Email', yes: chartData.booleans.isCustomerEmail.yes, no: chartData.booleans.isCustomerEmail.no },
-                      ]}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                        <Legend />
-                        <Bar dataKey="yes" stackId="a" fill="#82ca9d" name="Yes" />
-                        <Bar dataKey="no" stackId="a" fill="#ffc658" name="No" />
-                      </BarChart>
-                    </ChartContainer>
+                    {renderChartFilters('booleans')}
+                    {(() => {
+                      const chartFilteredData = getChartFilteredData('booleans');
+                      const booleansChartData = calculateChartData('booleans', chartFilteredData) as {
+                        canAutoInvoice: { yes: number; no: number };
+                        canAutoAnswer: { yes: number; no: number };
+                        isCustomerEmail: { yes: number; no: number };
+                      };
+                      return (
+                        <ChartContainer
+                          config={{
+                            yes: { label: 'Yes' },
+                            no: { label: 'No' },
+                          }}
+                          className="h-[400px] w-full"
+                        >
+                          <BarChart data={[
+                            { name: 'Can Auto Invoice', yes: booleansChartData.canAutoInvoice.yes, no: booleansChartData.canAutoInvoice.no },
+                            { name: 'Can Auto Answer', yes: booleansChartData.canAutoAnswer.yes, no: booleansChartData.canAutoAnswer.no },
+                            { name: 'Is Customer Email', yes: booleansChartData.isCustomerEmail.yes, no: booleansChartData.isCustomerEmail.no },
+                          ]}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Legend />
+                            <Bar dataKey="yes" stackId="a" fill="#82ca9d" name="Yes" />
+                            <Bar dataKey="no" stackId="a" fill="#ffc658" name="No" />
+                          </BarChart>
+                        </ChartContainer>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
 
@@ -891,30 +1184,38 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">Email Volume Over Time</CardTitle>
-                    <CardDescription>{chartData.timeSeries.length} data points</CardDescription>
+                    <CardDescription>{(() => {
+                      const chartFilteredData = getChartFilteredData('timeSeries');
+                      return calculateChartData('timeSeries', chartFilteredData).length;
+                    })()} data points</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {chartData.timeSeries.length > 0 ? (
-                      <ChartContainer
-                        config={{
-                          count: { label: 'Email Count' },
-                        }}
-                        className="h-[400px] w-full"
-                      >
-                        <LineChart data={chartData.timeSeries}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="date" />
-                          <YAxis />
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <Legend />
-                          <Line type="monotone" dataKey="count" stroke="hsl(var(--primary))" strokeWidth={2} name="Email Count" />
-                        </LineChart>
-                      </ChartContainer>
-                    ) : (
-                      <div className="h-[400px] flex items-center justify-center text-muted-foreground">
-                        No time series data available
-                      </div>
-                    )}
+                    {renderChartFilters('timeSeries')}
+                    {(() => {
+                      const chartFilteredData = getChartFilteredData('timeSeries');
+                      const timeSeriesChartData = calculateChartData('timeSeries', chartFilteredData);
+                      return timeSeriesChartData.length > 0 ? (
+                        <ChartContainer
+                          config={{
+                            count: { label: 'Email Count' },
+                          }}
+                          className="h-[400px] w-full"
+                        >
+                          <LineChart data={timeSeriesChartData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="date" />
+                            <YAxis />
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Legend />
+                            <Line type="monotone" dataKey="count" stroke="hsl(var(--primary))" strokeWidth={2} name="Email Count" />
+                          </LineChart>
+                        </ChartContainer>
+                      ) : (
+                        <div className="h-[400px] flex items-center justify-center text-muted-foreground">
+                          No time series data available
+                        </div>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
               </div>
