@@ -8,6 +8,7 @@ import { ConsentProvider } from '@/contexts/consent-context';
 import { CookieBanner } from '@/components/cookie-banner';
 import { CookieSettingsModal } from '@/components/cookie-settings-modal';
 import { LanguageProvider } from '@/contexts/language-context';
+import { AuthProvider } from '@/contexts/auth-context';
 
 const inter = Inter({ subsets: ['latin'] });
 const montserrat = Montserrat({ 
@@ -161,13 +162,15 @@ export default function RootLayout({
         </noscript>
         
         <LanguageProvider>
-          <ConsentProvider>
-            <GADebug />
-            {children}
-            <CookieBanner />
-            <CookieSettingsModal />
-            <Toaster />
-          </ConsentProvider>
+          <AuthProvider>
+            <ConsentProvider>
+              <GADebug />
+              {children}
+              <CookieBanner />
+              <CookieSettingsModal />
+              <Toaster />
+            </ConsentProvider>
+          </AuthProvider>
         </LanguageProvider>
       </body>
     </html>
