@@ -66,10 +66,40 @@ export default function AdminDashboardPage() {
     try {
       setIsLoading(true);
       
-      // Get current session
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error('No session found');
+      // Get JWT token - use LEGACY_JWT from env if available, otherwise use session
+      let jwtToken: string | null = null;
+      
+      // Check for legacy JWT in environment (must be NEXT_PUBLIC_ for client-side access)
+      const legacyJwt = process.env.NEXT_PUBLIC_LEGACY_JWT;
+      
+      if (legacyJwt) {
+        jwtToken = legacyJwt;
+        console.log('Using LEGACY_JWT from environment');
+      } else {
+        // Get current session and refresh if needed
+        const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError || !currentSession) {
+          throw new Error('No session found. Please log in again.');
+        }
+
+        // Refresh session to ensure we have a valid token
+        const { data: { session }, error: refreshError } = await supabase.auth.refreshSession(currentSession);
+        
+        if (refreshError || !session) {
+          // If refresh fails, try using current session
+          const sessionToUse = session || currentSession;
+          if (!sessionToUse?.access_token) {
+            throw new Error('Invalid session. Please log in again.');
+          }
+          jwtToken = sessionToUse.access_token;
+        } else {
+          jwtToken = session.access_token;
+        }
+      }
+
+      if (!jwtToken) {
+        throw new Error('No JWT token available');
       }
 
       // Call Supabase Edge Function to list users
@@ -83,7 +113,7 @@ export default function AdminDashboardPage() {
       const response = await fetch(`${supabaseUrl}/functions/v1/list-users`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${session.access_token}`,
+          'Authorization': `Bearer ${jwtToken}`,
           'apikey': anonKey,
           'Content-Type': 'application/json',
         },
@@ -204,7 +234,7 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Search Bar */}
-        <Card className="mb-6">
+        <Card className="mb-6 mt-6">
           <CardContent className="pt-6">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -239,7 +269,7 @@ export default function AdminDashboardPage() {
                 {filteredUsers.map((portalUser) => (
                   <Link
                     key={portalUser.id}
-                    href={`/portal/admin/users/${portalUser.id}`}
+                    href={`/portal/admin/users?userId=${portalUser.id}`}
                     className="block"
                   >
                     <Card className="highlight-card hover:shadow-brand-lg transition-all duration-300 cursor-pointer">

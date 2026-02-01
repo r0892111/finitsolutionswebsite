@@ -9,6 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { LogOut, FileText, MessageSquare, Settings, Shield, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { DataDashboard } from '@/components/data-dashboard';
+import { emailThreadEditsConfig, emailsConfig } from '@/lib/dashboard-configs';
 
 export default function PortalPage() {
   const { user, isAuthenticated, isAdmin, logout, isLoading } = useAuth();
@@ -93,68 +95,12 @@ export default function PortalPage() {
           </p>
         </div>
 
-        {/* Dashboard Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {/* Documents Card */}
-          <Card className="highlight-card cursor-pointer transition-all duration-300 hover:shadow-brand-lg">
-            <CardHeader>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="rounded-lg bg-primary/10 p-2">
-                  <FileText className="h-5 w-5 text-primary" />
-                </div>
-                <CardTitle className="finit-h2">{t('portal.documents.title')}</CardTitle>
-              </div>
-              <CardDescription className="finit-body">
-                {t('portal.documents.description')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full" disabled>
-                {t('portal.documents.view')}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Messages Card */}
-          <Card className="highlight-card cursor-pointer transition-all duration-300 hover:shadow-brand-lg">
-            <CardHeader>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="rounded-lg bg-primary/10 p-2">
-                  <MessageSquare className="h-5 w-5 text-primary" />
-                </div>
-                <CardTitle className="finit-h2">{t('portal.messages.title')}</CardTitle>
-              </div>
-              <CardDescription className="finit-body">
-                {t('portal.messages.description')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full" disabled>
-                {t('portal.messages.view')}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Settings Card */}
-          <Card className="highlight-card cursor-pointer transition-all duration-300 hover:shadow-brand-lg">
-            <CardHeader>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="rounded-lg bg-primary/10 p-2">
-                  <Settings className="h-5 w-5 text-primary" />
-                </div>
-                <CardTitle className="finit-h2">{t('portal.settings.title')}</CardTitle>
-              </div>
-              <CardDescription className="finit-body">
-                {t('portal.settings.description')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full" disabled>
-                {t('portal.settings.view')}
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Data Dashboards */}
+        {user?.id && (
+          <div className="mb-12 space-y-8">
+            <DataDashboard config={emailsConfig} userId={user.id} />
+          </div>
+        )}
 
         {/* Status Section */}
         <Card className="bg-primary/5 border-primary/20">

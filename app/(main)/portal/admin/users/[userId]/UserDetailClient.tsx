@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/auth-context';
 import { useLanguage } from '@/contexts/language-context';
@@ -10,6 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowLeft, User, Calendar, Mail, Shield, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import Image from 'next/image';
+import { DataDashboard } from '@/components/data-dashboard';
+import { emailThreadEditsConfig } from '@/lib/dashboard-configs';
 
 interface UserDetails {
   id: string;
@@ -20,12 +22,14 @@ interface UserDetails {
   is_admin: boolean;
 }
 
-export default function UserDetailPage() {
+interface UserDetailClientProps {
+  userId: string;
+}
+
+export default function UserDetailClient({ userId }: UserDetailClientProps) {
   const { isAuthenticated, isAdmin, isLoading: authLoading } = useAuth();
   const { t } = useLanguage();
   const router = useRouter();
-  const params = useParams();
-  const userId = params?.userId as string;
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -190,23 +194,8 @@ export default function UserDetailPage() {
             </CardContent>
           </Card>
 
-          {/* Custom Dashboard Placeholder */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="finit-h2">{t('portal.admin.userDetail.dashboard.title')}</CardTitle>
-              <CardDescription>{t('portal.admin.userDetail.dashboard.description')}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-12">
-                <p className="text-muted-foreground mb-4">
-                  {t('portal.admin.userDetail.dashboard.comingSoon')}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {t('portal.admin.userDetail.dashboard.note')}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Data Dashboard */}
+          <DataDashboard config={emailThreadEditsConfig} userId={userId} />
         </div>
       </main>
     </div>
