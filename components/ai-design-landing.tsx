@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { gsap, useGSAP, ScrollTrigger, MorphSVGPlugin, MotionPathPlugin, DrawSVGPlugin } from '@/lib/gsap';
 import {
   ArrowRight,
@@ -1325,388 +1325,131 @@ const illustrationComponents: Record<string, React.FC<{ progress: number }>> = {
   'reporting': ReportingIllustration,
 };
 
-// --- Use Cases Section Component (Scroll-Driven) ---
+// --- Use Cases Section: 1 voorbeeld per scherm, pijlen, animaties ---
 const UseCasesSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const pinnedRef = useRef<HTMLDivElement>(null);
-  const textContentRef = useRef<HTMLDivElement>(null);
-  const prevIndexRef = useRef<number>(0);
-  const isFirstRender = useRef<boolean>(true);
-  const scrollDirectionRef = useRef<number>(1); // 1 = scrolling down, -1 = scrolling up
   const [activeIndex, setActiveIndex] = useState(0);
-  const [localProgress, setLocalProgress] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-  
+  const [illustrationProgress, setIllustrationProgress] = useState(0);
   const TOTAL_USE_CASES = useCasesData.length;
-  const SCROLL_DISTANCE = 5800; // Total scroll distance (increased for reduced sensitivity)
-  const START_BUFFER = 0.15; // 15% hold at start before animation begins
-  const ANIMATION_PORTION = 0.50; // 50% for animation
-  // Remaining 35% = hold at end before transition
-  
-  // Check for mobile on mount and resize
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-  
-  // GSAP text crossfade animation (Desktop only)
-  useGSAP(() => {
-    if (!textContentRef.current || isMobile) return;
-    
-    const ctx = gsap.context(() => {
-      const prevIndex = prevIndexRef.current;
-      const currentIndex = activeIndex;
-      
-      // Set initial states for all content blocks
-      useCasesData.forEach((_, index) => {
-        if (index !== currentIndex && index !== prevIndex) {
-          gsap.set(`.uc-content-${index}`, { visibility: 'hidden' });
-          gsap.set([`.uc-pill-${index}`, `.uc-title-${index}`, `.uc-desc-${index}`, `.uc-stat-${index}`], { 
-            opacity: 0, y: 20 
-          });
-        }
-      });
-      
-      // On first render, just animate entrance
-      if (isFirstRender.current) {
-        isFirstRender.current = false;
-        gsap.set(`.uc-content-${currentIndex}`, { visibility: 'visible' });
-        
-        const entranceTl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-        entranceTl
-          .fromTo(`.uc-pill-${currentIndex}`, 
-            { y: 20, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.35 }
-          )
-          .fromTo(`.uc-title-${currentIndex}`, 
-            { y: 25, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.4 }, 
-            '-=0.2'
-          )
-          .fromTo(`.uc-desc-${currentIndex}`, 
-            { y: 25, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.4 }, 
-            '-=0.25'
-          )
-          .fromTo(`.uc-stat-${currentIndex}`, 
-            { y: 30, opacity: 0, scale: 0.95 }, 
-            { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.7)' }, 
-            '-=0.2'
-          );
-        
-        return;
-      }
-      
-      // Crossfade: exit previous, enter current (direction-aware)
-      if (prevIndex !== currentIndex) {
-        const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-        
-        // Get scroll direction: 1 = scrolling down, -1 = scrolling up
-        const direction = scrollDirectionRef.current;
-        
-        // Direction-aware Y values:
-        // Scrolling DOWN: exit slides UP (-), enter comes from BELOW (+)
-        // Scrolling UP: exit slides DOWN (+), enter comes from ABOVE (-)
-        const exitY = direction === 1 ? -15 : 15;
-        const enterFromY = direction === 1 ? 20 : -20;
-        const enterFromYLarge = direction === 1 ? 25 : -25;
-        const enterFromYStat = direction === 1 ? 30 : -30;
-        
-        // Make both visible during transition
-        gsap.set(`.uc-content-${prevIndex}`, { visibility: 'visible' });
-        gsap.set(`.uc-content-${currentIndex}`, { visibility: 'visible' });
-        
-        // Exit previous (staggered fade out + direction-aware slide)
-        tl.to(`.uc-pill-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' })
-          .to(`.uc-title-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' }, '-=0.18')
-          .to(`.uc-desc-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' }, '-=0.18')
-          .to(`.uc-stat-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' }, '-=0.18')
-          // Hide previous after exit
-          .set(`.uc-content-${prevIndex}`, { visibility: 'hidden' })
-          
-          // Enter current (staggered fade in + direction-aware slide)
-          .fromTo(`.uc-pill-${currentIndex}`, 
-            { y: enterFromY, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.35 }, 
-            '-=0.15'
-          )
-          .fromTo(`.uc-title-${currentIndex}`, 
-            { y: enterFromYLarge, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.4 }, 
-            '-=0.25'
-          )
-          .fromTo(`.uc-desc-${currentIndex}`, 
-            { y: enterFromYLarge, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.4 }, 
-            '-=0.3'
-          )
-          .fromTo(`.uc-stat-${currentIndex}`, 
-            { y: enterFromYStat, opacity: 0, scale: 0.95 }, 
-            { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.7)' }, 
-            '-=0.25'
-          );
-      }
-      
-      // Update prevIndexRef for next transition
-      prevIndexRef.current = currentIndex;
-      
-    }, textContentRef);
-    
-    return () => ctx.revert();
-  }, { scope: textContentRef, dependencies: [activeIndex, isMobile] });
-  
-  // GSAP scroll-driven animations (Desktop only)
-  useGSAP(() => {
-    if (!sectionRef.current || !pinnedRef.current || isMobile) return;
-    
-    const mm = gsap.matchMedia();
-    
-    mm.add("(min-width: 768px)", () => {
-      // Create ScrollTrigger for the pinned section
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: `+=${SCROLL_DISTANCE}`,
-        pin: pinnedRef.current,
-        scrub: 1.4,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          
-          // Track scroll direction (1 = down/forward, -1 = up/backward)
-          scrollDirectionRef.current = self.direction;
-          
-          // Calculate which use case we're on (0 to TOTAL_USE_CASES - 1)
-          const rawIndex = progress * TOTAL_USE_CASES;
-          const newIndex = Math.min(Math.floor(rawIndex), TOTAL_USE_CASES - 1);
-          
-          // Calculate progress within current use case segment (0 to 1)
-          const segmentProgress = rawIndex - newIndex;
-          
-          // Map segment progress to animation progress with hold periods
-          // First 15% = hold at 0 (buffer before animation starts)
-          // Next 50% = animation plays (0 → 1)
-          // Last 35% = hold at 1 (breathing room before next)
-          let animationProgress: number;
-          if (segmentProgress <= START_BUFFER) {
-            // Start buffer: stay at 0
-            animationProgress = 0;
-          } else if (segmentProgress <= START_BUFFER + ANIMATION_PORTION) {
-            // Animation phase: scale to 0-1
-            animationProgress = (segmentProgress - START_BUFFER) / ANIMATION_PORTION;
-          } else {
-            // End hold phase: stay at 1
-            animationProgress = 1;
-          }
-          
-          setActiveIndex(newIndex);
-          setLocalProgress(Math.min(animationProgress, 1));
-        },
-      });
-      
-      return () => {
-        ScrollTrigger.getAll().forEach(st => st.kill());
-      };
-    });
-    
-    return () => mm.revert();
-  }, { scope: sectionRef, dependencies: [isMobile] });
-  
-  // Get the progress to pass to each illustration
-  const getIllustrationProgress = (index: number) => {
-    if (index < activeIndex) return 1; // Already passed - show completed state
-    if (index > activeIndex) return 0; // Not reached yet - show initial state
-    return localProgress; // Current one - use scroll progress
-  };
 
-  // Desktop: Scroll-driven split-screen layout
-  if (!isMobile) {
-    return (
-      <section 
-        ref={sectionRef} 
-        id="use-cases" 
-        className="relative bg-[#FDFBF7]"
-        style={{ height: `calc(${SCROLL_DISTANCE}px + 100vh)` }}
-      >
-        {/* Pinned container - full viewport height */}
-        <div 
-          ref={pinnedRef}
-          className="h-screen w-full flex flex-col justify-center"
-        >
-          {/* Centered Header - styled like HowItWorksSection */}
-          <div className="text-center mb-12 lg:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
-              Praktijkvoorbeelden
-            </h2>
-            <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
-              Hoe klanten AI gebruiken
-            </p>
-          </div>
-          
-          <div className="w-full max-w-[1400px] mx-auto px-8 lg:px-16">
-            {/* Split-screen layout */}
-            <div className="flex items-center gap-12 lg:gap-20">
-              
-              {/* LEFT: Illustrations (50%) */}
-              <div className="w-1/2 relative flex items-center justify-center">
-                <div className="w-full max-w-[480px] aspect-[4/3] relative">
-                  {useCasesData.map((useCase, index) => {
-                    const IllustrationComponent = illustrationComponents[useCase.id];
-                    const isActive = index === activeIndex;
-                    const progress = getIllustrationProgress(index);
-                    
-                    return IllustrationComponent ? (
-                      <div 
-                        key={useCase.id}
-                        className="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
-                        style={{ 
-                          opacity: isActive ? 1 : 0,
-                          pointerEvents: isActive ? 'auto' : 'none',
-                        }}
-                      >
-                        <IllustrationComponent progress={progress} />
-                      </div>
-                    ) : null;
-                  })}
-                </div>
-              </div>
-              
-              {/* RIGHT: Text Content (50%) */}
-              <div className="w-1/2 relative">
-                <div className="max-w-[480px]">
-                  {/* Use case content - GSAP crossfade based on activeIndex */}
-                  <div ref={textContentRef} className="relative min-h-[280px]">
-                    {useCasesData.map((useCase, index) => {
-                      const isActive = index === activeIndex;
-                      
-                      return (
-                        <div 
-                          key={useCase.id}
-                          className={`absolute inset-0 uc-content-${index}`}
-                          style={{ 
-                            visibility: isActive ? 'visible' : 'hidden',
-                            pointerEvents: isActive ? 'auto' : 'none',
-                          }}
-                        >
-                          {/* Category pill */}
-                          <span className={`uc-pill-${index} inline-block px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-[#1A2D63]/50 border border-[#1A2D63]/15 rounded-full mb-4`}>
-                            {useCase.categoryLabel}
-                          </span>
-                          
-                          {/* Title */}
-                          <h3 className={`uc-title-${index} font-newsreader text-2xl lg:text-3xl text-[#1A2D63] mb-4 leading-tight`}>
-                            {useCase.title}
-                          </h3>
-                          
-                          {/* Description */}
-                          <p className={`uc-desc-${index} text-[#1A2D63]/60 text-base lg:text-lg leading-relaxed mb-6`}>
-                            {useCase.description}
-                          </p>
-                          
-                          {/* Stat highlight */}
-                          <div className={`uc-stat-${index} inline-flex items-baseline gap-2 bg-[#1A2D63] text-white px-5 py-3 rounded-xl shadow-[0_4px_20px_-4px_rgba(26,45,99,0.35)]`}>
-                            <span className="font-newsreader text-3xl lg:text-4xl font-light">
-                              {useCase.stat.value}
-                            </span>
-                            <span className="text-white/60 text-sm">
-                              {useCase.stat.label}
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  
-                  {/* Progress indicator */}
-                  <div className="mt-10 flex items-center gap-3">
-                    {useCasesData.map((_, index) => (
-                      <div 
-                        key={index}
-                        className={`h-1 rounded-full transition-all duration-300 ${
-                          index === activeIndex 
-                            ? 'w-8 bg-[#1A2D63]' 
-                            : index < activeIndex
-                              ? 'w-2 bg-[#1A2D63]/40'
-                              : 'w-2 bg-[#1A2D63]/15'
-                        }`}
-                      />
-                    ))}
-                    <span className="ml-2 text-sm text-[#1A2D63]/40">
-                      {activeIndex + 1} / {TOTAL_USE_CASES}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-  
-  // Mobile: Simplified vertical scroll layout (not pinned)
+  // Bij wisselen van voorbeeld: illustratie van 0 → 1 animeren
+  useEffect(() => {
+    setIllustrationProgress(0);
+    const obj = { value: 0 };
+    const tween = gsap.to(obj, {
+      value: 1,
+      duration: 0.9,
+      ease: 'power2.out',
+      onUpdate: () => setIllustrationProgress(obj.value),
+    });
+    return () => { tween.kill(); };
+  }, [activeIndex]);
+
+  const goTo = useCallback((index: number) => {
+    setActiveIndex(Math.max(0, Math.min(index, TOTAL_USE_CASES - 1)));
+  }, [TOTAL_USE_CASES]);
+
+  const useCase = useCasesData[activeIndex];
+  const IllustrationComponent = illustrationComponents[useCase?.id];
+
   return (
-    <section 
-      ref={sectionRef} 
-      id="use-cases" 
-      className="py-16 px-6 bg-[#FDFBF7]"
-    >
-      <div className="max-w-[600px] mx-auto">
-        {/* Header - styled like HowItWorksSection */}
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
+    <section ref={sectionRef} id="use-cases" className="py-16 md:py-20 px-4 md:px-8 bg-[#FDFBF7]">
+      <div className="max-w-[720px] mx-auto">
+        {/* Header */}
+        <div className="text-center mb-10 md:mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
             Praktijkvoorbeelden
           </h2>
-          <p className="text-[#1A2D63]/60 text-lg">
+          <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
             Hoe klanten AI gebruiken
           </p>
         </div>
-        
-        {/* Use cases as vertical cards */}
-        <div className="space-y-8">
-          {useCasesData.map((useCase, index) => {
-            const IllustrationComponent = illustrationComponents[useCase.id];
-            
-            return (
-              <div 
-                key={useCase.id}
+
+        {/* Eén voorbeeld per scherm + pijlen */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => goTo(activeIndex - 1)}
+            disabled={activeIndex === 0}
+            aria-label="Vorige"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/95 shadow-lg border border-[#1A2D63]/10 flex items-center justify-center text-[#1A2D63] hover:bg-white disabled:opacity-40 disabled:pointer-events-none transition-opacity -translate-x-2 md:-translate-x-6"
+          >
+            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+          </button>
+          <button
+            type="button"
+            onClick={() => goTo(activeIndex + 1)}
+            disabled={activeIndex === TOTAL_USE_CASES - 1}
+            aria-label="Volgende"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/95 shadow-lg border border-[#1A2D63]/10 flex items-center justify-center text-[#1A2D63] hover:bg-white disabled:opacity-40 disabled:pointer-events-none transition-opacity translate-x-2 md:translate-x-6"
+          >
+            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+          </button>
+
+          <AnimatePresence mode="wait">
+            {useCase && (
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
                 className="bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(26,45,99,0.12)] overflow-hidden"
               >
-                {/* Illustration */}
-                <div className="h-[200px] flex items-center justify-center bg-[#FDFBF7]/50 p-4">
+                {/* Illustratie met progress-animatie (0→1 bij wissel) */}
+                <div className="h-[220px] md:h-[280px] flex items-center justify-center bg-[#FDFBF7]/50 p-4 md:p-6">
                   {IllustrationComponent && (
-                    <IllustrationComponent progress={1} />
+                    <IllustrationComponent progress={illustrationProgress} key={useCase.id} />
                   )}
                 </div>
-                
-                {/* Content */}
-                <div className="p-5">
+                {/* Tekst met entrance-animatie */}
+                <motion.div
+                  className="p-5 md:p-8"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
                   <span className="inline-block px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[#1A2D63]/50 border border-[#1A2D63]/10 rounded-full mb-3">
                     {useCase.categoryLabel}
                   </span>
-                  
-                  <h3 className="font-newsreader text-xl text-[#1A2D63] mb-2">
+                  <h3 className="font-newsreader text-xl md:text-3xl text-[#1A2D63] mb-2">
                     {useCase.title}
                   </h3>
-                  
-                  <p className="text-[#1A2D63]/55 text-sm leading-relaxed mb-4">
+                  <p className="text-[#1A2D63]/55 text-sm md:text-lg leading-relaxed mb-4">
                     {useCase.description}
                   </p>
-                  
-                  <div className="inline-flex items-baseline gap-1.5 bg-[#1A2D63] text-white px-3 py-2 rounded-lg">
-                    <span className="font-newsreader text-xl font-light">
+                  <div className="inline-flex items-baseline gap-1.5 bg-[#1A2D63] text-white px-4 py-2.5 rounded-lg">
+                    <span className="font-newsreader text-xl md:text-2xl font-light">
                       {useCase.stat.value}
                     </span>
-                    <span className="text-white/60 text-xs">
+                    <span className="text-white/60 text-xs md:text-sm">
                       {useCase.stat.label}
                     </span>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Dots + counter */}
+          <div className="flex items-center justify-center gap-3 mt-6">
+            {useCasesData.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => goTo(index)}
+                aria-label={`Ga naar voorbeeld ${index + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  index === activeIndex
+                    ? 'w-8 bg-[#1A2D63]'
+                    : 'w-2 bg-[#1A2D63]/25 hover:bg-[#1A2D63]/40'
+                }`}
+              />
+            ))}
+            <span className="ml-2 text-sm text-[#1A2D63]/50">
+              {activeIndex + 1} / {TOTAL_USE_CASES}
+            </span>
+          </div>
         </div>
       </div>
     </section>
@@ -1837,13 +1580,13 @@ const HowItWorksSection = () => {
       // Calculate line paths FIRST (synchronously) before setting initial states
       updateLinePaths();
 
-      // Main pinned timeline - 1800px scroll distance (tight transition to next section)
+      // Pinned timeline - shorter scroll so steps appear sooner after the title
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: pinContainerRef.current,
           pin: true,
-          start: "top 5%",
-          end: "+=1800",
+          start: "top 18%",
+          end: "+=1000",
           scrub: 2,
           pinSpacing: true,
           anticipatePin: 1,
@@ -2095,7 +1838,7 @@ const HowItWorksSection = () => {
   return (
     <section ref={sectionRef} id="process" className="bg-[#FDFBF7] relative">
       {/* Sticky Header - Stays fixed at top during entire scroll experience */}
-      <div className="sticky top-0 z-20 bg-[#FDFBF7] pt-20 md:pt-24 pb-4 md:pb-6">
+      <div className="sticky top-0 z-20 bg-[#FDFBF7] pt-16 md:pt-20 pb-3 md:pb-4">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
             AI implementeren
@@ -2126,7 +1869,7 @@ const HowItWorksSection = () => {
       </div>
 
       {/* Pin Container - Only cards get pinned on desktop */}
-      <div ref={pinContainerRef} className="px-6 md:px-12 flex flex-col justify-start overflow-visible">
+      <div ref={pinContainerRef} className="px-6 md:px-12 flex flex-col justify-start overflow-visible -mt-2 md:-mt-4">
         <div className="max-w-[1100px] mx-auto w-full">
           {/* Cards Container with Connecting Line */}
           <div ref={cardsContainerRef} className="relative mb-6 md:mb-8 md:min-h-[850px] overflow-visible">

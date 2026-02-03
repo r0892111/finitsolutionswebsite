@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 html {
+  font-size: 15px;
   scroll-behavior: smooth;
   overscroll-behavior: none;
 }
@@ -30,6 +31,11 @@ body {
 
 .animate-scroll-logos:hover {
   animation-play-state: paused;
+}
+
+/* Hide scrollbar for carousels (Chrome/Safari) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 :root {
