@@ -2564,9 +2564,7 @@ export function AIDesignLanding() {
   // Navigate to section: instant overlay → jump → smooth reveal
   const overlayRef = useRef<HTMLDivElement>(null);
   const navigateToSection = useCallback((sectionId: string) => {
-    setMobileMenuOpen(false);
-
-    // Phase 1: instantly show overlay (no transition)
+    // Phase 1: instantly show overlay (no transition) — covers everything including mobile menu
     const overlay = overlayRef.current;
     if (overlay) {
       overlay.style.transition = 'none';
@@ -2574,17 +2572,21 @@ export function AIDesignLanding() {
       overlay.style.pointerEvents = 'auto';
     }
 
-    // Phase 2: after one frame (overlay painted), jump to target
-    requestAnimationFrame(() => {
+    // Close mobile menu after overlay is visible
+    setMobileMenuOpen(false);
+
+    // Phase 2: after two frames (overlay fully painted), jump to target
+    requestAnimationFrame(() => { requestAnimationFrame(() => {
+      const isDesktop = window.innerWidth >= 768;
       let targetTop = 0;
       if (sectionId === "hero") {
         targetTop = 0;
       } else if (sectionId === "process") {
         const el = document.getElementById("process");
-        if (el) targetTop = el.offsetTop + 2000;
+        if (el) targetTop = el.offsetTop + (isDesktop ? 2000 : 0);
       } else if (sectionId === "use-cases") {
         const el = document.getElementById("use-cases");
-        if (el) targetTop = el.offsetTop + 850;
+        if (el) targetTop = el.offsetTop + (isDesktop ? 850 : 0);
       } else {
         const el = document.getElementById(sectionId);
         if (el) targetTop = el.offsetTop;
@@ -2593,11 +2595,7 @@ export function AIDesignLanding() {
       // Override CSS scroll-behavior: smooth to make jump truly instant
       document.documentElement.style.scrollBehavior = 'auto';
       window.scrollTo(0, targetTop);
-      // Restore after jump
       document.documentElement.style.scrollBehavior = '';
-
-      // Force ScrollTrigger to immediately update to the new position
-      ScrollTrigger.update();
 
       // Short loader display, then smooth reveal
       setTimeout(() => {
@@ -2607,7 +2605,7 @@ export function AIDesignLanding() {
           overlay.style.pointerEvents = 'none';
         }
       }, 500);
-    });
+    }); });
   }, []);
 
   // Footer bounce animation
@@ -2830,7 +2828,7 @@ export function AIDesignLanding() {
       {/* Nav scroll loader overlay */}
       <div
         ref={overlayRef}
-        className="fixed inset-0 z-30 flex items-center justify-center pointer-events-none"
+        className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
         style={{ opacity: 0 }}
       >
         <div className="absolute inset-0 bg-[#FDFBF7]" />
