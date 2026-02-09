@@ -407,19 +407,23 @@ const LogoCarousel = ({
   // This ensures the curve shape stays identical on all screen sizes
   const CURVE_ASPECT_RATIO = 16 / 9; // 1.778
 
-  // Track mount state and window resize
+  // Track mount state and window resize (width only — ignore height changes from mobile address bar)
   useEffect(() => {
     setIsMounted(true);
-    
-    // Debounce resize to avoid excessive recalculations
+
+    let lastWidth = window.innerWidth;
     let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
+      const newWidth = window.innerWidth;
+      // Skip if only height changed (mobile address bar show/hide)
+      if (newWidth === lastWidth) return;
+      lastWidth = newWidth;
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         setResizeKey(prev => prev + 1);
       }, 100);
     };
-    
+
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -451,11 +455,12 @@ const LogoCarousel = ({
       // Calculate starting position on the path (evenly distributed)
       const startProgress = index * spacing;
 
-      // Set initial centering and make visible
+      // Set initial centering and make visible — force3D for GPU compositing
       gsap.set(logo, {
         xPercent: -50,
         yPercent: -50,
-        opacity: 1,  // Show logo once GSAP takes control
+        opacity: 1,
+        force3D: true,
       });
 
       // Create continuous looping animation - immediateRender positions them instantly
@@ -482,7 +487,8 @@ const LogoCarousel = ({
           duration: animationDuration,
           ease: "none",
           repeat: -1,
-          immediateRender: true, // Ensures logos are positioned immediately on page load
+          immediateRender: true,
+          force3D: true,
         }
       );
       
@@ -565,7 +571,8 @@ const LogoCarousel = ({
             height: `${logoSize}px`,
             left: 0,
             top: 0,
-            opacity: 0,  // Hidden until GSAP positions them
+            opacity: 0,
+            willChange: 'transform',
           }}
         >
           <div className="w-full h-full rounded-xl bg-white shadow-lg border border-[#1A2D63]/5 p-2.5 flex items-center justify-center">
@@ -2477,15 +2484,9 @@ const FAQSection = () => {
     const items = accordionRef.current.querySelectorAll('[data-faq-item]');
     gsap.set(items, { y: 30, opacity: 0 });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top 80%",
-        toggleActions: "play none none none",
-      }
-    });
+    // Build paused timeline
+    const tl = gsap.timeline({ paused: true });
 
-    // Heading fades in first
     tl.to(headingRef.current, {
       y: 0,
       opacity: 1,
@@ -2493,7 +2494,6 @@ const FAQSection = () => {
       ease: "power3.out",
     }, 0);
 
-    // Accordion items stagger in
     tl.to(items, {
       y: 0,
       opacity: 1,
@@ -2501,6 +2501,23 @@ const FAQSection = () => {
       stagger: 0.08,
       ease: "power3.out",
     }, 0.2);
+
+    // Use IntersectionObserver instead of ScrollTrigger — it calculates
+    // positions in real-time so it can't go stale from layout shifts
+    // after fonts/images load.
+    const section = sectionRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          tl.play();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(section);
+
+    return () => observer.disconnect();
   }, { scope: sectionRef });
 
   return (
@@ -2889,7 +2906,7 @@ export function AIDesignLanding() {
           {/* Centered Content */}
           <div ref={heroTextRef} className="relative z-10 text-center max-w-[22rem] sm:max-w-[28rem] md:max-w-3xl px-2 sm:px-0">
             <div className="mb-5 sm:mb-6 md:mb-8">
-              <h1 className="font-newsreader text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] leading-[1] tracking-tight text-[#1A2D63]">
+              <h1 className="font-newsreader text-5xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] leading-[1] tracking-tight text-[#1A2D63]">
                 <span className="block font-extralight">Automatiseer</span>
                 <TypewriterText />
               </h1>

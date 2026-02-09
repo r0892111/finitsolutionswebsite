@@ -31,6 +31,10 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { SplitText } from "gsap/SplitText";
 import { TextPlugin } from "gsap/TextPlugin";
 
+// Disable lag smoothing so animations don't "jump" to catch up after
+// frame drops (e.g. during mobile scroll when rAF is throttled).
+gsap.ticker.lagSmoothing(0);
+
 gsap.registerPlugin(
   useGSAP,
   Draggable,
