@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { gsap, useGSAP, ScrollTrigger, MorphSVGPlugin, MotionPathPlugin, DrawSVGPlugin } from '@/lib/gsap';
+import { gsap, useGSAP, ScrollTrigger, MorphSVGPlugin, MotionPathPlugin, DrawSVGPlugin, SplitText } from '@/lib/gsap';
 import {
   ArrowRight,
   Calendar,
@@ -27,9 +25,31 @@ import {
   Headphones,
   ChevronLeft,
   ChevronRight,
+  Building2,
+  Calculator,
+  Megaphone,
+  ShoppingCart,
+  Truck,
+  Briefcase,
+  Target,
+  Flame,
+  Hammer,
+  UtensilsCrossed,
+  Ticket,
+  Building,
+  Heart,
+  Zap,
+  Menu,
+  X,
   type LucideIcon,
 } from 'lucide-react';
 import { CookieSettingsLink } from '@/components/cookie-settings-link';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 /**
  * AIDesignLanding
@@ -97,6 +117,38 @@ const transformationAfter = [
   "Automatische opvolging op het juiste moment",
   "Processen draaien terwijl jij slaapt",
   "Schalen zonder extra personeel"
+];
+
+// --- FAQ Data ---
+const faqItems = [
+  {
+    question: "Wat als er iets misloopt met de automatisering?",
+    answer: "Elke oplossing bevat ingebouwde monitoring en foutmeldingen. Als er iets hapert, worden wij direct op de hoogte gebracht en lossen we het op — vaak voordat jij het merkt. Je team kan altijd manueel ingrijpen als dat nodig is.",
+  },
+  {
+    question: "Hoe weet ik of de automatisering echt resultaat oplevert?",
+    answer: "We meten vanaf dag één. Je krijgt een dashboard met concrete cijfers: bespaarde uren, verwerkte taken, foutpercentages. Zo zie je precies wat de automatisering oplevert en waar we nog kunnen optimaliseren.",
+  },
+  {
+    question: "Hoe verstorend is de implementatie voor mijn team?",
+    answer: "Minimaal. We bouwen parallel aan je bestaande processen en schakelen pas over als alles getest is. Je team hoeft niets anders te doen — wij zorgen dat de overgang soepel verloopt, zonder downtime.",
+  },
+  {
+    question: "Zit ik vast aan een langlopend contract?",
+    answer: "Nee. We werken projectmatig zonder langlopende verplichtingen. Je zit nergens aan vast en kunt op elk moment stoppen.",
+  },
+  {
+    question: "Kan ik een concreet voorbeeld zien van wat jullie bouwen?",
+    answer: "Zeker. Denk aan een makelaar wiens CRM automatisch wordt bijgewerkt na elk telefoontje, of een accountantskantoor waar facturen vanzelf worden verwerkt. In ons gratis gesprek tonen we voorbeelden die aansluiten bij jouw branche.",
+  },
+  {
+    question: "Wat als mijn bedrijf groeit of mijn processen veranderen?",
+    answer: "Onze oplossingen zijn modulair opgebouwd en schalen mee met je bedrijf. Nieuwe tools toevoegen, extra workflows inrichten of volumes opschalen — dat kan zonder alles opnieuw te bouwen.",
+  },
+  {
+    question: "Bieden jullie ook ondersteuning na de oplevering?",
+    answer: "Ja. Na oplevering blijven we beschikbaar voor vragen, updates en optimalisaties. We monitoren de prestaties en stellen proactief verbeteringen voor naarmate je bedrijf evolueert.",
+  },
 ];
 
 // --- Use Cases Data ---
@@ -442,7 +494,7 @@ const LogoCarousel = ({
       tweensRef.current.forEach(tween => tween.kill());
       tweensRef.current = [];
     };
-  }, [isMounted, resizeKey, spacingMultiplier, durationSeconds]);
+  }, [isMounted, resizeKey, spacingMultiplier]);
 
   // Use all logos for the carousel
   const displayLogos = logos ?? integrationLogos;
@@ -517,13 +569,10 @@ const LogoCarousel = ({
           }}
         >
           <div className="w-full h-full rounded-xl bg-white shadow-lg border border-[#1A2D63]/5 p-2.5 flex items-center justify-center">
-            <Image
+            <img
               src={logo.logo}
               alt={logo.name}
-              width={74}
-              height={74}
               className="w-full h-full object-contain"
-              unoptimized
             />
           </div>
         </div>
@@ -549,6 +598,57 @@ const MobileLogoCarousel = () => {
         />
       </div>
     </div>
+  );
+};
+
+// --- Company Types Carousel ---
+const companyTypes = [
+  { label: "Accountantskantoren", icon: Calculator },
+  { label: "Coaching", icon: Target },
+  { label: "HVAC & Installatie", icon: Flame },
+  { label: "Marketingbureaus", icon: Megaphone },
+  { label: "E-commerce", icon: ShoppingCart },
+  { label: "Logistiek & Transport", icon: Truck },
+  { label: "Consultancy", icon: Briefcase },
+  { label: "HR & Recruitment", icon: Users },
+  { label: "Bouwbedrijven & Aannemers", icon: Hammer },
+  { label: "Horeca", icon: UtensilsCrossed },
+  { label: "Event- & Verhuurbedrijven", icon: Ticket },
+  { label: "Facility Management", icon: Building },
+  { label: "VZW's", icon: Heart },
+  { label: "Energie", icon: Zap },
+  { label: "Vastgoed", icon: Building2 },
+];
+
+const CompanyTypesCarousel = () => {
+  const items = [...companyTypes, ...companyTypes];
+
+  return (
+    <section className="py-10 md:py-14 bg-[#FDFBF7] overflow-hidden">
+      <div className="max-w-4xl mx-auto border-t border-[#1A2D63]/[0.08] mb-8" />
+      <p className="text-center text-[#1A2D63]/50 text-[13px] uppercase tracking-wider mb-7 font-medium">
+        Voor bedrijven zoals het jouwe
+      </p>
+      <div
+        className="relative"
+        style={{
+          maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+          WebkitMaskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+        }}
+      >
+        <div className="flex gap-4 w-max animate-[companyScroll_30s_linear_infinite]">
+          {items.map((item, i) => (
+            <div key={i} className="flex items-center gap-2 shrink-0 bg-[#1A2D63]/[0.07] border border-[#1A2D63]/[0.08] rounded-full px-3 py-1">
+              <item.icon className="w-4 h-4 text-[#1A2D63]/40" />
+              <span className="text-[13px] font-medium text-[#1A2D63]/65 whitespace-nowrap">
+                {item.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="max-w-4xl mx-auto border-t border-[#1A2D63]/[0.08] mt-8" />
+    </section>
   );
 };
 
@@ -1325,131 +1425,388 @@ const illustrationComponents: Record<string, React.FC<{ progress: number }>> = {
   'reporting': ReportingIllustration,
 };
 
-// --- Use Cases Section: 1 voorbeeld per scherm, pijlen, animaties ---
+// --- Use Cases Section Component (Scroll-Driven) ---
 const UseCasesSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const pinnedRef = useRef<HTMLDivElement>(null);
+  const textContentRef = useRef<HTMLDivElement>(null);
+  const prevIndexRef = useRef<number>(0);
+  const isFirstRender = useRef<boolean>(true);
+  const scrollDirectionRef = useRef<number>(1); // 1 = scrolling down, -1 = scrolling up
   const [activeIndex, setActiveIndex] = useState(0);
-  const [illustrationProgress, setIllustrationProgress] = useState(0);
+  const [localProgress, setLocalProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  
   const TOTAL_USE_CASES = useCasesData.length;
-
-  // Bij wisselen van voorbeeld: illustratie van 0 → 1 animeren
+  const SCROLL_DISTANCE = 5800; // Total scroll distance (increased for reduced sensitivity)
+  const START_BUFFER = 0.15; // 15% hold at start before animation begins
+  const ANIMATION_PORTION = 0.50; // 50% for animation
+  // Remaining 35% = hold at end before transition
+  
+  // Check for mobile on mount and resize
   useEffect(() => {
-    setIllustrationProgress(0);
-    const obj = { value: 0 };
-    const tween = gsap.to(obj, {
-      value: 1,
-      duration: 0.9,
-      ease: 'power2.out',
-      onUpdate: () => setIllustrationProgress(obj.value),
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  // GSAP text crossfade animation (Desktop only)
+  useGSAP(() => {
+    if (!textContentRef.current || isMobile) return;
+    
+    const ctx = gsap.context(() => {
+      const prevIndex = prevIndexRef.current;
+      const currentIndex = activeIndex;
+      
+      // Set initial states for all content blocks
+      useCasesData.forEach((_, index) => {
+        if (index !== currentIndex && index !== prevIndex) {
+          gsap.set(`.uc-content-${index}`, { visibility: 'hidden' });
+          gsap.set([`.uc-pill-${index}`, `.uc-title-${index}`, `.uc-desc-${index}`, `.uc-stat-${index}`], { 
+            opacity: 0, y: 20 
+          });
+        }
+      });
+      
+      // On first render, just animate entrance
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        gsap.set(`.uc-content-${currentIndex}`, { visibility: 'visible' });
+        
+        const entranceTl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+        entranceTl
+          .fromTo(`.uc-pill-${currentIndex}`, 
+            { y: 20, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 0.35 }
+          )
+          .fromTo(`.uc-title-${currentIndex}`, 
+            { y: 25, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 0.4 }, 
+            '-=0.2'
+          )
+          .fromTo(`.uc-desc-${currentIndex}`, 
+            { y: 25, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 0.4 }, 
+            '-=0.25'
+          )
+          .fromTo(`.uc-stat-${currentIndex}`, 
+            { y: 30, opacity: 0, scale: 0.95 }, 
+            { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.7)' }, 
+            '-=0.2'
+          );
+        
+        return;
+      }
+      
+      // Crossfade: exit previous, enter current (direction-aware)
+      if (prevIndex !== currentIndex) {
+        const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+        
+        // Get scroll direction: 1 = scrolling down, -1 = scrolling up
+        const direction = scrollDirectionRef.current;
+        
+        // Direction-aware Y values:
+        // Scrolling DOWN: exit slides UP (-), enter comes from BELOW (+)
+        // Scrolling UP: exit slides DOWN (+), enter comes from ABOVE (-)
+        const exitY = direction === 1 ? -15 : 15;
+        const enterFromY = direction === 1 ? 20 : -20;
+        const enterFromYLarge = direction === 1 ? 25 : -25;
+        const enterFromYStat = direction === 1 ? 30 : -30;
+        
+        // Make both visible during transition
+        gsap.set(`.uc-content-${prevIndex}`, { visibility: 'visible' });
+        gsap.set(`.uc-content-${currentIndex}`, { visibility: 'visible' });
+        
+        // Exit previous (staggered fade out + direction-aware slide)
+        tl.to(`.uc-pill-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' })
+          .to(`.uc-title-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' }, '-=0.18')
+          .to(`.uc-desc-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' }, '-=0.18')
+          .to(`.uc-stat-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' }, '-=0.18')
+          // Hide previous after exit
+          .set(`.uc-content-${prevIndex}`, { visibility: 'hidden' })
+          
+          // Enter current (staggered fade in + direction-aware slide)
+          .fromTo(`.uc-pill-${currentIndex}`, 
+            { y: enterFromY, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 0.35 }, 
+            '-=0.15'
+          )
+          .fromTo(`.uc-title-${currentIndex}`, 
+            { y: enterFromYLarge, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 0.4 }, 
+            '-=0.25'
+          )
+          .fromTo(`.uc-desc-${currentIndex}`, 
+            { y: enterFromYLarge, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 0.4 }, 
+            '-=0.3'
+          )
+          .fromTo(`.uc-stat-${currentIndex}`, 
+            { y: enterFromYStat, opacity: 0, scale: 0.95 }, 
+            { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.7)' }, 
+            '-=0.25'
+          );
+      }
+      
+      // Update prevIndexRef for next transition
+      prevIndexRef.current = currentIndex;
+      
+    }, textContentRef);
+    
+    return () => ctx.revert();
+  }, { scope: textContentRef, dependencies: [activeIndex, isMobile] });
+  
+  // GSAP scroll-driven animations (Desktop only)
+  useGSAP(() => {
+    if (!sectionRef.current || !pinnedRef.current || isMobile) return;
+    
+    const mm = gsap.matchMedia();
+    
+    mm.add("(min-width: 768px)", () => {
+      // Create ScrollTrigger for the pinned section
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: `+=${SCROLL_DISTANCE}`,
+        pin: pinnedRef.current,
+        scrub: 1.4,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          
+          // Track scroll direction (1 = down/forward, -1 = up/backward)
+          scrollDirectionRef.current = self.direction;
+          
+          // Calculate which use case we're on (0 to TOTAL_USE_CASES - 1)
+          const rawIndex = progress * TOTAL_USE_CASES;
+          const newIndex = Math.min(Math.floor(rawIndex), TOTAL_USE_CASES - 1);
+          
+          // Calculate progress within current use case segment (0 to 1)
+          const segmentProgress = rawIndex - newIndex;
+          
+          // Map segment progress to animation progress with hold periods
+          // First 15% = hold at 0 (buffer before animation starts)
+          // Next 50% = animation plays (0 → 1)
+          // Last 35% = hold at 1 (breathing room before next)
+          let animationProgress: number;
+          if (segmentProgress <= START_BUFFER) {
+            // Start buffer: stay at 0
+            animationProgress = 0;
+          } else if (segmentProgress <= START_BUFFER + ANIMATION_PORTION) {
+            // Animation phase: scale to 0-1
+            animationProgress = (segmentProgress - START_BUFFER) / ANIMATION_PORTION;
+          } else {
+            // End hold phase: stay at 1
+            animationProgress = 1;
+          }
+          
+          setActiveIndex(newIndex);
+          setLocalProgress(Math.min(animationProgress, 1));
+        },
+      });
+      
+      return () => {
+        ScrollTrigger.getAll().forEach(st => st.kill());
+      };
     });
-    return () => { tween.kill(); };
-  }, [activeIndex]);
+    
+    return () => mm.revert();
+  }, { scope: sectionRef, dependencies: [isMobile] });
+  
+  // Get the progress to pass to each illustration
+  const getIllustrationProgress = (index: number) => {
+    if (index < activeIndex) return 1; // Already passed - show completed state
+    if (index > activeIndex) return 0; // Not reached yet - show initial state
+    return localProgress; // Current one - use scroll progress
+  };
 
-  const goTo = useCallback((index: number) => {
-    setActiveIndex(Math.max(0, Math.min(index, TOTAL_USE_CASES - 1)));
-  }, [TOTAL_USE_CASES]);
-
-  const useCase = useCasesData[activeIndex];
-  const IllustrationComponent = illustrationComponents[useCase?.id];
-
+  // Desktop: Scroll-driven split-screen layout
+  if (!isMobile) {
+    return (
+      <section 
+        ref={sectionRef} 
+        id="use-cases" 
+        className="relative bg-[#FDFBF7]"
+        style={{ height: `calc(${SCROLL_DISTANCE}px + 100vh)` }}
+      >
+        {/* Pinned container - full viewport height */}
+        <div 
+          ref={pinnedRef}
+          className="h-screen w-full flex flex-col justify-center"
+        >
+          {/* Centered Header - styled like HowItWorksSection */}
+          <div className="text-center mb-12 lg:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
+              Praktijkvoorbeelden
+            </h2>
+            <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
+              Hoe klanten AI gebruiken
+            </p>
+          </div>
+          
+          <div className="w-full max-w-[1400px] mx-auto px-8 lg:px-16">
+            {/* Split-screen layout */}
+            <div className="flex items-center gap-12 lg:gap-20">
+              
+              {/* LEFT: Illustrations (50%) */}
+              <div className="w-1/2 relative flex items-center justify-center">
+                <div className="w-full max-w-[480px] aspect-[4/3] relative">
+                  {useCasesData.map((useCase, index) => {
+                    const IllustrationComponent = illustrationComponents[useCase.id];
+                    const isActive = index === activeIndex;
+                    const progress = getIllustrationProgress(index);
+                    
+                    return IllustrationComponent ? (
+                      <div 
+                        key={useCase.id}
+                        className="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
+                        style={{ 
+                          opacity: isActive ? 1 : 0,
+                          pointerEvents: isActive ? 'auto' : 'none',
+                        }}
+                      >
+                        <IllustrationComponent progress={progress} />
+                      </div>
+                    ) : null;
+                  })}
+                </div>
+              </div>
+              
+              {/* RIGHT: Text Content (50%) */}
+              <div className="w-1/2 relative">
+                <div className="max-w-[480px]">
+                  {/* Use case content - GSAP crossfade based on activeIndex */}
+                  <div ref={textContentRef} className="relative min-h-[280px]">
+                    {useCasesData.map((useCase, index) => {
+                      const isActive = index === activeIndex;
+                      
+                      return (
+                        <div 
+                          key={useCase.id}
+                          className={`absolute inset-0 uc-content-${index}`}
+                          style={{ 
+                            visibility: isActive ? 'visible' : 'hidden',
+                            pointerEvents: isActive ? 'auto' : 'none',
+                          }}
+                        >
+                          {/* Category pill */}
+                          <span className={`uc-pill-${index} inline-block px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-[#1A2D63]/50 border border-[#1A2D63]/15 rounded-full mb-4`}>
+                            {useCase.categoryLabel}
+                          </span>
+                          
+                          {/* Title */}
+                          <h3 className={`uc-title-${index} font-newsreader text-2xl lg:text-3xl text-[#1A2D63] mb-4 leading-tight`}>
+                            {useCase.title}
+                          </h3>
+                          
+                          {/* Description */}
+                          <p className={`uc-desc-${index} text-[#1A2D63]/60 text-base lg:text-lg leading-relaxed mb-6`}>
+                            {useCase.description}
+                          </p>
+                          
+                          {/* Stat highlight */}
+                          <div className={`uc-stat-${index} inline-flex items-baseline gap-2 bg-[#1A2D63] text-white px-5 py-3 rounded-xl shadow-[0_4px_20px_-4px_rgba(26,45,99,0.35)]`}>
+                            <span className="font-newsreader text-3xl lg:text-4xl font-light">
+                              {useCase.stat.value}
+                            </span>
+                            <span className="text-white/60 text-sm">
+                              {useCase.stat.label}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Progress indicator */}
+                  <div className="mt-10 flex items-center gap-3">
+                    {useCasesData.map((_, index) => (
+                      <div 
+                        key={index}
+                        className={`h-1 rounded-full transition-all duration-300 ${
+                          index === activeIndex 
+                            ? 'w-8 bg-[#1A2D63]' 
+                            : index < activeIndex
+                              ? 'w-2 bg-[#1A2D63]/40'
+                              : 'w-2 bg-[#1A2D63]/15'
+                        }`}
+                      />
+                    ))}
+                    <span className="ml-2 text-sm text-[#1A2D63]/40">
+                      {activeIndex + 1} / {TOTAL_USE_CASES}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+  
+  // Mobile: Simplified vertical scroll layout (not pinned)
   return (
-    <section ref={sectionRef} id="use-cases" className="py-16 md:py-20 px-4 md:px-8 bg-[#FDFBF7]">
-      <div className="max-w-[720px] mx-auto">
-        {/* Header */}
-        <div className="text-center mb-10 md:mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
+    <section 
+      ref={sectionRef} 
+      id="use-cases" 
+      className="py-16 px-6 bg-[#FDFBF7]"
+    >
+      <div className="max-w-[600px] mx-auto">
+        {/* Header - styled like HowItWorksSection */}
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
             Praktijkvoorbeelden
           </h2>
-          <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
+          <p className="text-[#1A2D63]/60 text-lg">
             Hoe klanten AI gebruiken
           </p>
         </div>
-
-        {/* Eén voorbeeld per scherm + pijlen */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => goTo(activeIndex - 1)}
-            disabled={activeIndex === 0}
-            aria-label="Vorige"
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/95 shadow-lg border border-[#1A2D63]/10 flex items-center justify-center text-[#1A2D63] hover:bg-white disabled:opacity-40 disabled:pointer-events-none transition-opacity -translate-x-2 md:-translate-x-6"
-          >
-            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
-          </button>
-          <button
-            type="button"
-            onClick={() => goTo(activeIndex + 1)}
-            disabled={activeIndex === TOTAL_USE_CASES - 1}
-            aria-label="Volgende"
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/95 shadow-lg border border-[#1A2D63]/10 flex items-center justify-center text-[#1A2D63] hover:bg-white disabled:opacity-40 disabled:pointer-events-none transition-opacity translate-x-2 md:translate-x-6"
-          >
-            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-          </button>
-
-          <AnimatePresence mode="wait">
-            {useCase && (
-              <motion.div
-                key={activeIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
+        
+        {/* Use cases as vertical cards */}
+        <div className="space-y-8">
+          {useCasesData.map((useCase, index) => {
+            const IllustrationComponent = illustrationComponents[useCase.id];
+            
+            return (
+              <div 
+                key={useCase.id}
                 className="bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(26,45,99,0.12)] overflow-hidden"
               >
-                {/* Illustratie met progress-animatie (0→1 bij wissel) */}
-                <div className="h-[220px] md:h-[280px] flex items-center justify-center bg-[#FDFBF7]/50 p-4 md:p-6">
+                {/* Illustration */}
+                <div className="h-[200px] flex items-center justify-center bg-[#FDFBF7]/50 p-4">
                   {IllustrationComponent && (
-                    <IllustrationComponent progress={illustrationProgress} key={useCase.id} />
+                    <IllustrationComponent progress={1} />
                   )}
                 </div>
-                {/* Tekst met entrance-animatie */}
-                <motion.div
-                  className="p-5 md:p-8"
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                >
+                
+                {/* Content */}
+                <div className="p-5">
                   <span className="inline-block px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[#1A2D63]/50 border border-[#1A2D63]/10 rounded-full mb-3">
                     {useCase.categoryLabel}
                   </span>
-                  <h3 className="font-newsreader text-xl md:text-3xl text-[#1A2D63] mb-2">
+                  
+                  <h3 className="font-newsreader text-xl text-[#1A2D63] mb-2">
                     {useCase.title}
                   </h3>
-                  <p className="text-[#1A2D63]/55 text-sm md:text-lg leading-relaxed mb-4">
+                  
+                  <p className="text-[#1A2D63]/55 text-sm leading-relaxed mb-4">
                     {useCase.description}
                   </p>
-                  <div className="inline-flex items-baseline gap-1.5 bg-[#1A2D63] text-white px-4 py-2.5 rounded-lg">
-                    <span className="font-newsreader text-xl md:text-2xl font-light">
+                  
+                  <div className="inline-flex items-baseline gap-1.5 bg-[#1A2D63] text-white px-3 py-2 rounded-lg">
+                    <span className="font-newsreader text-xl font-light">
                       {useCase.stat.value}
                     </span>
-                    <span className="text-white/60 text-xs md:text-sm">
+                    <span className="text-white/60 text-xs">
                       {useCase.stat.label}
                     </span>
                   </div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Dots + counter */}
-          <div className="flex items-center justify-center gap-3 mt-6">
-            {useCasesData.map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                onClick={() => goTo(index)}
-                aria-label={`Ga naar voorbeeld ${index + 1}`}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  index === activeIndex
-                    ? 'w-8 bg-[#1A2D63]'
-                    : 'w-2 bg-[#1A2D63]/25 hover:bg-[#1A2D63]/40'
-                }`}
-              />
-            ))}
-            <span className="ml-2 text-sm text-[#1A2D63]/50">
-              {activeIndex + 1} / {TOTAL_USE_CASES}
-            </span>
-          </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -1484,6 +1841,11 @@ const howItWorksDetails = {
 const HowItWorksSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const pinContainerRef = useRef<HTMLDivElement>(null);
+  const headerWrapperRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const underlinePathRef = useRef<SVGPathElement>(null);
+  const cardsWrapperRef = useRef<HTMLDivElement>(null);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const line1Ref = useRef<SVGPathElement>(null);
@@ -1492,343 +1854,323 @@ const HowItWorksSection = () => {
   const card1Ref = useRef<HTMLDivElement>(null);
   const card2Ref = useRef<HTMLDivElement>(null);
   const card3Ref = useRef<HTMLDivElement>(null);
-  const card1ContentRef = useRef<HTMLDivElement>(null);
-  const card2ContentRef = useRef<HTMLDivElement>(null);
-  const card3ContentRef = useRef<HTMLDivElement>(null);
-  const number1Ref = useRef<HTMLSpanElement>(null);
-  const number2Ref = useRef<HTMLSpanElement>(null);
-  const number3Ref = useRef<HTMLSpanElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const mobileCTARef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
+  const ctaDesktopRef = useRef<HTMLDivElement>(null);
+  const ctaMobileRef = useRef<HTMLDivElement>(null);
 
-  // Function to calculate and update SVG line paths based on FINAL card positions (not animated positions)
-  // Uses offset* properties which give base positions without CSS transforms
+  // Calculate and update SVG line paths based on card positions
   const updateLinePaths = useCallback(() => {
     if (!cardsContainerRef.current || !card1Ref.current || !card2Ref.current || !card3Ref.current) return;
     if (!line1Ref.current || !line2Ref.current || !svgRef.current) return;
 
-    // Get card dimensions and base positions (without GSAP transforms)
-    // offsetLeft/offsetWidth give position relative to offsetParent (the grid container)
     const card1Width = card1Ref.current.offsetWidth;
     const card2Width = card2Ref.current.offsetWidth;
-    
+
     const card1Left = card1Ref.current.offsetLeft;
     const card2Left = card2Ref.current.offsetLeft;
     const card3Left = card3Ref.current.offsetLeft;
 
-    // Final Y offsets (from GSAP animation - these are the settled positions)
-    const card1FinalY = 60;
-    const card2FinalY = 180;
-    const card3FinalY = 300;
-
-    // Fixed connection point offset from top of card (targets the header area)
-    // Using a fixed value ensures consistent line lengths regardless of card content
-    const connectionOffset = 80;
-
-    // Update SVG viewBox to match container dimensions
     const containerWidth = cardsContainerRef.current.offsetWidth;
-    const containerHeight = 600; // Fixed height to accommodate all cards and lines
+    const containerHeight = cardsContainerRef.current.offsetHeight;
     svgRef.current.setAttribute('viewBox', `0 0 ${containerWidth} ${containerHeight}`);
 
-    // Calculate connection points at FINAL settled positions
-    // Lines connect at a fixed offset from top of each card
-    // Line 1: Card 1 right edge → Card 2 left edge
+    // Y position: vertically centered on the cards
+    const connectionY = card1Ref.current.offsetTop + card1Ref.current.offsetHeight / 2;
+
+    // Line 1: Card 1 right edge -> Card 2 left edge
     const line1StartX = card1Left + card1Width;
-    const line1StartY = card1FinalY + connectionOffset;
     const line1EndX = card2Left;
-    const line1EndY = card2FinalY + connectionOffset;
 
-    // Line 2: Card 2 right edge → Card 3 left edge
+    // Line 2: Card 2 right edge -> Card 3 left edge
     const line2StartX = card2Left + card2Width;
-    const line2StartY = card2FinalY + connectionOffset;
     const line2EndX = card3Left;
-    const line2EndY = card3FinalY + connectionOffset;
 
-    // Build smooth S-curve paths using cubic bezier
-    // The curve starts horizontal, bends down, then ends horizontal
     const midX1 = (line1StartX + line1EndX) / 2;
-    const path1 = `M ${line1StartX},${line1StartY} C ${midX1},${line1StartY} ${midX1},${line1EndY} ${line1EndX},${line1EndY}`;
+    const path1 = `M ${line1StartX},${connectionY} C ${midX1},${connectionY} ${midX1},${connectionY} ${line1EndX},${connectionY}`;
 
     const midX2 = (line2StartX + line2EndX) / 2;
-    const path2 = `M ${line2StartX},${line2StartY} C ${midX2},${line2StartY} ${midX2},${line2EndY} ${line2EndX},${line2EndY}`;
+    const path2 = `M ${line2StartX},${connectionY} C ${midX2},${connectionY} ${midX2},${connectionY} ${line2EndX},${connectionY}`;
 
     line1Ref.current.setAttribute('d', path1);
     line2Ref.current.setAttribute('d', path2);
-
-    // Calculate path lengths for strokeDasharray (needed for drawSVG)
-    const length1 = line1Ref.current.getTotalLength();
-    const length2 = line2Ref.current.getTotalLength();
-    
-    line1Ref.current.style.strokeDasharray = `${length1}`;
-    line1Ref.current.style.strokeDashoffset = `${length1}`;
-    line2Ref.current.style.strokeDasharray = `${length2}`;
-    line2Ref.current.style.strokeDashoffset = `${length2}`;
   }, []);
 
-  // GSAP scroll-triggered animations - Theatrical Curtain Rise with Pinning
+  // Calculate line paths on mount and resize (only for mobile; desktop handled in GSAP setup)
+  useEffect(() => {
+    updateLinePaths();
+  }, [updateLinePaths]);
+
+  // GSAP scroll-triggered text reveal + card entrance animation
   useGSAP(() => {
     if (!sectionRef.current) return;
 
     const mm = gsap.matchMedia();
 
-    // Desktop animations (768px+) - Full theatrical pinned experience
+    // Desktop (768px+): Pinned scroll-driven animation
     mm.add("(min-width: 768px)", () => {
-      if (!pinContainerRef.current || !line1Ref.current || !line2Ref.current || !card1Ref.current || !card2Ref.current || !card3Ref.current) return;
-      if (!card1ContentRef.current || !card2ContentRef.current || !card3ContentRef.current) return;
+      if (!pinContainerRef.current || !headingRef.current || !subtitleRef.current) return;
+      if (!card1Ref.current || !card2Ref.current || !card3Ref.current) return;
+      if (!cardsWrapperRef.current || !headerWrapperRef.current) return;
 
-      // Calculate line paths FIRST (synchronously) before setting initial states
       updateLinePaths();
 
-      // Pinned timeline - shorter scroll so steps appear sooner after the title
+      // Split heading and subtitle into words
+      const headingSplit = SplitText.create(headingRef.current, { type: "words" });
+      const subtitleSplit = SplitText.create(subtitleRef.current, { type: "words" });
+
+      // Initial states: words slightly visible (ghost/placeholder effect)
+      gsap.set(headingSplit.words, { opacity: 0.25, color: "rgba(26, 45, 99, 0.3)" });
+      gsap.set(subtitleSplit.words, { opacity: 0.25, color: "rgba(26, 45, 99, 0.3)" });
+
+      // Header starts large and centered in viewport
+      // Offset y by half the cards wrapper height so the header is truly vertically centered
+      // (the invisible cards wrapper still occupies flex layout space, pushing the header up)
+      const cardsH = cardsWrapperRef.current.offsetHeight;
+      gsap.set(headerWrapperRef.current, {
+        scale: 1.6,
+        y: cardsH / 2,
+      });
+
+      // Underline starts completely hidden
+      if (underlinePathRef.current) {
+        gsap.set(underlinePathRef.current, { drawSVG: "0%", opacity: 0 });
+      }
+
+      // Cards + CTA start hidden below
+      gsap.set([card1Ref.current, card2Ref.current, card3Ref.current], {
+        y: 100,
+        opacity: 0,
+      });
+      gsap.set([line1Ref.current, line2Ref.current], {
+        drawSVG: "0%",
+        opacity: 0,
+      });
+      if (ctaDesktopRef.current) {
+        gsap.set(ctaDesktopRef.current, { opacity: 0, y: 30 });
+      }
+
+      // Cards wrapper starts invisible and pushed down
+      gsap.set(cardsWrapperRef.current, {
+        opacity: 0,
+        y: 60,
+      });
+
+      // Master timeline with pinned ScrollTrigger
+      // Scroll distance of 2000px gives a slow, deliberate feel
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: pinContainerRef.current,
+          start: "top top",
+          end: "+=2000",
           pin: true,
-          start: "top 18%",
-          end: "+=1000",
-          scrub: 2,
-          pinSpacing: true,
+          scrub: true,
           anticipatePin: 1,
         }
       });
 
-      // Initial state - cards start below viewport
-      gsap.set([card1Ref.current, card2Ref.current, card3Ref.current], {
-        y: "100vh",
-        opacity: 0,
-      });
-      gsap.set([card1ContentRef.current, card2ContentRef.current, card3ContentRef.current], {
-        height: 0,
-        opacity: 0,
-        marginTop: 0,
-      });
-      gsap.set([number1Ref.current, number2Ref.current, number3Ref.current], {
-        opacity: 0,
-      });
-      // Lines start hidden (opacity 0) AND at drawSVG 0%
-      gsap.set([line1Ref.current, line2Ref.current], { 
-        drawSVG: "0%",
-        opacity: 0,
-      });
-      if (ctaRef.current) {
-        // CTA starts hidden well below Card 3, will animate in while everything shifts up
-        // Card 3 at y:240 + ~400px expanded height + 100px gap = ~740 minimum
-        gsap.set(ctaRef.current, { opacity: 0, top: 890 });
+      // Phase 1 (0 - 0.64): Word-by-word text reveal (ghost -> solid)
+      // Heading words solidify sequentially
+      tl.to(headingSplit.words, {
+        opacity: 1,
+        color: "rgba(26, 45, 99, 1)",
+        duration: 0.4,
+        stagger: 0.08,
+        ease: "none",
+      }, 0);
+
+      // Underline draws in after "zonder gedoe" words are fully animated
+      // Heading word "gedoe" finishes at ~0.64 (start 0.24 + duration 0.4)
+      if (underlinePathRef.current) {
+        tl.to(underlinePathRef.current, {
+          drawSVG: "100%",
+          opacity: 1,
+          duration: 0.2,
+          ease: "power2.inOut",
+        }, 0.65);
       }
 
-      // Timeline with proper spacing and dead time buffers:
-      // Card 1 starts at 0.03 (3%) for responsive but not instant start
-      // Lines draw AFTER the NEXT card has settled (connecting the two)
-      
-      // 0.03 - 0.16: Card 1 rises
-      // 0.16 - 0.24: Card 1 expands
-      // 0.24 - 0.30: Buffer
-      // 0.30 - 0.43: Card 2 rises
-      // 0.43 - 0.51: Card 2 expands
-      // 0.51 - 0.59: Line 1 draws (after Card 2 settled - connects Card 1 to Card 2)
-      // 0.59 - 0.65: Buffer
-      // 0.65 - 0.78: Card 3 rises
-      // 0.78 - 0.86: Card 3 expands
-      // 0.86 - 0.94: Line 2 draws (after Card 3 settled - connects Card 2 to Card 3)
-      // 0.94 - 1.00: CTA appears
+      // Subtitle words solidify after heading starts
+      tl.to(subtitleSplit.words, {
+        opacity: 1,
+        color: "rgba(26, 45, 99, 1)",
+        duration: 0.3,
+        stagger: 0.06,
+        ease: "none",
+      }, 0.3);
 
-      // Card 1 - Rises first, settles highest (y: 0), then expands
-      tl.addLabel("card1Start", 0)
-        .to(card1Ref.current, {
+      // --- Dead time (~0.96 to 1.25): text fully visible, user reads ---
+
+      // Phase 2 (1.25+): Shrink header + cards rise
+      // Calculate how far to shift header from center to top of pinned area
+      const pinH = pinContainerRef.current.offsetHeight;
+      const headerH = headerWrapperRef.current.offsetHeight;
+      const shiftY = -(pinH / 2 - headerH / 2 - 96); // 96px = top padding equivalent
+
+      // Header shrinks back to normal size and shifts from center to top
+      tl.to(headerWrapperRef.current, {
+        scale: 1,
+        y: shiftY,
+        duration: 0.4,
+        ease: "power2.inOut",
+      }, 1.25);
+
+      // Cards wrapper fades in and rises
+      tl.to(cardsWrapperRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.35,
+        ease: "power2.out",
+      }, 1.3);
+
+      // Individual cards stagger in
+      tl.to(card1Ref.current, {
+        y: 0,
+        opacity: 1,
+        duration: 0.25,
+        ease: "power2.out",
+      }, 1.33)
+      .to(card2Ref.current, {
+        y: 0,
+        opacity: 1,
+        duration: 0.25,
+        ease: "power2.out",
+      }, 1.37)
+      .to(card3Ref.current, {
+        y: 0,
+        opacity: 1,
+        duration: 0.25,
+        ease: "power2.out",
+      }, 1.41);
+
+      // Lines draw in
+      tl.to(line1Ref.current, {
+        drawSVG: "100%",
+        opacity: 1,
+        duration: 0.15,
+        ease: "power2.inOut",
+      }, 1.47)
+      .to(line2Ref.current, {
+        drawSVG: "100%",
+        opacity: 1,
+        duration: 0.15,
+        ease: "power2.inOut",
+      }, 1.51);
+
+      // CTA fades in
+      if (ctaDesktopRef.current) {
+        tl.to(ctaDesktopRef.current, {
+          opacity: 1,
           y: 0,
-          opacity: 1,
-          ease: "power3.out",
-          duration: 0.13,
-        }, 0)
-        .to(number1Ref.current, {
-          opacity: 1,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.05)
-        .addLabel("card1Expand", 0.16)
-        .to(card1ContentRef.current, {
-          height: "auto",
-          opacity: 1,
-          marginTop: 16,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.16);
+          duration: 0.12,
+          ease: "power2.out",
+        }, 1.55);
+      }
 
-      // Card 2 - Rises second, settles middle (y: 120px), then expands
-      tl.addLabel("card2Start", 0.30)
-        .to(card2Ref.current, {
-          y: 120,
-          opacity: 1,
-          ease: "power3.out",
-          duration: 0.13,
-        }, 0.30)
-        .to(number2Ref.current, {
-          opacity: 1,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.35)
-        // Line 1 starts drawing just as Card 2 settles, before expansion
-        .addLabel("line1Draw", 0.41)
-        .to(line1Ref.current, {
-          drawSVG: "100%",
-          opacity: 1,
-          ease: "power2.inOut",
-          duration: 0.10,
-        }, 0.41)
-        .addLabel("card2Expand", 0.43)
-        .to(card2ContentRef.current, {
-          height: "auto",
-          opacity: 1,
-          marginTop: 16,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.43);
+      // Dwell zone: cards + CTA fully visible, section stays pinned
+      // Empty tween pads the timeline so the section lingers before releasing
+      tl.to({}, { duration: 0.35 }, 1.67);
 
-      // Card 3 - Rises last, settles lowest (y: 240px), then expands
-      tl.addLabel("card3Start", 0.65)
-        .to(card3Ref.current, {
-          y: 240,
-          opacity: 1,
-          ease: "power3.out",
-          duration: 0.13,
-        }, 0.65)
-        .to(number3Ref.current, {
-          opacity: 1,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.70)
-        // Line 2 starts drawing just as Card 3 settles, before expansion
-        .addLabel("line2Draw", 0.76)
-        .to(line2Ref.current, {
-          drawSVG: "100%",
-          opacity: 1,
-          ease: "power2.inOut",
-          duration: 0.10,
-        }, 0.76)
-        .addLabel("card3Expand", 0.78)
-        .to(card3ContentRef.current, {
-          height: "auto",
-          opacity: 1,
-          marginTop: 16,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.78);
-
-      // CTA appears at the end - everything shifts up together to make room
-      // Shift amount to move everything up when CTA comes in
-      const shiftAmount = -100;
-      
-      tl.addLabel("finish", 0.92)
-        // Shift all cards up
-        .to(card1Ref.current, {
-          y: 0 + shiftAmount,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.92)
-        .to(card2Ref.current, {
-          y: 120 + shiftAmount,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.92)
-        .to(card3Ref.current, {
-          y: 240 + shiftAmount,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.92)
-        // Shift SVG lines up too
-        .to(svgRef.current, {
-          y: shiftAmount,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.92)
-        // CTA comes in from below - positioned below Card 3
-        .to(ctaRef.current, {
-          opacity: 1,
-          top: 620,
-          ease: "power3.out",
-          duration: 0.08,
-        }, 0.92);
-      
-      // CTA animation finishes at 1.0 (0.92 + 0.08) - no buffer/dead time after
-
-      // Add resize listener
-      const handleResize = () => {
-        updateLinePaths();
-      };
+      const handleResize = () => updateLinePaths();
       window.addEventListener('resize', handleResize);
-
       return () => {
         window.removeEventListener('resize', handleResize);
+        headingSplit.revert();
+        subtitleSplit.revert();
       };
     });
 
-    // Mobile animations (<768px) - Simpler scroll-linked without pinning
+    // Mobile (<768px): Simple fade-in animation (no pin)
     mm.add("(max-width: 767px)", () => {
-      if (!mobileLineRef.current || !card1Ref.current || !card2Ref.current || !card3Ref.current) return;
-      if (!card1ContentRef.current || !card2ContentRef.current || !card3ContentRef.current) return;
+      if (!card1Ref.current || !card2Ref.current || !card3Ref.current) return;
 
-      // Set initial states
       gsap.set([card1Ref.current, card2Ref.current, card3Ref.current], {
-        y: 30,
+        y: 60,
         opacity: 0,
       });
-      gsap.set([card1ContentRef.current, card2ContentRef.current, card3ContentRef.current], {
-        height: "auto",
-        opacity: 1,
-        marginTop: 16,
+      if (mobileLineRef.current) {
+        gsap.set(mobileLineRef.current, { drawSVG: "0%" });
+      }
+      if (ctaMobileRef.current) {
+        gsap.set(ctaMobileRef.current, { opacity: 0, y: 20 });
+      }
+
+      // Simple heading/subtitle fade on mobile
+      if (headingRef.current) {
+        gsap.set(headingRef.current, { opacity: 0, y: 30 });
+      }
+      if (subtitleRef.current) {
+        gsap.set(subtitleRef.current, { opacity: 0, y: 20 });
+      }
+
+      const headerTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          toggleActions: "play none none none",
+        }
       });
-      gsap.set(mobileLineRef.current, { drawSVG: "0%" });
-      if (mobileCTARef.current) {
-        gsap.set(mobileCTARef.current, { opacity: 0, y: 20 });
+
+      if (headingRef.current) {
+        headerTl.to(headingRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power3.out",
+        }, 0);
+      }
+      if (subtitleRef.current) {
+        headerTl.to(subtitleRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "power3.out",
+        }, 0.1);
       }
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 70%",
-          end: "bottom 30%",
-          scrub: 2.0,
+          start: "top 75%",
+          toggleActions: "play none none none",
         }
       });
 
-      // Draw the vertical connecting line
-      tl.to(mobileLineRef.current, {
-        drawSVG: "100%",
-        ease: "none",
-        duration: 1,
-      }, 0);
-
-      // Cards rise sequentially with smooth feel
+      // Cards slide up with slight stagger
       tl.to(card1Ref.current, {
         y: 0,
         opacity: 1,
+        duration: 0.5,
         ease: "power3.out",
-        duration: 0.25,
-      }, 0.05);
-
-      tl.to(card2Ref.current, {
+      }, 0)
+      .to(card2Ref.current, {
         y: 0,
         opacity: 1,
+        duration: 0.5,
         ease: "power3.out",
-        duration: 0.25,
-      }, 0.35);
-
-      tl.to(card3Ref.current, {
+      }, 0.1)
+      .to(card3Ref.current, {
         y: 0,
         opacity: 1,
+        duration: 0.5,
         ease: "power3.out",
-        duration: 0.25,
-      }, 0.65);
+      }, 0.2);
 
-      // Mobile CTA
-      if (mobileCTARef.current) {
-        tl.to(mobileCTARef.current, {
+      // Mobile line draws
+      if (mobileLineRef.current) {
+        tl.to(mobileLineRef.current, {
+          drawSVG: "100%",
+          duration: 0.8,
+          ease: "power2.inOut",
+        }, 0.15);
+      }
+
+      // CTA appears
+      if (ctaMobileRef.current) {
+        tl.to(ctaMobileRef.current, {
           opacity: 1,
           y: 0,
+          duration: 0.4,
           ease: "power3.out",
-          duration: 0.1,
-        }, 0.9);
+        }, 0.35);
       }
     });
 
@@ -1837,282 +2179,271 @@ const HowItWorksSection = () => {
 
   return (
     <section ref={sectionRef} id="process" className="bg-[#FDFBF7] relative">
-      {/* Sticky Header - Stays fixed at top during entire scroll experience */}
-      <div className="sticky top-0 z-20 bg-[#FDFBF7] pt-16 md:pt-20 pb-3 md:pb-4">
-        <div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
-            AI implementeren
-            <span className="relative inline-block ml-2">
-              <span className="relative z-10">zonder gedoe</span>
-              <svg 
-                className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0" 
-                viewBox="0 0 200 20" 
+      {/* Pinned container for desktop scroll animation */}
+      <div ref={pinContainerRef} className="relative min-h-screen overflow-hidden md:flex md:flex-col md:items-center md:justify-center">
+        {/* Header - centered in viewport during pin, shrinks to normal */}
+        <div ref={headerWrapperRef} className="pt-20 md:pt-0 pb-6 md:pb-10" style={{ transformOrigin: "center center" }}>
+          <div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
+            <h2 ref={headingRef} className="text-4xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
+              AI implementeren{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10">zonder gedoe</span>
+                <svg
+                  className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
+                  viewBox="0 0 200 20"
+                  preserveAspectRatio="none"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    ref={underlinePathRef}
+                    d="M3 14 Q40 4 100 12 Q160 18 197 8"
+                    stroke="#1A2D63"
+                    strokeOpacity="0.15"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                </svg>
+              </span>
+            </h2>
+            <p ref={subtitleRef} className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
+              Geen maanden wachten. Geen IT-team nodig.
+            </p>
+          </div>
+        </div>
+
+        {/* Cards Container - rises from below during Phase 3 */}
+        <div ref={cardsWrapperRef} className="w-full px-6 md:px-12 pb-16 md:pb-20">
+          <div className="max-w-[1100px] mx-auto w-full">
+            {/* Cards Container with Connecting Lines */}
+            <div ref={cardsContainerRef} className="relative mb-6 md:mb-8 overflow-visible">
+
+              {/* Desktop: Horizontal connecting line segments between cards */}
+              <svg
+                ref={svgRef}
+                className="absolute top-0 left-0 w-full h-full z-0 hidden md:block pointer-events-none overflow-visible"
+                viewBox="0 0 1100 400"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <linearGradient id="line1Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#1A2D63" stopOpacity="0" />
+                    <stop offset="12%" stopColor="#1A2D63" stopOpacity="0.65" />
+                    <stop offset="88%" stopColor="#1A2D63" stopOpacity="0.65" />
+                    <stop offset="100%" stopColor="#1A2D63" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="line2Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#1A2D63" stopOpacity="0" />
+                    <stop offset="12%" stopColor="#1A2D63" stopOpacity="0.65" />
+                    <stop offset="88%" stopColor="#1A2D63" stopOpacity="0.65" />
+                    <stop offset="100%" stopColor="#1A2D63" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+
+                <path
+                  ref={line1Ref}
+                  d=""
+                  stroke="url(#line1Gradient)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  fill="none"
+                  style={{ opacity: 0 }}
+                />
+
+                <path
+                  ref={line2Ref}
+                  d=""
+                  stroke="url(#line2Gradient)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  fill="none"
+                  style={{ opacity: 0 }}
+                />
+              </svg>
+
+              {/* Mobile: Vertical Connecting Line SVG */}
+              <svg
+                className="absolute left-1/2 top-0 w-24 h-full -translate-x-1/2 z-0 md:hidden pointer-events-none overflow-visible"
+                viewBox="0 0 80 900"
                 preserveAspectRatio="none"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path 
-                  d="M3 14 Q40 4 100 12 Q160 18 197 8" 
-                  stroke="#1A2D63"
-                  strokeOpacity="0.15"
-                  strokeWidth="10" 
+                <defs>
+                  <linearGradient id="mobileLineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#1A2D63" stopOpacity="0.15" />
+                    <stop offset="15%" stopColor="#1A2D63" stopOpacity="0.35" />
+                    <stop offset="85%" stopColor="#1A2D63" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#1A2D63" stopOpacity="0.15" />
+                  </linearGradient>
+                </defs>
+                <path
+                  ref={mobileLineRef}
+                  d="M 40,30
+                     Q 55,120 40,240
+                     Q 25,360 40,480
+                     Q 55,600 40,720
+                     Q 25,820 40,870"
+                  stroke="url(#mobileLineGradient)"
+                  strokeWidth="3"
                   strokeLinecap="round"
                   fill="none"
+                  style={{ strokeDasharray: 1200, strokeDashoffset: 1200 }}
                 />
               </svg>
-            </span>
-          </h2>
-          <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
-            Geen maanden wachten. Geen IT-team nodig.
-          </p>
-        </div>
-      </div>
 
-      {/* Pin Container - Only cards get pinned on desktop */}
-      <div ref={pinContainerRef} className="px-6 md:px-12 flex flex-col justify-start overflow-visible -mt-2 md:-mt-4">
-        <div className="max-w-[1100px] mx-auto w-full">
-          {/* Cards Container with Connecting Line */}
-          <div ref={cardsContainerRef} className="relative mb-6 md:mb-8 md:min-h-[850px] overflow-visible">
-            
-            {/* Desktop: Two clean curved S-curve line segments connecting cards */}
-            <svg 
-              ref={svgRef}
-              className="absolute top-0 left-0 w-full h-full z-0 hidden md:block pointer-events-none overflow-visible"
-              viewBox="0 0 1100 700"
-              preserveAspectRatio="none"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Gradient definitions for faded tips at card edges */}
-              <defs>
-                {/* Segment 1: Card 1 → Card 2 */}
-                <linearGradient id="line1Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#1A2D63" stopOpacity="0" />
-                  <stop offset="12%" stopColor="#1A2D63" stopOpacity="0.65" />
-                  <stop offset="88%" stopColor="#1A2D63" stopOpacity="0.65" />
-                  <stop offset="100%" stopColor="#1A2D63" stopOpacity="0" />
-                </linearGradient>
-                {/* Segment 2: Card 2 → Card 3 */}
-                <linearGradient id="line2Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#1A2D63" stopOpacity="0" />
-                  <stop offset="12%" stopColor="#1A2D63" stopOpacity="0.65" />
-                  <stop offset="88%" stopColor="#1A2D63" stopOpacity="0.65" />
-                  <stop offset="100%" stopColor="#1A2D63" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              
-              {/* Paths are dynamically calculated in JavaScript based on actual card positions */}
-              <path
-                ref={line1Ref}
-                d=""
-                stroke="url(#line1Gradient)"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-                fill="none"
-                style={{ opacity: 0 }}
-              />
-              
-              <path
-                ref={line2Ref}
-                d=""
-                stroke="url(#line2Gradient)"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-                fill="none"
-                style={{ opacity: 0 }}
-              />
-            </svg>
+              {/* 3 Steps - Same level on desktop */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8 relative z-10 md:items-start">
 
-            {/* Mobile: Vertical Connecting Line SVG with subtle S-curve */}
-            <svg 
-              className="absolute left-1/2 top-0 w-24 h-full -translate-x-1/2 z-0 md:hidden pointer-events-none overflow-visible"
-              viewBox="0 0 80 900"
-              preserveAspectRatio="none"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <linearGradient id="mobileLineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#1A2D63" stopOpacity="0.15" />
-                  <stop offset="15%" stopColor="#1A2D63" stopOpacity="0.35" />
-                  <stop offset="85%" stopColor="#1A2D63" stopOpacity="0.35" />
-                  <stop offset="100%" stopColor="#1A2D63" stopOpacity="0.15" />
-                </linearGradient>
-              </defs>
-              <path
-                ref={mobileLineRef}
-                d="M 40,30
-                   Q 55,120 40,240
-                   Q 25,360 40,480
-                   Q 55,600 40,720
-                   Q 25,820 40,870"
-                stroke="url(#mobileLineGradient)"
-                strokeWidth="3"
-                strokeLinecap="round"
-                fill="none"
-                style={{ strokeDasharray: 1200, strokeDashoffset: 1200 }}
-              />
-            </svg>
-
-            {/* 3 Steps - Staggered layout on desktop */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8 relative z-10 md:items-start">
-              
-              {/* Step 1 - Highest position */}
-              <div
-                ref={card1Ref}
-                className="group relative rounded-3xl p-8 md:p-10 
-                           bg-white
-                           shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
-                style={{ willChange: "transform, filter, opacity" }}
-              >
-                {/* Watermark number */}
-                <div className="absolute -top-2 -left-2 md:-top-5 md:-left-3">
-                  <span ref={number1Ref} className="font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.18] select-none">01</span>
-                </div>
-                
-                <div className="relative pt-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-2xl border-2 border-[#1A2D63]/25 bg-transparent flex items-center justify-center">
-                      <MessageSquare className="w-5 h-5 text-[#1A2D63]/50" />
-                    </div>
-                    <span className="text-xs font-medium text-[#1A2D63]/40 uppercase tracking-wider">30 min gratis</span>
+                {/* Step 1 */}
+                <div
+                  ref={card1Ref}
+                  className="group relative rounded-3xl p-8 md:p-10
+                             bg-white
+                             shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
+                >
+                  {/* Watermark number */}
+                  <div className="absolute -top-2 -left-2 md:-top-5 md:-left-3">
+                    <span className="font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.18] select-none">01</span>
                   </div>
-                  
-                  <h3 className="text-xl md:text-2xl font-semibold text-[#1A2D63] mb-2">
-                    Gesprek
-                  </h3>
-                  <p className="text-[#1A2D63]/60 text-[15px] leading-relaxed">
-                    We analyseren je processen en identificeren waar AI impact heeft.
-                  </p>
-                  
-                  {/* Expandable Content - Controlled by GSAP */}
-                  <div 
-                    ref={card1ContentRef}
-                    className="overflow-hidden"
-                    style={{ height: 0, opacity: 0, marginTop: 0 }}
-                  >
-                    <div className="border-t border-[#1A2D63]/10 pt-4">
-                      <ul className="space-y-2">
-                        {howItWorksDetails.gesprek.map((point, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-[#1A2D63]/60">
-                            <Check className="w-4 h-4 text-[#1A2D63]/40 mt-0.5 flex-shrink-0" />
-                            <span>{point}</span>
-                          </li>
-                        ))}
-                      </ul>
+
+                  <div className="relative pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-2xl border-2 border-[#1A2D63]/25 bg-transparent flex items-center justify-center">
+                        <MessageSquare className="w-5 h-5 text-[#1A2D63]/50" />
+                      </div>
+                      <span className="text-xs font-medium text-[#1A2D63]/40 uppercase tracking-wider">30 min gratis</span>
+                    </div>
+
+                    <h3 className="text-xl md:text-2xl font-semibold text-[#1A2D63] mb-2">
+                      Gesprek
+                    </h3>
+                    <p className="text-[#1A2D63]/60 text-[15px] leading-relaxed">
+                      We analyseren je processen en identificeren waar AI impact heeft.
+                    </p>
+
+                    {/* Card Content - Always visible */}
+                    <div className="mt-4">
+                      <div className="border-t border-[#1A2D63]/10 pt-4">
+                        <ul className="space-y-2">
+                          {howItWorksDetails.gesprek.map((point, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-[#1A2D63]/60">
+                              <Check className="w-4 h-4 text-[#1A2D63]/40 mt-0.5 flex-shrink-0" />
+                              <span>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Step 2 - Middle position */}
-              <div
-                ref={card2Ref}
-                className="group relative rounded-3xl p-8 md:p-10 
-                           bg-white
-                           shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
-                style={{ willChange: "transform, filter, opacity" }}
-              >
-                {/* Watermark number */}
-                <div className="absolute -top-4 -left-2 md:-top-5 md:-left-3">
-                  <span ref={number2Ref} className="font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.22] select-none">02</span>
-                </div>
-                
-                <div className="relative pt-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1A2D63]/15 to-[#1A2D63]/5 border border-[#1A2D63]/10 flex items-center justify-center">
-                      <Settings className="w-5 h-5 text-[#1A2D63]/70" />
-                    </div>
-                    <span className="text-xs font-medium text-[#1A2D63]/40 uppercase tracking-wider">2-4 weken</span>
+                {/* Step 2 */}
+                <div
+                  ref={card2Ref}
+                  className="group relative rounded-3xl p-8 md:p-10
+                             bg-white
+                             shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
+                >
+                  {/* Watermark number */}
+                  <div className="absolute -top-4 -left-2 md:-top-5 md:-left-3">
+                    <span className="font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.22] select-none">02</span>
                   </div>
-                  
-                  <h3 className="text-xl md:text-2xl font-semibold text-[#1A2D63] mb-2">
-                    Bouw
-                  </h3>
-                  <p className="text-[#1A2D63]/60 text-[15px] leading-relaxed">
-                    We bouwen en integreren AI op maat van jouw workflow.
-                  </p>
-                  
-                  {/* Expandable Content - Controlled by GSAP */}
-                  <div 
-                    ref={card2ContentRef}
-                    className="overflow-hidden"
-                    style={{ height: 0, opacity: 0, marginTop: 0 }}
-                  >
-                    <div className="border-t border-[#1A2D63]/10 pt-4">
-                      <ul className="space-y-2">
-                        {howItWorksDetails.bouw.map((point, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-[#1A2D63]/60">
-                            <Check className="w-4 h-4 text-[#1A2D63]/40 mt-0.5 flex-shrink-0" />
-                            <span>{point}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Step 3 - Lowest position */}
-              <div
-                ref={card3Ref}
-                className="group relative rounded-3xl p-8 md:p-10 
-                           bg-white
-                           shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
-                style={{ willChange: "transform, filter, opacity" }}
-              >
-                {/* Watermark number */}
-                <div className="absolute -top-4 -left-2 md:-top-5 md:-left-3">
-                  <span ref={number3Ref} className="font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.28] select-none">03</span>
-                </div>
-                
-                <div className="relative pt-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-2xl bg-[#1A2D63]/15 flex items-center justify-center">
-                      <Rocket className="w-5 h-5 text-[#1A2D63]" />
+                  <div className="relative pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1A2D63]/15 to-[#1A2D63]/5 border border-[#1A2D63]/10 flex items-center justify-center">
+                        <Settings className="w-5 h-5 text-[#1A2D63]/70" />
+                      </div>
+                      <span className="text-xs font-medium text-[#1A2D63]/40 uppercase tracking-wider">2-4 weken</span>
                     </div>
-                    <span className="text-xs font-medium text-[#1A2D63]/50 uppercase tracking-wider">24/7 actief</span>
+
+                    <h3 className="text-xl md:text-2xl font-semibold text-[#1A2D63] mb-2">
+                      Bouw
+                    </h3>
+                    <p className="text-[#1A2D63]/60 text-[15px] leading-relaxed">
+                      We bouwen en integreren AI op maat van jouw workflow.
+                    </p>
+
+                    {/* Card Content - Always visible */}
+                    <div className="mt-4">
+                      <div className="border-t border-[#1A2D63]/10 pt-4">
+                        <ul className="space-y-2">
+                          {howItWorksDetails.bouw.map((point, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-[#1A2D63]/60">
+                              <Check className="w-4 h-4 text-[#1A2D63]/40 mt-0.5 flex-shrink-0" />
+                              <span>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  
-                  <h3 className="text-xl md:text-2xl font-semibold text-[#1A2D63] mb-2">
-                    Resultaat
-                  </h3>
-                  <p className="text-[#1A2D63]/60 text-[15px] leading-relaxed">
-                    Jij bespaart tijd, de AI doet het werk. Zonder fouten.
-                  </p>
-                  
-                  {/* Expandable Content - Controlled by GSAP */}
-                  <div 
-                    ref={card3ContentRef}
-                    className="overflow-hidden"
-                    style={{ height: 0, opacity: 0, marginTop: 0 }}
-                  >
-                    <div className="border-t border-[#1A2D63]/10 pt-4">
-                      <ul className="space-y-2">
-                        {howItWorksDetails.resultaat.map((point, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-[#1A2D63]/60">
-                            <Check className="w-4 h-4 text-[#1A2D63]/40 mt-0.5 flex-shrink-0" />
-                            <span>{point}</span>
-                          </li>
-                        ))}
-                      </ul>
+                </div>
+
+                {/* Step 3 */}
+                <div
+                  ref={card3Ref}
+                  className="group relative rounded-3xl p-8 md:p-10
+                             bg-white
+                             shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
+                >
+                  {/* Watermark number */}
+                  <div className="absolute -top-4 -left-2 md:-top-5 md:-left-3">
+                    <span className="font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.28] select-none">03</span>
+                  </div>
+
+                  <div className="relative pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-2xl bg-[#1A2D63]/15 flex items-center justify-center">
+                        <Rocket className="w-5 h-5 text-[#1A2D63]" />
+                      </div>
+                      <span className="text-xs font-medium text-[#1A2D63]/50 uppercase tracking-wider">24/7 actief</span>
+                    </div>
+
+                    <h3 className="text-xl md:text-2xl font-semibold text-[#1A2D63] mb-2">
+                      Resultaat
+                    </h3>
+                    <p className="text-[#1A2D63]/60 text-[15px] leading-relaxed">
+                      Jij bespaart tijd, de AI doet het werk. Zonder fouten.
+                    </p>
+
+                    {/* Card Content - Always visible */}
+                    <div className="mt-4">
+                      <div className="border-t border-[#1A2D63]/10 pt-4">
+                        <ul className="space-y-2">
+                          {howItWorksDetails.resultaat.map((point, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-[#1A2D63]/60">
+                              <Check className="w-4 h-4 text-[#1A2D63]/40 mt-0.5 flex-shrink-0" />
+                              <span>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* CTA Button - absolutely positioned below Card 3 on desktop */}
-            <div 
-              ref={ctaRef} 
-              className="absolute hidden md:flex justify-center items-center z-20"
-              style={{ 
-                willChange: "transform, opacity",
-                right: "-16px",
-                width: "33.333%",
-                top: 0,
-              }}
-            >
+            {/* CTA Button - centered below Card 2 (middle column) */}
+            <div ref={ctaDesktopRef} className="hidden md:flex justify-center mt-8">
+              <a
+                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
+              >
+                <Calendar className="w-5 h-5" />
+                <span>Plan een gratis gesprek</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </a>
+            </div>
+
+            {/* Mobile CTA - centered below cards */}
+            <div ref={ctaMobileRef} className="text-center mt-8 md:hidden">
               <a
                 href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
                 target="_blank"
@@ -2125,20 +2456,83 @@ const HowItWorksSection = () => {
               </a>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-          {/* Mobile CTA - centered below cards */}
-          <div ref={mobileCTARef} className="text-center md:hidden">
-            <a
-              href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
+// --- FAQ Section ---
+
+const FAQSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const accordionRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!sectionRef.current || !headingRef.current || !accordionRef.current) return;
+
+    // Initial states
+    gsap.set(headingRef.current, { y: 40, opacity: 0 });
+    const items = accordionRef.current.querySelectorAll('[data-faq-item]');
+    gsap.set(items, { y: 30, opacity: 0 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      }
+    });
+
+    // Heading fades in first
+    tl.to(headingRef.current, {
+      y: 0,
+      opacity: 1,
+      duration: 0.6,
+      ease: "power3.out",
+    }, 0);
+
+    // Accordion items stagger in
+    tl.to(items, {
+      y: 0,
+      opacity: 1,
+      duration: 0.5,
+      stagger: 0.08,
+      ease: "power3.out",
+    }, 0.2);
+  }, { scope: sectionRef });
+
+  return (
+    <section ref={sectionRef} id="faq" className="pt-16 md:pt-32 pb-12 md:pb-12 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]">
+      <div className="max-w-[800px] mx-auto">
+        <div ref={headingRef} className="text-center mb-10 md:mb-16">
+          <h2 className="font-newsreader text-[1.75rem] sm:text-3xl md:text-4xl lg:text-5xl text-[#1A2D63] mb-3 md:mb-4">
+            Veelgestelde vragen
+          </h2>
+          <p className="text-[#1A2D63]/60 text-[15px] sm:text-base md:text-lg">
+            Alles wat je wilt weten over AI-automatisering voor je bedrijf
+          </p>
+        </div>
+
+        <div ref={accordionRef} className="bg-white/40 md:bg-transparent rounded-2xl md:rounded-none border border-[#1A2D63]/[0.06] md:border-0 px-4 sm:px-5 md:px-0">
+        <Accordion type="single" collapsible className="w-full">
+          {faqItems.map((item, index) => (
+            <AccordionItem
+              key={index}
+              value={`faq-${index}`}
+              className="border-b border-[#1A2D63]/[0.08] last:border-b-0 md:last:border-b md:border-[#1A2D63]/10"
+              data-faq-item
             >
-              <Calendar className="w-5 h-5" />
-              <span>Plan een gratis gesprek</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-          </div>
+              <AccordionTrigger className="py-4 sm:py-5 md:py-6 text-left text-[#1A2D63] font-instrument text-[15px] sm:text-base md:text-lg font-medium hover:no-underline hover:text-[#475D8F] transition-colors [&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-5 sm:[&>svg]:w-5 [&>svg]:text-[#475D8F] [&>svg]:shrink-0 [&>svg]:ml-3 gap-2">
+                {item.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-[#1A2D63]/60 text-[14px] sm:text-[15px] md:text-base leading-relaxed pb-4 sm:pb-5 md:pb-6">
+                {item.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
         </div>
       </div>
     </section>
@@ -2166,6 +2560,55 @@ export function AIDesignLanding() {
     }
     dataLayerTarget.dataLayer.push({ event: eventName, ...params });
   };
+
+  // Navigate to section: instant overlay → jump → smooth reveal
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const navigateToSection = useCallback((sectionId: string) => {
+    setMobileMenuOpen(false);
+
+    // Phase 1: instantly show overlay (no transition)
+    const overlay = overlayRef.current;
+    if (overlay) {
+      overlay.style.transition = 'none';
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
+    }
+
+    // Phase 2: after one frame (overlay painted), jump to target
+    requestAnimationFrame(() => {
+      let targetTop = 0;
+      if (sectionId === "hero") {
+        targetTop = 0;
+      } else if (sectionId === "process") {
+        const el = document.getElementById("process");
+        if (el) targetTop = el.offsetTop + 2000;
+      } else if (sectionId === "use-cases") {
+        const el = document.getElementById("use-cases");
+        if (el) targetTop = el.offsetTop + 850;
+      } else {
+        const el = document.getElementById(sectionId);
+        if (el) targetTop = el.offsetTop;
+      }
+
+      // Override CSS scroll-behavior: smooth to make jump truly instant
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, targetTop);
+      // Restore after jump
+      document.documentElement.style.scrollBehavior = '';
+
+      // Force ScrollTrigger to immediately update to the new position
+      ScrollTrigger.update();
+
+      // Short loader display, then smooth reveal
+      setTimeout(() => {
+        if (overlay) {
+          overlay.style.transition = 'opacity 400ms ease-in-out';
+          overlay.style.opacity = '0';
+          overlay.style.pointerEvents = 'none';
+        }
+      }, 500);
+    });
+  }, []);
 
   // Footer bounce animation
   useGSAP(() => {
@@ -2219,28 +2662,43 @@ export function AIDesignLanding() {
     return () => mm.revert();
   });
 
-  // Track scroll position for nav fade effect
-  const [navOpacity, setNavOpacity] = useState(1);
-  
+  // Track scroll position for nav transition (0 = hero state, 1 = compact state)
+  const [navScrollProgress, setNavScrollProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState<string>("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
-      
-      // Fade out nav when scrolling past hero section
-      // Start fading at 100px, fully hidden by 300px
+
+      // Calculate nav transition progress (0 at <=100px, 1 at >=300px)
       const fadeStart = 100;
       const fadeEnd = 300;
       const scrollY = window.scrollY;
-      
+
       if (scrollY <= fadeStart) {
-        setNavOpacity(1);
+        setNavScrollProgress(0);
       } else if (scrollY >= fadeEnd) {
-        setNavOpacity(0);
+        setNavScrollProgress(1);
       } else {
-        setNavOpacity(1 - (scrollY - fadeStart) / (fadeEnd - fadeStart));
+        setNavScrollProgress((scrollY - fadeStart) / (fadeEnd - fadeStart));
       }
+
+      // Determine active section based on scroll position
+      const sectionIds = ["process", "use-cases", "faq"];
+      let current = "";
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 120) {
+            current = id;
+          }
+        }
+      }
+      setActiveSection(current);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -2249,45 +2707,176 @@ export function AIDesignLanding() {
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A2D63] font-instrument selection:bg-[#B8C5E6] selection:text-[#1A2D63] overflow-x-hidden">
       <NoiseOverlay />
 
-      {/* Navigation - fades out when scrolling past hero */}
-      <nav 
-        className="fixed top-0 w-full z-40 transition-opacity duration-300 px-4 sm:px-6 py-4 md:py-6 bg-transparent"
-        style={{ 
-          opacity: navOpacity,
-          pointerEvents: navOpacity < 0.1 ? 'none' : 'auto'
+      {/* Unified Navigation - transitions from hero state to compact state on scroll */}
+      <nav
+        className="fixed top-0 w-full z-40"
+        style={{
+          background: navScrollProgress > 0
+            ? `rgba(253, 251, 247, ${0.82 * navScrollProgress})`
+            : 'transparent',
+          backdropFilter: navScrollProgress > 0 ? `blur(${14 * navScrollProgress}px)` : 'none',
+          WebkitBackdropFilter: navScrollProgress > 0 ? `blur(${14 * navScrollProgress}px)` : 'none',
+          borderBottom: `1px solid rgba(26, 45, 99, ${0.1 * navScrollProgress})`,
+          transition: 'background 0.3s, backdrop-filter 0.3s, border-bottom 0.3s',
         }}
       >
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between">
+        <div
+          className="max-w-[1400px] mx-auto flex items-center justify-between px-4 sm:px-6 relative"
+          style={{
+            paddingTop: `${12 + (1 - navScrollProgress) * 12}px`,
+            paddingBottom: `${12 + (1 - navScrollProgress) * 12}px`,
+            transition: 'padding 0.3s',
+          }}
+        >
           <div className="flex items-center gap-3">
-            <Image
+            {/* Mobile logo - smaller */}
+            <img
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
-              width={120}
-              height={40}
-              className="h-8 md:h-10 w-auto object-contain"
-              unoptimized
+              onClick={() => navigateToSection("hero")}
+              style={{
+                height: `${20 + (1 - navScrollProgress) * 6}px`,
+                transition: 'height 0.3s',
+                cursor: 'pointer',
+              }}
+              className="w-auto object-contain md:hidden"
+            />
+            {/* Desktop logo */}
+            <img
+              src="/Finit Logo Blue@4x.png"
+              alt="Finit Logo"
+              onClick={() => navigateToSection("hero")}
+              style={{
+                height: `${28 + (1 - navScrollProgress) * 12}px`,
+                transition: 'height 0.3s',
+                cursor: 'pointer',
+              }}
+              className="w-auto object-contain hidden md:block"
             />
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+            {[
+              { label: "Ons proces", id: "process" },
+              { label: "Praktijkvoorbeelden", id: "use-cases" },
+              { label: "FAQ", id: "faq" },
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => navigateToSection(item.id)}
+                className={`text-sm font-medium transition-colors ${
+                  activeSection === item.id
+                    ? 'text-[#1A2D63]'
+                    : 'text-[#1A2D63]/60 hover:text-[#1A2D63]'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+
+          <a
+            href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() =>
+              pushDataLayerEvent("cta_click", {
+                cta_label: "nav_calendly",
+                location: "nav",
+              })
+            }
+            className="hidden md:flex items-center gap-2 bg-[#1A2D63] text-white rounded-full text-sm font-medium hover:scale-105 transition-all shadow-lg shadow-[#1A2D63]/20"
+            style={{
+              paddingLeft: `${20 + (1 - navScrollProgress) * 4}px`,
+              paddingRight: `${20 + (1 - navScrollProgress) * 4}px`,
+              paddingTop: `${10 + (1 - navScrollProgress) * 2}px`,
+              paddingBottom: `${10 + (1 - navScrollProgress) * 2}px`,
+              transition: 'padding 0.3s',
+            }}
+          >
+            <Calendar className="w-4 h-4" />
+            <span>Plan een gesprek</span>
+          </a>
+
+          {/* Mobile CTA + hamburger */}
+          <div className="md:hidden flex items-center gap-2">
             <a
               href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() =>
                 pushDataLayerEvent("cta_click", {
-                  cta_label: "nav_calendly",
-                  location: "nav",
+                  cta_label: "mobile_nav_calendly",
+                  location: "mobile_nav",
                 })
               }
-              className="hidden md:flex items-center gap-2 bg-[#1A2D63] text-white px-6 py-3 rounded-full text-sm font-medium hover:scale-105 transition-transform shadow-lg shadow-[#1A2D63]/20"
+              className="flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-xs font-medium px-3.5 py-2 transition-opacity duration-300"
+              style={{ opacity: navScrollProgress, pointerEvents: navScrollProgress > 0.5 ? 'auto' : 'none' }}
             >
-              <Calendar className="w-4 h-4" />
+              <Calendar className="w-3.5 h-3.5" />
               <span>Plan een gesprek</span>
             </a>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="flex items-center justify-center w-9 h-9 rounded-full text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* Nav scroll loader overlay */}
+      <div
+        ref={overlayRef}
+        className="fixed inset-0 z-30 flex items-center justify-center pointer-events-none"
+        style={{ opacity: 0 }}
+      >
+        <div className="absolute inset-0 bg-[#FDFBF7]" />
+        <div className="loader relative z-10" />
+      </div>
+
+      {/* Mobile full-screen menu overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-30 md:hidden">
+          <div
+            className="absolute inset-0 bg-[#FDFBF7]/95 backdrop-blur-xl"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <div className="relative z-10 flex flex-col items-center justify-center h-full gap-10 px-8">
+            {[
+              { label: "Ons proces", id: "process" },
+              { label: "Praktijkvoorbeelden", id: "use-cases" },
+              { label: "FAQ", id: "faq" },
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => navigateToSection(item.id)}
+                className="text-3xl sm:text-4xl font-newsreader text-[#1A2D63] hover:text-[#475D8F] transition-colors"
+              >
+                {item.label}
+              </button>
+            ))}
+            <a
+              href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                pushDataLayerEvent("cta_click", {
+                  cta_label: "mobile_nav_calendly",
+                  location: "mobile_nav",
+                });
+              }}
+              className="mt-4 inline-flex items-center gap-2 bg-[#1A2D63] text-white px-7 py-3 rounded-full text-base font-medium"
+            >
+              <Calendar className="w-4 h-4" />
+              Plan een gesprek
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* ============================================ */}
       {/* HERO SECTION - Keep animation, update copy  */}
@@ -2346,14 +2935,24 @@ export function AIDesignLanding() {
       <HowItWorksSection />
 
       {/* ============================================ */}
+      {/* COMPANY TYPES CAROUSEL                      */}
+      {/* ============================================ */}
+      <CompanyTypesCarousel />
+
+      {/* ============================================ */}
       {/* USE CASES SECTION                          */}
       {/* ============================================ */}
       <UseCasesSection />
 
       {/* ============================================ */}
+      {/* FAQ SECTION                                  */}
+      {/* ============================================ */}
+      <FAQSection />
+
+      {/* ============================================ */}
       {/* SECONDARY CTA SECTION                       */}
       {/* ============================================ */}
-      <section ref={secondaryCTARef} id="contact" className="py-20 md:py-32 px-6 md:px-12 bg-[#FDFBF7] relative">
+      <section ref={secondaryCTARef} id="contact" className="pt-8 md:pt-12 pb-20 md:pb-32 px-6 md:px-12 bg-[#FDFBF7] relative">
         <div className="max-w-[800px] mx-auto">
           <div className="relative">
             <div className="absolute inset-0 bg-[#B8C5E6] rounded-full blur-[120px] opacity-30"></div>
@@ -2387,11 +2986,11 @@ export function AIDesignLanding() {
                     location: "secondary_cta",
                   })
                 }
-                className="inline-flex items-center gap-3 bg-[#1A2D63] text-white px-10 py-5 rounded-full text-lg font-bold hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
+                className="inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
               >
-                <Calendar className="w-6 h-6" />
+                <Calendar className="w-5 h-5 md:w-6 md:h-6" />
                 Plan je gratis gesprek
-                <ArrowRight className="w-6 h-6" />
+                <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
               </a>
 
             </div>
@@ -2512,13 +3111,10 @@ export function AIDesignLanding() {
           {/* Footer Bottom */}
           <div className="mt-10 pt-6 border-t border-white/10 flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:justify-between md:text-left">
             <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-white/60">
-              <Image
+              <img
                 src="/Finit Logo Blue@4x.png"
                 alt="Finit Logo"
-                width={120}
-                height={32}
                 className="h-8 w-auto object-contain brightness-0 invert"
-                unoptimized
               />
             </div>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 md:gap-6">
