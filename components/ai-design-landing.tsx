@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { gsap, useGSAP, ScrollTrigger, MorphSVGPlugin, MotionPathPlugin, DrawSVGPlugin, SplitText } from '@/lib/gsap';
+import { motion, AnimatePresence } from 'framer-motion';
+import { gsap, useGSAP, ScrollTrigger, MorphSVGPlugin, MotionPathPlugin, DrawSVGPlugin } from '@/lib/gsap';
 import {
   ArrowRight,
   Calendar,
@@ -119,35 +120,151 @@ const transformationAfter = [
   "Schalen zonder extra personeel"
 ];
 
-// --- FAQ Data ---
-const faqItems = [
+// --- FAQ Data (gestructureerd: alinea's, lijsten, kopjes) ---
+type FaqBlock = { type: "p"; text: string } | { type: "list"; items: string[] } | { type: "heading"; text: string };
+
+const faqItems: { question: string; answer: FaqBlock[] }[] = [
   {
     question: "Wat als er iets misloopt met de automatisering?",
-    answer: "Elke oplossing bevat ingebouwde monitoring en foutmeldingen. Als er iets hapert, worden wij direct op de hoogte gebracht en lossen we het op — vaak voordat jij het merkt. Je team kan altijd manueel ingrijpen als dat nodig is.",
+    answer: [
+      { type: "p", text: "Elke oplossing heeft een test- en integratieperiode, specifiek opgezet om ervoor te zorgen dat jouw automatisering niet zomaar fouten vertoont. Tijdens de hypercare-periode kijken we aandachtig mee naar alle handelingen van je automatisering om zeker te zijn dat alles perfect verloopt. Pas daarna behandelen we jouw project als afgeleverd." },
+      { type: "p", text: "Na aflevering laten we je uiteraard niet in de steek. Iedere oplossing bevat ingebouwde monitoring, zodat wij onmiddellijk verwittigd worden als er toch iets hapert." },
+    ],
   },
   {
-    question: "Hoe weet ik of de automatisering echt resultaat oplevert?",
-    answer: "We meten vanaf dag één. Je krijgt een dashboard met concrete cijfers: bespaarde uren, verwerkte taken, foutpercentages. Zo zie je precies wat de automatisering oplevert en waar we nog kunnen optimaliseren.",
+    question: "Wat kost AI-automatisering voor mijn bedrijf?",
+    answer: [
+      { type: "p", text: "Een AI-automatisering kost minder dan een parttime medewerker inhuren, maar werkt 24/7 en maakt geen fouten. Denk aan een investering die vergelijkbaar is met professionele software, maar dan specifiek gebouwd voor jouw processen." },
+      { type: "p", text: "De meeste projecten betalen zichzelf terug binnen het eerste halfjaar door tijdsbesparing en minder fouten." },
+      { type: "p", text: "Na een gratis intakegesprek en een scopingsessie geven we je een vaste prijs — geen verrassingen achteraf." },
+    ],
   },
   {
-    question: "Hoe verstorend is de implementatie voor mijn team?",
-    answer: "Minimaal. We bouwen parallel aan je bestaande processen en schakelen pas over als alles getest is. Je team hoeft niets anders te doen — wij zorgen dat de overgang soepel verloopt, zonder downtime.",
+    question: "Hoe lang duurt het voor de automatisering live staat?",
+    answer: [
+      { type: "p", text: "Totaal traject: 4–10 weken, afhankelijk van complexiteit." },
+      { type: "heading", text: "Fase 1 – Scoping (1 week)" },
+      { type: "p", text: "Samen analyseren we je processen. We starten snel op, geen maanden voorbereiding." },
+      { type: "heading", text: "Fase 2 – Building (2–6 weken)" },
+      { type: "p", text: "We bouwen en testen de automatisering. Je ziet tussentijds al resultaten." },
+      { type: "heading", text: "Fase 3 – Hypercare (2–4 weken)" },
+      { type: "p", text: "Het systeem is live en jullie gebruiken het. Wij monitoren intensief en lossen direct op als er iets niet perfect loopt. Pas als het 100% stabiel draait in de echte wereld, ronden we af." },
+      { type: "p", text: "Onze hypercare-fase is cruciaal: theorie vs. praktijk kan verschillen, en wij blijven erbij tot het écht werkt voor jouw team." },
+    ],
   },
   {
-    question: "Zit ik vast aan een langlopend contract?",
-    answer: "Nee. We werken projectmatig zonder langlopende verplichtingen. Je zit nergens aan vast en kunt op elk moment stoppen.",
+    question: "Is dit niet te duur voor een KMO van onze grootte?",
+    answer: [
+      { type: "p", text: "Juist voor KMO's is dit interessant. Grote bedrijven hebben IT-afdelingen; jij betaalt voor repetitief werk dat een systeem kan overnemen." },
+      { type: "p", text: "Concreet voorbeeld: als je team 10 uur per week kwijt is aan handmatige taken (facturen verwerken, data overzetten, offertes opstellen), dan kost dat je €15.000–20.000 per jaar. Een automatisering van €5.000–8.000 verdient zich in 3–6 maanden terug." },
+      { type: "p", text: "En dan blijft het werken — jaar na jaar, met minimale extra kosten." },
+      { type: "p", text: "Te klein om te starten? We bouwen ook graag gefaseerd: start met één proces, breid later uit als je de waarde ziet." },
+    ],
   },
   {
-    question: "Kan ik een concreet voorbeeld zien van wat jullie bouwen?",
-    answer: "Zeker. Denk aan een makelaar wiens CRM automatisch wordt bijgewerkt na elk telefoontje, of een accountantskantoor waar facturen vanzelf worden verwerkt. In ons gratis gesprek tonen we voorbeelden die aansluiten bij jouw branche.",
+    question: "Welke processen kunnen jullie eigenlijk automatiseren?",
+    answer: [
+      { type: "p", text: "Alles wat repetitief is en regels volgt, kunnen we automatiseren." },
+      { type: "heading", text: "Meest voorkomende automatiseringen voor KMO's:" },
+      { type: "list", items: [
+        "Communicatie: offertes automatisch versturen, klanten opvolgen, interne notificaties bij nieuwe leads",
+        "Data & admin: facturen verwerken, data tussen systemen synchroniseren, rapportages genereren",
+        "Klantbeheer: nieuwe klanten in CRM zetten, follow-up e-mails, projectstatus-updates",
+        "Planning: afspraken inplannen, herinneringen versturen, beschikbaarheid checken",
+      ]},
+      { type: "p", text: "De vuistregel: als je team het nu handmatig doet en het volgt vaste stappen, kunnen wij het automatiseren." },
+      { type: "p", text: "Twijfel of jouw proces kan? Vertel ons wat je team dagelijks doet — wij vertellen of (en hoe) het kan." },
+    ],
   },
   {
-    question: "Wat als mijn bedrijf groeit of mijn processen veranderen?",
-    answer: "Onze oplossingen zijn modulair opgebouwd en schalen mee met je bedrijf. Nieuwe tools toevoegen, extra workflows inrichten of volumes opschalen — dat kan zonder alles opnieuw te bouwen.",
+    question: "Moet mijn team hiervoor geschoold worden?",
+    answer: [
+      { type: "p", text: "Minimale onboarding, geen intensieve training." },
+      { type: "p", text: "Jouw team hoeft geen technische kennis te hebben. Wat ze wél moeten weten:" },
+      { type: "list", items: [
+        "Hoe triggert de automatisering? (bijv. lead toevoegen in CRM)",
+        "Wat gebeurt er automatisch? (zodat ze niet dubbel werk doen)",
+        "Waar zien ze de output? (bijv. taken verschijnen in hun inbox)",
+      ]},
+      { type: "heading", text: "We begeleiden dit met:" },
+      { type: "list", items: [
+        "Praktische walkthrough tijdens de hypercare-fase",
+        "Korte handleiding (geen 50-paginahandboeken)",
+        "Support gedurende 2–4 weken terwijl ze wennen",
+      ]},
+      { type: "p", text: "De grootste uitdaging? Niet zozeer \"leren gebruiken\", maar eerder \"vertrouwen dat het werkt en oude gewoontes loslaten\". Daar helpen we actief bij." },
+    ],
   },
   {
-    question: "Bieden jullie ook ondersteuning na de oplevering?",
-    answer: "Ja. Na oplevering blijven we beschikbaar voor vragen, updates en optimalisaties. We monitoren de prestaties en stellen proactief verbeteringen voor naarmate je bedrijf evolueert.",
+    question: "Hoeveel tijd besparen we hier realistisch mee?",
+    answer: [
+      { type: "p", text: "Tussen de 80% en 100% van de tijd op dat specifieke proces." },
+      { type: "heading", text: "Waarom zo hoog?" },
+      { type: "p", text: "Simpel: wij adviseren geen automatiseringen met lage ROI. Als een proces maar 30-40% efficiëntiewinst oplevert, zeggen we eerlijk dat het de investering niet waard is." },
+      { type: "p", text: "We focussen op processen waar automatisering écht verschil maakt — volledig of grotendeels repetitieve taken die nu handmatig worden uitgevoerd." },
+      { type: "heading", text: "Concrete voorbeelden" },
+      { type: "p", text: "Volledig repetitief (lead management, data synchronisatie): 90-100% tijdsbesparing — het proces draait volledig automatisch." },
+      { type: "p", text: "Grotendeels repetitief (offertes met variabele prijzen, factuurverwerking): 70-85% tijdsbesparing — template is geautomatiseerd, menselijke input alleen waar nodig." },
+      { type: "heading", text: "Meer dan alleen uren" },
+      { type: "p", text: "Tijdsbesparing is één ding, maar je wint ook: niks meer vergeten (follow-ups gebeuren automatisch), sneller reageren (binnen minuten vs. 'als iemand tijd heeft'), geen frustratie over repetitieve taken, en consistentie (geen fouten door haast)." },
+      { type: "p", text: "Twijfel of jouw proces geschikt is? Beschrijf het, dan zijn we eerlijk of de ROI er is — en adviseren we het alleen als het écht zin heeft." },
+    ],
+  },
+  {
+    question: "Werkt dit samen met onze bestaande software?",
+    answer: [
+      { type: "p", text: "Ja, juist daarom bouwen we automatiseringen — we verbinden je bestaande tools met elkaar." },
+      { type: "heading", text: "Systemen waar we mee werken:" },
+      { type: "list", items: [
+        "CRM: Teamleader, HubSpot, Salesforce, Pipedrive",
+        "Boekhouding: Exact Online, Yuki, Octopus",
+        "E-mail & communicatie: Gmail, Outlook, Mailchimp",
+        "Files & documenten: Google Drive, OneDrive, Dropbox",
+        "Betalingen: Stripe, Mollie, PayPal",
+        "500+ andere apps via standaard koppelingen",
+      ]},
+      { type: "p", text: "Werken jullie met minder courante software? Zolang het een API heeft (meeste moderne systemen hebben dit), kunnen we het waarschijnlijk koppelen." },
+      { type: "p", text: "Je hoeft geen nieuwe software aan te schaffen. We werken met wat je al hebt en laten die systemen samenwerken." },
+    ],
+  },
+  {
+    question: "Wat gebeurt er als we later willen uitbreiden?",
+    answer: [
+      { type: "p", text: "Uitbreiden is makkelijk — en dat adviseren we vaak bewust." },
+      { type: "heading", text: "Typisch groeipad:" },
+      { type: "list", items: [
+        "Fase 1 (maand 1–3): start met één high-impact proces, bijv. leadmanagement automatiseren — investering €3–5k",
+        "Fase 2 (maand 4–9): volgend proces erbij, bijv. offerteproces — investering €4–6k",
+        "Fase 3 (jaar 2): volledige workflow-automatisering, meerdere systemen praten met elkaar",
+      ]},
+      { type: "heading", text: "Waarom gefaseerd werken slim is:" },
+      { type: "list", items: [
+        "Kleiner risico per stap",
+        "Team went geleidelijk aan automatisering",
+        "Je ziet ROI tussen elke fase",
+        "Budget spreiding",
+      ]},
+      { type: "p", text: "Technisch bouwen we modulair: nieuwe automatisering sluit aan op bestaande. Geen grote herbouw nodig." },
+    ],
+  },
+  {
+    question: "Krijgen we ondersteuning na de lancering?",
+    answer: [
+      { type: "p", text: "Na de hypercare-fase zou alles perfect moeten werken — en daar investeren we samen in." },
+      { type: "heading", text: "Wat maakt onze hypercare anders?" },
+      { type: "p", text: "We monitoren niet alleen passief. We werken actief samen met jouw team om het systeem grondig te testen:" },
+      { type: "list", items: [
+        "Probeer alles kapot te maken (we moedigen dit aan)",
+        "Test alle edge cases en \"wat als…\"-scenario's",
+        "Gebruik het in de echte drukte van je bedrijf",
+        "Vind de kinderziektes vóór we weggaan",
+      ]},
+      { type: "p", text: "Waarom? Omdat theorie ≠ praktijk. Jouw team werkt ermee — zij kennen de situaties." },
+      { type: "heading", text: "Na die 2–4 weken:" },
+      { type: "p", text: "Als we het goed gedaan hebben, draait het stabiel. Maandenlang, zonder problemen." },
+      { type: "heading", text: "Mocht er toch iets zijn:" },
+      { type: "p", text: "We springen bij — gratis, vanzelfsprekend. Bug? Gratis. API veranderd? Gratis. Iets werkt niet zoals afgesproken? Onze verantwoordelijkheid. Je betaalt alleen voor nieuwe features die je later wilt toevoegen." },
+    ],
   },
 ];
 
@@ -631,8 +748,8 @@ const CompanyTypesCarousel = () => {
   const items = [...companyTypes, ...companyTypes];
 
   return (
-    <section className="py-10 md:py-14 bg-[#FDFBF7] overflow-hidden">
-      <div className="max-w-4xl mx-auto border-t border-[#1A2D63]/[0.08] mb-8" />
+    <section className="pt-6 md:pt-8 pb-10 md:pb-14 bg-[#FDFBF7] overflow-hidden">
+      <div className="max-w-4xl mx-auto border-t border-[#1A2D63]/[0.08] mb-6" />
       <p className="text-center text-[#1A2D63]/50 text-[13px] uppercase tracking-wider mb-7 font-medium">
         Voor bedrijven zoals het jouwe
       </p>
@@ -1432,388 +1549,124 @@ const illustrationComponents: Record<string, React.FC<{ progress: number }>> = {
   'reporting': ReportingIllustration,
 };
 
-// --- Use Cases Section Component (Scroll-Driven) ---
+// --- Use Cases: slideshow links/rechts, alleen pijlen (geen scroll om te wisselen) ---
 const UseCasesSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const pinnedRef = useRef<HTMLDivElement>(null);
-  const textContentRef = useRef<HTMLDivElement>(null);
-  const prevIndexRef = useRef<number>(0);
-  const isFirstRender = useRef<boolean>(true);
-  const scrollDirectionRef = useRef<number>(1); // 1 = scrolling down, -1 = scrolling up
   const [activeIndex, setActiveIndex] = useState(0);
-  const [localProgress, setLocalProgress] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-  
+  const [illustrationProgress, setIllustrationProgress] = useState(0);
   const TOTAL_USE_CASES = useCasesData.length;
-  const SCROLL_DISTANCE = 5800; // Total scroll distance (increased for reduced sensitivity)
-  const START_BUFFER = 0.15; // 15% hold at start before animation begins
-  const ANIMATION_PORTION = 0.50; // 50% for animation
-  // Remaining 35% = hold at end before transition
-  
-  // Check for mobile on mount and resize
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-  
-  // GSAP text crossfade animation (Desktop only)
-  useGSAP(() => {
-    if (!textContentRef.current || isMobile) return;
-    
-    const ctx = gsap.context(() => {
-      const prevIndex = prevIndexRef.current;
-      const currentIndex = activeIndex;
-      
-      // Set initial states for all content blocks
-      useCasesData.forEach((_, index) => {
-        if (index !== currentIndex && index !== prevIndex) {
-          gsap.set(`.uc-content-${index}`, { visibility: 'hidden' });
-          gsap.set([`.uc-pill-${index}`, `.uc-title-${index}`, `.uc-desc-${index}`, `.uc-stat-${index}`], { 
-            opacity: 0, y: 20 
-          });
-        }
-      });
-      
-      // On first render, just animate entrance
-      if (isFirstRender.current) {
-        isFirstRender.current = false;
-        gsap.set(`.uc-content-${currentIndex}`, { visibility: 'visible' });
-        
-        const entranceTl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-        entranceTl
-          .fromTo(`.uc-pill-${currentIndex}`, 
-            { y: 20, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.35 }
-          )
-          .fromTo(`.uc-title-${currentIndex}`, 
-            { y: 25, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.4 }, 
-            '-=0.2'
-          )
-          .fromTo(`.uc-desc-${currentIndex}`, 
-            { y: 25, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.4 }, 
-            '-=0.25'
-          )
-          .fromTo(`.uc-stat-${currentIndex}`, 
-            { y: 30, opacity: 0, scale: 0.95 }, 
-            { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.7)' }, 
-            '-=0.2'
-          );
-        
-        return;
-      }
-      
-      // Crossfade: exit previous, enter current (direction-aware)
-      if (prevIndex !== currentIndex) {
-        const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-        
-        // Get scroll direction: 1 = scrolling down, -1 = scrolling up
-        const direction = scrollDirectionRef.current;
-        
-        // Direction-aware Y values:
-        // Scrolling DOWN: exit slides UP (-), enter comes from BELOW (+)
-        // Scrolling UP: exit slides DOWN (+), enter comes from ABOVE (-)
-        const exitY = direction === 1 ? -15 : 15;
-        const enterFromY = direction === 1 ? 20 : -20;
-        const enterFromYLarge = direction === 1 ? 25 : -25;
-        const enterFromYStat = direction === 1 ? 30 : -30;
-        
-        // Make both visible during transition
-        gsap.set(`.uc-content-${prevIndex}`, { visibility: 'visible' });
-        gsap.set(`.uc-content-${currentIndex}`, { visibility: 'visible' });
-        
-        // Exit previous (staggered fade out + direction-aware slide)
-        tl.to(`.uc-pill-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' })
-          .to(`.uc-title-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' }, '-=0.18')
-          .to(`.uc-desc-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' }, '-=0.18')
-          .to(`.uc-stat-${prevIndex}`, { y: exitY, opacity: 0, duration: 0.25, ease: 'power2.in' }, '-=0.18')
-          // Hide previous after exit
-          .set(`.uc-content-${prevIndex}`, { visibility: 'hidden' })
-          
-          // Enter current (staggered fade in + direction-aware slide)
-          .fromTo(`.uc-pill-${currentIndex}`, 
-            { y: enterFromY, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.35 }, 
-            '-=0.15'
-          )
-          .fromTo(`.uc-title-${currentIndex}`, 
-            { y: enterFromYLarge, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.4 }, 
-            '-=0.25'
-          )
-          .fromTo(`.uc-desc-${currentIndex}`, 
-            { y: enterFromYLarge, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 0.4 }, 
-            '-=0.3'
-          )
-          .fromTo(`.uc-stat-${currentIndex}`, 
-            { y: enterFromYStat, opacity: 0, scale: 0.95 }, 
-            { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.7)' }, 
-            '-=0.25'
-          );
-      }
-      
-      // Update prevIndexRef for next transition
-      prevIndexRef.current = currentIndex;
-      
-    }, textContentRef);
-    
-    return () => ctx.revert();
-  }, { scope: textContentRef, dependencies: [activeIndex, isMobile] });
-  
-  // GSAP scroll-driven animations (Desktop only)
-  useGSAP(() => {
-    if (!sectionRef.current || !pinnedRef.current || isMobile) return;
-    
-    const mm = gsap.matchMedia();
-    
-    mm.add("(min-width: 768px)", () => {
-      // Create ScrollTrigger for the pinned section
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: `+=${SCROLL_DISTANCE}`,
-        pin: pinnedRef.current,
-        scrub: 1.4,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          
-          // Track scroll direction (1 = down/forward, -1 = up/backward)
-          scrollDirectionRef.current = self.direction;
-          
-          // Calculate which use case we're on (0 to TOTAL_USE_CASES - 1)
-          const rawIndex = progress * TOTAL_USE_CASES;
-          const newIndex = Math.min(Math.floor(rawIndex), TOTAL_USE_CASES - 1);
-          
-          // Calculate progress within current use case segment (0 to 1)
-          const segmentProgress = rawIndex - newIndex;
-          
-          // Map segment progress to animation progress with hold periods
-          // First 15% = hold at 0 (buffer before animation starts)
-          // Next 50% = animation plays (0 → 1)
-          // Last 35% = hold at 1 (breathing room before next)
-          let animationProgress: number;
-          if (segmentProgress <= START_BUFFER) {
-            // Start buffer: stay at 0
-            animationProgress = 0;
-          } else if (segmentProgress <= START_BUFFER + ANIMATION_PORTION) {
-            // Animation phase: scale to 0-1
-            animationProgress = (segmentProgress - START_BUFFER) / ANIMATION_PORTION;
-          } else {
-            // End hold phase: stay at 1
-            animationProgress = 1;
-          }
-          
-          setActiveIndex(newIndex);
-          setLocalProgress(Math.min(animationProgress, 1));
-        },
-      });
-      
-      return () => {
-        ScrollTrigger.getAll().forEach(st => st.kill());
-      };
-    });
-    
-    return () => mm.revert();
-  }, { scope: sectionRef, dependencies: [isMobile] });
-  
-  // Get the progress to pass to each illustration
-  const getIllustrationProgress = (index: number) => {
-    if (index < activeIndex) return 1; // Already passed - show completed state
-    if (index > activeIndex) return 0; // Not reached yet - show initial state
-    return localProgress; // Current one - use scroll progress
-  };
 
-  // Desktop: Scroll-driven split-screen layout
-  if (!isMobile) {
-    return (
-      <section 
-        ref={sectionRef} 
-        id="use-cases" 
-        className="relative bg-[#FDFBF7]"
-        style={{ height: `calc(${SCROLL_DISTANCE}px + 100vh)` }}
-      >
-        {/* Pinned container - full viewport height */}
-        <div 
-          ref={pinnedRef}
-          className="h-screen w-full flex flex-col justify-center"
-        >
-          {/* Centered Header - styled like HowItWorksSection */}
-          <div className="text-center mb-12 lg:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
-              Praktijkvoorbeelden
-            </h2>
-            <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
-              Hoe klanten AI gebruiken
-            </p>
-          </div>
-          
-          <div className="w-full max-w-[1400px] mx-auto px-8 lg:px-16">
-            {/* Split-screen layout */}
-            <div className="flex items-center gap-12 lg:gap-20">
-              
-              {/* LEFT: Illustrations (50%) */}
-              <div className="w-1/2 relative flex items-center justify-center">
-                <div className="w-full max-w-[480px] aspect-[4/3] relative">
-                  {useCasesData.map((useCase, index) => {
-                    const IllustrationComponent = illustrationComponents[useCase.id];
-                    const isActive = index === activeIndex;
-                    const progress = getIllustrationProgress(index);
-                    
-                    return IllustrationComponent ? (
-                      <div 
-                        key={useCase.id}
-                        className="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
-                        style={{ 
-                          opacity: isActive ? 1 : 0,
-                          pointerEvents: isActive ? 'auto' : 'none',
-                        }}
-                      >
-                        <IllustrationComponent progress={progress} />
-                      </div>
-                    ) : null;
-                  })}
-                </div>
-              </div>
-              
-              {/* RIGHT: Text Content (50%) */}
-              <div className="w-1/2 relative">
-                <div className="max-w-[480px]">
-                  {/* Use case content - GSAP crossfade based on activeIndex */}
-                  <div ref={textContentRef} className="relative min-h-[280px]">
-                    {useCasesData.map((useCase, index) => {
-                      const isActive = index === activeIndex;
-                      
-                      return (
-                        <div 
-                          key={useCase.id}
-                          className={`absolute inset-0 uc-content-${index}`}
-                          style={{ 
-                            visibility: isActive ? 'visible' : 'hidden',
-                            pointerEvents: isActive ? 'auto' : 'none',
-                          }}
-                        >
-                          {/* Category pill */}
-                          <span className={`uc-pill-${index} inline-block px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-[#1A2D63]/50 border border-[#1A2D63]/15 rounded-full mb-4`}>
-                            {useCase.categoryLabel}
-                          </span>
-                          
-                          {/* Title */}
-                          <h3 className={`uc-title-${index} font-newsreader text-2xl lg:text-3xl text-[#1A2D63] mb-4 leading-tight`}>
-                            {useCase.title}
-                          </h3>
-                          
-                          {/* Description */}
-                          <p className={`uc-desc-${index} text-[#1A2D63]/60 text-base lg:text-lg leading-relaxed mb-6`}>
-                            {useCase.description}
-                          </p>
-                          
-                          {/* Stat highlight */}
-                          <div className={`uc-stat-${index} inline-flex items-baseline gap-2 bg-[#1A2D63] text-white px-5 py-3 rounded-xl shadow-[0_4px_20px_-4px_rgba(26,45,99,0.35)]`}>
-                            <span className="font-newsreader text-3xl lg:text-4xl font-light">
-                              {useCase.stat.value}
-                            </span>
-                            <span className="text-white/60 text-sm">
-                              {useCase.stat.label}
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  
-                  {/* Progress indicator */}
-                  <div className="mt-10 flex items-center gap-3">
-                    {useCasesData.map((_, index) => (
-                      <div 
-                        key={index}
-                        className={`h-1 rounded-full transition-all duration-300 ${
-                          index === activeIndex 
-                            ? 'w-8 bg-[#1A2D63]' 
-                            : index < activeIndex
-                              ? 'w-2 bg-[#1A2D63]/40'
-                              : 'w-2 bg-[#1A2D63]/15'
-                        }`}
-                      />
-                    ))}
-                    <span className="ml-2 text-sm text-[#1A2D63]/40">
-                      {activeIndex + 1} / {TOTAL_USE_CASES}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-  
-  // Mobile: Simplified vertical scroll layout (not pinned)
+  // Bij wissel: illustratie van 0 → 1 animeren
+  useEffect(() => {
+    setIllustrationProgress(0);
+    const obj = { value: 0 };
+    const tween = gsap.to(obj, {
+      value: 1,
+      duration: 0.9,
+      ease: 'power2.out',
+      onUpdate: () => setIllustrationProgress(obj.value),
+    });
+    return () => { tween.kill(); };
+  }, [activeIndex]);
+
+  const goTo = useCallback((index: number) => {
+    setActiveIndex(Math.max(0, Math.min(index, TOTAL_USE_CASES - 1)));
+  }, [TOTAL_USE_CASES]);
+
+  const useCase = useCasesData[activeIndex];
+  const IllustrationComponent = useCase ? illustrationComponents[useCase.id] : null;
+
   return (
-    <section 
-      ref={sectionRef} 
-      id="use-cases" 
-      className="py-16 px-6 bg-[#FDFBF7]"
-    >
-      <div className="max-w-[600px] mx-auto">
-        {/* Header - styled like HowItWorksSection */}
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
+    <section ref={sectionRef} id="use-cases" className="py-16 md:py-20 px-4 md:px-8 bg-[#FDFBF7]">
+      <div className="max-w-[720px] mx-auto">
+        <div className="text-center mb-10 md:mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
             Praktijkvoorbeelden
           </h2>
-          <p className="text-[#1A2D63]/60 text-lg">
+          <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
             Hoe klanten AI gebruiken
           </p>
         </div>
-        
-        {/* Use cases as vertical cards */}
-        <div className="space-y-8">
-          {useCasesData.map((useCase, index) => {
-            const IllustrationComponent = illustrationComponents[useCase.id];
-            
-            return (
-              <div 
-                key={useCase.id}
+
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => goTo(activeIndex - 1)}
+            disabled={activeIndex === 0}
+            aria-label="Vorige"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/95 shadow-lg border border-[#1A2D63]/10 flex items-center justify-center text-[#1A2D63] hover:bg-white disabled:opacity-40 disabled:pointer-events-none -translate-x-2 md:-translate-x-6"
+          >
+            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+          </button>
+          <button
+            type="button"
+            onClick={() => goTo(activeIndex + 1)}
+            disabled={activeIndex === TOTAL_USE_CASES - 1}
+            aria-label="Volgende"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/95 shadow-lg border border-[#1A2D63]/10 flex items-center justify-center text-[#1A2D63] hover:bg-white disabled:opacity-40 disabled:pointer-events-none translate-x-2 md:translate-x-6"
+          >
+            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+          </button>
+
+          <AnimatePresence mode="wait">
+            {useCase && (
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
                 className="bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(26,45,99,0.12)] overflow-hidden"
               >
-                {/* Illustration */}
-                <div className="h-[200px] flex items-center justify-center bg-[#FDFBF7]/50 p-4">
+                <div className="h-[220px] md:h-[280px] flex items-center justify-center bg-[#FDFBF7]/50 p-4 md:p-6">
                   {IllustrationComponent && (
-                    <IllustrationComponent progress={1} />
+                    <IllustrationComponent progress={illustrationProgress} key={useCase.id} />
                   )}
                 </div>
-                
-                {/* Content */}
-                <div className="p-5">
+                <motion.div
+                  className="p-5 md:p-8"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
                   <span className="inline-block px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[#1A2D63]/50 border border-[#1A2D63]/10 rounded-full mb-3">
                     {useCase.categoryLabel}
                   </span>
-                  
-                  <h3 className="font-newsreader text-xl text-[#1A2D63] mb-2">
+                  <h3 className="font-newsreader text-xl md:text-3xl text-[#1A2D63] mb-2">
                     {useCase.title}
                   </h3>
-                  
-                  <p className="text-[#1A2D63]/55 text-sm leading-relaxed mb-4">
+                  <p className="text-[#1A2D63]/55 text-sm md:text-lg leading-relaxed mb-4">
                     {useCase.description}
                   </p>
-                  
-                  <div className="inline-flex items-baseline gap-1.5 bg-[#1A2D63] text-white px-3 py-2 rounded-lg">
-                    <span className="font-newsreader text-xl font-light">
+                  <div className="inline-flex items-baseline gap-1.5 bg-[#1A2D63] text-white px-4 py-2.5 rounded-lg">
+                    <span className="font-newsreader text-xl md:text-2xl font-light">
                       {useCase.stat.value}
                     </span>
-                    <span className="text-white/60 text-xs">
+                    <span className="text-white/60 text-xs md:text-sm">
                       {useCase.stat.label}
                     </span>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="flex items-center justify-center gap-3 mt-6">
+            {useCasesData.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => goTo(index)}
+                aria-label={`Ga naar voorbeeld ${index + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  index === activeIndex ? 'w-8 bg-[#1A2D63]' : 'w-2 bg-[#1A2D63]/25 hover:bg-[#1A2D63]/40'
+                }`}
+              />
+            ))}
+            <span className="ml-2 text-sm text-[#1A2D63]/50">
+              {activeIndex + 1} / {TOTAL_USE_CASES}
+            </span>
+          </div>
         </div>
       </div>
     </section>
@@ -1906,290 +1759,11 @@ const HowItWorksSection = () => {
     updateLinePaths();
   }, [updateLinePaths]);
 
-  // GSAP scroll-triggered text reveal + card entrance animation
-  useGSAP(() => {
-    if (!sectionRef.current) return;
-
-    const mm = gsap.matchMedia();
-
-    // Desktop (768px+): Pinned scroll-driven animation
-    mm.add("(min-width: 768px)", () => {
-      if (!pinContainerRef.current || !headingRef.current || !subtitleRef.current) return;
-      if (!card1Ref.current || !card2Ref.current || !card3Ref.current) return;
-      if (!cardsWrapperRef.current || !headerWrapperRef.current) return;
-
-      updateLinePaths();
-
-      // Split heading and subtitle into words
-      const headingSplit = SplitText.create(headingRef.current, { type: "words" });
-      const subtitleSplit = SplitText.create(subtitleRef.current, { type: "words" });
-
-      // Initial states: words slightly visible (ghost/placeholder effect)
-      gsap.set(headingSplit.words, { opacity: 0.25, color: "rgba(26, 45, 99, 0.3)" });
-      gsap.set(subtitleSplit.words, { opacity: 0.25, color: "rgba(26, 45, 99, 0.3)" });
-
-      // Header starts large and centered in viewport
-      // Offset y by half the cards wrapper height so the header is truly vertically centered
-      // (the invisible cards wrapper still occupies flex layout space, pushing the header up)
-      const cardsH = cardsWrapperRef.current.offsetHeight;
-      gsap.set(headerWrapperRef.current, {
-        scale: 1.6,
-        y: cardsH / 2,
-      });
-
-      // Underline starts completely hidden
-      if (underlinePathRef.current) {
-        gsap.set(underlinePathRef.current, { drawSVG: "0%", opacity: 0 });
-      }
-
-      // Cards + CTA start hidden below
-      gsap.set([card1Ref.current, card2Ref.current, card3Ref.current], {
-        y: 100,
-        opacity: 0,
-      });
-      gsap.set([line1Ref.current, line2Ref.current], {
-        drawSVG: "0%",
-        opacity: 0,
-      });
-      if (ctaDesktopRef.current) {
-        gsap.set(ctaDesktopRef.current, { opacity: 0, y: 30 });
-      }
-
-      // Cards wrapper starts invisible and pushed down
-      gsap.set(cardsWrapperRef.current, {
-        opacity: 0,
-        y: 60,
-      });
-
-      // Master timeline with pinned ScrollTrigger
-      // Scroll distance of 2000px gives a slow, deliberate feel
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: pinContainerRef.current,
-          start: "top top",
-          end: "+=2000",
-          pin: true,
-          scrub: true,
-          anticipatePin: 1,
-        }
-      });
-
-      // Phase 1 (0 - 0.64): Word-by-word text reveal (ghost -> solid)
-      // Heading words solidify sequentially
-      tl.to(headingSplit.words, {
-        opacity: 1,
-        color: "rgba(26, 45, 99, 1)",
-        duration: 0.4,
-        stagger: 0.08,
-        ease: "none",
-      }, 0);
-
-      // Underline draws in after "zonder gedoe" words are fully animated
-      // Heading word "gedoe" finishes at ~0.64 (start 0.24 + duration 0.4)
-      if (underlinePathRef.current) {
-        tl.to(underlinePathRef.current, {
-          drawSVG: "100%",
-          opacity: 1,
-          duration: 0.2,
-          ease: "power2.inOut",
-        }, 0.65);
-      }
-
-      // Subtitle words solidify after heading starts
-      tl.to(subtitleSplit.words, {
-        opacity: 1,
-        color: "rgba(26, 45, 99, 1)",
-        duration: 0.3,
-        stagger: 0.06,
-        ease: "none",
-      }, 0.3);
-
-      // --- Dead time (~0.96 to 1.25): text fully visible, user reads ---
-
-      // Phase 2 (1.25+): Shrink header + cards rise
-      // Calculate how far to shift header from center to top of pinned area
-      const pinH = pinContainerRef.current.offsetHeight;
-      const headerH = headerWrapperRef.current.offsetHeight;
-      const shiftY = -(pinH / 2 - headerH / 2 - 96); // 96px = top padding equivalent
-
-      // Header shrinks back to normal size and shifts from center to top
-      tl.to(headerWrapperRef.current, {
-        scale: 1,
-        y: shiftY,
-        duration: 0.4,
-        ease: "power2.inOut",
-      }, 1.25);
-
-      // Cards wrapper fades in and rises
-      tl.to(cardsWrapperRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.35,
-        ease: "power2.out",
-      }, 1.3);
-
-      // Individual cards stagger in
-      tl.to(card1Ref.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.25,
-        ease: "power2.out",
-      }, 1.33)
-      .to(card2Ref.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.25,
-        ease: "power2.out",
-      }, 1.37)
-      .to(card3Ref.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.25,
-        ease: "power2.out",
-      }, 1.41);
-
-      // Lines draw in
-      tl.to(line1Ref.current, {
-        drawSVG: "100%",
-        opacity: 1,
-        duration: 0.15,
-        ease: "power2.inOut",
-      }, 1.47)
-      .to(line2Ref.current, {
-        drawSVG: "100%",
-        opacity: 1,
-        duration: 0.15,
-        ease: "power2.inOut",
-      }, 1.51);
-
-      // CTA fades in
-      if (ctaDesktopRef.current) {
-        tl.to(ctaDesktopRef.current, {
-          opacity: 1,
-          y: 0,
-          duration: 0.12,
-          ease: "power2.out",
-        }, 1.55);
-      }
-
-      // Dwell zone: cards + CTA fully visible, section stays pinned
-      // Empty tween pads the timeline so the section lingers before releasing
-      tl.to({}, { duration: 0.35 }, 1.67);
-
-      const handleResize = () => updateLinePaths();
-      window.addEventListener('resize', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        headingSplit.revert();
-        subtitleSplit.revert();
-      };
-    });
-
-    // Mobile (<768px): Simple fade-in animation (no pin)
-    mm.add("(max-width: 767px)", () => {
-      if (!card1Ref.current || !card2Ref.current || !card3Ref.current) return;
-
-      gsap.set([card1Ref.current, card2Ref.current, card3Ref.current], {
-        y: 60,
-        opacity: 0,
-      });
-      if (mobileLineRef.current) {
-        gsap.set(mobileLineRef.current, { drawSVG: "0%" });
-      }
-      if (ctaMobileRef.current) {
-        gsap.set(ctaMobileRef.current, { opacity: 0, y: 20 });
-      }
-
-      // Simple heading/subtitle fade on mobile
-      if (headingRef.current) {
-        gsap.set(headingRef.current, { opacity: 0, y: 30 });
-      }
-      if (subtitleRef.current) {
-        gsap.set(subtitleRef.current, { opacity: 0, y: 20 });
-      }
-
-      const headerTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none",
-        }
-      });
-
-      if (headingRef.current) {
-        headerTl.to(headingRef.current, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power3.out",
-        }, 0);
-      }
-      if (subtitleRef.current) {
-        headerTl.to(subtitleRef.current, {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          ease: "power3.out",
-        }, 0.1);
-      }
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-          toggleActions: "play none none none",
-        }
-      });
-
-      // Cards slide up with slight stagger
-      tl.to(card1Ref.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power3.out",
-      }, 0)
-      .to(card2Ref.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power3.out",
-      }, 0.1)
-      .to(card3Ref.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power3.out",
-      }, 0.2);
-
-      // Mobile line draws
-      if (mobileLineRef.current) {
-        tl.to(mobileLineRef.current, {
-          drawSVG: "100%",
-          duration: 0.8,
-          ease: "power2.inOut",
-        }, 0.15);
-      }
-
-      // CTA appears
-      if (ctaMobileRef.current) {
-        tl.to(ctaMobileRef.current, {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          ease: "power3.out",
-        }, 0.35);
-      }
-    });
-
-    return () => mm.revert();
-  }, { scope: sectionRef, dependencies: [updateLinePaths] });
-
   return (
-    <section ref={sectionRef} id="process" className="bg-[#FDFBF7] relative">
-      {/* Pinned container for desktop scroll animation */}
-      <div ref={pinContainerRef} className="relative min-h-screen overflow-hidden md:flex md:flex-col md:items-center md:justify-center">
-        {/* Header - centered in viewport during pin, shrinks to normal */}
-        <div ref={headerWrapperRef} className="pt-20 md:pt-0 pb-6 md:pb-10" style={{ transformOrigin: "center center" }}>
+    <section ref={sectionRef} id="process" className="bg-[#FDFBF7] relative pt-8 md:pt-12 pb-10 md:pb-14">
+      <div ref={pinContainerRef} className="relative">
+        {/* Header */}
+        <div ref={headerWrapperRef} className="pb-6 md:pb-10">
           <div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
             <h2 ref={headingRef} className="text-4xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
               AI implementeren{" "}
@@ -2215,7 +1789,7 @@ const HowItWorksSection = () => {
               </span>
             </h2>
             <p ref={subtitleRef} className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
-              Geen maanden wachten. Geen IT-team nodig.
+              Klaar in weken, niet maanden. Zonder eigen IT-afdeling.
             </p>
           </div>
         </div>
@@ -2256,7 +1830,7 @@ const HowItWorksSection = () => {
                   strokeWidth="3.5"
                   strokeLinecap="round"
                   fill="none"
-                  style={{ opacity: 0 }}
+                  style={{ opacity: 1 }}
                 />
 
                 <path
@@ -2266,7 +1840,7 @@ const HowItWorksSection = () => {
                   strokeWidth="3.5"
                   strokeLinecap="round"
                   fill="none"
-                  style={{ opacity: 0 }}
+                  style={{ opacity: 1 }}
                 />
               </svg>
 
@@ -2297,7 +1871,7 @@ const HowItWorksSection = () => {
                   strokeWidth="3"
                   strokeLinecap="round"
                   fill="none"
-                  style={{ strokeDasharray: 1200, strokeDashoffset: 1200 }}
+                  style={{ strokeDasharray: 1200, strokeDashoffset: 0 }}
                 />
               </svg>
 
@@ -2544,8 +2118,29 @@ const FAQSection = () => {
               <AccordionTrigger className="py-4 sm:py-5 md:py-6 text-left text-[#1A2D63] font-instrument text-[15px] sm:text-base md:text-lg font-medium hover:no-underline hover:text-[#475D8F] transition-colors [&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-5 sm:[&>svg]:w-5 [&>svg]:text-[#475D8F] [&>svg]:shrink-0 [&>svg]:ml-3 gap-2">
                 {item.question}
               </AccordionTrigger>
-              <AccordionContent className="text-[#1A2D63]/60 text-[14px] sm:text-[15px] md:text-base leading-relaxed pb-4 sm:pb-5 md:pb-6">
-                {item.answer}
+              <AccordionContent className="text-[#1A2D63]/60 text-[14px] sm:text-[15px] md:text-base leading-relaxed pb-4 sm:pb-5 md:pb-6 space-y-3">
+                {item.answer.map((block, i) => {
+                  if (block.type === "p") {
+                    return <p key={i}>{block.text}</p>;
+                  }
+                  if (block.type === "heading") {
+                    return (
+                      <p key={i} className="font-medium text-[#1A2D63]/80 mt-4 first:mt-0">
+                        {block.text}
+                      </p>
+                    );
+                  }
+                  if (block.type === "list") {
+                    return (
+                      <ul key={i} className="list-disc pl-5 space-y-1.5">
+                        {block.items.map((entry, j) => (
+                          <li key={j}>{entry}</li>
+                        ))}
+                      </ul>
+                    );
+                  }
+                  return null;
+                })}
               </AccordionContent>
             </AccordionItem>
           ))}
@@ -2948,11 +2543,6 @@ export function AIDesignLanding() {
       {/* HOW IT WORKS SECTION - Enhanced 3 Steps      */}
       {/* ============================================ */}
       <HowItWorksSection />
-
-      {/* ============================================ */}
-      {/* COMPANY TYPES CAROUSEL                      */}
-      {/* ============================================ */}
-      <CompanyTypesCarousel />
 
       {/* ============================================ */}
       {/* USE CASES SECTION                          */}
