@@ -203,10 +203,18 @@ const faqItems: { question: string; answer: FaqBlock[] }[] = [
       { type: "p", text: "Simpel: wij adviseren geen automatiseringen met lage ROI. Als een proces maar 30-40% efficiëntiewinst oplevert, zeggen we eerlijk dat het de investering niet waard is." },
       { type: "p", text: "We focussen op processen waar automatisering écht verschil maakt — volledig of grotendeels repetitieve taken die nu handmatig worden uitgevoerd." },
       { type: "heading", text: "Concrete voorbeelden" },
-      { type: "p", text: "Volledig repetitief (lead management, data synchronisatie): 90-100% tijdsbesparing — het proces draait volledig automatisch." },
-      { type: "p", text: "Grotendeels repetitief (offertes met variabele prijzen, factuurverwerking): 70-85% tijdsbesparing — template is geautomatiseerd, menselijke input alleen waar nodig." },
+      { type: "list", items: [
+        "Lead management: Nu 6 uur/week aan leads in CRM zetten, e-mails versturen, opvolging plannen → na automatisering: 0 uur. Volledige besparing.",
+        "Offerte-proces: Nu 45 minuten per offerte (8x per week) → na automatisering: 10 minuten (alleen variabele gegevens invullen). Besparing: 4,5 uur/week.",
+        "Data synchronisatie: Nu 20 minuten per nieuwe klant om gegevens over te zetten naar boekhouding, projecttool, maillijst → na automatisering: 0 minuten, gebeurt direct.",
+      ]},
       { type: "heading", text: "Meer dan alleen uren" },
-      { type: "p", text: "Tijdsbesparing is één ding, maar je wint ook: niks meer vergeten (follow-ups gebeuren automatisch), sneller reageren (binnen minuten vs. 'als iemand tijd heeft'), geen frustratie over repetitieve taken, en consistentie (geen fouten door haast)." },
+      { type: "list", items: [
+        "Lead om 18:00u binnen? Nu: pas volgende ochtend verwerkt. Na automatisering: binnen 2 minuten beantwoord (ook buiten kantooruren).",
+        "Follow-ups: Nu vergeet je 20% bij drukte. Na automatisering: 0% gemist, alles gebeurt op tijd.",
+        "Fouten: Nu typ je klantgegevens 3x over (telkens kans op fouten). Na automatisering: 0 typefouten, data altijd consistent.",
+        "Teammoraal: Minder frustratie over admin, meer tijd voor klanten en groei.",
+      ]},
       { type: "p", text: "Twijfel of jouw proces geschikt is? Beschrijf het, dan zijn we eerlijk of de ROI er is — en adviseren we het alleen als het écht zin heeft." },
     ],
   },
@@ -214,17 +222,23 @@ const faqItems: { question: string; answer: FaqBlock[] }[] = [
     question: "Werkt dit samen met onze bestaande software?",
     answer: [
       { type: "p", text: "Ja, juist daarom bouwen we automatiseringen — we verbinden je bestaande tools met elkaar." },
-      { type: "heading", text: "Systemen waar we mee werken:" },
+      { type: "heading", text: "Types software waar we mee werken:" },
       { type: "list", items: [
-        "CRM: Teamleader, HubSpot, Salesforce, Pipedrive",
-        "Boekhouding: Exact Online, Yuki, Octopus",
-        "E-mail & communicatie: Gmail, Outlook, Mailchimp",
-        "Files & documenten: Google Drive, OneDrive, Dropbox",
-        "Betalingen: Stripe, Mollie, PayPal",
-        "500+ andere apps via standaard koppelingen",
+        "CRM-systemen (Teamleader, HubSpot, Salesforce, ...)",
+        "Boekhoudpakketten (Exact Online, Yuki, ...)",
+        "E-mail & marketingplatformen (Gmail, Outlook, Mailchimp, ...)",
+        "Cloud-opslag (Google Drive, OneDrive, Dropbox, ...)",
+        "Betalingsplatformen (Stripe, Mollie, PayPal, ...)",
+        "Projectmanagement tools (Monday, Asana, Trello, ...)",
+        "Communicatie (Slack, Microsoft Teams, ...)",
+        "En 500+ andere via standaard koppelingen",
       ]},
-      { type: "p", text: "Werken jullie met minder courante software? Zolang het een API heeft (meeste moderne systemen hebben dit), kunnen we het waarschijnlijk koppelen." },
+      { type: "heading", text: "Hoe we koppelen" },
+      { type: "p", text: "Als je software een API heeft (vrijwel alle moderne systemen sinds 2015), kunnen we het koppelen. Obscure of minder courante software? Zolang het een koppelingsmogelijkheid heeft, lukt het waarschijnlijk." },
+      { type: "heading", text: "Geen API?" },
+      { type: "p", text: "Dan zoeken we een workaround via e-mail, geëxporteerde bestanden, of webhooks. In 95% van de gevallen vinden we een oplossing." },
       { type: "p", text: "Je hoeft geen nieuwe software aan te schaffen. We werken met wat je al hebt en laten die systemen samenwerken." },
+      { type: "p", text: "Onzeker of jullie tools compatibel zijn? Stuur ons de lijst, dan checken we het vooraf — gratis en zonder verplichtingen." },
     ],
   },
   {
@@ -260,8 +274,8 @@ const faqItems: { question: string; answer: FaqBlock[] }[] = [
         "Vind de kinderziektes vóór we weggaan",
       ]},
       { type: "p", text: "Waarom? Omdat theorie ≠ praktijk. Jouw team werkt ermee — zij kennen de situaties." },
-      { type: "heading", text: "Na die 2–4 weken:" },
-      { type: "p", text: "Als we het goed gedaan hebben, draait het stabiel. Maandenlang, zonder problemen." },
+      { type: "heading", text: "Resultaat naar hypercare:" },
+      { type: "p", text: "Een systeem dat maandenlang draait zonder dat je aan ons hoeft te denken." },
       { type: "heading", text: "Mocht er toch iets zijn:" },
       { type: "p", text: "We springen bij — gratis, vanzelfsprekend. Bug? Gratis. API veranderd? Gratis. Iets werkt niet zoals afgesproken? Onze verantwoordelijkheid. Je betaalt alleen voor nieuwe features die je later wilt toevoegen." },
     ],
@@ -654,8 +668,8 @@ const LogoCarousel = ({
           height: 'auto',
           aspectRatio: `${CURVE_ASPECT_RATIO}`,
            top: `${svgTopPercent}%`,
-           transform: 'translateY(-50%)',
-         }}
+          transform: 'translateY(-50%)',
+        }}
         viewBox="0 0 1600 900"
         preserveAspectRatio="xMidYMid meet"
       >
@@ -1549,11 +1563,14 @@ const illustrationComponents: Record<string, React.FC<{ progress: number }>> = {
   'reporting': ReportingIllustration,
 };
 
-// --- Use Cases: slideshow links/rechts, alleen pijlen (geen scroll om te wisselen) ---
+// --- Use Cases: slideshow links/rechts, pijlen + swipe (touch & muis) ---
+const SWIPE_THRESHOLD = 50;
+
 const UseCasesSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [illustrationProgress, setIllustrationProgress] = useState(0);
+  const swipeStartRef = useRef<{ x: number; pointerId?: number } | null>(null);
   const TOTAL_USE_CASES = useCasesData.length;
 
   // Bij wissel: illustratie van 0 → 1 animeren
@@ -1573,6 +1590,19 @@ const UseCasesSection = () => {
     setActiveIndex(Math.max(0, Math.min(index, TOTAL_USE_CASES - 1)));
   }, [TOTAL_USE_CASES]);
 
+  const handleSwipeStart = useCallback((clientX: number, pointerId?: number) => {
+    swipeStartRef.current = { x: clientX, pointerId };
+  }, []);
+
+  const handleSwipeEnd = useCallback((clientX: number, pointerId?: number) => {
+    const start = swipeStartRef.current;
+    swipeStartRef.current = null;
+    if (!start || (pointerId != null && start.pointerId != null && start.pointerId !== pointerId)) return;
+    const delta = clientX - start.x;
+    if (delta > SWIPE_THRESHOLD && activeIndex > 0) goTo(activeIndex - 1);
+    else if (delta < -SWIPE_THRESHOLD && activeIndex < TOTAL_USE_CASES - 1) goTo(activeIndex + 1);
+  }, [activeIndex, goTo, TOTAL_USE_CASES]);
+
   const useCase = useCasesData[activeIndex];
   const IllustrationComponent = useCase ? illustrationComponents[useCase.id] : null;
 
@@ -1588,7 +1618,26 @@ const UseCasesSection = () => {
           </p>
         </div>
 
-        <div className="relative">
+        <div
+          className="relative touch-pan-y select-none"
+          style={{ touchAction: 'pan-y' }}
+          onTouchStart={(e) => handleSwipeStart(e.touches[0].clientX)}
+          onTouchEnd={(e) => e.changedTouches[0] && handleSwipeEnd(e.changedTouches[0].clientX)}
+          onPointerDown={(e) => { e.button === 0 && handleSwipeStart(e.clientX, e.pointerId); }}
+          onPointerMove={(e) => {
+            if (e.buttons !== 1 || !swipeStartRef.current) return;
+            const start = swipeStartRef.current;
+            if (start.pointerId != null && start.pointerId !== e.pointerId) return;
+            const delta = e.clientX - start.x;
+            if (Math.abs(delta) > SWIPE_THRESHOLD) {
+              if (delta > 0 && activeIndex > 0) { goTo(activeIndex - 1); swipeStartRef.current = null; }
+              else if (delta < 0 && activeIndex < TOTAL_USE_CASES - 1) { goTo(activeIndex + 1); swipeStartRef.current = null; }
+            }
+          }}
+          onPointerUp={(e) => e.button === 0 && handleSwipeEnd(e.clientX, e.pointerId)}
+          onPointerLeave={(e) => e.buttons === 0 && (swipeStartRef.current = null)}
+          onPointerCancel={() => { swipeStartRef.current = null; }}
+        >
           <button
             type="button"
             onClick={() => goTo(activeIndex - 1)}
@@ -2066,7 +2115,7 @@ const FAQSection = () => {
       opacity: 1,
       duration: 0.6,
       ease: "power3.out",
-    }, 0);
+      }, 0);
 
     tl.to(items, {
       y: 0,
@@ -2189,19 +2238,18 @@ export function AIDesignLanding() {
 
     // Phase 2: after two frames (overlay fully painted), jump to target
     requestAnimationFrame(() => { requestAnimationFrame(() => {
-      const isDesktop = window.innerWidth >= 768;
+      const navOffset = 80; // space below fixed nav
       let targetTop = 0;
       if (sectionId === "hero") {
         targetTop = 0;
-      } else if (sectionId === "process") {
-        const el = document.getElementById("process");
-        if (el) targetTop = el.offsetTop + (isDesktop ? 2000 : 0);
-      } else if (sectionId === "use-cases") {
-        const el = document.getElementById("use-cases");
-        if (el) targetTop = el.offsetTop + (isDesktop ? 850 : 0);
       } else {
         const el = document.getElementById(sectionId);
-        if (el) targetTop = el.offsetTop;
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const scrollY = window.scrollY ?? document.documentElement.scrollTop;
+          targetTop = scrollY + rect.top - navOffset;
+          targetTop = Math.max(0, targetTop);
+        }
       }
 
       // Override CSS scroll-behavior: smooth to make jump truly instant
@@ -2385,10 +2433,10 @@ export function AIDesignLanding() {
             ))}
           </div>
 
-          <a
-            href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-            target="_blank"
-            rel="noopener noreferrer"
+            <a
+              href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
+              target="_blank"
+              rel="noopener noreferrer"
             onClick={() =>
               pushDataLayerEvent("cta_click", {
                 cta_label: "nav_calendly",
@@ -2403,10 +2451,10 @@ export function AIDesignLanding() {
               paddingBottom: `${10 + (1 - navScrollProgress) * 2}px`,
               transition: 'padding 0.3s',
             }}
-          >
-            <Calendar className="w-4 h-4" />
-            <span>Plan een gesprek</span>
-          </a>
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Plan een gesprek</span>
+            </a>
 
           {/* Mobile CTA + hamburger */}
           <div className="md:hidden flex items-center gap-2">
@@ -2445,7 +2493,7 @@ export function AIDesignLanding() {
       >
         <div className="absolute inset-0 bg-[#FDFBF7]" />
         <div className="loader relative z-10" />
-      </div>
+                </div>
 
       {/* Mobile full-screen menu overlay */}
       {mobileMenuOpen && (
@@ -2483,9 +2531,9 @@ export function AIDesignLanding() {
             >
               <Calendar className="w-4 h-4" />
               Plan een gesprek
-            </a>
-          </div>
-        </div>
+                  </a>
+                </div>
+              </div>
       )}
 
       {/* ============================================ */}
@@ -2528,14 +2576,14 @@ export function AIDesignLanding() {
                 <span>Plan een gratis consult</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>
-            </div>
+          </div>
 
             <p className="mt-8 text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#475D8F]/70 lg:hidden">
               Integraties met je tools
             </p>
             <MobileLogoCarousel />
+            </div>
           </div>
-        </div>
 
       </header>
 
@@ -2626,7 +2674,7 @@ export function AIDesignLanding() {
 
         <div className="max-w-[1400px] mx-auto relative z-10">
           <div className="grid gap-10 lg:gap-12 lg:grid-cols-[1.3fr_1fr] items-start">
-            {/* Footer CTA */}
+          {/* Footer CTA */}
             <div>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-newsreader leading-tight mb-4 text-center lg:text-left">
                 Klaar om uw bedrijf <br />te automatiseren?
@@ -2675,7 +2723,7 @@ export function AIDesignLanding() {
                   <div className="flex flex-col">
                     <span>+32 (0)495 702 314</span>
                     <span>+32 (0)468 029 945</span>
-                  </div>
+                </div>
                 </li>
                 <li className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-white/70" />
@@ -2729,10 +2777,10 @@ export function AIDesignLanding() {
               <a href="/disclaimer" className="hover:text-white transition-colors">Disclaimer</a>
               <div className="text-sm text-white/60 [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:transition-colors">
                 <CookieSettingsLink />
-              </div>
             </div>
-            <p className="text-sm text-white/40">© {currentYear} Finit Solutions</p>
           </div>
+            <p className="text-sm text-white/40">© {currentYear} Finit Solutions</p>
+        </div>
         </div>
       </footer>
     </div>
