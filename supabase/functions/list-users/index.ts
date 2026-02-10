@@ -105,16 +105,30 @@ Deno.serve(async (req) => {
       )
     }
 
+    // Fetch user profiles to get account_ids
+    const { data: profiles } = await supabaseAdmin
+      .from('user_profiles')
+      .select('id, account_id, display_name')
+    
+    const profilesMap = new Map(
+      (profiles || []).map(p => [p.id, { account_id: p.account_id, display_name: p.display_name }])
+    )
+
     // Return user list (excluding sensitive data)
-    const userList = users.users.map(user => ({
-      id: user.id,
-      email: user.email,
-      created_at: user.created_at,
-      last_sign_in_at: user.last_sign_in_at,
-      email_confirmed_at: user.email_confirmed_at,
-      is_admin: user.email?.toLowerCase().endsWith('@finitsolutions.be') || 
-                user.email?.toLowerCase().endsWith('@finitsolutions.com'),
-    }))
+    const userList = users.users.map(user => {
+      const profile = profilesMap.get(user.id)
+      return {
+        id: user.id,
+        email: user.email,
+        created_at: user.created_at,
+        last_sign_in_at: user.last_sign_in_at,
+        email_confirmed_at: user.email_confirmed_at,
+        is_admin: user.email?.toLowerCase().endsWith('@finitsolutions.be') || 
+                  user.email?.toLowerCase().endsWith('@finitsolutions.com'),
+        account_id: profile?.account_id || null,
+        display_name: profile?.display_name || null,
+      }
+    })
 
     return new Response(
       JSON.stringify({ users: userList }),

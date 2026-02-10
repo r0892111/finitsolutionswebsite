@@ -47,6 +47,31 @@ export const emailThreadEditsConfig: DashboardConfig = {
   pageSize: 50,
   fields: [
     {
+      key: 'user_id',
+      label: 'Assigned To',
+      type: 'text',
+      filterable: true,
+      sortable: true,
+    },
+    {
+      key: 'assigned_by',
+      label: 'Assigned By',
+      type: 'text',
+      filterable: true,
+      sortable: true,
+    },
+    {
+      key: 'assigned_at',
+      label: 'Assigned At',
+      type: 'date',
+      filterable: true,
+      sortable: true,
+      render: (value: string) => {
+        if (!value) return '-';
+        return new Date(value).toLocaleString();
+      },
+    },
+    {
       key: 'thread_id',
       label: 'Thread ID',
       type: 'text',
@@ -210,6 +235,31 @@ export const emailsConfig: DashboardConfig = {
   },
   pageSize: 50,
   fields: [
+    {
+      key: 'user_id',
+      label: 'Assigned To',
+      type: 'text',
+      filterable: true,
+      sortable: true,
+    },
+    {
+      key: 'assigned_by',
+      label: 'Assigned By',
+      type: 'text',
+      filterable: true,
+      sortable: true,
+    },
+    {
+      key: 'assigned_at',
+      label: 'Assigned At',
+      type: 'date',
+      filterable: true,
+      sortable: true,
+      render: (value: string) => {
+        if (!value) return '-';
+        return new Date(value).toLocaleString();
+      },
+    },
     {
       key: 'id',
       label: 'ID',

@@ -10,8 +10,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowLeft, User, Calendar, Mail, Shield, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import { DataDashboard } from '@/components/data-dashboard';
-import { emailThreadEditsConfig } from '@/lib/dashboard-configs';
+import { UserProfileEditor } from '@/components/user-profile-editor';
+import { IntegrationsList } from '@/components/integrations-list';
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface UserDetails {
   id: string;
@@ -26,7 +28,7 @@ interface UserDetailClientProps {
   userId: string;
 }
 
-export default function UserDetailClient({ userId }: UserDetailClientProps) {
+function UserDetailContent({ userId }: UserDetailClientProps) {
   const { isAuthenticated, isAdmin, isLoading: authLoading } = useAuth();
   const { t } = useLanguage();
   const router = useRouter();
@@ -194,10 +196,27 @@ export default function UserDetailClient({ userId }: UserDetailClientProps) {
             </CardContent>
           </Card>
 
-          {/* Data Dashboard */}
-          <DataDashboard config={emailThreadEditsConfig} userId={userId} />
+          {/* User Profile Editor */}
+          <UserProfileEditor userId={userId} />
+
+          {/* Integrations */}
+          <IntegrationsList userId={userId} showConnectButton={false} />
         </div>
       </main>
     </div>
+  );
+}
+
+export default function UserDetailClient({ userId }: UserDetailClientProps) {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto" />
+        </div>
+      </div>
+    }>
+      <UserDetailContent userId={userId} />
+    </Suspense>
   );
 }

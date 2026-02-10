@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
 import { useLanguage } from '@/contexts/language-context';
@@ -9,13 +10,39 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { LogOut, FileText, MessageSquare, Settings, Shield, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { DataDashboard } from '@/components/data-dashboard';
-import { emailThreadEditsConfig, emailsConfig } from '@/lib/dashboard-configs';
+import { IntegrationsList } from '@/components/integrations-list';
+import { useToast } from '@/hooks/use-toast';
 
-export default function PortalPage() {
+function PortalContent() {
   const { user, isAuthenticated, isAdmin, logout, isLoading } = useAuth();
   const { t } = useLanguage();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { toast } = useToast();
+  useEffect(() => {
+    // Handle success/error messages from OAuth redirects
+    const success = searchParams.get('success');
+    const error = searchParams.get('error');
+    
+    if (success === 'google_connected') {
+      toast({
+        title: 'Success',
+        description: 'Google account connected successfully',
+      });
+      // Clean URL
+      router.replace('/portal');
+    }
+    
+    if (error) {
+      toast({
+        title: 'Error',
+        description: error === 'google_oauth_not_configured' 
+          ? 'Google OAuth is not configured. Please contact support.'
+          : decodeURIComponent(error),
+        variant: 'destructive',
+      });
+    }
+  }, [searchParams, toast, router]);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -25,6 +52,7 @@ export default function PortalPage() {
       router.push('/portal/admin');
     }
   }, [isAuthenticated, isAdmin, isLoading, router]);
+
 
   const handleLogout = () => {
     logout();
@@ -95,12 +123,10 @@ export default function PortalPage() {
           </p>
         </div>
 
-        {/* Data Dashboards */}
-        {user?.id && (
-          <div className="mb-12 space-y-8">
-            <DataDashboard config={emailsConfig} userId={user.id} />
-          </div>
-        )}
+        {/* Integrations */}
+        <div className="w-full">
+          <IntegrationsList showConnectButton={true} />
+        </div>
 
         {/* Status Section */}
         <Card className="bg-primary/5 border-primary/20">
@@ -129,5 +155,19 @@ export default function PortalPage() {
         </Card>
       </main>
     </div>
+  );
+}
+
+export default function PortalPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+        </div>
+      </div>
+    }>
+      <PortalContent />
+    </Suspense>
   );
 }

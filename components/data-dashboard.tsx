@@ -11,10 +11,12 @@ import {
   type ColumnDef,
   type SortingState,
   type ColumnFiltersState,
+  type RowSelectionState,
 } from '@tanstack/react-table';
 import { createClient } from '@/lib/supabase/client';
 import { useLanguage } from '@/contexts/language-context';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/auth-context';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -48,14 +50,17 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from 'recharts';
-import { Loader2, Search, Filter, Eye, X, ChevronUp, ChevronDown, Table2, BarChart3 } from 'lucide-react';
+import { Loader2, Search, Filter, Eye, X, ChevronUp, ChevronDown, Table2, BarChart3, UserPlus } from 'lucide-react';
 import type { DashboardConfig, DashboardField } from '@/lib/dashboard-configs';
 import { format } from 'date-fns';
 import { DataAnalysisBuilder } from '@/components/data-analysis-builder';
+import { Checkbox } from '@/components/ui/checkbox';
+import { UserAssignmentDialog } from '@/components/user-assignment-dialog';
 
 interface DataDashboardProps {
   config: DashboardConfig;
-  userId: string;
+  userId: string; // The user ID to filter by (or current user if not admin)
+  filterByUserId?: boolean; // If true, filter by userId. If false (admin), show all data
 }
 
 interface FilterState {
@@ -66,9 +71,10 @@ interface FilterState {
 
 const COLORS = ['hsl(var(--primary))', '#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#00ff00'];
 
-export function DataDashboard({ config, userId }: DataDashboardProps) {
+export function DataDashboard({ config, userId, filterByUserId = true }: DataDashboardProps) {
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { user: currentUser, isAdmin } = useAuth();
   const supabase = createClient();
   
   const [data, setData] = useState<any[]>([]);
@@ -87,6 +93,9 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
   // Column insight-specific filters: key is field key, value is array of filters
   const [insightFilters, setInsightFilters] = useState<Record<string, FilterState[]>>({});
   const [showInsightFilters, setShowInsightFilters] = useState<Record<string, boolean>>({});
+  // Row selection for bulk assignment
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [isAssignmentDialogOpen, setIsAssignmentDialogOpen] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -99,9 +108,31 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
 
       console.log(`Fetching data from table: ${config.tableName}`);
       
-      const { data: fetchedData, error } = await supabase
+      // Determine which user_id to filter by
+      // If filterByUserId is false (admin viewing all), don't filter
+      // If filterByUserId is true, filter by the provided userId
+      const targetUserId = filterByUserId ? userId : null;
+      
+      let query = supabase
         .from(config.tableName)
-        .select('*')
+        .select('*');
+      
+      // Apply user filter if needed (non-admin users or admin viewing specific user)
+      if (targetUserId) {
+        query = query.eq('user_id', targetUserId);
+        console.log(`Filtering by user_id: ${targetUserId}`);
+      } else if (isAdmin) {
+        console.log('Admin user - showing all data');
+      } else {
+        // Fallback: if not admin and no userId provided, use current user
+        const fallbackUserId = currentUser?.id;
+        if (fallbackUserId) {
+          query = query.eq('user_id', fallbackUserId);
+          console.log(`Fallback: Filtering by current user_id: ${fallbackUserId}`);
+        }
+      }
+      
+      const { data: fetchedData, error } = await query
         .order(config.defaultSort?.field || 'created_at', { 
           ascending: config.defaultSort?.direction === 'asc' 
         });
@@ -127,7 +158,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [userId, supabase, config.tableName, config.defaultSort?.field, config.defaultSort?.direction, t, toast]);
+  }, [userId, filterByUserId, supabase, config.tableName, config.defaultSort?.field, config.defaultSort?.direction, t, toast, isAdmin, currentUser?.id]);
 
   useEffect(() => {
     fetchData();
@@ -444,10 +475,36 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
 
   // TanStack Table columns
   const columns = useMemo<ColumnDef<any>[]>(() => {
-    const cols: ColumnDef<any>[] = config.fields.map((field) => ({
+    const cols: ColumnDef<any>[] = [];
+    
+    // Add checkbox column for admins
+    if (isAdmin) {
+      cols.push({
+        id: 'select',
+        header: ({ table }) => (
+          <Checkbox
+            checked={table.getIsAllPageRowsSelected()}
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      });
+    }
+    
+    // Add regular columns
+    const regularColumns = config.fields.map((field) => ({
       accessorKey: field.key,
       header: field.label,
-      cell: ({ row }) => {
+      cell: ({ row }: { row: any }) => {
         const value = row.getValue(field.key);
         if (field.render) {
           return field.render(value);
@@ -468,6 +525,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
       },
       enableSorting: field.sortable ?? false,
     }));
+    cols.push(...regularColumns);
 
     // Add actions column
     cols.push({
@@ -488,7 +546,7 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
     });
 
     return cols;
-  }, [config.fields]);
+  }, [config.fields, isAdmin]);
 
   const table = useReactTable({
     data: filteredData,
@@ -498,11 +556,14 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getRowId: (row) => row.thread_id || row.id || String(Math.random()),
+    enableRowSelection: isAdmin,
+    onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     state: {
       sorting,
       columnFilters,
+      rowSelection,
     },
     initialState: {
       pagination: {
@@ -2201,6 +2262,23 @@ export function DataDashboard({ config, userId }: DataDashboardProps) {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* User Assignment Dialog */}
+      {isAdmin && (
+        <UserAssignmentDialog
+          open={isAssignmentDialogOpen}
+          onOpenChange={setIsAssignmentDialogOpen}
+          recordIds={table.getSelectedRowModel().rows.map((row) => {
+            const primaryKey = config.tableName === 'email_thread_edits' ? 'thread_id' : 'id';
+            return row.original[primaryKey] || row.id;
+          })}
+          tableName={config.tableName}
+          onSuccess={() => {
+            setRowSelection({});
+            fetchData();
+          }}
+        />
+      )}
     </Card>
   );
 }
