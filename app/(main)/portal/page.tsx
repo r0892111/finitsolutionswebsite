@@ -61,10 +61,10 @@ function PortalContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-finit-aurora flex items-center justify-center">
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center font-instrument">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">{t('portal.loading')}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A2D63] mx-auto"></div>
+          <p className="mt-4 text-[#1A2D63]/60">{t('portal.loading')}</p>
         </div>
       </div>
     );
@@ -75,9 +75,9 @@ function PortalContent() {
   }
 
   return (
-    <div className="min-h-screen bg-finit-aurora">
+    <div className="min-h-screen bg-finit-aurora font-instrument">
       {/* Header */}
-      <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 sticky top-0 z-50">
+      <header className="bg-white/95 backdrop-blur-xl shadow-brand border-b border-[#1A2D63]/10 sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -90,14 +90,14 @@ function PortalContent() {
                   className="object-contain h-full w-auto"
                 />
               </div>
-              <div className="h-6 w-px bg-border"></div>
-              <h1 className="finit-h2 text-primary">{t('portal.title')}</h1>
+              <div className="h-6 w-px bg-[#1A2D63]/20"></div>
+              <h1 className="finit-h2 text-[#1A2D63]">{t('portal.title')}</h1>
             </div>
             <Button
               onClick={handleLogout}
               variant="outline"
               size="sm"
-              className="gap-2"
+              className="gap-2 border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium"
             >
               <LogOut className="h-4 w-4" />
               {t('portal.logout')}
@@ -110,15 +110,15 @@ function PortalContent() {
       <main className="container mx-auto px-6 py-12">
         {/* Welcome Section */}
         <div className="mb-12 text-center">
-          <h2 className="finit-h1 text-primary mb-4">
+          <h2 className="finit-h1 text-[#1A2D63] mb-4">
             {t('portal.welcome.title')}
             {user?.email && (
-              <span className="block text-lg font-normal text-muted-foreground mt-2">
+              <span className="block text-lg font-normal text-[#1A2D63]/60 mt-2 font-instrument">
                 {user.email}
               </span>
             )}
           </h2>
-          <p className="finit-body text-muted-foreground max-w-2xl mx-auto">
+          <p className="finit-body text-[#1A2D63]/70 max-w-2xl mx-auto">
             {t('portal.welcome.description')}
           </p>
         </div>
@@ -129,11 +129,13 @@ function PortalContent() {
         </div>
 
         {/* Status Section */}
-        <Card className="bg-primary/5 border-primary/20">
+        <Card className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10 mt-8">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-primary" />
-              <CardTitle className="finit-h2 text-primary">
+              <div className="rounded-full bg-[#1A2D63]/10 p-2">
+                <Shield className="h-5 w-5 text-[#1A2D63]" />
+              </div>
+              <CardTitle className="finit-h2 text-[#1A2D63]">
                 {t('portal.status.title')}
               </CardTitle>
             </div>
@@ -142,12 +144,12 @@ function PortalContent() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                  <span className="finit-body">{t('portal.status.authenticated')}</span>
+                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse"></div>
+                  <span className="finit-body text-[#1A2D63]">{t('portal.status.authenticated')}</span>
                 </div>
-                <Clock className="h-4 w-4 text-muted-foreground" />
+                <Clock className="h-4 w-4 text-[#1A2D63]/50" />
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-[#1A2D63]/60">
                 {t('portal.status.description')}
               </p>
             </div>
@@ -161,9 +163,9 @@ function PortalContent() {
 export default function PortalPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-finit-aurora flex items-center justify-center">
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center font-instrument">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A2D63] mx-auto"></div>
         </div>
       </div>
     }>

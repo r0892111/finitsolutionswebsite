@@ -157,10 +157,10 @@ export default function AdminDashboardPage() {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-finit-aurora flex items-center justify-center">
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center font-instrument">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">{t('portal.loading')}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A2D63] mx-auto"></div>
+          <p className="mt-4 text-[#1A2D63]/60">{t('portal.loading')}</p>
         </div>
       </div>
     );
@@ -171,9 +171,9 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-finit-aurora">
+    <div className="min-h-screen bg-finit-aurora font-instrument">
       {/* Header */}
-      <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 sticky top-0 z-50">
+      <header className="bg-white/95 backdrop-blur-xl shadow-brand border-b border-[#1A2D63]/10 sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -186,19 +186,21 @@ export default function AdminDashboardPage() {
                   className="object-contain h-full w-auto"
                 />
               </div>
-              <div className="h-6 w-px bg-border"></div>
+              <div className="h-6 w-px bg-[#1A2D63]/20"></div>
               <div className="flex items-center gap-2">
-                <Shield className="h-5 w-5 text-primary" />
-                <h1 className="finit-h2 text-primary">{t('portal.admin.title')}</h1>
+                <div className="rounded-full bg-[#1A2D63]/10 p-1.5">
+                  <Shield className="h-4 w-4 text-[#1A2D63]" />
+                </div>
+                <h1 className="finit-h2 text-[#1A2D63]">{t('portal.admin.title')}</h1>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Link href="/portal">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium">
                   {t('portal.admin.backToPortal')}
                 </Button>
               </Link>
-              <Button onClick={handleLogout} variant="outline" size="sm" className="gap-2">
+              <Button onClick={handleLogout} variant="outline" size="sm" className="gap-2 border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium">
                 <LogOut className="h-4 w-4" />
                 {t('portal.logout')}
               </Button>
@@ -209,28 +211,28 @@ export default function AdminDashboardPage() {
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-12">
-        {/* Integrations */}
+        {/* Stats & Users Section */}
         <div className="w-full mb-8">
             {/* Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="bg-primary/5 border-primary/20">
+              <Card className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
                 <CardHeader className="pb-2">
-                  <CardDescription>{t('portal.admin.stats.totalUsers')}</CardDescription>
-                  <CardTitle className="finit-h2 text-primary">{users.length}</CardTitle>
+                  <CardDescription className="text-[#1A2D63]/60">{t('portal.admin.stats.totalUsers')}</CardDescription>
+                  <CardTitle className="finit-h2 text-[#1A2D63]">{users.length}</CardTitle>
                 </CardHeader>
               </Card>
-              <Card className="bg-primary/5 border-primary/20">
+              <Card className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
                 <CardHeader className="pb-2">
-                  <CardDescription>{t('portal.admin.stats.activeUsers')}</CardDescription>
-                  <CardTitle className="finit-h2 text-primary">
+                  <CardDescription className="text-[#1A2D63]/60">{t('portal.admin.stats.activeUsers')}</CardDescription>
+                  <CardTitle className="finit-h2 text-[#1A2D63]">
                     {users.filter((u) => u.last_sign_in_at).length}
                   </CardTitle>
                 </CardHeader>
               </Card>
-              <Card className="bg-primary/5 border-primary/20">
+              <Card className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
                 <CardHeader className="pb-2">
-                  <CardDescription>{t('portal.admin.stats.adminUsers')}</CardDescription>
-                  <CardTitle className="finit-h2 text-primary">
+                  <CardDescription className="text-[#1A2D63]/60">{t('portal.admin.stats.adminUsers')}</CardDescription>
+                  <CardTitle className="finit-h2 text-[#1A2D63]">
                     {users.filter((u) => u.is_admin).length}
                   </CardTitle>
                 </CardHeader>
@@ -238,35 +240,35 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Search Bar */}
-            <Card className="mb-6 mt-6">
+            <Card className="mb-6 mt-6 bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
               <CardContent className="pt-6">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#1A2D63]/50" />
                   <Input
                     type="text"
                     placeholder={t('portal.admin.search.placeholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 border-[#1A2D63]/20 focus:border-[#1A2D63]/40 focus:ring-[#1A2D63]/20"
                   />
                 </div>
               </CardContent>
             </Card>
 
             {/* Users List */}
-            <Card>
+            <Card className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
               <CardHeader>
-                <CardTitle className="finit-h2 flex items-center gap-2">
+                <CardTitle className="finit-h2 flex items-center gap-2 text-[#1A2D63]">
                   <Users className="h-5 w-5" />
                   {t('portal.admin.users.title')}
                 </CardTitle>
-                <CardDescription>{t('portal.admin.users.description')}</CardDescription>
+                <CardDescription className="text-[#1A2D63]/60">{t('portal.admin.users.description')}</CardDescription>
               </CardHeader>
               <CardContent>
                 {filteredUsers.length === 0 ? (
                   <div className="text-center py-12">
-                    <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">{t('portal.admin.users.noUsers')}</p>
+                    <Users className="h-12 w-12 text-[#1A2D63]/30 mx-auto mb-4" />
+                    <p className="text-[#1A2D63]/60">{t('portal.admin.users.noUsers')}</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -276,30 +278,30 @@ export default function AdminDashboardPage() {
                         href={`/portal/admin/users?userId=${portalUser.id}`}
                         className="block"
                       >
-                        <Card className="highlight-card hover:shadow-brand-lg transition-all duration-300 cursor-pointer">
+                        <Card className="bg-white hover:bg-[#1A2D63]/[0.02] border-[#1A2D63]/10 hover:border-[#1A2D63]/20 hover:shadow-brand-lg transition-all duration-300 cursor-pointer">
                           <CardContent className="pt-6">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-4 flex-1">
-                                <div className="rounded-full bg-primary/10 p-3">
-                                  <User className="h-5 w-5 text-primary" />
+                                <div className="rounded-full bg-[#1A2D63]/10 p-3">
+                                  <User className="h-5 w-5 text-[#1A2D63]" />
                                 </div>
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2 mb-1">
-                                    <h3 className="font-semibold text-foreground">
+                                    <h3 className="font-semibold text-[#1A2D63]">
                                       {portalUser.display_name || portalUser.email}
                                     </h3>
                                     {portalUser.is_admin && (
-                                      <span className="px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full">
+                                      <span className="px-2 py-0.5 text-xs font-medium bg-[#1A2D63]/10 text-[#1A2D63] rounded-full">
                                         {t('portal.admin.users.admin')}
                                       </span>
                                     )}
                                     {portalUser.account_id && (
-                                      <span className="px-2 py-0.5 text-xs font-medium bg-secondary text-secondary-foreground rounded-full">
+                                      <span className="px-2 py-0.5 text-xs font-medium bg-[#F7E69B]/50 text-[#1A2D63] rounded-full">
                                         ID: {portalUser.account_id}
                                       </span>
                                     )}
                                   </div>
-                                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                  <div className="flex items-center gap-4 text-sm text-[#1A2D63]/60">
                                     {portalUser.display_name && (
                                       <span className="text-xs">{portalUser.email}</span>
                                     )}
@@ -321,7 +323,7 @@ export default function AdminDashboardPage() {
                                   </div>
                                 </div>
                               </div>
-                              <ArrowRight className="h-5 w-5 text-muted-foreground" />
+                              <ArrowRight className="h-5 w-5 text-[#1A2D63]/40" />
                             </div>
                           </CardContent>
                         </Card>
@@ -334,21 +336,21 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Integrations Section */}
-        <Card>
+        <Card className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
           <CardHeader>
-            <CardTitle className="finit-h2 flex items-center gap-2">
+            <CardTitle className="finit-h2 flex items-center gap-2 text-[#1A2D63]">
               <Plug className="h-5 w-5" />
               Account Integrations
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-[#1A2D63]/60">
               View and manage integrations for each account. Click on a user to see their integrations.
             </CardDescription>
           </CardHeader>
           <CardContent>
             {filteredUsers.length === 0 ? (
               <div className="text-center py-12">
-                <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">No users found</p>
+                <Users className="h-12 w-12 text-[#1A2D63]/30 mx-auto mb-4" />
+                <p className="text-[#1A2D63]/60">No users found</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -358,30 +360,30 @@ export default function AdminDashboardPage() {
                     href={`/portal/admin/users?userId=${portalUser.id}&tab=integrations`}
                     className="block"
                   >
-                    <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                    <Card className="bg-white hover:bg-[#1A2D63]/[0.02] border-[#1A2D63]/10 hover:border-[#1A2D63]/20 hover:shadow-brand-lg transition-all duration-300 cursor-pointer">
                       <CardContent className="pt-6">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
-                            <div className="rounded-full bg-primary/10 p-3">
-                              <User className="h-5 w-5 text-primary" />
+                            <div className="rounded-full bg-[#1A2D63]/10 p-3">
+                              <User className="h-5 w-5 text-[#1A2D63]" />
                             </div>
                             <div>
                               <div className="flex items-center gap-2 mb-1">
-                                <h3 className="font-semibold">
+                                <h3 className="font-semibold text-[#1A2D63]">
                                   {portalUser.display_name || portalUser.email}
                                 </h3>
                                 {portalUser.account_id && (
-                                  <span className="px-2 py-0.5 text-xs font-medium bg-secondary text-secondary-foreground rounded-full">
+                                  <span className="px-2 py-0.5 text-xs font-medium bg-[#F7E69B]/50 text-[#1A2D63] rounded-full">
                                     ID: {portalUser.account_id}
                                   </span>
                                 )}
                               </div>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-[#1A2D63]/60">
                                 Click to view integrations
                               </p>
                             </div>
                           </div>
-                          <ArrowRight className="h-5 w-5 text-muted-foreground" />
+                          <ArrowRight className="h-5 w-5 text-[#1A2D63]/40" />
                         </div>
                       </CardContent>
                     </Card>

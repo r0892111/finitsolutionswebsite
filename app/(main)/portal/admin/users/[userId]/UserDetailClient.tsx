@@ -90,10 +90,10 @@ function UserDetailContent({ userId }: UserDetailClientProps) {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-finit-aurora flex items-center justify-center">
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center font-instrument">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">{t('portal.loading')}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A2D63] mx-auto"></div>
+          <p className="mt-4 text-[#1A2D63]/60">{t('portal.loading')}</p>
         </div>
       </div>
     );
@@ -104,9 +104,9 @@ function UserDetailContent({ userId }: UserDetailClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-finit-aurora">
+    <div className="min-h-screen bg-finit-aurora font-instrument">
       {/* Header */}
-      <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 sticky top-0 z-50">
+      <header className="bg-white/95 backdrop-blur-xl shadow-brand border-b border-[#1A2D63]/10 sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -119,11 +119,11 @@ function UserDetailContent({ userId }: UserDetailClientProps) {
                   className="object-contain h-full w-auto"
                 />
               </div>
-              <div className="h-6 w-px bg-border"></div>
-              <h1 className="finit-h2 text-primary">{t('portal.admin.userDetail.title')}</h1>
+              <div className="h-6 w-px bg-[#1A2D63]/20"></div>
+              <h1 className="finit-h2 text-[#1A2D63]">{t('portal.admin.userDetail.title')}</h1>
             </div>
             <Link href="/portal/admin">
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium">
                 <ArrowLeft className="h-4 w-4" />
                 {t('portal.admin.userDetail.back')}
               </Button>
@@ -136,46 +136,46 @@ function UserDetailContent({ userId }: UserDetailClientProps) {
       <main className="container mx-auto px-6 py-12">
         <div className="max-w-4xl mx-auto">
           {/* User Info Card */}
-          <Card className="mb-6">
+          <Card className="mb-6 bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
             <CardHeader>
               <div className="flex items-center gap-4">
-                <div className="rounded-full bg-primary/10 p-4">
-                  <User className="h-8 w-8 text-primary" />
+                <div className="rounded-full bg-[#1A2D63]/10 p-4">
+                  <User className="h-8 w-8 text-[#1A2D63]" />
                 </div>
                 <div>
-                  <CardTitle className="finit-h2">
+                  <CardTitle className="finit-h2 text-[#1A2D63]">
                     {userDetails?.email || 'Loading...'}
                   </CardTitle>
-                  <CardDescription>{t('portal.admin.userDetail.userId')}: {userId}</CardDescription>
+                  <CardDescription className="text-[#1A2D63]/60">{t('portal.admin.userDetail.userId')}: {userId}</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2 text-sm text-[#1A2D63]/60">
                     <Mail className="h-4 w-4" />
                     <span>{t('portal.admin.userDetail.email')}</span>
                   </div>
-                  <p className="font-medium">{userDetails?.email}</p>
+                  <p className="font-medium text-[#1A2D63]">{userDetails?.email}</p>
                 </div>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2 text-sm text-[#1A2D63]/60">
                     <Shield className="h-4 w-4" />
                     <span>{t('portal.admin.userDetail.role')}</span>
                   </div>
-                  <p className="font-medium">
+                  <p className="font-medium text-[#1A2D63]">
                     {userDetails?.is_admin
                       ? t('portal.admin.userDetail.admin')
                       : t('portal.admin.userDetail.user')}
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2 text-sm text-[#1A2D63]/60">
                     <Calendar className="h-4 w-4" />
                     <span>{t('portal.admin.userDetail.createdAt')}</span>
                   </div>
-                  <p className="font-medium">
+                  <p className="font-medium text-[#1A2D63]">
                     {userDetails?.created_at
                       ? format(new Date(userDetails.created_at), 'PPpp')
                       : '-'}
@@ -183,11 +183,11 @@ function UserDetailContent({ userId }: UserDetailClientProps) {
                 </div>
                 {userDetails?.last_sign_in_at && (
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 text-sm text-[#1A2D63]/60">
                       <Calendar className="h-4 w-4" />
                       <span>{t('portal.admin.userDetail.lastLogin')}</span>
                     </div>
-                    <p className="font-medium">
+                    <p className="font-medium text-[#1A2D63]">
                       {format(new Date(userDetails.last_sign_in_at), 'PPpp')}
                     </p>
                   </div>
@@ -210,9 +210,9 @@ function UserDetailContent({ userId }: UserDetailClientProps) {
 export default function UserDetailClient({ userId }: UserDetailClientProps) {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-finit-aurora flex items-center justify-center">
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center font-instrument">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto" />
+          <Loader2 className="h-12 w-12 animate-spin text-[#1A2D63] mx-auto" />
         </div>
       </div>
     }>

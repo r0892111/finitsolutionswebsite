@@ -14,8 +14,11 @@ scopes = ""
 optional_scopes = [ ]
 use_legacy_install_flow = false
 
+# Redirect URLs for Shopify OAuth
+# Make sure ALL these URLs are also added in Shopify Partner Dashboard
 [auth]
 redirect_urls = [
   "http://localhost:3000/portal/integrations/shopify/callback",
-  "https://finitsolutions.be/portal/integrations/shopify/callback"
+  "https://finitsolutions.be/portal/integrations/shopify/callback",
+  "https://www.finitsolutions.be/portal/integrations/shopify/callback"
 ]

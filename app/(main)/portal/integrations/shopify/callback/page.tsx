@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw } from 'lucide-react';
+import { getShopifyRedirectUri } from '@/lib/oauth';
 
 function ShopifyCallbackContent() {
   const searchParams = useSearchParams();
@@ -94,7 +95,7 @@ function ShopifyCallbackContent() {
         });
 
         // Get redirect URI (must match what was used in the OAuth request)
-        const redirectUri = `${window.location.origin}/portal/integrations/shopify/callback`;
+        const redirectUri = getShopifyRedirectUri();
 
         // Call Supabase Edge Function to exchange code for tokens
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -331,7 +332,7 @@ function ShopifyCallbackContent() {
       }
 
       // Construct redirect URI (must match Shopify app settings)
-      const redirectUri = `${window.location.origin}/portal/integrations/shopify/callback`;
+      const redirectUri = getShopifyRedirectUri();
       const scope = 'read_products,read_orders,read_customers,read_inventory';
 
       // Build Shopify OAuth URL

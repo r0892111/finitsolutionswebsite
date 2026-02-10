@@ -188,7 +188,7 @@ function SignupForm() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-finit-aurora flex items-center justify-center p-4">
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center p-4 font-instrument">
         <div className="w-full max-w-md">
           <div className="flex justify-center mb-8">
             <div className="h-12 w-auto relative">
@@ -203,27 +203,27 @@ function SignupForm() {
             </div>
           </div>
 
-          <Card className="shadow-brand-lg border-primary/20 bg-white/95 backdrop-blur-sm">
+          <Card className="shadow-brand-lg border-[#1A2D63]/10 bg-white/95 backdrop-blur-xl">
             <CardHeader className="space-y-1 text-center pb-6">
               <div className="flex justify-center mb-4">
                 <div className="rounded-full bg-green-100 p-3">
                   <CheckCircle2 className="h-6 w-6 text-green-600" />
                 </div>
               </div>
-              <CardTitle className="finit-h2 text-primary">
+              <CardTitle className="finit-h2 text-[#1A2D63]">
                 {t('portal.signup.success.title')}
               </CardTitle>
-              <CardDescription className="finit-body text-muted-foreground">
+              <CardDescription className="finit-body text-[#1A2D63]/60">
                 {t('portal.signup.success.description')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <p className="text-sm text-muted-foreground text-center">
+                <p className="text-sm text-[#1A2D63]/60 text-center">
                   {t('portal.signup.success.checkEmail')}
                 </p>
                 <Link href="/portal/login">
-                  <Button className="w-full">
+                  <Button className="w-full bg-[#1A2D63] hover:bg-[#1A2D63]/90 text-white transition-premium">
                     {t('portal.signup.success.backToLogin')}
                   </Button>
                 </Link>
@@ -236,7 +236,7 @@ function SignupForm() {
   }
 
   return (
-    <div className="min-h-screen bg-finit-aurora flex items-center justify-center p-4">
+    <div className="min-h-screen bg-finit-aurora flex items-center justify-center p-4 font-instrument">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-8">
@@ -253,18 +253,18 @@ function SignupForm() {
         </div>
 
         {/* Signup Card */}
-        <Card className="shadow-brand-lg border-primary/20 bg-white/95 backdrop-blur-sm">
+        <Card className="shadow-brand-lg border-[#1A2D63]/10 bg-white/95 backdrop-blur-xl">
           <CardHeader className="space-y-1 text-center pb-6">
             <div className="flex justify-center mb-4">
-              <div className="rounded-full bg-primary/10 p-3">
-                <UserPlus className="h-6 w-6 text-primary" />
+              <div className="rounded-full bg-[#1A2D63]/10 p-3">
+                <UserPlus className="h-6 w-6 text-[#1A2D63]" />
               </div>
             </div>
-            <CardTitle className="finit-h2 text-primary">
+            <CardTitle className="finit-h2 text-[#1A2D63]">
               {t('portal.signup.title')}
             </CardTitle>
-            <CardDescription className="finit-body text-muted-foreground">
-              {searchParams.get('type') === 'invite' 
+            <CardDescription className="finit-body text-[#1A2D63]/60">
+              {searchParams.get('type') === 'invite'
                 ? t('portal.signup.inviteDescription')
                 : t('portal.signup.description')}
             </CardDescription>
@@ -274,12 +274,12 @@ function SignupForm() {
               <div className="space-y-2">
                 <label
                   htmlFor="email"
-                  className="text-sm font-medium text-foreground"
+                  className="text-sm font-medium text-[#1A2D63]"
                 >
                   {t('portal.signup.emailLabel')}
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#1A2D63]/50" />
                   <Input
                     id="email"
                     type="email"
@@ -287,7 +287,7 @@ function SignupForm() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={t('portal.signup.emailPlaceholder')}
                     disabled={isSubmitting}
-                    className="h-12 pl-10"
+                    className="h-12 pl-10 border-[#1A2D63]/20 focus:border-[#1A2D63]/40 focus:ring-[#1A2D63]/20"
                     autoFocus
                     autoComplete="email"
                   />
@@ -297,12 +297,12 @@ function SignupForm() {
               <div className="space-y-2">
                 <label
                   htmlFor="password"
-                  className="text-sm font-medium text-foreground"
+                  className="text-sm font-medium text-[#1A2D63]"
                 >
                   {t('portal.signup.passwordLabel')}
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#1A2D63]/50" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
@@ -310,13 +310,13 @@ function SignupForm() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={t('portal.signup.passwordPlaceholder')}
                     disabled={isSubmitting}
-                    className="h-12 pl-10 pr-10"
+                    className="h-12 pl-10 pr-10 border-[#1A2D63]/20 focus:border-[#1A2D63]/40 focus:ring-[#1A2D63]/20"
                     autoComplete="new-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#1A2D63]/50 hover:text-[#1A2D63] transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -325,7 +325,7 @@ function SignupForm() {
                     )}
                   </button>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-[#1A2D63]/50">
                   {t('portal.signup.passwordHint')}
                 </p>
               </div>
@@ -333,12 +333,12 @@ function SignupForm() {
               <div className="space-y-2">
                 <label
                   htmlFor="confirmPassword"
-                  className="text-sm font-medium text-foreground"
+                  className="text-sm font-medium text-[#1A2D63]"
                 >
                   {t('portal.signup.confirmPasswordLabel')}
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#1A2D63]/50" />
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
@@ -346,13 +346,13 @@ function SignupForm() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder={t('portal.signup.confirmPasswordPlaceholder')}
                     disabled={isSubmitting}
-                    className="h-12 pl-10 pr-10"
+                    className="h-12 pl-10 pr-10 border-[#1A2D63]/20 focus:border-[#1A2D63]/40 focus:ring-[#1A2D63]/20"
                     autoComplete="new-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#1A2D63]/50 hover:text-[#1A2D63] transition-colors"
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -366,7 +366,7 @@ function SignupForm() {
               <Button
                 type="submit"
                 disabled={isSubmitting || !email.trim() || !password.trim() || !confirmPassword.trim()}
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground transition-premium"
+                className="w-full h-12 bg-[#1A2D63] hover:bg-[#1A2D63]/90 text-white transition-premium"
                 size="lg"
               >
                 {isSubmitting ? (
@@ -383,10 +383,10 @@ function SignupForm() {
               </Button>
             </form>
 
-            <div className="mt-6 pt-6 border-t border-border">
-              <p className="text-sm text-center text-muted-foreground">
+            <div className="mt-6 pt-6 border-t border-[#1A2D63]/10">
+              <p className="text-sm text-center text-[#1A2D63]/60">
                 {t('portal.signup.alreadyHaveAccount')}{' '}
-                <Link href="/portal/login" className="text-primary hover:underline">
+                <Link href="/portal/login" className="text-[#1A2D63] font-medium hover:underline">
                   {t('portal.signup.loginLink')}
                 </Link>
               </p>
@@ -401,9 +401,9 @@ function SignupForm() {
 export default function SignupPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-finit-aurora flex items-center justify-center">
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center font-instrument">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A2D63] mx-auto"></div>
         </div>
       </div>
     }>

@@ -73,7 +73,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-finit-aurora flex items-center justify-center p-4">
+    <div className="min-h-screen bg-finit-aurora flex items-center justify-center p-4 font-instrument">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-8">
@@ -90,17 +90,17 @@ export default function ForgotPasswordPage() {
         </div>
 
         {/* Forgot Password Card */}
-        <Card className="shadow-brand-lg border-primary/20 bg-white/95 backdrop-blur-sm">
+        <Card className="shadow-brand-lg border-[#1A2D63]/10 bg-white/95 backdrop-blur-xl">
           <CardHeader className="space-y-1 text-center pb-6">
             <div className="flex justify-center mb-4">
-              <div className="rounded-full bg-primary/10 p-3">
-                <Mail className="h-6 w-6 text-primary" />
+              <div className="rounded-full bg-[#1A2D63]/10 p-3">
+                <Mail className="h-6 w-6 text-[#1A2D63]" />
               </div>
             </div>
-            <CardTitle className="finit-h2 text-primary">
+            <CardTitle className="finit-h2 text-[#1A2D63]">
               {t('portal.forgotPassword.title')}
             </CardTitle>
-            <CardDescription className="finit-body text-muted-foreground">
+            <CardDescription className="finit-body text-[#1A2D63]/60">
               {t('portal.forgotPassword.description')}
             </CardDescription>
           </CardHeader>
@@ -113,15 +113,15 @@ export default function ForgotPasswordPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="finit-h2 text-primary">
+                  <h3 className="finit-h2 text-[#1A2D63]">
                     {t('portal.forgotPassword.success.title')}
                   </h3>
-                  <p className="finit-body text-muted-foreground">
+                  <p className="finit-body text-[#1A2D63]/60">
                     {t('portal.forgotPassword.success.description')}
                   </p>
                 </div>
                 <Link href="/portal/login">
-                  <Button className="w-full">
+                  <Button className="w-full bg-[#1A2D63] hover:bg-[#1A2D63]/90 text-white transition-premium">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     {t('portal.forgotPassword.backToLogin')}
                   </Button>
@@ -132,12 +132,12 @@ export default function ForgotPasswordPage() {
                 <div className="space-y-2">
                   <label
                     htmlFor="email"
-                    className="text-sm font-medium text-foreground"
+                    className="text-sm font-medium text-[#1A2D63]"
                   >
                     {t('portal.forgotPassword.emailLabel')}
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#1A2D63]/50" />
                     <Input
                       id="email"
                       type="email"
@@ -145,7 +145,7 @@ export default function ForgotPasswordPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder={t('portal.forgotPassword.emailPlaceholder')}
                       disabled={isSubmitting}
-                      className="h-12 pl-10"
+                      className="h-12 pl-10 border-[#1A2D63]/20 focus:border-[#1A2D63]/40 focus:ring-[#1A2D63]/20"
                       autoFocus
                       autoComplete="email"
                     />
@@ -155,7 +155,7 @@ export default function ForgotPasswordPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting || !email.trim()}
-                  className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground transition-premium"
+                  className="w-full h-12 bg-[#1A2D63] hover:bg-[#1A2D63]/90 text-white transition-premium"
                   size="lg"
                 >
                   {isSubmitting ? (
@@ -170,10 +170,10 @@ export default function ForgotPasswordPage() {
               </form>
             )}
 
-            <div className="mt-6 pt-6 border-t border-border">
+            <div className="mt-6 pt-6 border-t border-[#1A2D63]/10">
               <Link
                 href="/portal/login"
-                className="flex items-center justify-center text-sm text-primary hover:underline"
+                className="flex items-center justify-center text-sm text-[#1A2D63] hover:text-[#1A2D63]/80 hover:underline transition-colors"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 {t('portal.forgotPassword.backToLogin')}

@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@/lib/supabase/client';
 import { Loader2, Plug, CheckCircle2, XCircle, AlertCircle, ExternalLink } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
+import { getDropboxRedirectUri, getGoogleRedirectUri, getShopifyRedirectUri } from '@/lib/oauth';
 
 interface IntegrationType {
   id: string;
@@ -142,7 +143,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
         }
 
         // Construct redirect URI (must match Google Cloud Console)
-        const redirectUri = `${window.location.origin}/portal/integrations/google/callback`;
+        const redirectUri = getGoogleRedirectUri();
         const scope = 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/calendar.readonly';
 
         // Build Google OAuth URL
@@ -178,7 +179,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
         }
 
         // Construct redirect URI (must match Shopify app settings)
-        const redirectUri = `${window.location.origin}/portal/integrations/shopify/callback`;
+        const redirectUri = getShopifyRedirectUri();
         
         // Shopify OAuth scopes (read_products, read_orders, read_customers are common)
         const scope = 'read_products,read_orders,read_customers,read_inventory';
@@ -232,7 +233,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
         }
 
         // Construct redirect URI (must match Dropbox app settings)
-        const redirectUri = `${window.location.origin}/portal/integrations/dropbox/callback`;
+        const redirectUri = getDropboxRedirectUri();
         
         // Dropbox OAuth scopes (files.content.read, files.content.write, files.metadata.read, account_info.read)
         const scope = 'files.content.read files.content.write files.metadata.read account_info.read';
@@ -309,13 +310,13 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
 
   if (isLoading) {
     return (
-      <Card>
+      <Card className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
         <CardHeader>
-          <CardTitle>Integrations</CardTitle>
+          <CardTitle className="text-[#1A2D63]">Integrations</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            <Loader2 className="h-6 w-6 animate-spin text-[#1A2D63]/50" />
           </div>
         </CardContent>
       </Card>
@@ -334,29 +335,29 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
       {/* User Integrations */}
       {integrations.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold">Your Integrations</h3>
+          <h3 className="text-lg font-semibold text-[#1A2D63]">Your Integrations</h3>
           {integrations.map((integration) => (
-            <Card key={integration.id}>
+            <Card key={integration.id} className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="rounded-lg bg-primary/10 p-3">
-                      <Plug className="h-6 w-6 text-primary" />
+                    <div className="rounded-lg bg-[#1A2D63]/10 p-3">
+                      <Plug className="h-6 w-6 text-[#1A2D63]" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-semibold">
+                        <h4 className="font-semibold text-[#1A2D63]">
                           {integration.integration_type.display_name}
                         </h4>
                         {getStatusBadge(integration.status)}
                       </div>
                       {integration.integration_type.description && (
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-[#1A2D63]/60">
                           {integration.integration_type.description}
                         </p>
                       )}
                       {integration.connected_at && (
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-[#1A2D63]/50 mt-1">
                           Connected: {new Date(integration.connected_at).toLocaleDateString()}
                         </p>
                       )}
@@ -373,6 +374,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                         variant="outline"
                         size="sm"
                         onClick={() => handleDisconnect(integration.id)}
+                        className="border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium"
                       >
                         Disconnect
                       </Button>
@@ -383,6 +385,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                           variant="outline"
                           size="sm"
                           onClick={() => handleDisconnect(integration.id)}
+                          className="border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium"
                         >
                           Remove
                         </Button>
@@ -392,6 +395,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                             const integrationName = integration.integration_type.name;
                             handleConnect(integration.integration_type_id, integrationName);
                           }}
+                          className="bg-[#1A2D63] hover:bg-[#1A2D63]/90 text-white transition-premium"
                         >
                           Retry Connection
                         </Button>
@@ -408,23 +412,23 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
       {/* Available Integrations */}
       {showConnectButton && availableTypes.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold">
+          <h3 className="text-lg font-semibold text-[#1A2D63]">
             {integrations.length > 0 ? 'Available Integrations' : 'Connect Integrations'}
           </h3>
           {availableTypes
             .filter(type => !connectedTypeIds.has(type.id))
             .map((type) => (
-              <Card key={type.id}>
+              <Card key={type.id} className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10 hover:border-[#1A2D63]/20 transition-all duration-300">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="rounded-lg bg-primary/10 p-3">
-                        <Plug className="h-6 w-6 text-primary" />
+                      <div className="rounded-lg bg-[#1A2D63]/10 p-3">
+                        <Plug className="h-6 w-6 text-[#1A2D63]" />
                       </div>
                       <div>
-                        <h4 className="font-semibold">{type.display_name}</h4>
+                        <h4 className="font-semibold text-[#1A2D63]">{type.display_name}</h4>
                         {type.description && (
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-[#1A2D63]/60">
                             {type.description}
                           </p>
                         )}
@@ -433,6 +437,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                     <Button
                       onClick={() => handleConnect(type.id, type.name)}
                       disabled={isConnecting === type.id}
+                      className="bg-[#1A2D63] hover:bg-[#1A2D63]/90 text-white transition-premium"
                     >
                       {isConnecting === type.id ? (
                         <>
@@ -454,11 +459,11 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
       )}
 
       {integrations.length === 0 && availableTypes.length === 0 && (
-        <Card>
+        <Card className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
           <CardContent className="pt-6">
             <div className="text-center py-8">
-              <Plug className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">No integrations available</p>
+              <Plug className="h-12 w-12 text-[#1A2D63]/30 mx-auto mb-4" />
+              <p className="text-[#1A2D63]/60">No integrations available</p>
             </div>
           </CardContent>
         </Card>

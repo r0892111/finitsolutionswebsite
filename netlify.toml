@@ -1,0 +1,23 @@
+# Netlify Configuration File
+# This file configures build settings for Netlify deployment
+
+[build]
+  # Build command for Next.js static export
+  command = "npm run build"
+  
+  # Output directory (Next.js static export outputs to 'out' directory)
+  publish = "out"
+
+[build.environment]
+  # Node.js version
+  NODE_VERSION = "18"
+
+# Redirect rules for Next.js App Router with trailing slashes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Note: Environment variables should be set in Netlify Dashboard
+# Go to: Site settings → Environment variables
+# Do NOT put sensitive values in this file if it's committed to version control

@@ -82,7 +82,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-finit-aurora flex items-center justify-center p-4">
+    <div className="min-h-screen bg-finit-aurora flex items-center justify-center p-4 font-instrument">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-8">
@@ -99,17 +99,17 @@ export default function LoginPage() {
         </div>
 
         {/* Login Card */}
-        <Card className="shadow-brand-lg border-primary/20 bg-white/95 backdrop-blur-sm">
+        <Card className="shadow-brand-lg border-[#1A2D63]/10 bg-white/95 backdrop-blur-xl">
           <CardHeader className="space-y-1 text-center pb-6">
             <div className="flex justify-center mb-4">
-              <div className="rounded-full bg-primary/10 p-3">
-                <Lock className="h-6 w-6 text-primary" />
+              <div className="rounded-full bg-[#1A2D63]/10 p-3">
+                <Lock className="h-6 w-6 text-[#1A2D63]" />
               </div>
             </div>
-            <CardTitle className="finit-h2 text-primary">
+            <CardTitle className="finit-h2 text-[#1A2D63]">
               {t('portal.login.title')}
             </CardTitle>
-            <CardDescription className="finit-body text-muted-foreground">
+            <CardDescription className="finit-body text-[#1A2D63]/60">
               {t('portal.login.description')}
             </CardDescription>
           </CardHeader>
@@ -118,12 +118,12 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <label
                   htmlFor="email"
-                  className="text-sm font-medium text-foreground"
+                  className="text-sm font-medium text-[#1A2D63]"
                 >
                   {t('portal.login.emailLabel')}
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#1A2D63]/50" />
                   <Input
                     id="email"
                     type="email"
@@ -131,7 +131,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={t('portal.login.emailPlaceholder')}
                     disabled={isSubmitting}
-                    className="h-12 pl-10"
+                    className="h-12 pl-10 border-[#1A2D63]/20 focus:border-[#1A2D63]/40 focus:ring-[#1A2D63]/20"
                     autoFocus
                     autoComplete="email"
                   />
@@ -141,12 +141,12 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <label
                   htmlFor="password"
-                  className="text-sm font-medium text-foreground"
+                  className="text-sm font-medium text-[#1A2D63]"
                 >
                   {t('portal.login.passwordLabel')}
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#1A2D63]/50" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
@@ -154,13 +154,13 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={t('portal.login.passwordPlaceholder')}
                     disabled={isSubmitting}
-                    className="h-12 pl-10 pr-10"
+                    className="h-12 pl-10 pr-10 border-[#1A2D63]/20 focus:border-[#1A2D63]/40 focus:ring-[#1A2D63]/20"
                     autoComplete="current-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#1A2D63]/50 hover:text-[#1A2D63] transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -174,7 +174,7 @@ export default function LoginPage() {
               <div className="flex items-center justify-end">
                 <Link
                   href="/portal/forgot-password"
-                  className="text-sm text-primary hover:underline"
+                  className="text-sm text-[#1A2D63] hover:text-[#1A2D63]/80 hover:underline transition-colors"
                 >
                   {t('portal.login.forgotPassword')}
                 </Link>
@@ -183,7 +183,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={isSubmitting || !email.trim() || !password.trim()}
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground transition-premium"
+                className="w-full h-12 bg-[#1A2D63] hover:bg-[#1A2D63]/90 text-white transition-premium"
                 size="lg"
               >
                 {isSubmitting ? (
@@ -200,10 +200,10 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            <div className="mt-6 pt-6 border-t border-border">
-              <p className="text-sm text-center text-muted-foreground">
+            <div className="mt-6 pt-6 border-t border-[#1A2D63]/10">
+              <p className="text-sm text-center text-[#1A2D63]/60">
                 {t('portal.login.noAccount')}{' '}
-                <Link href="/portal/signup" className="text-primary hover:underline">
+                <Link href="/portal/signup" className="text-[#1A2D63] font-medium hover:underline">
                   {t('portal.login.signupLink')}
                 </Link>
               </p>
@@ -213,9 +213,9 @@ export default function LoginPage() {
 
         {/* Security Badge */}
         <div className="mt-6 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10">
-            <Lock className="h-3 w-3 text-primary" />
-            <span className="text-xs font-medium text-primary">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1A2D63]/5 border border-[#1A2D63]/10">
+            <Lock className="h-3 w-3 text-[#1A2D63]" />
+            <span className="text-xs font-medium text-[#1A2D63]">
               {t('portal.login.secure')}
             </span>
           </div>

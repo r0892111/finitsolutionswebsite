@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw } from 'lucide-react';
+import { getDropboxRedirectUri } from '@/lib/oauth';
 
 function DropboxCallbackContent() {
   const searchParams = useSearchParams();
@@ -82,7 +83,7 @@ function DropboxCallbackContent() {
         });
 
         // Get redirect URI (must match what was used in the OAuth request)
-        const redirectUri = `${window.location.origin}/portal/integrations/dropbox/callback`;
+        const redirectUri = getDropboxRedirectUri();
 
         // Call Supabase Edge Function to exchange code for tokens
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -267,7 +268,7 @@ function DropboxCallbackContent() {
       }
 
       // Construct redirect URI (must match Dropbox app settings)
-      const redirectUri = `${window.location.origin}/portal/integrations/dropbox/callback`;
+      const redirectUri = getDropboxRedirectUri();
       const scope = 'files.content.read files.content.write files.metadata.read account_info.read';
 
       // Build Dropbox OAuth URL

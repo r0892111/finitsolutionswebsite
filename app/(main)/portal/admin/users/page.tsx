@@ -26,9 +26,9 @@ function UserDetailContent() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-finit-aurora flex items-center justify-center">
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center font-instrument">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto" />
+          <Loader2 className="h-12 w-12 animate-spin text-[#1A2D63] mx-auto" />
         </div>
       </div>
     );
@@ -44,9 +44,9 @@ function UserDetailContent() {
 export default function UserDetailPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-finit-aurora flex items-center justify-center">
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center font-instrument">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto" />
+          <Loader2 className="h-12 w-12 animate-spin text-[#1A2D63] mx-auto" />
         </div>
       </div>
     }>
