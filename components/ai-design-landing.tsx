@@ -268,7 +268,7 @@ const faqItems: { question: string; answer: FaqBlock[] }[] = [
       { type: "heading", text: "Wat maakt onze hypercare anders?" },
       { type: "p", text: "We monitoren niet alleen passief. We werken actief samen met jouw team om het systeem grondig te testen:" },
       { type: "list", items: [
-        "Probeer alles kapot te maken (we moedigen dit aan)",
+        "Probeer het systeem eens te breken (we moedigen dit aan)",
         "Test alle edge cases en \"wat als…\"-scenario's",
         "Gebruik het in de echte drukte van je bedrijf",
         "Vind de kinderziektes vóór we weggaan",
@@ -1566,11 +1566,16 @@ const illustrationComponents: Record<string, React.FC<{ progress: number }>> = {
 // --- Use Cases: slideshow links/rechts, pijlen + swipe (touch & muis) ---
 const SWIPE_THRESHOLD = 50;
 
+const WHEEL_THRESHOLD = 40;
+const WHEEL_NAV_COOLDOWN_MS = 400;
+
 const UseCasesSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [illustrationProgress, setIllustrationProgress] = useState(0);
   const swipeStartRef = useRef<{ x: number; pointerId?: number } | null>(null);
+  const wheelCooldownRef = useRef(0);
+  const carouselContainerRef = useRef<HTMLDivElement>(null);
   const TOTAL_USE_CASES = useCasesData.length;
 
   // Bij wissel: illustratie van 0 → 1 animeren
@@ -1603,6 +1608,27 @@ const UseCasesSection = () => {
     else if (delta < -SWIPE_THRESHOLD && activeIndex < TOTAL_USE_CASES - 1) goTo(activeIndex + 1);
   }, [activeIndex, goTo, TOTAL_USE_CASES]);
 
+  const activeIndexRef = useRef(activeIndex);
+  activeIndexRef.current = activeIndex;
+
+  useEffect(() => {
+    const el = carouselContainerRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      const now = Date.now();
+      if (now < wheelCooldownRef.current) return;
+      const isHorizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      if (!isHorizontal || Math.abs(e.deltaX) < WHEEL_THRESHOLD) return;
+      e.preventDefault();
+      wheelCooldownRef.current = now + WHEEL_NAV_COOLDOWN_MS;
+      const idx = activeIndexRef.current;
+      if (e.deltaX > 0 && idx < TOTAL_USE_CASES - 1) goTo(idx + 1);
+      else if (e.deltaX < 0 && idx > 0) goTo(idx - 1);
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [goTo, TOTAL_USE_CASES]);
+
   const useCase = useCasesData[activeIndex];
   const IllustrationComponent = useCase ? illustrationComponents[useCase.id] : null;
 
@@ -1619,6 +1645,7 @@ const UseCasesSection = () => {
         </div>
 
         <div
+          ref={carouselContainerRef}
           className="relative touch-pan-y select-none"
           style={{ touchAction: 'pan-y' }}
           onTouchStart={(e) => handleSwipeStart(e.touches[0].clientX)}
