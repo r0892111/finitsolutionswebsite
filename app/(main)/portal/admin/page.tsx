@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { LogOut, Users, Search, User, Calendar, Shield, Loader2, ArrowRight, Plug } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { TestRefreshTokens } from '@/components/test-refresh-tokens';
+import { DebugIntegrations } from '@/components/debug-integrations';
 import Image from 'next/image';
 import { format } from 'date-fns';
 
@@ -393,6 +395,12 @@ export default function AdminDashboardPage() {
             )}
           </CardContent>
         </Card>
+
+        {/* Debug Integrations - Admin Only */}
+        <DebugIntegrations />
+
+        {/* Test Refresh Tokens - Admin Only */}
+        <TestRefreshTokens />
       </main>
     </div>
   );

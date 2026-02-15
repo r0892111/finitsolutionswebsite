@@ -11,6 +11,7 @@ import { LogOut, FileText, MessageSquare, Settings, Shield, Clock } from 'lucide
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { IntegrationsList } from '@/components/integrations-list';
+import { TestRefreshTokens } from '@/components/test-refresh-tokens';
 import { useToast } from '@/hooks/use-toast';
 
 function PortalContent() {
@@ -155,6 +156,9 @@ function PortalContent() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Test Refresh Tokens - Admin Only */}
+        {isAdmin && <TestRefreshTokens />}
       </main>
     </div>
   );
