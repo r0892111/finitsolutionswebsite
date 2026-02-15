@@ -272,11 +272,13 @@ function DropboxCallbackContent() {
       const scope = 'files.content.read files.content.write files.metadata.read account_info.read';
 
       // Build Dropbox OAuth URL
+      // Include token_access_type=offline to get refresh tokens
       const authUrl = new URL('https://www.dropbox.com/oauth2/authorize');
       authUrl.searchParams.set('client_id', clientId);
       authUrl.searchParams.set('redirect_uri', redirectUri);
       authUrl.searchParams.set('response_type', 'code');
       authUrl.searchParams.set('scope', scope);
+      authUrl.searchParams.set('token_access_type', 'offline'); // Request offline access for refresh token
       authUrl.searchParams.set('state', session.user.id);
 
       // Redirect to Dropbox OAuth

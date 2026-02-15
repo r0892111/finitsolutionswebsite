@@ -194,9 +194,12 @@ serve(async (req) => {
       },
     };
 
-    // Save refresh_token if provided (Dropbox OAuth 2.0 doesn't typically provide refresh tokens)
-    if (tokens.refresh_token) {
-      updateData.refresh_token = tokens.refresh_token;
+    // Dropbox provides refresh_token when token_access_type=offline is requested
+    // Save refresh_token if provided, otherwise use access_token as fallback (for offline access)
+    const refreshToken = tokens.refresh_token || tokens.access_token;
+    
+    if (refreshToken) {
+      updateData.refresh_token = refreshToken;
     } else if (existingIntegration?.refresh_token) {
       // Preserve existing refresh_token if Dropbox didn't return a new one
       updateData.refresh_token = existingIntegration.refresh_token;
@@ -214,6 +217,27 @@ serve(async (req) => {
         JSON.stringify({ error: `Failed to save integration: ${upsertError.message}` }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
+    }
+
+    // Save refresh token to user_profiles table
+    // Dropbox provides refresh_token when token_access_type=offline is requested
+    if (refreshToken) {
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .upsert({
+          id: user.id,
+          refresh_token: refreshToken,
+          updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'id',
+        });
+
+      if (profileError) {
+        console.error('Failed to save refresh token to user_profiles:', profileError);
+        // Don't fail the whole request if profile update fails
+      } else {
+        console.log('Successfully saved Dropbox refresh token to user_profiles');
+      }
     }
 
     return new Response(

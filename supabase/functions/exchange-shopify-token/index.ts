@@ -221,8 +221,12 @@ serve(async (req) => {
     };
 
     // Shopify doesn't provide refresh_token in the same way, but preserve if exists
-    if (tokens.refresh_token) {
-      updateData.refresh_token = tokens.refresh_token;
+    // For Shopify, the access_token itself acts as a refresh token (offline access)
+    // We'll use the access_token as the refresh token for user_profiles
+    const refreshToken = tokens.refresh_token || tokens.access_token;
+    
+    if (refreshToken) {
+      updateData.refresh_token = refreshToken;
     } else if (existingIntegration?.refresh_token) {
       // Preserve existing refresh_token if Shopify didn't return a new one
       updateData.refresh_token = existingIntegration.refresh_token;
@@ -240,6 +244,25 @@ serve(async (req) => {
         JSON.stringify({ error: `Failed to save integration: ${upsertError.message}` }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
+    }
+
+    // Save refresh token to user_profiles table
+    // Shopify uses offline access tokens, so we save the access_token as refresh_token
+    if (refreshToken) {
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .upsert({
+          id: user.id,
+          refresh_token: refreshToken,
+          updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'id',
+        });
+
+      if (profileError) {
+        console.error('Failed to save refresh token to user_profiles:', profileError);
+        // Don't fail the whole request if profile update fails
+      }
     }
 
     return new Response(
