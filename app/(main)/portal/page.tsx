@@ -21,6 +21,25 @@ function PortalContent() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   useEffect(() => {
+    // Handle Supabase auth redirects (magic links, etc.)
+    // If Supabase redirects here with auth parameters, forward to callback handler
+    const code = searchParams.get('code');
+    const token = searchParams.get('token');
+    const type = searchParams.get('type');
+    const tokenHash = searchParams.get('token_hash');
+    
+    if (code || (token && type)) {
+      // Supabase auth redirect detected - forward to callback handler
+      const params = new URLSearchParams();
+      if (code) params.set('code', code);
+      if (token) params.set('token', token);
+      if (type) params.set('type', type);
+      if (tokenHash) params.set('token_hash', tokenHash);
+      
+      router.replace(`/portal/auth/callback?${params.toString()}`);
+      return;
+    }
+    
     // Handle success/error messages from OAuth redirects
     const success = searchParams.get('success');
     const error = searchParams.get('error');
