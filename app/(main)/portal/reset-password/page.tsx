@@ -91,9 +91,13 @@ function ResetPasswordForm() {
         toast({
           title: t('portal.resetPassword.success.title'),
           description: isInviteFlow 
-            ? t('portal.resetPassword.success.inviteAccepted') || 'Password set successfully! You can now access the portal.'
+            ? t('portal.resetPassword.success.inviteAccepted')
             : t('portal.resetPassword.success.description'),
         });
+        // Set flag to show welcome message on portal
+        if (isFirstLogin || isInviteFlow) {
+          sessionStorage.setItem('justSetPassword', 'true');
+        }
         // Redirect to portal after 2 seconds
         setTimeout(() => {
           router.push('/portal');
@@ -138,14 +142,14 @@ function ResetPasswordForm() {
             </div>
             <CardTitle className="finit-h2 text-[#1A2D63]">
               {isFirstLogin || isInviteFlow
-                ? t('portal.resetPassword.firstLoginTitle') || 'Stel uw wachtwoord in'
+                ? t('portal.resetPassword.firstLoginTitle')
                 : t('portal.resetPassword.title')}
             </CardTitle>
             <CardDescription className="finit-body text-[#1A2D63]/60">
               {isFirstLogin
-                ? t('portal.resetPassword.firstLoginDescription') || 'Voor uw eerste login moet u een nieuw wachtwoord instellen. Dit is verplicht voordat u toegang krijgt tot het portaal.'
+                ? t('portal.resetPassword.firstLoginDescription')
                 : isInviteFlow
-                ? t('portal.resetPassword.inviteDescription') || 'You\'ve been invited! Please set your password to get started.'
+                ? t('portal.resetPassword.inviteDescription')
                 : t('portal.resetPassword.description')}
             </CardDescription>
           </CardHeader>

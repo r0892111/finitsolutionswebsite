@@ -1,0 +1,23 @@
+Welkom bij Finit Solutions!
+================================
+
+U bent uitgenodigd om toegang te krijgen tot ons klantportaal. Hier kunt u uw projecten beheren, documenten bekijken en direct communiceren met ons team.
+
+Activeer uw account:
+{{ .ConfirmationURL }}
+
+Wat kunt u verwachten?
+• Directe toegang tot uw projectinformatie
+• Beveiligde documentenopslag
+• Eenvoudige communicatie met ons team
+• Real-time updates over uw projecten
+
+Deze uitnodiging is 24 uur geldig. Als u vragen heeft, neem dan gerust contact met ons op.
+
+---
+Finit Solutions
+Slimme AI-oplossingen, op maat van jouw KMO.
+
+Als u deze uitnodiging niet heeft aangevraagd, kunt u deze e-mail veilig negeren.
+
+© 2024 Finit Solutions. Alle rechten voorbehouden.

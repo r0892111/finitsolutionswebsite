@@ -37,8 +37,8 @@ function LoginPageContent() {
     const errorParam = searchParams.get('error');
     if (errorParam === 'link_expired') {
       toast({
-        title: t('portal.login.error.linkExpired') || 'Link verlopen',
-        description: t('portal.login.error.linkExpiredDescription') || 'De inloglink is verlopen. Vraag een nieuwe link aan via "Wachtwoord vergeten" of log in met uw wachtwoord.',
+        title: t('portal.login.error.linkExpired'),
+        description: t('portal.login.error.linkExpiredDescription'),
         variant: 'destructive',
         duration: 6000,
       });
@@ -80,8 +80,8 @@ function LoginPageContent() {
           toast({
             title: t('portal.login.error.title'),
             description: error.includes('Email not confirmed') 
-              ? t('portal.login.error.emailNotConfirmed') || 'Please check your email for a confirmation link.'
-              : t('portal.login.error.invalidCredentials') || 'Invalid email or password. If you were invited, please use the invite link from your email.',
+              ? t('portal.login.error.emailNotConfirmed')
+              : t('portal.login.error.invalidCredentials'),
             variant: 'destructive',
           });
         } else {

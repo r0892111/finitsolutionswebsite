@@ -1,0 +1,23 @@
+Welcome to Finit Solutions!
+================================
+
+You've been invited to access our customer portal. Here you can manage your projects, view documents, and communicate directly with our team.
+
+Activate your account:
+{{ .ConfirmationURL }}
+
+What can you expect?
+• Direct access to your project information
+• Secure document storage
+• Easy communication with our team
+• Real-time updates on your projects
+
+This invitation is valid for 24 hours. If you have any questions, please don't hesitate to contact us.
+
+---
+Finit Solutions
+Smart AI solutions, tailored to your SME.
+
+If you did not request this invitation, you can safely ignore this email.
+
+© 2024 Finit Solutions. All rights reserved.

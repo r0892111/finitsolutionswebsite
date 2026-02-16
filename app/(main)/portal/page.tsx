@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/auth-context';
 import { useLanguage } from '@/contexts/language-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogOut, FileText, MessageSquare, Settings, Shield, Clock } from 'lucide-react';
+import { LogOut, FileText, MessageSquare, Settings, Shield, Clock, CheckCircle2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { IntegrationsList } from '@/components/integrations-list';
@@ -20,6 +20,7 @@ function PortalContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
   useEffect(() => {
     // Handle Supabase auth tokens/errors in hash fragment (magic links)
     // Supabase redirects with tokens in hash: #access_token=...&token_type=bearer&expires_in=...&type=magiclink
@@ -41,13 +42,13 @@ function PortalContent() {
             : 'An authentication error occurred';
           
           if (errorCode === 'otp_expired') {
-            errorMessage = 'Deze inloglink is verlopen of ongeldig. Vraag een nieuwe link aan.';
+            errorMessage = t('portal.error.linkExpired');
           } else if (error === 'access_denied') {
-            errorMessage = 'Toegang geweigerd. De link is mogelijk verlopen of ongeldig.';
+            errorMessage = t('portal.error.accessDenied');
           }
           
           toast({
-            title: 'Inloglink ongeldig',
+            title: t('portal.error.linkInvalid'),
             description: errorMessage,
             variant: 'destructive',
             duration: 5000,
@@ -78,8 +79,8 @@ function PortalContent() {
               if (sessionError) {
                 console.error('Magic link session error:', sessionError);
                 toast({
-                  title: 'Fout',
-                  description: 'Kon niet inloggen. Probeer opnieuw.',
+                  title: t('portal.error.loginFailed'),
+                  description: t('portal.error.loginFailedDescription'),
                   variant: 'destructive',
                 });
                 router.replace('/portal/login');
@@ -93,8 +94,8 @@ function PortalContent() {
             } catch (error) {
               console.error('Magic link auth error:', error);
               toast({
-                title: 'Fout',
-                description: 'Er is een fout opgetreden bij het inloggen.',
+                title: t('portal.error.loginFailed'),
+                description: t('portal.error.generic'),
                 variant: 'destructive',
               });
               router.replace('/portal/login');
@@ -163,6 +164,15 @@ function PortalContent() {
       return;
     }
     
+    // Check if user just completed password setup (redirected from reset-password)
+    if (!isLoading && isAuthenticated && !needsPasswordReset) {
+      const justSetPassword = sessionStorage.getItem('justSetPassword');
+      if (justSetPassword === 'true') {
+        setShowWelcomeMessage(true);
+        sessionStorage.removeItem('justSetPassword');
+      }
+    }
+    
     if (!isLoading && isAuthenticated && isAdmin) {
       // Redirect admins to admin dashboard
       router.push('/portal/admin');
@@ -224,6 +234,36 @@ function PortalContent() {
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-12">
+        {/* First Login Welcome Banner */}
+        {showWelcomeMessage && (
+          <div className="mb-8 animate-in slide-in-from-top-5 duration-500">
+            <Card className="bg-gradient-to-r from-[#1A2D63] to-[#2A3D73] border-0 shadow-brand-lg">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="rounded-full bg-white/20 p-2 flex-shrink-0">
+                    <CheckCircle2 className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="finit-h2 text-white mb-2">
+                      {t('portal.welcome.firstLogin.title')}
+                    </h3>
+                    <p className="finit-body text-white/90">
+                      {t('portal.welcome.firstLogin.description')}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowWelcomeMessage(false)}
+                    className="flex-shrink-0 text-white/80 hover:text-white transition-colors"
+                    aria-label="Close"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         {/* Welcome Section */}
         <div className="mb-12 text-center">
           <h2 className="finit-h1 text-[#1A2D63] mb-4">
