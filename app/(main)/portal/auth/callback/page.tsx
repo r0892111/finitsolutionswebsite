@@ -21,7 +21,7 @@ function CallbackHandler() {
     const handleCallback = async () => {
       const code = searchParams.get('code');
       const tokenHash = searchParams.get('token_hash');
-      const type = searchParams.get('type'); // 'signup', 'recovery', 'invite'
+      const type = searchParams.get('type'); // 'signup', 'recovery', 'invite', 'magiclink'
       
       if (!code) {
         setStatus('error');
@@ -53,18 +53,40 @@ function CallbackHandler() {
 
         // Success - handle different auth types
         if (data.session) {
-          setStatus('success');
+          // For magic links and successful logins, redirect immediately
+          // Magic links don't always have type=magiclink, so we check if it's not recovery/invite
+          const isMagicLink = type === 'magiclink' || (!type && data.session && !tokenHash);
+          const isRecovery = type === 'recovery';
+          const isInvite = type === 'invite' && tokenHash;
           
-          // Redirect based on type
-          setTimeout(() => {
-            if (type === 'recovery') {
+          if (isMagicLink) {
+            // Magic link: user is now logged in, redirect immediately to portal
+            router.push('/portal');
+            return;
+          }
+          
+          if (isRecovery) {
+            // Password reset flow
+            setStatus('success');
+            setTimeout(() => {
               router.push('/portal/reset-password');
-            } else if (type === 'invite' && tokenHash) {
-              router.push(`/portal/signup?type=invite&token_hash=${tokenHash}`);
-            } else {
-              router.push('/portal');
-            }
-          }, 2000);
+            }, 1500);
+            return;
+          }
+          
+          if (isInvite) {
+            // Invite flow - redirect to reset password page to force password reset
+            // User will be logged in via the session, but must set their password
+            setStatus('success');
+            setTimeout(() => {
+              router.push(`/portal/reset-password?type=invite&token_hash=${tokenHash}`);
+            }, 1500);
+            return;
+          }
+          
+          // Default: successful login/confirmation (including magic links without explicit type)
+          // Redirect immediately to portal
+          router.push('/portal');
         } else {
           setStatus('error');
           setErrorMessage('Failed to create session');

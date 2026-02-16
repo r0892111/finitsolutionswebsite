@@ -18,11 +18,24 @@ function ResetPasswordForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const { updatePassword } = useAuth();
+  const { updatePassword, isAuthenticated, isLoading } = useAuth();
   const { t } = useLanguage();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
+  
+  // Check if this is an invite flow
+  const isInviteFlow = searchParams.get('type') === 'invite';
+  const tokenHash = searchParams.get('token_hash');
+
+  useEffect(() => {
+    // Ensure user is authenticated (session should exist from callback for both invite and password reset flows)
+    // Wait for auth context to finish loading before checking
+    if (!isLoading && !isAuthenticated) {
+      // User is not authenticated - redirect to login
+      router.push('/portal/login');
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +82,9 @@ function ResetPasswordForm() {
         setIsSuccess(true);
         toast({
           title: t('portal.resetPassword.success.title'),
-          description: t('portal.resetPassword.success.description'),
+          description: isInviteFlow 
+            ? t('portal.resetPassword.success.inviteAccepted') || 'Password set successfully! You can now access the portal.'
+            : t('portal.resetPassword.success.description'),
         });
         // Redirect to portal after 2 seconds
         setTimeout(() => {
@@ -114,10 +129,14 @@ function ResetPasswordForm() {
               </div>
             </div>
             <CardTitle className="finit-h2 text-[#1A2D63]">
-              {t('portal.resetPassword.title')}
+              {isInviteFlow 
+                ? t('portal.resetPassword.inviteTitle') || 'Set Your Password'
+                : t('portal.resetPassword.title')}
             </CardTitle>
             <CardDescription className="finit-body text-[#1A2D63]/60">
-              {t('portal.resetPassword.description')}
+              {isInviteFlow
+                ? t('portal.resetPassword.inviteDescription') || 'You\'ve been invited! Please set your password to get started.'
+                : t('portal.resetPassword.description')}
             </CardDescription>
           </CardHeader>
           <CardContent>

@@ -57,12 +57,27 @@ export default function LoginPage() {
       const { error } = await login(email, password);
       
       if (error) {
-        toast({
-          title: t('portal.login.error.title'),
-          description: error,
-          variant: 'destructive',
-        });
+        // Check if error indicates password needs to be reset (e.g., "Invalid login credentials" for invited users)
+        // For invited users who haven't set password yet, they should use the invite link
+        if (error.includes('Invalid login credentials') || error.includes('Email not confirmed')) {
+          toast({
+            title: t('portal.login.error.title'),
+            description: error.includes('Email not confirmed') 
+              ? t('portal.login.error.emailNotConfirmed') || 'Please check your email for a confirmation link.'
+              : t('portal.login.error.invalidCredentials') || 'Invalid email or password. If you were invited, please use the invite link from your email.',
+            variant: 'destructive',
+          });
+        } else {
+          toast({
+            title: t('portal.login.error.title'),
+            description: error,
+            variant: 'destructive',
+          });
+        }
       } else {
+        // Check if user needs to reset password (first login after invite)
+        // This is handled by checking user metadata or redirecting to reset password
+        // For now, just redirect to portal - password reset will be handled via invite flow
         toast({
           title: t('portal.login.success.title'),
           description: t('portal.login.success.description'),
