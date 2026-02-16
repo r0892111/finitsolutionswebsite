@@ -10,6 +10,8 @@ api_version = "2026-01"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+# All scopes require merchant approval during app installation
+# If merchant gets "requires merchant approval" error, they need to reinstall the app
 scopes = "read_products,read_orders,read_customers,read_inventory"
 optional_scopes = [ ]
 use_legacy_install_flow = false

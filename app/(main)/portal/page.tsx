@@ -21,18 +21,20 @@ function PortalContent() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   useEffect(() => {
-    // Handle Supabase auth errors in hash fragment (e.g., expired magic links)
-    // Supabase redirects with errors in hash: #error=access_denied&error_code=otp_expired&error_description=...
+    // Handle Supabase auth tokens/errors in hash fragment (magic links)
+    // Supabase redirects with tokens in hash: #access_token=...&token_type=bearer&expires_in=...&type=magiclink
+    // Or errors: #error=access_denied&error_code=otp_expired&error_description=...
     if (typeof window !== 'undefined') {
       const hash = window.location.hash;
-      if (hash && hash.includes('error=')) {
-        // Parse hash fragment parameters
+      if (hash) {
         const hashParams = new URLSearchParams(hash.substring(1)); // Remove '#'
-        const error = hashParams.get('error');
-        const errorCode = hashParams.get('error_code');
-        const errorDescription = hashParams.get('error_description');
         
+        // Check for errors first
+        const error = hashParams.get('error');
         if (error) {
+          const errorCode = hashParams.get('error_code');
+          const errorDescription = hashParams.get('error_description');
+          
           // Determine user-friendly error message
           let errorMessage = errorDescription 
             ? decodeURIComponent(errorDescription.replace(/\+/g, ' '))
@@ -53,6 +55,53 @@ function PortalContent() {
           
           // Clean URL and redirect to login
           router.replace('/portal/login?error=link_expired');
+          return;
+        }
+        
+        // Check for access token (magic link success)
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
+        const hashType = hashParams.get('type');
+        
+        if (accessToken && (hashType === 'magiclink' || hashType === 'email')) {
+          // Magic link verified - set session and redirect
+          const handleMagicLinkAuth = async () => {
+            try {
+              const { createClient } = await import('@/lib/supabase/client');
+              const supabase = createClient();
+              
+              const { error: sessionError, data: sessionData } = await supabase.auth.setSession({
+                access_token: accessToken,
+                refresh_token: refreshToken || '',
+              });
+              
+              if (sessionError) {
+                console.error('Magic link session error:', sessionError);
+                toast({
+                  title: 'Fout',
+                  description: 'Kon niet inloggen. Probeer opnieuw.',
+                  variant: 'destructive',
+                });
+                router.replace('/portal/login');
+                return;
+              }
+              
+              if (sessionData.session) {
+                // Successfully logged in - clean URL and stay on portal
+                router.replace('/portal');
+              }
+            } catch (error) {
+              console.error('Magic link auth error:', error);
+              toast({
+                title: 'Fout',
+                description: 'Er is een fout opgetreden bij het inloggen.',
+                variant: 'destructive',
+              });
+              router.replace('/portal/login');
+            }
+          };
+          
+          handleMagicLinkAuth();
           return;
         }
       }
