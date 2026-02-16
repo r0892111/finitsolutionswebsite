@@ -117,6 +117,10 @@ function SignupForm() {
         if (exchangeData.session) {
           const { error: updateError } = await supabase.auth.updateUser({
             password: password,
+            data: {
+              password_changed: true,
+              password_changed_at: new Date().toISOString(),
+            },
           });
           
           if (updateError) {

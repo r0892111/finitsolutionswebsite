@@ -10,6 +10,7 @@ interface AuthContextType {
   session: Session | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  needsPasswordReset: boolean;
   login: (email: string, password: string) => Promise<{ error: string | null }>;
   signUp: (email: string, password: string, options?: { tokenHash?: string }) => Promise<{ error: string | null; requiresConfirmation?: boolean }>;
   logout: () => Promise<void>;
@@ -39,6 +40,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const supabase = createClient();
   
   const isAdmin = isAdminEmail(user?.email);
+  
+  // Check if user needs to reset password (first login)
+  // User needs password reset if:
+  // 1. They don't have password_changed flag in metadata
+  // 2. They were created via invite (invited users should change password on first login)
+  const needsPasswordReset = user ? !user.user_metadata?.password_changed : false;
 
   useEffect(() => {
     // Get initial session
@@ -141,6 +148,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const { error } = await supabase.auth.updateUser({
         password,
+        data: {
+          password_changed: true,
+          password_changed_at: new Date().toISOString(),
+        },
       });
 
       if (error) {
@@ -161,6 +172,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         session,
         isAuthenticated: !!user,
         isAdmin,
+        needsPasswordReset,
         login,
         signUp,
         logout,

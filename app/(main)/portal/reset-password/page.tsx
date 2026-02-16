@@ -18,14 +18,15 @@ function ResetPasswordForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const { updatePassword, isAuthenticated, isLoading } = useAuth();
+  const { updatePassword, isAuthenticated, isLoading, needsPasswordReset } = useAuth();
   const { t } = useLanguage();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
   
-  // Check if this is an invite flow
+  // Check if this is an invite flow or first login
   const isInviteFlow = searchParams.get('type') === 'invite';
+  const isFirstLogin = searchParams.get('first_login') === 'true' || needsPasswordReset;
   const tokenHash = searchParams.get('token_hash');
 
   useEffect(() => {
@@ -34,8 +35,15 @@ function ResetPasswordForm() {
     if (!isLoading && !isAuthenticated) {
       // User is not authenticated - redirect to login
       router.push('/portal/login');
+      return;
     }
-  }, [isAuthenticated, isLoading, router]);
+    
+    // If user is authenticated but doesn't need password reset (and not in invite flow),
+    // redirect to portal (they shouldn't be here)
+    if (!isLoading && isAuthenticated && !needsPasswordReset && !isInviteFlow) {
+      router.push('/portal');
+    }
+  }, [isAuthenticated, isLoading, needsPasswordReset, isInviteFlow, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,12 +137,14 @@ function ResetPasswordForm() {
               </div>
             </div>
             <CardTitle className="finit-h2 text-[#1A2D63]">
-              {isInviteFlow 
-                ? t('portal.resetPassword.inviteTitle') || 'Set Your Password'
+              {isFirstLogin || isInviteFlow
+                ? t('portal.resetPassword.firstLoginTitle') || 'Stel uw wachtwoord in'
                 : t('portal.resetPassword.title')}
             </CardTitle>
             <CardDescription className="finit-body text-[#1A2D63]/60">
-              {isInviteFlow
+              {isFirstLogin
+                ? t('portal.resetPassword.firstLoginDescription') || 'Voor uw eerste login moet u een nieuw wachtwoord instellen. Dit is verplicht voordat u toegang krijgt tot het portaal.'
+                : isInviteFlow
                 ? t('portal.resetPassword.inviteDescription') || 'You\'ve been invited! Please set your password to get started.'
                 : t('portal.resetPassword.description')}
             </CardDescription>

@@ -15,7 +15,7 @@ import { TestRefreshTokens } from '@/components/test-refresh-tokens';
 import { useToast } from '@/hooks/use-toast';
 
 function PortalContent() {
-  const { user, isAuthenticated, isAdmin, logout, isLoading } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout, isLoading, needsPasswordReset } = useAuth();
   const { t } = useLanguage();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -153,11 +153,21 @@ function PortalContent() {
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       router.push('/portal/login');
-    } else if (!isLoading && isAuthenticated && isAdmin) {
+      return;
+    }
+    
+    // Check if user needs to reset password (first login)
+    if (!isLoading && isAuthenticated && needsPasswordReset) {
+      // Force password reset on first login
+      router.push('/portal/reset-password?first_login=true');
+      return;
+    }
+    
+    if (!isLoading && isAuthenticated && isAdmin) {
       // Redirect admins to admin dashboard
       router.push('/portal/admin');
     }
-  }, [isAuthenticated, isAdmin, isLoading, router]);
+  }, [isAuthenticated, isAdmin, isLoading, needsPasswordReset, router]);
 
 
   const handleLogout = () => {
@@ -176,7 +186,7 @@ function PortalContent() {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || needsPasswordReset) {
     return null;
   }
 

@@ -27,6 +27,8 @@ function LoginPageContent() {
   useEffect(() => {
     // Redirect if already authenticated
     if (isAuthenticated) {
+      // Check if user needs password reset (first login)
+      // This will be handled by the portal page redirect
       router.push('/portal');
       return;
     }
