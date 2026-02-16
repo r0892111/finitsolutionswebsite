@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/auth-context';
 import { useLanguage } from '@/contexts/language-context';
@@ -13,7 +13,7 @@ import { Lock, Loader2, ArrowRight, Mail, Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
-export default function LoginPage() {
+function LoginPageContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -21,14 +21,29 @@ export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
   const { t } = useLanguage();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
 
   useEffect(() => {
     // Redirect if already authenticated
     if (isAuthenticated) {
       router.push('/portal');
+      return;
     }
-  }, [isAuthenticated, router]);
+    
+    // Check for error parameter (e.g., expired magic link)
+    const errorParam = searchParams.get('error');
+    if (errorParam === 'link_expired') {
+      toast({
+        title: t('portal.login.error.linkExpired') || 'Link verlopen',
+        description: t('portal.login.error.linkExpiredDescription') || 'De inloglink is verlopen. Vraag een nieuwe link aan via "Wachtwoord vergeten" of log in met uw wachtwoord.',
+        variant: 'destructive',
+        duration: 6000,
+      });
+      // Clean URL
+      router.replace('/portal/login');
+    }
+  }, [isAuthenticated, router, searchParams, toast, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -237,5 +252,19 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-finit-aurora flex items-center justify-center font-instrument">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A2D63] mx-auto"></div>
+        </div>
+      </div>
+    }>
+      <LoginPageContent />
+    </Suspense>
   );
 }

@@ -21,6 +21,43 @@ function PortalContent() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   useEffect(() => {
+    // Handle Supabase auth errors in hash fragment (e.g., expired magic links)
+    // Supabase redirects with errors in hash: #error=access_denied&error_code=otp_expired&error_description=...
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash && hash.includes('error=')) {
+        // Parse hash fragment parameters
+        const hashParams = new URLSearchParams(hash.substring(1)); // Remove '#'
+        const error = hashParams.get('error');
+        const errorCode = hashParams.get('error_code');
+        const errorDescription = hashParams.get('error_description');
+        
+        if (error) {
+          // Determine user-friendly error message
+          let errorMessage = errorDescription 
+            ? decodeURIComponent(errorDescription.replace(/\+/g, ' '))
+            : 'An authentication error occurred';
+          
+          if (errorCode === 'otp_expired') {
+            errorMessage = 'Deze inloglink is verlopen of ongeldig. Vraag een nieuwe link aan.';
+          } else if (error === 'access_denied') {
+            errorMessage = 'Toegang geweigerd. De link is mogelijk verlopen of ongeldig.';
+          }
+          
+          toast({
+            title: 'Inloglink ongeldig',
+            description: errorMessage,
+            variant: 'destructive',
+            duration: 5000,
+          });
+          
+          // Clean URL and redirect to login
+          router.replace('/portal/login?error=link_expired');
+          return;
+        }
+      }
+    }
+    
     // Handle Supabase auth redirects (magic links, etc.)
     // If Supabase redirects here with auth parameters, forward to callback handler
     const code = searchParams.get('code');
