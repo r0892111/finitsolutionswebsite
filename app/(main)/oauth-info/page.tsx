@@ -193,7 +193,7 @@ export default function OAuthInfoPage() {
         {/* Footer Note */}
         <div className="text-center mt-8 text-sm text-[#1A2D63]/60">
           <p>
-            This page provides information about Finit Solutions' use of Google APIs for customer portal integration.
+            This page provides information about Finit Solutions&apos; use of Google APIs for customer portal integration.
           </p>
           <p className="mt-2">
             <a href="/" className="text-[#1A2D63] hover:underline">← Back to Home</a>
