@@ -11,6 +11,14 @@ import { useAuth } from '@/contexts/auth-context';
 import { getDropboxRedirectUri, getGoogleRedirectUri, getShopifyRedirectUri } from '@/lib/oauth';
 import Image from 'next/image';
 
+// Fallback icon mapping for integrations
+const INTEGRATION_ICONS: Record<string, string> = {
+  google: '/Gmail_icon_(2020).png',
+  microsoft: '/Microsoft_Office_Teams_(2019–2025).svg',
+  shopify: '/shopify_icon.png',
+  dropbox: '/dropbox_icon.png',
+};
+
 interface IntegrationType {
   id: string;
   name: string;
@@ -68,6 +76,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
 
       if (error) throw error;
 
+      console.log('User integrations:', data);
       setIntegrations((data || []) as UserIntegration[]);
     } catch (error) {
       console.error('Error fetching integrations:', error);
@@ -91,6 +100,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
 
       if (error) throw error;
 
+      console.log('Available integration types:', data);
       setAvailableTypes(data || []);
     } catch (error) {
       console.error('Error fetching integration types:', error);
@@ -345,14 +355,29 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="rounded-lg bg-[#1A2D63]/10 p-3 flex items-center justify-center w-12 h-12">
-                      {integration.integration_type.icon_url ? (
+                      {(integration.integration_type.icon_url || INTEGRATION_ICONS[integration.integration_type.name]) ? (
                         <Image
-                          src={integration.integration_type.icon_url}
+                          src={integration.integration_type.icon_url || INTEGRATION_ICONS[integration.integration_type.name] || ''}
                           alt={integration.integration_type.display_name}
                           width={24}
                           height={24}
                           className="object-contain"
                           unoptimized
+                          onError={(e) => {
+                            console.error('Failed to load icon:', integration.integration_type.icon_url || INTEGRATION_ICONS[integration.integration_type.name], 'for integration:', integration.integration_type.display_name);
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const parent = target.parentElement;
+                            if (parent && !parent.querySelector('.fallback-icon')) {
+                              const fallback = document.createElement('div');
+                              fallback.className = 'fallback-icon';
+                              fallback.innerHTML = '<svg class="h-6 w-6 text-[#1A2D63]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>';
+                              parent.appendChild(fallback);
+                            }
+                          }}
+                          onLoad={() => {
+                            console.log('Successfully loaded icon:', integration.integration_type.icon_url || INTEGRATION_ICONS[integration.integration_type.name]);
+                          }}
                         />
                       ) : (
                         <Plug className="h-6 w-6 text-[#1A2D63]" />
@@ -437,14 +462,29 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="rounded-lg bg-[#1A2D63]/10 p-3 flex items-center justify-center w-12 h-12">
-                        {type.icon_url ? (
+                        {(type.icon_url || INTEGRATION_ICONS[type.name]) ? (
                           <Image
-                            src={type.icon_url}
+                            src={type.icon_url || INTEGRATION_ICONS[type.name] || ''}
                             alt={type.display_name}
                             width={24}
                             height={24}
                             className="object-contain"
                             unoptimized
+                            onError={(e) => {
+                              console.error('Failed to load icon:', type.icon_url || INTEGRATION_ICONS[type.name], 'for integration:', type.display_name);
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const parent = target.parentElement;
+                              if (parent && !parent.querySelector('.fallback-icon')) {
+                                const fallback = document.createElement('div');
+                                fallback.className = 'fallback-icon';
+                                fallback.innerHTML = '<svg class="h-6 w-6 text-[#1A2D63]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>';
+                                parent.appendChild(fallback);
+                              }
+                            }}
+                            onLoad={() => {
+                              console.log('Successfully loaded icon:', type.icon_url || INTEGRATION_ICONS[type.name]);
+                            }}
                           />
                         ) : (
                           <Plug className="h-6 w-6 text-[#1A2D63]" />
