@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/client';
 import { Loader2, Plug, CheckCircle2, XCircle, AlertCircle, ExternalLink } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
 import { getDropboxRedirectUri, getGoogleRedirectUri, getShopifyRedirectUri } from '@/lib/oauth';
+import Image from 'next/image';
 
 interface IntegrationType {
   id: string;
@@ -343,8 +344,19 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="rounded-lg bg-[#1A2D63]/10 p-3">
-                      <Plug className="h-6 w-6 text-[#1A2D63]" />
+                    <div className="rounded-lg bg-[#1A2D63]/10 p-3 flex items-center justify-center w-12 h-12">
+                      {integration.integration_type.icon_url ? (
+                        <Image
+                          src={integration.integration_type.icon_url}
+                          alt={integration.integration_type.display_name}
+                          width={24}
+                          height={24}
+                          className="object-contain"
+                          unoptimized
+                        />
+                      ) : (
+                        <Plug className="h-6 w-6 text-[#1A2D63]" />
+                      )}
                     </div>
                     <div>
                       <div className="flex items-center gap-2 mb-1">
@@ -424,8 +436,19 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="rounded-lg bg-[#1A2D63]/10 p-3">
-                        <Plug className="h-6 w-6 text-[#1A2D63]" />
+                      <div className="rounded-lg bg-[#1A2D63]/10 p-3 flex items-center justify-center w-12 h-12">
+                        {type.icon_url ? (
+                          <Image
+                            src={type.icon_url}
+                            alt={type.display_name}
+                            width={24}
+                            height={24}
+                            className="object-contain"
+                            unoptimized
+                          />
+                        ) : (
+                          <Plug className="h-6 w-6 text-[#1A2D63]" />
+                        )}
                       </div>
                       <div>
                         <h4 className="font-semibold text-[#1A2D63]">{type.display_name}</h4>
