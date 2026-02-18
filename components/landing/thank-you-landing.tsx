@@ -4,53 +4,38 @@ import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Mail,
-  Lightbulb,
-  Video,
-  Phone,
+  Phone as PhoneIcon,
+  Clock,
+  MessageSquare,
   Linkedin,
 } from "lucide-react";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
+import { pushEvent } from "@/lib/analytics";
 
 // ============================================
 // DATA
 // ============================================
 
-const CALENDLY_URL =
-  "https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions";
-
 const timelineSteps = [
   {
+    icon: Clock,
+    title: "We bellen je binnen 24 uur",
+    description:
+      "Een van ons teamleden neemt telefonisch contact met je op voor een kort kennismakingsgesprek.",
+  },
+  {
+    icon: MessageSquare,
+    title: "Kort gesprek over jouw situatie",
+    description:
+      "We luisteren naar je uitdagingen en bespreken waar automatisering het meeste impact kan maken.",
+  },
+  {
     icon: Mail,
-    title: "Check je inbox",
+    title: "Samen naar een plan",
     description:
-      "Je krijgt een bevestigingsmail met de link voor het gesprek.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Denk alvast na over...",
-    description:
-      "Welke taken kosten jou en je team de meeste tijd? Waar lopen dingen vast of gaan ze te traag? Welke tools gebruik je al (CRM, e-mail, facturatie)?",
-  },
-  {
-    icon: Video,
-    title: "We zien je bij het gesprek",
-    description:
-      "30 minuten, vrijblijvend. We doen het zware denkwerk.",
+      "We bekijken samen de mogelijkheden en werken stap voor stap toe naar een aanpak die bij jouw bedrijf past.",
   },
 ];
-
-// ============================================
-// ANALYTICS
-// ============================================
-
-function pushDataLayerEvent(
-  event: string,
-  params?: Record<string, string>
-) {
-  if (typeof window !== "undefined" && (window as any).dataLayer) {
-    (window as any).dataLayer.push({ event, ...params });
-  }
-}
 
 // ============================================
 // NOISE OVERLAY
@@ -110,7 +95,7 @@ export function ThankYouLanding() {
 
   // Fire conversion event on mount
   useEffect(() => {
-    pushDataLayerEvent("booking_completed", {
+    pushEvent("form_submitted", {
       location: "lp_thank_you",
     });
   }, []);
@@ -155,7 +140,7 @@ export function ThankYouLanding() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            Top! Je gesprek is ingepland
+            In orde!
           </motion.h1>
 
           {/* Subtitle */}
@@ -165,7 +150,7 @@ export function ThankYouLanding() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.45 }}
           >
-            Je ontvangt een bevestiging per e-mail met alle details.
+            We nemen binnen 24 uur telefonisch contact met je op om even kort kennis te maken en een goed moment te vinden voor een gesprek.
           </motion.p>
 
           {/* "Wat nu?" Timeline */}
@@ -175,7 +160,7 @@ export function ThankYouLanding() {
             transition={{ duration: 0.5, delay: 0.6 }}
           >
             <h2 className="font-newsreader text-xl md:text-2xl text-[#1A2D63] mb-6 md:mb-8">
-              Wat nu?
+              Wat kun je verwachten?
             </h2>
 
             <div className="relative">
@@ -211,36 +196,34 @@ export function ThankYouLanding() {
             </div>
           </motion.div>
 
+          {/* Back to website button */}
+          <motion.div
+            className="mt-10 md:mt-12"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 1.1 }}
+          >
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/20"
+            >
+              Terug naar de website
+            </a>
+          </motion.div>
+
           {/* Bottom links */}
           <motion.div
-            className="mt-10 md:mt-14 pt-8 border-t border-[#1A2D63]/10 space-y-3"
+            className="mt-8 md:mt-10 pt-8 border-t border-[#1A2D63]/10 space-y-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 1.2 }}
           >
             <p className="text-sm text-[#475D8F]">
-              Moet je je afspraak wijzigen?{" "}
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  pushDataLayerEvent("cta_click", {
-                    cta_label: "reschedule",
-                    location: "lp_thank_you",
-                  })
-                }
-                className="text-[#1A2D63] font-medium underline underline-offset-2 hover:text-[#2A4488] transition-colors"
-              >
-                Herplan hier
-              </a>
-            </p>
-            <p className="text-sm text-[#475D8F]">
               Vragen in de tussentijd?{" "}
               <a
                 href="mailto:contact@finitsolutions.be"
                 onClick={() =>
-                  pushDataLayerEvent("contact_click", {
+                  pushEvent("contact_click", {
                     method: "email",
                     location: "lp_thank_you",
                   })
@@ -248,6 +231,21 @@ export function ThankYouLanding() {
                 className="text-[#1A2D63] font-medium underline underline-offset-2 hover:text-[#2A4488] transition-colors"
               >
                 contact@finitsolutions.be
+              </a>
+            </p>
+            <p className="text-sm text-[#475D8F]">
+              Of bel ons direct:{" "}
+              <a
+                href="tel:+32495702314"
+                onClick={() =>
+                  pushEvent("contact_click", {
+                    method: "phone",
+                    location: "lp_thank_you",
+                  })
+                }
+                className="text-[#1A2D63] font-medium underline underline-offset-2 hover:text-[#2A4488] transition-colors"
+              >
+                +32 495 70 23 14
               </a>
             </p>
           </motion.div>

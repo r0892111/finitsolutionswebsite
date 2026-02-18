@@ -10,13 +10,12 @@ import {
   Linkedin,
 } from "lucide-react";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
+import { useContactForm, ContactFormPopup, EmbeddedContactForm } from "@/components/contact-form-popup";
+import { pushEvent } from "@/lib/analytics";
 
 // ============================================
 // DATA
 // ============================================
-
-const CALENDLY_URL =
-  "https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions";
 
 const checklistItems = [
   "Analyse van je huidige processen",
@@ -24,19 +23,6 @@ const checklistItems = [
   "Concrete ROI-schatting",
   "Geen verplichtingen, geen verkooppraatje",
 ];
-
-// ============================================
-// ANALYTICS
-// ============================================
-
-function pushDataLayerEvent(
-  event: string,
-  params?: Record<string, string>
-) {
-  if (typeof window !== "undefined" && (window as any).dataLayer) {
-    (window as any).dataLayer.push({ event, ...params });
-  }
-}
 
 // ============================================
 // NOISE OVERLAY (same as main site)
@@ -58,6 +44,7 @@ const NoiseOverlay = () => (
 export function DirectBookingLanding() {
   const [navScrollProgress, setNavScrollProgress] = useState(0);
   const currentYear = new Date().getFullYear();
+  const { isOpen, openForm, closeForm } = useContactForm();
 
   // Nav scroll progress
   useEffect(() => {
@@ -154,14 +141,7 @@ export function DirectBookingLanding() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <iframe
-              src="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions?hide_gdpr_banner=1&background_color=fdfbf7&text_color=1a2d63&primary_color=1a2d63"
-              width="100%"
-              height="800"
-              frameBorder="0"
-              title="Plan een gesprek"
-              className="rounded-2xl border border-[#1A2D63]/10"
-            />
+            <EmbeddedContactForm />
           </motion.div>
 
           {/* Checklist */}
@@ -191,7 +171,7 @@ export function DirectBookingLanding() {
             </div>
           </motion.div>
 
-          {/* Trust Signals */}
+          {/* Trust Signal */}
           <motion.div
             className="text-center"
             initial={{ opacity: 0 }}
@@ -199,11 +179,7 @@ export function DirectBookingLanding() {
             transition={{ duration: 0.6, delay: 0.7 }}
           >
             <p className="font-instrument text-sm text-[#475D8F]/70">
-              30+ bedrijven geholpen{" "}
-              <span className="mx-2 text-[#1A2D63]/20">|</span>{" "}
-              Gemiddeld 15 uur/week bespaard{" "}
-              <span className="mx-2 text-[#1A2D63]/20">|</span>{" "}
-              4.9/5 klanttevredenheid
+              Vrijblijvend &middot; Geen verplichtingen &middot; Binnen 24 uur reactie
             </p>
           </motion.div>
         </div>
@@ -244,25 +220,24 @@ export function DirectBookingLanding() {
                 Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <a
-                  href={CALENDLY_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() =>
-                    pushDataLayerEvent("cta_click", {
+                <button
+                  type="button"
+                  onClick={() => {
+                    openForm();
+                    pushEvent("cta_click", {
                       cta_label: "footer_calendly",
                       location: "lp_direct_booking_footer",
-                    })
-                  }
+                    });
+                  }}
                   className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
                 >
                   <Calendar className="w-4 h-4" />
                   Plan een gesprek
-                </a>
+                </button>
                 <a
                   href="mailto:contact@finitsolutions.be"
                   onClick={() =>
-                    pushDataLayerEvent("contact_click", {
+                    pushEvent("contact_click", {
                       method: "email",
                       location: "lp_direct_booking_footer",
                     })
@@ -347,6 +322,7 @@ export function DirectBookingLanding() {
           </div>
         </div>
       </footer>
+      <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </div>
   );
 }

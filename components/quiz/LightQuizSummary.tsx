@@ -18,6 +18,7 @@ import {
   Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useContactForm, ContactFormPopup } from "@/components/contact-form-popup";
 import {
   Card,
   CardContent,
@@ -165,6 +166,7 @@ function ProgressRing({ value, size = 120 }: { value: number; size?: number }) {
 }
 
 export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
+  const { isOpen, openForm, closeForm } = useContactForm();
   const score = data.efficiency_score ?? 0;
   const readiness = data.ai_readiness ?? "Gemiddeld";
 
@@ -690,13 +692,8 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
                         </div>
                       </div>
                       <Button
-  onClick={() =>
-    window.open(
-      "https://calendly.com/karel-finitsolutions/rl-30-minuten-kennismaking-finit-solutions",
-      "_blank",
-      "noopener,noreferrer"
-    )
-  }
+  onClick={openForm}
+  type="button"
   size="lg"
   className="bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-bold px-6 h-11 rounded-xl shadow-xl"
 >
@@ -711,6 +708,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
           </div>
         </FullBleed>
       </section>
+      <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </>
   );
 }

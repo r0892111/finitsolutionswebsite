@@ -5,11 +5,14 @@ import { Zap, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { useLanguage } from "@/contexts/language-context";
+import { useContactForm, ContactFormPopup } from "@/components/contact-form-popup";
+import { pushEvent } from "@/lib/analytics";
 
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
   const { t } = useLanguage();
+  const { isOpen, openForm, closeForm } = useContactForm();
 
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
@@ -71,20 +74,21 @@ export function Hero() {
               size="lg"
               variant="outline"
               className="border-gray-300 text-gray-700 hover:bg-blue-800 px-8 py-4 text-lg rounded-full font-medium"
+              onClick={() => {
+                openForm();
+                pushEvent("cta_click", { cta_label: "hero_calendly", location: "main_hero" });
+              }}
+              type="button"
             >
-              <a 
-                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2"
-              >
+              <span className="flex items-center gap-2">
                 <Calendar className="h-5 w-5" />
                 {t('hero.cta.meeting')}
-              </a>
+              </span>
             </Button>
           </motion.div>
         </div>
       </div>
+      <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </section>
   );
 }

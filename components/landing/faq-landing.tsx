@@ -13,13 +13,12 @@ import {
 } from "lucide-react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
+import { useContactForm, ContactFormPopup } from "@/components/contact-form-popup";
+import { pushEvent } from "@/lib/analytics";
 
 // ============================================
 // DATA
 // ============================================
-
-const CALENDLY_URL =
-  "https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions";
 
 type FaqBlock =
   | { type: "p"; text: string }
@@ -216,19 +215,6 @@ const faqCategories: FAQCategory[] = [
 ];
 
 // ============================================
-// ANALYTICS
-// ============================================
-
-function pushDataLayerEvent(
-  event: string,
-  params?: Record<string, string>
-) {
-  if (typeof window !== "undefined" && (window as any).dataLayer) {
-    (window as any).dataLayer.push({ event, ...params });
-  }
-}
-
-// ============================================
 // NOISE OVERLAY
 // ============================================
 
@@ -321,6 +307,7 @@ export function FAQLanding() {
   const [navScrollProgress, setNavScrollProgress] = useState(0);
   const [showStickyMobileCTA, setShowStickyMobileCTA] = useState(false);
   const currentYear = new Date().getFullYear();
+  const { isOpen, openForm, closeForm } = useContactForm();
 
   // Nav scroll progress + sticky mobile CTA trigger
   useEffect(() => {
@@ -431,16 +418,15 @@ export function FAQLanding() {
           </a>
 
           {/* Desktop CTA */}
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() =>
-              pushDataLayerEvent("cta_click", {
+          <button
+            type="button"
+            onClick={() => {
+              openForm();
+              pushEvent("cta_click", {
                 cta_label: "nav_calendly",
                 location: "lp_faq_nav",
-              })
-            }
+              });
+            }}
             className="hidden md:flex items-center gap-2 bg-[#1A2D63] text-white rounded-full text-sm font-medium hover:scale-105 transition-all shadow-lg shadow-[#1A2D63]/20"
             style={{
               paddingLeft: `${20 + (1 - navScrollProgress) * 4}px`,
@@ -452,19 +438,18 @@ export function FAQLanding() {
           >
             <Calendar className="w-4 h-4" />
             <span>Plan een gesprek</span>
-          </a>
+          </button>
 
           {/* Mobile CTA only */}
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() =>
-              pushDataLayerEvent("cta_click", {
+          <button
+            type="button"
+            onClick={() => {
+              openForm();
+              pushEvent("cta_click", {
                 cta_label: "mobile_nav_calendly",
                 location: "lp_faq_mobile_nav",
-              })
-            }
+              });
+            }}
             className="md:hidden flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-xs font-medium px-3.5 py-2 transition-opacity duration-300"
             style={{
               opacity: navScrollProgress,
@@ -473,7 +458,7 @@ export function FAQLanding() {
           >
             <Calendar className="w-3.5 h-3.5" />
             <span>Plan een gesprek</span>
-          </a>
+          </button>
         </div>
       </nav>
 
@@ -575,22 +560,21 @@ export function FAQLanding() {
                 ))}
               </div>
 
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  pushDataLayerEvent("cta_click", {
+              <button
+                type="button"
+                onClick={() => {
+                  openForm();
+                  pushEvent("cta_click", {
                     cta_label: "final_calendly",
                     location: "lp_faq_final_cta",
-                  })
-                }
+                  });
+                }}
                 className="inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
               >
                 <Calendar className="w-5 h-5 md:w-6 md:h-6" />
                 Plan je gratis gesprek
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
-              </a>
+              </button>
             </motion.div>
           </div>
         </div>
@@ -631,25 +615,24 @@ export function FAQLanding() {
                 Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <a
-                  href={CALENDLY_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() =>
-                    pushDataLayerEvent("cta_click", {
+                <button
+                  type="button"
+                  onClick={() => {
+                    openForm();
+                    pushEvent("cta_click", {
                       cta_label: "footer_calendly",
                       location: "lp_faq_footer",
-                    })
-                  }
+                    });
+                  }}
                   className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
                 >
                   <Calendar className="w-4 h-4" />
                   Plan een gesprek
-                </a>
+                </button>
                 <a
                   href="mailto:contact@finitsolutions.be"
                   onClick={() =>
-                    pushDataLayerEvent("contact_click", {
+                    pushEvent("contact_click", {
                       method: "email",
                       location: "lp_faq_footer",
                     })
@@ -748,24 +731,24 @@ export function FAQLanding() {
         }}
       >
         <div className="bg-[#FDFBF7]/90 backdrop-blur-xl border-t border-[#1A2D63]/10 px-4 py-3">
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() =>
-              pushDataLayerEvent("cta_click", {
+          <button
+            type="button"
+            onClick={() => {
+              openForm();
+              pushEvent("cta_click", {
                 cta_label: "sticky_mobile_calendly",
                 location: "lp_faq_sticky",
-              })
-            }
+              });
+            }}
             className="flex items-center justify-center gap-2.5 bg-[#1A2D63] text-white w-full py-3 rounded-full text-[15px] font-medium shadow-lg shadow-[#1A2D63]/20"
           >
             <Calendar className="w-4 h-4" />
             Plan je gratis gesprek
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </button>
         </div>
       </div>
+      <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </div>
   );
 }

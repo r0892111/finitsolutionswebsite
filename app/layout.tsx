@@ -1,7 +1,7 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
-import { GADebug } from '@/components/ga-debug';
+
 import { Toaster } from '@/components/ui/toaster';
 import Script from 'next/script';
 import { ConsentProvider } from '@/contexts/consent-context';
@@ -124,23 +124,6 @@ export default function RootLayout({
           }}
         />
         
-        {/* Google Analytics (keeping existing for compatibility) */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-0ZT5ZRKWLV"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-0ZT5ZRKWLV', {
-              page_title: document.title,
-              page_location: window.location.href
-            });
-          `}
-        </Script>
-
         {/* Leadinfo tracking code */}
         <Script
           id="leadinfo-tracking"
@@ -169,7 +152,6 @@ export default function RootLayout({
         <LanguageProvider>
           <AuthProvider>
             <ConsentProvider>
-              <GADebug />
               {children}
               <CookieBanner />
               <CookieSettingsModal />

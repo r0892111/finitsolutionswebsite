@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { pushEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/language-context";
 import { Globe, Lock } from "lucide-react";
@@ -81,30 +82,35 @@ export function Navbar() {
             <div className="lg:flex hidden items-center bg-gray-900/10 backdrop-blur-sm rounded-full px-2 py-1 border border-gray-200/50 shadow-sm">
               <Link
                 href="/"
+                onClick={() => pushEvent("nav_click", { nav_item: "home", location: "navbar" })}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
                 Home
               </Link>
               <Link
                 href="/diensten"
+                onClick={() => pushEvent("nav_click", { nav_item: "diensten", location: "navbar" })}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
                 {t('nav.services')}
               </Link>
               <Link
                 href="/marketplace"
+                onClick={() => pushEvent("nav_click", { nav_item: "marketplace", location: "navbar" })}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
                 {t('nav.marketplace')}
               </Link>
               <Link
                 href="/about"
+                onClick={() => pushEvent("nav_click", { nav_item: "about", location: "navbar" })}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
                 {t('nav.about')}
               </Link>
               <Link
                 href="/portal"
+                onClick={() => pushEvent("nav_click", { nav_item: "portal", location: "navbar" })}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200 flex items-center gap-1.5"
               >
                 <Lock className="h-3 w-3" />
@@ -196,7 +202,10 @@ export function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setIsOpen(false);
+                  pushEvent("nav_click", { nav_item: item.href.replace("/", "") || "home", location: "mobile_navbar" });
+                }}
                 className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2"
               >
                 {item.name}
@@ -204,7 +213,10 @@ export function Navbar() {
             ))}
             <Link
               href="/portal"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                pushEvent("nav_click", { nav_item: "portal", location: "mobile_navbar" });
+              }}
               className="text-lg font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2 flex items-center gap-2"
             >
               <Lock className="h-4 w-4" />

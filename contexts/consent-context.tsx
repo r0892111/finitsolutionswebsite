@@ -83,13 +83,23 @@ export function ConsentProvider({ children }: ConsentProviderProps) {
       marketing: true,
       social: true,
     };
-    
-    updateChoices(allAccepted, 'banner');
+
+    setChoices(allAccepted);
+    setHasConsent(true);
+    setShowBanner(false);
+    setShowSettings(false);
+    saveConsent(allAccepted, 'banner');
+    applyConsentMode(allAccepted);
     pushDataLayerEvent('consent_accept_all', allAccepted, 'banner');
   };
 
   const rejectAll = () => {
-    updateChoices(defaultChoices, 'banner');
+    setChoices(defaultChoices);
+    setHasConsent(true);
+    setShowBanner(false);
+    setShowSettings(false);
+    saveConsent(defaultChoices, 'banner');
+    applyConsentMode(defaultChoices);
     pushDataLayerEvent('consent_reject_all', defaultChoices, 'banner');
   };
 

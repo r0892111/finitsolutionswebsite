@@ -21,13 +21,12 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
+import { useContactForm, ContactFormPopup } from "@/components/contact-form-popup";
+import { pushEvent } from "@/lib/analytics";
 
 // ============================================
 // DATA
 // ============================================
-
-const CALENDLY_URL =
-  "https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions";
 
 const integrationLogos = [
   { name: "Salesforce", logo: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg" },
@@ -150,19 +149,6 @@ const faqs: FAQ[] = [
     answer: "Gemiddeld 2-4 weken van start tot werkend systeem.",
   },
 ];
-
-// ============================================
-// ANALYTICS
-// ============================================
-
-function pushDataLayerEvent(
-  event: string,
-  params?: Record<string, string>
-) {
-  if (typeof window !== "undefined" && (window as any).dataLayer) {
-    (window as any).dataLayer.push({ event, ...params });
-  }
-}
 
 // ============================================
 // NOISE OVERLAY
@@ -369,7 +355,7 @@ const MobileLogoCarousel = () => {
         <LogoCarousel
           className="logo-carousel absolute inset-0 pointer-events-none overflow-visible block lg:hidden"
           logoSize={52}
-          svgTopPercent={39}
+          svgTopPercent={30}
           spacingMultiplier={1.15}
           pathD={mobilePath}
           durationSeconds={60}
@@ -481,6 +467,7 @@ export function AIReadinessScanLanding() {
   const [showStickyMobileCTA, setShowStickyMobileCTA] = useState(false);
   const logoCarouselRef = useRef<HTMLDivElement>(null);
   const currentYear = new Date().getFullYear();
+  const { isOpen, openForm, closeForm } = useContactForm();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -548,16 +535,15 @@ export function AIReadinessScanLanding() {
             />
           </a>
 
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() =>
-              pushDataLayerEvent("cta_click", {
+          <button
+            type="button"
+            onClick={() => {
+              openForm();
+              pushEvent("cta_click", {
                 cta_label: "nav_calendly",
                 location: "lp_ai_readiness_scan_nav",
-              })
-            }
+              });
+            }}
             className="hidden md:flex items-center gap-2 bg-[#1A2D63] text-white rounded-full text-sm font-medium hover:scale-105 transition-all shadow-lg shadow-[#1A2D63]/20"
             style={{
               paddingLeft: `${20 + (1 - navScrollProgress) * 4}px`,
@@ -569,18 +555,17 @@ export function AIReadinessScanLanding() {
           >
             <Calendar className="w-4 h-4" />
             <span>Plan een gesprek</span>
-          </a>
+          </button>
 
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() =>
-              pushDataLayerEvent("cta_click", {
+          <button
+            type="button"
+            onClick={() => {
+              openForm();
+              pushEvent("cta_click", {
                 cta_label: "mobile_nav_calendly",
                 location: "lp_ai_readiness_scan_mobile_nav",
-              })
-            }
+              });
+            }}
             className="md:hidden flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-xs font-medium px-3.5 py-2 transition-opacity duration-300"
             style={{
               opacity: navScrollProgress,
@@ -589,7 +574,7 @@ export function AIReadinessScanLanding() {
           >
             <Calendar className="w-3.5 h-3.5" />
             <span>Plan een gesprek</span>
-          </a>
+          </button>
         </div>
       </nav>
 
@@ -628,22 +613,21 @@ export function AIReadinessScanLanding() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  pushDataLayerEvent("cta_click", {
+              <button
+                type="button"
+                onClick={() => {
+                  openForm();
+                  pushEvent("cta_click", {
                     cta_label: "hero_calendly",
                     location: "lp_ai_readiness_scan_hero",
-                  })
-                }
+                  });
+                }}
                 className="group w-full sm:w-auto bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
                 <span>Plan je gratis scan</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </button>
             </motion.div>
 
             <motion.p
@@ -908,22 +892,21 @@ export function AIReadinessScanLanding() {
                 ))}
               </div>
 
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  pushDataLayerEvent("cta_click", {
+              <button
+                type="button"
+                onClick={() => {
+                  openForm();
+                  pushEvent("cta_click", {
                     cta_label: "final_calendly",
                     location: "lp_ai_readiness_scan_final_cta",
-                  })
-                }
+                  });
+                }}
                 className="inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
               >
                 <Calendar className="w-5 h-5 md:w-6 md:h-6" />
                 Kies een moment
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
-              </a>
+              </button>
             </motion.div>
           </div>
         </div>
@@ -963,25 +946,24 @@ export function AIReadinessScanLanding() {
                 Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <a
-                  href={CALENDLY_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() =>
-                    pushDataLayerEvent("cta_click", {
+                <button
+                  type="button"
+                  onClick={() => {
+                    openForm();
+                    pushEvent("cta_click", {
                       cta_label: "footer_calendly",
                       location: "lp_ai_readiness_scan_footer",
-                    })
-                  }
+                    });
+                  }}
                   className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
                 >
                   <Calendar className="w-4 h-4" />
                   Plan een gesprek
-                </a>
+                </button>
                 <a
                   href="mailto:contact@finitsolutions.be"
                   onClick={() =>
-                    pushDataLayerEvent("contact_click", {
+                    pushEvent("contact_click", {
                       method: "email",
                       location: "lp_ai_readiness_scan_footer",
                     })
@@ -1080,24 +1062,24 @@ export function AIReadinessScanLanding() {
         }}
       >
         <div className="bg-[#FDFBF7]/90 backdrop-blur-xl border-t border-[#1A2D63]/10 px-4 py-3">
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() =>
-              pushDataLayerEvent("cta_click", {
+          <button
+            type="button"
+            onClick={() => {
+              openForm();
+              pushEvent("cta_click", {
                 cta_label: "sticky_mobile_calendly",
                 location: "lp_ai_readiness_scan_sticky",
-              })
-            }
+              });
+            }}
             className="flex items-center justify-center gap-2.5 bg-[#1A2D63] text-white w-full py-3 rounded-full text-[15px] font-medium shadow-lg shadow-[#1A2D63]/20"
           >
             <Calendar className="w-4 h-4" />
             Plan je gratis scan
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </button>
         </div>
       </div>
+      <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </div>
   );
 }
