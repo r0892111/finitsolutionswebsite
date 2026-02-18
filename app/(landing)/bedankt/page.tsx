@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { ThankYouLanding } from '@/components/landing/thank-you-landing';
 
 export const metadata: Metadata = {
-  title: 'Bedankt! Je gesprek is ingepland | Finit Solutions',
+  title: 'In orde! | Finit Solutions',
   description:
-    'Je gesprek met Finit Solutions is ingepland. Check je inbox voor de bevestiging en bereid je voor op het gesprek.',
+    'Bedankt voor je bericht. We nemen binnen 24 uur contact met je op.',
   openGraph: {
-    title: 'Bedankt! Je gesprek is ingepland | Finit Solutions',
+    title: 'In orde! | Finit Solutions',
     description:
-      'Je gesprek met Finit Solutions is ingepland. Check je inbox voor de bevestiging.',
+      'Bedankt voor je bericht. We nemen binnen 24 uur contact met je op.',
     url: 'https://finitsolutions.be/bedankt',
     siteName: 'Finit Solutions',
     locale: 'nl_BE',
