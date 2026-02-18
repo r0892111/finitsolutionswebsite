@@ -10,7 +10,6 @@ import {
   ArrowRight,
   Calendar,
   Check,
-  ChevronDown,
   Zap,
   TrendingUp,
   UserMinus,
@@ -399,11 +398,11 @@ const RangeSlider = ({
 
   return (
     <div className="mb-8 last:mb-0">
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-1 sm:gap-3">
         <label className="font-instrument text-[15px] md:text-base text-[#1A2D63] font-medium">
           {label}
         </label>
-        <span className="font-newsreader text-xl md:text-2xl font-semibold text-[#1A2D63] tabular-nums">
+        <span className="font-newsreader text-xl md:text-2xl font-semibold text-[#1A2D63] tabular-nums shrink-0">
           {formatValue(value)}
         </span>
       </div>
@@ -808,20 +807,6 @@ export function ROICalculatorLanding() {
           </div>
         </div>
 
-        {/* Animated chevron pointing down — pinned to bottom of hero */}
-        <motion.div
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ChevronDown className="w-8 h-8 md:w-10 md:h-10 text-[#1A2D63]/30" />
-          </motion.div>
-        </motion.div>
       </header>
 
       {/* Divider: cream -> white */}
@@ -882,7 +867,7 @@ export function ROICalculatorLanding() {
 
             <div className="relative bg-white rounded-3xl shadow-2xl border border-[#1A2D63]/10 overflow-hidden">
               {/* Inputs section */}
-              <div className="p-6 md:p-10 lg:p-12">
+              <div className="p-5 sm:p-6 md:p-10 lg:p-12">
                 <h3 className="font-newsreader text-lg md:text-xl font-semibold text-[#1A2D63] mb-6">
                   Vul jouw gegevens in
                 </h3>
@@ -923,7 +908,7 @@ export function ROICalculatorLanding() {
               <div className="h-px bg-gradient-to-r from-transparent via-[#1A2D63]/10 to-transparent" />
 
               {/* Outputs section */}
-              <div className="p-6 md:p-10 lg:p-12">
+              <div className="p-5 sm:p-6 md:p-10 lg:p-12">
                 {/* Main results */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
                   {/* Current cost card */}
