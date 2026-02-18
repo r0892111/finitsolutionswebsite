@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { gsap, useGSAP, ScrollTrigger, MorphSVGPlugin, MotionPathPlugin, DrawSVGPlugin } from '@/lib/gsap';
+import { gsap, useGSAP, ScrollTrigger, MotionPathPlugin, DrawSVGPlugin } from '@/lib/gsap';
 import {
   ArrowRight,
   Calendar,
@@ -394,6 +394,53 @@ const NoiseOverlay = () => (
     }}
   />
 );
+
+// --- Section Divider ---
+
+const sectionDividerData = [
+  {
+    fill: "M0,70 C480,130 960,-10 1920,50",
+    navy: "M0,62 C480,110 960,-18 1920,34 L1920,60 C960,4 480,146 0,78 Z",
+    light: "M0,78 C480,146 960,4 1920,60 L1920,74 C960,14 480,164 0,88 Z",
+  },
+  {
+    fill: "M0,30 C320,110 640,120 960,60 C1280,0 1600,-10 1920,80",
+    navy: "M0,22 C320,92 640,100 960,50 C1280,-10 1600,-16 1920,66 L1920,90 C1600,4 1280,10 960,70 C640,134 320,126 0,38 Z",
+    light: "M0,38 C320,126 640,134 960,70 C1280,10 1600,4 1920,90 L1920,102 C1600,18 1280,22 960,80 C640,146 320,142 0,48 Z",
+  },
+];
+
+const SectionDivider = ({
+  fromColor,
+  toColor,
+  variant = 0,
+}: {
+  fromColor: string;
+  toColor: string;
+  variant?: number;
+}) => {
+  const data = sectionDividerData[variant % sectionDividerData.length];
+  const fillPath = `${data.fill} L1920,160 L0,160 Z`;
+  return (
+    <div
+      className="relative w-full"
+      style={{ backgroundColor: fromColor, marginTop: -1, marginBottom: -1 }}
+      aria-hidden="true"
+    >
+      <svg
+        viewBox="0 -40 1920 200"
+        preserveAspectRatio="none"
+        className="w-full block h-[50px] md:h-[75px] lg:h-[100px]"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ overflow: "visible" }}
+      >
+        <path d={fillPath} fill={toColor} />
+        <path d={data.navy} fill="#1A2D63" />
+        <path d={data.light} fill="#7B8DB5" />
+      </svg>
+    </div>
+  );
+};
 
 // --- Typewriter Animation Component ---
 const typewriterPhrases = [
@@ -2236,8 +2283,6 @@ export function AIDesignLanding() {
   const heroRef = useRef(null);
   const heroTextRef = useRef(null);
   const logoCarouselRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLElement>(null);
-  const footerWaveRef = useRef<SVGPathElement>(null);
   const secondaryCTARef = useRef<HTMLElement>(null);
 
   const pushDataLayerEvent = (eventName: string, params: Record<string, unknown>) => {
@@ -2295,32 +2340,6 @@ export function AIDesignLanding() {
     }); });
   }, []);
 
-  // Footer bounce animation
-  useGSAP(() => {
-    const curvedPath = 'M0-0.3C0-0.3,464,120,1139,120S2278-0.3,2278-0.3V683H0V-0.3z';
-    const flatPath = 'M0-0.3C0-0.3,464,0,1139,0s1139-0.3,1139-0.3V683H0V-0.3z';
-
-    if (footerRef.current && footerWaveRef.current) {
-      ScrollTrigger.create({
-        trigger: footerRef.current,
-        start: 'top bottom',
-        onEnter: (self) => {
-          const velocity = self.getVelocity();
-          const variation = velocity / 10000;
-
-          gsap.fromTo(footerWaveRef.current,
-            { morphSVG: curvedPath },
-            {
-              duration: 2,
-              morphSVG: flatPath,
-              ease: `elastic.out(${1 + variation}, ${1 - variation})`,
-              overwrite: true
-            }
-          );
-        }
-      });
-    }
-  });
 
   // Secondary CTA section entrance animation - slides up from below
   useGSAP(() => {
@@ -2619,10 +2638,14 @@ export function AIDesignLanding() {
       {/* ============================================ */}
       <HowItWorksSection />
 
+      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={0} />
+
       {/* ============================================ */}
       {/* USE CASES SECTION                          */}
       {/* ============================================ */}
       <UseCasesSection />
+
+      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={1} />
 
       {/* ============================================ */}
       {/* FAQ SECTION                                  */}
@@ -2681,8 +2704,8 @@ export function AIDesignLanding() {
       {/* ============================================ */}
       {/* FOOTER                                      */}
       {/* ============================================ */}
-      <footer ref={footerRef} className="bg-[#1A2D63] text-white pt-16 md:pt-20 pb-12 md:pb-16 px-6 relative overflow-visible mt-16 md:mt-20 lg:mt-24">
-        {/* Bouncy SVG Wave */}
+      <footer className="bg-[#1A2D63] text-white pt-16 md:pt-20 pb-12 md:pb-16 px-6 relative overflow-visible mt-16 md:mt-20 lg:mt-24">
+        {/* SVG Wave */}
         <div className="absolute top-0 left-0 w-full" style={{ transform: 'translateY(-99%)' }}>
           <svg
             preserveAspectRatio="none"
@@ -2692,7 +2715,6 @@ export function AIDesignLanding() {
             style={{ overflow: 'visible' }}
           >
             <path
-              ref={footerWaveRef}
               fill="#1A2D63"
               d="M0-0.3C0-0.3,464,120,1139,120S2278-0.3,2278-0.3V683H0V-0.3z"
             />
