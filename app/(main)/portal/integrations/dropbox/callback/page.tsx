@@ -96,6 +96,7 @@ function DropboxCallbackContent() {
         const response = await fetch(`${supabaseUrl}/functions/v1/exchange-dropbox-token`, {
           method: 'POST',
           headers: {
+            'Authorization': `Bearer ${sessionToUse.access_token}`, // Include for Supabase gateway, but function doesn't verify it
             'apikey': anonKey,
             'Content-Type': 'application/json',
           },

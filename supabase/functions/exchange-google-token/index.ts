@@ -43,10 +43,17 @@ serve(async (req) => {
     let userId: string;
     try {
       const body = await req.json();
+      console.log('Received request body:', { 
+        hasCode: !!body.code, 
+        hasRedirectUri: !!body.redirectUri, 
+        hasUserId: !!body.userId,
+        userId: body.userId 
+      });
       code = body.code;
       redirectUri = body.redirectUri;
       userId = body.userId;
     } catch (parseError) {
+      console.error('Failed to parse request body:', parseError);
       return new Response(
         JSON.stringify({ error: 'Invalid request body. Expected JSON with code, redirectUri, and userId.' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -54,6 +61,11 @@ serve(async (req) => {
     }
 
     if (!code || !redirectUri || !userId) {
+      console.error('Missing required fields:', {
+        hasCode: !!code,
+        hasRedirectUri: !!redirectUri,
+        hasUserId: !!userId,
+      });
       return new Response(
         JSON.stringify({ 
           error: `Missing required fields. code: ${code ? 'provided' : 'missing'}, redirectUri: ${redirectUri ? 'provided' : 'missing'}, userId: ${userId ? 'provided' : 'missing'}` 
@@ -63,12 +75,15 @@ serve(async (req) => {
     }
 
     // Verify user exists in database (security check)
+    console.log('Verifying user:', { userId });
     const { data: { user }, error: userError } = await supabase.auth.admin.getUserById(userId);
     
     if (userError || !user) {
       console.error('User verification failed:', {
         userId,
         error: userError?.message,
+        errorCode: userError?.status,
+        hasUser: !!user,
       });
       return new Response(
         JSON.stringify({ 
@@ -79,7 +94,7 @@ serve(async (req) => {
       );
     }
 
-    console.log('User verified:', { userId: user.id, email: user.email });
+    console.log('User verified successfully:', { userId: user.id, email: user.email });
 
     // Get Google OAuth credentials from environment
     const clientId = Deno.env.get('GOOGLE_CLIENT_ID');

@@ -115,11 +115,17 @@ function GoogleCallbackContent() {
           throw new Error('Invalid session. Please log in again.');
         }
         
+        if (!sessionToUse?.user?.id) {
+          throw new Error('Invalid session: User ID not found. Please log in again.');
+        }
+        
         console.log('Using session token:', {
           hasToken: !!sessionToUse.access_token,
           tokenLength: sessionToUse.access_token?.length,
           expiresAt: sessionToUse.expires_at,
           timeUntilExpiry: (sessionToUse.expires_at || 0) - Math.floor(Date.now() / 1000),
+          userId: sessionToUse.user.id,
+          userEmail: sessionToUse.user.email,
         });
 
         // Get redirect URI (must match what was used in the OAuth request)
@@ -133,17 +139,28 @@ function GoogleCallbackContent() {
           throw new Error('Supabase configuration missing');
         }
 
+        const requestBody = {
+          code,
+          redirectUri,
+          userId: sessionToUse.user.id,
+        };
+        
+        console.log('Calling Edge Function with:', {
+          url: `${supabaseUrl}/functions/v1/exchange-google-token`,
+          hasCode: !!code,
+          hasRedirectUri: !!redirectUri,
+          hasUserId: !!requestBody.userId,
+          userId: requestBody.userId,
+        });
+
         const response = await fetch(`${supabaseUrl}/functions/v1/exchange-google-token`, {
           method: 'POST',
           headers: {
+            'Authorization': `Bearer ${sessionToUse.access_token}`, // Include for Supabase gateway, but function doesn't verify it
             'apikey': anonKey,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            code,
-            redirectUri,
-            userId: sessionToUse.user.id,
-          }),
+          body: JSON.stringify(requestBody),
         });
 
         if (!response.ok) {
@@ -152,13 +169,21 @@ function GoogleCallbackContent() {
           let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
           let errorData: { error?: string; code?: number; message?: string } = {};
           
+          console.error('Edge Function returned error:', {
+            status: response.status,
+            statusText: response.statusText,
+            responseText,
+          });
+          
           // Try to parse as JSON
           try {
             errorData = JSON.parse(responseText);
             errorMessage = errorData.error || errorData.message || errorMessage;
+            console.error('Parsed error data:', errorData);
           } catch {
             // If not JSON, use the text response
             errorMessage = responseText || errorMessage;
+            console.error('Response is not JSON, using raw text:', responseText);
           }
           
           // Handle 401 errors (Invalid user)
