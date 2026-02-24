@@ -55,22 +55,61 @@ function GoogleCallbackContent() {
         const supabase = createClient();
         
         // Get current session and refresh if needed to ensure we have a valid token
-        const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
+        let currentSession = null;
+        let sessionError = null;
+        
+        try {
+          const sessionResult = await supabase.auth.getSession();
+          currentSession = sessionResult.data?.session;
+          sessionError = sessionResult.error;
+        } catch (err) {
+          console.error('Error getting session:', err);
+          sessionError = err as Error;
+        }
         
         if (sessionError || !currentSession) {
           console.error('Session error:', sessionError);
-          throw new Error('Not authenticated. Please log in again.');
+          // Try to get user directly - sometimes session isn't set but user is authenticated
+          const { data: { user }, error: userError } = await supabase.auth.getUser();
+          if (userError || !user) {
+            throw new Error('Not authenticated. Please log in again.');
+          }
+          // If we have a user but no session, redirect to login
+          throw new Error('Session expired. Please log in again.');
         }
 
-        // Refresh session to ensure we have a valid token
-        const { data: { session }, error: refreshError } = await supabase.auth.refreshSession(currentSession);
+        // Check if token is expired or about to expire (within 60 seconds)
+        const now = Math.floor(Date.now() / 1000);
+        const expiresAt = currentSession.expires_at || 0;
+        const timeUntilExpiry = expiresAt - now;
         
-        if (refreshError) {
-          console.warn('Session refresh error (will use current session):', refreshError);
+        // Refresh session if expired or expiring soon
+        let sessionToUse = currentSession;
+        if (timeUntilExpiry < 60) {
+          console.log('Token expiring soon, refreshing session...', { timeUntilExpiry, expiresAt, now });
+          try {
+            const { data: { session }, error: refreshError } = await supabase.auth.refreshSession(currentSession);
+            if (refreshError) {
+              console.error('Session refresh error:', refreshError);
+              // If refresh fails, try to get user to see if we're still authenticated
+              const { data: { user }, error: userError } = await supabase.auth.getUser();
+              if (userError || !user) {
+                throw new Error('Session expired. Please log in again.');
+              }
+              // If we have a user, try refreshing one more time
+              const { data: { session: retrySession }, error: retryError } = await supabase.auth.refreshSession(currentSession);
+              if (retryError || !retrySession) {
+                throw new Error('Session expired. Please log in again.');
+              }
+              sessionToUse = retrySession;
+            } else if (session) {
+              sessionToUse = session;
+            }
+          } catch (refreshErr) {
+            console.error('Failed to refresh session:', refreshErr);
+            throw new Error('Session expired. Please log in again.');
+          }
         }
-        
-        // Use refreshed session if available, otherwise fall back to current session
-        const sessionToUse = session || currentSession;
         
         if (!sessionToUse?.access_token) {
           throw new Error('Invalid session. Please log in again.');
@@ -80,6 +119,7 @@ function GoogleCallbackContent() {
           hasToken: !!sessionToUse.access_token,
           tokenLength: sessionToUse.access_token?.length,
           expiresAt: sessionToUse.expires_at,
+          timeUntilExpiry: (sessionToUse.expires_at || 0) - Math.floor(Date.now() / 1000),
         });
 
         // Get redirect URI (must match what was used in the OAuth request)
@@ -110,14 +150,35 @@ function GoogleCallbackContent() {
           // Read response as text first (can only read body once)
           const responseText = await response.text();
           let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+          let errorData: { error?: string; code?: number; message?: string } = {};
           
           // Try to parse as JSON
           try {
-            const errorData = JSON.parse(responseText);
-            errorMessage = errorData.error || errorMessage;
+            errorData = JSON.parse(responseText);
+            errorMessage = errorData.error || errorData.message || errorMessage;
           } catch {
             // If not JSON, use the text response
             errorMessage = responseText || errorMessage;
+          }
+          
+          // Handle 401 errors (Invalid JWT) - session expired
+          if (response.status === 401) {
+            const isJWTError = errorMessage.includes("Invalid JWT") || 
+                             errorMessage.includes("Invalid or expired token") ||
+                             errorData.code === 401;
+            
+            if (isJWTError) {
+              // Session expired - redirect to login
+              toast({
+                title: 'Session Expired',
+                description: 'Your session has expired. Please log in again and try connecting.',
+                variant: 'destructive',
+              });
+              setTimeout(() => {
+                router.push('/portal/login?error=session_expired');
+              }, 2000);
+              return;
+            }
           }
           
           // For 400 errors (Bad Request), check if integration was already created
@@ -360,8 +421,7 @@ function GoogleCallbackContent() {
               </Button>
               <Button
                 onClick={() => router.push('/portal')}
-                variant="outline"
-                className="min-w-[120px]"
+                className="min-w-[120px] bg-background border border-input hover:bg-accent"
               >
                 Go to Portal
               </Button>

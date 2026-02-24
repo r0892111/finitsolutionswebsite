@@ -38,23 +38,27 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+    // Create Supabase client with user's token in Authorization header
     const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       global: {
         headers: { Authorization: authHeader },
       },
     });
 
-    // Get user from token
+    // Get user from token (getUser() reads from the Authorization header set in global headers)
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {
       console.error('Auth error:', {
         userError: userError?.message,
+        errorCode: userError?.status,
         hasUser: !!user,
-        authHeader: authHeader ? 'present' : 'missing',
+        authHeaderPresent: !!authHeader,
+        authHeaderPrefix: authHeader?.substring(0, 30),
       });
       return new Response(
         JSON.stringify({ 
-          error: `Unauthorized: ${userError?.message || 'Invalid or expired token'}` 
+          code: 401,
+          message: `Invalid JWT: ${userError?.message || 'Invalid or expired token'}` 
         }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );

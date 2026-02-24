@@ -38,23 +38,27 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+    // Create Supabase client with user's token in Authorization header
     const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       global: {
         headers: { Authorization: authHeader },
       },
     });
 
-    // Get user from token
+    // Get user from token (getUser() reads from the Authorization header set in global headers)
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {
       console.error('Auth error:', {
         userError: userError?.message,
+        errorCode: userError?.status,
         hasUser: !!user,
-        authHeader: authHeader ? 'present' : 'missing',
+        authHeaderPresent: !!authHeader,
+        authHeaderPrefix: authHeader?.substring(0, 30),
       });
       return new Response(
         JSON.stringify({ 
-          error: `Unauthorized: ${userError?.message || 'Invalid or expired token'}` 
+          code: 401,
+          message: `Invalid JWT: ${userError?.message || 'Invalid or expired token'}` 
         }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -160,17 +164,7 @@ serve(async (req) => {
       ? new Date(Date.now() + tokens.expires_in * 1000).toISOString()
       : null;
 
-    // Check if integration with same authenticated_email already exists to preserve refresh_token
-    // This allows multiple accounts per integration type, but prevents duplicate connections to the same account
-    const { data: existingIntegration } = await supabase
-      .from('user_integrations')
-      .select('id, refresh_token')
-      .eq('user_id', user.id)
-      .eq('integration_type_id', integrationType.id)
-      .eq('authenticated_email', authenticatedEmail || '')
-      .maybeSingle();
-
-    // Fetch user email from Google API
+    // Fetch user email from Google API first (needed for checking existing integration)
     let authenticatedEmail: string | null = null;
     try {
       const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
@@ -190,6 +184,16 @@ serve(async (req) => {
       console.error('Error fetching Google user email:', emailError);
       // Don't fail the whole request if email fetch fails
     }
+
+    // Check if integration with same authenticated_email already exists to preserve refresh_token
+    // This allows multiple accounts per integration type, but prevents duplicate connections to the same account
+    const { data: existingIntegration } = await supabase
+      .from('user_integrations')
+      .select('id, refresh_token')
+      .eq('user_id', user.id)
+      .eq('integration_type_id', integrationType.id)
+      .eq('authenticated_email', authenticatedEmail || '')
+      .maybeSingle();
 
     // Prepare update data - always save refresh_token if provided, otherwise preserve existing
     const updateData: {
