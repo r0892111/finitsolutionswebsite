@@ -136,13 +136,13 @@ function GoogleCallbackContent() {
         const response = await fetch(`${supabaseUrl}/functions/v1/exchange-google-token`, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${sessionToUse.access_token}`,
             'apikey': anonKey,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             code,
             redirectUri,
+            userId: sessionToUse.user.id,
           }),
         });
 
@@ -161,17 +161,17 @@ function GoogleCallbackContent() {
             errorMessage = responseText || errorMessage;
           }
           
-          // Handle 401 errors (Invalid JWT) - session expired
+          // Handle 401 errors (Invalid user)
           if (response.status === 401) {
-            const isJWTError = errorMessage.includes("Invalid JWT") || 
-                             errorMessage.includes("Invalid or expired token") ||
-                             errorData.code === 401;
+            const isUserError = errorMessage.includes("Invalid user") || 
+                               errorMessage.includes("User not found") ||
+                               errorData.code === 401;
             
-            if (isJWTError) {
-              // Session expired - redirect to login
+            if (isUserError) {
+              // User verification failed - redirect to login
               toast({
-                title: 'Session Expired',
-                description: 'Your session has expired. Please log in again and try connecting.',
+                title: 'Authentication Error',
+                description: 'Unable to verify your account. Please log in again and try connecting.',
                 variant: 'destructive',
               });
               setTimeout(() => {
