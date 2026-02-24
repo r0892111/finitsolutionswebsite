@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -50,6 +51,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
   const { toast } = useToast();
   const { user: currentUser, isAdmin } = useAuth();
   const supabase = createClient();
+  const searchParams = useSearchParams();
   const [integrations, setIntegrations] = useState<UserIntegration[]>([]);
   const [availableTypes, setAvailableTypes] = useState<IntegrationType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,6 +65,16 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
       fetchAvailableTypes();
     }
   }, [targetUserId]);
+
+  // Watch for refresh query parameter to trigger a refresh
+  useEffect(() => {
+    const refresh = searchParams.get('refresh');
+    if (refresh === 'integrations' && targetUserId) {
+      console.log('Refreshing integrations due to refresh query parameter');
+      fetchIntegrations();
+      fetchAvailableTypes();
+    }
+  }, [searchParams, targetUserId]);
 
   const fetchIntegrations = async () => {
     try {
@@ -593,5 +605,23 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
         </Card>
       )}
     </div>
+  );
+}
+
+// Wrapper component with Suspense for useSearchParams
+export function IntegrationsListWithSuspense(props: IntegrationsListProps) {
+  return (
+    <Suspense fallback={
+      <Card className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
+        <CardContent className="pt-6">
+          <div className="text-center py-8">
+            <Loader2 className="h-8 w-8 text-[#1A2D63]/30 mx-auto mb-4 animate-spin" />
+            <p className="text-[#1A2D63]/60">Loading integrations...</p>
+          </div>
+        </CardContent>
+      </Card>
+    }>
+      <IntegrationsList {...props} />
+    </Suspense>
   );
 }

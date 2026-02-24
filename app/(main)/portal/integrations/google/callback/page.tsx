@@ -211,7 +211,7 @@ function GoogleCallbackContent() {
                     description: 'Google account connected successfully',
                   });
                   router.replace('/portal/integrations/google/callback?success=true');
-                  setTimeout(() => router.push('/portal'), 2000);
+                  setTimeout(() => router.push('/portal?refresh=integrations'), 2000);
                   return;
                 }
               }
@@ -238,6 +238,47 @@ function GoogleCallbackContent() {
           throw new Error(errorMessage);
         }
 
+        // Edge Function succeeded - now verify the integration is actually connected
+        // Poll for up to 5 seconds to ensure the database update is visible
+        const { data: integrationType } = await supabase
+          .from('integration_types')
+          .select('id')
+          .eq('name', 'google')
+          .single();
+
+        if (integrationType) {
+          let attempts = 0;
+          const maxAttempts = 10; // 5 seconds total (500ms * 10)
+          let integrationConnected = false;
+
+          while (attempts < maxAttempts && !integrationConnected) {
+            const { data: integration, error: fetchError } = await supabase
+              .from('user_integrations')
+              .select('id, status, authenticated_email')
+              .eq('user_id', sessionToUse.user.id)
+              .eq('integration_type_id', integrationType.id)
+              .order('connected_at', { ascending: false })
+              .limit(1)
+              .maybeSingle();
+
+            if (!fetchError && integration && integration.status === 'connected') {
+              integrationConnected = true;
+              console.log('Integration verified as connected:', integration);
+              break;
+            }
+
+            attempts++;
+            if (attempts < maxAttempts) {
+              // Wait 500ms before next attempt
+              await new Promise(resolve => setTimeout(resolve, 500));
+            }
+          }
+
+          if (!integrationConnected) {
+            console.warn('Integration status not updated to connected after polling. Proceeding anyway.');
+          }
+        }
+
         setStatus('success');
         toast({
           title: 'Success',
@@ -246,7 +287,7 @@ function GoogleCallbackContent() {
         
         // Clean up URL to prevent re-processing on refresh
         router.replace('/portal/integrations/google/callback?success=true');
-        setTimeout(() => router.push('/portal'), 2000);
+        setTimeout(() => router.push('/portal?refresh=integrations'), 2000);
       } catch (error) {
         console.error('OAuth callback error:', error);
         setStatus('error');

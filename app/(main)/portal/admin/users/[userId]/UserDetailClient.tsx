@@ -11,7 +11,7 @@ import { ArrowLeft, User, Calendar, Mail, Shield, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { UserProfileEditor } from '@/components/user-profile-editor';
-import { IntegrationsList } from '@/components/integrations-list';
+import { IntegrationsListWithSuspense } from '@/components/integrations-list';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
@@ -200,7 +200,7 @@ function UserDetailContent({ userId }: UserDetailClientProps) {
           <UserProfileEditor userId={userId} />
 
           {/* Integrations */}
-          <IntegrationsList userId={userId} showConnectButton={false} />
+          <IntegrationsListWithSuspense userId={userId} showConnectButton={false} />
         </div>
       </main>
     </div>

@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { LogOut, FileText, MessageSquare, Settings, Shield, Clock, CheckCircle2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { IntegrationsList } from '@/components/integrations-list';
+import { IntegrationsListWithSuspense } from '@/components/integrations-list';
 import { TestRefreshTokens } from '@/components/test-refresh-tokens';
 import { useToast } from '@/hooks/use-toast';
 
@@ -21,6 +21,20 @@ function PortalContent() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
+
+  // Clean up refresh parameter from URL after it's been processed
+  useEffect(() => {
+    const refresh = searchParams.get('refresh');
+    if (refresh === 'integrations') {
+      // Remove the refresh parameter from URL after a short delay
+      setTimeout(() => {
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.delete('refresh');
+        router.replace(newUrl.pathname + newUrl.search, { scroll: false });
+      }, 1000);
+    }
+  }, [searchParams, router]);
+
   useEffect(() => {
     // Handle Supabase auth tokens/errors in hash fragment (magic links)
     // Supabase redirects with tokens in hash: #access_token=...&token_type=bearer&expires_in=...&type=magiclink
@@ -221,7 +235,7 @@ function PortalContent() {
             </div>
             <Button
               onClick={handleLogout}
-              variant="outline"
+              variant="secondary"
               size="sm"
               className="gap-2 border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium"
             >
@@ -281,7 +295,7 @@ function PortalContent() {
 
         {/* Integrations */}
         <div className="w-full">
-          <IntegrationsList showConnectButton={true} />
+          <IntegrationsListWithSuspense showConnectButton={true} />
         </div>
 
         {/* Status Section */}
