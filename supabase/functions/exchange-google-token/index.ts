@@ -160,13 +160,15 @@ serve(async (req) => {
       ? new Date(Date.now() + tokens.expires_in * 1000).toISOString()
       : null;
 
-    // Check if integration already exists to preserve refresh_token if Google doesn't return a new one
+    // Check if integration with same authenticated_email already exists to preserve refresh_token
+    // This allows multiple accounts per integration type, but prevents duplicate connections to the same account
     const { data: existingIntegration } = await supabase
       .from('user_integrations')
-      .select('refresh_token')
+      .select('id, refresh_token')
       .eq('user_id', user.id)
       .eq('integration_type_id', integrationType.id)
-      .single();
+      .eq('authenticated_email', authenticatedEmail || '')
+      .maybeSingle();
 
     // Fetch user email from Google API
     let authenticatedEmail: string | null = null;
@@ -223,11 +225,22 @@ serve(async (req) => {
     }
 
     // Store integration connection
-    const { error: upsertError } = await supabase
-      .from('user_integrations')
-      .upsert(updateData, {
-        onConflict: 'user_id,integration_type_id',
-      });
+    // If existing integration found, update it; otherwise insert new one
+    let upsertError;
+    if (existingIntegration?.id) {
+      // Update existing integration
+      const { error } = await supabase
+        .from('user_integrations')
+        .update(updateData)
+        .eq('id', existingIntegration.id);
+      upsertError = error;
+    } else {
+      // Insert new integration
+      const { error } = await supabase
+        .from('user_integrations')
+        .insert(updateData);
+      upsertError = error;
+    }
 
     if (upsertError) {
       return new Response(

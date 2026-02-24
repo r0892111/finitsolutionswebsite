@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@/lib/supabase/client';
-import { Loader2, Plug, CheckCircle2, XCircle, AlertCircle, ExternalLink } from 'lucide-react';
+import { Loader2, Plug, CheckCircle2, XCircle, AlertCircle, ExternalLink, Plus } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
 import { getDropboxRedirectUri, getGoogleRedirectUri, getShopifyRedirectUri } from '@/lib/oauth';
 import Image from 'next/image';
@@ -194,7 +194,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
         const redirectUri = getShopifyRedirectUri();
         
         // Shopify OAuth scopes (read_products, read_orders, read_customers are common)
-        const scope = 'read_products,read_orders,read_customers,read_inventory';
+        const scope = 'read_products,read_orders,read_customers,read_inventory,write_draft_orders';
 
         // Build Shopify OAuth URL
         // Shopify uses shop parameter - we'll prompt user for their shop domain
@@ -337,7 +337,27 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
     );
   }
 
-  // Get connected integration type IDs (only 'connected' status, not 'error' or 'pending')
+  // Group integrations by integration type
+  const integrationsByType = integrations.reduce((acc, integration) => {
+    const typeId = integration.integration_type_id;
+    if (!acc[typeId]) {
+      acc[typeId] = [];
+    }
+    acc[typeId].push(integration);
+    return acc;
+  }, {} as Record<string, UserIntegration[]>);
+
+  // Get integration type info for each group
+  const integrationGroups = Object.entries(integrationsByType).map(([typeId, groupIntegrations]) => {
+    const integrationType = groupIntegrations[0].integration_type;
+    return {
+      typeId,
+      integrationType,
+      accounts: groupIntegrations,
+    };
+  });
+
+  // Get connected integration type IDs (for showing available integrations)
   const connectedTypeIds = new Set(
     integrations
       .filter(i => i.status === 'connected')
@@ -346,26 +366,27 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
 
   return (
     <div className="space-y-4">
-      {/* User Integrations */}
-      {integrations.length > 0 && (
-        <div className="space-y-3">
+      {/* User Integrations - Grouped by Type */}
+      {integrationGroups.length > 0 && (
+        <div className="space-y-4">
           <h3 className="text-lg font-semibold text-[#1A2D63]">Your Integrations</h3>
-          {integrations.map((integration) => (
-            <Card key={integration.id} className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
+          {integrationGroups.map((group) => (
+            <Card key={group.typeId} className="bg-white/95 backdrop-blur-sm shadow-brand-lg border-[#1A2D63]/10">
               <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
+                {/* Integration Type Header */}
+                <div className="flex items-center justify-between mb-4 pb-4 border-b border-[#1A2D63]/10">
                   <div className="flex items-center gap-4">
                     <div className="rounded-lg bg-[#1A2D63]/10 p-3 flex items-center justify-center w-12 h-12">
-                      {(integration.integration_type.icon_url || INTEGRATION_ICONS[integration.integration_type.name]) ? (
+                      {(group.integrationType.icon_url || INTEGRATION_ICONS[group.integrationType.name]) ? (
                         <Image
-                          src={integration.integration_type.icon_url || INTEGRATION_ICONS[integration.integration_type.name] || ''}
-                          alt={integration.integration_type.display_name}
+                          src={group.integrationType.icon_url || INTEGRATION_ICONS[group.integrationType.name] || ''}
+                          alt={group.integrationType.display_name}
                           width={24}
                           height={24}
                           className="object-contain"
                           unoptimized
                           onError={(e) => {
-                            console.error('Failed to load icon:', integration.integration_type.icon_url || INTEGRATION_ICONS[integration.integration_type.name], 'for integration:', integration.integration_type.display_name);
+                            console.error('Failed to load icon:', group.integrationType.icon_url || INTEGRATION_ICONS[group.integrationType.name]);
                             const target = e.target as HTMLImageElement;
                             target.style.display = 'none';
                             const parent = target.parentElement;
@@ -376,77 +397,106 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                               parent.appendChild(fallback);
                             }
                           }}
-                          onLoad={() => {
-                            console.log('Successfully loaded icon:', integration.integration_type.icon_url || INTEGRATION_ICONS[integration.integration_type.name]);
-                          }}
                         />
                       ) : (
                         <Plug className="h-6 w-6 text-[#1A2D63]" />
                       )}
                     </div>
                     <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-semibold text-[#1A2D63]">
-                          {integration.integration_type.display_name}
-                        </h4>
-                        {getStatusBadge(integration.status)}
-                      </div>
-                      {integration.integration_type.description && (
+                      <h4 className="font-semibold text-[#1A2D63]">{group.integrationType.display_name}</h4>
+                      {group.integrationType.description && (
                         <p className="text-sm text-[#1A2D63]/60">
-                          {integration.integration_type.description}
-                        </p>
-                      )}
-                      {integration.authenticated_email && (
-                        <p className="text-xs text-[#1A2D63]/70 mt-1 font-medium">
-                          {integration.integration_type.name === 'shopify' ? 'Shop' : 'Email'}: {integration.authenticated_email}
-                        </p>
-                      )}
-                      {integration.connected_at && (
-                        <p className="text-xs text-[#1A2D63]/50 mt-1">
-                          Connected: {new Date(integration.connected_at).toLocaleDateString()}
-                        </p>
-                      )}
-                      {integration.error_message && (
-                        <p className="text-xs text-destructive mt-1">
-                          {integration.error_message}
+                          {group.integrationType.description}
                         </p>
                       )}
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    {integration.status === 'connected' && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDisconnect(integration.id)}
-                        className="border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium"
-                      >
-                        Disconnect
-                      </Button>
-                    )}
-                    {(integration.status === 'error' || integration.status === 'pending') && (
-                      <>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDisconnect(integration.id)}
-                          className="border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium"
-                        >
-                          Remove
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            const integrationName = integration.integration_type.name;
-                            handleConnect(integration.integration_type_id, integrationName);
-                          }}
-                          className="bg-[#1A2D63] hover:bg-[#1A2D63]/90 text-white transition-premium"
-                        >
-                          Retry Connection
-                        </Button>
-                      </>
-                    )}
-                  </div>
+                  {showConnectButton && (
+                    <Button
+                      onClick={() => handleConnect(group.typeId, group.integrationType.name)}
+                      disabled={isConnecting === group.typeId}
+                      size="sm"
+                      variant="outline"
+                      className="border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium"
+                    >
+                      {isConnecting === group.typeId ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Connecting...
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Account
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </div>
+
+                {/* Accounts for this Integration Type */}
+                <div className="space-y-3">
+                  {group.accounts.map((integration) => (
+                    <div key={integration.id} className="flex items-center justify-between p-3 bg-[#1A2D63]/5 rounded-lg border border-[#1A2D63]/10">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          {integration.authenticated_email && (
+                            <span className="font-medium text-[#1A2D63]">
+                              {integration.integration_type.name === 'shopify' ? 'Shop' : 'Email'}: {integration.authenticated_email}
+                            </span>
+                          )}
+                          {!integration.authenticated_email && (
+                            <span className="text-[#1A2D63]/60 italic">Account {integration.id.slice(0, 8)}</span>
+                          )}
+                          {getStatusBadge(integration.status)}
+                        </div>
+                        {integration.connected_at && (
+                          <p className="text-xs text-[#1A2D63]/50">
+                            Connected: {new Date(integration.connected_at).toLocaleDateString()}
+                          </p>
+                        )}
+                        {integration.error_message && (
+                          <p className="text-xs text-destructive mt-1">
+                            {integration.error_message}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        {integration.status === 'connected' && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDisconnect(integration.id)}
+                            className="border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium"
+                          >
+                            Disconnect
+                          </Button>
+                        )}
+                        {(integration.status === 'error' || integration.status === 'pending') && (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDisconnect(integration.id)}
+                              className="border-[#1A2D63]/20 text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-premium"
+                            >
+                              Remove
+                            </Button>
+                            <Button
+                              size="sm"
+                              onClick={() => {
+                                const integrationName = integration.integration_type.name;
+                                handleConnect(integration.integration_type_id, integrationName);
+                              }}
+                              className="bg-[#1A2D63] hover:bg-[#1A2D63]/90 text-white transition-premium"
+                            >
+                              Retry
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -454,7 +504,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
         </div>
       )}
 
-      {/* Available Integrations */}
+      {/* Available Integrations - Only show types with no connected accounts */}
       {showConnectButton && availableTypes.length > 0 && (
         <div className="space-y-3">
           <h3 className="text-lg font-semibold text-[#1A2D63]">

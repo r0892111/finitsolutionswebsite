@@ -333,7 +333,7 @@ function ShopifyCallbackContent() {
 
       // Construct redirect URI (must match Shopify app settings)
       const redirectUri = getShopifyRedirectUri();
-      const scope = 'read_products,read_orders,read_customers,read_inventory';
+      const scope = 'read_products,read_orders,read_customers,read_inventory,write_draft_orders';
 
       // Build Shopify OAuth URL
       const authUrl = new URL(`https://${shopDomain}/admin/oauth/authorize`);

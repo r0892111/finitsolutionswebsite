@@ -186,17 +186,19 @@ serve(async (req) => {
       );
     }
 
-    // Check if integration already exists to preserve refresh_token if Shopify doesn't return a new one
-    const { data: existingIntegration } = await supabase
-      .from('user_integrations')
-      .select('refresh_token')
-      .eq('user_id', user.id)
-      .eq('integration_type_id', integrationType.id)
-      .single();
-
     // For Shopify, store the shop domain as the authenticated identifier
     // Shopify doesn't provide user email directly, so we use the shop domain
     const authenticatedEmail = shopDomain;
+
+    // Check if integration with same authenticated_email (shop domain) already exists to preserve refresh_token
+    // This allows multiple accounts per integration type, but prevents duplicate connections to the same shop
+    const { data: existingIntegration } = await supabase
+      .from('user_integrations')
+      .select('id, refresh_token')
+      .eq('user_id', user.id)
+      .eq('integration_type_id', integrationType.id)
+      .eq('authenticated_email', authenticatedEmail)
+      .maybeSingle();
 
     // Prepare update data - Shopify doesn't use refresh tokens in the same way as Google
     // Store shop domain and scope in metadata
@@ -239,11 +241,22 @@ serve(async (req) => {
     }
 
     // Store integration connection
-    const { error: upsertError } = await supabase
-      .from('user_integrations')
-      .upsert(updateData, {
-        onConflict: 'user_id,integration_type_id',
-      });
+    // If existing integration found, update it; otherwise insert new one
+    let upsertError;
+    if (existingIntegration?.id) {
+      // Update existing integration
+      const { error } = await supabase
+        .from('user_integrations')
+        .update(updateData)
+        .eq('id', existingIntegration.id);
+      upsertError = error;
+    } else {
+      // Insert new integration
+      const { error } = await supabase
+        .from('user_integrations')
+        .insert(updateData);
+      upsertError = error;
+    }
 
     if (upsertError) {
       return new Response(
