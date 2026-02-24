@@ -37,6 +37,7 @@ interface UserIntegration {
   last_sync_at: string | null;
   error_message: string | null;
   authenticated_email: string | null;
+  user_email: string | null;
   integration_type: IntegrationType;
 }
 
@@ -440,12 +441,15 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                     <div key={integration.id} className="flex items-center justify-between p-3 bg-[#1A2D63]/5 rounded-lg border border-[#1A2D63]/10">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          {integration.authenticated_email && (
+                          {integration.authenticated_email ? (
                             <span className="font-medium text-[#1A2D63]">
                               {integration.integration_type.name === 'shopify' ? 'Shop' : 'Email'}: {integration.authenticated_email}
                             </span>
-                          )}
-                          {!integration.authenticated_email && (
+                          ) : integration.user_email ? (
+                            <span className="font-medium text-[#1A2D63]">
+                              User: {integration.user_email}
+                            </span>
+                          ) : (
                             <span className="text-[#1A2D63]/60 italic">Account {integration.id.slice(0, 8)}</span>
                           )}
                           {getStatusBadge(integration.status)}
