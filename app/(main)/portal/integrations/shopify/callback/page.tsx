@@ -108,7 +108,6 @@ function ShopifyCallbackContent() {
         const response = await fetch(`${supabaseUrl}/functions/v1/exchange-shopify-token`, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${sessionToUse.access_token}`,
             'apikey': anonKey,
             'Content-Type': 'application/json',
           },
@@ -116,6 +115,7 @@ function ShopifyCallbackContent() {
             code,
             shop,
             redirectUri,
+            userId: sessionToUse.user.id,
           }),
         });
 
