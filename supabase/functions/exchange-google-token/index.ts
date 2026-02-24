@@ -168,6 +168,27 @@ serve(async (req) => {
       .eq('integration_type_id', integrationType.id)
       .single();
 
+    // Fetch user email from Google API
+    let authenticatedEmail: string | null = null;
+    try {
+      const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+        headers: {
+          'Authorization': `Bearer ${tokens.access_token}`,
+        },
+      });
+      
+      if (userInfoResponse.ok) {
+        const userInfo = await userInfoResponse.json();
+        authenticatedEmail = userInfo.email || null;
+        console.log('Fetched Google user email:', authenticatedEmail);
+      } else {
+        console.warn('Failed to fetch Google user info:', userInfoResponse.status);
+      }
+    } catch (emailError) {
+      console.error('Error fetching Google user email:', emailError);
+      // Don't fail the whole request if email fetch fails
+    }
+
     // Prepare update data - always save refresh_token if provided, otherwise preserve existing
     const updateData: {
       user_id: string;
@@ -177,6 +198,7 @@ serve(async (req) => {
       refresh_token?: string;
       token_expires_at: string | null;
       connected_at: string;
+      authenticated_email?: string | null;
       metadata: Record<string, unknown>;
     } = {
       user_id: user.id,
@@ -185,6 +207,7 @@ serve(async (req) => {
       access_token: tokens.access_token,
       token_expires_at: expiresAt,
       connected_at: new Date().toISOString(),
+      authenticated_email: authenticatedEmail,
       metadata: {
         scope: tokens.scope,
         token_type: tokens.token_type,

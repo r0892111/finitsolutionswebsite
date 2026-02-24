@@ -169,6 +169,30 @@ serve(async (req) => {
       .eq('integration_type_id', integrationType.id)
       .single();
 
+    // Fetch user email from Dropbox API
+    let authenticatedEmail: string | null = null;
+    try {
+      const accountInfoResponse = await fetch('https://api.dropbox.com/2/users/get_current_account', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${tokens.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+      
+      if (accountInfoResponse.ok) {
+        const accountInfo = await accountInfoResponse.json();
+        authenticatedEmail = accountInfo.email || null;
+        console.log('Fetched Dropbox user email:', authenticatedEmail);
+      } else {
+        console.warn('Failed to fetch Dropbox account info:', accountInfoResponse.status);
+      }
+    } catch (emailError) {
+      console.error('Error fetching Dropbox user email:', emailError);
+      // Don't fail the whole request if email fetch fails
+    }
+
     // Prepare update data - Dropbox doesn't provide refresh_token in OAuth 2.0 flow
     // Access tokens are long-lived but can be revoked
     const updateData: {
@@ -179,6 +203,7 @@ serve(async (req) => {
       refresh_token?: string;
       token_expires_at: string | null;
       connected_at: string;
+      authenticated_email?: string | null;
       metadata: Record<string, unknown>;
     } = {
       user_id: user.id,
@@ -187,6 +212,7 @@ serve(async (req) => {
       access_token: tokens.access_token,
       token_expires_at: expiresAt,
       connected_at: new Date().toISOString(),
+      authenticated_email: authenticatedEmail,
       metadata: {
         account_id: tokens.account_id || null,
         token_type: tokens.token_type || 'bearer',

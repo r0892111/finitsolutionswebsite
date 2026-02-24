@@ -194,6 +194,10 @@ serve(async (req) => {
       .eq('integration_type_id', integrationType.id)
       .single();
 
+    // For Shopify, store the shop domain as the authenticated identifier
+    // Shopify doesn't provide user email directly, so we use the shop domain
+    const authenticatedEmail = shopDomain;
+
     // Prepare update data - Shopify doesn't use refresh tokens in the same way as Google
     // Store shop domain and scope in metadata
     const updateData: {
@@ -204,6 +208,7 @@ serve(async (req) => {
       refresh_token?: string;
       token_expires_at: string | null;
       connected_at: string;
+      authenticated_email?: string | null;
       metadata: Record<string, unknown>;
     } = {
       user_id: user.id,
@@ -212,6 +217,7 @@ serve(async (req) => {
       access_token: tokens.access_token,
       token_expires_at: null, // Shopify tokens don't expire unless revoked
       connected_at: new Date().toISOString(),
+      authenticated_email: authenticatedEmail,
       metadata: {
         shop: shopDomain,
         scope: tokens.scope || '',

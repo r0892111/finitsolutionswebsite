@@ -36,6 +36,7 @@ interface UserIntegration {
   connected_at: string | null;
   last_sync_at: string | null;
   error_message: string | null;
+  authenticated_email: string | null;
   integration_type: IntegrationType;
 }
 
@@ -393,6 +394,11 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                       {integration.integration_type.description && (
                         <p className="text-sm text-[#1A2D63]/60">
                           {integration.integration_type.description}
+                        </p>
+                      )}
+                      {integration.authenticated_email && (
+                        <p className="text-xs text-[#1A2D63]/70 mt-1 font-medium">
+                          {integration.integration_type.name === 'shopify' ? 'Shop' : 'Email'}: {integration.authenticated_email}
                         </p>
                       )}
                       {integration.connected_at && (
