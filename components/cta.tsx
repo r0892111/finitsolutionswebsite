@@ -6,11 +6,14 @@ import { Calendar, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectRequestDialog } from "@/components/project-request-dialog";
 import { useLanguage } from "@/contexts/language-context";
+import { useContactForm, ContactFormPopup } from "@/components/contact-form-popup";
+import { pushEvent } from "@/lib/analytics";
 
 export function CTA() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.6 });
   const { t } = useLanguage();
+  const { isOpen, openForm, closeForm } = useContactForm();
 
   return (
     <section className="relative py-16 md:py-24 bg-muted">
@@ -41,23 +44,23 @@ export function CTA() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <a 
-              href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Button
+              size="lg"
+              className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8 group"
+              onClick={() => {
+                openForm();
+                pushEvent("cta_click", { cta_label: "secondary_calendly", location: "main_cta_section" });
+              }}
+              type="button"
             >
-              <Button 
-                size="lg" 
-                className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8 group"
-              >
-                <Calendar className="h-5 w-5" />
-                {t('hero.cta.meeting')}
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </a>
+              <Calendar className="h-5 w-5" />
+              {t('hero.cta.meeting')}
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
           </motion.div>
         </div>
       </div>
+      <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </section>
   );
 }

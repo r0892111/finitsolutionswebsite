@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { gsap, useGSAP, ScrollTrigger, MorphSVGPlugin, MotionPathPlugin, DrawSVGPlugin } from '@/lib/gsap';
+import { gsap, useGSAP, ScrollTrigger, MotionPathPlugin, DrawSVGPlugin } from '@/lib/gsap';
 import {
   ArrowRight,
   Calendar,
@@ -51,6 +51,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { useContactForm, ContactFormPopup } from '@/components/contact-form-popup';
+import { pushEvent } from '@/lib/analytics';
 
 /**
  * AIDesignLanding
@@ -395,6 +397,53 @@ const NoiseOverlay = () => (
   />
 );
 
+// --- Section Divider ---
+
+const sectionDividerData = [
+  {
+    fill: "M0,70 C480,130 960,-10 1920,50",
+    navy: "M0,62 C480,110 960,-18 1920,34 L1920,60 C960,4 480,146 0,78 Z",
+    light: "M0,78 C480,146 960,4 1920,60 L1920,74 C960,14 480,164 0,88 Z",
+  },
+  {
+    fill: "M0,30 C320,110 640,120 960,60 C1280,0 1600,-10 1920,80",
+    navy: "M0,22 C320,92 640,100 960,50 C1280,-10 1600,-16 1920,66 L1920,90 C1600,4 1280,10 960,70 C640,134 320,126 0,38 Z",
+    light: "M0,38 C320,126 640,134 960,70 C1280,10 1600,4 1920,90 L1920,102 C1600,18 1280,22 960,80 C640,146 320,142 0,48 Z",
+  },
+];
+
+const SectionDivider = ({
+  fromColor,
+  toColor,
+  variant = 0,
+}: {
+  fromColor: string;
+  toColor: string;
+  variant?: number;
+}) => {
+  const data = sectionDividerData[variant % sectionDividerData.length];
+  const fillPath = `${data.fill} L1920,160 L0,160 Z`;
+  return (
+    <div
+      className="relative w-full"
+      style={{ backgroundColor: fromColor, marginTop: -1, marginBottom: -1 }}
+      aria-hidden="true"
+    >
+      <svg
+        viewBox="0 -40 1920 200"
+        preserveAspectRatio="none"
+        className="w-full block h-[50px] md:h-[75px] lg:h-[100px]"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ overflow: "visible" }}
+      >
+        <path d={fillPath} fill={toColor} />
+        <path d={data.navy} fill="#1A2D63" />
+        <path d={data.light} fill="#7B8DB5" />
+      </svg>
+    </div>
+  );
+};
+
 // --- Typewriter Animation Component ---
 const typewriterPhrases = [
   "je workflow",
@@ -723,13 +772,13 @@ const MobileLogoCarousel = () => {
   const mobilePath = "M -900,612\n   C -420,690 0,820 420,880\n   C 860,940 1180,900 1580,780\n   C 2040,630 2460,430 2900,250\n   C 3300,140 3700,100 4100,80";
 
   return (
-    <div className="relative mt-7 block lg:hidden">
-      <div className="relative h-52 sm:h-56 overflow-visible">
+    <div className="relative mt-2 block lg:hidden">
+      <div className="relative h-44 sm:h-48 overflow-visible">
         <LogoCarousel
           className="logo-carousel absolute inset-0 pointer-events-none overflow-visible block lg:hidden"
           logoSize={52}
           logos={integrationLogos}
-          svgTopPercent={39}
+          svgTopPercent={22}
           spacingMultiplier={1.15}
           pathD={mobilePath}
           durationSeconds={60}
@@ -1774,7 +1823,7 @@ const howItWorksDetails = {
 };
 
 // --- How It Works Section Component ---
-const HowItWorksSection = () => {
+const HowItWorksSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const pinContainerRef = useRef<HTMLDivElement>(null);
   const headerWrapperRef = useRef<HTMLDivElement>(null);
@@ -2087,30 +2136,28 @@ const HowItWorksSection = () => {
 
             {/* CTA Button - centered below Card 2 (middle column) */}
             <div ref={ctaDesktopRef} className="hidden md:flex justify-center mt-8">
-              <a
-                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={onCtaClick}
                 className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
               >
                 <Calendar className="w-5 h-5" />
                 <span>Plan een gratis gesprek</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </button>
             </div>
 
             {/* Mobile CTA - centered below cards */}
             <div ref={ctaMobileRef} className="text-center mt-8 md:hidden">
-              <a
-                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={onCtaClick}
                 className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
               >
                 <Calendar className="w-5 h-5" />
                 <span>Plan een gratis gesprek</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -2232,22 +2279,12 @@ const FAQSection = () => {
 export function AIDesignLanding() {
   const [scrolled, setScrolled] = useState(false);
   const currentYear = new Date().getFullYear();
+  const { isOpen, openForm, closeForm } = useContactForm();
 
   const heroRef = useRef(null);
   const heroTextRef = useRef(null);
   const logoCarouselRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLElement>(null);
-  const footerWaveRef = useRef<SVGPathElement>(null);
   const secondaryCTARef = useRef<HTMLElement>(null);
-
-  const pushDataLayerEvent = (eventName: string, params: Record<string, unknown>) => {
-    if (typeof window === "undefined") return;
-    const dataLayerTarget = window as Window & { dataLayer?: Array<Record<string, unknown>> };
-    if (!Array.isArray(dataLayerTarget.dataLayer)) {
-      dataLayerTarget.dataLayer = [];
-    }
-    dataLayerTarget.dataLayer.push({ event: eventName, ...params });
-  };
 
   // Navigate to section: instant overlay → jump → smooth reveal
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -2295,32 +2332,6 @@ export function AIDesignLanding() {
     }); });
   }, []);
 
-  // Footer bounce animation
-  useGSAP(() => {
-    const curvedPath = 'M0-0.3C0-0.3,464,120,1139,120S2278-0.3,2278-0.3V683H0V-0.3z';
-    const flatPath = 'M0-0.3C0-0.3,464,0,1139,0s1139-0.3,1139-0.3V683H0V-0.3z';
-
-    if (footerRef.current && footerWaveRef.current) {
-      ScrollTrigger.create({
-        trigger: footerRef.current,
-        start: 'top bottom',
-        onEnter: (self) => {
-          const velocity = self.getVelocity();
-          const variation = velocity / 10000;
-
-          gsap.fromTo(footerWaveRef.current,
-            { morphSVG: curvedPath },
-            {
-              duration: 2,
-              morphSVG: flatPath,
-              ease: `elastic.out(${1 + variation}, ${1 - variation})`,
-              overwrite: true
-            }
-          );
-        }
-      });
-    }
-  });
 
   // Secondary CTA section entrance animation - slides up from below
   useGSAP(() => {
@@ -2460,16 +2471,15 @@ export function AIDesignLanding() {
             ))}
           </div>
 
-            <a
-              href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-              target="_blank"
-              rel="noopener noreferrer"
-            onClick={() =>
-              pushDataLayerEvent("cta_click", {
+            <button
+              type="button"
+            onClick={() => {
+              openForm();
+              pushEvent("cta_click", {
                 cta_label: "nav_calendly",
                 location: "nav",
-              })
-            }
+              });
+            }}
             className="hidden md:flex items-center gap-2 bg-[#1A2D63] text-white rounded-full text-sm font-medium hover:scale-105 transition-all shadow-lg shadow-[#1A2D63]/20"
             style={{
               paddingLeft: `${20 + (1 - navScrollProgress) * 4}px`,
@@ -2481,26 +2491,25 @@ export function AIDesignLanding() {
             >
               <Calendar className="w-4 h-4" />
               <span>Plan een gesprek</span>
-            </a>
+            </button>
 
           {/* Mobile CTA + hamburger */}
           <div className="md:hidden flex items-center gap-2">
-            <a
-              href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() =>
-                pushDataLayerEvent("cta_click", {
+            <button
+              type="button"
+              onClick={() => {
+                openForm();
+                pushEvent("cta_click", {
                   cta_label: "mobile_nav_calendly",
                   location: "mobile_nav",
-                })
-              }
+                });
+              }}
               className="flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-xs font-medium px-3.5 py-2 transition-opacity duration-300"
               style={{ opacity: navScrollProgress, pointerEvents: navScrollProgress > 0.5 ? 'auto' : 'none' }}
             >
               <Calendar className="w-3.5 h-3.5" />
               <span>Plan een gesprek</span>
-            </a>
+            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="flex items-center justify-center w-9 h-9 rounded-full text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-colors"
@@ -2543,13 +2552,12 @@ export function AIDesignLanding() {
                 {item.label}
               </button>
             ))}
-            <a
-              href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
               onClick={() => {
                 setMobileMenuOpen(false);
-                pushDataLayerEvent("cta_click", {
+                openForm();
+                pushEvent("cta_click", {
                   cta_label: "mobile_nav_calendly",
                   location: "mobile_nav",
                 });
@@ -2558,7 +2566,7 @@ export function AIDesignLanding() {
             >
               <Calendar className="w-4 h-4" />
               Plan een gesprek
-                  </a>
+                  </button>
                 </div>
               </div>
       )}
@@ -2571,58 +2579,98 @@ export function AIDesignLanding() {
         {/* Floating Logo Carousel - Background animation */}
         <LogoCarousel carouselRef={logoCarouselRef} />
 
-        {/* Hero Content */}
-        <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 flex items-center justify-center min-h-[calc(100svh-64px)] md:min-h-screen pt-20 md:pt-0 pb-0 w-full relative z-10">
-          {/* Centered Content */}
-          <div ref={heroTextRef} className="relative z-10 text-center max-w-[22rem] sm:max-w-[28rem] md:max-w-3xl px-2 sm:px-0">
-            <div className="mb-5 sm:mb-6 md:mb-8">
-              <h1 className="font-newsreader text-5xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] leading-[1] tracking-tight text-[#1A2D63]">
+        {/* Desktop layout: centered flex */}
+        <div className="hidden md:flex container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 items-center justify-center min-h-screen pt-0 pb-0 w-full relative z-10">
+          <div ref={heroTextRef} className="relative z-10 text-center max-w-3xl">
+            <div className="mb-8">
+              <h1 className="font-newsreader text-6xl lg:text-[4.25rem] xl:text-[4.75rem] leading-[1] tracking-tight text-[#1A2D63]">
                 <span className="block font-extralight">Automatiseer</span>
                 <TypewriterText />
               </h1>
             </div>
 
-            <p className="font-instrument text-base sm:text-[17px] md:text-lg text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-6 sm:mb-7 md:mb-8">
+            <p className="font-instrument md:text-lg text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-8">
             AI op maat, perfect geïntegreerd in je bestaande tools, klaar om werk over te nemen terwijl jij je focus op groei kunt richten.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  pushDataLayerEvent("cta_click", {
+            <div className="flex flex-row items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  openForm();
+                  pushEvent("cta_click", {
                     cta_label: "hero_calendly",
                     location: "hero",
-                  })
-                }
-                className="group w-full sm:w-auto bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
+                  });
+                }}
+                className="group bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
                 <span>Plan een gratis consult</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile layout: h1 in flow, subtitle+CTA+carousel pinned to bottom */}
+        <div className="md:hidden relative z-10 min-h-[calc(100svh-64px)] px-4 sm:px-6">
+          {/* Typewriter heading - centered in viewport, unaffected by bottom section */}
+          <div className="flex items-center justify-center min-h-[calc(100svh-64px)] pt-20 pb-[28rem]">
+            <div className="text-center max-w-[22rem] sm:max-w-[28rem] px-2 sm:px-0">
+              <h1 className="font-newsreader text-5xl leading-[1] tracking-tight text-[#1A2D63]">
+                <span className="block font-extralight">Automatiseer</span>
+                <TypewriterText />
+              </h1>
+            </div>
           </div>
 
-            <p className="mt-8 text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#475D8F]/70 lg:hidden">
+          {/* Absolutely positioned bottom section - never moves */}
+          <div className="absolute bottom-4 left-4 right-4 sm:left-6 sm:right-6 text-center max-w-[22rem] sm:max-w-[28rem] mx-auto">
+            <p className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-5">
+            AI op maat, perfect geïntegreerd in je bestaande tools, klaar om werk over te nemen terwijl jij je focus op groei kunt richten.
+            </p>
+
+            <div className="flex flex-col items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  openForm();
+                  pushEvent("cta_click", {
+                    cta_label: "hero_calendly",
+                    location: "hero",
+                  });
+                }}
+                className="group w-full bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Plan een gratis consult</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+
+            <p className="mt-4 text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#475D8F]/70">
               Integraties met je tools
             </p>
             <MobileLogoCarousel />
-            </div>
           </div>
+        </div>
 
       </header>
 
       {/* ============================================ */}
       {/* HOW IT WORKS SECTION - Enhanced 3 Steps      */}
       {/* ============================================ */}
-      <HowItWorksSection />
+      <HowItWorksSection onCtaClick={openForm} />
+
+      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={0} />
 
       {/* ============================================ */}
       {/* USE CASES SECTION                          */}
       {/* ============================================ */}
       <UseCasesSection />
+
+      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={1} />
 
       {/* ============================================ */}
       {/* FAQ SECTION                                  */}
@@ -2656,22 +2704,21 @@ export function AIDesignLanding() {
                 ))}
               </div>
 
-              <a
-                href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  pushDataLayerEvent("cta_click", {
+              <button
+                type="button"
+                onClick={() => {
+                  openForm();
+                  pushEvent("cta_click", {
                     cta_label: "secondary_calendly",
                     location: "secondary_cta",
-                  })
-                }
+                  });
+                }}
                 className="inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
               >
                 <Calendar className="w-5 h-5 md:w-6 md:h-6" />
                 Plan je gratis gesprek
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
-              </a>
+              </button>
 
             </div>
           </div>
@@ -2681,8 +2728,8 @@ export function AIDesignLanding() {
       {/* ============================================ */}
       {/* FOOTER                                      */}
       {/* ============================================ */}
-      <footer ref={footerRef} className="bg-[#1A2D63] text-white pt-16 md:pt-20 pb-12 md:pb-16 px-6 relative overflow-visible mt-16 md:mt-20 lg:mt-24">
-        {/* Bouncy SVG Wave */}
+      <footer className="bg-[#1A2D63] text-white pt-16 md:pt-20 pb-12 md:pb-16 px-6 relative overflow-visible mt-16 md:mt-20 lg:mt-24">
+        {/* SVG Wave */}
         <div className="absolute top-0 left-0 w-full" style={{ transform: 'translateY(-99%)' }}>
           <svg
             preserveAspectRatio="none"
@@ -2692,7 +2739,6 @@ export function AIDesignLanding() {
             style={{ overflow: 'visible' }}
           >
             <path
-              ref={footerWaveRef}
               fill="#1A2D63"
               d="M0-0.3C0-0.3,464,120,1139,120S2278-0.3,2278-0.3V683H0V-0.3z"
             />
@@ -2710,25 +2756,24 @@ export function AIDesignLanding() {
                 Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <a
-                  href="https://calendly.com/karel-finitsolutions/kennismaking-finit-solutions"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() =>
-                    pushDataLayerEvent("cta_click", {
+                <button
+                  type="button"
+                  onClick={() => {
+                    openForm();
+                    pushEvent("cta_click", {
                       cta_label: "footer_calendly",
                       location: "footer_cta",
-                    })
-                  }
+                    });
+                  }}
                   className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
                 >
                   <Calendar className="w-4 h-4" />
                   Plan een gesprek
-                </a>
+                </button>
                 <a
                   href="mailto:contact@finitsolutions.be"
                   onClick={() =>
-                    pushDataLayerEvent("contact_click", {
+                    pushEvent("contact_click", {
                       method: "email",
                       location: "footer_cta",
                     })
@@ -2757,7 +2802,7 @@ export function AIDesignLanding() {
                   <a
                     href="mailto:contact@finitsolutions.be"
                     onClick={() =>
-                      pushDataLayerEvent("contact_click", {
+                      pushEvent("contact_click", {
                         method: "email",
                         location: "footer_contact",
                       })
@@ -2774,7 +2819,7 @@ export function AIDesignLanding() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() =>
-                      pushDataLayerEvent("contact_click", {
+                      pushEvent("contact_click", {
                         method: "linkedin",
                         location: "footer_contact",
                       })
@@ -2810,6 +2855,7 @@ export function AIDesignLanding() {
         </div>
         </div>
       </footer>
+      <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </div>
   );
 }
