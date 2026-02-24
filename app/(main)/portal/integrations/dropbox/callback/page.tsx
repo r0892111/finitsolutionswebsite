@@ -96,13 +96,13 @@ function DropboxCallbackContent() {
         const response = await fetch(`${supabaseUrl}/functions/v1/exchange-dropbox-token`, {
           method: 'POST',
           headers: {
+            'Authorization': `Bearer ${sessionToUse.access_token}`,
             'apikey': anonKey,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             code,
             redirectUri,
-            userId: sessionToUse.user.id,
           }),
         });
 

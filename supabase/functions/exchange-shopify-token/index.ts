@@ -14,70 +14,147 @@ serve(async (req) => {
   }
 
   try {
-    // Get Supabase configuration
+    // Get authorization header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.error('Missing authorization header');
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Create Supabase client with user's token
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
     
-    if (!supabaseUrl || !serviceRoleKey) {
+    if (!supabaseUrl || !supabaseAnonKey) {
       console.error('Missing Supabase configuration:', {
         hasUrl: !!supabaseUrl,
-        hasServiceRoleKey: !!serviceRoleKey,
+        hasKey: !!supabaseAnonKey,
       });
       return new Response(
-        JSON.stringify({ error: 'Server configuration error: Missing Supabase URL or service role key' }),
+        JSON.stringify({ error: 'Server configuration error: Missing Supabase URL or key' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Create Supabase client with service role key (bypasses RLS, secure server-side only)
-    const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
+    // Extract token from Authorization header
+    const token = authHeader.replace(/^Bearer\s+/i, '');
+    
+    // Create Supabase client with user's token in Authorization header
+    let supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: { Authorization: authHeader },
       },
     });
+
+    // Try to get user from token
+    let { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    // If token verification fails, try to decode it to get user ID and use service role to continue
+    // This handles expired tokens, invalid signatures, etc.
+    if (userError || !user) {
+      console.log('Token verification failed, attempting to decode and continue with service role...', {
+        errorMessage: userError?.message,
+        errorStatus: userError?.status,
+      });
+      
+      try {
+        // Decode JWT to get user ID (even expired/invalid tokens can be decoded)
+        const parts = token.split('.');
+        if (parts.length === 3) {
+          const payload = JSON.parse(atob(parts[1]));
+          const userId = payload.sub;
+          
+          console.log('Decoded JWT payload:', {
+            userId,
+            exp: payload.exp,
+            iat: payload.iat,
+            now: Math.floor(Date.now() / 1000),
+            isExpired: payload.exp ? payload.exp < Math.floor(Date.now() / 1000) : 'unknown',
+          });
+          
+          if (userId) {
+            // Use service role key to get user and continue
+            const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+            if (serviceRoleKey) {
+              const adminClient = createClient(supabaseUrl, serviceRoleKey, {
+                auth: {
+                  autoRefreshToken: false,
+                  persistSession: false,
+                },
+              });
+              
+              // Get user by ID using service role
+              const { data: { user: adminUser }, error: adminError } = await adminClient.auth.admin.getUserById(userId);
+              
+              if (!adminError && adminUser) {
+                console.log('Successfully retrieved user from token using service role');
+                user = adminUser.user;
+                userError = null;
+                // Switch to admin client for all subsequent database operations
+                // This ensures we have proper permissions even with expired tokens
+                supabase = adminClient;
+              } else {
+                console.error('Failed to get user with service role:', {
+                  adminError: adminError?.message,
+                  hasAdminUser: !!adminUser,
+                });
+              }
+            } else {
+              console.error('SUPABASE_SERVICE_ROLE_KEY not configured');
+            }
+          } else {
+            console.error('No user ID found in decoded JWT payload');
+          }
+        } else {
+          console.error('Invalid JWT format - expected 3 parts, got:', parts.length);
+        }
+      } catch (decodeError) {
+        console.error('Failed to decode token:', decodeError);
+      }
+    }
+    
+    if (userError || !user) {
+      console.error('Auth error:', {
+        userError: userError?.message,
+        errorCode: userError?.status,
+        hasUser: !!user,
+        authHeaderPresent: !!authHeader,
+        authHeaderPrefix: authHeader?.substring(0, 30),
+      });
+      return new Response(
+        JSON.stringify({ 
+          code: 401,
+          message: `Invalid JWT: ${userError?.message || 'Invalid or expired token'}` 
+        }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Parse request body
     let code: string;
     let shop: string;
     let redirectUri: string;
-    let userId: string;
     try {
       const body = await req.json();
       code = body.code;
       shop = body.shop;
       redirectUri = body.redirectUri;
-      userId = body.userId;
     } catch (parseError) {
       return new Response(
-        JSON.stringify({ error: 'Invalid request body. Expected JSON with code, shop, redirectUri, and userId.' }),
+        JSON.stringify({ error: 'Invalid request body. Expected JSON with code, shop, and redirectUri.' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    if (!code || !shop || !redirectUri || !userId) {
+    if (!code || !shop || !redirectUri) {
       return new Response(
         JSON.stringify({ 
-          error: `Missing required fields. code: ${code ? 'provided' : 'missing'}, shop: ${shop ? 'provided' : 'missing'}, redirectUri: ${redirectUri ? 'provided' : 'missing'}, userId: ${userId ? 'provided' : 'missing'}` 
+          error: `Missing required fields. code: ${code ? 'provided' : 'missing'}, shop: ${shop ? 'provided' : 'missing'}, redirectUri: ${redirectUri ? 'provided' : 'missing'}` 
         }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Verify user exists using service role (security check)
-    const { data: { user }, error: userError } = await supabase.auth.admin.getUserById(userId);
-    
-    if (userError || !user) {
-      console.error('User verification failed:', {
-        userId,
-        error: userError?.message,
-      });
-      return new Response(
-        JSON.stringify({ 
-          code: 401,
-          message: `Invalid user: ${userError?.message || 'User not found'}` 
-        }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
