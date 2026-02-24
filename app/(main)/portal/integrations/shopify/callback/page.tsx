@@ -316,15 +316,14 @@ function ShopifyCallbackContent() {
         shopDomain = `${shopDomain}.myshopify.com`;
       }
 
-      // Create or update pending integration record
+      // Create pending integration record
+      // Allow multiple pending records - Edge Functions will handle deduplication by authenticated_email
       const { error: upsertError } = await supabase
         .from('user_integrations')
-        .upsert({
+        .insert({
           user_id: session.user.id,
           integration_type_id: integrationType.id,
           status: 'pending',
-        }, {
-          onConflict: 'user_id,integration_type_id',
         });
 
       if (upsertError) {

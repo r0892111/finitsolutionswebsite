@@ -123,14 +123,13 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
       setIsConnecting(integrationTypeId);
 
       // Create pending integration record
+      // Allow multiple pending records - Edge Functions will handle deduplication by authenticated_email
       const { error: insertError } = await supabase
         .from('user_integrations')
-        .upsert({
+        .insert({
           user_id: currentUser.id,
           integration_type_id: integrationTypeId,
           status: 'pending',
-        }, {
-          onConflict: 'user_id,integration_type_id',
         });
 
       if (insertError) {
