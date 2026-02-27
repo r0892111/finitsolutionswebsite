@@ -508,7 +508,8 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
                         )}
                       </div>
                     </div>
-                  ))}
+                  );
+                  })}
                 </div>
               </CardContent>
             </Card>
