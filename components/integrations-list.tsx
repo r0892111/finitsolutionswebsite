@@ -168,7 +168,7 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
 
         // Construct redirect URI (must match Google Cloud Console)
         const redirectUri = getGoogleRedirectUri();
-        const scope = 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/calendar.readonly';
+        const scope = 'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.modify';
 
         // Build Google OAuth URL
         const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
@@ -448,21 +448,18 @@ export function IntegrationsList({ userId, showConnectButton = true }: Integrati
 
                 {/* Accounts for this Integration Type */}
                 <div className="space-y-3">
-                  {group.accounts.map((integration) => (
+                  {group.accounts.map((integration, accountIndex) => {
+                    // Default display name: {type}-integration-{n} (e.g., google-integration-1)
+                    const typeName = group.integrationType.name;
+                    const displayName = `${typeName}-integration-${accountIndex + 1}`;
+                    
+                    return (
                     <div key={integration.id} className="flex items-center justify-between p-3 bg-[#1A2D63]/5 rounded-lg border border-[#1A2D63]/10">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          {integration.authenticated_email ? (
-                            <span className="font-medium text-[#1A2D63]">
-                              {integration.integration_type.name === 'shopify' ? 'Shop' : 'Email'}: {integration.authenticated_email}
-                            </span>
-                          ) : integration.user_email ? (
-                            <span className="font-medium text-[#1A2D63]">
-                              User: {integration.user_email}
-                            </span>
-                          ) : (
-                            <span className="text-[#1A2D63]/60 italic">Account {integration.id.slice(0, 8)}</span>
-                          )}
+                          <span className="font-medium text-[#1A2D63]">
+                            {displayName}
+                          </span>
                           {getStatusBadge(integration.status)}
                         </div>
                         {integration.connected_at && (

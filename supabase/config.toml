@@ -1,0 +1,8 @@
+[functions.exchange-google-token]
+verify_jwt = false
+
+[functions.exchange-dropbox-token]
+verify_jwt = false
+
+[functions.exchange-shopify-token]
+verify_jwt = false

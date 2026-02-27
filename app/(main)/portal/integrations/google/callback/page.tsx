@@ -410,7 +410,7 @@ function GoogleCallbackContent() {
 
       // Construct redirect URI (must match Google Cloud Console)
       const redirectUri = getGoogleRedirectUri();
-      const scope = 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/calendar.readonly';
+      const scope = 'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.modify';
 
       // Build Google OAuth URL
       const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');

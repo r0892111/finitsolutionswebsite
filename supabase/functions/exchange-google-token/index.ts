@@ -100,7 +100,16 @@ serve(async (req) => {
     const clientId = Deno.env.get('GOOGLE_CLIENT_ID');
     const clientSecret = Deno.env.get('GOOGLE_CLIENT_SECRET');
 
+    console.log('Google OAuth credentials check:', {
+      clientId: clientId ? `present (${clientId.length} chars)` : 'missing',
+      clientSecret: clientSecret ? 'present' : 'missing',
+    });
+
     if (!clientId || !clientSecret) {
+      console.error('Google OAuth not configured - missing credentials:', {
+        clientId: clientId ? 'present' : 'missing',
+        clientSecret: clientSecret ? 'present' : 'missing',
+      });
       return new Response(
         JSON.stringify({ error: 'Google OAuth not configured' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -140,6 +149,8 @@ serve(async (req) => {
         statusText: tokenResponse.statusText,
         error: errorMessage,
         redirectUri,
+        clientId: clientId ? 'present' : 'missing',
+        clientSecret: clientSecret ? 'present' : 'missing',
       });
       return new Response(
         JSON.stringify({ error: `Token exchange failed: ${errorMessage}` }),
@@ -241,6 +252,7 @@ serve(async (req) => {
 
     // Store integration connection
     // If existing integration found, update it; otherwise insert new one
+    let connectedIntegrationId: string | null = null;
     let upsertError;
     if (existingIntegration?.id) {
       // Update existing integration
@@ -249,12 +261,16 @@ serve(async (req) => {
         .update(updateData)
         .eq('id', existingIntegration.id);
       upsertError = error;
+      connectedIntegrationId = existingIntegration.id;
     } else {
-      // Insert new integration
-      const { error } = await supabase
+      // Insert new integration and get the ID back
+      const { data: insertedData, error } = await supabase
         .from('user_integrations')
-        .insert(updateData);
+        .insert(updateData)
+        .select('id')
+        .single();
       upsertError = error;
+      connectedIntegrationId = insertedData?.id || null;
     }
 
     if (upsertError) {
@@ -262,6 +278,44 @@ serve(async (req) => {
         JSON.stringify({ error: `Failed to save integration: ${upsertError.message}` }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
+    }
+
+    // If we don't have the ID, query for it using authenticated_email
+    if (!connectedIntegrationId && authenticatedEmail) {
+      const { data: connectedIntegration } = await supabase
+        .from('user_integrations')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('integration_type_id', integrationType.id)
+        .eq('authenticated_email', authenticatedEmail)
+        .eq('status', 'connected')
+        .order('connected_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      connectedIntegrationId = connectedIntegration?.id || null;
+    }
+
+    // Clean up any pending integrations for this user and integration type
+    // This ensures no orphaned pending records remain after successful connection
+    const cleanupQuery = supabase
+      .from('user_integrations')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('integration_type_id', integrationType.id)
+      .eq('status', 'pending');
+    
+    // Exclude the connected integration if we have its ID
+    if (connectedIntegrationId) {
+      cleanupQuery.neq('id', connectedIntegrationId);
+    }
+    
+    const { error: cleanupError } = await cleanupQuery;
+
+    if (cleanupError) {
+      console.warn('Failed to cleanup pending integrations:', cleanupError);
+      // Don't fail the request if cleanup fails, just log it
+    } else {
+      console.log('Cleaned up pending integrations for user:', user.id);
     }
 
     return new Response(
