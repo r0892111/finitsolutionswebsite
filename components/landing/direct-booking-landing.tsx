@@ -175,7 +175,7 @@ export function DirectBookingLanding() {
           paddingBottom: "clamp(12px, 2.5vh, 40px)",
         }}
       >
-        <div className="max-w-[700px] mx-auto w-full">
+        <div className="max-w-[980px] mx-auto w-full">
           {/* Heading */}
           <motion.div
             className="text-center"
@@ -221,21 +221,64 @@ export function DirectBookingLanding() {
             </p>
           </motion.div>
 
-          {/* Embedded form card */}
-          <motion.div
-            className="bg-white rounded-3xl shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] border border-[#1A2D63]/[0.06]"
-            style={{ padding: "clamp(1rem, 3vh, 2.5rem)" }}
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <EmbeddedContactForm />
-          </motion.div>
+          {/* Form + phone card side-by-side on desktop */}
+          <div className="flex flex-col lg:flex-row lg:items-center lg:gap-6">
 
-          {/* Trust signal */}
+            {/* Left: form */}
+            <div className="flex-1 min-w-0">
+              {/* Embedded form card */}
+              <motion.div
+                className="w-full bg-white rounded-3xl shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] border border-[#1A2D63]/[0.06]"
+                style={{ padding: "clamp(1rem, 3vh, 2.5rem)" }}
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <EmbeddedContactForm />
+              </motion.div>
+            </div>
+
+            {/* Divider */}
+            <motion.div
+              className="flex lg:flex-col items-center gap-3 my-5 lg:my-0 lg:self-stretch"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.5 }}
+            >
+              <div className="flex-1 h-px lg:h-auto lg:w-px w-full bg-[#1A2D63]/10" />
+              <span className="text-sm font-instrument text-[#1A2D63]/35 whitespace-nowrap">of</span>
+              <div className="flex-1 h-px lg:h-auto lg:w-px w-full bg-[#1A2D63]/10" />
+            </motion.div>
+
+            {/* Right: phone card */}
+            <motion.div
+              className="flex-1 min-w-0 flex flex-col items-center justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              <a
+                href="tel:+32495702314"
+                onClick={() => pushEvent("contact_click", { method: "phone", location: "direct_booking_card" })}
+                className="w-full block bg-white rounded-2xl px-6 py-8 border border-[#1A2D63]/[0.06] shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] flex flex-col items-center gap-2 text-center hover:shadow-[0_1px_0_0_rgba(26,45,99,0.15),0_6px_12px_-1px_rgba(26,45,99,0.2),0_16px_28px_-3px_rgba(26,45,99,0.25),0_28px_50px_-8px_rgba(26,45,99,0.2)] transition-shadow"
+              >
+                <p className="text-[#475D8F]/70 text-xs font-instrument tracking-widest uppercase">Bel gerust op</p>
+                <span className="font-newsreader text-[#1A2D63] text-3xl leading-tight">
+                  +32 495 70 23 14
+                </span>
+                <div className="w-10 h-px bg-[#1A2D63]/15 my-0.5" />
+                <p className="text-[#475D8F] text-sm font-instrument">
+                  ma-za · 8u30-19u
+                </p>
+              </a>
+            </motion.div>
+
+          </div>
+
+          {/* Trust signal + logos — full width, centered */}
           <motion.p
-            className="text-center text-sm text-[#1A2D63]/40"
-            style={{ marginTop: "clamp(6px, 1.2vh, 16px)" }}
+            className="text-center text-base text-[#1A2D63]/50"
+            style={{ marginTop: "clamp(28px, 4vh, 52px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.6 }}
@@ -244,15 +287,15 @@ export function DirectBookingLanding() {
           </motion.p>
 
           <motion.div
-            className="flex items-center justify-center gap-2.5"
-            style={{ marginTop: "clamp(10px, 2vh, 32px)" }}
+            className="flex items-center justify-center gap-3.5"
+            style={{ marginTop: "clamp(14px, 2.5vh, 32px)" }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
           >
-            <span className="text-[10px] sm:text-xs uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
-            <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="w-auto object-contain" style={{ height: "clamp(16px, 2.5vh, 28px)" }} />
-            <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="w-auto object-contain" style={{ height: "clamp(16px, 2.5vh, 28px)" }} />
+            <span className="text-xs sm:text-sm uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
+            <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="w-auto object-contain" style={{ height: "clamp(20px, 3vh, 34px)" }} />
+            <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="w-auto object-contain" style={{ height: "clamp(20px, 3vh, 34px)" }} />
           </motion.div>
         </div>
       </header>

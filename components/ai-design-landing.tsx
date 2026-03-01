@@ -651,22 +651,10 @@ const MobileLogoCarousel = () => {
   );
 };
 
-// --- Hand-drawn checkmark for hero ---
-const HandDrawnCheck = ({ className = "" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M3.5 13.5C5 15 8.5 18.5 9.5 19.5C12 15 16 9 21 4.5"
-      stroke="#1A2D63"
-      strokeWidth="3.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 
 // --- Recognition Section ("Herken jij dit?") ---
 const recognitionItems = [
-  "Je weet dat AI kan helpen, maar je wil geen geld verspillen aan iets dat niets oplevert.",
+  "Je weet dat AI kan helpen, maar je wil geen geld uitgeven aan iets dat niets oplevert.",
   "Je hebt al demo's gezien, maar niemand kon concreet tonen wat het in jouw bedrijf bespaart.",
   "Je wil eerlijk advies over wat wél automatiseerbaar is — en wat niet.",
   "Je zoekt geen \"AI-tool\", maar iemand die meedenkt over je processen.",
@@ -1635,6 +1623,14 @@ const UseCasesSection = () => {
     el.style.userSelect = '';
   };
 
+  const scrollByCard = (dir: -1 | 1) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const card = el.querySelector(':scope > div') as HTMLElement | null;
+    const cardWidth = card ? card.offsetWidth + 24 : 320; // 24px = gap-6
+    el.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
+  };
+
   return (
     <section ref={sectionRef} id="use-cases" className="pt-8 md:pt-12 pb-4 md:pb-6 bg-[#FDFBF7]">
       <div className="text-center mb-8 md:mb-10 px-6 md:px-12">
@@ -1649,6 +1645,13 @@ const UseCasesSection = () => {
       {/* Scroll progress bar */}
       <div className="px-6 md:px-12 mb-5 flex justify-center">
         <div className="flex items-center gap-3 max-w-xs w-full">
+          <button
+            onClick={() => scrollByCard(-1)}
+            aria-label="Vorige"
+            className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full border border-[#1A2D63]/20 text-[#1A2D63]/50 hover:border-[#1A2D63]/50 hover:text-[#1A2D63] transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
           <div className="relative flex-1 h-[5px] rounded-full bg-[#1A2D63]/15 overflow-hidden">
             <div
               className="absolute inset-y-0 left-0 rounded-full bg-[#1A2D63] transition-none"
@@ -1658,6 +1661,13 @@ const UseCasesSection = () => {
           <span className="text-[11px] font-medium tracking-wide text-[#1A2D63]/50 whitespace-nowrap tabular-nums">
             {Math.round(scrollProgress * (useCasesData.length - 1)) + 1} / {useCasesData.length}
           </span>
+          <button
+            onClick={() => scrollByCard(1)}
+            aria-label="Volgende"
+            className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full border border-[#1A2D63]/20 text-[#1A2D63]/50 hover:border-[#1A2D63]/50 hover:text-[#1A2D63] transition-colors"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
@@ -1680,7 +1690,7 @@ const UseCasesSection = () => {
               style={{ pointerEvents: isDragging.current ? 'none' : undefined }}
             >
               <div className="h-[180px] sm:h-[200px] md:h-[220px] flex items-center justify-center bg-white overflow-hidden">
-                <div className="w-full h-full translate-y-4">
+                <div className="w-full h-full" style={{ transform: `translateY(${useCase.id === 'crm-sync' ? '10px' : '16px'})` }}>
                   {IllustrationComponent && (
                     <IllustrationComponent progress={illustrationProgress} />
                   )}
@@ -2526,7 +2536,7 @@ export function AIDesignLanding() {
             </div>
 
             <p className="font-instrument text-lg lg:text-xl text-[#475D8F] leading-relaxed max-w-2xl mx-auto mb-8">
-              Finit helpt KMO&apos;s de stap richting AI te zetten — praktisch, zonder technisch gedoe en met échte tijdswinst.
+              Finit helpt KMO&apos;s de stap richting AI te zetten — van grondige analyse tot krachtige systemen die écht tijd besparen.
             </p>
 
             <div className="flex flex-row items-center justify-center gap-3 mb-6">
@@ -2547,26 +2557,10 @@ export function AIDesignLanding() {
               </button>
             </div>
 
-            <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="flex items-center justify-center gap-3">
               <span className="text-xs uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
               <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-7 w-auto object-contain" />
               <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-7 w-auto object-contain" />
-            </div>
-
-            {/* 3 value bullets */}
-            <div className="flex flex-row items-start justify-center gap-8 text-[#1A2D63]/70 text-base max-w-4xl mx-auto">
-              <span className="flex items-center gap-2.5 min-w-[16rem]">
-                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
-                Nooit ziek. Nooit op vakantie. Altijd aan het werk.
-              </span>
-              <span className="flex items-center gap-2.5 min-w-[16rem]">
-                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
-                Een fractie van de kost van een echte werknemer.
-              </span>
-              <span className="flex items-center gap-2.5 min-w-[16rem]">
-                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
-                Automatische offertes, mails, opvolging en meer.
-              </span>
             </div>
           </div>
         </div>
@@ -2598,7 +2592,7 @@ export function AIDesignLanding() {
             </h1>
 
             <p className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-6">
-            Finit helpt KMO&apos;s de stap richting AI te zetten — praktisch, zonder technisch gedoe en met échte tijdswinst.
+            Finit helpt KMO&apos;s de stap richting AI te zetten — van grondige analyse tot krachtige systemen die écht tijd besparen.
             </p>
 
             <div className="flex flex-col items-center justify-center gap-3 mb-5">
@@ -2619,26 +2613,10 @@ export function AIDesignLanding() {
               </button>
             </div>
 
-            <div className="flex items-center justify-center gap-2.5 mb-5">
+            <div className="flex items-center justify-center gap-2.5">
               <span className="text-[10px] uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
               <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-5 w-auto object-contain" />
               <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-5 w-auto object-contain" />
-            </div>
-
-            {/* 3 value bullets */}
-            <div className="flex flex-col items-start gap-2.5 text-[#1A2D63]/70 text-sm mx-auto w-fit max-w-[26rem] sm:max-w-[30rem]">
-              <span className="flex items-center gap-2.5 text-left">
-                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
-                Nooit ziek. Nooit op vakantie. Altijd aan het werk.
-              </span>
-              <span className="flex items-center gap-2.5 text-left">
-                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
-                Een fractie van de kost van een echte werknemer.
-              </span>
-              <span className="flex items-center gap-2.5 text-left">
-                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
-                Automatische offertes, mails, opvolging en meer.
-              </span>
             </div>
           </div>
         </div>
