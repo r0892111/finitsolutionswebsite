@@ -26,7 +26,7 @@ const generalSans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
+  title: "Finit Solutions | AI voor KMO's",
   description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen. Ontdek hoe wij uw bedrijfsprocessen kunnen optimaliseren.',
   metadataBase: new URL('https://finitsolutions.be'),
   icons: {
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     apple: '/Finit Logomark@4x.png'
   },
   openGraph: {
-    title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
+    title: "Finit Solutions | AI voor KMO's",
     description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen. Ontdek hoe wij uw bedrijfsprocessen kunnen optimaliseren.',
     url: 'https://finitsolutions.be',
     siteName: 'Finit Solutions',
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
+    title: "Finit Solutions | AI voor KMO's",
     description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen.',
     images: ['/Finit Logomark@4x.png'],
     creator: '@finitsolutions',

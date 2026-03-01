@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 html {
-  font-size: 15px;
+  /* Fluid scaling: 15px at 1440px viewport, scales proportionally on larger screens */
+  font-size: clamp(15px, 1.042vw, 22px);
   scroll-behavior: smooth;
   overscroll-behavior: none;
 }
@@ -82,7 +83,7 @@ body {
     @apply bg-background text-foreground overflow-x-hidden;
   }
   .container {
-    @apply px-4 max-w-[1200px] mx-auto w-full;
+    @apply px-4 max-w-[80rem] mx-auto w-full;
   }
   .font-montserrat {
     font-family: var(--font-montserrat);
@@ -583,6 +584,12 @@ html {
 
 /* Company Types Carousel */
 @keyframes companyScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Logo Integration Strip */
+@keyframes logoScroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }

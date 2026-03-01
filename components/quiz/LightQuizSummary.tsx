@@ -517,7 +517,7 @@ export function LightQuizSummary({ data, onRestart }: LightQuizSummaryProps) {
                         />
                       </div>
                       <div>
-                        <Label className="text-slate-700 text-xs">Admin uren/week</Label>
+                        <Label className="text-slate-700 text-xs">Administratie uren/week</Label>
                         <Input
                           type="number"
                           min={0}

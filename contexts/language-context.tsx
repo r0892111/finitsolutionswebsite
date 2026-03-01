@@ -605,7 +605,7 @@ const translations = {
     
     'diensten.sections.philosophy.title': 'Our Philosophy',
     'diensten.sections.philosophy.preview': 'We make work smoother without changing how teams operate, automating background tasks.',
-    'diensten.sections.philosophy.content': 'We don\'t reinvent how teams work—we make their work smoother. The tools people already know stay the same, but we automate repetitive, low-value tasks in the background. This means less energy wasted on admin, and more time for meaningful interactions.',
+    'diensten.sections.philosophy.content': 'We don\'t reinvent how teams work—we make their work smoother. The tools people already know stay the same, but we automate repetitive, low-value tasks in the background. This means less energy wasted on administration, and more time for meaningful interactions.',
     
     'diensten.sections.commitment.title': 'Commitment to Clients',
     'diensten.sections.commitment.preview': 'Dedicated partners with direct communication and long-term relationship focus.',

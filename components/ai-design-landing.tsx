@@ -7,9 +7,6 @@ import {
   ArrowRight,
   Calendar,
   Check,
-  Clock,
-  UserMinus,
-  TrendingDown,
   MessageSquare,
   Settings,
   Link2,
@@ -42,6 +39,7 @@ import {
   Zap,
   Menu,
   X,
+  TrendingUp,
   type LucideIcon,
 } from 'lucide-react';
 import { CookieSettingsLink } from '@/components/cookie-settings-link';
@@ -97,127 +95,25 @@ const integrationLogos = [
   { name: "DocuSign", logo: "/docusign.svg" },
 ];
 
-const painPoints = [
-  {
-    icon: Clock,
-    title: "Uren kwijt aan handmatige data-invoer",
-    description: "Je typt dezelfde klantinfo in je CRM, Excel, en facturatie. Elke dag opnieuw."
-  },
-  {
-    icon: UserMinus,
-    title: "Leads die door de mazen glippen",
-    description: "Geen tijd voor follow-ups? Die prospect van vorige week is nu klant bij je concurrent."
-  },
-  {
-    icon: TrendingDown,
-    title: "Geen tijd voor wat er echt toe doet",
-    description: "Je bent ondernemer geworden om te groeien, niet om admin te doen tot middernacht."
-  }
-];
-
-const transformationAfter = [
-  "Eén voice memo, alles gesynchroniseerd",
-  "Automatische opvolging op het juiste moment",
-  "Processen draaien terwijl jij slaapt",
-  "Schalen zonder extra personeel"
-];
-
 // --- FAQ Data (gestructureerd: alinea's, lijsten, kopjes) ---
 type FaqBlock = { type: "p"; text: string } | { type: "list"; items: string[] } | { type: "heading"; text: string };
 
 const faqItems: { question: string; answer: FaqBlock[] }[] = [
   {
-    question: "Wat als er iets misloopt met de automatisering?",
+    question: "Welke processen kunnen jullie automatiseren?",
     answer: [
-      { type: "p", text: "Elke oplossing heeft een test- en integratieperiode, specifiek opgezet om ervoor te zorgen dat jouw automatisering niet zomaar fouten vertoont. Tijdens de hypercare-periode kijken we aandachtig mee naar alle handelingen van je automatisering om zeker te zijn dat alles perfect verloopt. Pas daarna behandelen we jouw project als afgeleverd." },
-      { type: "p", text: "Na aflevering laten we je uiteraard niet in de steek. Iedere oplossing bevat ingebouwde monitoring, zodat wij onmiddellijk verwittigd worden als er toch iets hapert." },
-    ],
-  },
-  {
-    question: "Wat kost AI-automatisering voor mijn bedrijf?",
-    answer: [
-      { type: "p", text: "Een AI-automatisering kost minder dan een parttime medewerker inhuren, maar werkt 24/7 en maakt geen fouten. Denk aan een investering die vergelijkbaar is met professionele software, maar dan specifiek gebouwd voor jouw processen." },
-      { type: "p", text: "De meeste projecten betalen zichzelf terug binnen het eerste halfjaar door tijdsbesparing en minder fouten." },
-      { type: "p", text: "Na een gratis intakegesprek en een scopingsessie geven we je een vaste prijs — geen verrassingen achteraf." },
-    ],
-  },
-  {
-    question: "Hoe lang duurt het voor de automatisering live staat?",
-    answer: [
-      { type: "p", text: "Totaal traject: 4–10 weken, afhankelijk van complexiteit." },
-      { type: "heading", text: "Fase 1 – Scoping (1 week)" },
-      { type: "p", text: "Samen analyseren we je processen. We starten snel op, geen maanden voorbereiding." },
-      { type: "heading", text: "Fase 2 – Building (2–6 weken)" },
-      { type: "p", text: "We bouwen en testen de automatisering. Je ziet tussentijds al resultaten." },
-      { type: "heading", text: "Fase 3 – Hypercare (2–4 weken)" },
-      { type: "p", text: "Het systeem is live en jullie gebruiken het. Wij monitoren intensief en lossen direct op als er iets niet perfect loopt. Pas als het 100% stabiel draait in de echte wereld, ronden we af." },
-      { type: "p", text: "Onze hypercare-fase is cruciaal: theorie vs. praktijk kan verschillen, en wij blijven erbij tot het écht werkt voor jouw team." },
-    ],
-  },
-  {
-    question: "Is dit niet te duur voor een KMO van onze grootte?",
-    answer: [
-      { type: "p", text: "Juist voor KMO's is dit interessant. Grote bedrijven hebben IT-afdelingen; jij betaalt voor repetitief werk dat een systeem kan overnemen." },
-      { type: "p", text: "Concreet voorbeeld: als je team 10 uur per week kwijt is aan handmatige taken (facturen verwerken, data overzetten, offertes opstellen), dan kost dat je €15.000–20.000 per jaar. Een automatisering van €5.000–8.000 verdient zich in 3–6 maanden terug." },
-      { type: "p", text: "En dan blijft het werken — jaar na jaar, met minimale extra kosten." },
-      { type: "p", text: "Te klein om te starten? We bouwen ook graag gefaseerd: start met één proces, breid later uit als je de waarde ziet." },
-    ],
-  },
-  {
-    question: "Welke processen kunnen jullie eigenlijk automatiseren?",
-    answer: [
-      { type: "p", text: "Alles wat repetitief is en regels volgt, kunnen we automatiseren." },
-      { type: "heading", text: "Meest voorkomende automatiseringen voor KMO's:" },
-      { type: "list", items: [
-        "Communicatie: offertes automatisch versturen, klanten opvolgen, interne notificaties bij nieuwe leads",
-        "Data & admin: facturen verwerken, data tussen systemen synchroniseren, rapportages genereren",
-        "Klantbeheer: nieuwe klanten in CRM zetten, follow-up e-mails, projectstatus-updates",
-        "Planning: afspraken inplannen, herinneringen versturen, beschikbaarheid checken",
-      ]},
-      { type: "p", text: "De vuistregel: als je team het nu handmatig doet en het volgt vaste stappen, kunnen wij het automatiseren." },
-      { type: "p", text: "Twijfel of jouw proces kan? Vertel ons wat je team dagelijks doet — wij vertellen of (en hoe) het kan." },
-    ],
-  },
-  {
-    question: "Moet mijn team hiervoor geschoold worden?",
-    answer: [
-      { type: "p", text: "Minimale onboarding, geen intensieve training." },
-      { type: "p", text: "Jouw team hoeft geen technische kennis te hebben. Wat ze wél moeten weten:" },
-      { type: "list", items: [
-        "Hoe triggert de automatisering? (bijv. lead toevoegen in CRM)",
-        "Wat gebeurt er automatisch? (zodat ze niet dubbel werk doen)",
-        "Waar zien ze de output? (bijv. taken verschijnen in hun inbox)",
-      ]},
-      { type: "heading", text: "We begeleiden dit met:" },
-      { type: "list", items: [
-        "Praktische walkthrough tijdens de hypercare-fase",
-        "Korte handleiding (geen 50-paginahandboeken)",
-        "Support gedurende 2–4 weken terwijl ze wennen",
-      ]},
-      { type: "p", text: "De grootste uitdaging? Niet zozeer \"leren gebruiken\", maar eerder \"vertrouwen dat het werkt en oude gewoontes loslaten\". Daar helpen we actief bij." },
-    ],
-  },
-  {
-    question: "Hoeveel tijd besparen we hier realistisch mee?",
-    answer: [
-      { type: "p", text: "Tussen de 80% en 100% van de tijd op dat specifieke proces." },
-      { type: "heading", text: "Waarom zo hoog?" },
-      { type: "p", text: "Simpel: wij adviseren geen automatiseringen met lage ROI. Als een proces maar 30-40% efficiëntiewinst oplevert, zeggen we eerlijk dat het de investering niet waard is." },
-      { type: "p", text: "We focussen op processen waar automatisering écht verschil maakt — volledig of grotendeels repetitieve taken die nu handmatig worden uitgevoerd." },
-      { type: "heading", text: "Concrete voorbeelden" },
-      { type: "list", items: [
-        "Lead management: Nu 6 uur/week aan leads in CRM zetten, e-mails versturen, opvolging plannen → na automatisering: 0 uur. Volledige besparing.",
-        "Offerte-proces: Nu 45 minuten per offerte (8x per week) → na automatisering: 10 minuten (alleen variabele gegevens invullen). Besparing: 4,5 uur/week.",
-        "Data synchronisatie: Nu 20 minuten per nieuwe klant om gegevens over te zetten naar boekhouding, projecttool, maillijst → na automatisering: 0 minuten, gebeurt direct.",
-      ]},
-      { type: "heading", text: "Meer dan alleen uren" },
-      { type: "list", items: [
-        "Lead om 18:00u binnen? Nu: pas volgende ochtend verwerkt. Na automatisering: binnen 2 minuten beantwoord (ook buiten kantooruren).",
-        "Follow-ups: Nu vergeet je 20% bij drukte. Na automatisering: 0% gemist, alles gebeurt op tijd.",
-        "Fouten: Nu typ je klantgegevens 3x over (telkens kans op fouten). Na automatisering: 0 typefouten, data altijd consistent.",
-        "Teammoraal: Minder frustratie over admin, meer tijd voor klanten en groei.",
-      ]},
-      { type: "p", text: "Twijfel of jouw proces geschikt is? Beschrijf het, dan zijn we eerlijk of de ROI er is — en adviseren we het alleen als het écht zin heeft." },
+      { type: "p", text: "De vuistregel: doet je team het nu handmatig, en volgt het vaste stappen? Dan kunnen wij het overnemen." },
+      { type: "heading", text: "Enkele succesverhalen bij onze klanten:" },
+      { type: "heading", text: "1 \u2013 E-commerce" },
+      { type: "p", text: "Een webshop kreeg dagelijks 50 klantemails over bestellingen, leveringen en retouren \u2014 allemaal handmatig beantwoord. We koppelden zijn mailbox aan webshop en zijn kennisbank. Zijn AI-systeem beantwoordt klantemails automatisch, zet bestellingen klaar in de webshop en schakelt alleen een echte medewerker in als de vraag te complex is." },
+      { type: "p", text: "\u2192 Resultaat: van 50 naar 5 mails per dag." },
+      { type: "heading", text: "2 \u2013 Gidsbedrijf" },
+      { type: "p", text: "Een bedrijf met 20 gidsen verwerkte alle boekingen handmatig via website, WhatsApp en mail. We bouwden \u00E9\u00E9n AI-systeem: boekingen komen binnen, de juiste gids wordt gecontacteerd en ingepland, klant en gids krijgen automatisch een bevestiging en facturen worden automatisch opgesteld." },
+      { type: "p", text: "\u2192 Resultaat: geen administratie meer, volledige focus op ondernemen." },
+      { type: "heading", text: "3 \u2013 Recruitmentbureau" },
+      { type: "p", text: "Een recruitmentbureau verwerkte sollicitaties handmatig: cv\u2019s lezen, kandidaten mailen, plannen. Zijn AI-systeem screent binnenkomende cv\u2019s, plant automatisch een kennismakingsgesprek in en houdt kandidaten op de hoogte." },
+      { type: "p", text: "\u2192 Resultaat: van dagen wachten naar same-day opvolging, zonder extra personeel." },
+      { type: "p", text: "Jij kent je bedrijf, wij de technologie. Tijdens een analysegesprek denken we actief met je mee om samen te kijken waar de opportuniteiten liggen." },
     ],
   },
   {
@@ -244,13 +140,92 @@ const faqItems: { question: string; answer: FaqBlock[] }[] = [
     ],
   },
   {
+    question: "Wat kost AI-automatisering voor mijn bedrijf?",
+    answer: [
+      { type: "p", text: "Minder dan een halftijdse medewerker inhuren, maar dan werkt het 24/7, maakt geen fouten en is nooit ziek." },
+      { type: "p", text: "Concreet voorbeeld: als je team 10 uur per week kwijt is aan handmatige taken, kost dat je €15.000–20.000 per jaar. Een automatisering van €5.000–8.000 verdient zichzelf terug in 3 tot 6 maanden." },
+      { type: "p", text: "En daarna blijft het werken — jaar na jaar, met minimale extra kosten." },
+      { type: "p", text: "Na een gratis kennismakingsgesprek krijg je een vaste prijs. Geen verrassingen achteraf." },
+    ],
+  },
+  {
+    question: "Is dit niet te duur voor een KMO van onze grootte?",
+    answer: [
+      { type: "p", text: "Juist voor KMO's is dit interessant. Grote bedrijven hebben IT-afdelingen; jij betaalt voor repetitief werk dat een systeem kan overnemen." },
+      { type: "p", text: "Te klein om te starten? We bouwen ook graag gefaseerd: start met één proces, breid later uit als je de waarde ziet." },
+      { type: "p", text: "De investering is vergelijkbaar met professionele software, maar dan specifiek gebouwd voor jouw processen." },
+    ],
+  },
+  {
+    question: "Hoeveel tijd besparen we hier realistisch mee?",
+    answer: [
+      { type: "p", text: "Tussen de 80% en 100% van de tijd op dat specifieke proces." },
+      { type: "heading", text: "Waarom zo hoog?" },
+      { type: "p", text: "Simpel: wij adviseren geen automatiseringen met lage ROI. Als een proces maar 30–40% efficiëntiewinst oplevert, zeggen we eerlijk dat het de investering niet waard is." },
+      { type: "heading", text: "Concrete voorbeelden" },
+      { type: "list", items: [
+        "Lead management: Nu 6 uur/week → na automatisering: 0 uur. Volledige besparing.",
+        "Offerte-proces: Nu 45 min per offerte (8x/week) → na automatisering: 10 min. Besparing: 4,5 uur/week.",
+        "Data synchronisatie: Nu 20 min per nieuwe klant → na automatisering: 0 min, gebeurt direct.",
+      ]},
+      { type: "heading", text: "Meer dan alleen uren" },
+      { type: "list", items: [
+        "Lead om 18:00u binnen? Binnen 2 minuten beantwoord, ook buiten kantooruren.",
+        "Follow-ups: 0% gemist, alles gebeurt automatisch op tijd.",
+        "Fouten: 0 typefouten, data altijd consistent.",
+        "Teammoraal: minder frustratie over administratie, meer tijd voor klanten.",
+      ]},
+      { type: "p", text: "Twijfel of jouw proces geschikt is? Beschrijf het, dan zijn we eerlijk of de ROI er is." },
+    ],
+  },
+  {
+    question: "Hoe lang duurt het voor de automatisering live staat?",
+    answer: [
+      { type: "p", text: "Totaal traject: 4–10 weken, afhankelijk van complexiteit." },
+      { type: "heading", text: "Fase 1 – Analyse (1 week)" },
+      { type: "p", text: "Samen analyseren we je processen. We starten snel op, geen maanden voorbereiding." },
+      { type: "heading", text: "Fase 2 – Building (2–6 weken)" },
+      { type: "p", text: "We bouwen en testen de automatisering. Je ziet tussentijds al resultaten." },
+      { type: "heading", text: "Fase 3 – Hypercare (2–4 weken)" },
+      { type: "p", text: "Het systeem is live en jullie gebruiken het. Wij monitoren intensief en lossen direct op als er iets niet perfect loopt. Pas als het 100% stabiel draait, ronden we af." },
+      { type: "p", text: "Onze hypercare-fase is cruciaal: theorie vs. praktijk kan verschillen, en wij blijven erbij tot het écht werkt voor jouw team." },
+    ],
+  },
+  {
+    question: "Moet mijn team hiervoor geschoold worden?",
+    answer: [
+      { type: "p", text: "Minimale onboarding, geen intensieve training." },
+      { type: "p", text: "Jouw team hoeft geen technische kennis te hebben. Wat ze wél moeten weten:" },
+      { type: "list", items: [
+        "Hoe triggert de automatisering? (bijv. lead toevoegen in CRM)",
+        "Wat gebeurt er automatisch? (zodat ze niet dubbel werk doen)",
+        "Waar zien ze de output? (bijv. taken verschijnen in hun inbox)",
+      ]},
+      { type: "heading", text: "We begeleiden dit met:" },
+      { type: "list", items: [
+        "Praktische walkthrough tijdens de hypercare-fase",
+        "Korte handleiding (geen 50-paginahandboeken)",
+        "Support gedurende 2–4 weken terwijl ze wennen",
+      ]},
+      { type: "p", text: "De grootste uitdaging? Niet zozeer \"leren gebruiken\", maar eerder \"vertrouwen dat het werkt en oude gewoontes loslaten\". Daar helpen we actief bij." },
+    ],
+  },
+  {
+    question: "Wat als er iets misloopt met de automatisering?",
+    answer: [
+      { type: "p", text: "Elke oplossing heeft een test- en integratieperiode. Tijdens de hypercare kijken we aandachtig mee naar alle handelingen. Pas als alles perfect verloopt, ronden we af." },
+      { type: "p", text: "Na aflevering laten we je niet in de steek. Elke oplossing bevat ingebouwde monitoring. Wij worden onmiddellijk verwittigd als er iets hapert." },
+      { type: "p", text: "Bug? Gratis. API veranderd? Gratis. Onze verantwoordelijkheid, niet de jouwe." },
+    ],
+  },
+  {
     question: "Wat gebeurt er als we later willen uitbreiden?",
     answer: [
       { type: "p", text: "Uitbreiden is makkelijk — en dat adviseren we vaak bewust." },
       { type: "heading", text: "Typisch groeipad:" },
       { type: "list", items: [
-        "Fase 1 (maand 1–3): start met één high-impact proces, bijv. leadmanagement automatiseren — investering €3–5k",
-        "Fase 2 (maand 4–9): volgend proces erbij, bijv. offerteproces — investering €4–6k",
+        "Fase 1 (maand 1–3): start met één high-impact proces, bijv. leadmanagement",
+        "Fase 2 (maand 4–9): volgend proces erbij, bijv. offerteproces",
         "Fase 3 (jaar 2): volledige workflow-automatisering, meerdere systemen praten met elkaar",
       ]},
       { type: "heading", text: "Waarom gefaseerd werken slim is:" },
@@ -268,18 +243,17 @@ const faqItems: { question: string; answer: FaqBlock[] }[] = [
     answer: [
       { type: "p", text: "Na de hypercare-fase zou alles perfect moeten werken — en daar investeren we samen in." },
       { type: "heading", text: "Wat maakt onze hypercare anders?" },
-      { type: "p", text: "We monitoren niet alleen passief. We werken actief samen met jouw team om het systeem grondig te testen:" },
+      { type: "p", text: "We monitoren niet alleen passief. We werken actief samen met jouw team:" },
       { type: "list", items: [
         "Probeer het systeem eens te breken (we moedigen dit aan)",
         "Test alle edge cases en \"wat als…\"-scenario's",
         "Gebruik het in de echte drukte van je bedrijf",
         "Vind de kinderziektes vóór we weggaan",
       ]},
-      { type: "p", text: "Waarom? Omdat theorie ≠ praktijk. Jouw team werkt ermee — zij kennen de situaties." },
-      { type: "heading", text: "Resultaat naar hypercare:" },
+      { type: "heading", text: "Resultaat na hypercare:" },
       { type: "p", text: "Een systeem dat maandenlang draait zonder dat je aan ons hoeft te denken." },
       { type: "heading", text: "Mocht er toch iets zijn:" },
-      { type: "p", text: "We springen bij — gratis, vanzelfsprekend. Bug? Gratis. API veranderd? Gratis. Iets werkt niet zoals afgesproken? Onze verantwoordelijkheid. Je betaalt alleen voor nieuwe features die je later wilt toevoegen." },
+      { type: "p", text: "We springen bij — gratis, vanzelfsprekend. Je betaalt alleen voor nieuwe features die je later wilt toevoegen." },
     ],
   },
 ];
@@ -304,10 +278,10 @@ const useCasesData: UseCase[] = [
   {
     id: 'lead-followup',
     category: 'sales',
-    categoryLabel: 'Sales',
-    title: 'Automatische Lead Follow-up',
-    description: 'Een sales team gebruikt AI om automatisch follow-up emails te sturen aan prospects op basis van hun interactie met eerdere berichten.',
-    stat: { value: '40%', label: 'meer conversies' },
+    categoryLabel: 'Klantopvolging',
+    title: 'Elke klant wordt automatisch opgevolgd',
+    description: 'Jouw AI-systeem stuurt automatisch de juiste mail op het juiste moment. Geen klant wordt vergeten, ook niet op drukke dagen.',
+    stat: { value: '3x', label: 'meer klanten die terugkomen' },
     flowSteps: [
       { icon: Mail, label: 'Email' },
       { icon: Sparkles, label: 'AI' },
@@ -318,9 +292,9 @@ const useCasesData: UseCase[] = [
     id: 'crm-sync',
     category: 'admin',
     categoryLabel: 'Administratie',
-    title: 'CRM Data Synchronisatie',
-    description: 'Een bedrijf automatiseert het invoeren van klantgegevens vanuit emails en gesprekken direct in hun CRM systeem.',
-    stat: { value: '15+', label: 'uur/week bespaard' },
+    title: 'Klantgegevens worden vanzelf bijgewerkt',
+    description: 'Nieuwe klant? De gegevens staan meteen in je CRM, boekhouding en maillijst. Geen dubbel werk meer.',
+    stat: { value: '15+', label: 'uur per week bespaard' },
     flowSteps: [
       { icon: MessageSquare, label: 'Gesprek' },
       { icon: Sparkles, label: 'AI' },
@@ -331,9 +305,9 @@ const useCasesData: UseCase[] = [
     id: 'scheduling',
     category: 'admin',
     categoryLabel: 'Planning',
-    title: 'Intelligente Afsprakenplanning',
-    description: 'AI analyseert beschikbaarheid en voorkeuren om automatisch de beste tijdstippen voor meetings voor te stellen.',
-    stat: { value: '90%', label: 'minder back-and-forth' },
+    title: 'Klanten plannen zelf hun afspraak in',
+    description: 'Geen eindeloos heen-en-weer mailen. Klanten kiezen zelf een moment dat past, en de bevestiging gaat automatisch.',
+    stat: { value: '0', label: 'minuten besteed aan plannen' },
     flowSteps: [
       { icon: Calendar, label: 'Agenda' },
       { icon: Sparkles, label: 'AI' },
@@ -344,9 +318,9 @@ const useCasesData: UseCase[] = [
     id: 'multi-system',
     category: 'data',
     categoryLabel: 'Integratie',
-    title: 'Multi-System Integratie',
-    description: 'Automatische synchronisatie tussen Excel, CRM en facturatiesysteem - één invoer, alles bijgewerkt.',
-    stat: { value: '1x', label: 'invoer, alles bijgewerkt' },
+    title: 'Eén keer invoeren, overal bijgewerkt',
+    description: 'Je vult iets in op één plek, en het staat meteen in Excel, je CRM en je facturatie. Geen copy-paste meer.',
+    stat: { value: '0', label: 'fouten door overtypen' },
     flowSteps: [
       { icon: FileText, label: 'Excel' },
       { icon: Sparkles, label: 'AI' },
@@ -357,9 +331,9 @@ const useCasesData: UseCase[] = [
     id: 'customer-service',
     category: 'support',
     categoryLabel: 'Klantenservice',
-    title: 'Klantenservice Automatisering',
-    description: 'AI beantwoordt veelgestelde vragen en routeert complexe vragen naar het juiste teamlid.',
-    stat: { value: '60%', label: 'snellere reactietijd' },
+    title: 'Veelgestelde vragen automatisch beantwoord',
+    description: 'Krijg je elke dag dezelfde vragen? Je AI-systeem antwoordt direct. Moeilijke vragen gaan naar de juiste persoon.',
+    stat: { value: '2 min', label: 'gemiddelde reactietijd' },
     flowSteps: [
       { icon: Headphones, label: 'Vraag' },
       { icon: Sparkles, label: 'AI' },
@@ -370,9 +344,9 @@ const useCasesData: UseCase[] = [
     id: 'reporting',
     category: 'data',
     categoryLabel: 'Rapportage',
-    title: 'Rapportage Automatisering',
-    description: 'Automatische generatie van wekelijkse rapporten door data uit verschillende bronnen te combineren.',
-    stat: { value: '5+', label: 'uur/week teruggewonnen' },
+    title: 'Rapporten die zichzelf opmaken',
+    description: 'Elke week een overzicht klaar, zonder dat iemand er aan moet denken. Alle cijfers verzameld en netjes gepresenteerd.',
+    stat: { value: '5+', label: 'uur per week terug' },
     flowSteps: [
       { icon: Database, label: 'Data' },
       { icon: Sparkles, label: 'AI' },
@@ -441,117 +415,6 @@ const SectionDivider = ({
         <path d={data.light} fill="#7B8DB5" />
       </svg>
     </div>
-  );
-};
-
-// --- Typewriter Animation Component ---
-const typewriterPhrases = [
-  "je workflow",
-  "routinewerk",
-  "data-invoer",
-  "je bedrijf",
-  "repetitieve taken",
-  "dagelijkse admin",
-  "klantopvolging",
-  "handmatige processen",
-  "je operaties",
-  "het saaie werk",
-  "leadbeheer",
-  "e-mailreacties",
-  "CRM-invoer",
-];
-
-const TypewriterText = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isDrawing, setIsDrawing] = useState(false);
-
-  const currentPhrase = typewriterPhrases[currentPhraseIndex];
-
-  // Ensure component is mounted before starting animation
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-    
-    let timeout: NodeJS.Timeout;
-
-    if (isPaused) {
-      timeout = setTimeout(() => {
-        setIsPaused(false);
-        setIsDrawing(false); // Reset drawing state before deleting
-        setIsDeleting(true);
-      }, 2000); // Pause for 2 seconds before deleting
-      return () => clearTimeout(timeout);
-    }
-
-    if (isDeleting) {
-      if (displayedText.length === 0) {
-        setIsDeleting(false);
-        setCurrentPhraseIndex((prev) => (prev + 1) % typewriterPhrases.length);
-      } else {
-        timeout = setTimeout(() => {
-          setDisplayedText(displayedText.slice(0, -1));
-        }, 40); // Delete speed
-      }
-    } else {
-      if (displayedText.length === currentPhrase.length) {
-        setIsDrawing(true); // Trigger highlighter draw animation
-        setIsPaused(true);
-      } else {
-        timeout = setTimeout(() => {
-          setDisplayedText(currentPhrase.slice(0, displayedText.length + 1));
-        }, 80); // Type speed
-      }
-    }
-
-    return () => clearTimeout(timeout);
-  }, [isMounted, displayedText, isDeleting, isPaused, currentPhrase]);
-
-  // Split displayed text into words for highlighting the last word
-  const words = displayedText.trim().split(' ');
-  const lastWord = words[words.length - 1];
-  const textBeforeLastWord = words.slice(0, -1).join(' ');
-
-  return (
-    <span className="block font-bold italic">
-      {textBeforeLastWord && <>{textBeforeLastWord} </>}
-      <span className="relative inline-block">
-        <span className="relative z-10">{lastWord}</span>
-        {/* Marker brush stroke SVG - hand-drawn animation */}
-        <svg
-          className="absolute -bottom-1 left-0 w-full h-[0.45em] z-0"
-          viewBox="0 0 120 20"
-          preserveAspectRatio="none"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M2 16Q50 6 118 10"
-            stroke="#2D3A5C"
-            strokeOpacity="0.22"
-            strokeWidth="12"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            pathLength="1"
-            style={{
-              strokeDasharray: 1,
-              strokeDashoffset: isDrawing ? 0 : 1,
-              opacity: isDrawing ? 1 : 0,
-              transition: isDrawing
-                ? 'stroke-dashoffset 400ms ease-out, opacity 0ms'
-                : 'opacity 0ms',
-            }}
-          />
-        </svg>
-      </span>
-      <span className="inline-block w-[3px] h-[1em] bg-[#1A2D63] ml-1 animate-pulse" />
-    </span>
   );
 };
 
@@ -772,7 +635,7 @@ const MobileLogoCarousel = () => {
   const mobilePath = "M -900,612\n   C -420,690 0,820 420,880\n   C 860,940 1180,900 1580,780\n   C 2040,630 2460,430 2900,250\n   C 3300,140 3700,100 4100,80";
 
   return (
-    <div className="relative mt-2 block lg:hidden">
+    <div className="relative -mt-6 block lg:hidden">
       <div className="relative h-44 sm:h-48 overflow-visible">
         <LogoCarousel
           className="logo-carousel absolute inset-0 pointer-events-none overflow-visible block lg:hidden"
@@ -785,6 +648,105 @@ const MobileLogoCarousel = () => {
         />
       </div>
     </div>
+  );
+};
+
+// --- Hand-drawn checkmark for hero ---
+const HandDrawnCheck = ({ className = "" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M3.5 13.5C5 15 8.5 18.5 9.5 19.5C12 15 16 9 21 4.5"
+      stroke="#1A2D63"
+      strokeWidth="3.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+// --- Recognition Section ("Herken jij dit?") ---
+const recognitionItems = [
+  "Je weet dat AI kan helpen, maar je wil geen geld verspillen aan iets dat niets oplevert.",
+  "Je hebt al demo's gezien, maar niemand kon concreet tonen wat het in jouw bedrijf bespaart.",
+  "Je wil eerlijk advies over wat wél automatiseerbaar is — en wat niet.",
+  "Je zoekt geen \"AI-tool\", maar iemand die meedenkt over je processen.",
+  "Je wil klein starten, snel resultaat zien en daarna pas opschalen.",
+];
+
+const RecognitionSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    if (!sectionRef.current) return;
+
+    const items = sectionRef.current.querySelectorAll('[data-recognition-item]');
+
+    // Items animate when they scroll into view
+    gsap.set(items, { y: 25, opacity: 0 });
+
+    const itemsTl = gsap.timeline({ paused: true });
+    itemsTl.to(items, { y: 0, opacity: 1, stagger: 0.1, duration: 0.4, ease: "power3.out" });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          itemsTl.play();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    // Observe the first item rather than the whole section
+    if (items[0]) observer.observe(items[0]);
+
+    return () => observer.disconnect();
+  }, { scope: sectionRef });
+
+  return (
+    <section id="recognition" ref={sectionRef} className="pt-0 md:pt-2 pb-8 md:pb-12 px-6 md:px-12 bg-[#FDFBF7]">
+      <div className="max-w-[53.33rem] mx-auto">
+        <div className="text-center mb-5 md:mb-7">
+          <h2 className="font-newsreader text-4xl md:text-5xl text-[#1A2D63] leading-[1.15]">
+            Herken jij dit?
+          </h2>
+        </div>
+
+        <div className="space-y-5 md:space-y-6">
+          {recognitionItems.map((title, index) => (
+            <div
+              key={index}
+              data-recognition-item
+              className="flex items-center gap-4 md:gap-5 bg-white rounded-2xl p-5 md:p-6 border border-[#1A2D63]/[0.06] shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
+            >
+              <span className="font-newsreader text-2xl md:text-3xl text-[#1A2D63]/20 tabular-nums leading-none flex-shrink-0 w-9 text-right">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <p className="font-instrument text-base md:text-lg text-[#1A2D63] leading-snug">
+                {title}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center mt-10 md:mt-12">
+          <button
+            type="button"
+            onClick={() => {
+              onCtaClick?.();
+              pushEvent("cta_click", {
+                cta_label: "recognition_calendly",
+                location: "recognition",
+              });
+            }}
+            className="group inline-flex items-center gap-2.5 bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
+          >
+            <Calendar className="w-4 h-4" />
+            <span>Plan een kennismakingsgesprek</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+      </div>
+    </section>
   );
 };
 
@@ -811,7 +773,7 @@ const CompanyTypesCarousel = () => {
   const items = [...companyTypes, ...companyTypes];
 
   return (
-    <section className="pt-6 md:pt-8 pb-10 md:pb-14 bg-[#FDFBF7] overflow-hidden">
+    <section className="pt-4 md:pt-6 pb-6 md:pb-8 bg-[#FDFBF7] overflow-hidden">
       <div className="max-w-4xl mx-auto border-t border-[#1A2D63]/[0.08] mb-6" />
       <p className="text-center text-[#1A2D63]/50 text-[13px] uppercase tracking-wider mb-7 font-medium">
         Voor bedrijven zoals het jouwe
@@ -887,10 +849,10 @@ const LeadFollowupIllustration = ({ progress }: { progress: number }) => {
   }, [progress]);
   
   return (
-    <svg ref={svgRef} viewBox="0 0 280 200" className="w-full h-full" fill="none">
+    <svg ref={svgRef} viewBox="0 2 280 170" className="w-full h-full" fill="none">
       {/* Lead Avatar - Left side (x=35 ensures r=18 stays within bounds) */}
       <g className="lf-lead" transform="translate(35, 55)">
-        <circle cx="0" cy="0" r="18" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <circle cx="0" cy="0" r="18" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <circle cx="0" cy="-3" r="5" fill="#1A2D63" fillOpacity="0.08" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-9,11 Q0,5 9,11" fill="none" stroke="#1A2D63" strokeWidth="1.2" strokeLinecap="round"/>
       </g>
@@ -912,7 +874,7 @@ const LeadFollowupIllustration = ({ progress }: { progress: number }) => {
       
       {/* Card 1 - Email Day 1 */}
       <g className="lf-card" transform="translate(85, 83)">
-        <rect x="-16" y="0" width="32" height="40" rx="4" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-16" y="0" width="32" height="40" rx="4" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         {/* Envelope icon */}
         <rect x="-8" y="10" width="16" height="12" rx="2" fill="none" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-7,11 L0,17 L7,11" fill="none" stroke="#1A2D63" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
@@ -921,7 +883,7 @@ const LeadFollowupIllustration = ({ progress }: { progress: number }) => {
       
       {/* Card 2 - Email Day 3 */}
       <g className="lf-card" transform="translate(120, 83)">
-        <rect x="-16" y="0" width="32" height="40" rx="4" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-16" y="0" width="32" height="40" rx="4" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         {/* Envelope icon */}
         <rect x="-8" y="10" width="16" height="12" rx="2" fill="none" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-7,11 L0,17 L7,11" fill="none" stroke="#1A2D63" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
@@ -930,7 +892,7 @@ const LeadFollowupIllustration = ({ progress }: { progress: number }) => {
       
       {/* Card 3 - Email Day 7 */}
       <g className="lf-card" transform="translate(155, 83)">
-        <rect x="-16" y="0" width="32" height="40" rx="4" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-16" y="0" width="32" height="40" rx="4" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         {/* Envelope icon */}
         <rect x="-8" y="10" width="16" height="12" rx="2" fill="none" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-7,11 L0,17 L7,11" fill="none" stroke="#1A2D63" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
@@ -939,7 +901,7 @@ const LeadFollowupIllustration = ({ progress }: { progress: number }) => {
       
       {/* Card 4 - Calendar with checkmark (Booked) */}
       <g className="lf-card" transform="translate(190, 83)">
-        <rect x="-16" y="0" width="32" height="40" rx="4" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-16" y="0" width="32" height="40" rx="4" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         {/* Calendar icon */}
         <rect x="-8" y="8" width="16" height="14" rx="2" fill="none" stroke="#1A2D63" strokeWidth="1.2"/>
         {/* Calendar header bar */}
@@ -949,14 +911,14 @@ const LeadFollowupIllustration = ({ progress }: { progress: number }) => {
         <circle cx="1" cy="17" r="1" fill="#1A2D63" fillOpacity="0.3"/>
         <circle cx="5" cy="17" r="1" fill="#1A2D63" fillOpacity="0.3"/>
         {/* Checkmark overlay */}
-        <circle cx="5" cy="26" r="5" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1"/>
+        <circle cx="5" cy="26" r="5" fill="white" stroke="#1A2D63" strokeWidth="1"/>
         <path d="M2,26 L4,28 L8,24" fill="none" stroke="#1A2D63" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
       </g>
       <text className="lf-label" x="190" y="136" textAnchor="middle" fill="#1A2D63" fontSize="9" fontWeight="400">Booked</text>
       
       {/* Success Badge - Right end (same size as lead avatar r=18, x=245 ensures within bounds) */}
       <g className="lf-success" transform="translate(245, 55)">
-        <circle cx="0" cy="0" r="18" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <circle cx="0" cy="0" r="18" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <path d="M-6,-1 L-2,4 L6,-5" fill="none" stroke="#1A2D63" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </g>
     </svg>
@@ -1007,13 +969,13 @@ const CRMSyncIllustration = ({ progress }: { progress: number }) => {
       
       {/* Email Icon - y=30 */}
       <g className="crm-source" transform="translate(45, 30)">
-        <rect x="-12" y="-9" width="24" height="18" rx="3" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-12" y="-9" width="24" height="18" rx="3" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <path d="M-10,-7 L0,3 L10,-7" fill="none" stroke="#1A2D63" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
       </g>
       
       {/* Document Icon - y=60 */}
       <g className="crm-source" transform="translate(45, 60)">
-        <rect x="-12" y="-14" width="24" height="28" rx="2" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-12" y="-14" width="24" height="28" rx="2" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <line x1="-6" y1="-6" x2="6" y2="-6" stroke="#1A2D63" strokeWidth="1.2" strokeOpacity="0.4"/>
         <line x1="-6" y1="0" x2="6" y2="0" stroke="#1A2D63" strokeWidth="1.2" strokeOpacity="0.4"/>
         <line x1="-6" y1="6" x2="4" y2="6" stroke="#1A2D63" strokeWidth="1.2" strokeOpacity="0.4"/>
@@ -1021,14 +983,14 @@ const CRMSyncIllustration = ({ progress }: { progress: number }) => {
       
       {/* Phone Icon - y=100 */}
       <g className="crm-source" transform="translate(45, 100)">
-        <rect x="-12" y="-14" width="24" height="28" rx="4" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-12" y="-14" width="24" height="28" rx="4" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <line x1="-4" y1="-9" x2="4" y2="-9" stroke="#1A2D63" strokeWidth="1.2" strokeOpacity="0.4"/>
         <circle cx="0" cy="6" r="4" fill="none" stroke="#1A2D63" strokeWidth="1"/>
       </g>
       
       {/* Calendar Icon - y=140 */}
       <g className="crm-source" transform="translate(45, 140)">
-        <rect x="-12" y="-12" width="24" height="24" rx="2" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-12" y="-12" width="24" height="24" rx="2" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <line x1="-12" y1="-4" x2="12" y2="-4" stroke="#1A2D63" strokeWidth="1"/>
         <line x1="-6" y1="-16" x2="-6" y2="-10" stroke="#1A2D63" strokeWidth="1.5" strokeLinecap="round"/>
         <line x1="6" y1="-16" x2="6" y2="-10" stroke="#1A2D63" strokeWidth="1.5" strokeLinecap="round"/>
@@ -1038,7 +1000,7 @@ const CRMSyncIllustration = ({ progress }: { progress: number }) => {
       
       {/* Chat Icon - y=170 (shifted left slightly to align with others due to speech tail) */}
       <g className="crm-source" transform="translate(45, 171)">
-        <path d="M-12,-10 L-12,6 L-6,6 L0,14 L0,6 L12,6 L12,-10 Z" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5" strokeLinejoin="round"/>
+        <path d="M-12,-10 L-12,6 L-6,6 L0,14 L0,6 L12,6 L12,-10 Z" fill="white" stroke="#1A2D63" strokeWidth="1.5" strokeLinejoin="round"/>
         <circle cx="-5" cy="-2" r="2" fill="#1A2D63" fillOpacity="0.4"/>
         <circle cx="0" cy="-2" r="2" fill="#1A2D63" fillOpacity="0.4"/>
         <circle cx="5" cy="-2" r="2" fill="#1A2D63" fillOpacity="0.4"/>
@@ -1054,7 +1016,7 @@ const CRMSyncIllustration = ({ progress }: { progress: number }) => {
       {/* === CRM WINDOW (Right Side) === */}
       <g className="crm-frame">
         {/* Main window frame */}
-        <rect x="78" y="20" width="175" height="160" rx="8" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="2"/>
+        <rect x="78" y="20" width="175" height="160" rx="8" fill="white" stroke="#1A2D63" strokeWidth="2"/>
         
         {/* Title bar */}
         <rect x="78" y="20" width="175" height="28" rx="8" fill="#1A2D63" fillOpacity="0.06"/>
@@ -1074,7 +1036,7 @@ const CRMSyncIllustration = ({ progress }: { progress: number }) => {
       
       {/* Card 1 */}
       <g className="crm-card">
-        <rect x="88" y="58" width="155" height="34" rx="5" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1"/>
+        <rect x="88" y="58" width="155" height="34" rx="5" fill="white" stroke="#1A2D63" strokeWidth="1"/>
         <circle cx="108" cy="75" r="10" fill="#1A2D63" fillOpacity="0.06" stroke="#1A2D63" strokeWidth="0.8"/>
         <circle cx="108" cy="72" r="4" fill="#1A2D63" fillOpacity="0.1"/>
         <path d="M101,80 Q108,76 115,80" fill="none" stroke="#1A2D63" strokeWidth="0.8" strokeOpacity="0.2"/>
@@ -1084,7 +1046,7 @@ const CRMSyncIllustration = ({ progress }: { progress: number }) => {
       
       {/* Card 2 */}
       <g className="crm-card">
-        <rect x="88" y="98" width="155" height="34" rx="5" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1"/>
+        <rect x="88" y="98" width="155" height="34" rx="5" fill="white" stroke="#1A2D63" strokeWidth="1"/>
         <circle cx="108" cy="115" r="10" fill="#1A2D63" fillOpacity="0.06" stroke="#1A2D63" strokeWidth="0.8"/>
         <circle cx="108" cy="112" r="4" fill="#1A2D63" fillOpacity="0.1"/>
         <path d="M101,120 Q108,116 115,120" fill="none" stroke="#1A2D63" strokeWidth="0.8" strokeOpacity="0.2"/>
@@ -1094,7 +1056,7 @@ const CRMSyncIllustration = ({ progress }: { progress: number }) => {
       
       {/* Card 3 */}
       <g className="crm-card">
-        <rect x="88" y="138" width="155" height="34" rx="5" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1"/>
+        <rect x="88" y="138" width="155" height="34" rx="5" fill="white" stroke="#1A2D63" strokeWidth="1"/>
         <circle cx="108" cy="155" r="10" fill="#1A2D63" fillOpacity="0.06" stroke="#1A2D63" strokeWidth="0.8"/>
         <circle cx="108" cy="152" r="4" fill="#1A2D63" fillOpacity="0.1"/>
         <path d="M101,160 Q108,156 115,160" fill="none" stroke="#1A2D63" strokeWidth="0.8" strokeOpacity="0.2"/>
@@ -1104,7 +1066,7 @@ const CRMSyncIllustration = ({ progress }: { progress: number }) => {
       
       {/* === SUCCESS BADGE (bottom-right of CRM window) === */}
       <g className="crm-check" transform="translate(246, 172)">
-        <circle cx="0" cy="0" r="12" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <circle cx="0" cy="0" r="12" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <path d="M-5,0 L-1,4 L6,-4" fill="none" stroke="#1A2D63" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </g>
       
@@ -1159,11 +1121,11 @@ const SchedulingIllustration = ({ progress }: { progress: number }) => {
   }, [progress]);
   
   return (
-    <svg ref={svgRef} viewBox="0 0 280 200" className="w-full h-full" fill="none">
+    <svg ref={svgRef} viewBox="0 -10 280 200" className="w-full h-full" fill="none">
       {/* === CALENDAR GRID (left-center) === */}
       <g className="sched-grid">
         {/* Main calendar frame */}
-        <rect x="20" y="25" width="140" height="130" rx="6" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="20" y="25" width="140" height="130" rx="6" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         
         {/* Header row */}
         <rect x="20" y="25" width="140" height="24" rx="6" fill="#1A2D63" fillOpacity="0.05"/>
@@ -1200,7 +1162,7 @@ const SchedulingIllustration = ({ progress }: { progress: number }) => {
       {/* === CLOCK (right side) === */}
       <g className="sched-clock" transform="translate(210, 100)">
         {/* Clock face */}
-        <circle cx="0" cy="0" r="42" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="2"/>
+        <circle cx="0" cy="0" r="42" fill="white" stroke="#1A2D63" strokeWidth="2"/>
         
         {/* Hour markers */}
         <line x1="0" y1="-36" x2="0" y2="-32" stroke="#1A2D63" strokeWidth="2" strokeLinecap="round"/>
@@ -1229,7 +1191,7 @@ const SchedulingIllustration = ({ progress }: { progress: number }) => {
       
       {/* === SUCCESS CHECK (bottom right of clock) === */}
       <g className="sched-check" transform="translate(240, 140)">
-        <circle cx="0" cy="0" r="14" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <circle cx="0" cy="0" r="14" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <path d="M-5,0 L-2,4 L6,-5" stroke="#1A2D63" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
       </g>
     </svg>
@@ -1279,8 +1241,8 @@ const MultiSystemIllustration = ({ progress }: { progress: number }) => {
   }, [progress]);
   
   return (
-    <svg ref={svgRef} viewBox="0 0 280 200" className="w-full h-full" fill="none">
-      
+    <svg ref={svgRef} viewBox="0 -17 280 230" className="w-full h-full" fill="none">
+
       {/* === CONNECTION LINES (from center to apps) === */}
       {/* To Excel (top) */}
       <path className="ms-connector ms-connector-1" d="M140,83 L140,52" stroke="#1A2D63" strokeWidth="1.5" strokeOpacity="0.3" fill="none"/>
@@ -1292,7 +1254,7 @@ const MultiSystemIllustration = ({ progress }: { progress: number }) => {
       {/* === CENTER INPUT FORM (the source) === */}
       <g className="ms-center" transform="translate(140, 105)">
         {/* Form card */}
-        <rect x="-28" y="-22" width="56" height="44" rx="6" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-28" y="-22" width="56" height="44" rx="6" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         {/* Input field 1 - Name */}
         <rect x="-22" y="-16" width="44" height="14" rx="2" fill="#1A2D63" fillOpacity="0.06" stroke="#1A2D63" strokeWidth="0.8" strokeOpacity="0.3"/>
         <text x="-18" y="-6" fill="#1A2D63" fontSize="7" fontWeight="500" fillOpacity="0.7">Jan de Vries</text>
@@ -1304,7 +1266,7 @@ const MultiSystemIllustration = ({ progress }: { progress: number }) => {
       {/* === EXCEL APP (top) === */}
       <g className="ms-app ms-app-excel" transform="translate(140, 30)">
         {/* Window frame */}
-        <rect x="-38" y="-22" width="76" height="44" rx="5" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-38" y="-22" width="76" height="44" rx="5" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         {/* Title bar */}
         <rect x="-38" y="-22" width="76" height="12" rx="5" fill="#1A2D63" fillOpacity="0.08"/>
         <rect x="-38" y="-14" width="76" height="4" fill="#1A2D63" fillOpacity="0.08"/>
@@ -1327,7 +1289,7 @@ const MultiSystemIllustration = ({ progress }: { progress: number }) => {
       {/* === CRM APP (bottom-left) === */}
       <g className="ms-app ms-app-crm" transform="translate(50, 168)">
         {/* Window frame */}
-        <rect x="-38" y="-22" width="76" height="44" rx="5" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-38" y="-22" width="76" height="44" rx="5" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         {/* Title bar */}
         <rect x="-38" y="-22" width="76" height="12" rx="5" fill="#1A2D63" fillOpacity="0.08"/>
         <rect x="-38" y="-14" width="76" height="4" fill="#1A2D63" fillOpacity="0.08"/>
@@ -1347,7 +1309,7 @@ const MultiSystemIllustration = ({ progress }: { progress: number }) => {
       {/* === INVOICE APP (bottom-right) === */}
       <g className="ms-app ms-app-invoice" transform="translate(230, 168)">
         {/* Window frame */}
-        <rect x="-38" y="-22" width="76" height="44" rx="5" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-38" y="-22" width="76" height="44" rx="5" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         {/* Title bar */}
         <rect x="-38" y="-22" width="76" height="12" rx="5" fill="#1A2D63" fillOpacity="0.08"/>
         <rect x="-38" y="-14" width="76" height="4" fill="#1A2D63" fillOpacity="0.08"/>
@@ -1368,17 +1330,17 @@ const MultiSystemIllustration = ({ progress }: { progress: number }) => {
       {/* === SUCCESS CHECKMARKS === */}
       {/* Excel check */}
       <g className="ms-check" transform="translate(170, 15)">
-        <circle cx="0" cy="0" r="8" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.2"/>
+        <circle cx="0" cy="0" r="8" fill="white" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-3,0 L-1,2.5 L4,-3" stroke="#1A2D63" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
       </g>
       {/* CRM check */}
       <g className="ms-check" transform="translate(80, 153)">
-        <circle cx="0" cy="0" r="8" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.2"/>
+        <circle cx="0" cy="0" r="8" fill="white" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-3,0 L-1,2.5 L4,-3" stroke="#1A2D63" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
       </g>
       {/* Invoice check */}
       <g className="ms-check" transform="translate(260, 153)">
-        <circle cx="0" cy="0" r="8" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.2"/>
+        <circle cx="0" cy="0" r="8" fill="white" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-3,0 L-1,2.5 L4,-3" stroke="#1A2D63" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
       </g>
       
@@ -1430,11 +1392,11 @@ const CustomerServiceIllustration = ({ progress }: { progress: number }) => {
   }, [progress]);
   
   return (
-    <svg ref={svgRef} viewBox="0 0 280 200" className="w-full h-full" fill="none">
+    <svg ref={svgRef} viewBox="0 -17 280 230" className="w-full h-full" fill="none">
       {/* Central AI bubble - clean circle with question/sparkle */}
       <g className="cs-bubble" transform="translate(140, 42)">
         {/* Main bubble - simple circle, no tail */}
-        <circle cx="0" cy="0" r="32" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="2"/>
+        <circle cx="0" cy="0" r="32" fill="white" stroke="#1A2D63" strokeWidth="2"/>
         {/* Question mark */}
         <text className="cs-question" x="0" y="10" textAnchor="middle" fill="#1A2D63" fontSize="32" fontWeight="300" fontFamily="Georgia, serif">?</text>
         {/* Sparkle that replaces question - clean 4-point star */}
@@ -1453,49 +1415,49 @@ const CustomerServiceIllustration = ({ progress }: { progress: number }) => {
       
       {/* Message envelopes - positioned at path ends */}
       <g className="cs-message" transform="translate(55, 125)">
-        <rect x="-11" y="0" width="22" height="16" rx="3" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-11" y="0" width="22" height="16" rx="3" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <path d="M-9,2 L0,10 L9,2" fill="none" stroke="#1A2D63" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.5"/>
       </g>
       <g className="cs-message" transform="translate(140, 125)">
-        <rect x="-11" y="0" width="22" height="16" rx="3" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-11" y="0" width="22" height="16" rx="3" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <path d="M-9,2 L0,10 L9,2" fill="none" stroke="#1A2D63" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.5"/>
       </g>
       <g className="cs-message" transform="translate(225, 125)">
-        <rect x="-11" y="0" width="22" height="16" rx="3" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="-11" y="0" width="22" height="16" rx="3" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <path d="M-9,2 L0,10 L9,2" fill="none" stroke="#1A2D63" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.5"/>
       </g>
       
       {/* Team avatars - evenly spaced at bottom */}
       {/* Left avatar */}
       <g className="cs-avatar" transform="translate(55, 168)">
-        <circle cx="0" cy="0" r="18" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <circle cx="0" cy="0" r="18" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <circle cx="0" cy="-3" r="6" fill="#1A2D63" fillOpacity="0.08" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-9,12 Q0,6 9,12" fill="none" stroke="#1A2D63" strokeWidth="1.2" strokeLinecap="round"/>
       </g>
       {/* Center avatar */}
       <g className="cs-avatar" transform="translate(140, 168)">
-        <circle cx="0" cy="0" r="18" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <circle cx="0" cy="0" r="18" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <circle cx="0" cy="-3" r="6" fill="#1A2D63" fillOpacity="0.08" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-9,12 Q0,6 9,12" fill="none" stroke="#1A2D63" strokeWidth="1.2" strokeLinecap="round"/>
       </g>
       {/* Right avatar */}
       <g className="cs-avatar" transform="translate(225, 168)">
-        <circle cx="0" cy="0" r="18" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <circle cx="0" cy="0" r="18" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         <circle cx="0" cy="-3" r="6" fill="#1A2D63" fillOpacity="0.08" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-9,12 Q0,6 9,12" fill="none" stroke="#1A2D63" strokeWidth="1.2" strokeLinecap="round"/>
       </g>
       
       {/* Check badges - positioned to upper-right of each avatar */}
       <g className="cs-check" transform="translate(70, 153)">
-        <circle cx="0" cy="0" r="8" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.2"/>
+        <circle cx="0" cy="0" r="8" fill="white" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-4,0 L-1,3 L4,-3" stroke="#1A2D63" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
       </g>
       <g className="cs-check" transform="translate(155, 153)">
-        <circle cx="0" cy="0" r="8" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.2"/>
+        <circle cx="0" cy="0" r="8" fill="white" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-4,0 L-1,3 L4,-3" stroke="#1A2D63" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
       </g>
       <g className="cs-check" transform="translate(240, 153)">
-        <circle cx="0" cy="0" r="8" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.2"/>
+        <circle cx="0" cy="0" r="8" fill="white" stroke="#1A2D63" strokeWidth="1.2"/>
         <path d="M-4,0 L-1,3 L4,-3" stroke="#1A2D63" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
       </g>
     </svg>
@@ -1548,7 +1510,7 @@ const ReportingIllustration = ({ progress }: { progress: number }) => {
   }, [progress]);
   
   return (
-    <svg ref={svgRef} viewBox="0 0 280 200" className="w-full h-full" fill="none">
+    <svg ref={svgRef} viewBox="0 15 280 170" className="w-full h-full" fill="none">
       {/* Floating data labels - positioned in orbital pattern around center */}
       {/* Top-left: Revenue */}
       <text className="rp-data rp-data-1" x="55" y="30" fill="#1A2D63" fontSize="14" fontWeight="600">€12.4k</text>
@@ -1563,7 +1525,7 @@ const ReportingIllustration = ({ progress }: { progress: number }) => {
       
 {/* Chart frame - centered and larger */}
       <g className="rp-chart-frame">
-        <rect x="45" y="45" width="190" height="115" rx="6" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+        <rect x="45" y="45" width="190" height="115" rx="6" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
         {/* Clean baseline only */}
         <line x1="60" y1="145" x2="220" y2="145" stroke="#1A2D63" strokeWidth="1" strokeOpacity="0.25"/>
         {/* Subtle horizontal gridlines */}
@@ -1587,15 +1549,15 @@ const ReportingIllustration = ({ progress }: { progress: number }) => {
       <path className="rp-line" d="M73,120 C88,115 98,108 103,108 S118,95 133,92 S148,82 163,78 S178,68 193,62" stroke="#1A2D63" strokeWidth="2" strokeLinecap="round" fill="none"/>
       
       {/* Dots on trend line at each bar */}
-      <circle className="rp-dot" cx="73" cy="120" r="3" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
-      <circle className="rp-dot" cx="103" cy="108" r="3" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
-      <circle className="rp-dot" cx="133" cy="92" r="3" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
-      <circle className="rp-dot" cx="163" cy="78" r="3" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
-      <circle className="rp-dot" cx="193" cy="62" r="3" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1.5"/>
+      <circle className="rp-dot" cx="73" cy="120" r="3" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
+      <circle className="rp-dot" cx="103" cy="108" r="3" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
+      <circle className="rp-dot" cx="133" cy="92" r="3" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
+      <circle className="rp-dot" cx="163" cy="78" r="3" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
+      <circle className="rp-dot" cx="193" cy="62" r="3" fill="white" stroke="#1A2D63" strokeWidth="1.5"/>
       
       {/* "Analyzed" Badge - top-right of chart frame */}
       <g className="rp-badge" transform="translate(175, 50)">
-        <rect x="0" y="0" width="55" height="18" rx="9" fill="#FDFBF7" stroke="#1A2D63" strokeWidth="1"/>
+        <rect x="0" y="0" width="55" height="18" rx="9" fill="white" stroke="#1A2D63" strokeWidth="1"/>
         <text x="27.5" y="12.5" textAnchor="middle" fill="#1A2D63" fontSize="9" fontWeight="500">Analyzed</text>
       </g>
     </svg>
@@ -1612,187 +1574,133 @@ const illustrationComponents: Record<string, React.FC<{ progress: number }>> = {
   'reporting': ReportingIllustration,
 };
 
-// --- Use Cases: slideshow links/rechts, pijlen + swipe (touch & muis) ---
-const SWIPE_THRESHOLD = 50;
-
-const WHEEL_THRESHOLD = 40;
-const WHEEL_NAV_COOLDOWN_MS = 400;
-
+// --- Use Cases: horizontally scrollable carousel of large cards ---
 const UseCasesSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [illustrationProgress, setIllustrationProgress] = useState(0);
-  const swipeStartRef = useRef<{ x: number; pointerId?: number } | null>(null);
-  const wheelCooldownRef = useRef(0);
-  const carouselContainerRef = useRef<HTMLDivElement>(null);
-  const TOTAL_USE_CASES = useCasesData.length;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [illustrationProgress, setIllustrationProgress] = useState(1);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragScrollLeft = useRef(0);
 
-  // Bij wissel: illustratie van 0 → 1 animeren
   useEffect(() => {
     setIllustrationProgress(0);
     const obj = { value: 0 };
     const tween = gsap.to(obj, {
       value: 1,
-      duration: 0.9,
+      duration: 1.2,
       ease: 'power2.out',
       onUpdate: () => setIllustrationProgress(obj.value),
     });
     return () => { tween.kill(); };
-  }, [activeIndex]);
-
-  const goTo = useCallback((index: number) => {
-    setActiveIndex(Math.max(0, Math.min(index, TOTAL_USE_CASES - 1)));
-  }, [TOTAL_USE_CASES]);
-
-  const handleSwipeStart = useCallback((clientX: number, pointerId?: number) => {
-    swipeStartRef.current = { x: clientX, pointerId };
   }, []);
 
-  const handleSwipeEnd = useCallback((clientX: number, pointerId?: number) => {
-    const start = swipeStartRef.current;
-    swipeStartRef.current = null;
-    if (!start || (pointerId != null && start.pointerId != null && start.pointerId !== pointerId)) return;
-    const delta = clientX - start.x;
-    if (delta > SWIPE_THRESHOLD && activeIndex > 0) goTo(activeIndex - 1);
-    else if (delta < -SWIPE_THRESHOLD && activeIndex < TOTAL_USE_CASES - 1) goTo(activeIndex + 1);
-  }, [activeIndex, goTo, TOTAL_USE_CASES]);
-
-  const activeIndexRef = useRef(activeIndex);
-  activeIndexRef.current = activeIndex;
-
   useEffect(() => {
-    const el = carouselContainerRef.current;
+    const el = scrollRef.current;
     if (!el) return;
-    const onWheel = (e: WheelEvent) => {
-      const now = Date.now();
-      if (now < wheelCooldownRef.current) return;
-      const isHorizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
-      if (!isHorizontal || Math.abs(e.deltaX) < WHEEL_THRESHOLD) return;
-      e.preventDefault();
-      wheelCooldownRef.current = now + WHEEL_NAV_COOLDOWN_MS;
-      const idx = activeIndexRef.current;
-      if (e.deltaX > 0 && idx < TOTAL_USE_CASES - 1) goTo(idx + 1);
-      else if (e.deltaX < 0 && idx > 0) goTo(idx - 1);
+    const handleScroll = () => {
+      const max = el.scrollWidth - el.clientWidth;
+      setScrollProgress(max > 0 ? el.scrollLeft / max : 0);
     };
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => el.removeEventListener('wheel', onWheel);
-  }, [goTo, TOTAL_USE_CASES]);
+    el.addEventListener('scroll', handleScroll, { passive: true });
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  const useCase = useCasesData[activeIndex];
-  const IllustrationComponent = useCase ? illustrationComponents[useCase.id] : null;
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isDragging.current = true;
+    dragStartX.current = e.pageX - el.offsetLeft;
+    dragScrollLeft.current = el.scrollLeft;
+    el.style.cursor = 'grabbing';
+    el.style.userSelect = 'none';
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging.current) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - dragStartX.current) * 1.2;
+    el.scrollLeft = dragScrollLeft.current - walk;
+  };
+
+  const stopDragging = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isDragging.current = false;
+    el.style.cursor = 'grab';
+    el.style.userSelect = '';
+  };
 
   return (
-    <section ref={sectionRef} id="use-cases" className="py-16 md:py-20 px-4 md:px-8 bg-[#FDFBF7]">
-      <div className="max-w-[720px] mx-auto">
-        <div className="text-center mb-10 md:mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
-            Praktijkvoorbeelden
-          </h2>
-          <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
-            Hoe klanten AI gebruiken
-          </p>
+    <section ref={sectionRef} id="use-cases" className="pt-8 md:pt-12 pb-4 md:pb-6 bg-[#FDFBF7]">
+      <div className="text-center mb-8 md:mb-10 px-6 md:px-12">
+        <h2 className="text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
+          Hoe wij AI inzetten voor klanten
+        </h2>
+        <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-2xl mx-auto">
+          Dit doen AI-systemen vandaag al voor bedrijven zoals die van jou.
+        </p>
+      </div>
+
+      {/* Scroll progress bar */}
+      <div className="px-6 md:px-12 mb-5 flex justify-center">
+        <div className="flex items-center gap-3 max-w-xs w-full">
+          <div className="relative flex-1 h-[5px] rounded-full bg-[#1A2D63]/15 overflow-hidden">
+            <div
+              className="absolute inset-y-0 left-0 rounded-full bg-[#1A2D63] transition-none"
+              style={{ width: `${Math.max(8, scrollProgress * 100)}%` }}
+            />
+          </div>
+          <span className="text-[11px] font-medium tracking-wide text-[#1A2D63]/50 whitespace-nowrap tabular-nums">
+            {Math.round(scrollProgress * (useCasesData.length - 1)) + 1} / {useCasesData.length}
+          </span>
         </div>
+      </div>
 
-        <div
-          ref={carouselContainerRef}
-          className="relative touch-pan-y select-none"
-          style={{ touchAction: 'pan-y' }}
-          onTouchStart={(e) => handleSwipeStart(e.touches[0].clientX)}
-          onTouchEnd={(e) => e.changedTouches[0] && handleSwipeEnd(e.changedTouches[0].clientX)}
-          onPointerDown={(e) => { e.button === 0 && handleSwipeStart(e.clientX, e.pointerId); }}
-          onPointerMove={(e) => {
-            if (e.buttons !== 1 || !swipeStartRef.current) return;
-            const start = swipeStartRef.current;
-            if (start.pointerId != null && start.pointerId !== e.pointerId) return;
-            const delta = e.clientX - start.x;
-            if (Math.abs(delta) > SWIPE_THRESHOLD) {
-              if (delta > 0 && activeIndex > 0) { goTo(activeIndex - 1); swipeStartRef.current = null; }
-              else if (delta < 0 && activeIndex < TOTAL_USE_CASES - 1) { goTo(activeIndex + 1); swipeStartRef.current = null; }
-            }
-          }}
-          onPointerUp={(e) => e.button === 0 && handleSwipeEnd(e.clientX, e.pointerId)}
-          onPointerLeave={(e) => e.buttons === 0 && (swipeStartRef.current = null)}
-          onPointerCancel={() => { swipeStartRef.current = null; }}
-        >
-          <button
-            type="button"
-            onClick={() => goTo(activeIndex - 1)}
-            disabled={activeIndex === 0}
-            aria-label="Vorige"
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/95 shadow-lg border border-[#1A2D63]/10 flex items-center justify-center text-[#1A2D63] hover:bg-white disabled:opacity-40 disabled:pointer-events-none -translate-x-2 md:-translate-x-6"
-          >
-            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
-          </button>
-          <button
-            type="button"
-            onClick={() => goTo(activeIndex + 1)}
-            disabled={activeIndex === TOTAL_USE_CASES - 1}
-            aria-label="Volgende"
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/95 shadow-lg border border-[#1A2D63]/10 flex items-center justify-center text-[#1A2D63] hover:bg-white disabled:opacity-40 disabled:pointer-events-none translate-x-2 md:translate-x-6"
-          >
-            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-          </button>
-
-          <AnimatePresence mode="wait">
-            {useCase && (
-              <motion.div
-                key={activeIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(26,45,99,0.12)] overflow-hidden"
-              >
-                <div className="h-[220px] md:h-[280px] flex items-center justify-center bg-[#FDFBF7]/50 p-4 md:p-6">
+      <div className="pt-0 pb-6">
+      <div
+        ref={scrollRef}
+        className="flex gap-6 overflow-x-auto pl-6 md:pl-12 pr-6 md:pr-12 pt-6 pb-12 snap-x snap-mandatory scrollbar-hide scroll-pl-6 md:scroll-pl-12"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch', cursor: 'grab' }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={stopDragging}
+        onMouseLeave={stopDragging}
+      >
+                {useCasesData.map((useCase) => {
+          const IllustrationComponent = illustrationComponents[useCase.id];
+          return (
+            <div
+              key={useCase.id}
+              className={"flex-shrink-0 w-[72vw] sm:w-[52vw] md:w-[34vw] lg:w-[28vw] snap-start rounded-3xl bg-white overflow-hidden shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"}
+              style={{ pointerEvents: isDragging.current ? 'none' : undefined }}
+            >
+              <div className="h-[180px] sm:h-[200px] md:h-[220px] flex items-center justify-center bg-white overflow-hidden">
+                <div className="w-full h-full translate-y-4">
                   {IllustrationComponent && (
-                    <IllustrationComponent progress={illustrationProgress} key={useCase.id} />
+                    <IllustrationComponent progress={illustrationProgress} />
                   )}
                 </div>
-                <motion.div
-                  className="p-5 md:p-8"
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                >
-                  <span className="inline-block px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[#1A2D63]/50 border border-[#1A2D63]/10 rounded-full mb-3">
-                    {useCase.categoryLabel}
-                  </span>
-                  <h3 className="font-newsreader text-xl md:text-3xl text-[#1A2D63] mb-2">
-                    {useCase.title}
-                  </h3>
-                  <p className="text-[#1A2D63]/55 text-sm md:text-lg leading-relaxed mb-4">
-                    {useCase.description}
-                  </p>
-                  <div className="inline-flex items-baseline gap-1.5 bg-[#1A2D63] text-white px-4 py-2.5 rounded-lg">
-                    <span className="font-newsreader text-xl md:text-2xl font-light">
-                      {useCase.stat.value}
-                    </span>
-                    <span className="text-white/60 text-xs md:text-sm">
-                      {useCase.stat.label}
-                    </span>
-                  </div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="flex items-center justify-center gap-3 mt-6">
-            {useCasesData.map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                onClick={() => goTo(index)}
-                aria-label={`Ga naar voorbeeld ${index + 1}`}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  index === activeIndex ? 'w-8 bg-[#1A2D63]' : 'w-2 bg-[#1A2D63]/25 hover:bg-[#1A2D63]/40'
-                }`}
-              />
-            ))}
-            <span className="ml-2 text-sm text-[#1A2D63]/50">
-              {activeIndex + 1} / {TOTAL_USE_CASES}
-            </span>
-          </div>
-        </div>
+              </div>
+              <div className="px-6 md:px-8 pt-4 md:pt-5 pb-5 md:pb-6">
+                <span className="inline-block px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-[#1A2D63]/50 border border-[#1A2D63]/10 rounded-full mb-3">
+                  {useCase.categoryLabel}
+                </span>
+                <h3 className="font-newsreader text-2xl md:text-3xl text-[#1A2D63] mb-2">
+                  {useCase.title}
+                </h3>
+                <p className="text-[#1A2D63]/65 text-base md:text-lg leading-relaxed">
+                  {useCase.description}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
       </div>
     </section>
   );
@@ -1801,24 +1709,19 @@ const UseCasesSection = () => {
 // --- How It Works Card Expansion Data ---
 const howItWorksDetails = {
   gesprek: [
-    "Grondige analyse van je huidige processen",
-    "Concrete voorstellen met voorbeelden uit jouw sector",
-    "Duidelijke ROI-berekening vooraf",
-    "Vrijblijvend en zonder verplichtingen",
+    "We tonen exact waar je vandaag tijd verliest",
+    "We identificeren wat meteen automatiseerbaar is",
+    "Je krijgt een inschatting van tijd- en omzetwinst",
   ],
   bouw: [
-    "AI-agents die 24/7 op de achtergrond werken",
-    "Naadloze integratie met CRM, e-mail, spreadsheets",
-    "Je workflow blijft ongewijzigd",
-    "Volledige automatisering van admin-taken",
-    "Feedback momenten elke paar maanden",
+    "We automatiseren offertes, opvolging, administratie en meer",
+    "We koppelen je tools zodat alles samenwerkt",
+    "Alles op maat van jouw manier van werken",
   ],
   resultaat: [
-    "Human-in-the-loop waar nodig",
-    "Schaal op zonder extra personeel",
-    "Real-time monitoring van je processen",
-    "Al je data gesynchroniseerd - geen verspreide tools",
-    "GDPR-compliant & veilige verbindingen",
+    "Je systeem werkt dag én nacht, zonder fouten",
+    "Minder manueel werk voor jou en je team",
+    "Meer omzet zonder extra personeel",
   ],
 };
 
@@ -1885,15 +1788,15 @@ const HowItWorksSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
   }, [updateLinePaths]);
 
   return (
-    <section ref={sectionRef} id="process" className="bg-[#FDFBF7] relative pt-8 md:pt-12 pb-10 md:pb-14">
+    <section ref={sectionRef} id="process" className="bg-[#FDFBF7] relative pt-8 md:pt-12 pb-0 md:pb-0">
       <div ref={pinContainerRef} className="relative">
         {/* Header */}
         <div ref={headerWrapperRef} className="pb-6 md:pb-10">
-          <div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
-            <h2 ref={headingRef} className="text-4xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
-              AI implementeren{" "}
+          <div className="max-w-[73.33rem] mx-auto px-6 md:px-12 text-center">
+            <h2 ref={headingRef} className="text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
+              Hoe wij AI{" "}
               <span className="relative inline-block">
-                <span className="relative z-10">zonder gedoe</span>
+                <span className="relative z-10">voor jou laten werken</span>
                 <svg
                   className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
                   viewBox="0 0 200 20"
@@ -1914,14 +1817,14 @@ const HowItWorksSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
               </span>
             </h2>
             <p ref={subtitleRef} className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
-              Klaar in weken, niet maanden. Zonder eigen IT-afdeling.
+              Simpel, snel, en zonder dat jij iets hoeft te leren.
             </p>
           </div>
         </div>
 
         {/* Cards Container - rises from below during Phase 3 */}
         <div ref={cardsWrapperRef} className="w-full px-6 md:px-12 pb-16 md:pb-20">
-          <div className="max-w-[1100px] mx-auto w-full">
+          <div className="max-w-[73.33rem] mx-auto w-full">
             {/* Cards Container with Connecting Lines */}
             <div ref={cardsContainerRef} className="relative mb-6 md:mb-8 overflow-visible">
 
@@ -2011,7 +1914,7 @@ const HowItWorksSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
                              shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
                 >
                   {/* Watermark number */}
-                  <div className="absolute -top-2 -left-2 md:-top-5 md:-left-3">
+                  <div className="absolute -top-4 -left-2 md:-top-5 md:-left-3">
                     <span className="font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.18] select-none">01</span>
                   </div>
 
@@ -2020,29 +1923,21 @@ const HowItWorksSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
                       <div className="w-10 h-10 rounded-2xl border-2 border-[#1A2D63]/25 bg-transparent flex items-center justify-center">
                         <MessageSquare className="w-5 h-5 text-[#1A2D63]/50" />
                       </div>
-                      <span className="text-xs font-medium text-[#1A2D63]/40 uppercase tracking-wider">30 min gratis</span>
+                      <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">30 min vrijblijvend</span>
                     </div>
 
-                    <h3 className="text-xl md:text-2xl font-semibold text-[#1A2D63] mb-2">
-                      Gesprek
+                    <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">
+                      Analyse
                     </h3>
-                    <p className="text-[#1A2D63]/60 text-[15px] leading-relaxed">
-                      We analyseren je processen en identificeren waar AI impact heeft.
-                    </p>
 
-                    {/* Card Content - Always visible */}
-                    <div className="mt-4">
-                      <div className="border-t border-[#1A2D63]/10 pt-4">
-                        <ul className="space-y-2">
-                          {howItWorksDetails.gesprek.map((point, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm text-[#1A2D63]/60">
-                              <Check className="w-4 h-4 text-[#1A2D63]/40 mt-0.5 flex-shrink-0" />
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+                    <ul className="space-y-3">
+                      {howItWorksDetails.gesprek.map((point, i) => (
+                        <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                          <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
 
@@ -2063,29 +1958,21 @@ const HowItWorksSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
                       <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1A2D63]/15 to-[#1A2D63]/5 border border-[#1A2D63]/10 flex items-center justify-center">
                         <Settings className="w-5 h-5 text-[#1A2D63]/70" />
                       </div>
-                      <span className="text-xs font-medium text-[#1A2D63]/40 uppercase tracking-wider">2-4 weken</span>
+                      <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">2–4 weken</span>
                     </div>
 
-                    <h3 className="text-xl md:text-2xl font-semibold text-[#1A2D63] mb-2">
+                    <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">
                       Bouw
                     </h3>
-                    <p className="text-[#1A2D63]/60 text-[15px] leading-relaxed">
-                      We bouwen en integreren AI op maat van jouw workflow.
-                    </p>
 
-                    {/* Card Content - Always visible */}
-                    <div className="mt-4">
-                      <div className="border-t border-[#1A2D63]/10 pt-4">
-                        <ul className="space-y-2">
-                          {howItWorksDetails.bouw.map((point, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm text-[#1A2D63]/60">
-                              <Check className="w-4 h-4 text-[#1A2D63]/40 mt-0.5 flex-shrink-0" />
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+                    <ul className="space-y-3">
+                      {howItWorksDetails.bouw.map((point, i) => (
+                        <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                          <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
 
@@ -2106,29 +1993,21 @@ const HowItWorksSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
                       <div className="w-10 h-10 rounded-2xl bg-[#1A2D63]/15 flex items-center justify-center">
                         <Rocket className="w-5 h-5 text-[#1A2D63]" />
                       </div>
-                      <span className="text-xs font-medium text-[#1A2D63]/50 uppercase tracking-wider">24/7 actief</span>
+                      <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">24/7 actief</span>
                     </div>
 
-                    <h3 className="text-xl md:text-2xl font-semibold text-[#1A2D63] mb-2">
+                    <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">
                       Resultaat
                     </h3>
-                    <p className="text-[#1A2D63]/60 text-[15px] leading-relaxed">
-                      Jij bespaart tijd, de AI doet het werk. Zonder fouten.
-                    </p>
 
-                    {/* Card Content - Always visible */}
-                    <div className="mt-4">
-                      <div className="border-t border-[#1A2D63]/10 pt-4">
-                        <ul className="space-y-2">
-                          {howItWorksDetails.resultaat.map((point, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm text-[#1A2D63]/60">
-                              <Check className="w-4 h-4 text-[#1A2D63]/40 mt-0.5 flex-shrink-0" />
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+                    <ul className="space-y-3">
+                      {howItWorksDetails.resultaat.map((point, i) => (
+                        <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                          <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -2142,7 +2021,7 @@ const HowItWorksSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
                 className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
               >
                 <Calendar className="w-5 h-5" />
-                <span>Plan een gratis gesprek</span>
+                <span>Plan een kennismakingsgesprek</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -2155,7 +2034,7 @@ const HowItWorksSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
                 className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
               >
                 <Calendar className="w-5 h-5" />
-                <span>Plan een gratis gesprek</span>
+                <span>Plan een kennismakingsgesprek</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -2218,15 +2097,13 @@ const FAQSection = () => {
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} id="faq" className="pt-16 md:pt-32 pb-12 md:pb-12 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]">
-      <div className="max-w-[800px] mx-auto">
-        <div ref={headingRef} className="text-center mb-10 md:mb-16">
-          <h2 className="font-newsreader text-[1.75rem] sm:text-3xl md:text-4xl lg:text-5xl text-[#1A2D63] mb-3 md:mb-4">
+    <section ref={sectionRef} id="faq" className="pt-8 md:pt-12 pb-8 md:pb-10 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]">
+      <div className="max-w-[53.33rem] mx-auto">
+        <div ref={headingRef} className="text-center mb-6 md:mb-10">
+          <h2 className="font-newsreader text-4xl md:text-5xl text-[#1A2D63] mb-3 md:mb-4">
             Veelgestelde vragen
           </h2>
-          <p className="text-[#1A2D63]/60 text-[15px] sm:text-base md:text-lg">
-            Alles wat je wilt weten over AI-automatisering voor je bedrijf
-          </p>
+          
         </div>
 
         <div ref={accordionRef} className="bg-white/40 md:bg-transparent rounded-2xl md:rounded-none border border-[#1A2D63]/[0.06] md:border-0 px-4 sm:px-5 md:px-0">
@@ -2238,26 +2115,29 @@ const FAQSection = () => {
               className="border-b border-[#1A2D63]/[0.08] last:border-b-0 md:last:border-b md:border-[#1A2D63]/10"
               data-faq-item
             >
-              <AccordionTrigger className="py-4 sm:py-5 md:py-6 text-left text-[#1A2D63] font-instrument text-[15px] sm:text-base md:text-lg font-medium hover:no-underline hover:text-[#475D8F] transition-colors [&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-5 sm:[&>svg]:w-5 [&>svg]:text-[#475D8F] [&>svg]:shrink-0 [&>svg]:ml-3 gap-2">
+              <AccordionTrigger className="py-4 sm:py-5 md:py-6 text-left text-[#1A2D63] font-instrument text-base sm:text-lg md:text-xl font-medium hover:no-underline hover:text-[#475D8F] transition-colors [&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-5 sm:[&>svg]:w-5 [&>svg]:text-[#475D8F] [&>svg]:shrink-0 [&>svg]:ml-3 gap-2">
                 {item.question}
               </AccordionTrigger>
-              <AccordionContent className="text-[#1A2D63]/60 text-[14px] sm:text-[15px] md:text-base leading-relaxed pb-4 sm:pb-5 md:pb-6 space-y-3">
+              <AccordionContent className="text-[#1A2D63]/65 text-[15px] sm:text-base md:text-[17px] leading-[1.7] pb-5 sm:pb-6 md:pb-7 space-y-3.5">
                 {item.answer.map((block, i) => {
                   if (block.type === "p") {
                     return <p key={i}>{block.text}</p>;
                   }
                   if (block.type === "heading") {
                     return (
-                      <p key={i} className="font-medium text-[#1A2D63]/80 mt-4 first:mt-0">
+                      <p key={i} className="font-semibold text-[#1A2D63]/85 mt-5 first:mt-0 text-[15px] sm:text-base md:text-[17px]">
                         {block.text}
                       </p>
                     );
                   }
                   if (block.type === "list") {
                     return (
-                      <ul key={i} className="list-disc pl-5 space-y-1.5">
+                      <ul key={i} className="space-y-2 pl-1">
                         {block.items.map((entry, j) => (
-                          <li key={j}>{entry}</li>
+                          <li key={j} className="flex items-start gap-2.5">
+                            <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-[#1A2D63]/30 flex-shrink-0" />
+                            <span>{entry}</span>
+                          </li>
                         ))}
                       </ul>
                     );
@@ -2289,6 +2169,11 @@ export function AIDesignLanding() {
   // Navigate to section: instant overlay → jump → smooth reveal
   const overlayRef = useRef<HTMLDivElement>(null);
   const navigateToSection = useCallback((sectionId: string) => {
+    if (sectionId === "contact") {
+      window.location.href = "/plan-gesprek";
+      return;
+    }
+
     // Phase 1: instantly show overlay (no transition) — covers everything including mobile menu
     const overlay = overlayRef.current;
     if (overlay) {
@@ -2381,7 +2266,7 @@ export function AIDesignLanding() {
       }
 
       // Determine active section based on scroll position
-      const sectionIds = ["process", "use-cases", "faq"];
+      const sectionIds = ["recognition", "process", "use-cases", "faq", "contact"];
       let current = "";
       for (const id of sectionIds) {
         const el = document.getElementById(id);
@@ -2417,7 +2302,7 @@ export function AIDesignLanding() {
         }}
       >
         <div
-          className="max-w-[1400px] mx-auto flex items-center justify-between px-4 sm:px-6 relative"
+          className="max-w-[93.33rem] mx-auto flex items-center justify-between px-4 sm:px-6 relative"
           style={{
             paddingTop: `${12 + (1 - navScrollProgress) * 12}px`,
             paddingBottom: `${12 + (1 - navScrollProgress) * 12}px`,
@@ -2425,13 +2310,13 @@ export function AIDesignLanding() {
           }}
         >
           <div className="flex items-center gap-3">
-            {/* Mobile logo - smaller */}
+            {/* Mobile logo */}
             <img
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
               onClick={() => navigateToSection("hero")}
               style={{
-                height: `${20 + (1 - navScrollProgress) * 6}px`,
+                height: `${24 + (1 - navScrollProgress) * 6}px`,
                 transition: 'height 0.3s',
                 cursor: 'pointer',
               }}
@@ -2443,7 +2328,7 @@ export function AIDesignLanding() {
               alt="Finit Logo"
               onClick={() => navigateToSection("hero")}
               style={{
-                height: `${28 + (1 - navScrollProgress) * 12}px`,
+                height: `${32 + (1 - navScrollProgress) * 14}px`,
                 transition: 'height 0.3s',
                 cursor: 'pointer',
               }}
@@ -2453,14 +2338,16 @@ export function AIDesignLanding() {
 
           <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
             {[
+              { label: "Herken jij dit?", id: "recognition" },
               { label: "Ons proces", id: "process" },
-              { label: "Praktijkvoorbeelden", id: "use-cases" },
+              { label: "Voorbeelden", id: "use-cases" },
               { label: "FAQ", id: "faq" },
+              { label: "Contact", id: "contact" },
             ].map((item) => (
               <button
                 key={item.id}
                 onClick={() => navigateToSection(item.id)}
-                className={`text-sm font-medium transition-colors ${
+                className={`text-base font-medium transition-colors ${
                   activeSection === item.id
                     ? 'text-[#1A2D63]'
                     : 'text-[#1A2D63]/60 hover:text-[#1A2D63]'
@@ -2490,7 +2377,7 @@ export function AIDesignLanding() {
             }}
             >
               <Calendar className="w-4 h-4" />
-              <span>Plan een gesprek</span>
+              <span>Plan een kennismakingsgesprek</span>
             </button>
 
           {/* Mobile CTA + hamburger */}
@@ -2505,17 +2392,17 @@ export function AIDesignLanding() {
                 });
               }}
               className="flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-xs font-medium px-3.5 py-2 transition-opacity duration-300"
-              style={{ opacity: navScrollProgress, pointerEvents: navScrollProgress > 0.5 ? 'auto' : 'none' }}
+              style={{ opacity: mobileMenuOpen ? 0 : navScrollProgress, pointerEvents: !mobileMenuOpen && navScrollProgress > 0.5 ? 'auto' : 'none' }}
             >
               <Calendar className="w-3.5 h-3.5" />
               <span>Plan een gesprek</span>
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="flex items-center justify-center w-9 h-9 rounded-full text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-colors"
+              className="flex items-center justify-center w-11 h-11 rounded-full text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-colors"
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
             </button>
           </div>
         </div>
@@ -2538,62 +2425,111 @@ export function AIDesignLanding() {
             className="absolute inset-0 bg-[#FDFBF7]/95 backdrop-blur-xl"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="relative z-10 flex flex-col items-center justify-center h-full gap-10 px-8">
-            {[
-              { label: "Ons proces", id: "process" },
-              { label: "Praktijkvoorbeelden", id: "use-cases" },
-              { label: "FAQ", id: "faq" },
-            ].map((item) => (
+          <div className="relative z-10 flex flex-col h-full pt-24 pb-8 px-6">
+            {/* Top: CTA + phone */}
+            <div className="flex flex-col gap-4 mb-8">
               <button
-                key={item.id}
-                onClick={() => navigateToSection(item.id)}
-                className="text-3xl sm:text-4xl font-newsreader text-[#1A2D63] hover:text-[#475D8F] transition-colors"
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openForm();
+                  pushEvent("cta_click", {
+                    cta_label: "mobile_nav_calendly",
+                    location: "mobile_nav",
+                  });
+                }}
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium"
               >
-                {item.label}
+                <Calendar className="w-4 h-4" />
+                Plan een kennismakingsgesprek
               </button>
-            ))}
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                openForm();
-                pushEvent("cta_click", {
-                  cta_label: "mobile_nav_calendly",
-                  location: "mobile_nav",
-                });
-              }}
-              className="mt-4 inline-flex items-center gap-2 bg-[#1A2D63] text-white px-7 py-3 rounded-full text-base font-medium"
-            >
-              <Calendar className="w-4 h-4" />
-              Plan een gesprek
-                  </button>
-                </div>
+              <div className="w-full bg-white rounded-2xl px-6 py-5 border border-[#1A2D63]/[0.06] shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] flex flex-col items-center gap-2 text-center">
+                <p className="text-[#475D8F]/70 text-xs font-instrument tracking-widest uppercase">Bel gerust op</p>
+                <a
+                  href="tel:+32495702314"
+                  className="font-newsreader text-[#1A2D63] text-3xl leading-tight underline underline-offset-4 decoration-[#1A2D63]/20 hover:decoration-[#1A2D63]/60 hover:text-[#2A4488] transition-colors"
+                  onClick={() => pushEvent("contact_click", { method: "phone", location: "mobile_menu" })}
+                >
+                  +32 495 70 23 14
+                </a>
+                <p className="text-[#475D8F] text-sm font-instrument">
+                  ma-za · 8u30-19u
+                </p>
               </div>
+            </div>
+
+            {/* Middle: Nav links */}
+            <div className="flex-1">
+              <div className="border-t border-[#1A2D63]/10">
+                {[
+                  { label: "Home", id: "hero" },
+                  { label: "Herken jij dit?", id: "recognition" },
+                  { label: "Ons proces", id: "process" },
+                  { label: "Voorbeelden", id: "use-cases" },
+                  { label: "FAQ", id: "faq" },
+                  { label: "Contact", id: "contact" },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => navigateToSection(item.id)}
+                    className="flex items-center justify-between w-full py-4 border-b border-[#1A2D63]/10 text-[#1A2D63] hover:text-[#475D8F] transition-colors"
+                  >
+                    <span className="text-lg font-medium">{item.label}</span>
+                    <ChevronRight className="w-5 h-5 text-[#1A2D63]/30" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom: Email */}
+            <div className="flex items-center justify-center gap-2 text-[#1A2D63]/60 text-sm pt-4">
+              <Mail className="w-4 h-4" />
+              <a href="mailto:contact@finitsolutions.be" className="hover:text-[#1A2D63] transition-colors">
+                contact@finitsolutions.be
+              </a>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* ============================================ */}
-      {/* HERO SECTION - Keep animation, update copy  */}
+      {/* HERO SECTION                                */}
       {/* ============================================ */}
-      <header ref={heroRef} className="relative min-h-screen max-w-[100vw] mx-auto flex flex-col justify-center overflow-hidden">
+      <header ref={heroRef} className="relative max-w-[100vw] mx-auto flex flex-col">
 
-        {/* Floating Logo Carousel - Background animation */}
-        <LogoCarousel carouselRef={logoCarouselRef} />
-
-        {/* Desktop layout: centered flex */}
-        <div className="hidden md:flex container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 items-center justify-center min-h-screen pt-0 pb-0 w-full relative z-10">
+        {/* Desktop layout */}
+        <div className="hidden md:flex container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 items-center justify-center pt-28 lg:pt-32 pb-8 w-full relative z-10">
           <div ref={heroTextRef} className="relative z-10 text-center max-w-3xl">
-            <div className="mb-8">
-              <h1 className="font-newsreader text-6xl lg:text-[4.25rem] xl:text-[4.75rem] leading-[1] tracking-tight text-[#1A2D63]">
-                <span className="block font-extralight">Automatiseer</span>
-                <TypewriterText />
+            <div className="mb-6">
+              <h1 className="font-newsreader text-5xl lg:text-6xl xl:text-[4.25rem] leading-[1.1] tracking-tight text-[#1A2D63]">
+                AI-systemen die 24/7{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">voor je werken.</span>
+                  <svg
+                    className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
+                    viewBox="0 0 200 20"
+                    preserveAspectRatio="none"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3 14 Q40 4 100 12 Q160 18 197 8"
+                      stroke="#1A2D63"
+                      strokeOpacity="0.15"
+                      strokeWidth="10"
+                      strokeLinecap="round"
+                      fill="none"
+                    />
+                  </svg>
+                </span>
               </h1>
             </div>
 
-            <p className="font-instrument md:text-lg text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-8">
-            AI op maat, perfect geïntegreerd in je bestaande tools, klaar om werk over te nemen terwijl jij je focus op groei kunt richten.
+            <p className="font-instrument text-lg lg:text-xl text-[#475D8F] leading-relaxed max-w-2xl mx-auto mb-8">
+              Finit helpt KMO's de stap richting AI te zetten — praktisch, zonder technisch gedoe en met échte tijdswinst.
             </p>
 
-            <div className="flex flex-row items-center justify-center gap-3">
+            <div className="flex flex-row items-center justify-center gap-3 mb-6">
               <button
                 type="button"
                 onClick={() => {
@@ -2603,35 +2539,69 @@ export function AIDesignLanding() {
                     location: "hero",
                   });
                 }}
-                className="group bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
+                className="group bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Plan een gratis consult</span>
+                <span>Plan een kennismakingsgesprek</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <span className="text-xs uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
+              <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-7 w-auto object-contain" />
+              <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-7 w-auto object-contain" />
+            </div>
+
+            {/* 3 value bullets */}
+            <div className="flex flex-row items-start justify-center gap-8 text-[#1A2D63]/70 text-base max-w-4xl mx-auto">
+              <span className="flex items-center gap-2.5 min-w-[16rem]">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Nooit ziek. Nooit op vakantie. Altijd aan het werk.
+              </span>
+              <span className="flex items-center gap-2.5 min-w-[16rem]">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Een fractie van de kost van een echte werknemer.
+              </span>
+              <span className="flex items-center gap-2.5 min-w-[16rem]">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Automatische offertes, mails, opvolging en meer.
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Mobile layout: h1 in flow, subtitle+CTA+carousel pinned to bottom */}
-        <div className="md:hidden relative z-10 min-h-[calc(100svh-64px)] px-4 sm:px-6">
-          {/* Typewriter heading - centered in viewport, unaffected by bottom section */}
-          <div className="flex items-center justify-center min-h-[calc(100svh-64px)] pt-20 pb-[28rem]">
-            <div className="text-center max-w-[22rem] sm:max-w-[28rem] px-2 sm:px-0">
-              <h1 className="font-newsreader text-5xl leading-[1] tracking-tight text-[#1A2D63]">
-                <span className="block font-extralight">Automatiseer</span>
-                <TypewriterText />
-              </h1>
-            </div>
-          </div>
+        {/* Mobile layout */}
+        <div className="md:hidden relative z-10 px-4 sm:px-6 pt-28 pb-6">
+          <div className="text-center max-w-[22rem] sm:max-w-[28rem] mx-auto">
+            <h1 className="font-newsreader text-[2.5rem] sm:text-5xl leading-[1.1] tracking-tight text-[#1A2D63] mb-5">
+              AI-systemen die 24/7{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10">voor je werken.</span>
+                <svg
+                  className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
+                  viewBox="0 0 200 20"
+                  preserveAspectRatio="none"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 14 Q40 4 100 12 Q160 18 197 8"
+                    stroke="#1A2D63"
+                    strokeOpacity="0.15"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                </svg>
+              </span>
+            </h1>
 
-          {/* Absolutely positioned bottom section - never moves */}
-          <div className="absolute bottom-4 left-4 right-4 sm:left-6 sm:right-6 text-center max-w-[22rem] sm:max-w-[28rem] mx-auto">
-            <p className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-5">
-            AI op maat, perfect geïntegreerd in je bestaande tools, klaar om werk over te nemen terwijl jij je focus op groei kunt richten.
+            <p className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-6">
+            Finit helpt KMO's de stap richting AI te zetten — praktisch, zonder technisch gedoe en met échte tijdswinst.
             </p>
 
-            <div className="flex flex-col items-center justify-center gap-3">
+            <div className="flex flex-col items-center justify-center gap-3 mb-5">
               <button
                 type="button"
                 onClick={() => {
@@ -2641,25 +2611,85 @@ export function AIDesignLanding() {
                     location: "hero",
                   });
                 }}
-                className="group w-full bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
+                className="group w-full bg-[#1A2D63] text-white px-6 py-3.5 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Plan een gratis consult</span>
+                <span>Plan een kennismakingsgesprek</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
 
-            <p className="mt-4 text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#475D8F]/70">
-              Integraties met je tools
-            </p>
-            <MobileLogoCarousel />
+            <div className="flex items-center justify-center gap-2.5 mb-5">
+              <span className="text-[10px] uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
+              <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-5 w-auto object-contain" />
+              <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-5 w-auto object-contain" />
+            </div>
+
+            {/* 3 value bullets */}
+            <div className="flex flex-col items-start gap-2.5 text-[#1A2D63]/70 text-sm mx-auto w-fit max-w-[26rem] sm:max-w-[30rem]">
+              <span className="flex items-center gap-2.5 text-left">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Nooit ziek. Nooit op vakantie. Altijd aan het werk.
+              </span>
+              <span className="flex items-center gap-2.5 text-left">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Een fractie van de kost van een echte werknemer.
+              </span>
+              <span className="flex items-center gap-2.5 text-left">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Automatische offertes, mails, opvolging en meer.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Logo carousel with subtle curve - Desktop */}
+        <div className="hidden lg:block relative pt-0 pb-6 md:pt-0 md:pb-8 overflow-visible">
+          <p className="text-center text-xs uppercase tracking-[0.18em] text-[#475D8F]/80 mb-4 relative z-10">
+            We integreren met al je tools:
+          </p>
+          <div className="relative h-[8rem] overflow-visible">
+            <LogoCarousel
+              className="logo-carousel absolute inset-0 pointer-events-none overflow-visible block"
+              logoSize={64}
+              logos={integrationLogos}
+              svgTopPercent={50}
+              spacingMultiplier={1}
+              pathD="M -400,500 C 100,470 400,430 800,450 C 1200,470 1600,520 2000,420"
+              durationSeconds={70}
+            />
+          </div>
+        </div>
+
+        {/* Logo carousel with subtle curve - Mobile/Tablet */}
+        <div className="block lg:hidden relative pt-0 pb-4 overflow-visible">
+          <p className="text-center text-xs uppercase tracking-[0.18em] text-[#475D8F]/80 mt-4 mb-4 relative z-10">
+            We integreren met al je tools:
+          </p>
+          <div className="relative h-[6.67rem] -mt-2 overflow-visible">
+            <LogoCarousel
+              className="logo-carousel absolute inset-0 pointer-events-none overflow-visible block"
+              logoSize={48}
+              logos={integrationLogos}
+              svgTopPercent={35}
+              spacingMultiplier={1}
+              pathD="M -800,500 C -200,450 300,520 800,490 C 1300,460 1800,530 2400,410"
+              durationSeconds={55}
+            />
           </div>
         </div>
 
       </header>
 
       {/* ============================================ */}
-      {/* HOW IT WORKS SECTION - Enhanced 3 Steps      */}
+      {/* RECOGNITION SECTION - flows directly from hero */}
+      {/* ============================================ */}
+      <RecognitionSection onCtaClick={openForm} />
+
+      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={0} />
+
+      {/* ============================================ */}
+      {/* HOW IT WORKS SECTION                        */}
       {/* ============================================ */}
       <HowItWorksSection onCtaClick={openForm} />
 
@@ -2680,30 +2710,17 @@ export function AIDesignLanding() {
       {/* ============================================ */}
       {/* SECONDARY CTA SECTION                       */}
       {/* ============================================ */}
-      <section ref={secondaryCTARef} id="contact" className="pt-8 md:pt-12 pb-20 md:pb-32 px-6 md:px-12 bg-[#FDFBF7] relative">
-        <div className="max-w-[800px] mx-auto">
+      <section ref={secondaryCTARef} id="contact" className="pt-6 md:pt-8 pb-12 md:pb-20 px-6 md:px-12 bg-[#FDFBF7] relative">
+        <div className="max-w-[53.33rem] mx-auto">
           <div className="relative">
             <div className="absolute inset-0 bg-[#B8C5E6] rounded-full blur-[120px] opacity-30"></div>
-            <div className="relative bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-[#1A2D63]/10 text-center">
-              <h2 className="font-newsreader text-3xl md:text-4xl lg:text-5xl text-[#1A2D63] mb-4">
-                Klaar om te ontdekken wat AI voor jou kan doen?
+            <div className="relative bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-[#1A2D63]/10 text-center flex flex-col items-center gap-6">
+              <h2 className="font-newsreader text-4xl md:text-5xl text-[#1A2D63]">
+                Ontdek wat AI jouw bedrijf oplevert
               </h2>
-              <p className="text-[#1A2D63]/60 text-lg mb-8">30 minuten, gratis, geen verplichtingen</p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-                {[
-                  'Analyse van je processen',
-                  'Automatiseringskansen',
-                  'Concreet plan',
-                  'ROI inschatting'
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-2 text-sm text-[#1A2D63]">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-
+              <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
+                In 30 minuten bespreken we je huidige situatie en maken we een inschatting van wat mogelijk is.
+              </p>
               <button
                 type="button"
                 onClick={() => {
@@ -2716,10 +2733,12 @@ export function AIDesignLanding() {
                 className="inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
               >
                 <Calendar className="w-5 h-5 md:w-6 md:h-6" />
-                Plan je gratis gesprek
+                Plan een kennismakingsgesprek
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
               </button>
-
+              <p className="text-sm text-[#1A2D63]/40">
+                We werken met een beperkt aantal bedrijven tegelijk.
+              </p>
             </div>
           </div>
         </div>
@@ -2728,7 +2747,7 @@ export function AIDesignLanding() {
       {/* ============================================ */}
       {/* FOOTER                                      */}
       {/* ============================================ */}
-      <footer className="bg-[#1A2D63] text-white pt-16 md:pt-20 pb-12 md:pb-16 px-6 relative overflow-visible mt-16 md:mt-20 lg:mt-24">
+      <footer className="bg-[#1A2D63] text-white pt-0 md:pt-0 pb-6 md:pb-8 px-6 relative overflow-visible mt-16 md:mt-20 lg:mt-24">
         {/* SVG Wave */}
         <div className="absolute top-0 left-0 w-full" style={{ transform: 'translateY(-99%)' }}>
           <svg
@@ -2745,15 +2764,15 @@ export function AIDesignLanding() {
           </svg>
         </div>
 
-        <div className="max-w-[1400px] mx-auto relative z-10">
+        <div className="max-w-[93.33rem] mx-auto relative z-10">
           <div className="grid gap-10 lg:gap-12 lg:grid-cols-[1.3fr_1fr] items-start">
           {/* Footer CTA */}
             <div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-newsreader leading-tight mb-4 text-center lg:text-left">
-                Klaar om uw bedrijf <br />te automatiseren?
+              <h2 className="text-4xl md:text-5xl font-newsreader leading-tight mb-4 text-center lg:text-left">
+                Ontdek wat AI jouw bedrijf oplevert
               </h2>
               <p className="text-white/70 text-base md:text-lg mb-6 max-w-md text-center lg:text-left mx-auto lg:mx-0">
-                Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
+              In 30 minuten bespreken we je huidige situatie en maken we een inschatting van wat mogelijk is.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
                 <button
@@ -2768,7 +2787,7 @@ export function AIDesignLanding() {
                   className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
                 >
                   <Calendar className="w-4 h-4" />
-                  Plan een gesprek
+                  Plan een kennismakingsgesprek
                 </button>
                 <a
                   href="mailto:contact@finitsolutions.be"
@@ -2793,8 +2812,8 @@ export function AIDesignLanding() {
                 <li className="flex items-start gap-3">
                   <Phone className="w-4 h-4 text-white/70 mt-0.5" />
                   <div className="flex flex-col">
-                    <span>+32 (0)495 702 314</span>
-                    <span>+32 (0)468 029 945</span>
+                    <a href="tel:+32495702314" className="hover:text-white transition-colors" onClick={() => pushEvent("contact_click", { method: "phone", location: "footer" })}>+32 495 70 23 14</a>
+                    <a href="tel:+32468029945" className="hover:text-white transition-colors" onClick={() => pushEvent("contact_click", { method: "phone", location: "footer" })}>+32 468 02 99 45</a>
                 </div>
                 </li>
                 <li className="flex items-center gap-3">
@@ -2834,7 +2853,7 @@ export function AIDesignLanding() {
           </div>
 
           {/* Footer Bottom */}
-          <div className="mt-10 pt-6 border-t border-white/10 flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:justify-between md:text-left">
+          <div className="mt-8 pt-4 border-t border-white/10 flex flex-col items-center gap-4 text-center md:flex-row md:items-center md:justify-between md:text-left">
             <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-white/60">
               <img
                 src="/Finit Logo Blue@4x.png"

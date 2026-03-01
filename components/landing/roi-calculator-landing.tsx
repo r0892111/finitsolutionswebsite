@@ -10,22 +10,28 @@ import {
   ArrowRight,
   Calendar,
   Check,
-  Zap,
-  TrendingUp,
-  UserMinus,
-  XCircle,
-  Sparkles,
   Clock,
-  Target,
-  Shield,
+  TrendingUp,
+  XCircle,
   Mail,
   Phone,
   Linkedin,
+  MessageSquare,
+  Settings,
+  Rocket,
   type LucideIcon,
 } from "lucide-react";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
 import { useContactForm, ContactFormPopup } from "@/components/contact-form-popup";
+import { LandingCTA } from "@/components/landing/landing-cta";
+import { LandingFooter } from "@/components/landing/landing-footer";
 import { pushEvent } from "@/lib/analytics";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 // ============================================
 // DATA
@@ -64,6 +70,198 @@ const integrationLogos = [
   { name: "DocuSign", logo: "/docusign.svg" },
 ];
 
+interface PainPoint {
+  icon: LucideIcon;
+  text: string;
+}
+
+const painPoints: PainPoint[] = [
+  { icon: Clock, text: "Je team besteedt uren per week aan repetitieve taken" },
+  { icon: TrendingUp, text: "Je weet dat het efficienter kan, maar niet hoeveel je echt bespaart" },
+  { icon: XCircle, text: "Je mist omzet door trage opvolging en handmatig werk" },
+];
+
+const howItWorksDetails = {
+  analyse: [
+    "We tonen exact waar je vandaag tijd verliest",
+    "We identificeren wat meteen automatiseerbaar is",
+    "Je krijgt een inschatting van tijd- en omzetwinst",
+  ],
+  bouw: [
+    "We automatiseren offertes, opvolging en/of administratie",
+    "We koppelen je tools zodat alles samenwerkt",
+    "Alles op maat van jouw manier van werken",
+  ],
+  resultaat: [
+    "Offertes worden automatisch verstuurd en opgevolgd",
+    "Minder manueel werk voor jou en je team",
+    "Meer omzet zonder extra personeel",
+  ],
+};
+
+// --- FAQ Data ---
+type FaqBlock = { type: "p"; text: string } | { type: "list"; items: string[] } | { type: "heading"; text: string };
+
+const faqItems: { question: string; answer: FaqBlock[] }[] = [
+  {
+    question: "Welke processen kunnen jullie automatiseren?",
+    answer: [
+      { type: "p", text: "De vuistregel: doet je team het nu handmatig, en volgt het vaste stappen? Dan kunnen wij het overnemen." },
+      { type: "heading", text: "Enkele succesverhalen bij onze klanten:" },
+      { type: "heading", text: "1 – E-commerce" },
+      { type: "p", text: "Een webshop kreeg dagelijks 50 klantemails over bestellingen, leveringen en retouren — allemaal handmatig beantwoord. We koppelden zijn mailbox aan webshop en zijn kennisbank. Zijn AI-systeem beantwoordt klantemails automatisch, zet bestellingen klaar in de webshop en schakelt alleen een echte medewerker in als de vraag te complex is." },
+      { type: "p", text: "→ Resultaat: van 50 naar 5 mails per dag." },
+      { type: "heading", text: "2 – Gidsbedrijf" },
+      { type: "p", text: "Een bedrijf met 20 gidsen verwerkte alle boekingen handmatig via website, WhatsApp en mail. We bouwden één AI-systeem: boekingen komen binnen, de juiste gids wordt gecontacteerd en ingepland, klant en gids krijgen automatisch een bevestiging en facturen worden automatisch opgesteld." },
+      { type: "p", text: "→ Resultaat: geen administratie meer, volledige focus op ondernemen." },
+      { type: "heading", text: "3 – Recruitmentbureau" },
+      { type: "p", text: "Een recruitmentbureau verwerkte sollicitaties handmatig: cv's lezen, kandidaten mailen, plannen. Zijn AI-systeem screent binnenkomende cv's, plant automatisch een kennismakingsgesprek in en houdt kandidaten op de hoogte." },
+      { type: "p", text: "→ Resultaat: van dagen wachten naar same-day opvolging, zonder extra personeel." },
+      { type: "p", text: "Jij kent je bedrijf, wij de technologie. Tijdens een analysegesprek denken we actief met je mee om samen te kijken waar de opportuniteiten liggen." },
+    ],
+  },
+  {
+    question: "Werkt dit samen met onze bestaande software?",
+    answer: [
+      { type: "p", text: "Ja, juist daarom bouwen we automatiseringen — we verbinden je bestaande tools met elkaar." },
+      { type: "heading", text: "Types software waar we mee werken:" },
+      { type: "list", items: [
+        "CRM-systemen (Teamleader, HubSpot, Salesforce, ...)",
+        "Boekhoudpakketten (Exact Online, Yuki, ...)",
+        "E-mail & marketingplatformen (Gmail, Outlook, Mailchimp, ...)",
+        "Cloud-opslag (Google Drive, OneDrive, Dropbox, ...)",
+        "Betalingsplatformen (Stripe, Mollie, PayPal, ...)",
+        "Projectmanagement tools (Monday, Asana, Trello, ...)",
+        "Communicatie (Slack, Microsoft Teams, ...)",
+        "En 500+ andere via standaard koppelingen",
+      ]},
+      { type: "heading", text: "Hoe we koppelen" },
+      { type: "p", text: "Als je software een API heeft (vrijwel alle moderne systemen sinds 2015), kunnen we het koppelen. Obscure of minder courante software? Zolang het een koppelingsmogelijkheid heeft, lukt het waarschijnlijk." },
+      { type: "heading", text: "Geen API?" },
+      { type: "p", text: "Dan zoeken we een workaround via e-mail, geëxporteerde bestanden, of webhooks. In 95% van de gevallen vinden we een oplossing." },
+      { type: "p", text: "Je hoeft geen nieuwe software aan te schaffen. We werken met wat je al hebt en laten die systemen samenwerken." },
+      { type: "p", text: "Onzeker of jullie tools compatibel zijn? Stuur ons de lijst, dan checken we het vooraf — gratis en zonder verplichtingen." },
+    ],
+  },
+  {
+    question: "Wat kost AI-automatisering voor mijn bedrijf?",
+    answer: [
+      { type: "p", text: "Minder dan een halftijdse medewerker inhuren, maar dan werkt het 24/7, maakt geen fouten en is nooit ziek." },
+      { type: "p", text: "Concreet voorbeeld: als je team 10 uur per week kwijt is aan handmatige taken, kost dat je €15.000–20.000 per jaar. Een automatisering van €5.000–8.000 verdient zichzelf terug in 3 tot 6 maanden." },
+      { type: "p", text: "En daarna blijft het werken — jaar na jaar, met minimale extra kosten." },
+      { type: "p", text: "Na een gratis kennismakingsgesprek krijg je een vaste prijs. Geen verrassingen achteraf." },
+    ],
+  },
+  {
+    question: "Is dit niet te duur voor een KMO van onze grootte?",
+    answer: [
+      { type: "p", text: "Juist voor KMO's is dit interessant. Grote bedrijven hebben IT-afdelingen; jij betaalt voor repetitief werk dat een systeem kan overnemen." },
+      { type: "p", text: "Te klein om te starten? We bouwen ook graag gefaseerd: start met één proces, breid later uit als je de waarde ziet." },
+      { type: "p", text: "De investering is vergelijkbaar met professionele software, maar dan specifiek gebouwd voor jouw processen." },
+    ],
+  },
+  {
+    question: "Hoeveel tijd besparen we hier realistisch mee?",
+    answer: [
+      { type: "p", text: "Tussen de 80% en 100% van de tijd op dat specifieke proces." },
+      { type: "heading", text: "Waarom zo hoog?" },
+      { type: "p", text: "Simpel: wij adviseren geen automatiseringen met lage ROI. Als een proces maar 30–40% efficiëntiewinst oplevert, zeggen we eerlijk dat het de investering niet waard is." },
+      { type: "heading", text: "Concrete voorbeelden" },
+      { type: "list", items: [
+        "Lead management: Nu 6 uur/week → na automatisering: 0 uur. Volledige besparing.",
+        "Offerte-proces: Nu 45 min per offerte (8x/week) → na automatisering: 10 min. Besparing: 4,5 uur/week.",
+        "Data synchronisatie: Nu 20 min per nieuwe klant → na automatisering: 0 min, gebeurt direct.",
+      ]},
+      { type: "heading", text: "Meer dan alleen uren" },
+      { type: "list", items: [
+        "Lead om 18:00u binnen? Binnen 2 minuten beantwoord, ook buiten kantooruren.",
+        "Follow-ups: 0% gemist, alles gebeurt automatisch op tijd.",
+        "Fouten: 0 typefouten, data altijd consistent.",
+        "Teammoraal: minder frustratie over administratie, meer tijd voor klanten.",
+      ]},
+      { type: "p", text: "Twijfel of jouw proces geschikt is? Beschrijf het, dan zijn we eerlijk of de ROI er is." },
+    ],
+  },
+  {
+    question: "Hoe lang duurt het voor de automatisering live staat?",
+    answer: [
+      { type: "p", text: "Totaal traject: 4–10 weken, afhankelijk van complexiteit." },
+      { type: "heading", text: "Fase 1 – Analyse (1 week)" },
+      { type: "p", text: "Samen analyseren we je processen. We starten snel op, geen maanden voorbereiding." },
+      { type: "heading", text: "Fase 2 – Building (2–6 weken)" },
+      { type: "p", text: "We bouwen en testen de automatisering. Je ziet tussentijds al resultaten." },
+      { type: "heading", text: "Fase 3 – Hypercare (2–4 weken)" },
+      { type: "p", text: "Het systeem is live en jullie gebruiken het. Wij monitoren intensief en lossen direct op als er iets niet perfect loopt. Pas als het 100% stabiel draait, ronden we af." },
+      { type: "p", text: "Onze hypercare-fase is cruciaal: theorie vs. praktijk kan verschillen, en wij blijven erbij tot het écht werkt voor jouw team." },
+    ],
+  },
+  {
+    question: "Moet mijn team hiervoor geschoold worden?",
+    answer: [
+      { type: "p", text: "Minimale onboarding, geen intensieve training." },
+      { type: "p", text: "Jouw team hoeft geen technische kennis te hebben. Wat ze wél moeten weten:" },
+      { type: "list", items: [
+        "Hoe triggert de automatisering? (bijv. lead toevoegen in CRM)",
+        "Wat gebeurt er automatisch? (zodat ze niet dubbel werk doen)",
+        "Waar zien ze de output? (bijv. taken verschijnen in hun inbox)",
+      ]},
+      { type: "heading", text: "We begeleiden dit met:" },
+      { type: "list", items: [
+        "Praktische walkthrough tijdens de hypercare-fase",
+        "Korte handleiding (geen 50-paginahandboeken)",
+        "Support gedurende 2–4 weken terwijl ze wennen",
+      ]},
+      { type: "p", text: "De grootste uitdaging? Niet zozeer \"leren gebruiken\", maar eerder \"vertrouwen dat het werkt en oude gewoontes loslaten\". Daar helpen we actief bij." },
+    ],
+  },
+  {
+    question: "Wat als er iets misloopt met de automatisering?",
+    answer: [
+      { type: "p", text: "Elke oplossing heeft een test- en integratieperiode. Tijdens de hypercare kijken we aandachtig mee naar alle handelingen. Pas als alles perfect verloopt, ronden we af." },
+      { type: "p", text: "Na aflevering laten we je niet in de steek. Elke oplossing bevat ingebouwde monitoring. Wij worden onmiddellijk verwittigd als er iets hapert." },
+      { type: "p", text: "Bug? Gratis. API veranderd? Gratis. Onze verantwoordelijkheid, niet de jouwe." },
+    ],
+  },
+  {
+    question: "Wat gebeurt er als we later willen uitbreiden?",
+    answer: [
+      { type: "p", text: "Uitbreiden is makkelijk — en dat adviseren we vaak bewust." },
+      { type: "heading", text: "Typisch groeipad:" },
+      { type: "list", items: [
+        "Fase 1 (maand 1–3): start met één high-impact proces, bijv. leadmanagement",
+        "Fase 2 (maand 4–9): volgend proces erbij, bijv. offerteproces",
+        "Fase 3 (jaar 2): volledige workflow-automatisering, meerdere systemen praten met elkaar",
+      ]},
+      { type: "heading", text: "Waarom gefaseerd werken slim is:" },
+      { type: "list", items: [
+        "Kleiner risico per stap",
+        "Team went geleidelijk aan automatisering",
+        "Je ziet ROI tussen elke fase",
+        "Budget spreiding",
+      ]},
+      { type: "p", text: "Technisch bouwen we modulair: nieuwe automatisering sluit aan op bestaande. Geen grote herbouw nodig." },
+    ],
+  },
+  {
+    question: "Krijgen we ondersteuning na de lancering?",
+    answer: [
+      { type: "p", text: "Na de hypercare-fase zou alles perfect moeten werken — en daar investeren we samen in." },
+      { type: "heading", text: "Wat maakt onze hypercare anders?" },
+      { type: "p", text: "We monitoren niet alleen passief. We werken actief samen met jouw team:" },
+      { type: "list", items: [
+        "Probeer het systeem eens te breken (we moedigen dit aan)",
+        "Test alle edge cases en \"wat als…\"-scenario's",
+        "Gebruik het in de echte drukte van je bedrijf",
+        "Vind de kinderziektes vóór we weggaan",
+      ]},
+      { type: "heading", text: "Resultaat na hypercare:" },
+      { type: "p", text: "Een systeem dat maandenlang draait zonder dat je aan ons hoeft te denken." },
+      { type: "heading", text: "Mocht er toch iets zijn:" },
+      { type: "p", text: "We springen bij — gratis, vanzelfsprekend. Je betaalt alleen voor nieuwe features die je later wilt toevoegen." },
+    ],
+  },
+];
+
 // ============================================
 // NOISE OVERLAY
 // ============================================
@@ -78,7 +276,23 @@ const NoiseOverlay = () => (
 );
 
 // ============================================
-// LOGO CAROUSEL (same GSAP curve as main site)
+// HAND-DRAWN CHECKMARK
+// ============================================
+
+const HandDrawnCheck = ({ className = "" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M3.5 13.5C5 15 8.5 18.5 9.5 19.5C12 15 16 9 21 4.5"
+      stroke="#1A2D63"
+      strokeWidth="3.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+// ============================================
+// LOGO CAROUSEL
 // ============================================
 
 interface LogoCarouselProps {
@@ -259,26 +473,6 @@ const LogoCarousel = ({
   );
 };
 
-const MobileLogoCarousel = () => {
-  const mobilePath =
-    "M -900,612 C -420,690 0,820 420,880 C 860,940 1180,900 1580,780 C 2040,630 2460,430 2900,250 C 3300,140 3700,100 4100,80";
-
-  return (
-    <div className="relative -mt-3 block lg:hidden">
-      <div className="relative h-44 sm:h-48 overflow-visible">
-        <LogoCarousel
-          className="logo-carousel absolute inset-0 pointer-events-none overflow-visible block lg:hidden"
-          logoSize={52}
-          svgTopPercent={12}
-          spacingMultiplier={1.15}
-          pathD={mobilePath}
-          durationSeconds={60}
-        />
-      </div>
-    </div>
-  );
-};
-
 // ============================================
 // SECTION DIVIDERS
 // ============================================
@@ -443,7 +637,7 @@ export function ROICalculatorLanding() {
   const [navScrollProgress, setNavScrollProgress] = useState(0);
   const [showStickyMobileCTA, setShowStickyMobileCTA] = useState(false);
   const [showMethodology, setShowMethodology] = useState(false);
-  const logoCarouselRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
   const currentYear = new Date().getFullYear();
   const { isOpen, openForm, closeForm } = useContactForm();
 
@@ -456,15 +650,11 @@ export function ROICalculatorLanding() {
   const weeksPerYear = 52;
   const totalWeeklyHours = hours * members;
   const yearlyCost = totalWeeklyHours * rate * weeksPerYear;
-  const monthlyCost = yearlyCost / 12;
-  // Savings estimate: based on typical results from AI automation implementations
-  // Conservative range used — most repetitive admin tasks (data entry, follow-ups, reporting) are highly automatable
   const savingsMultiplier = 0.55;
-  const yearlySavings = yearlyCost * savingsMultiplier;
-  const monthlySavings = yearlySavings / 12;
   const hoursSavedPerWeek = totalWeeklyHours * savingsMultiplier;
+  const hoursSavedPerYear = Math.round(hoursSavedPerWeek * weeksPerYear);
+  const hoursSavedPerMonth = Math.round(hoursSavedPerYear / 12);
 
-  // Nav scroll progress + sticky mobile CTA trigger
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -476,7 +666,7 @@ export function ROICalculatorLanding() {
   }, []);
 
   return (
-    <div className="bg-[#FDFBF7] min-h-screen overflow-x-hidden">
+    <div className="min-h-screen bg-[#FDFBF7] text-[#1A2D63] font-instrument selection:bg-[#B8C5E6] selection:text-[#1A2D63] overflow-x-hidden">
       <NoiseOverlay />
 
       {/* Slider custom styles */}
@@ -513,10 +703,6 @@ export function ROICalculatorLanding() {
           height: 8px;
           border-radius: 9999px;
           background: transparent;
-        }
-        @keyframes urgencyPulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.85; }
         }
       `}</style>
 
@@ -556,7 +742,7 @@ export function ROICalculatorLanding() {
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
               style={{
-                height: `${20 + (1 - navScrollProgress) * 6}px`,
+                height: `${24 + (1 - navScrollProgress) * 6}px`,
                 transition: "height 0.3s",
               }}
               className="w-auto object-contain md:hidden"
@@ -565,7 +751,7 @@ export function ROICalculatorLanding() {
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
               style={{
-                height: `${28 + (1 - navScrollProgress) * 12}px`,
+                height: `${32 + (1 - navScrollProgress) * 14}px`,
                 transition: "height 0.3s",
               }}
               className="w-auto object-contain hidden md:block"
@@ -579,7 +765,7 @@ export function ROICalculatorLanding() {
               openForm();
               pushEvent("cta_click", {
                 cta_label: "nav_calendly",
-                location: "lp_roi_nav",
+                location: "lp_roi_calculator_nav",
               });
             }}
             className="hidden md:flex items-center gap-2 bg-[#1A2D63] text-white rounded-full text-sm font-medium hover:scale-105 transition-all shadow-lg shadow-[#1A2D63]/20"
@@ -602,7 +788,7 @@ export function ROICalculatorLanding() {
               openForm();
               pushEvent("cta_click", {
                 cta_label: "mobile_nav_calendly",
-                location: "lp_roi_mobile_nav",
+                location: "lp_roi_calculator_mobile_nav",
               });
             }}
             className="md:hidden flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-xs font-medium px-3.5 py-2 transition-opacity duration-300"
@@ -618,219 +804,219 @@ export function ROICalculatorLanding() {
       </nav>
 
       {/* ============================================ */}
-      {/* HERO SECTION (full viewport height)           */}
+      {/* HERO SECTION                                 */}
       {/* ============================================ */}
-      <header className="relative min-h-screen max-w-[100vw] mx-auto flex flex-col justify-center overflow-hidden">
-        <LogoCarousel carouselRef={logoCarouselRef} durationSeconds={60} />
-
-        {/* Desktop layout: centered flex */}
-        <div className="hidden md:flex container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 items-center justify-center min-h-screen pt-0 pb-0 w-full relative z-10">
-          <div className="relative z-10 text-center max-w-3xl">
+      <header
+        ref={heroRef}
+        className="relative max-w-[100vw] mx-auto flex flex-col"
+      >
+        {/* Desktop layout */}
+        <div className="hidden md:flex container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 items-center justify-center pt-28 lg:pt-32 pb-4 w-full relative z-10">
+          <div className="relative z-10 text-center max-w-5xl">
             <motion.div
-              className="mb-8"
+              className="mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h1 className="font-newsreader text-6xl lg:text-[4.25rem] xl:text-[4.75rem] leading-[1.05] tracking-tight text-[#1A2D63]">
-                <span className="block font-extralight">Wat kost jouw</span>
-                <span className="block font-bold italic">
-                  <span className="relative inline-block">
-                    <span className="relative z-10">administratie</span>
-                    <svg
-                      className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
-                      viewBox="0 0 200 20"
-                      preserveAspectRatio="none"
+              <h1 className="font-newsreader text-5xl lg:text-6xl xl:text-[4.25rem] leading-[1.1] tracking-tight text-[#1A2D63]">
+                Hoeveel tijd bespaar je met {" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">AI-werknemers?</span>
+                  <svg
+                    className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
+                    viewBox="0 0 200 20"
+                    preserveAspectRatio="none"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3 14 Q40 4 100 12 Q160 18 197 8"
+                      stroke="#1A2D63"
+                      strokeOpacity="0.15"
+                      strokeWidth="10"
+                      strokeLinecap="round"
                       fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M3 14 Q40 4 100 12 Q160 18 197 8"
-                        stroke="#1A2D63"
-                        strokeOpacity="0.15"
-                        strokeWidth="10"
-                        strokeLinecap="round"
-                        fill="none"
-                      />
-                    </svg>
-                  </span>
+                    />
+                  </svg>
                 </span>
-                <span className="block font-extralight">je echt?</span>
               </h1>
             </motion.div>
 
             <motion.p
-              className="font-instrument md:text-lg text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-8"
+              className="font-instrument text-lg lg:text-xl text-[#475D8F] leading-relaxed max-w-2xl mx-auto mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              De gemiddelde KMO-ondernemer verliest{" "}
-              <strong className="text-[#1A2D63]">meer dan 780 uur per jaar</strong>{" "}
-              aan taken die geautomatiseerd kunnen worden. Bereken hoeveel tijd jij terugwint.
+              Bereken in 30 seconden hoeveel tijd jij terugwint met virtuele medewerkers in je bedrijf. Verschuif de sliders en zie direct het resultaat.
             </motion.p>
 
             <motion.div
-              className="flex flex-row items-center justify-center gap-3"
+              className="flex flex-row items-center justify-center gap-3 mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
             >
               <a
                 href="#calculator"
                 onClick={() =>
                   pushEvent("cta_click", {
                     cta_label: "hero_calculate",
-                    location: "lp_roi_hero_calculate",
+                    location: "lp_roi_calculator_hero",
                   })
                 }
-                className="group bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
-              >
-                <Target className="w-4 h-4" />
-                <span>Bereken jouw tijdsbesparing</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
-              <button
-                type="button"
-                onClick={() => {
-                  openForm();
-                  pushEvent("cta_click", {
-                    cta_label: "hero_plan",
-                    location: "lp_roi_hero_plan",
-                  });
-                }}
-                className="border-2 border-[#1A2D63] text-[#1A2D63] px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#1A2D63]/5 transition-colors"
+                className="group bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Plan een gratis gesprek</span>
-              </button>
+                <span>Bereken jouw besparing</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </a>
+            </motion.div>
+
+            <motion.div className="flex items-center justify-center gap-3 mt-6 mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
+              <span className="text-xs uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
+              <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-7 w-auto object-contain" />
+              <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-7 w-auto object-contain" />
+            </motion.div>
+
+            {/* 3 value bullets */}
+            <motion.div
+              className="flex flex-row items-center justify-center gap-6 lg:gap-8 text-[#1A2D63]/70 text-base mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              <span className="flex items-center gap-2.5">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Eenvoudige berekening
+              </span>
+              <span className="flex items-center gap-2.5">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Gebaseerd op onze gemiddelde klantresultaten
+              </span>
+              <span className="flex items-center gap-2.5">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Gratis gesprek voor een analyse op maat
+              </span>
             </motion.div>
           </div>
         </div>
 
-        {/* Mobile layout: h1 in flow, subtitle+CTA+carousel pinned to bottom */}
-        <div className="md:hidden relative z-10 min-h-[calc(100svh-64px)] px-4 sm:px-6">
-          {/* Heading - centered in viewport, unaffected by bottom section */}
-          <div className="flex items-center justify-center min-h-[calc(100svh-64px)] pt-20 pb-[28rem]">
-            <motion.div
-              className="text-center max-w-[22rem] sm:max-w-[28rem] px-2 sm:px-0"
+        {/* Mobile layout */}
+        <div className="md:hidden relative z-10 px-4 sm:px-6 pt-28 pb-2">
+          <div className="text-center max-w-[22rem] sm:max-w-[28rem] mx-auto">
+            <motion.h1
+              className="font-newsreader text-[2.5rem] sm:text-5xl leading-[1.1] tracking-tight text-[#1A2D63] mb-5"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h1 className="font-newsreader text-5xl leading-[1.05] tracking-tight text-[#1A2D63]">
-                <span className="block font-extralight">Wat kost jouw</span>
-                <span className="block font-bold italic">
-                  <span className="relative inline-block">
-                    <span className="relative z-10">administratie</span>
-                    <svg
-                      className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
-                      viewBox="0 0 200 20"
-                      preserveAspectRatio="none"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M3 14 Q40 4 100 12 Q160 18 197 8"
-                        stroke="#1A2D63"
-                        strokeOpacity="0.15"
-                        strokeWidth="10"
-                        strokeLinecap="round"
-                        fill="none"
-                      />
-                    </svg>
-                  </span>
-                </span>
-                <span className="block font-extralight">je echt?</span>
-              </h1>
-            </motion.div>
-          </div>
+              Hoeveel tijdbespaar je met{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10">AI-werknemers?</span>
+                <svg
+                  className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
+                  viewBox="0 0 200 20"
+                  preserveAspectRatio="none"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 14 Q40 4 100 12 Q160 18 197 8"
+                    stroke="#1A2D63"
+                    strokeOpacity="0.15"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                </svg>
+              </span>
+            </motion.h1>
 
-          {/* Absolutely positioned bottom section - never moves */}
-          <div className="absolute -bottom-4 left-4 right-4 sm:left-6 sm:right-6 text-center max-w-[22rem] sm:max-w-[28rem] mx-auto">
             <motion.p
-              className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-5"
+              className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              De gemiddelde KMO-ondernemer verliest{" "}
-              <strong className="text-[#1A2D63]">meer dan 780 uur per jaar</strong>{" "}
-              aan taken die geautomatiseerd kunnen worden. Bereken hoeveel tijd jij terugwint.
+              Bereken in 30 seconden hoeveel tijd en geld jij terugwint met AI-automatisering.
             </motion.p>
 
             <motion.div
-              className="flex flex-col items-center justify-center gap-3"
+              className="flex flex-col items-center justify-center gap-3 mb-5"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
             >
               <a
                 href="#calculator"
                 onClick={() =>
                   pushEvent("cta_click", {
                     cta_label: "hero_calculate",
-                    location: "lp_roi_hero_calculate",
+                    location: "lp_roi_calculator_hero",
                   })
                 }
-                className="group w-full bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
-              >
-                <Target className="w-4 h-4" />
-                <span>Bereken jouw tijdsbesparing</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
-              <button
-                type="button"
-                onClick={() => {
-                  openForm();
-                  pushEvent("cta_click", {
-                    cta_label: "hero_plan",
-                    location: "lp_roi_hero_plan",
-                  });
-                }}
-                className="w-full border-2 border-[#1A2D63] text-[#1A2D63] px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#1A2D63]/5 transition-colors"
+                className="group w-full bg-[#1A2D63] text-white px-6 py-3.5 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Plan een gratis gesprek</span>
-              </button>
+                <span>Bereken jouw besparing</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </a>
             </motion.div>
 
-            <motion.p
-              className="mt-4 text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#475D8F]/70"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+            <motion.div className="flex items-center justify-center gap-2.5 mt-5 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
+              <span className="text-[10px] uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
+              <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-5 w-auto object-contain" />
+              <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-5 w-auto object-contain" />
+            </motion.div>
+
+            {/* 3 value bullets — mobile */}
+            <motion.div
+              className="flex flex-col items-start gap-2.5 text-[#1A2D63]/70 text-sm mx-auto w-fit text-left"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.7 }}
             >
-              Integraties met je tools
-            </motion.p>
-            <MobileLogoCarousel />
+              <span className="flex items-center gap-2.5">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Eenvoudige berekening.
+              </span>
+              <span className="flex items-center gap-2.5">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Gebaseerd op onze gemiddelde klantresultaten.
+              </span>
+              <span className="flex items-center gap-2.5">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Gratis gesprek voor een analyse op maat.
+              </span>
+            </motion.div>
           </div>
         </div>
 
       </header>
 
-      {/* Divider: cream -> white */}
-      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={0} />
-
       {/* ============================================ */}
       {/* INTERACTIVE ROI CALCULATOR                    */}
+      {/* Starts with minimal top padding so the card   */}
+      {/* peeks into the hero as a scroll indicator     */}
       {/* ============================================ */}
       <section
         id="calculator"
-        className="py-16 md:py-24 px-4 sm:px-6 md:px-12 bg-[#FDFBF7] relative"
+        className="pt-8 md:pt-12 pb-16 md:pb-20 px-6 md:px-12 bg-[#FDFBF7] relative"
       >
-        <div className="max-w-[900px] mx-auto">
+        <div className="max-w-[1100px] mx-auto">
           <motion.div
-            className="text-center mb-10 md:mb-14"
+            className="text-center mb-8 md:mb-10"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
+            <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
               Bereken jouw{" "}
               <span className="relative inline-block">
-                <span className="relative z-10">tijdsbesparing</span>
+                <span className="relative z-10">besparing</span>
                 <svg
                   className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
                   viewBox="0 0 200 20"
@@ -849,9 +1035,7 @@ export function ROICalculatorLanding() {
                 </svg>
               </span>
             </h2>
-            <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto font-instrument">
-              Verschuif de sliders en zie direct wat AI-automatisering jou oplevert.
-            </p>
+            
           </motion.div>
 
           {/* Calculator card */}
@@ -862,17 +1046,14 @@ export function ROICalculatorLanding() {
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.6 }}
           >
-            {/* Glow behind card */}
-            <div className="absolute inset-0 bg-[#B8C5E6] rounded-full blur-[120px] opacity-30 pointer-events-none" />
-
-            <div className="relative bg-white rounded-3xl shadow-2xl border border-[#1A2D63]/10 overflow-hidden">
+            <div className="relative bg-white rounded-3xl shadow-[0_1px_2px_0_rgba(26,45,99,0.04),0_2px_6px_-1px_rgba(26,45,99,0.03)] border border-[#1A2D63]/[0.06]">
               {/* Inputs section */}
               <div className="p-5 sm:p-6 md:p-10 lg:p-12">
                 <h3 className="font-newsreader text-lg md:text-xl font-semibold text-[#1A2D63] mb-6">
                   Vul jouw gegevens in
                 </h3>
                 <RangeSlider
-                  label="Aantal medewerkers met admin-taken"
+                  label="Aantal medewerkers met administratieve taken"
                   min={1}
                   max={25}
                   step={1}
@@ -898,83 +1079,64 @@ export function ROICalculatorLanding() {
                   step={5}
                   value={rate}
                   onChange={setRate}
-                  formatValue={(v) => `\u20AC${v}/uur`}
+                  formatValue={(v) => `€${v}/uur`}
                   sliderName="rate"
                 />
-
               </div>
 
-              {/* Divider */}
-              <div className="h-px bg-gradient-to-r from-transparent via-[#1A2D63]/10 to-transparent" />
-
               {/* Outputs section */}
-              <div className="p-5 sm:p-6 md:p-10 lg:p-12">
-                {/* Main results */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
-                  {/* Current cost card */}
-                  <div className="bg-[#F8F4F0] rounded-2xl p-6 border border-[#C4A882]/20 shadow-sm">
-                    <p className="text-sm font-instrument text-[#475D8F] uppercase tracking-wider mb-3">
-                      Huidige jaarlijkse kost
+              <div className="px-5 sm:px-6 md:px-8 lg:px-10 pb-5 sm:pb-6 md:pb-8 lg:pb-10 pt-0 md:pt-1">
+                {/* Before/After comparison */}
+                <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-4 max-w-[680px] mx-auto mb-3">
+                  {/* Current cost */}
+                  <div className="bg-[#F6F5F1] rounded-2xl p-5 md:p-6 text-center border border-[#1A2D63]/[0.06]">
+                    <p className="text-[11px] uppercase tracking-[0.15em] text-[#475D8F]/50 mb-2.5 font-medium">
+                      Dit kost je nu per jaar
                     </p>
-                    <div className="space-y-2">
-                      <div className="flex items-baseline gap-1.5">
-                        <AnimatedNumber
-                          value={Math.round(yearlyCost)}
-                          prefix={"\u20AC"}
-                          className="font-newsreader text-3xl md:text-4xl font-semibold text-[#8B6914]"
-                        />
-                        <span className="text-[#8B6914]/60 text-sm font-instrument">per jaar</span>
-                      </div>
-                      <div className="flex items-baseline gap-1.5">
-                        <AnimatedNumber
-                          value={Math.round(monthlyCost)}
-                          prefix={"\u20AC"}
-                          className="font-newsreader text-lg md:text-xl font-medium text-[#8B6914]/70"
-                        />
-                        <span className="text-[#8B6914]/50 text-sm font-instrument">per maand</span>
-                      </div>
-                      <p className="text-xs text-[#8B6914]/40 font-instrument pt-1">
-                        {totalWeeklyHours} uur/week totaal{members > 1 ? ` (${hours}u × ${members} medewerkers)` : ""}
-                      </p>
-                    </div>
+                    <AnimatedNumber
+                      value={Math.round(yearlyCost)}
+                      prefix="€"
+                      className="font-newsreader text-[2.25rem] md:text-[2.75rem] font-semibold text-[#1A2D63] leading-none"
+                    />
+                    <p className="font-newsreader text-xl md:text-2xl font-semibold text-[#1A2D63]/70 mt-2 leading-none">
+                      {totalWeeklyHours * 52} uur per jaar
+                    </p>
                   </div>
 
-                  {/* Savings card */}
-                  <div className="bg-[#1A2D63] rounded-2xl p-6 text-white shadow-xl shadow-[#1A2D63]/25 relative overflow-hidden">
-                    <p className="text-sm font-instrument text-white/70 uppercase tracking-wider mb-3 relative z-10">
+                  {/* Arrow */}
+                  <div className="flex items-center justify-center">
+                    <ArrowRight className="w-5 h-5 text-[#1A2D63]/15 rotate-90 sm:rotate-0" />
+                  </div>
+
+                  {/* Hours saved */}
+                  <div className="bg-[#1A2D63] rounded-2xl p-5 md:p-6 text-center">
+                    <p className="text-[11px] uppercase tracking-[0.15em] text-white/40 mb-2.5 font-medium">
                       Jouw tijdsbesparing
                     </p>
-                    <div className="space-y-2 relative z-10">
-                      <div className="flex items-baseline gap-1.5">
-                        <AnimatedNumber
-                          value={Math.round(hoursSavedPerWeek * 52)}
-                          className="font-newsreader text-3xl md:text-4xl font-bold text-white"
-                        />
-                        <span className="text-white/60 text-sm font-instrument">uur per jaar</span>
+                    <AnimatedNumber
+                      value={hoursSavedPerYear}
+                      suffix=" uur"
+                      className="font-newsreader text-[2.25rem] md:text-[2.75rem] font-semibold text-white leading-none"
+                    />
+                    <p className="text-white/50 text-[13px] md:text-sm mt-1">
+                      per jaar
+                    </p>
+                    <div className="mt-3 pt-3 border-t border-white/[0.08] grid grid-cols-2 gap-3">
+                      <div className="flex flex-col items-center">
+                        <span className="font-newsreader text-xl md:text-2xl font-semibold text-white leading-none">{hoursSavedPerMonth}</span>
+                        <span className="text-white/40 text-[11px] md:text-xs mt-1 tracking-wide">uur / maand</span>
                       </div>
-                      <div className="flex items-baseline gap-1.5">
-                        <AnimatedNumber
-                          value={Math.round(hoursSavedPerWeek * 4.33 * 10) / 10}
-                          decimals={1}
-                          className="font-newsreader text-lg md:text-xl font-medium text-white/80"
-                        />
-                        <span className="text-white/50 text-sm font-instrument">uur per maand</span>
-                      </div>
-                      <div className="flex items-baseline gap-1.5 pt-1">
-                        <AnimatedNumber
-                          value={Math.round(hoursSavedPerWeek * 10) / 10}
-                          decimals={1}
-                          className="font-newsreader text-base font-medium text-white/70"
-                        />
-                        <span className="text-white/40 text-xs font-instrument">uur/week teruggewonnen{members > 1 ? ` (totaal)` : ""}</span>
+                      <div className="flex flex-col items-center">
+                        <span className="font-newsreader text-xl md:text-2xl font-semibold text-white leading-none">{Math.round(hoursSavedPerWeek * 10) / 10}</span>
+                        <span className="text-white/40 text-[11px] md:text-xs mt-1 tracking-wide">uur / week</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Disclaimer */}
-                <p className="text-xs text-[#475D8F]/50 font-instrument text-center mb-8">
-                  * Schatting gebaseerd op typische resultaten bij KMO-klanten. Jouw werkelijke tijdsbesparing kan afwijken — plan een gratis gesprek voor een persoonlijke analyse.{" "}
+                <p className="text-xs text-[#475D8F]/50 font-instrument text-center mb-6">
+                  * Schatting op basis van typische resultaten bij KMO-klanten. Jouw werkelijke besparing kan afwijken.{" "}
                   <button
                     onClick={() => setShowMethodology(true)}
                     className="underline decoration-dotted underline-offset-2 text-[#475D8F]/70 hover:text-[#1A2D63] transition-colors"
@@ -1012,27 +1174,27 @@ export function ROICalculatorLanding() {
                         <div>
                           <p className="font-semibold text-[#1A2D63] mb-1">Huidige kost</p>
                           <p>
-                            Uren administratie per week &times; aantal medewerkers &times; uurkost &times; 52 weken = jaarlijkse kost.
+                            Uren administratie per week x aantal medewerkers x uurkost x 52 weken = jaarlijkse kost.
                           </p>
                         </div>
 
                         <div>
                           <p className="font-semibold text-[#1A2D63] mb-1">Tijdsbesparing</p>
                           <p>
-                            We hanteren een besparingsfactor van 55%. Dit is gebaseerd op typische resultaten bij KMO-automatiseringen waarbij repetitieve taken (data-invoer, opvolging, rapportage) grotendeels worden overgenomen.
+                            We hanteren een besparingsfactor van 55%. Dit is gebaseerd op typische resultaten bij KMO-automatiseringen.
                           </p>
                         </div>
 
                         <div>
                           <p className="font-semibold text-[#1A2D63] mb-1">Waarom 55%?</p>
                           <p>
-                            Dit is een conservatieve schatting. Op individuele processen zien we 80-100% besparing, maar niet alle admin-uren zijn even automatiseerbaar. 55% houdt rekening met taken die menselijke input blijven vragen.
+                            Op individuele processen zien we 80-100% besparing. Maar niet alle administratie-uren zijn even automatiseerbaar. 55% is een conservatieve schatting.
                           </p>
                         </div>
 
                         <div className="pt-2 border-t border-[#1A2D63]/[0.06]">
                           <p className="text-xs text-[#475D8F]/50">
-                            Dit zijn indicatieve cijfers. Tijdens een vrijblijvend gesprek maken we een analyse op maat van jouw specifieke situatie.
+                            Plan een gratis gesprek voor een analyse op maat van jouw specifieke situatie.
                           </p>
                         </div>
                       </div>
@@ -1054,10 +1216,10 @@ export function ROICalculatorLanding() {
                         location: "lp_roi_calculator_cta",
                       });
                     }}
-                    className="group inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-8 md:py-4 rounded-full text-base md:text-lg font-medium hover:bg-[#2A4488] hover:scale-105 transition-all shadow-lg shadow-[#1A2D63]/20"
+                    className="group inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-8 md:py-4 rounded-full text-base md:text-lg font-medium hover:bg-[#2A4488] transition-all shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
                   >
                     <Calendar className="w-5 h-5" />
-                    <span>Plan je gratis gesprek</span>
+                    <span>Plan een gesprek</span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
@@ -1067,101 +1229,29 @@ export function ROICalculatorLanding() {
         </div>
       </section>
 
-      {/* Divider: white -> navy */}
-      <SectionDivider fromColor="#FDFBF7" toColor="#1A2D63" variant={1} />
+      <div className="-mt-8 md:-mt-10 relative z-0">
+        <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={1} />
+      </div>
 
       {/* ============================================ */}
-      {/* COMPETITIVE PRESSURE (dark navy section)     */}
+      {/* HOW IT WORKS                                 */}
       {/* ============================================ */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 md:px-12 bg-[#1A2D63] relative overflow-hidden">
-        <div className="max-w-[900px] mx-auto relative z-10">
+      <section
+        id="how-it-works"
+        className="pt-8 md:pt-12 pb-12 md:pb-16 px-6 md:px-12 bg-[#FDFBF7]"
+      >
+        <div className="max-w-[1100px] mx-auto">
           <motion.div
-            className="text-center mb-12 md:mb-16"
+            className="text-center mb-8 md:mb-10"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-newsreader text-white leading-[1.15] mb-4">
-              Terwijl jij twijfelt,{" "}
+            <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
+              Hoe wij AI voor jou laten{" "}
               <span className="relative inline-block">
-                <span className="relative z-10">automatiseert</span>
-                <svg
-                  className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
-                  viewBox="0 0 200 20"
-                  preserveAspectRatio="none"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3 14 Q40 4 100 12 Q160 18 197 8"
-                    stroke="#7B8DB5"
-                    strokeOpacity="0.4"
-                    strokeWidth="10"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
-                </svg>
-              </span>
-              <br className="hidden sm:block" />
-              {" "}je concurrent
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-            {[
-              {
-                icon: Zap,
-                text: "Elke minuut die jij aan admin besteedt, gebruikt je concurrent voor groei.",
-              },
-              {
-                icon: TrendingUp,
-                text: "1 op 5 Europese bedrijven automatiseert al met AI in 2026. Dat aantal verdubbelt elk jaar.",
-              },
-              {
-                icon: UserMinus,
-                text: "Die concurrent die altijd sneller offreert? Hij werkt niet harder.",
-              },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                className="bg-white/[0.06] border border-white/10 rounded-2xl p-6 md:p-7 backdrop-blur-sm hover:bg-white/[0.1] transition-all shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.45, delay: index * 0.15 }}
-              >
-                <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center mb-5">
-                  <item.icon className="w-5 h-5 text-white" />
-                </div>
-                <p className="text-white/90 font-instrument text-[15px] md:text-base leading-relaxed">
-                  {item.text}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Divider: navy -> white */}
-      <SectionDivider fromColor="#1A2D63" toColor="#FDFBF7" variant={2} />
-
-      {/* ============================================ */}
-      {/* "DE KOST VAN NIKS DOEN" COMPARISON            */}
-      {/* ============================================ */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]">
-        <div className="max-w-[1000px] mx-auto">
-          <motion.div
-            className="text-center mb-10 md:mb-14"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
-              De kost van{" "}
-              <span className="relative inline-block">
-                <span className="relative z-10">niks doen</span>
+                <span className="relative z-10">werken</span>
                 <svg
                   className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
                   viewBox="0 0 200 20"
@@ -1182,340 +1272,230 @@ export function ROICalculatorLanding() {
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8">
-            {/* Left: Als je niets doet */}
+          {/* 3 step cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 md:pt-8">
+            {/* Card 1 - Analyse */}
             <motion.div
-              className="bg-[#F7F7F7] rounded-2xl p-7 md:p-8 border border-[#1A2D63]/[0.06]"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              className="relative"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.45, delay: 0 }}
             >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                  <XCircle className="w-5 h-5 text-[#C53030]" />
-                </div>
-                <h3 className="font-newsreader text-xl md:text-2xl font-semibold text-[#1A2D63]/60">
-                  Als je niets doet
-                </h3>
-              </div>
-              <ul className="space-y-4">
-                {[
-                  {
-                    label: `${Math.round(totalWeeklyHours * 52).toLocaleString("nl-BE")} uur per jaar verloren aan admin`,
-                    muted: true,
-                  },
-                  {
-                    label: `${Math.round(totalWeeklyHours)} uur per week verloren${members > 1 ? ` (${hours}u × ${members} medewerkers)` : ""}`,
-                    muted: true,
-                  },
-                  {
-                    label: "Leads die weglopen door trage opvolging",
-                    muted: true,
-                  },
-                  {
-                    label: "Concurrent die marktaandeel pakt",
-                    muted: true,
-                  },
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#C53030]/40 mt-2 shrink-0" />
-                    <span className="font-instrument text-[15px] text-[#1A2D63]/50 leading-relaxed">
-                      {item.label}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Right: Als je vandaag start */}
-            <motion.div
-              className="bg-[#1A2D63] rounded-2xl p-7 md:p-8 text-white shadow-2xl shadow-[#1A2D63]/30"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="font-newsreader text-xl md:text-2xl font-semibold text-white">
-                  Als je vandaag start
-                </h3>
-              </div>
-              <ul className="space-y-4">
-                {[
-                  `${Math.round(hoursSavedPerWeek * 52).toLocaleString("nl-BE")} uur per jaar teruggewonnen`,
-                  `${Math.round(hoursSavedPerWeek * 10) / 10} uur per week vrijgemaakt${members > 1 ? ` over ${members} medewerkers` : ""}`,
-                  "Automatische opvolging — geen gemiste leads",
-                  "Meer tijd voor strategie en groei",
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center mt-0.5 shrink-0">
-                      <Check className="w-3 h-3 text-white" />
+              <span className="absolute -top-4 -left-2 md:-top-5 md:-left-3 font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.18] select-none pointer-events-none z-10">01</span>
+              <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] relative">
+                <div className="relative pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-2xl border-2 border-[#1A2D63]/25 bg-transparent flex items-center justify-center">
+                      <MessageSquare className="w-5 h-5 text-[#1A2D63]/50" />
                     </div>
-                    <span className="font-instrument text-[15px] text-white/90 leading-relaxed">
-                      {item}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                    <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">30 min vrijblijvend</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">Analyse</h3>
+                  <ul className="space-y-3">
+                    {howItWorksDetails.analyse.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                        <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+            {/* Card 2 - Bouw */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.45, delay: 0.1 }}
+            >
+              <span className="absolute -top-4 -left-2 md:-top-5 md:-left-3 font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.22] select-none pointer-events-none z-10">02</span>
+              <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] relative">
+                <div className="relative pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1A2D63]/15 to-[#1A2D63]/5 border border-[#1A2D63]/10 flex items-center justify-center">
+                      <Settings className="w-5 h-5 text-[#1A2D63]/70" />
+                    </div>
+                    <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">2–4 weken</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">Bouw</h3>
+                  <ul className="space-y-3">
+                    {howItWorksDetails.bouw.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                        <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+            {/* Card 3 - Resultaat */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.45, delay: 0.2 }}
+            >
+              <span className="absolute -top-4 -left-2 md:-top-5 md:-left-3 font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.28] select-none pointer-events-none z-10">03</span>
+              <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] relative">
+                <div className="relative pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-2xl bg-[#1A2D63]/15 flex items-center justify-center">
+                      <Rocket className="w-5 h-5 text-[#1A2D63]" />
+                    </div>
+                    <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">24/7 actief</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">Resultaat</h3>
+                  <ul className="space-y-3">
+                    {howItWorksDetails.resultaat.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                        <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </motion.div>
           </div>
+
+          {/* CTA after process */}
+          <motion.div
+            className="flex justify-center mt-10 md:mt-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                openForm();
+                pushEvent("cta_click", {
+                  cta_label: "process_calendly",
+                  location: "lp_roi_calculator_process",
+                });
+              }}
+              className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Plan een kennismakingsgesprek</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </motion.div>
         </div>
       </section>
 
-      {/* Divider: white -> cream */}
-      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={3} />
+      <SectionDivider fromColor="#FDFBF7" toColor="#1A2D63" variant={2} />
 
       {/* ============================================ */}
-      {/* URGENCY BANNER + FINAL CTA                   */}
+      {/* TESTIMONIAL                                  */}
       {/* ============================================ */}
-      <section
-        id="contact"
-        className="pt-8 md:pt-12 pb-20 md:pb-32 px-4 sm:px-6 md:px-12 bg-[#FDFBF7] relative"
-      >
-        <div className="max-w-[800px] mx-auto">
-          {/* Urgency Banner */}
+      <section className="py-8 md:py-10 px-4 sm:px-6 md:px-12 bg-[#1A2D63] relative">
+        <div className="max-w-[800px] mx-auto relative z-10">
           <motion.div
-            className="mb-10 md:mb-14"
+            className="flex flex-col md:flex-row items-center gap-6 md:gap-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
+            viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
           >
             <div
-              className="bg-[#1A2D63] rounded-2xl px-6 py-4 md:px-8 md:py-5 text-center shadow-xl shadow-[#1A2D63]/25"
-              style={{ animation: "urgencyPulse 3s ease-in-out infinite" }}
-            >
-              <p className="font-newsreader text-lg md:text-xl font-semibold text-white">
-                We nemen per maand maximaal 5 nieuwe projecten aan
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full shrink-0 shadow-lg shadow-black/20"
+              role="img"
+              aria-label="Bas - PRS Rotselaar"
+              style={{
+                backgroundImage: "url('/papa foto.jpg')",
+                backgroundSize: "150%",
+                backgroundPosition: "center 25%",
+                backgroundRepeat: "no-repeat",
+              }}
+            />
+            <div className="text-center md:text-left">
+              <blockquote className="font-instrument text-lg md:text-xl text-white leading-relaxed mb-3">
+                &ldquo;Snelle oplevering, sympathieke gasten. Ik wist niet dat AI vandaag al zoveel werk kon overnemen! &rdquo;
+              </blockquote>
+              <p className="font-instrument text-sm md:text-base text-white/60">
+                &mdash; Bas, PRS Rotselaar
               </p>
             </div>
           </motion.div>
+        </div>
+      </section>
 
-          {/* Final CTA Card */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-[#B8C5E6] rounded-full blur-[120px] opacity-30" />
-            <motion.div
-              className="relative bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-[#1A2D63]/10 text-center"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="font-newsreader text-3xl md:text-4xl lg:text-5xl text-[#1A2D63] mb-4">
-                Klaar om je tijd terug te winnen?
-              </h2>
-              <p className="text-[#1A2D63]/60 text-lg mb-8 font-instrument max-w-lg mx-auto">
-                Plan vandaag nog je gesprek. Hoe eerder je start, hoe sneller je resultaat.
-              </p>
+      <SectionDivider fromColor="#1A2D63" toColor="#FDFBF7" variant={3} />
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-                {[
-                  "Vrijblijvend",
-                  "Concrete tijdsanalyse",
-                  "Resultaat in 4 weken",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-2 text-sm text-[#1A2D63]"
-                  >
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="font-instrument">{item}</span>
-                  </div>
-                ))}
-              </div>
+      {/* ============================================ */}
+      {/* FAQ SECTION                                  */}
+      {/* ============================================ */}
+      <section
+        id="faq"
+        className="pt-8 md:pt-12 pb-8 md:pb-10 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]"
+      >
+        <div className="max-w-[800px] mx-auto">
+          <motion.div
+            className="text-center mb-8 md:mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
+              Veelgestelde vragen
+            </h2>
+          </motion.div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  openForm();
-                  pushEvent("cta_click", {
-                    cta_label: "final_calendly",
-                    location: "lp_roi_final_cta",
-                  });
-                }}
-                className="group inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
-              >
-                <Calendar className="w-5 h-5 md:w-6 md:h-6" />
-                Boek je gesprek NU
-                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </motion.div>
+          <div className="bg-white/40 md:bg-transparent rounded-2xl md:rounded-none border border-[#1A2D63]/[0.06] md:border-0 px-4 sm:px-5 md:px-0">
+            <Accordion type="single" collapsible className="w-full">
+              {faqItems.map((item, index) => (
+                <AccordionItem
+                  key={index}
+                  value={`faq-${index}`}
+                  className="border-b border-[#1A2D63]/[0.08] last:border-b-0 md:last:border-b md:border-[#1A2D63]/10"
+                >
+                  <AccordionTrigger className="py-4 sm:py-5 md:py-6 text-left text-[#1A2D63] font-instrument text-base sm:text-lg md:text-xl font-medium hover:no-underline hover:text-[#475D8F] transition-colors [&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-5 sm:[&>svg]:w-5 [&>svg]:text-[#475D8F] [&>svg]:shrink-0 [&>svg]:ml-3 gap-2">
+                    {item.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-[#1A2D63]/65 text-[15px] sm:text-base md:text-[17px] leading-[1.7] pb-5 sm:pb-6 md:pb-7 space-y-3.5">
+                    {item.answer.map((block, i) => {
+                      if (block.type === "p") {
+                        return <p key={i}>{block.text}</p>;
+                      }
+                      if (block.type === "heading") {
+                        return (
+                          <p key={i} className="font-semibold text-[#1A2D63]/85 mt-5 first:mt-0 text-[15px] sm:text-base md:text-[17px]">
+                            {block.text}
+                          </p>
+                        );
+                      }
+                      if (block.type === "list") {
+                        return (
+                          <ul key={i} className="space-y-2 pl-1">
+                            {block.items.map((entry, j) => (
+                              <li key={j} className="flex items-start gap-2.5">
+                                <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-[#1A2D63]/30 shrink-0" />
+                                <span>{entry}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        );
+                      }
+                      return null;
+                    })}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </section>
 
-      {/* ============================================ */}
-      {/* FOOTER (compact version - identical to LP1)  */}
-      {/* ============================================ */}
-      <footer className="bg-[#1A2D63] text-white pt-12 md:pt-16 pb-10 md:pb-12 px-6 relative overflow-visible">
-        {/* Wave */}
-        <div
-          className="absolute top-0 left-0 w-full"
-          style={{ transform: "translateY(-99%)" }}
-        >
-          <svg
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 2278 683"
-            className="w-full h-16 md:h-20 lg:h-24 block"
-            style={{ overflow: "visible" }}
-          >
-            <path
-              fill="#1A2D63"
-              d="M0-0.3C0-0.3,464,120,1139,120S2278-0.3,2278-0.3V683H0V-0.3z"
-            />
-          </svg>
-        </div>
-
-        <div className="max-w-[1400px] mx-auto relative z-10">
-          <div className="grid gap-10 lg:gap-12 lg:grid-cols-[1.3fr_1fr] items-start">
-            <div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-newsreader leading-tight mb-4 text-center lg:text-left">
-                Klaar om uw bedrijf
-                <br />
-                te automatiseren?
-              </h2>
-              <p className="text-white/70 text-base md:text-lg mb-6 max-w-md text-center lg:text-left mx-auto lg:mx-0 font-instrument">
-                Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <button
-                  type="button"
-                  onClick={() => {
-                    openForm();
-                    pushEvent("cta_click", {
-                      cta_label: "footer_calendly",
-                      location: "lp_roi_footer",
-                    });
-                  }}
-                  className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                >
-                  <Calendar className="w-4 h-4" />
-                  Plan een gesprek
-                </button>
-                <a
-                  href="mailto:contact@finitsolutions.be"
-                  onClick={() =>
-                    pushEvent("contact_click", {
-                      method: "email",
-                      location: "lp_roi_footer",
-                    })
-                  }
-                  className="border border-white/20 px-6 py-3 rounded-full text-base font-medium hover:bg-white/5 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Mail className="w-4 h-4" />
-                  contact@finitsolutions.be
-                </a>
-              </div>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-7 shadow-lg shadow-black/10">
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
-              <ul className="space-y-4 text-sm text-white/70">
-                <li className="flex items-start gap-3">
-                  <Phone className="w-4 h-4 text-white/70 mt-0.5" />
-                  <div className="flex flex-col">
-                    <span>+32 (0)495 702 314</span>
-                    <span>+32 (0)468 029 945</span>
-                  </div>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-white/70" />
-                  <a
-                    href="mailto:contact@finitsolutions.be"
-                    className="hover:text-white transition-colors"
-                  >
-                    contact@finitsolutions.be
-                  </a>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Linkedin className="w-4 h-4 text-white/70" />
-                  <a
-                    href="https://www.linkedin.com/company/finitsolutions/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
-                  >
-                    LinkedIn
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-10 pt-6 border-t border-white/10 flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:justify-between md:text-left">
-            <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-white/60">
-              <img
-                src="/Finit Logo Blue@4x.png"
-                alt="Finit Logo"
-                className="h-8 w-auto object-contain brightness-0 invert"
-              />
-            </div>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 md:gap-6">
-              <span>BTW: BE1020600643</span>
-              <a
-                href="/privacy"
-                className="hover:text-white transition-colors"
-              >
-                Privacybeleid
-              </a>
-              <a
-                href="/cookieverklaring"
-                className="hover:text-white transition-colors"
-              >
-                Cookieverklaring
-              </a>
-              <a
-                href="/disclaimer"
-                className="hover:text-white transition-colors"
-              >
-                Disclaimer
-              </a>
-              <div className="text-sm text-white/60 [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:transition-colors">
-                <CookieSettingsLink />
-              </div>
-            </div>
-            <p className="text-sm text-white/40">
-              &copy; {currentYear} Finit Solutions
-            </p>
-          </div>
-        </div>
-      </footer>
-
-      {/* ============================================ */}
-      {/* STICKY MOBILE CTA                            */}
-      {/* ============================================ */}
-      <div
-        className="fixed bottom-0 left-0 right-0 z-40 md:hidden transition-all duration-300"
-        style={{
-          transform: showStickyMobileCTA
-            ? "translateY(0)"
-            : "translateY(100%)",
-          opacity: showStickyMobileCTA ? 1 : 0,
-        }}
-      >
-        <div className="bg-[#FDFBF7]/90 backdrop-blur-xl border-t border-[#1A2D63]/10 px-4 py-3">
-          <button
-            type="button"
-            onClick={() => {
-              openForm();
-              pushEvent("cta_click", {
-                cta_label: "sticky_mobile_calendly",
-                location: "lp_roi_sticky",
-              });
-            }}
-            className="flex items-center justify-center gap-2.5 bg-[#1A2D63] text-white w-full py-3 rounded-full text-[15px] font-medium shadow-lg shadow-[#1A2D63]/20"
-          >
-            <Calendar className="w-4 h-4" />
-            Plan je gratis gesprek
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+      <LandingCTA />
+      <LandingFooter />
 
       <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </div>

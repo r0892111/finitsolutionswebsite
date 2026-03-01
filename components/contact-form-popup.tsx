@@ -122,12 +122,12 @@ export function EmbeddedContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-3">
       {/* Naam */}
       <div>
         <label
           htmlFor="embedded-naam"
-          className="block font-instrument text-sm font-medium text-[#1A2D63] mb-1.5"
+          className="block font-instrument text-sm font-medium text-[#1A2D63] mb-1"
         >
           Naam <span className="text-red-500">*</span>
         </label>
@@ -139,8 +139,29 @@ export function EmbeddedContactForm() {
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, naam: e.target.value }))
           }
-          className="w-full px-4 py-3 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-[15px] placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
+          className="w-full px-4 py-2.5 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-base placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
           placeholder="Jan Janssen"
+        />
+      </div>
+
+      {/* E-mailadres */}
+      <div>
+        <label
+          htmlFor="embedded-email"
+          className="block font-instrument text-sm font-medium text-[#1A2D63] mb-1"
+        >
+          E-mailadres <span className="text-red-500">*</span>
+        </label>
+        <input
+          id="embedded-email"
+          type="email"
+          required
+          value={formData.email}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, email: e.target.value }))
+          }
+          className="w-full px-4 py-2.5 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-base placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
+          placeholder="jan@bedrijf.be"
         />
       </div>
 
@@ -148,7 +169,7 @@ export function EmbeddedContactForm() {
       <div>
         <label
           htmlFor="embedded-telefoon"
-          className="block font-instrument text-sm font-medium text-[#1A2D63] mb-1.5"
+          className="block font-instrument text-sm font-medium text-[#1A2D63] mb-1"
         >
           Telefoonnummer <span className="text-red-500">*</span>
         </label>
@@ -163,29 +184,8 @@ export function EmbeddedContactForm() {
               telefoonnummer: e.target.value,
             }))
           }
-          className="w-full px-4 py-3 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-[15px] placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
+          className="w-full px-4 py-2.5 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-base placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
           placeholder="+32 495 123 456"
-        />
-      </div>
-
-      {/* E-mailadres */}
-      <div>
-        <label
-          htmlFor="embedded-email"
-          className="block font-instrument text-sm font-medium text-[#1A2D63] mb-1.5"
-        >
-          E-mailadres <span className="text-red-500">*</span>
-        </label>
-        <input
-          id="embedded-email"
-          type="email"
-          required
-          value={formData.email}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, email: e.target.value }))
-          }
-          className="w-full px-4 py-3 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-[15px] placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
-          placeholder="jan@bedrijf.be"
         />
       </div>
 
@@ -193,12 +193,12 @@ export function EmbeddedContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-[#1A2D63] text-white py-3.5 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-lg shadow-[#1A2D63]/20 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full bg-[#1A2D63] text-white py-2.5 rounded-full text-base font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-lg shadow-[#1A2D63]/20 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {isSubmitting ? (
           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
         ) : (
-          "Verstuur"
+          "Plan een gesprek"
         )}
       </button>
     </form>
@@ -272,35 +272,33 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
 
       {/* Modal card */}
       <div className="relative w-full max-w-md bg-[#FDFBF7] rounded-2xl md:rounded-3xl shadow-2xl border border-[#1A2D63]/10 animate-[modalIn_0.3s_ease-out] overflow-hidden">
-        {/* Accent strip */}
-        <div className="h-1 bg-[#1A2D63]" />
 
         {/* Close button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#1A2D63]/[0.06] hover:bg-[#1A2D63]/[0.12] flex items-center justify-center transition-colors z-10"
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#1A2D63]/[0.06] hover:bg-[#1A2D63]/[0.12] flex items-center justify-center transition-colors z-10"
           aria-label="Sluiten"
         >
           <X className="w-4 h-4 text-[#1A2D63]" />
         </button>
 
-        <div className="p-6 md:p-8">
+        <div className="pt-12 px-6 pb-6 md:pt-12 md:px-8 md:pb-8">
           <div className="mb-6">
             <h2 className="font-newsreader text-2xl md:text-3xl text-[#1A2D63] mb-1.5">
-              Neem contact op
+              Plan een kennismakingsgesprek
             </h2>
             <p className="font-instrument text-[#475D8F] text-sm md:text-base">
-              Vul je gegevens in en we bellen je snel terug.
+              Vul je gegevens in en we nemen binnen 48 uur contact op om een moment in te plannen.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Naam */}
             <div>
               <label
                 htmlFor="popup-naam"
-                className="block font-instrument text-sm font-medium text-[#1A2D63] mb-1.5"
+                className="block font-instrument text-sm font-medium text-[#1A2D63] mb-2"
               >
                 Naam <span className="text-red-500">*</span>
               </label>
@@ -315,32 +313,8 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
                     naam: e.target.value,
                   }))
                 }
-                className="w-full px-4 py-3 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-[15px] placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
+                className="w-full px-4 py-3.5 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-base placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
                 placeholder="Jan Janssen"
-              />
-            </div>
-
-            {/* Telefoonnummer */}
-            <div>
-              <label
-                htmlFor="popup-telefoon"
-                className="block font-instrument text-sm font-medium text-[#1A2D63] mb-1.5"
-              >
-                Telefoonnummer <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="popup-telefoon"
-                type="tel"
-                required
-                value={formData.telefoonnummer}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    telefoonnummer: e.target.value,
-                  }))
-                }
-                className="w-full px-4 py-3 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-[15px] placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
-                placeholder="+32 495 123 456"
               />
             </div>
 
@@ -348,7 +322,7 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
             <div>
               <label
                 htmlFor="popup-email"
-                className="block font-instrument text-sm font-medium text-[#1A2D63] mb-1.5"
+                className="block font-instrument text-sm font-medium text-[#1A2D63] mb-2"
               >
                 E-mailadres <span className="text-red-500">*</span>
               </label>
@@ -363,8 +337,32 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
                     email: e.target.value,
                   }))
                 }
-                className="w-full px-4 py-3 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-[15px] placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
+                className="w-full px-4 py-3.5 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-base placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
                 placeholder="jan@bedrijf.be"
+              />
+            </div>
+
+            {/* Telefoonnummer */}
+            <div>
+              <label
+                htmlFor="popup-telefoon"
+                className="block font-instrument text-sm font-medium text-[#1A2D63] mb-2"
+              >
+                Telefoonnummer <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="popup-telefoon"
+                type="tel"
+                required
+                value={formData.telefoonnummer}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    telefoonnummer: e.target.value,
+                  }))
+                }
+                className="w-full px-4 py-3.5 rounded-xl border border-[#1A2D63]/15 bg-white text-[#1A2D63] font-instrument text-base placeholder:text-[#475D8F]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/20 focus:border-[#1A2D63]/30 transition-all"
+                placeholder="+32 495 123 456"
               />
             </div>
 
@@ -372,18 +370,18 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#1A2D63] text-white py-3.5 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-lg shadow-[#1A2D63]/20 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-[#1A2D63] text-white py-3.5 rounded-full text-base font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-lg shadow-[#1A2D63]/20 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                "Verstuur"
+                "Plan een gesprek"
               )}
             </button>
           </form>
 
-          <p className="mt-4 text-center text-xs text-[#475D8F]/50 font-instrument">
-            We respecteren je privacy. Geen spam, beloofd.
+          <p className="mt-4 text-center text-sm text-[#475D8F]/60 font-instrument">
+            Binnen 30 minuten weet je wat de mogelijkheden met AI zijn.
           </p>
         </div>
       </div>

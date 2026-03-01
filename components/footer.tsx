@@ -15,7 +15,7 @@ export function Footer() {
   
   return (
     <footer className="bg-[#1A2D63] text-white pt-14 md:pt-16 pb-10 md:pb-12 px-6 relative overflow-visible">
-      <div className="max-w-[1200px] mx-auto relative z-10">
+      <div className="max-w-[80rem] mx-auto relative z-10">
         <div className="grid gap-8 lg:gap-10 lg:grid-cols-[1.3fr_1fr] items-start">
           {/* Footer CTA */}
           <div>

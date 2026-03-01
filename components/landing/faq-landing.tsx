@@ -1,38 +1,77 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
+import {
+  gsap,
+  MotionPathPlugin,
+} from "@/lib/gsap";
 import {
   ArrowRight,
   Calendar,
   Check,
-  ChevronDown,
-  Mail,
   Phone,
+  Mail,
   Linkedin,
+  MessageSquare,
+  Settings,
+  Rocket,
+  type LucideIcon,
 } from "lucide-react";
-import * as Accordion from "@radix-ui/react-accordion";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
 import { useContactForm, ContactFormPopup } from "@/components/contact-form-popup";
+import { LandingCTA } from "@/components/landing/landing-cta";
+import { LandingFooter } from "@/components/landing/landing-footer";
 import { pushEvent } from "@/lib/analytics";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 // ============================================
 // DATA
 // ============================================
 
-type FaqBlock =
-  | { type: "p"; text: string }
-  | { type: "list"; items: string[] }
-  | { type: "heading"; text: string };
+const integrationLogos = [
+  { name: "Salesforce", logo: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg" },
+  { name: "SAP", logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg" },
+  { name: "Odoo", logo: "https://upload.wikimedia.org/wikipedia/commons/5/50/Odoo_logo.svg" },
+  { name: "Outlook", logo: "/Microsoft_Office_Outlook_(2018–2024).svg" },
+  { name: "Gmail", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" },
+  { name: "Excel", logo: "/Microsoft_Office_Excel_(2019–2025).svg" },
+  { name: "HubSpot", logo: "https://upload.wikimedia.org/wikipedia/commons/3/3f/HubSpot_Logo.svg" },
+  { name: "Slack", logo: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg" },
+  { name: "Google Calendar", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg" },
+  { name: "Power BI", logo: "https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg" },
+  { name: "Pipedrive", logo: "/Pipedrive_id-7ejZnwv_0.svg" },
+  { name: "Mailchimp", logo: "https://logos-world.net/wp-content/uploads/2021/02/Mailchimp-Logo.png" },
+  { name: "Jira", logo: "https://upload.wikimedia.org/wikipedia/commons/8/82/Jira_%28Software%29_logo.svg" },
+  { name: "Shopify", logo: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg" },
+  { name: "Zendesk", logo: "https://upload.wikimedia.org/wikipedia/commons/c/c8/Zendesk_logo.svg" },
+  { name: "Twilio", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Twilio-logo-red.svg" },
+  { name: "WhatsApp", logo: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" },
+  { name: "Zoom", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg" },
+  { name: "Notion", logo: "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png" },
+  { name: "Telegram", logo: "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" },
+  { name: "Google Workspace", logo: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Workspace_Logo.svg" },
+  { name: "Microsoft Teams", logo: "/Microsoft_Office_Teams_(2019–2025).svg" },
+  { name: "Trello", logo: "/trello-tile.svg" },
+  { name: "Asana", logo: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Asana_logo.svg" },
+  { name: "Teamleader", logo: "/Teamleader_Icon.svg" },
+  { name: "Zoho", logo: "/ZOHO_logo_2023.svg.png" },
+  { name: "Stripe", logo: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" },
+  { name: "Monday", logo: "/Monday_logo.svg" },
+  { name: "Microsoft Dynamics", logo: "/microsoft-dynamics-icon.svg" },
+  { name: "DocuSign", logo: "/docusign.svg" },
+];
 
-interface FAQItem {
-  question: string;
-  answer: FaqBlock[];
-}
+type FaqBlock = { type: "p"; text: string } | { type: "list"; items: string[] } | { type: "heading"; text: string };
 
 interface FAQCategory {
   title: string;
-  items: FAQItem[];
+  items: { question: string; answer: FaqBlock[] }[];
 }
 
 const faqCategories: FAQCategory[] = [
@@ -42,16 +81,18 @@ const faqCategories: FAQCategory[] = [
       {
         question: "Welke processen kunnen jullie eigenlijk automatiseren?",
         answer: [
-          { type: "p", text: "Alles wat repetitief is en regels volgt, kunnen we automatiseren." },
-          { type: "heading", text: "Meest voorkomende automatiseringen voor KMO\u2019s:" },
-          { type: "list", items: [
-            "Communicatie: offertes automatisch versturen, klanten opvolgen, interne notificaties bij nieuwe leads",
-            "Data & admin: facturen verwerken, data tussen systemen synchroniseren, rapportages genereren",
-            "Klantbeheer: nieuwe klanten in CRM zetten, follow-up e-mails, projectstatus-updates",
-            "Planning: afspraken inplannen, herinneringen versturen, beschikbaarheid checken",
-          ]},
-          { type: "p", text: "De vuistregel: als je team het nu handmatig doet en het volgt vaste stappen, kunnen wij het automatiseren." },
-          { type: "p", text: "Twijfel of jouw proces kan? Vertel ons wat je team dagelijks doet \u2014 wij vertellen of (en hoe) het kan." },
+          { type: "p", text: "De vuistregel: doet je team het nu handmatig, en volgt het vaste stappen? Dan kunnen wij het overnemen." },
+          { type: "heading", text: "Enkele succesverhalen bij onze klanten:" },
+          { type: "heading", text: "1 \u2013 E-commerce" },
+          { type: "p", text: "Een webshop kreeg dagelijks 50 klantemails over bestellingen, leveringen en retouren \u2014 allemaal handmatig beantwoord. We koppelden zijn mailbox aan webshop en zijn kennisbank. Zijn AI-systeem beantwoordt klantemails automatisch, zet bestellingen klaar in de webshop en schakelt alleen een echte medewerker in als de vraag te complex is." },
+          { type: "p", text: "\u2192 Resultaat: van 50 naar 5 mails per dag." },
+          { type: "heading", text: "2 \u2013 Gidsbedrijf" },
+          { type: "p", text: "Een bedrijf met 20 gidsen verwerkte alle boekingen handmatig via website, WhatsApp en mail. We bouwden \u00E9\u00E9n AI-systeem: boekingen komen binnen, de juiste gids wordt gecontacteerd en ingepland, klant en gids krijgen automatisch een bevestiging en facturen worden automatisch opgesteld." },
+          { type: "p", text: "\u2192 Resultaat: geen administratie meer, volledige focus op ondernemen." },
+          { type: "heading", text: "3 \u2013 Recruitmentbureau" },
+          { type: "p", text: "Een recruitmentbureau verwerkte sollicitaties handmatig: cv\u2019s lezen, kandidaten mailen, plannen. Zijn AI-systeem screent binnenkomende cv\u2019s, plant automatisch een kennismakingsgesprek in en houdt kandidaten op de hoogte." },
+          { type: "p", text: "\u2192 Resultaat: van dagen wachten naar same-day opvolging, zonder extra personeel." },
+          { type: "p", text: "Jij kent je bedrijf, wij de technologie. Tijdens een analysegesprek denken we actief met je mee om samen te kijken waar de opportuniteiten liggen." },
         ],
       },
       {
@@ -96,6 +137,28 @@ const faqCategories: FAQCategory[] = [
           { type: "p", text: "De grootste uitdaging? Niet zozeer \"leren gebruiken\", maar eerder \"vertrouwen dat het werkt en oude gewoontes loslaten\". Daar helpen we actief bij." },
         ],
       },
+      {
+        question: "Vervangt AI mijn medewerkers?",
+        answer: [
+          { type: "p", text: "Nee. AI neemt het saaie, repetitieve werk over. Je medewerkers krijgen tijd terug voor het werk waar ze goed in zijn." },
+          { type: "p", text: "Denk aan het verschil tussen een boekhouder die facturen overtypt en een boekhouder die advies geeft. Wij nemen het eerste over, zodat jouw team zich op het tweede kan richten." },
+          { type: "p", text: "In de praktijk zien we dat teams productiever en gemotiveerder worden. Minder frustratie over administratie, meer tijd voor klanten." },
+        ],
+      },
+      {
+        question: "Hoe veilig zijn mijn gegevens?",
+        answer: [
+          { type: "p", text: "Heel veilig. We werken met dezelfde beveiligingsstandaarden als grote softwarebedrijven." },
+          { type: "heading", text: "Wat we concreet doen:" },
+          { type: "list", items: [
+            "Alle data wordt versleuteld opgeslagen en verstuurd",
+            "We werken met Europese servers die voldoen aan AVG/GDPR",
+            "Toegang tot systemen is strikt beperkt en gelogd",
+            "We delen nooit gegevens met derden zonder jouw toestemming",
+          ]},
+          { type: "p", text: "Je data is van jou. Wij gebruiken het alleen om jouw automatisering te laten werken. Niet meer, niet minder." },
+        ],
+      },
     ],
   },
   {
@@ -104,18 +167,18 @@ const faqCategories: FAQCategory[] = [
       {
         question: "Wat kost AI-automatisering voor mijn bedrijf?",
         answer: [
-          { type: "p", text: "Een AI-automatisering kost minder dan een parttime medewerker inhuren, maar werkt 24/7 en maakt geen fouten. Denk aan een investering die vergelijkbaar is met professionele software, maar dan specifiek gebouwd voor jouw processen." },
-          { type: "p", text: "De meeste projecten betalen zichzelf terug binnen het eerste halfjaar door tijdsbesparing en minder fouten." },
-          { type: "p", text: "Na een gratis intakegesprek en een scopingsessie geven we je een vaste prijs \u2014 geen verrassingen achteraf." },
+          { type: "p", text: "Minder dan een parttime medewerker inhuren. Maar dan werkt het 24/7, maakt geen fouten en is nooit ziek." },
+          { type: "p", text: "Concreet voorbeeld: als je team 10 uur per week kwijt is aan handmatige taken, kost dat je \u20AC15.000\u201320.000 per jaar. Een automatisering van \u20AC5.000\u20138.000 verdient zichzelf terug in 3 tot 6 maanden." },
+          { type: "p", text: "En daarna blijft het werken \u2014 jaar na jaar, met minimale extra kosten." },
+          { type: "p", text: "Na een gratis kennismakingsgesprek krijg je een vaste prijs. Geen verrassingen achteraf." },
         ],
       },
       {
         question: "Is dit niet te duur voor een KMO van onze grootte?",
         answer: [
           { type: "p", text: "Juist voor KMO\u2019s is dit interessant. Grote bedrijven hebben IT-afdelingen; jij betaalt voor repetitief werk dat een systeem kan overnemen." },
-          { type: "p", text: "Concreet voorbeeld: als je team 10 uur per week kwijt is aan handmatige taken (facturen verwerken, data overzetten, offertes opstellen), dan kost dat je \u20AC15.000\u201320.000 per jaar. Een automatisering van \u20AC5.000\u20138.000 verdient zich in 3\u20136 maanden terug." },
-          { type: "p", text: "En dan blijft het werken \u2014 jaar na jaar, met minimale extra kosten." },
           { type: "p", text: "Te klein om te starten? We bouwen ook graag gefaseerd: start met \u00E9\u00E9n proces, breid later uit als je de waarde ziet." },
+          { type: "p", text: "De investering is vergelijkbaar met professionele software, maar dan specifiek gebouwd voor jouw processen." },
         ],
       },
       {
@@ -123,22 +186,38 @@ const faqCategories: FAQCategory[] = [
         answer: [
           { type: "p", text: "Tussen de 80% en 100% van de tijd op dat specifieke proces." },
           { type: "heading", text: "Waarom zo hoog?" },
-          { type: "p", text: "Simpel: wij adviseren geen automatiseringen met lage ROI. Als een proces maar 30-40% effici\u00EBntiewinst oplevert, zeggen we eerlijk dat het de investering niet waard is." },
-          { type: "p", text: "We focussen op processen waar automatisering \u00E9cht verschil maakt \u2014 volledig of grotendeels repetitieve taken die nu handmatig worden uitgevoerd." },
+          { type: "p", text: "Simpel: wij adviseren geen automatiseringen met lage ROI. Als een proces maar 30\u201340% effici\u00EBntiewinst oplevert, zeggen we eerlijk dat het de investering niet waard is." },
           { type: "heading", text: "Concrete voorbeelden" },
           { type: "list", items: [
-            "Lead management: Nu 6 uur/week aan leads in CRM zetten, e-mails versturen, opvolging plannen \u2192 na automatisering: 0 uur. Volledige besparing.",
-            "Offerte-proces: Nu 45 minuten per offerte (8x per week) \u2192 na automatisering: 10 minuten (alleen variabele gegevens invullen). Besparing: 4,5 uur/week.",
-            "Data synchronisatie: Nu 20 minuten per nieuwe klant om gegevens over te zetten naar boekhouding, projecttool, maillijst \u2192 na automatisering: 0 minuten, gebeurt direct.",
+            "Lead management: Nu 6 uur/week \u2192 na automatisering: 0 uur. Volledige besparing.",
+            "Offerte-proces: Nu 45 min per offerte (8x/week) \u2192 na automatisering: 10 min. Besparing: 4,5 uur/week.",
+            "Data synchronisatie: Nu 20 min per nieuwe klant \u2192 na automatisering: 0 min, gebeurt direct.",
           ]},
           { type: "heading", text: "Meer dan alleen uren" },
           { type: "list", items: [
-            "Lead om 18:00u binnen? Nu: pas volgende ochtend verwerkt. Na automatisering: binnen 2 minuten beantwoord (ook buiten kantooruren).",
-            "Follow-ups: Nu vergeet je 20% bij drukte. Na automatisering: 0% gemist, alles gebeurt op tijd.",
-            "Fouten: Nu typ je klantgegevens 3x over (telkens kans op fouten). Na automatisering: 0 typefouten, data altijd consistent.",
-            "Teammoraal: Minder frustratie over admin, meer tijd voor klanten en groei.",
+            "Lead om 18:00u binnen? Binnen 2 minuten beantwoord, ook buiten kantooruren.",
+            "Follow-ups: 0% gemist, alles gebeurt automatisch op tijd.",
+            "Fouten: 0 typefouten, data altijd consistent.",
+            "Teammoraal: minder frustratie over administratie, meer tijd voor klanten.",
           ]},
-          { type: "p", text: "Twijfel of jouw proces geschikt is? Beschrijf het, dan zijn we eerlijk of de ROI er is \u2014 en adviseren we het alleen als het \u00E9cht zin heeft." },
+          { type: "p", text: "Twijfel of jouw proces geschikt is? Beschrijf het, dan zijn we eerlijk of de ROI er is." },
+        ],
+      },
+      {
+        question: "Zijn er verborgen kosten?",
+        answer: [
+          { type: "p", text: "Nee. Na het gratis intakegesprek krijg je een vaste prijs voor het hele traject. Daar zit alles in: scoping, bouw, testen, hypercare." },
+          { type: "p", text: "Na oplevering zijn er minimale doorlopende kosten voor hosting en licenties van de tools die we gebruiken. We zijn daar transparant over v\u00F3\u00F3r je beslist." },
+          { type: "p", text: "Bug na oplevering? Gratis. Iets werkt niet zoals afgesproken? Onze verantwoordelijkheid. Je betaalt alleen voor nieuwe features die je later wilt toevoegen." },
+        ],
+      },
+      {
+        question: "Werkt dit ook voor kleine bedrijven?",
+        answer: [
+          { type: "p", text: "Ja. Sterker nog: kleine bedrijven profiteren er vaak het meest van." },
+          { type: "p", text: "Waarom? Omdat je met een klein team elke uur telt. Als jij als ondernemer 10 uur per week aan administratie besteedt, is dat 10 uur die je niet aan klanten of groei besteedt." },
+          { type: "p", text: "We bouwen graag gefaseerd: start met het proces dat je de meeste tijd kost, en breid later uit wanneer je wilt." },
+          { type: "p", text: "Zelfs een eenmanszaak kan profiteren. Je hoeft geen groot team te hebben om te starten." },
         ],
       },
     ],
@@ -155,15 +234,16 @@ const faqCategories: FAQCategory[] = [
           { type: "heading", text: "Fase 2 \u2013 Building (2\u20136 weken)" },
           { type: "p", text: "We bouwen en testen de automatisering. Je ziet tussentijds al resultaten." },
           { type: "heading", text: "Fase 3 \u2013 Hypercare (2\u20134 weken)" },
-          { type: "p", text: "Het systeem is live en jullie gebruiken het. Wij monitoren intensief en lossen direct op als er iets niet perfect loopt. Pas als het 100% stabiel draait in de echte wereld, ronden we af." },
+          { type: "p", text: "Het systeem is live en jullie gebruiken het. Wij monitoren intensief en lossen direct op als er iets niet perfect loopt. Pas als het 100% stabiel draait, ronden we af." },
           { type: "p", text: "Onze hypercare-fase is cruciaal: theorie vs. praktijk kan verschillen, en wij blijven erbij tot het \u00E9cht werkt voor jouw team." },
         ],
       },
       {
         question: "Wat als er iets misloopt met de automatisering?",
         answer: [
-          { type: "p", text: "Elke oplossing heeft een test- en integratieperiode, specifiek opgezet om ervoor te zorgen dat jouw automatisering niet zomaar fouten vertoont. Tijdens de hypercare-periode kijken we aandachtig mee naar alle handelingen van je automatisering om zeker te zijn dat alles perfect verloopt. Pas daarna behandelen we jouw project als afgeleverd." },
-          { type: "p", text: "Na aflevering laten we je uiteraard niet in de steek. Iedere oplossing bevat ingebouwde monitoring, zodat wij onmiddellijk verwittigd worden als er toch iets hapert." },
+          { type: "p", text: "Elke oplossing heeft een test- en integratieperiode. Tijdens de hypercare kijken we aandachtig mee naar alle handelingen. Pas als alles perfect verloopt, ronden we af." },
+          { type: "p", text: "Na aflevering laten we je niet in de steek. Elke oplossing bevat ingebouwde monitoring. Wij worden onmiddellijk verwittigd als er iets hapert." },
+          { type: "p", text: "Bug? Gratis. API veranderd? Gratis. Onze verantwoordelijkheid, niet de jouwe." },
         ],
       },
       {
@@ -172,8 +252,8 @@ const faqCategories: FAQCategory[] = [
           { type: "p", text: "Uitbreiden is makkelijk \u2014 en dat adviseren we vaak bewust." },
           { type: "heading", text: "Typisch groeipad:" },
           { type: "list", items: [
-            "Fase 1 (maand 1\u20133): start met \u00E9\u00E9n high-impact proces, bijv. leadmanagement automatiseren \u2014 investering \u20AC3\u20135k",
-            "Fase 2 (maand 4\u20139): volgend proces erbij, bijv. offerteproces \u2014 investering \u20AC4\u20136k",
+            "Fase 1 (maand 1\u20133): start met \u00E9\u00E9n high-impact proces, bijv. leadmanagement",
+            "Fase 2 (maand 4\u20139): volgend proces erbij, bijv. offerteproces",
             "Fase 3 (jaar 2): volledige workflow-automatisering, meerdere systemen praten met elkaar",
           ]},
           { type: "heading", text: "Waarom gefaseerd werken slim is:" },
@@ -186,6 +266,14 @@ const faqCategories: FAQCategory[] = [
           { type: "p", text: "Technisch bouwen we modulair: nieuwe automatisering sluit aan op bestaande. Geen grote herbouw nodig." },
         ],
       },
+      {
+        question: "Moeten wij iets voorbereiden?",
+        answer: [
+          { type: "p", text: "Bijna niks. Wij doen het zware werk." },
+          { type: "p", text: "Het enige wat we nodig hebben: toegang tot de systemen die je wilt koppelen, en iemand in je team die kan uitleggen hoe het huidige proces werkt." },
+          { type: "p", text: "Geen technische voorbereiding, geen documenten schrijven. We stellen de juiste vragen tijdens het intakegesprek." },
+        ],
+      },
     ],
   },
   {
@@ -196,23 +284,64 @@ const faqCategories: FAQCategory[] = [
         answer: [
           { type: "p", text: "Na de hypercare-fase zou alles perfect moeten werken \u2014 en daar investeren we samen in." },
           { type: "heading", text: "Wat maakt onze hypercare anders?" },
-          { type: "p", text: "We monitoren niet alleen passief. We werken actief samen met jouw team om het systeem grondig te testen:" },
+          { type: "p", text: "We monitoren niet alleen passief. We werken actief samen met jouw team:" },
           { type: "list", items: [
             "Probeer het systeem eens te breken (we moedigen dit aan)",
             "Test alle edge cases en \"wat als\u2026\"-scenario\u2019s",
             "Gebruik het in de echte drukte van je bedrijf",
             "Vind de kinderziektes v\u00F3\u00F3r we weggaan",
           ]},
-          { type: "p", text: "Waarom? Omdat theorie \u2260 praktijk. Jouw team werkt ermee \u2014 zij kennen de situaties." },
-          { type: "heading", text: "Resultaat naar hypercare:" },
+          { type: "heading", text: "Resultaat na hypercare:" },
           { type: "p", text: "Een systeem dat maandenlang draait zonder dat je aan ons hoeft te denken." },
           { type: "heading", text: "Mocht er toch iets zijn:" },
-          { type: "p", text: "We springen bij \u2014 gratis, vanzelfsprekend. Bug? Gratis. API veranderd? Gratis. Iets werkt niet zoals afgesproken? Onze verantwoordelijkheid. Je betaalt alleen voor nieuwe features die je later wilt toevoegen." },
+          { type: "p", text: "We springen bij \u2014 gratis, vanzelfsprekend. Je betaalt alleen voor nieuwe features die je later wilt toevoegen." },
+        ],
+      },
+      {
+        question: "Kan ik jullie bereiken buiten kantooruren?",
+        answer: [
+          { type: "p", text: "Ja. We zijn bereikbaar via telefoon, e-mail en WhatsApp. Ook in het weekend en buiten werkuren." },
+          { type: "p", text: "We begrijpen dat ondernemers niet stoppen om 17:00u. Daarom doen wij dat ook niet." },
+        ],
+      },
+      {
+        question: "Wat als ik niet tevreden ben?",
+        answer: [
+          { type: "p", text: "Dan lossen we het op. Dat is het uitgangspunt." },
+          { type: "p", text: "Tijdens de hypercare-fase heb je alle ruimte om feedback te geven. We passen aan tot het perfect werkt voor jouw situatie." },
+          { type: "p", text: "Iets werkt niet zoals afgesproken na oplevering? Onze verantwoordelijkheid. We komen terug en fixen het \u2014 gratis." },
+          { type: "p", text: "We willen langetermijnrelaties, geen eenmalige transacties. Jouw succes is ons visitekaartje." },
+        ],
+      },
+      {
+        question: "Kan ik het systeem later aanpassen?",
+        answer: [
+          { type: "p", text: "Ja. We bouwen alles modulair, zodat aanpassingen eenvoudig zijn." },
+          { type: "p", text: "Processen veranderen? Nieuwe stap toevoegen? Extra systeem koppelen? Dat kan allemaal zonder alles opnieuw te bouwen." },
+          { type: "p", text: "Kleine aanpassingen doen we snel en tegen een eerlijke prijs. Je zit nergens aan vast." },
         ],
       },
     ],
   },
 ];
+
+const howItWorksDetails = {
+  analyse: [
+    "We tonen exact waar je vandaag tijd verliest",
+    "We identificeren wat meteen automatiseerbaar is",
+    "Je krijgt een inschatting van tijd- en omzetwinst",
+  ],
+  bouw: [
+    "We automatiseren offertes, opvolging en/of administratie",
+    "We koppelen je tools zodat alles samenwerkt",
+    "Alles op maat van jouw manier van werken",
+  ],
+  resultaat: [
+    "Offertes worden automatisch verstuurd en opgevolgd",
+    "Minder manueel werk voor jou en je team",
+    "Meer omzet zonder extra personeel",
+  ],
+};
 
 // ============================================
 // NOISE OVERLAY
@@ -228,76 +357,262 @@ const NoiseOverlay = () => (
 );
 
 // ============================================
-// ACCORDION COMPONENTS
+// HAND-DRAWN CHECKMARK
 // ============================================
 
-const AccordionTrigger = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentPropsWithoutRef<typeof Accordion.Trigger> & {
-    children: React.ReactNode;
-  }
->(({ children, className, ...props }, forwardedRef) => (
-  <Accordion.Header className="flex">
-    <Accordion.Trigger
-      className={`group flex flex-1 items-center justify-between py-4 text-left font-medium transition-all ${className ?? ""}`}
-      {...props}
-      ref={forwardedRef}
-    >
-      {children}
-      <ChevronDown className="w-5 h-5 text-[#475D8F] shrink-0 transition-transform duration-300 group-data-[state=open]:rotate-180" />
-    </Accordion.Trigger>
-  </Accordion.Header>
-));
-AccordionTrigger.displayName = "AccordionTrigger";
-
-const AccordionContent = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<typeof Accordion.Content> & {
-    children: React.ReactNode;
-  }
->(({ children, className, ...props }, forwardedRef) => (
-  <Accordion.Content
-    className={`overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up ${className ?? ""}`}
-    {...props}
-    ref={forwardedRef}
-  >
-    <div className="pb-4">{children}</div>
-  </Accordion.Content>
-));
-AccordionContent.displayName = "AccordionContent";
+const HandDrawnCheck = ({ className = "" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M3.5 13.5C5 15 8.5 18.5 9.5 19.5C12 15 16 9 21 4.5"
+      stroke="#1A2D63"
+      strokeWidth="3.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 // ============================================
-// FAQ ANSWER RENDERER
+// LOGO CAROUSEL
 // ============================================
 
-function renderFaqAnswer(answer: FaqBlock[]) {
-  return answer.map((block, i) => {
-    switch (block.type) {
-      case "p":
-        return (
-          <p key={i} className="text-[#475D8F] text-[15px] leading-relaxed mb-3 last:mb-0">
-            {block.text}
-          </p>
-        );
-      case "heading":
-        return (
-          <p key={i} className="text-[#1A2D63] text-[15px] font-semibold mt-4 mb-2">
-            {block.text}
-          </p>
-        );
-      case "list":
-        return (
-          <ul key={i} className="list-disc list-inside text-[#475D8F] text-[15px] leading-relaxed mb-3 space-y-1.5 pl-1">
-            {block.items.map((item, j) => (
-              <li key={j}>{item}</li>
-            ))}
-          </ul>
-        );
-      default:
-        return null;
-    }
-  });
+interface LogoCarouselProps {
+  carouselRef?: React.RefObject<HTMLDivElement | null>;
+  className?: string;
+  logoSize?: number;
+  svgTopPercent?: number;
+  spacingMultiplier?: number;
+  pathD?: string;
+  durationSeconds?: number;
 }
+
+const LogoCarousel = ({
+  carouselRef,
+  className,
+  logoSize = 74,
+  svgTopPercent = 50,
+  spacingMultiplier = 1,
+  pathD,
+  durationSeconds,
+}: LogoCarouselProps) => {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const tweensRef = useRef<gsap.core.Tween[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+  const [resizeKey, setResizeKey] = useState(0);
+
+  const CURVE_ASPECT_RATIO = 16 / 9;
+
+  useEffect(() => {
+    setIsMounted(true);
+    let lastWidth = window.innerWidth;
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      const newWidth = window.innerWidth;
+      if (newWidth === lastWidth) return;
+      lastWidth = newWidth;
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setResizeKey((prev) => prev + 1);
+      }, 100);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted || !containerRef.current || !svgRef.current) return;
+    const logos = containerRef.current.querySelectorAll(".floating-logo");
+    const path = svgRef.current.querySelector(
+      "#logoMotionPath"
+    ) as SVGPathElement;
+    if (logos.length === 0 || !path) return;
+
+    tweensRef.current.forEach((tween) => tween.kill());
+    tweensRef.current = [];
+
+    const totalLogos = logos.length;
+    const animationDuration = durationSeconds ?? 80;
+    const spacing = (1 / totalLogos) * spacingMultiplier;
+
+    logos.forEach((logo, index) => {
+      const startProgress = index * spacing;
+      gsap.set(logo, {
+        xPercent: -50,
+        yPercent: -50,
+        opacity: 1,
+        force3D: true,
+      });
+      const tween = gsap.fromTo(
+        logo,
+        {
+          motionPath: {
+            path,
+            align: path,
+            alignOrigin: [0.5, 0.5],
+            autoRotate: true,
+            start: startProgress,
+            end: startProgress,
+          },
+        },
+        {
+          motionPath: {
+            path,
+            align: path,
+            alignOrigin: [0.5, 0.5],
+            autoRotate: true,
+            start: startProgress,
+            end: startProgress + 1,
+          },
+          duration: animationDuration,
+          ease: "none",
+          repeat: -1,
+          immediateRender: true,
+          force3D: true,
+        }
+      );
+      tweensRef.current.push(tween);
+    });
+
+    return () => {
+      tweensRef.current.forEach((tween) => tween.kill());
+      tweensRef.current = [];
+    };
+  }, [isMounted, resizeKey, spacingMultiplier, durationSeconds]);
+
+  const setRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      (containerRef as React.MutableRefObject<HTMLDivElement | null>).current =
+        node;
+      if (carouselRef && "current" in carouselRef) {
+        (
+          carouselRef as React.MutableRefObject<HTMLDivElement | null>
+        ).current = node;
+      }
+    },
+    [carouselRef]
+  );
+
+  return (
+    <div
+      ref={setRefs}
+      className={
+        className ??
+        "logo-carousel absolute inset-0 pointer-events-none overflow-visible hidden lg:block"
+      }
+      style={{ zIndex: 6 }}
+    >
+      <svg
+        ref={svgRef}
+        className="absolute left-0"
+        style={{
+          width: "100%",
+          height: "auto",
+          aspectRatio: `${CURVE_ASPECT_RATIO}`,
+          top: `${svgTopPercent}%`,
+          transform: "translateY(-50%)",
+        }}
+        viewBox="0 0 1600 900"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <path
+          id="logoMotionPath"
+          d={
+            pathD ??
+            "M -100,612 C 100,650 300,720 500,770 C 700,810 850,810 950,780 C 1100,730 1250,550 1400,350 C 1500,220 1600,120 1700,80"
+          }
+          fill="none"
+          stroke="transparent"
+        />
+      </svg>
+      {integrationLogos.map((logo, index) => (
+        <div
+          key={`floating-${logo.name}-${index}`}
+          className="floating-logo absolute"
+          style={{
+            width: `${logoSize}px`,
+            height: `${logoSize}px`,
+            left: 0,
+            top: 0,
+            opacity: 0,
+            willChange: "transform",
+          }}
+        >
+          <div className="w-full h-full rounded-xl bg-white shadow-lg border border-[#1A2D63]/5 p-2.5 flex items-center justify-center">
+            <img
+              src={logo.logo}
+              alt={logo.name}
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ============================================
+// SECTION DIVIDERS
+// ============================================
+
+const sectionDividerData = [
+  {
+    fill: "M0,70 C480,130 960,-10 1920,50",
+    navy: "M0,62 C480,110 960,-18 1920,34 L1920,60 C960,4 480,146 0,78 Z",
+    light: "M0,78 C480,146 960,4 1920,60 L1920,74 C960,14 480,164 0,88 Z",
+  },
+  {
+    fill: "M0,30 C320,110 640,120 960,60 C1280,0 1600,-10 1920,80",
+    navy: "M0,22 C320,92 640,100 960,50 C1280,-10 1600,-16 1920,66 L1920,90 C1600,4 1280,10 960,70 C640,134 320,126 0,38 Z",
+    light: "M0,38 C320,126 640,134 960,70 C1280,10 1600,4 1920,90 L1920,102 C1600,18 1280,22 960,80 C640,146 320,142 0,48 Z",
+  },
+  {
+    fill: "M0,85 C320,10 640,-5 960,55 C1280,115 1600,130 1920,35",
+    navy: "M0,77 C320,-8 640,-25 960,45 C1280,107 1600,114 1920,21 L1920,45 C1600,144 1280,125 960,65 C640,9 320,26 0,93 Z",
+    light: "M0,93 C320,26 640,9 960,65 C1280,125 1600,144 1920,45 L1920,57 C1600,158 1280,137 960,75 C640,21 320,40 0,103 Z",
+  },
+  {
+    fill: "M0,55 C240,110 480,110 720,60 C960,10 1200,10 1440,60 C1680,110 1800,110 1920,55",
+    navy: "M0,47 C240,92 480,90 720,50 C960,2 1200,4 1440,50 C1680,92 1800,90 1920,41 L1920,65 C1800,124 1680,126 1440,70 C1200,24 960,20 720,70 C480,126 240,124 0,63 Z",
+    light: "M0,63 C240,124 480,126 720,70 C960,20 1200,24 1440,70 C1680,126 1800,124 1920,65 L1920,77 C1800,136 1680,140 1440,80 C1200,38 960,32 720,80 C480,138 240,138 0,73 Z",
+  },
+];
+
+const SectionDivider = ({
+  fromColor,
+  toColor,
+  variant = 0,
+}: {
+  fromColor: string;
+  toColor: string;
+  variant?: number;
+}) => {
+  const data = sectionDividerData[variant % sectionDividerData.length];
+  const fillPath = `${data.fill} L1920,160 L0,160 Z`;
+
+  return (
+    <div
+      className="relative w-full"
+      style={{ backgroundColor: fromColor, marginTop: -1, marginBottom: -1 }}
+      aria-hidden="true"
+    >
+      <svg
+        viewBox="0 -40 1920 200"
+        preserveAspectRatio="none"
+        className="w-full block h-[50px] md:h-[75px] lg:h-[100px]"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ overflow: "visible" }}
+      >
+        <path d={fillPath} fill={toColor} />
+        <path d={data.navy} fill="#1A2D63" />
+        <path d={data.light} fill="#7B8DB5" />
+      </svg>
+    </div>
+  );
+};
 
 // ============================================
 // MAIN COMPONENT
@@ -306,10 +621,10 @@ function renderFaqAnswer(answer: FaqBlock[]) {
 export function FAQLanding() {
   const [navScrollProgress, setNavScrollProgress] = useState(0);
   const [showStickyMobileCTA, setShowStickyMobileCTA] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
   const currentYear = new Date().getFullYear();
   const { isOpen, openForm, closeForm } = useContactForm();
 
-  // Nav scroll progress + sticky mobile CTA trigger
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -320,49 +635,11 @@ export function FAQLanding() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Build flat list of accordion items
-  const accordionElements: React.ReactNode[] = [];
+  // Build flat FAQ index for accordion values
   let globalIndex = 0;
 
-  faqCategories.forEach((category, catIndex) => {
-    // Category heading
-    accordionElements.push(
-      <motion.div
-        key={`cat-${catIndex}`}
-        className={catIndex > 0 ? "mt-10" : ""}
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.4 }}
-      >
-        <h3 className="text-xs uppercase tracking-[0.2em] text-[#475D8F]/50 font-medium mb-4">
-          {category.title}
-        </h3>
-      </motion.div>
-    );
-
-    category.items.forEach((item) => {
-      const itemIndex = globalIndex;
-      accordionElements.push(
-        <Accordion.Item
-          key={`faq-${itemIndex}`}
-          value={`faq-${itemIndex}`}
-          className="bg-white rounded-xl border border-[#1A2D63]/[0.06] shadow-lg hover:shadow-xl transition-all overflow-hidden"
-        >
-          <AccordionTrigger className="px-6 text-[#1A2D63] text-[15px] md:text-base">
-            <span className="pr-4">{item.question}</span>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            {renderFaqAnswer(item.answer)}
-          </AccordionContent>
-        </Accordion.Item>
-      );
-      globalIndex++;
-    });
-  });
-
   return (
-    <div className="bg-[#FDFBF7] min-h-screen overflow-x-hidden">
+    <div className="min-h-screen bg-[#FDFBF7] text-[#1A2D63] font-instrument selection:bg-[#B8C5E6] selection:text-[#1A2D63] overflow-x-hidden">
       <NoiseOverlay />
 
       {/* ============================================ */}
@@ -401,7 +678,7 @@ export function FAQLanding() {
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
               style={{
-                height: `${20 + (1 - navScrollProgress) * 6}px`,
+                height: `${24 + (1 - navScrollProgress) * 6}px`,
                 transition: "height 0.3s",
               }}
               className="w-auto object-contain md:hidden"
@@ -410,7 +687,7 @@ export function FAQLanding() {
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
               style={{
-                height: `${28 + (1 - navScrollProgress) * 12}px`,
+                height: `${32 + (1 - navScrollProgress) * 14}px`,
                 transition: "height 0.3s",
               }}
               className="w-auto object-contain hidden md:block"
@@ -440,7 +717,7 @@ export function FAQLanding() {
             <span>Plan een gesprek</span>
           </button>
 
-          {/* Mobile CTA only */}
+          {/* Mobile CTA */}
           <button
             type="button"
             onClick={() => {
@@ -463,291 +740,554 @@ export function FAQLanding() {
       </nav>
 
       {/* ============================================ */}
-      {/* HERO SECTION (40vh - compact)                */}
+      {/* HERO SECTION                                 */}
       {/* ============================================ */}
-      <header className="relative min-h-[40vh] flex flex-col justify-center pt-28 pb-8 md:pt-32 md:pb-12 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]">
-        <div className="max-w-[800px] mx-auto text-center">
-          <motion.h1
-            className="font-newsreader text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] leading-[1.1] tracking-tight text-[#1A2D63] mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            Veelgestelde{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">Vragen</span>
-              <svg
-                className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
-                viewBox="0 0 200 20"
-                preserveAspectRatio="none"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3 14 Q40 4 100 12 Q160 18 197 8"
-                  stroke="#1A2D63"
-                  strokeOpacity="0.15"
-                  strokeWidth="10"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              </svg>
-            </span>
-          </motion.h1>
-          <motion.p
-            className="font-instrument text-base sm:text-[17px] md:text-lg text-[#475D8F] leading-relaxed max-w-lg mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            Alles wat je wilt weten over AI-automatisering voor je bedrijf
-          </motion.p>
-        </div>
-      </header>
-
-      {/* ============================================ */}
-      {/* FAQ ACCORDION                                */}
-      {/* ============================================ */}
-      <section className="py-8 md:py-16 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]">
-        <div className="max-w-[800px] mx-auto">
-          <Accordion.Root
-            type="single"
-            collapsible
-            className="space-y-3"
-          >
-            {accordionElements}
-          </Accordion.Root>
-        </div>
-      </section>
-
-      {/* ============================================ */}
-      {/* FINAL CTA                                    */}
-      {/* ============================================ */}
-      <section
-        id="contact"
-        className="pt-8 md:pt-12 pb-20 md:pb-32 px-6 md:px-12 bg-[#FDFBF7] relative"
+      <header
+        ref={heroRef}
+        className="relative max-w-[100vw] mx-auto flex flex-col"
       >
-        <div className="max-w-[800px] mx-auto">
-          <div className="relative">
-            <div className="absolute inset-0 bg-[#B8C5E6] rounded-full blur-[120px] opacity-30" />
+        {/* Desktop layout */}
+        <div className="hidden md:flex container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 items-center justify-center pt-28 lg:pt-32 pb-8 w-full relative z-10">
+          <div className="relative z-10 text-center max-w-5xl">
             <motion.div
-              className="relative bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-[#1A2D63]/10 text-center"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6 }}
+              className="mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h2 className="font-newsreader text-3xl md:text-4xl lg:text-5xl text-[#1A2D63] mb-4">
-                Nog vragen? Of klaar om te starten?
-              </h2>
-              <p className="text-[#1A2D63]/60 text-lg mb-8">
-                Plan een vrijblijvend gesprek. We beantwoorden al je vragen.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-                {[
-                  "Vrijblijvend",
-                  "30 minuten",
-                  "Al je vragen beantwoord",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-2 text-sm text-[#1A2D63]"
+              <h1 className="font-newsreader text-5xl lg:text-6xl xl:text-[4.25rem] leading-[1.1] tracking-tight text-[#1A2D63]">
+                Al je vragen{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">beantwoord.</span>
+                  <svg
+                    className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
+                    viewBox="0 0 200 20"
+                    preserveAspectRatio="none"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
+                    <path
+                      d="M3 14 Q40 4 100 12 Q160 18 197 8"
+                      stroke="#1A2D63"
+                      strokeOpacity="0.15"
+                      strokeWidth="10"
+                      strokeLinecap="round"
+                      fill="none"
+                    />
+                  </svg>
+                </span>
+              </h1>
+            </motion.div>
 
+            <motion.p
+              className="font-instrument text-lg lg:text-xl text-[#475D8F] leading-relaxed max-w-2xl mx-auto mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              Alles wat je wilt weten over AI-automatisering voor je bedrijf. Eerlijk en zonder jargon.
+            </motion.p>
+
+            <motion.div
+              className="flex flex-row items-center justify-center gap-3 mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
               <button
                 type="button"
                 onClick={() => {
                   openForm();
                   pushEvent("cta_click", {
-                    cta_label: "final_calendly",
-                    location: "lp_faq_final_cta",
+                    cta_label: "hero_calendly",
+                    location: "lp_faq_hero",
                   });
                 }}
-                className="inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
+                className="group bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
-                <Calendar className="w-5 h-5 md:w-6 md:h-6" />
-                Plan je gratis gesprek
-                <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
+                <Calendar className="w-4 h-4" />
+                <span>Plan een kennismakingsgesprek</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
+            </motion.div>
+
+            <motion.div className="flex items-center justify-center gap-3 mt-6 mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
+              <span className="text-xs uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
+              <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-7 w-auto object-contain" />
+              <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-7 w-auto object-contain" />
+            </motion.div>
+
+            <motion.div
+              className="flex flex-row items-start justify-center gap-8 text-[#1A2D63]/70 text-base max-w-5xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              <span className="flex items-center gap-2.5 min-w-[18rem]">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Geen jargon. Duidelijke antwoorden.
+              </span>
+              <span className="flex items-center gap-2.5 min-w-[18rem]">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Eerlijk over wat wel en niet kan.
+              </span>
+              <span className="flex items-center gap-2.5 min-w-[18rem]">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Vraag niet beantwoord? Bel ons gewoon.
+              </span>
             </motion.div>
           </div>
         </div>
+
+        {/* Mobile layout */}
+        <div className="md:hidden relative z-10 px-4 sm:px-6 pt-28 pb-6">
+          <div className="text-center max-w-[22rem] sm:max-w-[28rem] mx-auto">
+            <motion.h1
+              className="font-newsreader text-[2.5rem] sm:text-5xl leading-[1.1] tracking-tight text-[#1A2D63] mb-5"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              Al je vragen{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10">beantwoord.</span>
+                <svg
+                  className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
+                  viewBox="0 0 200 20"
+                  preserveAspectRatio="none"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 14 Q40 4 100 12 Q160 18 197 8"
+                    stroke="#1A2D63"
+                    strokeOpacity="0.15"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                </svg>
+              </span>
+            </motion.h1>
+
+            <motion.p
+              className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              Alles wat je wilt weten over AI-automatisering. Eerlijk en zonder jargon.
+            </motion.p>
+
+            <motion.div
+              className="flex flex-col items-center justify-center gap-3 mb-5"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  openForm();
+                  pushEvent("cta_click", {
+                    cta_label: "hero_calendly",
+                    location: "lp_faq_hero",
+                  });
+                }}
+                className="group w-full bg-[#1A2D63] text-white px-6 py-3.5 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Plan een kennismakingsgesprek</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </motion.div>
+
+            <motion.div className="flex items-center justify-center gap-2.5 mt-5 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
+              <span className="text-[10px] uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
+              <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-5 w-auto object-contain" />
+              <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-5 w-auto object-contain" />
+            </motion.div>
+
+            <motion.div
+              className="flex flex-col items-start gap-2.5 text-[#1A2D63]/70 text-sm mx-auto w-fit text-left"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              <span className="flex items-center gap-2.5">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Geen jargon. Duidelijke antwoorden.
+              </span>
+              <span className="flex items-center gap-2.5">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Eerlijk over wat wel en niet kan.
+              </span>
+              <span className="flex items-center gap-2.5">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Vraag niet beantwoord? Bel ons gewoon.
+              </span>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Logo carousel - Desktop */}
+        <div className="hidden lg:block relative pt-0 pb-6 md:pt-0 md:pb-8 overflow-visible">
+          <p className="text-center text-xs uppercase tracking-[0.18em] text-[#475D8F]/80 mb-4 relative z-10">
+            We integreren met al je tools:
+          </p>
+          <div className="relative h-[8rem] overflow-visible">
+            <LogoCarousel
+              className="logo-carousel absolute inset-0 pointer-events-none overflow-visible block"
+              logoSize={64}
+              svgTopPercent={50}
+              spacingMultiplier={1}
+              pathD="M -400,500 C 100,470 400,430 800,450 C 1200,470 1600,520 2000,420"
+              durationSeconds={70}
+            />
+          </div>
+        </div>
+
+        {/* Logo carousel - Mobile/Tablet */}
+        <div className="block lg:hidden relative pt-0 pb-4 overflow-visible">
+          <p className="text-center text-xs uppercase tracking-[0.18em] text-[#475D8F]/80 mt-4 mb-4 relative z-10">
+            We integreren met al je tools:
+          </p>
+          <div className="relative h-[6.67rem] -mt-2 overflow-visible">
+            <LogoCarousel
+              className="logo-carousel absolute inset-0 pointer-events-none overflow-visible block"
+              logoSize={48}
+              svgTopPercent={35}
+              spacingMultiplier={1}
+              pathD="M -800,500 C -200,450 300,520 800,490 C 1300,460 1800,530 2400,410"
+              durationSeconds={55}
+            />
+          </div>
+        </div>
+      </header>
+
+      {/* ============================================ */}
+      {/* FAQ ACCORDION SECTIONS                       */}
+      {/* ============================================ */}
+      {faqCategories.map((category, catIndex) => {
+        const startIndex = globalIndex;
+        const categoryItems = category.items.map((item, itemIndex) => {
+          const currentIndex = globalIndex;
+          globalIndex++;
+          return { ...item, index: currentIndex };
+        });
+
+        return (
+          <React.Fragment key={catIndex}>
+            {catIndex === 0 && (
+              <section
+                id="faq"
+                className="pt-4 md:pt-6 pb-0 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]"
+              >
+                <div className="max-w-[800px] mx-auto">
+                  <div className="text-center mb-8 md:mb-10">
+                    <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
+                      Veelgestelde{" "}
+                      <span className="relative inline-block">
+                        <span className="relative z-10">vragen</span>
+                        <svg
+                          className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
+                          viewBox="0 0 200 20"
+                          preserveAspectRatio="none"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M3 14 Q40 4 100 12 Q160 18 197 8"
+                            stroke="#1A2D63"
+                            strokeOpacity="0.15"
+                            strokeWidth="10"
+                            strokeLinecap="round"
+                            fill="none"
+                          />
+                        </svg>
+                      </span>
+                    </h2>
+                    <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
+                      Gegroepeerd per onderwerp. Klik op een vraag voor het antwoord.
+                    </p>
+                    <p className="text-[#1A2D63]/40 text-sm md:text-[15px] mt-4 max-w-xl mx-auto">
+                      Staat je vraag er niet bij?{" "}
+                      <a
+                        href="mailto:contact@finitsolutions.be"
+                        className="underline decoration-dotted underline-offset-2 text-[#1A2D63]/50 hover:text-[#1A2D63] transition-colors"
+                      >
+                        Neem contact op
+                      </a>{" "}
+                      — we helpen je graag.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            <section
+              className={`${catIndex === 0 ? 'pt-0' : 'pt-6 md:pt-8'} pb-4 md:pb-6 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]`}
+            >
+              <div className="max-w-[800px] mx-auto">
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <p className="text-xs uppercase tracking-[0.2em] text-[#1A2D63]/40 font-medium mb-4">
+                    {category.title}
+                  </p>
+                </motion.div>
+
+                <div className="bg-white/40 md:bg-transparent rounded-2xl md:rounded-none border border-[#1A2D63]/[0.06] md:border-0 px-4 sm:px-5 md:px-0">
+                  <Accordion type="single" collapsible className="w-full">
+                    {categoryItems.map((item) => (
+                      <AccordionItem
+                        key={item.index}
+                        value={`faq-${item.index}`}
+                        className="border-b border-[#1A2D63]/[0.08] last:border-b-0 md:last:border-b md:border-[#1A2D63]/10"
+                      >
+                        <AccordionTrigger className="py-4 sm:py-5 md:py-6 text-left text-[#1A2D63] font-instrument text-base sm:text-lg md:text-xl font-medium hover:no-underline hover:text-[#475D8F] transition-colors [&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-5 sm:[&>svg]:w-5 [&>svg]:text-[#475D8F] [&>svg]:shrink-0 [&>svg]:ml-3 gap-2">
+                          {item.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-[#1A2D63]/65 text-[15px] sm:text-base md:text-[17px] leading-[1.7] pb-5 sm:pb-6 md:pb-7 space-y-3.5">
+                          {item.answer.map((block, i) => {
+                            if (block.type === "p") {
+                              return <p key={i}>{block.text}</p>;
+                            }
+                            if (block.type === "heading") {
+                              return (
+                                <p key={i} className="font-semibold text-[#1A2D63]/85 mt-5 first:mt-0 text-[15px] sm:text-base md:text-[17px]">
+                                  {block.text}
+                                </p>
+                              );
+                            }
+                            if (block.type === "list") {
+                              return (
+                                <ul key={i} className="space-y-2 pl-1">
+                                  {block.items.map((entry, j) => (
+                                    <li key={j} className="flex items-start gap-2.5">
+                                      <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-[#1A2D63]/30 shrink-0" />
+                                      <span>{entry}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              );
+                            }
+                            return null;
+                          })}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </div>
+              </div>
+            </section>
+          </React.Fragment>
+        );
+      })}
+
+      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={0} />
+
+      {/* ============================================ */}
+      {/* HOW IT WORKS                                 */}
+      {/* ============================================ */}
+      <section
+        id="how-it-works"
+        className="pt-8 md:pt-12 pb-12 md:pb-16 px-6 md:px-12 bg-[#FDFBF7]"
+      >
+        <div className="max-w-[1100px] mx-auto">
+          <motion.div
+            className="text-center mb-8 md:mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
+              Hoe wij AI voor jou laten{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10">werken</span>
+                <svg
+                  className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
+                  viewBox="0 0 200 20"
+                  preserveAspectRatio="none"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 14 Q40 4 100 12 Q160 18 197 8"
+                    stroke="#1A2D63"
+                    strokeOpacity="0.15"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                </svg>
+              </span>
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 md:pt-8">
+            {/* Card 1 - Analyse */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.45, delay: 0 }}
+            >
+              <span className="absolute -top-4 -left-2 md:-top-5 md:-left-3 font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.18] select-none pointer-events-none z-10">01</span>
+              <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] relative">
+                <div className="relative pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-2xl border-2 border-[#1A2D63]/25 bg-transparent flex items-center justify-center">
+                      <MessageSquare className="w-5 h-5 text-[#1A2D63]/50" />
+                    </div>
+                    <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">30 min vrijblijvend</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">Analyse</h3>
+                  <ul className="space-y-3">
+                    {howItWorksDetails.analyse.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                        <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+            {/* Card 2 - Bouw */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.45, delay: 0.1 }}
+            >
+              <span className="absolute -top-4 -left-2 md:-top-5 md:-left-3 font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.22] select-none pointer-events-none z-10">02</span>
+              <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] relative">
+                <div className="relative pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1A2D63]/15 to-[#1A2D63]/5 border border-[#1A2D63]/10 flex items-center justify-center">
+                      <Settings className="w-5 h-5 text-[#1A2D63]/70" />
+                    </div>
+                    <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">2–4 weken</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">Bouw</h3>
+                  <ul className="space-y-3">
+                    {howItWorksDetails.bouw.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                        <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+            {/* Card 3 - Resultaat */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.45, delay: 0.2 }}
+            >
+              <span className="absolute -top-4 -left-2 md:-top-5 md:-left-3 font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.28] select-none pointer-events-none z-10">03</span>
+              <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] relative">
+                <div className="relative pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-2xl bg-[#1A2D63]/15 flex items-center justify-center">
+                      <Rocket className="w-5 h-5 text-[#1A2D63]" />
+                    </div>
+                    <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">24/7 actief</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">Resultaat</h3>
+                  <ul className="space-y-3">
+                    {howItWorksDetails.resultaat.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                        <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <motion.div
+            className="flex justify-center mt-10 md:mt-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                openForm();
+                pushEvent("cta_click", {
+                  cta_label: "process_calendly",
+                  location: "lp_faq_process",
+                });
+              }}
+              className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Plan een kennismakingsgesprek</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </motion.div>
+        </div>
       </section>
 
+      <SectionDivider fromColor="#FDFBF7" toColor="#1A2D63" variant={2} />
+
       {/* ============================================ */}
-      {/* FOOTER                                       */}
+      {/* TESTIMONIAL                                  */}
       {/* ============================================ */}
-      <footer className="bg-[#1A2D63] text-white pt-12 md:pt-16 pb-10 md:pb-12 px-6 relative overflow-visible">
-        {/* Wave */}
-        <div
-          className="absolute top-0 left-0 w-full"
-          style={{ transform: "translateY(-99%)" }}
-        >
-          <svg
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 2278 683"
-            className="w-full h-16 md:h-20 lg:h-24 block"
-            style={{ overflow: "visible" }}
+      <section className="py-8 md:py-10 px-4 sm:px-6 md:px-12 bg-[#1A2D63] relative">
+        <div className="max-w-[800px] mx-auto relative z-10">
+          <motion.div
+            className="flex flex-col md:flex-row items-center gap-6 md:gap-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
           >
-            <path
-              fill="#1A2D63"
-              d="M0-0.3C0-0.3,464,120,1139,120S2278-0.3,2278-0.3V683H0V-0.3z"
+            <div
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full shrink-0 shadow-lg shadow-black/20"
+              role="img"
+              aria-label="Bas - PRS Rotselaar"
+              style={{
+                backgroundImage: "url('/papa foto.jpg')",
+                backgroundSize: "150%",
+                backgroundPosition: "center 25%",
+                backgroundRepeat: "no-repeat",
+              }}
             />
-          </svg>
-        </div>
-
-        <div className="max-w-[1400px] mx-auto relative z-10">
-          <div className="grid gap-10 lg:gap-12 lg:grid-cols-[1.3fr_1fr] items-start">
-            <div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-newsreader leading-tight mb-4 text-center lg:text-left">
-                Klaar om uw bedrijf
-                <br />
-                te automatiseren?
-              </h2>
-              <p className="text-white/70 text-base md:text-lg mb-6 max-w-md text-center lg:text-left mx-auto lg:mx-0">
-                Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
+            <div className="text-center md:text-left">
+              <blockquote className="font-instrument text-lg md:text-xl text-white leading-relaxed mb-3">
+                &ldquo;Snelle oplevering, sympathieke gasten. Ik wist niet dat AI vandaag al zoveel werk kon overnemen!&rdquo;
+              </blockquote>
+              <p className="font-instrument text-sm md:text-base text-white/60">
+                &mdash; Bas, PRS Rotselaar
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <button
-                  type="button"
-                  onClick={() => {
-                    openForm();
-                    pushEvent("cta_click", {
-                      cta_label: "footer_calendly",
-                      location: "lp_faq_footer",
-                    });
-                  }}
-                  className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                >
-                  <Calendar className="w-4 h-4" />
-                  Plan een gesprek
-                </button>
-                <a
-                  href="mailto:contact@finitsolutions.be"
-                  onClick={() =>
-                    pushEvent("contact_click", {
-                      method: "email",
-                      location: "lp_faq_footer",
-                    })
-                  }
-                  className="border border-white/20 px-6 py-3 rounded-full text-base font-medium hover:bg-white/5 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Mail className="w-4 h-4" />
-                  contact@finitsolutions.be
-                </a>
-              </div>
             </div>
-
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-7 shadow-lg shadow-black/10">
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
-              <ul className="space-y-4 text-sm text-white/70">
-                <li className="flex items-start gap-3">
-                  <Phone className="w-4 h-4 text-white/70 mt-0.5" />
-                  <div className="flex flex-col">
-                    <span>+32 (0)495 702 314</span>
-                    <span>+32 (0)468 029 945</span>
-                  </div>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-white/70" />
-                  <a
-                    href="mailto:contact@finitsolutions.be"
-                    className="hover:text-white transition-colors"
-                  >
-                    contact@finitsolutions.be
-                  </a>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Linkedin className="w-4 h-4 text-white/70" />
-                  <a
-                    href="https://www.linkedin.com/company/finitsolutions/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
-                  >
-                    LinkedIn
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-10 pt-6 border-t border-white/10 flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:justify-between md:text-left">
-            <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-white/60">
-              <img
-                src="/Finit Logo Blue@4x.png"
-                alt="Finit Logo"
-                className="h-8 w-auto object-contain brightness-0 invert"
-              />
-            </div>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 md:gap-6">
-              <span>BTW: BE1020600643</span>
-              <a
-                href="/privacy"
-                className="hover:text-white transition-colors"
-              >
-                Privacybeleid
-              </a>
-              <a
-                href="/cookieverklaring"
-                className="hover:text-white transition-colors"
-              >
-                Cookieverklaring
-              </a>
-              <a
-                href="/disclaimer"
-                className="hover:text-white transition-colors"
-              >
-                Disclaimer
-              </a>
-              <div className="text-sm text-white/60 [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:transition-colors">
-                <CookieSettingsLink />
-              </div>
-            </div>
-            <p className="text-sm text-white/40">
-              &copy; {currentYear} Finit Solutions
-            </p>
-          </div>
+          </motion.div>
         </div>
-      </footer>
+      </section>
 
-      {/* ============================================ */}
-      {/* STICKY MOBILE CTA                            */}
-      {/* ============================================ */}
-      <div
-        className="fixed bottom-0 left-0 right-0 z-40 md:hidden transition-all duration-300"
-        style={{
-          transform: showStickyMobileCTA
-            ? "translateY(0)"
-            : "translateY(100%)",
-          opacity: showStickyMobileCTA ? 1 : 0,
-        }}
-      >
-        <div className="bg-[#FDFBF7]/90 backdrop-blur-xl border-t border-[#1A2D63]/10 px-4 py-3">
-          <button
-            type="button"
-            onClick={() => {
-              openForm();
-              pushEvent("cta_click", {
-                cta_label: "sticky_mobile_calendly",
-                location: "lp_faq_sticky",
-              });
-            }}
-            className="flex items-center justify-center gap-2.5 bg-[#1A2D63] text-white w-full py-3 rounded-full text-[15px] font-medium shadow-lg shadow-[#1A2D63]/20"
-          >
-            <Calendar className="w-4 h-4" />
-            Plan je gratis gesprek
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+      <SectionDivider fromColor="#1A2D63" toColor="#FDFBF7" variant={3} />
+
+      <LandingCTA />
+      <LandingFooter />
+
+
       <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </div>
   );

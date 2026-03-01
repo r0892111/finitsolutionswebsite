@@ -4,28 +4,18 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Check,
-  Calendar,
   Mail,
   Phone,
   Linkedin,
 } from "lucide-react";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
-import { useContactForm, ContactFormPopup, EmbeddedContactForm } from "@/components/contact-form-popup";
+import { EmbeddedContactForm } from "@/components/contact-form-popup";
 import { pushEvent } from "@/lib/analytics";
+import { LandingCTA } from "@/components/landing/landing-cta";
+import { LandingFooter } from "@/components/landing/landing-footer";
 
 // ============================================
-// DATA
-// ============================================
-
-const checklistItems = [
-  "Analyse van je huidige processen",
-  "Identificatie van automatiseringskansen",
-  "Concrete ROI-schatting",
-  "Geen verplichtingen, geen verkooppraatje",
-];
-
-// ============================================
-// NOISE OVERLAY (same as main site)
+// NOISE OVERLAY
 // ============================================
 
 const NoiseOverlay = () => (
@@ -38,15 +28,67 @@ const NoiseOverlay = () => (
 );
 
 // ============================================
+// CHECKLIST DATA
+// ============================================
+
+const checklistItems = [
+  "Analyse van je huidige processen",
+  "Concrete besparingskansen",
+  "Een eerlijk advies \u2014 ook als AI niet past",
+  "Vaste prijs \u2014 geen verrassingen",
+];
+
+// ============================================
+// SECTION DIVIDERS
+// ============================================
+
+const sectionDividerData = [
+  {
+    fill: "M0,70 C480,130 960,-10 1920,50",
+    navy: "M0,62 C480,110 960,-18 1920,34 L1920,60 C960,4 480,146 0,78 Z",
+    light: "M0,78 C480,146 960,4 1920,60 L1920,74 C960,14 480,164 0,88 Z",
+  },
+];
+
+const SectionDivider = ({
+  fromColor,
+  toColor,
+}: {
+  fromColor: string;
+  toColor: string;
+}) => {
+  const data = sectionDividerData[0];
+  const fillPath = `${data.fill} L1920,160 L0,160 Z`;
+
+  return (
+    <div
+      className="relative w-full"
+      style={{ backgroundColor: fromColor, marginTop: -1, marginBottom: -1 }}
+      aria-hidden="true"
+    >
+      <svg
+        viewBox="0 -40 1920 200"
+        preserveAspectRatio="none"
+        className="w-full block h-[50px] md:h-[75px] lg:h-[100px]"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ overflow: "visible" }}
+      >
+        <path d={fillPath} fill={toColor} />
+        <path d={data.navy} fill="#1A2D63" />
+        <path d={data.light} fill="#7B8DB5" />
+      </svg>
+    </div>
+  );
+};
+
+// ============================================
 // MAIN COMPONENT
 // ============================================
 
 export function DirectBookingLanding() {
   const [navScrollProgress, setNavScrollProgress] = useState(0);
   const currentYear = new Date().getFullYear();
-  const { isOpen, openForm, closeForm } = useContactForm();
 
-  // Nav scroll progress
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -57,11 +99,11 @@ export function DirectBookingLanding() {
   }, []);
 
   return (
-    <div className="bg-[#FDFBF7] min-h-screen overflow-x-hidden">
+    <div className="min-h-[100dvh] flex flex-col bg-[#FDFBF7] text-[#1A2D63] font-instrument selection:bg-[#B8C5E6] selection:text-[#1A2D63] overflow-x-hidden">
       <NoiseOverlay />
 
       {/* ============================================ */}
-      {/* LIGHTWEIGHT NAV (logo only, no menu)         */}
+      {/* LIGHTWEIGHT NAV                              */}
       {/* ============================================ */}
       <nav
         className="fixed top-0 left-0 right-0 z-40"
@@ -84,7 +126,7 @@ export function DirectBookingLanding() {
         }}
       >
         <div
-          className="max-w-[1400px] mx-auto flex items-center justify-center px-4 sm:px-6 relative"
+          className="max-w-[1400px] mx-auto flex items-center justify-between px-4 sm:px-6 relative"
           style={{
             paddingTop: `${12 + (1 - navScrollProgress) * 12}px`,
             paddingBottom: `${12 + (1 - navScrollProgress) * 12}px`,
@@ -96,7 +138,7 @@ export function DirectBookingLanding() {
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
               style={{
-                height: `${20 + (1 - navScrollProgress) * 6}px`,
+                height: `${24 + (1 - navScrollProgress) * 6}px`,
                 transition: "height 0.3s",
               }}
               className="w-auto object-contain md:hidden"
@@ -105,224 +147,117 @@ export function DirectBookingLanding() {
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
               style={{
-                height: `${28 + (1 - navScrollProgress) * 12}px`,
+                height: `${32 + (1 - navScrollProgress) * 14}px`,
                 transition: "height 0.3s",
               }}
               className="w-auto object-contain hidden md:block"
             />
           </a>
+
+          {/* Desktop phone */}
+          <a
+            href="tel:+32495702314"
+            className="hidden md:flex items-center gap-2 text-[#1A2D63]/60 text-sm font-medium hover:text-[#1A2D63] transition-colors"
+          >
+            <Phone className="w-4 h-4" />
+            <span>+32 (0)495 702 314</span>
+          </a>
         </div>
       </nav>
 
       {/* ============================================ */}
-      {/* MAIN CONTENT - Single Screen Booking         */}
+      {/* HERO + EMBEDDED FORM                         */}
       {/* ============================================ */}
-      <main className="pt-28 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 md:px-12">
-        <div className="max-w-[800px] mx-auto">
+      <header
+        className="flex-1 flex flex-col justify-center px-4 sm:px-6 md:px-12 bg-[#FDFBF7]"
+        style={{
+          paddingTop: "clamp(64px, 10vh, 96px)",
+          paddingBottom: "clamp(12px, 2.5vh, 40px)",
+        }}
+      >
+        <div className="max-w-[700px] mx-auto w-full">
           {/* Heading */}
           <motion.div
-            className="text-center mb-8 md:mb-10"
+            className="text-center"
+            style={{ marginBottom: "clamp(12px, 2.5vh, 36px)" }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <h1 className="font-newsreader text-4xl sm:text-5xl md:text-6xl leading-[1.1] tracking-tight text-[#1A2D63] mb-3">
-              Plan je gratis gesprek
+            <h1
+              className="font-newsreader leading-[1.1] tracking-tight text-[#1A2D63]"
+              style={{
+                fontSize: "clamp(2rem, 6.5vh, 3.75rem)",
+                marginBottom: "clamp(6px, 1.2vh, 16px)",
+              }}
+            >
+              Plan je gratis{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10">analyse</span>
+                <svg
+                  className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
+                  viewBox="0 0 200 20"
+                  preserveAspectRatio="none"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 14 Q40 4 100 12 Q160 18 197 8"
+                    stroke="#1A2D63"
+                    strokeOpacity="0.15"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                </svg>
+              </span>
             </h1>
-            <p className="font-instrument text-base sm:text-lg md:text-xl text-[#475D8F] leading-relaxed">
-              30 minuten die je bedrijf kunnen veranderen
+            <p
+              className="font-instrument text-[#475D8F] leading-relaxed max-w-xl mx-auto"
+              style={{ fontSize: "clamp(0.95rem, 2.2vh, 1.2rem)" }}
+            >
+              Vul je gegevens in en we nemen binnen 24 uur contact op om een gratis analyse van 30 minuten in te plannen.
+              Daarin ontdek je waar AI in jouw bedrijf concreet tijd kan besparen.
             </p>
           </motion.div>
 
-          {/* Calendly Embed */}
+          {/* Embedded form card */}
           <motion.div
-            className="mb-10 md:mb-12"
-            initial={{ opacity: 0, y: 20 }}
+            className="bg-white rounded-3xl shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] border border-[#1A2D63]/[0.06]"
+            style={{ padding: "clamp(1rem, 3vh, 2.5rem)" }}
+            initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
             <EmbeddedContactForm />
           </motion.div>
 
-          {/* Checklist */}
-          <motion.div
-            className="mb-16 md:mb-20"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            <h2 className="font-newsreader text-xl sm:text-2xl text-[#1A2D63] text-center mb-5">
-              Wat je krijgt in dit gesprek
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto">
-              {checklistItems.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-3 text-[#1A2D63]"
-                >
-                  <div className="w-6 h-6 rounded-full bg-[#1A2D63]/[0.08] flex items-center justify-center shrink-0">
-                    <Check className="w-3.5 h-3.5 text-[#1A2D63]" />
-                  </div>
-                  <span className="font-instrument text-sm sm:text-[15px] leading-snug">
-                    {item}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Trust Signal */}
-          <motion.div
-            className="text-center"
+          {/* Trust signal */}
+          <motion.p
+            className="text-center text-sm text-[#1A2D63]/40"
+            style={{ marginTop: "clamp(6px, 1.2vh, 16px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.6 }}
+          >
+            We helpen een beperkt aantal bedrijven tegelijk.
+          </motion.p>
+
+          <motion.div
+            className="flex items-center justify-center gap-2.5"
+            style={{ marginTop: "clamp(10px, 2vh, 32px)" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
           >
-            <p className="font-instrument text-sm text-[#475D8F]/70">
-              Vrijblijvend &middot; Geen verplichtingen &middot; Binnen 24 uur reactie
-            </p>
+            <span className="text-[10px] sm:text-xs uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
+            <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="w-auto object-contain" style={{ height: "clamp(16px, 2.5vh, 28px)" }} />
+            <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="w-auto object-contain" style={{ height: "clamp(16px, 2.5vh, 28px)" }} />
           </motion.div>
         </div>
-      </main>
+      </header>
 
-      {/* ============================================ */}
-      {/* FOOTER (compact version)                     */}
-      {/* ============================================ */}
-      <footer className="bg-[#1A2D63] text-white pt-12 md:pt-16 pb-10 md:pb-12 px-6 relative overflow-visible">
-        {/* Wave */}
-        <div
-          className="absolute top-0 left-0 w-full"
-          style={{ transform: "translateY(-99%)" }}
-        >
-          <svg
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 2278 683"
-            className="w-full h-16 md:h-20 lg:h-24 block"
-            style={{ overflow: "visible" }}
-          >
-            <path
-              fill="#1A2D63"
-              d="M0-0.3C0-0.3,464,120,1139,120S2278-0.3,2278-0.3V683H0V-0.3z"
-            />
-          </svg>
-        </div>
-
-        <div className="max-w-[1400px] mx-auto relative z-10">
-          <div className="grid gap-10 lg:gap-12 lg:grid-cols-[1.3fr_1fr] items-start">
-            <div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-newsreader leading-tight mb-4 text-center lg:text-left">
-                Klaar om uw bedrijf
-                <br />
-                te automatiseren?
-              </h2>
-              <p className="text-white/70 text-base md:text-lg mb-6 max-w-md text-center lg:text-left mx-auto lg:mx-0">
-                Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <button
-                  type="button"
-                  onClick={() => {
-                    openForm();
-                    pushEvent("cta_click", {
-                      cta_label: "footer_calendly",
-                      location: "lp_direct_booking_footer",
-                    });
-                  }}
-                  className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                >
-                  <Calendar className="w-4 h-4" />
-                  Plan een gesprek
-                </button>
-                <a
-                  href="mailto:contact@finitsolutions.be"
-                  onClick={() =>
-                    pushEvent("contact_click", {
-                      method: "email",
-                      location: "lp_direct_booking_footer",
-                    })
-                  }
-                  className="border border-white/20 px-6 py-3 rounded-full text-base font-medium hover:bg-white/5 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Mail className="w-4 h-4" />
-                  contact@finitsolutions.be
-                </a>
-              </div>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-7 shadow-lg shadow-black/10">
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
-              <ul className="space-y-4 text-sm text-white/70">
-                <li className="flex items-start gap-3">
-                  <Phone className="w-4 h-4 text-white/70 mt-0.5" />
-                  <div className="flex flex-col">
-                    <span>+32 (0)495 702 314</span>
-                    <span>+32 (0)468 029 945</span>
-                  </div>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-white/70" />
-                  <a
-                    href="mailto:contact@finitsolutions.be"
-                    className="hover:text-white transition-colors"
-                  >
-                    contact@finitsolutions.be
-                  </a>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Linkedin className="w-4 h-4 text-white/70" />
-                  <a
-                    href="https://www.linkedin.com/company/finitsolutions/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
-                  >
-                    LinkedIn
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-10 pt-6 border-t border-white/10 flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:justify-between md:text-left">
-            <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-white/60">
-              <img
-                src="/Finit Logo Blue@4x.png"
-                alt="Finit Logo"
-                className="h-8 w-auto object-contain brightness-0 invert"
-              />
-            </div>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 md:gap-6">
-              <span>BTW: BE1020600643</span>
-              <a
-                href="/privacy"
-                className="hover:text-white transition-colors"
-              >
-                Privacybeleid
-              </a>
-              <a
-                href="/cookieverklaring"
-                className="hover:text-white transition-colors"
-              >
-                Cookieverklaring
-              </a>
-              <a
-                href="/disclaimer"
-                className="hover:text-white transition-colors"
-              >
-                Disclaimer
-              </a>
-              <div className="text-sm text-white/60 [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:transition-colors">
-                <CookieSettingsLink />
-              </div>
-            </div>
-            <p className="text-sm text-white/40">
-              &copy; {currentYear} Finit Solutions
-            </p>
-          </div>
-        </div>
-      </footer>
-      <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
+      <LandingFooter />
     </div>
   );
 }

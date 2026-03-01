@@ -8,25 +8,41 @@ import {
 } from "@/lib/gsap";
 import {
   ArrowRight,
-  ArrowUpRight,
   Calendar,
   Check,
   Clock,
   Mail,
   FileText,
   CalendarCheck,
+  Users,
+  TrendingDown,
   RefreshCw,
   Plus,
   Phone,
   Linkedin,
+  Droplets,
+  MessageCircle,
+  X,
   PhoneOff,
   MailWarning,
   UserX,
+  ArrowUpRight,
+  MessageSquare,
+  Settings,
+  Rocket,
   type LucideIcon,
 } from "lucide-react";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
 import { useContactForm, ContactFormPopup } from "@/components/contact-form-popup";
+import { LandingCTA } from "@/components/landing/landing-cta";
+import { LandingFooter } from "@/components/landing/landing-footer";
 import { pushEvent } from "@/lib/analytics";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 // ============================================
 // DATA
@@ -65,17 +81,18 @@ const integrationLogos = [
   { name: "DocuSign", logo: "/docusign.svg" },
 ];
 
-const typewriterPhrases = [
-  "gemiste oproepen",
-  "late offertes",
-  "planningschaos",
-  "klantopvolging",
-  "administratie na werkuren",
-  "heen-en-weer gebel",
-  "handmatige facturen",
-  "dubbele data-invoer",
-  "verloren leads",
-  "eindeloze e-mails",
+interface PainPoint {
+  icon: LucideIcon;
+  text: string;
+}
+
+const painPoints: PainPoint[] = [
+  { icon: Clock, text: "Spoedklussen die je hele planning overhoop gooien" },
+  { icon: FileText, text: "Offertes die je 's avonds nog aan de keukentafel maakt" },
+  { icon: CalendarCheck, text: "Klanten opbellen om een afspraak te plannen kost je een half uur per dag" },
+  { icon: RefreshCw, text: "Facturen die weken te laat de deur uit gaan" },
+  { icon: Users, text: "Meer klussen aannemen lukt niet zonder extra personeel" },
+  { icon: TrendingDown, text: "Nieuwe klanten mislopen omdat je te laat reageert" },
 ];
 
 interface Solution {
@@ -87,40 +104,226 @@ interface Solution {
 const solutions: Solution[] = [
   {
     icon: FileText,
-    title: "Automatische Offertes",
-    description: "Klant vraagt een offerte? Het systeem maakt hem direct aan op basis van je standaardprijzen. Verstuurd binnen minuten.",
+    title: "Offertes vliegen de deur uit terwijl jij aan het werk bent",
+    description: "Klant belt voor een lekkage? Het systeem maakt direct een offerte op basis van je standaardprijzen. Verstuurd binnen minuten. Jij hoeft niks te doen.",
   },
   {
     icon: CalendarCheck,
-    title: "Klanten Plannen Zelf In",
-    description: "Geen heen-en-weer gebel meer. Klanten kiezen zelf een beschikbaar tijdslot. Je agenda wordt automatisch bijgewerkt.",
+    title: "Klanten plannen zelf in. Jij rijdt gewoon door.",
+    description: "Geen heen-en-weer gebel meer. Klanten kiezen zelf een moment dat past. Bevestiging en herinnering gaan automatisch.",
   },
   {
     icon: RefreshCw,
-    title: "Opvolging Op Autopilot",
-    description: "Na elke klus: automatische feedback-vraag, factuur, en herinnering voor onderhoud. Zonder dat jij er aan denkt.",
+    title: "Facturatie en opvolging draaien op de achtergrond",
+    description: "Na elke klus: automatische factuur, opvolgmail en herinnering voor onderhoud. Alles zonder dat jij eraan hoeft te denken.",
   },
 ];
 
+const howItWorksDetails = {
+  analyse: [
+    "We tonen exact waar je vandaag tijd verliest",
+    "We identificeren wat meteen automatiseerbaar is",
+    "Je krijgt een inschatting van tijd- en omzetwinst",
+  ],
+  bouw: [
+    "We automatiseren offertes, opvolging en/of administratie",
+    "We koppelen je tools zodat alles samenwerkt",
+    "Alles op maat van jouw manier van werken",
+  ],
+  resultaat: [
+    "Offertes worden automatisch verstuurd en opgevolgd",
+    "Minder manueel werk voor jou en je team",
+    "Meer omzet zonder extra personeel",
+  ],
+};
+
+// --- FAQ Data ---
+type FaqBlock = { type: "p"; text: string } | { type: "list"; items: string[] } | { type: "heading"; text: string };
+
+const faqItems: { question: string; answer: FaqBlock[] }[] = [
+  {
+    question: "Welke processen kunnen jullie automatiseren?",
+    answer: [
+      { type: "p", text: "De vuistregel: doet je team het nu handmatig, en volgt het vaste stappen? Dan kunnen wij het overnemen." },
+      { type: "heading", text: "Enkele succesverhalen bij onze klanten:" },
+      { type: "heading", text: "1 – E-commerce" },
+      { type: "p", text: "Een webshop kreeg dagelijks 50 klantemails over bestellingen, leveringen en retouren — allemaal handmatig beantwoord. We koppelden zijn mailbox aan webshop en zijn kennisbank. Zijn AI-systeem beantwoordt klantemails automatisch, zet bestellingen klaar in de webshop en schakelt alleen een echte medewerker in als de vraag te complex is." },
+      { type: "p", text: "→ Resultaat: van 50 naar 5 mails per dag." },
+      { type: "heading", text: "2 – Gidsbedrijf" },
+      { type: "p", text: "Een bedrijf met 20 gidsen verwerkte alle boekingen handmatig via website, WhatsApp en mail. We bouwden één AI-systeem: boekingen komen binnen, de juiste gids wordt gecontacteerd en ingepland, klant en gids krijgen automatisch een bevestiging en facturen worden automatisch opgesteld." },
+      { type: "p", text: "→ Resultaat: geen administratie meer, volledige focus op ondernemen." },
+      { type: "heading", text: "3 – Recruitmentbureau" },
+      { type: "p", text: "Een recruitmentbureau verwerkte sollicitaties handmatig: cv's lezen, kandidaten mailen, plannen. Zijn AI-systeem screent binnenkomende cv's, plant automatisch een kennismakingsgesprek in en houdt kandidaten op de hoogte." },
+      { type: "p", text: "→ Resultaat: van dagen wachten naar same-day opvolging, zonder extra personeel." },
+      { type: "p", text: "Jij kent je bedrijf, wij de technologie. Tijdens een analysegesprek denken we actief met je mee om samen te kijken waar de opportuniteiten liggen." },
+    ],
+  },
+  {
+    question: "Werkt dit samen met onze bestaande software?",
+    answer: [
+      { type: "p", text: "Ja, juist daarom bouwen we automatiseringen — we verbinden je bestaande tools met elkaar." },
+      { type: "heading", text: "Types software waar we mee werken:" },
+      { type: "list", items: [
+        "CRM-systemen (Teamleader, HubSpot, Salesforce, ...)",
+        "Boekhoudpakketten (Exact Online, Yuki, ...)",
+        "E-mail & marketingplatformen (Gmail, Outlook, Mailchimp, ...)",
+        "Cloud-opslag (Google Drive, OneDrive, Dropbox, ...)",
+        "Betalingsplatformen (Stripe, Mollie, PayPal, ...)",
+        "Projectmanagement tools (Monday, Asana, Trello, ...)",
+        "Communicatie (Slack, Microsoft Teams, ...)",
+        "En 500+ andere via standaard koppelingen",
+      ]},
+      { type: "heading", text: "Hoe we koppelen" },
+      { type: "p", text: "Als je software een API heeft (vrijwel alle moderne systemen sinds 2015), kunnen we het koppelen. Obscure of minder courante software? Zolang het een koppelingsmogelijkheid heeft, lukt het waarschijnlijk." },
+      { type: "heading", text: "Geen API?" },
+      { type: "p", text: "Dan zoeken we een workaround via e-mail, geëxporteerde bestanden, of webhooks. In 95% van de gevallen vinden we een oplossing." },
+      { type: "p", text: "Je hoeft geen nieuwe software aan te schaffen. We werken met wat je al hebt en laten die systemen samenwerken." },
+      { type: "p", text: "Onzeker of jullie tools compatibel zijn? Stuur ons de lijst, dan checken we het vooraf — gratis en zonder verplichtingen." },
+    ],
+  },
+  {
+    question: "Wat kost AI-automatisering voor mijn bedrijf?",
+    answer: [
+      { type: "p", text: "Minder dan een halftijdse medewerker inhuren, maar dan werkt het 24/7, maakt geen fouten en is nooit ziek." },
+      { type: "p", text: "Concreet voorbeeld: als je team 10 uur per week kwijt is aan handmatige taken, kost dat je €15.000–20.000 per jaar. Een automatisering van €5.000–8.000 verdient zichzelf terug in 3 tot 6 maanden." },
+      { type: "p", text: "En daarna blijft het werken — jaar na jaar, met minimale extra kosten." },
+      { type: "p", text: "Na een gratis kennismakingsgesprek krijg je een vaste prijs. Geen verrassingen achteraf." },
+    ],
+  },
+  {
+    question: "Is dit niet te duur voor een KMO van onze grootte?",
+    answer: [
+      { type: "p", text: "Juist voor KMO's is dit interessant. Grote bedrijven hebben IT-afdelingen; jij betaalt voor repetitief werk dat een systeem kan overnemen." },
+      { type: "p", text: "Te klein om te starten? We bouwen ook graag gefaseerd: start met één proces, breid later uit als je de waarde ziet." },
+      { type: "p", text: "De investering is vergelijkbaar met professionele software, maar dan specifiek gebouwd voor jouw processen." },
+    ],
+  },
+  {
+    question: "Hoeveel tijd besparen we hier realistisch mee?",
+    answer: [
+      { type: "p", text: "Tussen de 80% en 100% van de tijd op dat specifieke proces." },
+      { type: "heading", text: "Waarom zo hoog?" },
+      { type: "p", text: "Simpel: wij adviseren geen automatiseringen met lage ROI. Als een proces maar 30–40% efficiëntiewinst oplevert, zeggen we eerlijk dat het de investering niet waard is." },
+      { type: "heading", text: "Concrete voorbeelden" },
+      { type: "list", items: [
+        "Lead management: Nu 6 uur/week → na automatisering: 0 uur. Volledige besparing.",
+        "Offerte-proces: Nu 45 min per offerte (8x/week) → na automatisering: 10 min. Besparing: 4,5 uur/week.",
+        "Data synchronisatie: Nu 20 min per nieuwe klant → na automatisering: 0 min, gebeurt direct.",
+      ]},
+      { type: "heading", text: "Meer dan alleen uren" },
+      { type: "list", items: [
+        "Lead om 18:00u binnen? Binnen 2 minuten beantwoord, ook buiten kantooruren.",
+        "Follow-ups: 0% gemist, alles gebeurt automatisch op tijd.",
+        "Fouten: 0 typefouten, data altijd consistent.",
+        "Teammoraal: minder frustratie over administratie, meer tijd voor klanten.",
+      ]},
+      { type: "p", text: "Twijfel of jouw proces geschikt is? Beschrijf het, dan zijn we eerlijk of de ROI er is." },
+    ],
+  },
+  {
+    question: "Hoe lang duurt het voor de automatisering live staat?",
+    answer: [
+      { type: "p", text: "Totaal traject: 4–10 weken, afhankelijk van complexiteit." },
+      { type: "heading", text: "Fase 1 – Analyse (1 week)" },
+      { type: "p", text: "Samen analyseren we je processen. We starten snel op, geen maanden voorbereiding." },
+      { type: "heading", text: "Fase 2 – Building (2–6 weken)" },
+      { type: "p", text: "We bouwen en testen de automatisering. Je ziet tussentijds al resultaten." },
+      { type: "heading", text: "Fase 3 – Hypercare (2–4 weken)" },
+      { type: "p", text: "Het systeem is live en jullie gebruiken het. Wij monitoren intensief en lossen direct op als er iets niet perfect loopt. Pas als het 100% stabiel draait, ronden we af." },
+      { type: "p", text: "Onze hypercare-fase is cruciaal: theorie vs. praktijk kan verschillen, en wij blijven erbij tot het écht werkt voor jouw team." },
+    ],
+  },
+  {
+    question: "Moet mijn team hiervoor geschoold worden?",
+    answer: [
+      { type: "p", text: "Minimale onboarding, geen intensieve training." },
+      { type: "p", text: "Jouw team hoeft geen technische kennis te hebben. Wat ze wél moeten weten:" },
+      { type: "list", items: [
+        "Hoe triggert de automatisering? (bijv. lead toevoegen in CRM)",
+        "Wat gebeurt er automatisch? (zodat ze niet dubbel werk doen)",
+        "Waar zien ze de output? (bijv. taken verschijnen in hun inbox)",
+      ]},
+      { type: "heading", text: "We begeleiden dit met:" },
+      { type: "list", items: [
+        "Praktische walkthrough tijdens de hypercare-fase",
+        "Korte handleiding (geen 50-paginahandboeken)",
+        "Support gedurende 2–4 weken terwijl ze wennen",
+      ]},
+      { type: "p", text: "De grootste uitdaging? Niet zozeer \"leren gebruiken\", maar eerder \"vertrouwen dat het werkt en oude gewoontes loslaten\". Daar helpen we actief bij." },
+    ],
+  },
+  {
+    question: "Wat als er iets misloopt met de automatisering?",
+    answer: [
+      { type: "p", text: "Elke oplossing heeft een test- en integratieperiode. Tijdens de hypercare kijken we aandachtig mee naar alle handelingen. Pas als alles perfect verloopt, ronden we af." },
+      { type: "p", text: "Na aflevering laten we je niet in de steek. Elke oplossing bevat ingebouwde monitoring. Wij worden onmiddellijk verwittigd als er iets hapert." },
+      { type: "p", text: "Bug? Gratis. API veranderd? Gratis. Onze verantwoordelijkheid, niet de jouwe." },
+    ],
+  },
+  {
+    question: "Wat gebeurt er als we later willen uitbreiden?",
+    answer: [
+      { type: "p", text: "Uitbreiden is makkelijk — en dat adviseren we vaak bewust." },
+      { type: "heading", text: "Typisch groeipad:" },
+      { type: "list", items: [
+        "Fase 1 (maand 1–3): start met één high-impact proces, bijv. leadmanagement",
+        "Fase 2 (maand 4–9): volgend proces erbij, bijv. offerteproces",
+        "Fase 3 (jaar 2): volledige workflow-automatisering, meerdere systemen praten met elkaar",
+      ]},
+      { type: "heading", text: "Waarom gefaseerd werken slim is:" },
+      { type: "list", items: [
+        "Kleiner risico per stap",
+        "Team went geleidelijk aan automatisering",
+        "Je ziet ROI tussen elke fase",
+        "Budget spreiding",
+      ]},
+      { type: "p", text: "Technisch bouwen we modulair: nieuwe automatisering sluit aan op bestaande. Geen grote herbouw nodig." },
+    ],
+  },
+  {
+    question: "Krijgen we ondersteuning na de lancering?",
+    answer: [
+      { type: "p", text: "Na de hypercare-fase zou alles perfect moeten werken — en daar investeren we samen in." },
+      { type: "heading", text: "Wat maakt onze hypercare anders?" },
+      { type: "p", text: "We monitoren niet alleen passief. We werken actief samen met jouw team:" },
+      { type: "list", items: [
+        "Probeer het systeem eens te breken (we moedigen dit aan)",
+        "Test alle edge cases en \"wat als…\"-scenario's",
+        "Gebruik het in de echte drukte van je bedrijf",
+        "Vind de kinderziektes vóór we weggaan",
+      ]},
+      { type: "heading", text: "Resultaat na hypercare:" },
+      { type: "p", text: "Een systeem dat maandenlang draait zonder dat je aan ons hoeft te denken." },
+      { type: "heading", text: "Mocht er toch iets zijn:" },
+      { type: "p", text: "We springen bij — gratis, vanzelfsprekend. Je betaalt alleen voor nieuwe features die je later wilt toevoegen." },
+    ],
+  },
+];
+
+// ============================================
+// STORYTELLING TIMELINE DATA
+// ============================================
+
 interface StoryLine {
+  icon: LucideIcon;
   text: string;
-  icon?: LucideIcon;
-  isBreak?: boolean;
   isConclusion?: boolean;
 }
 
 const storyLines: StoryLine[] = [
-  { text: "Je bent op locatie bij een klant.", icon: Clock },
-  { text: "Je telefoon blijft rinkelen.", icon: PhoneOff },
-  { text: "Mails blijven binnenkomen.", icon: MailWarning },
-  { text: "Je reageert te laat.", icon: Clock },
-  { text: "", isBreak: true },
-  { text: "De klant die je niet kon helpen?", isConclusion: true, icon: UserX },
-  { text: "Die stapt naar je concurrent.", isConclusion: true, icon: ArrowUpRight },
+  { icon: Clock, text: "Je bent bij een klant onder de wastafel aan het werk." },
+  { icon: PhoneOff, text: "Je telefoon blijft rinkelen." },
+  { icon: MailWarning, text: "Mails blijven binnenkomen." },
+  { icon: Clock, text: "Je reageert te laat." },
+];
+
+const conclusionLines: StoryLine[] = [
+  { icon: UserX, text: "De klant die je niet kon helpen?", isConclusion: true },
+  { icon: ArrowUpRight, text: "Die stapt naar je concurrent.", isConclusion: true },
 ];
 
 // ============================================
-// NOISE OVERLAY (same as main site)
+// NOISE OVERLAY
 // ============================================
 
 const NoiseOverlay = () => (
@@ -133,104 +336,23 @@ const NoiseOverlay = () => (
 );
 
 // ============================================
-// TYPEWRITER (adapted from main site)
+// HAND-DRAWN CHECKMARK
 // ============================================
 
-const TypewriterText = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isDrawing, setIsDrawing] = useState(false);
-
-  const currentPhrase = typewriterPhrases[currentPhraseIndex];
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    let timeout: NodeJS.Timeout;
-
-    if (isPaused) {
-      timeout = setTimeout(() => {
-        setIsPaused(false);
-        setIsDrawing(false);
-        setIsDeleting(true);
-      }, 2000);
-      return () => clearTimeout(timeout);
-    }
-
-    if (isDeleting) {
-      if (displayedText.length === 0) {
-        setIsDeleting(false);
-        setCurrentPhraseIndex(
-          (prev) => (prev + 1) % typewriterPhrases.length
-        );
-      } else {
-        timeout = setTimeout(() => {
-          setDisplayedText(displayedText.slice(0, -1));
-        }, 40);
-      }
-    } else {
-      if (displayedText.length === currentPhrase.length) {
-        setIsDrawing(true);
-        setIsPaused(true);
-      } else {
-        timeout = setTimeout(() => {
-          setDisplayedText(currentPhrase.slice(0, displayedText.length + 1));
-        }, 80);
-      }
-    }
-
-    return () => clearTimeout(timeout);
-  }, [isMounted, displayedText, isDeleting, isPaused, currentPhrase]);
-
-  const words = displayedText.trim().split(" ");
-  const lastWord = words[words.length - 1];
-  const textBeforeLastWord = words.slice(0, -1).join(" ");
-
-  return (
-    <span className="block font-bold italic">
-      {textBeforeLastWord && <>{textBeforeLastWord} </>}
-      <span className="relative inline-block">
-        <span className="relative z-10">{lastWord}</span>
-        <svg
-          className="absolute -bottom-1 left-0 w-full h-[0.45em] z-0"
-          viewBox="0 0 120 20"
-          preserveAspectRatio="none"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M2 16Q50 6 118 10"
-            stroke="#2D3A5C"
-            strokeOpacity="0.22"
-            strokeWidth="12"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            pathLength="1"
-            style={{
-              strokeDasharray: 1,
-              strokeDashoffset: isDrawing ? 0 : 1,
-              opacity: isDrawing ? 1 : 0,
-              transition: isDrawing
-                ? "stroke-dashoffset 400ms ease-out, opacity 0ms"
-                : "opacity 0ms",
-            }}
-          />
-        </svg>
-      </span>
-      <span className="inline-block w-[3px] h-[1em] bg-[#1A2D63] ml-1 animate-pulse" />
-    </span>
-  );
-};
+const HandDrawnCheck = ({ className = "" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M3.5 13.5C5 15 8.5 18.5 9.5 19.5C12 15 16 9 21 4.5"
+      stroke="#1A2D63"
+      strokeWidth="3.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 // ============================================
-// LOGO CAROUSEL (same GSAP curve as main site)
+// LOGO CAROUSEL
 // ============================================
 
 interface LogoCarouselProps {
@@ -411,28 +533,8 @@ const LogoCarousel = ({
   );
 };
 
-const MobileLogoCarousel = () => {
-  const mobilePath =
-    "M -900,612 C -420,690 0,820 420,880 C 860,940 1180,900 1580,780 C 2040,630 2460,430 2900,250 C 3300,140 3700,100 4100,80";
-
-  return (
-    <div className="relative mt-2 block lg:hidden">
-      <div className="relative h-44 sm:h-48 overflow-visible">
-        <LogoCarousel
-          className="logo-carousel absolute inset-0 pointer-events-none overflow-visible block lg:hidden"
-          logoSize={52}
-          svgTopPercent={22}
-          spacingMultiplier={1.15}
-          pathD={mobilePath}
-          durationSeconds={60}
-        />
-      </div>
-    </div>
-  );
-};
-
 // ============================================
-// SECTION DIVIDERS (curved SVG separators)
+// SECTION DIVIDERS
 // ============================================
 
 const sectionDividerData = [
@@ -499,11 +601,9 @@ export function LoodgietersLanding() {
   const [navScrollProgress, setNavScrollProgress] = useState(0);
   const [showStickyMobileCTA, setShowStickyMobileCTA] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
-  const logoCarouselRef = useRef<HTMLDivElement>(null);
   const currentYear = new Date().getFullYear();
   const { isOpen, openForm, closeForm } = useContactForm();
 
-  // Nav scroll progress + sticky mobile CTA trigger
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -515,7 +615,7 @@ export function LoodgietersLanding() {
   }, []);
 
   return (
-    <div className="bg-[#FDFBF7] min-h-screen overflow-x-hidden">
+    <div className="min-h-screen bg-[#FDFBF7] text-[#1A2D63] font-instrument selection:bg-[#B8C5E6] selection:text-[#1A2D63] overflow-x-hidden">
       <NoiseOverlay />
 
       {/* ============================================ */}
@@ -524,21 +624,11 @@ export function LoodgietersLanding() {
       <nav
         className="fixed top-0 left-0 right-0 z-40"
         style={{
-          background:
-            navScrollProgress > 0
-              ? `rgba(253, 251, 247, ${0.82 * navScrollProgress})`
-              : "transparent",
-          backdropFilter:
-            navScrollProgress > 0
-              ? `blur(${14 * navScrollProgress}px)`
-              : "none",
-          WebkitBackdropFilter:
-            navScrollProgress > 0
-              ? `blur(${14 * navScrollProgress}px)`
-              : "none",
+          background: navScrollProgress > 0 ? `rgba(253, 251, 247, ${0.82 * navScrollProgress})` : "transparent",
+          backdropFilter: navScrollProgress > 0 ? `blur(${14 * navScrollProgress}px)` : "none",
+          WebkitBackdropFilter: navScrollProgress > 0 ? `blur(${14 * navScrollProgress}px)` : "none",
           borderBottom: `1px solid rgba(26, 45, 99, ${0.1 * navScrollProgress})`,
-          transition:
-            "background 0.3s, backdrop-filter 0.3s, border-bottom 0.3s",
+          transition: "background 0.3s, backdrop-filter 0.3s, border-bottom 0.3s",
         }}
       >
         <div
@@ -550,65 +640,16 @@ export function LoodgietersLanding() {
           }}
         >
           <a href="/" className="flex items-center gap-3">
-            <img
-              src="/Finit Logo Blue@4x.png"
-              alt="Finit Logo"
-              style={{
-                height: `${20 + (1 - navScrollProgress) * 6}px`,
-                transition: "height 0.3s",
-              }}
-              className="w-auto object-contain md:hidden"
-            />
-            <img
-              src="/Finit Logo Blue@4x.png"
-              alt="Finit Logo"
-              style={{
-                height: `${28 + (1 - navScrollProgress) * 12}px`,
-                transition: "height 0.3s",
-              }}
-              className="w-auto object-contain hidden md:block"
-            />
+            <img src="/Finit Logo Blue@4x.png" alt="Finit Logo" style={{ height: `${24 + (1 - navScrollProgress) * 6}px`, transition: "height 0.3s" }} className="w-auto object-contain md:hidden" />
+            <img src="/Finit Logo Blue@4x.png" alt="Finit Logo" style={{ height: `${32 + (1 - navScrollProgress) * 14}px`, transition: "height 0.3s" }} className="w-auto object-contain hidden md:block" />
           </a>
 
-          {/* Desktop CTA */}
-          <button
-            type="button"
-            onClick={() => {
-              openForm();
-              pushEvent("cta_click", {
-                cta_label: "nav_calendly",
-                location: "lp_loodgieters_nav",
-              });
-            }}
-            className="hidden md:flex items-center gap-2 bg-[#1A2D63] text-white rounded-full text-sm font-medium hover:scale-105 transition-all shadow-lg shadow-[#1A2D63]/20"
-            style={{
-              paddingLeft: `${20 + (1 - navScrollProgress) * 4}px`,
-              paddingRight: `${20 + (1 - navScrollProgress) * 4}px`,
-              paddingTop: `${10 + (1 - navScrollProgress) * 2}px`,
-              paddingBottom: `${10 + (1 - navScrollProgress) * 2}px`,
-              transition: "padding 0.3s",
-            }}
-          >
+          <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "nav_calendly", location: "lp_loodgieters_nav" }); }} className="hidden md:flex items-center gap-2 bg-[#1A2D63] text-white rounded-full text-sm font-medium hover:scale-105 transition-all shadow-lg shadow-[#1A2D63]/20" style={{ paddingLeft: `${20 + (1 - navScrollProgress) * 4}px`, paddingRight: `${20 + (1 - navScrollProgress) * 4}px`, paddingTop: `${10 + (1 - navScrollProgress) * 2}px`, paddingBottom: `${10 + (1 - navScrollProgress) * 2}px`, transition: "padding 0.3s" }}>
             <Calendar className="w-4 h-4" />
             <span>Plan een gesprek</span>
           </button>
 
-          {/* Mobile CTA only */}
-          <button
-            type="button"
-            onClick={() => {
-              openForm();
-              pushEvent("cta_click", {
-                cta_label: "mobile_nav_calendly",
-                location: "lp_loodgieters_mobile_nav",
-              });
-            }}
-            className="md:hidden flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-xs font-medium px-3.5 py-2 transition-opacity duration-300"
-            style={{
-              opacity: navScrollProgress,
-              pointerEvents: navScrollProgress > 0.5 ? "auto" : "none",
-            }}
-          >
+          <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "mobile_nav_calendly", location: "lp_loodgieters_mobile_nav" }); }} className="md:hidden flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-xs font-medium px-3.5 py-2 transition-opacity duration-300" style={{ opacity: navScrollProgress, pointerEvents: navScrollProgress > 0.5 ? "auto" : "none" }}>
             <Calendar className="w-3.5 h-3.5" />
             <span>Plan een gesprek</span>
           </button>
@@ -618,147 +659,108 @@ export function LoodgietersLanding() {
       {/* ============================================ */}
       {/* HERO SECTION                                 */}
       {/* ============================================ */}
-      <header
-        ref={heroRef}
-        className="relative min-h-screen max-w-[100vw] mx-auto flex flex-col justify-center overflow-hidden"
-      >
-        <LogoCarousel carouselRef={logoCarouselRef} />
-
-        {/* Desktop layout: centered flex */}
-        <div className="hidden md:flex container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 items-center justify-center min-h-screen pt-0 pb-0 w-full relative z-10">
-          <div className="relative z-10 text-center max-w-3xl">
-            <motion.div
-              className="mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <h1 className="font-newsreader text-6xl lg:text-[4.25rem] xl:text-[4.75rem] leading-[1] tracking-tight text-[#1A2D63]">
-                <span className="block font-extralight">
-                  Loodgieters, stop met
+      <header ref={heroRef} className="relative max-w-[100vw] mx-auto flex flex-col">
+        {/* Desktop layout */}
+        <div className="hidden md:flex container mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 items-center justify-center pt-28 lg:pt-32 pb-8 w-full relative z-10">
+          <div className="relative z-10 text-center max-w-5xl">
+            <motion.div className="mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}>
+              <h1 className="font-newsreader text-5xl lg:text-6xl xl:text-[4.25rem] leading-[1.1] tracking-tight text-[#1A2D63]">
+                Minder administratie. Meer{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">klussen.</span>
+                  <svg className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0" viewBox="0 0 200 20" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke="#1A2D63" strokeOpacity="0.15" strokeWidth="10" strokeLinecap="round" fill="none" />
+                  </svg>
                 </span>
-                <TypewriterText />
               </h1>
             </motion.div>
 
-            <motion.p
-              className="font-instrument md:text-lg text-[#475D8F] leading-relaxed max-w-md mx-auto mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              AI-systemen die alles automatiseren wat je van je werk houdt
-              &mdash; van offertes en planning tot opvolging en administratie. Terwijl jij op locatie bent.
+            <motion.p className="font-instrument text-lg lg:text-xl text-[#475D8F] leading-relaxed max-w-2xl mx-auto mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}>
+              Wij automatiseren de administratie van loodgieters. Offertes, facturatie, planning en opvolging draaien op de achtergrond. Jij rijdt gewoon door naar de volgende klus.
             </motion.p>
 
-            <motion.div
-              className="flex flex-row items-center justify-center gap-3"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-            >
-              <button
-                type="button"
-                onClick={() => {
-                  openForm();
-                  pushEvent("cta_click", {
-                    cta_label: "hero_calendly",
-                    location: "lp_loodgieters_hero",
-                  });
-                }}
-                className="group bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
-              >
+            <motion.div className="flex flex-row items-center justify-center gap-3 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}>
+              <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "hero_calendly", location: "lp_loodgieters_hero" }); }} className="group bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10">
                 <Calendar className="w-4 h-4" />
-                <span>Check wat mogelijk is voor jouw bedrijf</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Mobile layout: h1 in flow, subtitle+CTA+carousel pinned to bottom */}
-        <div className="md:hidden relative z-10 min-h-[calc(100svh-64px)] px-4 sm:px-6">
-          {/* Typewriter heading - centered in viewport, unaffected by bottom section */}
-          <div className="flex items-center justify-center min-h-[calc(100svh-64px)] pt-20 pb-[28rem]">
-            <motion.div
-              className="text-center max-w-[22rem] sm:max-w-[28rem] px-2 sm:px-0"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <h1 className="font-newsreader text-5xl leading-[1] tracking-tight text-[#1A2D63]">
-                <span className="block font-extralight">
-                  Loodgieters, stop met
-                </span>
-                <TypewriterText />
-              </h1>
-            </motion.div>
-          </div>
-
-          {/* Absolutely positioned bottom section - never moves */}
-          <div className="absolute bottom-4 left-4 right-4 sm:left-6 sm:right-6 text-center max-w-[22rem] sm:max-w-[28rem] mx-auto">
-            <motion.p
-              className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-md mx-auto mb-5"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              AI-systemen die alles automatiseren wat je van je werk houdt
-              &mdash; van offertes en planning tot opvolging en administratie. Terwijl jij op locatie bent.
-            </motion.p>
-
-            <motion.div
-              className="flex flex-col items-center justify-center gap-3"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-            >
-              <button
-                type="button"
-                onClick={() => {
-                  openForm();
-                  pushEvent("cta_click", {
-                    cta_label: "hero_calendly",
-                    location: "lp_loodgieters_hero",
-                  });
-                }}
-                className="group w-full bg-[#1A2D63] text-white px-6 py-3 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
-              >
-                <Calendar className="w-4 h-4" />
-                <span>Check wat mogelijk is voor jouw bedrijf</span>
+                <span>Plan een kennismakingsgesprek</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
 
-            <motion.p
-              className="mt-4 text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#475D8F]/70"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-            >
-              Integraties met je tools
-            </motion.p>
-            <MobileLogoCarousel />
+            <motion.div className="flex items-center justify-center gap-3 mt-6 mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
+              <span className="text-xs uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
+              <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-7 w-auto object-contain" />
+              <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-7 w-auto object-contain" />
+            </motion.div>
+
+            <motion.div className="flex flex-col items-start gap-2 text-[#1A2D63]/70 text-lg mx-auto w-fit text-left" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.7 }}>
+              <span className="flex items-center gap-2.5 whitespace-nowrap">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                We leren eerst jouw manier van werken kennen
+              </span>
+              <span className="flex items-center gap-2.5 whitespace-nowrap">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                We bepalen waar AI het meeste tijd oplevert
+              </span>
+              <span className="flex items-center gap-2.5 whitespace-nowrap">
+                <HandDrawnCheck className="w-6 h-6 flex-shrink-0" />
+                Fractie van de kost van een echte werknemer
+              </span>
+            </motion.div>
           </div>
         </div>
+
+        {/* Mobile layout */}
+        <div className="md:hidden relative z-10 px-4 sm:px-6 pt-28 pb-6">
+          <div className="text-center max-w-[22rem] sm:max-w-[28rem] mx-auto">
+            <motion.h1 className="font-newsreader text-[2.5rem] sm:text-5xl leading-[1.1] tracking-tight text-[#1A2D63] mb-5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}>
+              Minder administratie. Meer{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10">klussen.</span>
+                <svg className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0" viewBox="0 0 200 20" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke="#1A2D63" strokeOpacity="0.15" strokeWidth="10" strokeLinecap="round" fill="none" />
+                </svg>
+              </span>
+            </motion.h1>
+
+            <motion.p className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}>
+              Wij automatiseren de administratie van loodgieters. Offertes, facturatie, planning en opvolging draaien op de achtergrond.
+            </motion.p>
+
+            <motion.div className="flex flex-col items-center justify-center gap-3 mb-5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}>
+              <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "hero_calendly", location: "lp_loodgieters_hero" }); }} className="group w-full bg-[#1A2D63] text-white px-6 py-3.5 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10">
+                <Calendar className="w-4 h-4" />
+                <span>Plan een kennismakingsgesprek</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </motion.div>
+
+            <motion.div className="flex items-center justify-center gap-2.5 mt-5 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
+              <span className="text-[10px] uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
+              <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-5 w-auto object-contain" />
+              <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-5 w-auto object-contain" />
+            </motion.div>
+
+            <motion.div className="flex flex-col items-start gap-2.5 text-[#1A2D63]/70 text-base mx-auto w-fit text-left" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.7 }}>
+              <span className="flex items-center gap-2.5"><HandDrawnCheck className="w-6 h-6 flex-shrink-0" />Automatische offertes, werkbonnen, planning</span>
+              <span className="flex items-center gap-2.5"><HandDrawnCheck className="w-6 h-6 flex-shrink-0" />AI-werknemers werken 24/7, zonder fouten</span>
+              <span className="flex items-center gap-2.5"><HandDrawnCheck className="w-6 h-6 flex-shrink-0" />Fractie van de kost van een echte werknemer</span>
+            </motion.div>
+          </div>
+        </div>
+
       </header>
 
       {/* ============================================ */}
-      {/* "HERKEN JE DIT?" - STORYTELLING SECTION      */}
+      {/* STORYTELLING TIMELINE — "Herken je dit?"     */}
       {/* ============================================ */}
       <section
-        id="herken-je-dit"
-        className="py-16 md:py-24 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]"
+        id="pain-points"
+        className="pt-4 md:pt-6 pb-8 md:pb-10 px-6 md:px-12 bg-[#FDFBF7]"
       >
-        <div className="max-w-[700px] mx-auto">
-          <motion.div
-            className="text-center mb-12 md:mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
+        <div className="max-w-[800px] mx-auto bg-white/80 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-[#1A2D63]/[0.08] shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]">
+          <div className="text-center mb-8 md:mb-10">
+            <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
               Herken je{" "}
               <span className="relative inline-block">
                 <span className="relative z-10">dit?</span>
@@ -780,423 +782,203 @@ export function LoodgietersLanding() {
                 </svg>
               </span>
             </h2>
-          </motion.div>
-
-          <div className="relative">
-            <div className="space-y-0">
-              {(() => {
-                const breakIndex = storyLines.findIndex((l) => l.isBreak);
-                return storyLines.map((line, index) => {
-                  if (line.isBreak) {
-                    return (
-                      <div key={index} className="h-8 md:h-10 relative flex items-center justify-start pl-[14px] md:pl-[17px]">
-                        <div className="flex gap-1.5">
-                          <span className="block w-1.5 h-1.5 rounded-full bg-[#1A2D63]/25" />
-                          <span className="block w-1.5 h-1.5 rounded-full bg-[#1A2D63]/25" />
-                          <span className="block w-1.5 h-1.5 rounded-full bg-[#1A2D63]/25" />
-                        </div>
-                      </div>
-                    );
-                  }
-
-                  const isLastBeforeBreak = breakIndex > 0 && index === breakIndex - 1;
-                  const isLastItem = index === storyLines.length - 1;
-                  const showConnectorBelow = !isLastBeforeBreak && !isLastItem && !storyLines[index + 1]?.isBreak;
-
-                  return (
-                    <motion.div
-                      key={index}
-                      className="relative"
-                      initial={{ opacity: 0, x: -16 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true, margin: "-40px" }}
-                      transition={{ duration: 0.4, delay: index * 0.1 }}
-                    >
-                      <div className="flex items-center gap-4 md:gap-5 py-3 md:py-4">
-                        <div
-                          className={`relative z-10 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-                            line.isConclusion
-                              ? "bg-[#1A2D63] shadow-md shadow-[#1A2D63]/20"
-                              : "bg-white border-2 border-[#1A2D63]/15"
-                          }`}
-                        >
-                          {line.icon && (
-                            <line.icon
-                              className={`w-4 h-4 md:w-5 md:h-5 ${
-                                line.isConclusion ? "text-white" : "text-[#1A2D63]/60"
-                              }`}
-                            />
-                          )}
-                        </div>
-
-                        <p
-                          className={`font-newsreader text-xl sm:text-2xl md:text-3xl leading-snug ${
-                            line.isConclusion
-                              ? "text-[#1A2D63] font-semibold"
-                              : "text-[#475D8F]"
-                          }`}
-                        >
-                          {line.text}
-                        </p>
-                      </div>
-
-                      {showConnectorBelow && (
-                        <div className="absolute left-5 md:left-6 -translate-x-1/2 top-[calc(50%+20px)] md:top-[calc(50%+24px)] w-px h-[calc(100%-16px)] bg-[#1A2D63]/15" />
-                      )}
-                    </motion.div>
-                  );
-                });
-              })()}
-            </div>
           </div>
 
-          <motion.div
-            className="mt-12 md:mt-16 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <p className="font-newsreader text-2xl sm:text-3xl md:text-4xl text-[#1A2D63] font-semibold italic">
+          {/* Vertical storytelling timeline */}
+          <div className="relative max-w-lg mx-auto">
+            {storyLines.map((line, index) => (
+              <motion.div
+                key={index}
+                className="flex items-start gap-4 md:gap-5 relative"
+                initial={{ opacity: 0, x: -16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.22, delay: index * 0.07 }}
+              >
+                <div className="flex flex-col items-center shrink-0">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-[#1A2D63]/20 bg-white flex items-center justify-center">
+                    <line.icon className="w-5 h-5 md:w-6 md:h-6 text-[#1A2D63]/60" strokeWidth={1.5} />
+                  </div>
+                  {index < storyLines.length - 1 && (
+                    <div className="w-px h-8 md:h-10 bg-[#1A2D63]/15" />
+                  )}
+                </div>
+                <p className="font-instrument text-lg md:text-xl text-[#1A2D63] leading-snug pt-2.5">
+                  {line.text}
+                </p>
+              </motion.div>
+            ))}
+
+            {/* Break — 3 dots */}
+            <motion.div
+              className="flex items-center justify-start pl-[18px] md:pl-[22px] py-2"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.2, delay: 0.25 }}
+            >
+              <div className="flex flex-col items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1A2D63]/25" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1A2D63]/25" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1A2D63]/25" />
+              </div>
+            </motion.div>
+
+            {/* Conclusion lines */}
+            {conclusionLines.map((line, index) => (
+              <motion.div
+                key={`conclusion-${index}`}
+                className="flex items-start gap-4 md:gap-5 relative"
+                initial={{ opacity: 0, x: -16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.22, delay: 0.3 + index * 0.07 }}
+              >
+                <div className="flex flex-col items-center shrink-0">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1A2D63] flex items-center justify-center">
+                    <line.icon className="w-5 h-5 md:w-6 md:h-6 text-white" strokeWidth={1.5} />
+                  </div>
+                  {index < conclusionLines.length - 1 && (
+                    <div className="w-px h-8 md:h-10 bg-[#1A2D63]/15" />
+                  )}
+                </div>
+                <p className="font-instrument text-base md:text-lg text-[#1A2D63] font-semibold leading-snug pt-2.5">
+                  {line.text}
+                </p>
+              </motion.div>
+            ))}
+
+            {/* Dramatic conclusion */}
+            <motion.p
+              className="font-newsreader italic text-2xl md:text-3xl text-[#1A2D63] text-center mt-8 md:mt-10"
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.3, delay: 0.45 }}
+            >
               Het hoeft niet zo te zijn.
-            </p>
-          </motion.div>
+            </motion.p>
+          </div>
         </div>
       </section>
 
       <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={0} />
 
       {/* ============================================ */}
-      {/* SECTOR-SPECIFIC SOLUTIONS                    */}
+      {/* SOLUTIONS                                    */}
       {/* ============================================ */}
-      <section
-        id="solutions"
-        className="py-16 md:py-24 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]"
-      >
-        <div className="max-w-[1000px] mx-auto">
-          <motion.div
-            className="text-center mb-12 md:mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
-              Wat als het{" "}
+      <section id="solutions" className="pt-8 md:pt-12 pb-8 md:pb-10 px-6 md:px-12 bg-[#FDFBF7]">
+        <div className="max-w-[1100px] mx-auto">
+          <motion.div className="text-center mb-8 md:mb-10" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.5 }}>
+            <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
+              Wat als het gewoon{" "}
               <span className="relative inline-block">
                 <span className="relative z-10">automatisch</span>
-                <svg
-                  className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
-                  viewBox="0 0 200 20"
-                  preserveAspectRatio="none"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3 14 Q40 4 100 12 Q160 18 197 8"
-                    stroke="#1A2D63"
-                    strokeOpacity="0.15"
-                    strokeWidth="10"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
-                </svg>
-              </span>{" "}
-              ging?
+                <svg className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0" viewBox="0 0 200 20" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke="#1A2D63" strokeOpacity="0.15" strokeWidth="10" strokeLinecap="round" fill="none" /></svg>
+              </span>{" "}ging?
             </h2>
-            <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
-              AI neemt het repetitieve werk over. Jij blijft loodgieter.
-            </p>
+            <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">AI neemt het repetitieve werk over. Jij rijdt door naar de volgende klus.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+          {/* Before/After */}
+          <motion.div className="flex flex-col sm:flex-row items-stretch justify-center gap-4 md:gap-6 max-w-2xl mx-auto mb-10 md:mb-12" initial={{ opacity: 0, scale: 0.96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.5 }}>
+            <div className="flex-1 bg-[#1A2D63]/[0.04] rounded-2xl p-7 md:p-8 text-center border border-[#1A2D63]/[0.08] shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]">
+              <p className="text-xs uppercase tracking-widest text-[#1A2D63]/40 mb-3 font-medium">Zonder AI</p>
+              <p className="text-4xl md:text-5xl font-newsreader text-[#1A2D63] font-semibold leading-none">15+</p>
+              <p className="text-[#475D8F] text-sm md:text-base mt-2">uur administratie per week</p>
+            </div>
+            <div className="flex items-center justify-center px-2"><ArrowRight className="w-7 h-7 text-[#1A2D63]/20 rotate-90 sm:rotate-0" /></div>
+            <div className="flex-1 bg-[#1A2D63] rounded-2xl p-7 md:p-8 text-center shadow-xl shadow-[#1A2D63]/15">
+              <p className="text-xs uppercase tracking-widest text-white/50 mb-3 font-medium">Met AI</p>
+              <p className="text-4xl md:text-5xl font-newsreader text-white font-semibold leading-none">2</p>
+              <p className="text-white/60 text-sm md:text-base mt-2">uur administratie per week</p>
+            </div>
+          </motion.div>
+
+          {/* Solution cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {solutions.map((solution, index) => (
-              <motion.div
-                key={index}
-                className="relative group"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
-                <div className="bg-white rounded-2xl p-7 border border-[#1A2D63]/[0.06] h-full group-hover:border-[#1A2D63]/[0.15] transition-all shadow-lg hover:shadow-2xl hover:-translate-y-1">
-                  <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#1A2D63] to-[#2A4488] flex items-center justify-center mb-5 shadow-md shadow-[#1A2D63]/15">
-                    <solution.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="text-[17px] font-semibold text-[#1A2D63] mb-2 leading-tight">
-                    {solution.title}
-                  </h3>
-                  <p className="text-[#475D8F] text-[15px] leading-relaxed">
-                    {solution.description}
-                  </p>
+              <motion.div key={index} className="relative" initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.4, delay: index * 0.1 }}>
+                <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]">
+                  <div className="w-10 h-10 rounded-2xl bg-[#1A2D63]/10 border border-[#1A2D63]/25 flex items-center justify-center mb-5"><solution.icon className="w-5 h-5 text-[#1A2D63]" /></div>
+                  <h3 className="font-newsreader text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">{solution.title}</h3>
+                  <p className="text-[#1A2D63]/65 text-base md:text-lg leading-relaxed">{solution.description}</p>
                 </div>
               </motion.div>
             ))}
           </div>
 
           {/* Breadth indicator */}
-          <motion.div
-            className="mt-8 md:mt-10"
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.4, delay: 0.35 }}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                openForm();
-                pushEvent("cta_click", {
-                  cta_label: "breadth_card_calendly",
-                  location: "lp_loodgieters_solutions",
-                });
-              }}
-              className="group flex items-center gap-4 max-w-2xl mx-auto rounded-2xl border-2 border-dashed border-[#1A2D63]/15 hover:border-[#1A2D63]/30 px-6 py-5 transition-all hover:bg-white/60 cursor-pointer w-full text-left"
-            >
-              <div className="w-11 h-11 rounded-xl bg-[#1A2D63]/[0.06] group-hover:bg-[#1A2D63]/[0.12] flex items-center justify-center shrink-0 transition-colors">
-                <Plus className="w-5 h-5 text-[#1A2D63]" />
+          <motion.div className="mt-8 md:mt-10" initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.4, delay: 0.35 }}>
+            <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "breadth_card_calendly", location: "lp_loodgieters_solutions" }); }} className="group relative flex items-center gap-5 md:gap-6 max-w-2xl mx-auto rounded-3xl border-2 border-dashed border-[#1A2D63]/20 hover:border-[#1A2D63]/40 px-8 py-7 md:px-10 md:py-8 transition-all hover:bg-white/60 cursor-pointer w-full text-left">
+              <div className="hidden md:flex w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-[#1A2D63]/[0.08] group-hover:bg-[#1A2D63]/[0.15] items-center justify-center shrink-0 transition-colors"><Plus className="w-7 h-7 md:w-8 md:h-8 text-[#1A2D63]" /></div>
+              <div className="md:hidden absolute top-4 right-4 w-9 h-9 rounded-xl bg-[#1A2D63]/[0.08] group-hover:bg-[#1A2D63]/[0.15] flex items-center justify-center transition-colors"><Plus className="w-5 h-5 text-[#1A2D63]" /></div>
+              <div className="flex-1 min-w-0 pr-12 md:pr-0">
+                <p className="font-newsreader text-xl md:text-2xl text-[#1A2D63] leading-snug mb-1">En alles wat repetitief is in jouw bedrijf</p>
+                <p className="text-[#1A2D63]/60 text-base md:text-lg">Vertel ons wat je dagelijks doet — wij laten zien wat er kan.</p>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[#1A2D63] font-medium text-[15px] leading-snug">
-                  En alles wat repetitief is in jouw bedrijf
-                </p>
-                <p className="text-[#475D8F]/70 text-sm mt-0.5">
-                  In een vrijblijvend gesprek ontdekken we samen welke processen nog meer geautomatiseerd kunnen worden.
-                </p>
-              </div>
-              <ArrowRight className="w-4 h-4 text-[#1A2D63]/30 group-hover:text-[#1A2D63]/60 shrink-0 group-hover:translate-x-1 transition-all" />
+              <ArrowRight className="hidden md:block w-5 h-5 md:w-6 md:h-6 text-[#1A2D63]/30 group-hover:text-[#1A2D63]/60 shrink-0 group-hover:translate-x-1 transition-all" />
             </button>
           </motion.div>
         </div>
       </section>
 
-      <SectionDivider fromColor="#FDFBF7" toColor="#1A2D63" variant={1} />
-
       {/* ============================================ */}
-      {/* CASE STUDY - BEFORE/AFTER                    */}
+      {/* EMERGENCY SCENARIO                           */}
       {/* ============================================ */}
-      <section
-        id="case-study"
-        className="py-14 md:py-20 px-4 sm:px-6 md:px-12 bg-[#1A2D63] relative"
-      >
-        <div className="max-w-[900px] mx-auto relative z-10">
-          <motion.div
-            className="text-center mb-10 md:mb-14"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="text-xs uppercase tracking-widest text-white/40 mb-3 font-medium">
-              Voorbeeld op basis van gemiddelde klantresultaten
-            </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-newsreader text-white leading-[1.15]">
-              Van chaos naar controle
-            </h2>
-          </motion.div>
-
-          <motion.div
-            className="flex flex-col sm:flex-row items-stretch justify-center gap-4 md:gap-6 max-w-2xl mx-auto mb-10 md:mb-12"
-            initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="flex-1 bg-white/[0.06] rounded-2xl p-7 md:p-8 border border-white/[0.08]">
-              <p className="text-xs uppercase tracking-widest text-white/40 mb-5 font-medium text-center">
-                Ervoor
-              </p>
-              <div className="space-y-4">
-                <div className="text-center">
-                  <p className="text-3xl md:text-4xl font-newsreader text-white font-semibold leading-none">
-                    18u
-                  </p>
-                  <p className="text-white/50 text-sm mt-1">admin per week</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl md:text-4xl font-newsreader text-white font-semibold leading-none">
-                    1-2 dagen
-                  </p>
-                  <p className="text-white/50 text-sm mt-1">voor een offerte</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl md:text-4xl font-newsreader text-white font-semibold leading-none">
-                    23%
-                  </p>
-                  <p className="text-white/50 text-sm mt-1">leads verloren</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center px-2">
-              <ArrowRight className="w-7 h-7 text-white/20 rotate-90 sm:rotate-0" />
-            </div>
-
-            <div className="flex-1 bg-white rounded-2xl p-7 md:p-8 shadow-xl shadow-black/15">
-              <p className="text-xs uppercase tracking-widest text-[#1A2D63]/40 mb-5 font-medium text-center">
-                Erna
-              </p>
-              <div className="space-y-4">
-                <div className="text-center">
-                  <p className="text-3xl md:text-4xl font-newsreader text-[#1A2D63] font-semibold leading-none">
-                    6u
-                  </p>
-                  <p className="text-[#475D8F] text-sm mt-1">admin per week</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl md:text-4xl font-newsreader text-[#1A2D63] font-semibold leading-none">
-                    Minuten
-                  </p>
-                  <p className="text-[#475D8F] text-sm mt-1">voor een offerte</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl md:text-4xl font-newsreader text-[#1A2D63] font-semibold leading-none">
-                    &lt;5%
-                  </p>
-                  <p className="text-[#475D8F] text-sm mt-1">leads verloren</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-          >
-            <blockquote className="font-newsreader text-lg md:text-xl text-white/80 italic leading-relaxed max-w-lg mx-auto">
-              &ldquo;Ik ben loodgieter geworden om met mijn handen te werken. Niet om achter een bureau te zitten.&rdquo;
-            </blockquote>
-          </motion.div>
-        </div>
-      </section>
-
-      <SectionDivider fromColor="#1A2D63" toColor="#FDFBF7" variant={2} />
-
-      {/* ============================================ */}
-      {/* COMPETITION ANGLE                            */}
-      {/* ============================================ */}
-      <section
-        id="competition"
-        className="py-16 md:py-24 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]"
-      >
-        <div className="max-w-[700px] mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-6">
-              Die concurrent die altijd sneller{" "}
-              <span className="relative inline-block">
-                <span className="relative z-10">offreert?</span>
-                <svg
-                  className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
-                  viewBox="0 0 200 20"
-                  preserveAspectRatio="none"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3 14 Q40 4 100 12 Q160 18 197 8"
-                    stroke="#1A2D63"
-                    strokeOpacity="0.15"
-                    strokeWidth="10"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
-                </svg>
-              </span>
-            </h2>
-            <p className="font-instrument text-lg md:text-xl text-[#475D8F] leading-relaxed mb-3">
-              Hij werkt niet harder. Hij werkt slimmer.
-            </p>
-            <p className="font-instrument text-lg md:text-xl text-[#475D8F] leading-relaxed mb-3">
-              AI doet zijn opvolging, zijn planning en zijn administratie.
-            </p>
-            <p className="font-instrument text-lg md:text-xl text-[#1A2D63] leading-relaxed font-medium">
-              Terwijl hij gewoon aan het werk is.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={3} />
-
-      {/* ============================================ */}
-      {/* FINAL CTA                                    */}
-      {/* ============================================ */}
-      <section
-        id="contact"
-        className="pt-8 md:pt-12 pb-20 md:pb-32 px-6 md:px-12 bg-[#FDFBF7] relative"
-      >
+      <section className="pt-8 md:pt-12 pb-8 md:pb-10 px-6 md:px-12 bg-[#FDFBF7]">
         <div className="max-w-[800px] mx-auto">
-          <div className="relative">
-            <div className="absolute inset-0 bg-[#B8C5E6] rounded-full blur-[120px] opacity-30" />
+          <motion.div
+            className="text-center mb-8 md:mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
+              Een{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10">spoedklus</span>
+                <svg className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0" viewBox="0 0 200 20" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke="#1A2D63" strokeOpacity="0.15" strokeWidth="10" strokeLinecap="round" fill="none" /></svg>
+              </span>{" "}op zondagavond
+            </h2>
+            <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
+              Het is zondag, 20u. Een klant belt met een lekkage.
+            </p>
+          </motion.div>
+
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+            {/* Without AI */}
             <motion.div
-              className="relative bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-[#1A2D63]/10 text-center"
-              initial={{ opacity: 0, y: 30 }}
+              className="flex-1 bg-[#1A2D63]/[0.04] rounded-3xl p-7 md:p-8 border border-[#1A2D63]/[0.08] shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.4 }}
             >
-              <h2 className="font-newsreader text-3xl md:text-4xl lg:text-5xl text-[#1A2D63] mb-4">
-                Wil je weten wat mogelijk is voor jouw bedrijf?
-              </h2>
-              <p className="text-[#1A2D63]/60 text-lg mb-8">
-                Plan een vrijblijvend gesprek van 30 minuten. Wij laten je zien
-                waar de grootste kansen liggen.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-                {[
-                  "Vrijblijvend",
-                  "Specifiek voor loodgieters",
-                  "Resultaat binnen 4 weken",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-2 text-sm text-[#1A2D63]"
-                  >
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span>{item}</span>
-                  </div>
-                ))}
+              <div className="flex items-center gap-2 mb-4">
+                <X className="w-5 h-5 text-[#1A2D63]/40" />
+                <p className="text-xs uppercase tracking-widest text-[#1A2D63]/40 font-medium">Zonder AI</p>
               </div>
+              <p className="text-[#1A2D63]/60 text-base md:text-lg leading-relaxed">
+                Je schrijft het op een papiertje. Maandag bel je terug. De klant heeft al iemand anders gebeld.
+              </p>
+            </motion.div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  openForm();
-                  pushEvent("cta_click", {
-                    cta_label: "final_calendly",
-                    location: "lp_loodgieters_final_cta",
-                  });
-                }}
-                className="inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
-              >
-                <Calendar className="w-5 h-5 md:w-6 md:h-6" />
-                Plan een gratis kennismaking
-                <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
-              </button>
-
-              <p className="mt-6 text-[#475D8F] text-sm">
-                Of bel direct:{" "}
-                <a
-                  href="tel:+32495702314"
-                  className="font-medium text-[#1A2D63] hover:underline"
-                  onClick={() =>
-                    pushEvent("contact_click", {
-                      method: "phone",
-                      location: "lp_loodgieters_final_cta",
-                    })
-                  }
-                >
-                  +32 (0)495 702 314
-                </a>
+            {/* With Finit */}
+            <motion.div
+              className="flex-1 bg-[#1A2D63] rounded-3xl p-7 md:p-8 shadow-xl shadow-[#1A2D63]/15"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <Check className="w-5 h-5 text-white/50" />
+                <p className="text-xs uppercase tracking-widest text-white/50 font-medium">Met AI</p>
+              </div>
+              <p className="text-white/80 text-base md:text-lg leading-relaxed">
+                De klant krijgt automatisch een bevestiging via WhatsApp. Maandagochtend staat de afspraak in je agenda.
               </p>
             </motion.div>
           </div>
@@ -1204,173 +986,208 @@ export function LoodgietersLanding() {
       </section>
 
       {/* ============================================ */}
-      {/* FOOTER (compact version)                     */}
+      {/* WHATSAPP INTEGRATION                         */}
       {/* ============================================ */}
-      <footer className="bg-[#1A2D63] text-white pt-12 md:pt-16 pb-10 md:pb-12 px-6 relative overflow-visible">
-        {/* Wave */}
-        <div
-          className="absolute top-0 left-0 w-full"
-          style={{ transform: "translateY(-99%)" }}
-        >
-          <svg
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 2278 683"
-            className="w-full h-16 md:h-20 lg:h-24 block"
-            style={{ overflow: "visible" }}
+      <section className="pt-4 md:pt-6 pb-8 md:pb-10 px-6 md:px-12 bg-[#FDFBF7]">
+        <div className="max-w-[800px] mx-auto">
+          <motion.div
+            className="flex items-center gap-5 md:gap-6 bg-white rounded-3xl p-7 md:p-8 border border-[#1A2D63]/[0.06] shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.4 }}
           >
-            <path
-              fill="#1A2D63"
-              d="M0-0.3C0-0.3,464,120,1139,120S2278-0.3,2278-0.3V683H0V-0.3z"
-            />
-          </svg>
-        </div>
-
-        <div className="max-w-[1400px] mx-auto relative z-10">
-          <div className="grid gap-10 lg:gap-12 lg:grid-cols-[1.3fr_1fr] items-start">
-            <div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-newsreader leading-tight mb-4 text-center lg:text-left">
-                Klaar om uw bedrijf
-                <br />
-                te automatiseren?
-              </h2>
-              <p className="text-white/70 text-base md:text-lg mb-6 max-w-md text-center lg:text-left mx-auto lg:mx-0">
-                Ontdek hoe AI uw bedrijfsprocessen kan transformeren.
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-[#25D366]/10 flex items-center justify-center shrink-0">
+              <MessageCircle className="w-7 h-7 md:w-8 md:h-8 text-[#25D366]" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-newsreader text-xl md:text-2xl text-[#1A2D63] leading-snug mb-1">
+                WhatsApp als je snelste kanaal
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <button
-                  type="button"
-                  onClick={() => {
-                    openForm();
-                    pushEvent("cta_click", {
-                      cta_label: "footer_calendly",
-                      location: "lp_loodgieters_footer",
-                    });
-                  }}
-                  className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                >
-                  <Calendar className="w-4 h-4" />
-                  Plan een gesprek
-                </button>
-                <a
-                  href="mailto:contact@finitsolutions.be"
-                  onClick={() =>
-                    pushEvent("contact_click", {
-                      method: "email",
-                      location: "lp_loodgieters_footer",
-                    })
-                  }
-                  className="border border-white/20 px-6 py-3 rounded-full text-base font-medium hover:bg-white/5 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Mail className="w-4 h-4" />
-                  contact@finitsolutions.be
-                </a>
-              </div>
+              <p className="text-[#1A2D63]/60 text-base md:text-lg leading-relaxed">
+                Je klanten sturen een bericht via WhatsApp. Je systeem antwoordt automatisch. De afspraak staat in je agenda. Zonder dat jij je telefoon hoeft op te pakken.
+              </p>
             </div>
+          </motion.div>
+        </div>
+      </section>
 
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-7 shadow-lg shadow-black/10">
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
-              <ul className="space-y-4 text-sm text-white/70">
-                <li className="flex items-start gap-3">
-                  <Phone className="w-4 h-4 text-white/70 mt-0.5" />
-                  <div className="flex flex-col">
-                    <span>+32 (0)495 702 314</span>
-                    <span>+32 (0)468 029 945</span>
+      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={1} />
+
+      {/* ============================================ */}
+      {/* HOW IT WORKS                                 */}
+      {/* ============================================ */}
+      <section id="how-it-works" className="pt-8 md:pt-12 pb-12 md:pb-16 px-6 md:px-12 bg-[#FDFBF7]">
+        <div className="max-w-[1100px] mx-auto">
+          <motion.div className="text-center mb-8 md:mb-10" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.5 }}>
+            <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
+              Hoe je meer klussen per dag{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10">draait</span>
+                <svg className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0" viewBox="0 0 200 20" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke="#1A2D63" strokeOpacity="0.15" strokeWidth="10" strokeLinecap="round" fill="none" /></svg>
+              </span>
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 md:pt-8">
+            {/* Card 1 - Analyse */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.45, delay: 0 }}
+            >
+              <span className="absolute -top-4 -left-2 md:-top-5 md:-left-3 font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.18] select-none pointer-events-none z-10">01</span>
+              <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] relative">
+                <div className="relative pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-2xl border-2 border-[#1A2D63]/25 bg-transparent flex items-center justify-center">
+                      <MessageSquare className="w-5 h-5 text-[#1A2D63]/50" />
+                    </div>
+                    <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">30 min vrijblijvend</span>
                   </div>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-white/70" />
-                  <a
-                    href="mailto:contact@finitsolutions.be"
-                    className="hover:text-white transition-colors"
-                  >
-                    contact@finitsolutions.be
-                  </a>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Linkedin className="w-4 h-4 text-white/70" />
-                  <a
-                    href="https://www.linkedin.com/company/finitsolutions/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
-                  >
-                    LinkedIn
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-10 pt-6 border-t border-white/10 flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:justify-between md:text-left">
-            <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-white/60">
-              <img
-                src="/Finit Logo Blue@4x.png"
-                alt="Finit Logo"
-                className="h-8 w-auto object-contain brightness-0 invert"
-              />
-            </div>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 md:gap-6">
-              <span>BTW: BE1020600643</span>
-              <a
-                href="/privacy"
-                className="hover:text-white transition-colors"
-              >
-                Privacybeleid
-              </a>
-              <a
-                href="/cookieverklaring"
-                className="hover:text-white transition-colors"
-              >
-                Cookieverklaring
-              </a>
-              <a
-                href="/disclaimer"
-                className="hover:text-white transition-colors"
-              >
-                Disclaimer
-              </a>
-              <div className="text-sm text-white/60 [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:transition-colors">
-                <CookieSettingsLink />
+                  <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">Analyse</h3>
+                  <ul className="space-y-3">
+                    {howItWorksDetails.analyse.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                        <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-            <p className="text-sm text-white/40">
-              &copy; {currentYear} Finit Solutions
-            </p>
+            </motion.div>
+            {/* Card 2 - Bouw */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.45, delay: 0.1 }}
+            >
+              <span className="absolute -top-4 -left-2 md:-top-5 md:-left-3 font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.22] select-none pointer-events-none z-10">02</span>
+              <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] relative">
+                <div className="relative pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1A2D63]/15 to-[#1A2D63]/5 border border-[#1A2D63]/10 flex items-center justify-center">
+                      <Settings className="w-5 h-5 text-[#1A2D63]/70" />
+                    </div>
+                    <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">2–4 weken</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">Bouw</h3>
+                  <ul className="space-y-3">
+                    {howItWorksDetails.bouw.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                        <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+            {/* Card 3 - Resultaat */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.45, delay: 0.2 }}
+            >
+              <span className="absolute -top-4 -left-2 md:-top-5 md:-left-3 font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.28] select-none pointer-events-none z-10">03</span>
+              <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] relative">
+                <div className="relative pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-2xl bg-[#1A2D63]/15 flex items-center justify-center">
+                      <Rocket className="w-5 h-5 text-[#1A2D63]" />
+                    </div>
+                    <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">24/7 actief</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">Resultaat</h3>
+                  <ul className="space-y-3">
+                    {howItWorksDetails.resultaat.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
+                        <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
           </div>
+
+          <motion.div className="flex justify-center mt-10 md:mt-12" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.5, delay: 0.3 }}>
+            <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "process_calendly", location: "lp_loodgieters_process" }); }} className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]">
+              <Calendar className="w-4 h-4" />
+              <span>Plan een kennismakingsgesprek</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </motion.div>
         </div>
-      </footer>
+      </section>
+
+      <SectionDivider fromColor="#FDFBF7" toColor="#1A2D63" variant={2} />
 
       {/* ============================================ */}
-      {/* STICKY MOBILE CTA                            */}
+      {/* TESTIMONIAL                                  */}
       {/* ============================================ */}
-      <div
-        className="fixed bottom-0 left-0 right-0 z-40 md:hidden transition-all duration-300"
-        style={{
-          transform: showStickyMobileCTA
-            ? "translateY(0)"
-            : "translateY(100%)",
-          opacity: showStickyMobileCTA ? 1 : 0,
-        }}
-      >
-        <div className="bg-[#FDFBF7]/90 backdrop-blur-xl border-t border-[#1A2D63]/10 px-4 py-3">
-          <button
-            type="button"
-            onClick={() => {
-              openForm();
-              pushEvent("cta_click", {
-                cta_label: "sticky_mobile_calendly",
-                location: "lp_loodgieters_sticky",
-              });
-            }}
-            className="flex items-center justify-center gap-2.5 bg-[#1A2D63] text-white w-full py-3 rounded-full text-[15px] font-medium shadow-lg shadow-[#1A2D63]/20"
-          >
-            <Calendar className="w-4 h-4" />
-            Check wat mogelijk is
-            <ArrowRight className="w-4 h-4" />
-          </button>
+      <section className="py-8 md:py-10 px-4 sm:px-6 md:px-12 bg-[#1A2D63] relative">
+        <div className="max-w-[800px] mx-auto relative z-10">
+          <motion.div className="flex flex-col md:flex-row items-center gap-6 md:gap-8" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.5 }}>
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full shrink-0 shadow-lg shadow-black/20" role="img" aria-label="Bas - PRS Rotselaar" style={{ backgroundImage: "url('/papa foto.jpg')", backgroundSize: "150%", backgroundPosition: "center 25%", backgroundRepeat: "no-repeat" }} />
+            <div className="text-center md:text-left">
+              <blockquote className="font-instrument text-lg md:text-xl text-white leading-relaxed mb-3">
+                &ldquo;Snelle oplevering, sympathieke gasten. Ik wist niet dat AI vandaag al zoveel werk kon overnemen! &rdquo;
+              </blockquote>
+              <p className="font-instrument text-sm md:text-base text-white/60">&mdash; Bas, PRS Rotselaar</p>
+            </div>
+          </motion.div>
         </div>
-      </div>
+      </section>
+
+      <SectionDivider fromColor="#1A2D63" toColor="#FDFBF7" variant={3} />
+
+      {/* ============================================ */}
+      {/* FAQ SECTION                                  */}
+      {/* ============================================ */}
+      <section id="faq" className="pt-8 md:pt-12 pb-8 md:pb-10 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]">
+        <div className="max-w-[800px] mx-auto">
+          <motion.div className="text-center mb-8 md:mb-10" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.5 }}>
+            <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">Veelgestelde vragen</h2>
+          </motion.div>
+
+          <div className="bg-white/40 md:bg-transparent rounded-2xl md:rounded-none border border-[#1A2D63]/[0.06] md:border-0 px-4 sm:px-5 md:px-0">
+            <Accordion type="single" collapsible className="w-full">
+              {faqItems.map((item, index) => (
+                <AccordionItem key={index} value={`faq-${index}`} className="border-b border-[#1A2D63]/[0.08] last:border-b-0 md:last:border-b md:border-[#1A2D63]/10">
+                  <AccordionTrigger className="py-4 sm:py-5 md:py-6 text-left text-[#1A2D63] font-instrument text-base sm:text-lg md:text-xl font-medium hover:no-underline hover:text-[#475D8F] transition-colors [&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-5 sm:[&>svg]:w-5 [&>svg]:text-[#475D8F] [&>svg]:shrink-0 [&>svg]:ml-3 gap-2">
+                    {item.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-[#1A2D63]/65 text-[15px] sm:text-base md:text-[17px] leading-[1.7] pb-5 sm:pb-6 md:pb-7 space-y-3.5">
+                    {item.answer.map((block, i) => {
+                      if (block.type === "p") return <p key={i}>{block.text}</p>;
+                      if (block.type === "heading") return <p key={i} className="font-semibold text-[#1A2D63]/85 mt-5 first:mt-0 text-[15px] sm:text-base md:text-[17px]">{block.text}</p>;
+                      if (block.type === "list") return (
+                        <ul key={i} className="space-y-2 pl-1">
+                          {block.items.map((entry, j) => (<li key={j} className="flex items-start gap-2.5"><span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-[#1A2D63]/30 shrink-0" /><span>{entry}</span></li>))}
+                        </ul>
+                      );
+                      return null;
+                    })}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+      </section>
+
+      <LandingCTA />
+      <LandingFooter />
+
 
       <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </div>

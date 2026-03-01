@@ -19,7 +19,7 @@ export function Hero() {
 
   return (
     <section className="relative md:min-h-screen overflow-hidden">
-      <div className="max-w-[1500px] px-4 md:px-10 mx-auto flex items-center justify-center py-20 md:py-0 md:h-screen lg:px-8">
+      <div className="max-w-[100rem] px-4 md:px-10 mx-auto flex items-center justify-center py-20 md:py-0 md:h-screen lg:px-8">
         <div className="absolute inset-0 bg-[url('/about-bg.png')] bg-cover z-[-1] bg-center"></div>
 
         {/* Centered Content */}
@@ -28,7 +28,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex justify-center"
+            className="flex flex-col items-center gap-3"
           >
             <div className="inline-flex items-center px-4 py-2 rounded-full text-[12px] font-semibold bg-white border border-blue-200" style={{ color: 'rgb(28, 44, 85)' }}>
               <Zap className="h-4 w-4 mr-2" />
@@ -85,6 +85,17 @@ export function Hero() {
                 {t('hero.cta.meeting')}
               </span>
             </Button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="flex items-center justify-center gap-3 mt-6"
+          >
+            <span className="text-xs uppercase tracking-widest font-medium" style={{ color: 'rgba(28, 44, 85, 0.4)' }}>Ondersteund door</span>
+            <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-7 w-auto object-contain" />
+            <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-7 w-auto object-contain" />
           </motion.div>
         </div>
       </div>
