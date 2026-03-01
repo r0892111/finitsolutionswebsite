@@ -1,0 +1,30 @@
+import { type NextRequest } from 'next/server';
+import crypto from 'crypto';
+
+export async function POST(request: NextRequest) {
+  const rawBody = await request.text();
+  const hmacHeader = request.headers.get('x-shopify-hmac-sha256') ?? '';
+  const secret = process.env.SHOPIFY_API_SECRET ?? '';
+
+  const digest = crypto
+    .createHmac('sha256', secret)
+    .update(rawBody, 'utf8')
+    .digest('base64');
+
+  const valid = crypto.timingSafeEqual(
+    Buffer.from(digest),
+    Buffer.from(hmacHeader),
+  );
+
+  if (!valid) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+
+  const payload = JSON.parse(rawBody);
+  console.log(`[Shopify webhook] customers/redact for shop: ${payload.shop_domain}`);
+
+  // This app stores no customer-level data. If added in future, delete by
+  // payload.customer.id here.
+
+  return new Response(null, { status: 200 });
+}
