@@ -2526,7 +2526,7 @@ export function AIDesignLanding() {
             </div>
 
             <p className="font-instrument text-lg lg:text-xl text-[#475D8F] leading-relaxed max-w-2xl mx-auto mb-8">
-              Finit helpt KMO's de stap richting AI te zetten — praktisch, zonder technisch gedoe en met échte tijdswinst.
+              Finit helpt KMO&apos;s de stap richting AI te zetten — praktisch, zonder technisch gedoe en met échte tijdswinst.
             </p>
 
             <div className="flex flex-row items-center justify-center gap-3 mb-6">
@@ -2598,7 +2598,7 @@ export function AIDesignLanding() {
             </h1>
 
             <p className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-6">
-            Finit helpt KMO's de stap richting AI te zetten — praktisch, zonder technisch gedoe en met échte tijdswinst.
+            Finit helpt KMO&apos;s de stap richting AI te zetten — praktisch, zonder technisch gedoe en met échte tijdswinst.
             </p>
 
             <div className="flex flex-col items-center justify-center gap-3 mb-5">
