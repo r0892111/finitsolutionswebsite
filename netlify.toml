@@ -12,6 +12,25 @@
   # Node.js version
   NODE_VERSION = "18"
 
+# Shopify mandatory GDPR compliance webhooks → Netlify Functions
+[[redirects]]
+  from = "/portal/webhooks/customers/data_request"
+  to = "/.netlify/functions/shopify-webhook-customers-data-request"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/portal/webhooks/customers/redact"
+  to = "/.netlify/functions/shopify-webhook-customers-redact"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/portal/webhooks/shop/redact"
+  to = "/.netlify/functions/shopify-webhook-shop-redact"
+  status = 200
+  force = true
+
 # Redirect rules for Next.js App Router with trailing slashes
 [[redirects]]
   from = "/*"
