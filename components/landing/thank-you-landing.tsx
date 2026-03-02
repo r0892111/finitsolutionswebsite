@@ -3,16 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Clock,
-  MessageSquare,
-  Rocket,
   Mail,
-  Phone,
-  Linkedin,
+  ArrowLeft,
 } from "lucide-react";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
 import { pushEvent } from "@/lib/analytics";
-import { LandingCTA } from "@/components/landing/landing-cta";
 import { LandingFooter } from "@/components/landing/landing-footer";
 
 // ============================================
@@ -119,24 +114,21 @@ const AnimatedCheckmark = () => (
 const nextSteps = [
   {
     number: "01",
-    icon: Clock,
-    title: "We bellen je binnen 24 uur",
+    title: "We nemen contact met je op",
     description:
-      "Een van ons teamleden neemt persoonlijk contact met je op. Kort en vrijblijvend.",
+      "Binnen 24 uur neemt een van ons persoonlijk contact met je op om een kort gesprek in te plannen.",
   },
   {
     number: "02",
-    icon: MessageSquare,
-    title: "We luisteren naar jouw situatie",
+    title: "We bespreken jouw situatie",
     description:
-      "Geen verkooppraatje. We willen begrijpen waar jij tijd verliest en wat het meeste impact maakt.",
+      "We bekijken hoe jouw bedrijf vandaag werkt, waar je tijd verliest en waar verbetering mogelijk is.",
   },
   {
     number: "03",
-    icon: Rocket,
-    title: "Je krijgt een concreet voorstel",
+    title: "Je ontvangt een concreet voorstel",
     description:
-      "Geen vaag verhaal. Je weet precies wat we gaan doen, wat het kost en wanneer je resultaat ziet.",
+      "Je krijgt een helder plan met wat we aanpakken, wat het kost en wat je mag verwachten.",
   },
 ];
 
@@ -199,6 +191,13 @@ export function ThankYouLanding() {
             transition: "padding 0.3s",
           }}
         >
+          <a
+            href="/"
+            className="absolute left-4 sm:left-6 flex items-center gap-1.5 text-[#1A2D63]/50 hover:text-[#1A2D63] transition-colors text-sm font-medium"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">Terug naar home</span>
+          </a>
           <a href="/" className="flex items-center gap-3">
             <img
               src="/Finit Logo Blue@4x.png"
@@ -225,7 +224,7 @@ export function ThankYouLanding() {
       {/* ============================================ */}
       {/* HERO - Thank you message                     */}
       {/* ============================================ */}
-      <header className="relative pt-28 lg:pt-32 pb-8 md:pb-12 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]">
+      <header className="relative pt-44 lg:pt-52 pb-6 px-4 sm:px-6 md:px-12 bg-[#FDFBF7]">
         <div className="max-w-[800px] mx-auto text-center">
           {/* Animated Checkmark */}
           <motion.div
@@ -272,10 +271,10 @@ export function ThankYouLanding() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.45 }}
           >
-            Je bericht is goed aangekomen. We nemen zo snel mogelijk contact met je op — meestal binnen 24 uur.
+            Je informatie is goed aangekomen. We nemen zo snel mogelijk contact met je op — meestal binnen 24 uur.
           </motion.p>
 
-          <motion.div className="flex items-center justify-center gap-2.5 mt-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
+          <motion.div className="flex items-center justify-center gap-2.5 mt-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
             <span className="text-[10px] sm:text-xs uppercase tracking-widest text-[#1A2D63]/40 font-medium">Ondersteund door</span>
             <img src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" className="h-5 sm:h-7 w-auto object-contain" />
             <img src="/SI @KBC Black (2).png" alt="Start it @KBC" className="h-5 sm:h-7 w-auto object-contain" />
@@ -283,23 +282,25 @@ export function ThankYouLanding() {
         </div>
       </header>
 
-      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={0} />
+      {/* Scroll connector line */}
+      <motion.div
+        className="flex justify-center bg-[#FDFBF7] pb-2 -mt-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.9 }}
+      >
+        <div className="w-[1.5px] h-32 bg-gradient-to-b from-[#1A2D63]/0 via-[#1A2D63]/35 to-[#1A2D63]/0" />
+      </motion.div>
 
       {/* ============================================ */}
       {/* WHAT HAPPENS NEXT — 3 step cards             */}
       {/* ============================================ */}
       <section
         id="next-steps"
-        className="pt-8 md:pt-12 pb-12 md:pb-16 px-6 md:px-12 bg-[#FDFBF7]"
+        className="pt-2 pb-12 md:pb-16 px-6 md:px-12 bg-[#FDFBF7]"
       >
         <div className="max-w-[1100px] mx-auto">
-          <motion.div
-            className="text-center mb-8 md:mb-10"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-          >
+          <div className="text-center mb-4 md:mb-6">
             <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
               Wat gebeurt er{" "}
               <span className="relative inline-block">
@@ -323,12 +324,12 @@ export function ThankYouLanding() {
               </span>
             </h2>
             <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
-              Drie simpele stappen. Jij hoeft niks te doen.
+              Drie duidelijke stappen. Zo weet je precies wat je mag verwachten.
             </p>
-          </motion.div>
+          </div>
 
           {/* 3 step cards — homepage process card styling */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 md:pt-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-2 md:pt-3">
             {nextSteps.map((step, index) => {
               const opacityClass =
                 index === 0
@@ -341,9 +342,8 @@ export function ThankYouLanding() {
                   key={index}
                   className="relative"
                   initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.45, delay: index * 0.1 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.7 + index * 0.1 }}
                 >
                   {/* Watermark number */}
                   <span
@@ -352,9 +352,6 @@ export function ThankYouLanding() {
                     {step.number}
                   </span>
                   <div className="bg-white rounded-3xl p-8 md:p-10 h-full shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] relative">
-                    <div className="w-10 h-10 rounded-2xl bg-[#1A2D63]/10 border border-[#1A2D63]/25 flex items-center justify-center mb-5">
-                      <step.icon className="w-5 h-5 text-[#1A2D63]" />
-                    </div>
                     <h3 className="font-newsreader text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">
                       {step.title}
                     </h3>
@@ -368,8 +365,6 @@ export function ThankYouLanding() {
           </div>
         </div>
       </section>
-
-      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={1} />
 
       {/* ============================================ */}
       {/* CONTACT / QUESTIONS SECTION                  */}
@@ -388,47 +383,36 @@ export function ThankYouLanding() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] mb-4">
+              <h2 className="font-newsreader text-3xl sm:text-4xl md:text-5xl text-[#1A2D63] mb-6">
                 Vragen in de tussentijd?
               </h2>
-              <p className="text-[#1A2D63]/60 text-lg md:text-xl mb-8 max-w-xl mx-auto">
-                Je mag ons altijd bereiken. Ook buiten werkuren en in het weekend.
+              <p className="text-[#475D8F]/70 text-xs font-instrument tracking-widest uppercase mb-2">
+                Bel gerust op
               </p>
+              <a
+                href="tel:+32495702314"
+                onClick={() => pushEvent("contact_click", { method: "phone", location: "lp_thankyou_contact" })}
+                className="font-newsreader text-[#1A2D63] text-4xl md:text-5xl leading-tight underline underline-offset-4 decoration-[#1A2D63]/20 hover:decoration-[#1A2D63]/60 hover:text-[#2A4488] transition-colors block mb-1"
+              >
+                +32 495 70 23 14
+              </a>
+              <p className="text-[#475D8F] text-sm font-instrument mb-6">ma-za · 8u30-19u</p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a
-                  href="mailto:contact@finitsolutions.be"
-                  onClick={() =>
-                    pushEvent("contact_click", {
-                      method: "email",
-                      location: "lp_thankyou_contact",
-                    })
-                  }
-                  className="inline-flex items-center gap-2 bg-[#1A2D63] text-white px-6 py-3.5 rounded-full text-base font-medium hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
-                >
-                  <Mail className="w-4 h-4" />
-                  contact@finitsolutions.be
-                </a>
-                <a
-                  href="tel:+32495702314"
-                  onClick={() =>
-                    pushEvent("contact_click", {
-                      method: "phone",
-                      location: "lp_thankyou_contact",
-                    })
-                  }
-                  className="inline-flex items-center gap-2 border border-[#1A2D63]/20 text-[#1A2D63] px-6 py-3.5 rounded-full text-base font-medium hover:bg-[#1A2D63]/5 transition-colors"
-                >
-                  <Phone className="w-4 h-4" />
-                  +32 495 70 23 14
-                </a>
-              </div>
+              <div className="w-10 h-px bg-[#1A2D63]/15 mx-auto mb-6" />
+
+              <a
+                href="mailto:contact@finitsolutions.be"
+                onClick={() => pushEvent("contact_click", { method: "email", location: "lp_thankyou_contact" })}
+                className="inline-flex items-center gap-2 bg-[#1A2D63] text-white px-6 py-3.5 rounded-full text-base font-medium hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
+              >
+                <Mail className="w-4 h-4" />
+                contact@finitsolutions.be
+              </a>
             </motion.div>
           </div>
         </div>
       </section>
 
-      <LandingCTA />
       <LandingFooter />
     </div>
   );

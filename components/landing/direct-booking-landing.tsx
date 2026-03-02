@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import {
   Check,
   Mail,
-  Phone,
   Linkedin,
 } from "lucide-react";
 import { CookieSettingsLink } from "@/components/cookie-settings-link";
@@ -154,14 +153,6 @@ export function DirectBookingLanding() {
             />
           </a>
 
-          {/* Desktop phone */}
-          <a
-            href="tel:+32495702314"
-            className="hidden md:flex items-center gap-2 text-[#1A2D63]/60 text-sm font-medium hover:text-[#1A2D63] transition-colors"
-          >
-            <Phone className="w-4 h-4" />
-            <span>+32 (0)495 702 314</span>
-          </a>
         </div>
       </nav>
 
