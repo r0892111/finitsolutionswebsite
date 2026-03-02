@@ -11,10 +11,11 @@ export async function POST(request: NextRequest) {
     .update(rawBody, 'utf8')
     .digest('base64');
 
-  const valid = crypto.timingSafeEqual(
-    Buffer.from(digest),
-    Buffer.from(hmacHeader),
-  );
+  const digestBuf = Buffer.from(digest);
+  const hmacBuf = Buffer.from(hmacHeader);
+  const valid =
+    digestBuf.length === hmacBuf.length &&
+    crypto.timingSafeEqual(digestBuf, hmacBuf);
 
   if (!valid) {
     return new Response('Unauthorized', { status: 401 });
