@@ -4,8 +4,10 @@
 
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
+import { useLanguage } from "@/contexts/language-context";
 
 export default function PrivacyPage() {
+  const { language } = useLanguage();
   return (
     <main className="pt-20">
       <section className="relative py-16 md:py-24 bg-background">
@@ -247,9 +249,31 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                 <a href="/cookieverklaring" className="underline">Cookieverklaring</a>.
               </p>
 
-              {/* 8. Uw privacyrechten */}
+              {/* 8. Leadinfo */}
+              <h2 className="text-2xl font-semibold mt-8 mb-4" id="leadinfo">
+                {language === 'nl' ? '8. Leadgeneratie (Leadinfo)' : '8. Lead Generation (Leadinfo)'}
+              </h2>
+              {language === 'nl' ? (
+                <p>
+                  We maken gebruik van de leadgeneratieservice van Leadinfo B.V., Rotterdam, Nederland. De tool herkent bedrijfsbezoeken op onze website op basis van IP-adressen en toont ons openbaar beschikbare informatie, zoals bedrijfsnamen of adressen. Bovendien plaatst Leadinfo twee first-party cookies, om het gebruikersgedrag op onze website te evalueren en verwerkt de tool domeinen uit formulierinvoeringen (bijv. &quot;Leadinfo.com&quot;) om IP-adressen met bedrijven te correleren en diensten te verbeteren. Meer informatie is beschikbaar op{" "}
+                  <a href="https://www.leadinfo.com" target="_blank" rel="noopener noreferrer" className="underline">www.leadinfo.com</a>.
+                  {" "}Op deze pagina:{" "}
+                  <a href="https://www.leadinfo.com/en/opt-out" target="_blank" rel="noopener noreferrer" className="underline">https://www.leadinfo.com/en/opt-out</a>
+                  {" "}heb je een opt-out-optie. Bij een opt-out worden uw gegevens niet langer door Leadinfo geregistreerd.
+                </p>
+              ) : (
+                <p>
+                  We use the lead generation service of Leadinfo B.V., Rotterdam, the Netherlands. The tool recognises company visits to our website based on IP addresses and shows us publicly available information, such as company names or addresses. In addition, Leadinfo places two first-party cookies to evaluate user behaviour on our website and processes domains from form submissions (e.g. &quot;Leadinfo.com&quot;) to correlate IP addresses with companies and improve services. More information is available at{" "}
+                  <a href="https://www.leadinfo.com" target="_blank" rel="noopener noreferrer" className="underline">www.leadinfo.com</a>.
+                  {" "}On this page:{" "}
+                  <a href="https://www.leadinfo.com/en/opt-out" target="_blank" rel="noopener noreferrer" className="underline">https://www.leadinfo.com/en/opt-out</a>
+                  {" "}you have an opt-out option. With an opt-out, your data will no longer be recorded by Leadinfo.
+                </p>
+              )}
+
+              {/* 9. Uw privacyrechten */}
               <h2 className="text-2xl font-semibold mt-8 mb-4" id="uw-privacyrechten">
-                8. Uw privacyrechten
+                9. {language === 'nl' ? 'Uw privacyrechten' : 'Your privacy rights'}
               </h2>
               <p>
                 Om u meer controle te geven over de verwerking van uw persoonsgegevens, beschikt u over heel wat rechten.
@@ -305,9 +329,9 @@ als dit noodzakelijk is voor de totstandkoming, of de uitvoering van een overeen
                 </li>
               </ul>
 
-              {/* 9. Klachten & Toezicht */}
+              {/* 10. Klachten & Toezicht */}
               <h2 className="text-2xl font-semibold mt-8 mb-4" id="klachten-en-toezicht">
-                9. Klachten en toezicht
+                10. Klachten en toezicht
               </h2>
               <p> U heeft het recht om een klacht in te dienen bij de toezichthoudende autoriteit (artikel 77, 1. AVG):
 
@@ -345,9 +369,9 @@ als dit noodzakelijk is voor de totstandkoming, of de uitvoering van een overeen
                 </li>
               </ul>
 
-              {/* 10. Uitoefenen van uw rechten */}
+              {/* 11. Uitoefenen van uw rechten */}
               <h2 className="text-2xl font-semibold mt-8 mb-4" id="uitoefenen-rechten">
-                10. Uitoefenen van uw rechten
+                11. Uitoefenen van uw rechten
               </h2>
               <p>
                 Om deze rechten uit te oefenen, kunt u contact met ons opnemen via de contactgegevens onder de titel "Wie zijn wij?". Om uw identiteit te kunnen nagaan, vragen wij u om een kopie van de voorzijde van uw identiteitskaart mee te sturen. Wij vragen u om daarbij uw rijksregisternummer en afbeelding op uw identiteitskaart onleesbaar te maken. In elk geval zullen wij uw identiteitskaartgegevens louter verwerken om uw identiteit te verifiëren en niet opslaan noch registreren in onze systemen.
@@ -355,16 +379,16 @@ U kan al deze rechten kosteloos uitoefenen, tenzij uw verzoek kennelijk ongegron
 
               </p>
 
-              {/* 11. Bewaren */}
-              <h2 className="text-2xl font-semibold mt-8 mb-4" id="bewaren">11. Bewaren van uw persoonsgegevens</h2>
+              {/* 12. Bewaren */}
+              <h2 className="text-2xl font-semibold mt-8 mb-4" id="bewaren">12. Bewaren van uw persoonsgegevens</h2>
               <p>
                 Wij bewaren uw persoonsgegevens zolang deze noodzakelijk zijn voor verwezenlijking van het beoogde doel. U dient er rekening mee te houden dat tal van (wettelijke) bewaartermijnen ertoe leiden dat persoonsgegevens opgeslagen (moeten) blijven. Voor zover geen bewaarplicht bestaat, worden de gegevens routinematig gewist nadat het doel waarvoor ze zijn verzameld, is verwezenlijkt. 
 Daar komt bij dat wij persoonsgegevens kunnen bewaren als u ons hiervoor toestemming heeft verleend of als het mogelijk is dat wij deze gegevens nodig hebben in het kader van een rechtsvordering. In dat laatste geval dienen we bepaalde persoonsgegevens te gebruiken als bewijsmiddelen. Met dat doel bewaren we bepaalde persoonsgegevens overeenkomstig de wettelijke verjaringstermijn, die tot dertig jaar kan bedragen; de gebruikelijke verjaringstermijn in verband met persoonlijke rechtsvorderingen bedraagt tien jaar.
 
               </p>
 
-              {/* 12. Bronnen */}
-              <h2 className="text-2xl font-semibold mt-8 mb-4" id="bronnen">12. Bronnen van persoonsgegevens</h2>
+              {/* 13. Bronnen */}
+              <h2 className="text-2xl font-semibold mt-8 mb-4" id="bronnen">13. Bronnen van persoonsgegevens</h2>
               <p>
                 Wij verwerken de persoonsgegevens die u ons spontaan bezorgt. Indien bijkomstige persoonsgegevens nodig zijn, zal worden meegedeeld of u al dan niet verplicht bent om deze mee te delen en wat de gevolgen zijn indien u ze niet meedeelt. Het niet meedelen van persoonsgegevens kan ertoe leiden dat wij onze producten en diensten niet aan u kunnen leveren. 
 In het bijzonder kunnen wij uw persoonsgegevens ontvangen van volgende bronnen: 
@@ -373,8 +397,8 @@ Publiek toegankelijke bronnen en officiële registers (zoals de Kruispuntbank va
 Commerciële databanken of dataleveranciers (bijvoorbeeld leadlijsten, indien van toepassing).
               </p>
 
-              {/* 13. Ontvangers */}
-              <h2 className="text-2xl font-semibold mt-8 mb-4" id="ontvangers">13. Categorieën van ontvangers</h2>
+              {/* 14. Ontvangers */}
+              <h2 className="text-2xl font-semibold mt-8 mb-4" id="ontvangers">14. Categorieën van ontvangers</h2>
               <p>
                 Binnen onze organisatie zien wij erop toe dat uw persoonsgegevens uitsluitend toegankelijk zijn voor personen die deze nodig hebben om te voldoen aan de contractuele en wettelijke verplichtingen. 
 Wij zullen uw persoonsgegevens uitsluitend doorgeven aan derden conform de wettelijke bepalingen of wanneer u daarvoor toestemming heeft verleend. In bepaalde gevallen worden onze medewerkers bij het uitvoeren van hun taken ondersteund door externe dienstverleners.
@@ -387,9 +411,9 @@ Marketing- en communicatiepartners die ons bijstaan bij het opzetten en uitvoere
 Financiële instellingen en betalingsdienstverleners voor de afhandeling van transacties.
               </p>
 
-              {/* 14. Doorgiften buiten EER */}
+              {/* 15. Doorgiften buiten EER */}
               <h2 className="text-2xl font-semibold mt-8 mb-4" id="doorgiften-buiten-eer">
-                14. Doorgiften aan derde landen buiten de Europese Economische Ruimte ("EER")
+                15. Doorgiften aan derde landen buiten de Europese Economische Ruimte ("EER")
               </h2>
               <p>
                 We geven uw persoonsgegevens uitsluitend door aan verwerkers of verwerkingsverantwoordelijken in derde landen, voor zover we hiertoe wettelijk gerechtigd zijn of indien dit noodzakelijk is om een dossier te behandelen.
@@ -397,22 +421,22 @@ Voor zover dergelijke doorgiften nodig zijn, nemen wij de nodige maatregelen om 
 
               </p>
 
-              {/* 15. Beveiliging */}
-              <h2 className="text-2xl font-semibold mt-8 mb-4" id="beveiliging">15. Beveiliging van uw persoonsgegevens</h2>
+              {/* 16. Beveiliging */}
+              <h2 className="text-2xl font-semibold mt-8 mb-4" id="beveiliging">16. Beveiliging van uw persoonsgegevens</h2>
               <p>
                 De beveiliging van uw persoonsgegevens is belangrijk voor ons. Wij hebben redelijke en passende technische en organisatorische beveiligingsmaatregelen getroffen om uw persoonsgegevens zo goed mogelijk te beschermen tegen toevallige dan wel opzettelijke manipulatie, verlies, vernietiging of toegang door onbevoegde personen. 
 Helaas is de overdracht van informatie via het internet niet volledig veilig. Hoewel wij ons best doen om uw persoonsgegevens te beschermen, kunnen wij de veiligheid van uw persoonsgegevens die via het internet aan ons worden doorgegeven niet garanderen. 
 
               </p>
 
-              {/* 16. Vragen of klachten */}
-              <h2 className="text-2xl font-semibold mt-8 mb-4" id="vragen-klachten">16. Vragen of klachten?</h2>
+              {/* 17. Vragen of klachten */}
+              <h2 className="text-2xl font-semibold mt-8 mb-4" id="vragen-klachten">17. Vragen of klachten?</h2>
               <p>
                 Dan mag u steeds contact met ons opnemen via telefoon, e-mail of per brief via de contactgegevens onder de titel “Wie zijn wij?”. Wij beantwoorden graag uw vragen. 
               </p>
 
-              {/* 17. Wijzigingen */}
-              <h2 className="text-2xl font-semibold mt-8 mb-4" id="wijzigingen">17. Wijzigingen</h2>
+              {/* 18. Wijzigingen */}
+              <h2 className="text-2xl font-semibold mt-8 mb-4" id="wijzigingen">18. Wijzigingen</h2>
               <p>
                 Om tegemoet te komen aan feedback of om veranderingen in onze verwerkingsactiviteiten te weerspiegelen, kunnen we deze privacyverklaring van tijd tot tijd wijzigen. Wij nodigen u dan ook uit om steeds de laatste versie van deze privacyverklaring te raadplegen op onze website.
 
