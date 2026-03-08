@@ -112,9 +112,7 @@ export function Footer() {
             <Link href="/disclaimer" className="hover:text-white transition-colors">
               {t('footer.disclaimer')}
             </Link>
-            <div className="text-sm text-white/60 [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:transition-colors">
-              <CookieSettingsLink />
-            </div>
+            <CookieSettingsLink />
           </div>
           <p className="text-sm text-white/40">© {currentYear} Finit Solutions</p>
         </div>

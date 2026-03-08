@@ -3,10 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useConsent } from '@/contexts/consent-context';
 import { ConsentChoices, pushDataLayerEvent } from '@/lib/consent';
-import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { X, ChevronDown, ChevronUp } from 'lucide-react';
+import { X } from 'lucide-react';
 import Link from 'next/link';
 
 interface CategoryInfo {
@@ -14,48 +12,54 @@ interface CategoryInfo {
   title: string;
   description: string;
   required: boolean;
-  cookies: string[];
 }
 
 const categories: CategoryInfo[] = [
   {
     key: 'essential',
-    title: 'Essentieel (altijd actief)',
-    description: 'Nodig om de site te laten werken (beveiliging, load balancing, cookievoorkeuren).',
+    title: 'Essentieel',
+    description: 'Deze items zijn nodig om de basisfunctionaliteit van de website mogelijk te maken.',
     required: true,
-    cookies: ['fs_cookie_consent_v1', 'fs_cookie_consent_log_v1', 'PHPSESSID', '__Secure-*']
-  },
-  {
-    key: 'statistics',
-    title: 'Statistieken',
-    description: 'Helpen ons te begrijpen hoe de site gebruikt wordt (anonieme statistieken).',
-    required: false,
-    cookies: ['_ga', '_ga_*', '_gid', '_gat', '_gtag_*']
   },
   {
     key: 'marketing',
     title: 'Marketing',
-    description: 'Maakt gepersonaliseerde advertenties en metingen mogelijk.',
+    description: 'Deze items worden gebruikt om advertenties te leveren die relevanter zijn voor jou en je interesses.',
     required: false,
-    cookies: ['_fbp', '_fbc', 'fr', 'ads/ga-audiences', 'IDE', 'test_cookie']
   },
   {
     key: 'social',
-    title: 'Sociaal',
-    description: 'Voor het laden van externe media en deelknoppen.',
+    title: 'Personalisatie',
+    description: 'Deze items stellen de website in staat om keuzes die je maakt (zoals je gebruikersnaam, taal of de regio waarin je je bevindt) te onthouden en bieden verbeterde, meer persoonlijke functies.',
     required: false,
-    cookies: ['VISITOR_INFO1_LIVE', 'YSC', 'CONSENT', 'SOCS']
-  }
+  },
+  {
+    key: 'statistics',
+    title: 'Analytics',
+    description: 'Deze items helpen de websitebeheerder te begrijpen hoe zijn website presteert, hoe bezoekers met de site omgaan en of er technische problemen kunnen zijn.',
+    required: false,
+  },
 ];
 
 export function CookieSettingsModal() {
-  const { showSettings, choices, updateChoices, closeSettings, acceptAll, rejectAll } = useConsent();
+  const { showSettings, choices, updateChoices, closeSettings } = useConsent();
   const [localChoices, setLocalChoices] = useState<ConsentChoices>(choices);
-  const [expandedCategories, setExpandedCategories] = useState<{[key: string]: boolean}>({});
 
   useEffect(() => {
     setLocalChoices(choices);
   }, [choices, showSettings]);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (showSettings) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showSettings]);
 
   const handleToggle = (category: keyof ConsentChoices, value: boolean) => {
     setLocalChoices(prev => ({
@@ -93,45 +97,68 @@ export function CookieSettingsModal() {
     pushDataLayerEvent('consent_reject_all', allRejected, 'settings');
   };
 
-  const toggleCategoryExpansion = (categoryKey: string) => {
-    setExpandedCategories(prev => ({
-      ...prev,
-      [categoryKey]: !prev[categoryKey]
-    }));
-  };
-
   if (!showSettings) return null;
 
   return (
-    <Dialog open={showSettings} onOpenChange={closeSettings}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">Cookie-instellingen</DialogTitle>
-        </DialogHeader>
-        
-        <div className="space-y-6">
-          <p className="text-sm text-gray-600">
-            Maak je keuze per categorie. Je kan dit later altijd aanpassen via &apos;Cookie-instellingen&apos; onderaan de pagina.
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/40"
+        onClick={closeSettings}
+      />
+
+      {/* Panel — centered card, fits in one mobile viewport */}
+      <div className="relative bg-white w-full max-w-md rounded-2xl max-h-[90vh] flex flex-col overflow-hidden">
+        <div className="overflow-y-auto flex-1 px-5 pt-5 pb-3 sm:px-6 sm:pt-6 sm:pb-4">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-3">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#1C2C55] font-montserrat">
+              Voorkeuren
+            </h2>
+            <button
+              onClick={closeSettings}
+              className="text-red-500 hover:text-red-600 transition-colors p-1 -mt-1 -mr-1"
+              aria-label="Sluiten"
+            >
+              <X className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.5} />
+            </button>
+          </div>
+
+          {/* Intro text */}
+          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-4">
+            Net zoals we jouw bedrijfsprocessen slim automatiseren, gaan we ook zorgvuldig om met jouw gegevens. Bekijk onze{' '}
+            <Link href="/privacy" className="underline text-gray-600 hover:text-gray-900">
+              Privacy Policy
+            </Link>
+            {' '}voor meer informatie.
           </p>
 
+          {/* Accept all button */}
+          <button
+            onClick={handleAcceptAll}
+            className="px-5 py-2 rounded-full border-2 border-[#1C2C55] text-[#1C2C55] font-semibold text-sm hover:bg-[#1C2C55] hover:text-white transition-colors mb-4"
+          >
+            Accepteer alle cookies
+          </button>
+
           {/* Categories */}
-          <div className="space-y-4">
+          <div className="divide-y divide-gray-200">
             {categories.map((category) => (
-              <div key={category.key} className="border border-gray-200 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 mb-1">
+              <div key={category.key} className="py-3.5 first:pt-0">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base sm:text-lg font-bold text-[#1C2C55] font-montserrat mb-0.5">
                       {category.title}
-                    </h4>
-                    <p className="text-sm text-gray-600">
+                    </h3>
+                    <p className="text-xs text-gray-600 leading-relaxed">
                       {category.description}
                     </p>
                   </div>
-                  <div className="ml-4">
+                  <div className="flex-shrink-0 mt-0.5">
                     {category.required ? (
-                      <div className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                      <span className="text-xs sm:text-sm text-gray-500 font-medium whitespace-nowrap">
                         Altijd actief
-                      </div>
+                      </span>
                     ) : (
                       <Switch
                         checked={localChoices[category.key]}
@@ -141,74 +168,27 @@ export function CookieSettingsModal() {
                     )}
                   </div>
                 </div>
-
-                {/* Cookie details accordion */}
-                <button
-                  onClick={() => toggleCategoryExpansion(category.key)}
-                  className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
-                  aria-expanded={expandedCategories[category.key]}
-                >
-                  <span>Bekijk cookies</span>
-                  {expandedCategories[category.key] ? (
-                    <ChevronUp className="h-4 w-4" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4" />
-                  )}
-                </button>
-
-                {expandedCategories[category.key] && (
-                  <div className="mt-3 p-3 bg-gray-50 rounded border">
-                    <h5 className="text-sm font-medium text-gray-900 mb-2">Cookies in deze categorie:</h5>
-                    <ul className="text-xs text-gray-600 space-y-1">
-                      {category.cookies.map((cookie, index) => (
-                        <li key={index} className="font-mono">
-                          {cookie}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </div>
             ))}
           </div>
-
-          {/* Cookie Policy Link */}
-          <div className="pt-4 border-t border-gray-200">
-            <Link 
-              href="/cookieverklaring" 
-              className="text-sm text-primary hover:underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Cookieverklaring
-            </Link>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
-            <Button
-              variant="ghost"
-              onClick={handleRejectAll}
-              className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 border border-gray-300"
-            >
-              Alles weigeren
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleSave}
-              className="border-primary text-primary hover:bg-primary/5"
-            >
-              Opslaan
-            </Button>
-            <Button
-              onClick={handleAcceptAll}
-              className="bg-primary hover:bg-primary/90 text-white"
-            >
-              Alles accepteren
-            </Button>
-          </div>
         </div>
-      </DialogContent>
-    </Dialog>
+
+        {/* Bottom buttons - sticky */}
+        <div className="flex gap-3 px-5 pb-5 pt-3 sm:px-6 sm:pb-6 border-t border-gray-100">
+          <button
+            onClick={handleRejectAll}
+            className="flex-1 py-2.5 rounded-full border-2 border-gray-300 text-[#1C2C55] font-semibold text-sm hover:bg-gray-50 transition-colors"
+          >
+            Alles afwijzen
+          </button>
+          <button
+            onClick={handleSave}
+            className="flex-1 py-2.5 rounded-full bg-[#1C2C55] text-white font-semibold text-sm hover:bg-[#1C2C55]/90 transition-colors"
+          >
+            Bevestigen
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

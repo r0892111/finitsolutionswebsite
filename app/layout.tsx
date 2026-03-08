@@ -118,25 +118,46 @@ export default function RootLayout({
                 'analytics_storage': 'denied',
                 'ad_user_data': 'denied',
                 'ad_personalization': 'denied',
+                'personalization_storage': 'denied',
+                'functionality_storage': 'denied',
                 'wait_for_update': 500
               });
+              gtag('set', 'url_passthrough', true);
+              gtag('set', 'ads_data_redaction', true);
+            `,
+          }}
+        />
+
+        {/* Restore stored consent BEFORE GTM loads - prevents race condition
+            where returning visitors are tracked with denied consent while
+            React is still hydrating. Content is static trusted strings only. */}
+        <Script
+          id="consent-restore"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                try {
+                  var s = localStorage.getItem('fs_cookie_consent_v1');
+                  if (!s) return;
+                  var d = JSON.parse(s);
+                  if (new Date() > new Date(d.expiry)) return;
+                  var c = d.choices;
+                  gtag('consent', 'update', {
+                    'analytics_storage': c.statistics ? 'granted' : 'denied',
+                    'ad_storage': c.marketing ? 'granted' : 'denied',
+                    'ad_user_data': c.marketing ? 'granted' : 'denied',
+                    'ad_personalization': c.marketing ? 'granted' : 'denied',
+                    'personalization_storage': c.social ? 'granted' : 'denied',
+                    'functionality_storage': c.social ? 'granted' : 'denied'
+                  });
+                } catch(e){}
+              })();
             `,
           }}
         />
         
-        {/* Leadinfo tracking code */}
-        <Script
-          id="leadinfo-tracking"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(l,e,a,d,i,n,f,o){if(!l[i]){l.GlobalLeadinfoNamespace=l.GlobalLeadinfoNamespace||[];
-              l.GlobalLeadinfoNamespace.push(i);l[i]=function(){(l[i].q=l[i].q||[]).push(arguments)};l[i].t=l[i].t||n;
-              l[i].q=l[i].q||[];o=e.createElement(a);f=e.getElementsByTagName(a)[0];o.async=1;o.src=d;f.parentNode.insertBefore(o,f);}
-              }(window,document,'script','https://cdn.leadinfo.net/ping.js','leadinfo','LI-696FBC0B74395'));
-            `,
-          }}
-        />
+        {/* Leadinfo is loaded conditionally by ConsentProvider when analytics consent is granted */}
       </head>
       <body className={`${inter.className} ${montserrat.variable} ${generalSans.variable}`}>
         {/* Google Tag Manager (noscript) */}

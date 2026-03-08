@@ -9,8 +9,13 @@ export function CookieSettingsLink() {
 
   return (
     <button
-      onClick={openSettings}
-      className="text-xs text-muted-foreground hover:text-primary transition-colors underline"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openSettings();
+      }}
+      type="button"
+      className="text-sm py-2 cursor-pointer underline text-inherit hover:text-white transition-colors"
       aria-label="Cookie-instellingen openen"
     >
       {t('footer.cookie.settings')}
