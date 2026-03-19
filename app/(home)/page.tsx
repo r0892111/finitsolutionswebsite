@@ -2,8 +2,8 @@ import { AIDesignLanding } from "@/components/ai-design-landing";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Finit Solutions | Innovatieve Bedrijfsautomatisering',
-  description: 'Finit Solutions helpt bedrijven groeien met slimme automatisering, software op maat en innovatieve SaaS-oplossingen. Ontdek hoe wij uw bedrijfsprocessen kunnen optimaliseren.',
+  title: 'Finit Solutions | AI systemen die 24/7 voor je werken',
+  description: 'Finit helpt KMO\'s de stap richting AI te zetten — van grondige analyse tot krachtige systemen die écht tijd besparen.',
 };
 
 export default function Home() {

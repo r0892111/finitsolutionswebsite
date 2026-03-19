@@ -102,7 +102,7 @@ export function About() {
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ duration: 0.5 }}
             >
-              <Link href="/diensten">
+              <Link href="/hoe-het-werkt">
                 <Button
                   variant="outline"
                   size="sm"
@@ -182,7 +182,7 @@ export function About() {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="pt-4 flex flex-col sm:flex-row gap-4"
             >
-              <Link href="/about">
+              <Link href="/hoe-het-werkt">
                 <Button size="lg">
                   {t('about.cta')}
                 </Button>

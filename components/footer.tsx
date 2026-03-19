@@ -54,7 +54,7 @@ export function Footer() {
             <ul className="space-y-4 text-sm text-white/70">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-white/70 mt-0.5" />
-                <span>Keerbergen, België</span>
+                <span>Leuven, België</span>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-white/70 mt-0.5" />

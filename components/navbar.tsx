@@ -29,9 +29,9 @@ export function Navbar() {
   }
   const navItems = [
     { name: "Home", href: "/" },
-    { name: t('nav.services'), href: "/diensten" },
-    { name: t('nav.marketplace'), href: "/marketplace" },
-    { name: t('nav.about'), href: "/about" },
+    { name: t('nav.how_it_works') || "Hoe het werkt", href: "/hoe-het-werkt" },
+    { name: t('nav.success_stories') || "Succesverhalen", href: "/succesverhalen" },
+    { name: t('nav.faq') || "FAQ", href: "/veelgestelde-vragen" },
   ];
   const handleContactClick = () => {
     // If we're already on the homepage, just scroll to contact
@@ -88,25 +88,25 @@ export function Navbar() {
                 Home
               </Link>
               <Link
-                href="/diensten"
-                onClick={() => pushEvent("nav_click", { nav_item: "diensten", location: "navbar" })}
+                href="/hoe-het-werkt"
+                onClick={() => pushEvent("nav_click", { nav_item: "hoe-het-werkt", location: "navbar" })}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
-                {t('nav.services')}
+                {t('nav.how_it_works') || "Hoe het werkt"}
               </Link>
               <Link
-                href="/marketplace"
-                onClick={() => pushEvent("nav_click", { nav_item: "marketplace", location: "navbar" })}
+                href="/succesverhalen"
+                onClick={() => pushEvent("nav_click", { nav_item: "succesverhalen", location: "navbar" })}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
-                {t('nav.marketplace')}
+                {t('nav.success_stories') || "Succesverhalen"}
               </Link>
               <Link
-                href="/about"
-                onClick={() => pushEvent("nav_click", { nav_item: "about", location: "navbar" })}
+                href="/veelgestelde-vragen"
+                onClick={() => pushEvent("nav_click", { nav_item: "veelgestelde-vragen", location: "navbar" })}
                 className="px-6 py-2 text-[12px] font-semibold text-gray-700 hover:text-blue-600 hover:bg-white/50 rounded-full transition-all duration-200"
               >
-                {t('nav.about')}
+                {t('nav.faq') || "FAQ"}
               </Link>
               <Link
                 href="/portal"

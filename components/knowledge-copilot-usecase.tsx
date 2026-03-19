@@ -228,7 +228,7 @@ export function KnowledgeCopilotUseCase() {
               <p className="finit-body mb-8" style={{ color: '#36454F' }}>
                 {t('knowledge_copilot.marketplace_cta_description')}
               </p>
-              <a href="/marketplace">
+              <a href="/plan-gesprek">
                 <button className="bg-white/90 backdrop-blur-xl text-primary hover:bg-white border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 finit-body px-8 py-4 rounded-full font-medium">
                   {t('knowledge_copilot.visit_marketplace')}
                   <svg className="ml-2 h-5 w-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
