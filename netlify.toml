@@ -31,6 +31,38 @@
   status = 200
   force = true
 
+# Finit OS interactive intake — Netlify Functions
+# Frontend calls /api/intake/* + /api/lead-magnet/start; redirected to functions.
+[[redirects]]
+  from = "/api/intake/state"
+  to = "/.netlify/functions/intake-state"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/intake/chat"
+  to = "/.netlify/functions/intake-chat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/intake/transcribe"
+  to = "/.netlify/functions/intake-transcribe"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/intake/submit"
+  to = "/.netlify/functions/intake-submit"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/lead-magnet/start"
+  to = "/.netlify/functions/lead-magnet-start"
+  status = 200
+  force = true
+
 # Redirect rules for Next.js App Router with trailing slashes
 [[redirects]]
   from = "/*"
