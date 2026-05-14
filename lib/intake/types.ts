@@ -76,6 +76,74 @@ export interface IntakePersonalization {
   minted_by_operator?: string;
 }
 
+/* ------------------------------------------------------------------ *
+ * Widget submission shape — mirrored from app/intake/types.ts.
+ * Server uses this to type incoming POST /api/intake/chat bodies.
+ * ------------------------------------------------------------------ */
+
+export type SystemPickerSubmission = {
+  selected: { name: string; domain: string; is_custom?: boolean }[];
+  none_selected: boolean;
+  unsure_probe_at_kickoff: boolean;
+  admin_contact?: string;
+};
+
+export type WidgetSubmissionValue =
+  | string
+  | number
+  | boolean
+  | string[]
+  | SystemPickerSubmission
+  | { confirmed: boolean; value?: string | number | boolean }
+  | { proceed: boolean; revisit?: string[] };
+
+export interface WidgetSubmission {
+  widget_id: string;
+  kind: WidgetKind;
+  value: WidgetSubmissionValue;
+  goal_id?: string;
+}
+
+/* ------------------------------------------------------------------ *
+ * Chat request body — what the client POSTs to /api/intake/chat.
+ *
+ * Single source of truth; imported by both
+ * `netlify/functions/intake-chat.ts` (the server) and
+ * `app/intake/OnboardingChat.tsx` (the client). Adding a field here is
+ * a contract change — both sides must update.
+ * ------------------------------------------------------------------ */
+
+export type IntakeChatOp = "start" | "submit_widget";
+
+export interface IntakeChatRequestBody {
+  token: string;
+  op: IntakeChatOp;
+  /** Required when op === 'submit_widget'. */
+  submission?: WidgetSubmission;
+  /** Optional language override (defaults to row.language from Supabase). */
+  language?: Language;
+}
+
+/* ------------------------------------------------------------------ *
+ * SSE stream events — what /api/intake/chat emits.
+ *
+ * Mirrored from `app/intake/types.ts` `StreamEvent`. Server emits these
+ * in app-shape (NOT raw Anthropic events) — the translation from
+ * Anthropic native streaming + tool_use blocks happens inside the
+ * function. Client consumes this discriminated union directly.
+ * ------------------------------------------------------------------ */
+
+export type IntakeStreamEvent =
+  | { type: "assistant_text_delta"; text: string }
+  | { type: "assistant_text_done" }
+  | { type: "widget"; widget: Record<string, unknown> & { kind: WidgetKind; widget_id: string } }
+  | { type: "goal_update"; goal_id: string; status: "open" | "probing" | "satisfied" }
+  | { type: "circuit_breaker"; tokens: number; hint: string }
+  | { type: "submit_intake" }
+  | { type: "request_resume_link"; email?: string }
+  | { type: "done"; ok?: boolean }
+  | { type: "error"; message: string };
+
 /**
  * Wire shape for `GET /api/intake/state?t=<token>`.
  *
