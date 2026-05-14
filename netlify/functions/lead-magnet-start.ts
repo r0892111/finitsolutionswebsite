@@ -1,25 +1,24 @@
 /**
- * POST /api/lead-magnet/start
+ * POST /api/lead-magnet/start  (mapped via netlify.toml redirect)
  *
- * Public-form entrypoint. Body fields:
- *   { email, first_name?, last_name?, company_name?, company_website?,
- *     sector?, language?, role?, phone? }
+ * Public-form entrypoint. Body fields: email (required), first_name,
+ * last_name, company_name, company_website, sector, language, role, phone.
  *
  * Mints a token, inserts a Supabase row with flavor=lead_magnet + sparse
- * personalization_json (just identity + sector defaults), and returns the
- * redirect URL `/intake?t=<token>`.
- *
- * No auth — this IS the entrypoint. Rate-limit via Netlify edge if needed.
+ * personalization_json. Returns the redirect URL `/intake?t=<token>`.
  *
  * Spec: [intake-flow.md §Architecture overview — public-form path].
  */
-import { NextRequest, NextResponse } from "next/server";
-import { mintToken } from "@/lib/intake/token-mint";
-import { insertLeadMagnetRow } from "@/lib/intake/supabase-intake";
-import type { IntakePersonalization, Language } from "@/lib/intake/types";
+import type { Handler, HandlerEvent } from "@netlify/functions";
+import { mintToken } from "../../lib/intake/token-mint";
+import { insertLeadMagnetRow } from "../../lib/intake/supabase-intake";
+import type { IntakePersonalization, Language } from "../../lib/intake/types";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+const JSON_HEADERS = { "Content-Type": "application/json" };
+
+function json(statusCode: number, body: unknown) {
+  return { statusCode, headers: JSON_HEADERS, body: JSON.stringify(body) };
+}
 
 interface LeadMagnetStartBody {
   email?: unknown;
@@ -45,20 +44,23 @@ function pickLang(v: unknown): Language {
   return "nl";
 }
 
-// Basic-but-not-paranoid email regex. Real validation = the magic-link itself.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export async function POST(req: NextRequest) {
+export const handler: Handler = async (event: HandlerEvent) => {
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method Not Allowed" };
+  }
+
   let body: LeadMagnetStartBody;
   try {
-    body = (await req.json()) as LeadMagnetStartBody;
+    body = JSON.parse(event.body ?? "{}") as LeadMagnetStartBody;
   } catch {
-    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+    return json(400, { error: "invalid_json" });
   }
 
   const email = pickStr(body.email);
   if (!email || !EMAIL_RE.test(email)) {
-    return NextResponse.json({ error: "invalid_email" }, { status: 400 });
+    return json(400, { error: "invalid_email" });
   }
 
   const language = pickLang(body.language);
@@ -70,8 +72,6 @@ export async function POST(req: NextRequest) {
   const role = pickStr(body.role, 80);
   const phone = pickStr(body.phone, 40);
 
-  // Sparse personalization JSON. Maturity is unknown — confidence=low —
-  // so the agent should treat this prospect as cold and lean explanatory.
   const personalization: IntakePersonalization = {
     flavor: "lead_magnet",
     intake_compactness: "compressed",
@@ -118,20 +118,15 @@ export async function POST(req: NextRequest) {
       personalization_json: personalization,
     });
   } catch (err) {
-    return NextResponse.json(
-      {
-        error: "insert_failed",
-        message: err instanceof Error ? err.message : "unknown",
-      },
-      { status: 500 }
-    );
+    return json(500, {
+      error: "insert_failed",
+      message: err instanceof Error ? err.message : "unknown",
+    });
   }
 
-  // Return both the URL and the raw token so the form can either redirect
-  // (window.location.assign) or open the chat shell inline.
-  return NextResponse.json({
+  return json(200, {
     ok: true,
     redirect_url: `/intake?t=${token}`,
     token,
   });
-}
+};
