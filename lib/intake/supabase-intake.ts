@@ -135,6 +135,43 @@ export async function markCompleted(token: string): Promise<void> {
 }
 
 /**
+ * Save the generated mini-report onto the Supabase row.
+ *
+ * v1: the operator drafts the actual prospect email via gws Gmail CLI by reading
+ * this column. Phase F (automated send via Resend) is deferred — see spec
+ * §"Implementation phases" + §"Email transport" notes.
+ */
+export async function saveMiniReport(
+  token: string,
+  report: { subject: string; html: string; text: string }
+): Promise<void> {
+  const sb = getServiceClient();
+  const { error } = await sb
+    .from(TABLE)
+    .update({
+      mini_report_subject: report.subject,
+      mini_report_html: report.html,
+      mini_report_text: report.text,
+    })
+    .eq("token", token);
+  if (error) throw error;
+}
+
+/**
+ * Mark a row with an error_message + leave `completed_at` NULL so the operator's
+ * queue-check skill surfaces it for manual recovery. Used when the paying-client
+ * GitHub commit fails after retries.
+ */
+export async function markError(token: string, errorMessage: string): Promise<void> {
+  const sb = getServiceClient();
+  const { error } = await sb
+    .from(TABLE)
+    .update({ error_message: errorMessage })
+    .eq("token", token);
+  if (error) throw error;
+}
+
+/**
  * INSERT a new lead-magnet row from the public-form path. Personalization is
  * sparse for this flavor; the chat agent will probe to fill gaps.
  */

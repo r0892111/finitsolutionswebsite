@@ -2,42 +2,43 @@
  * POST /api/intake/submit  (mapped via netlify.toml redirect)
  *
  * Finalizes an intake. Body: `{ token }`. Branches on flavor.
- *   paying_client → commit to client repo via Octokit (3x retry) + email
- *   lead_magnet   → generate mini-report, send via Resend, email operator
  *
- * Spec: [intake-flow.md §Edge cases #10 + §Submit].
+ *   paying_client → commit state to client repo via Octokit (3x retry).
+ *                   Operator notification = the .intake-complete marker file
+ *                   committed alongside the state JSON; the boot ritual on
+ *                   the operator's next Claude Code session in that repo
+ *                   auto-routes to /01.2-process-intake.
+ *                   Commit failure → write error_message on the Supabase row
+ *                   (completed_at stays NULL), so the operator's queue check
+ *                   in finit-company surfaces it for manual recovery.
+ *
+ *   lead_magnet   → generate the mini-report HTML and save it onto the
+ *                   Supabase row (mini_report_html column). Operator drafts
+ *                   the actual prospect email later via gws Gmail (manual
+ *                   for v1; DRAFT-only per global CLAUDE.md). Phase F is the
+ *                   automated send via Resend — see lib/intake/mini-report.ts
+ *                   for the placeholder.
+ *
+ * Spec: [intake-flow.md §Edge cases #10 + §Submit + §"Email transport"].
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
 import {
   getSessionByToken,
   markCompleted,
+  saveMiniReport,
+  markError,
   scanStateJsonForInjection,
 } from "../../lib/intake/supabase-intake";
 import { isPlausibleToken } from "../../lib/intake/token-mint";
 import { commitIntakeToRepo } from "../../lib/intake/github-commit";
-import {
-  buildMiniReportHtml,
-  sendMiniReport,
-  notifyOperator,
-} from "../../lib/intake/mini-report";
+import { buildMiniReportHtml } from "../../lib/intake/mini-report";
 
-const OPERATOR_EMAIL =
-  process.env.INTAKE_OPERATOR_EMAIL ?? "alex@finitsolutions.be";
 const GITHUB_OWNER = process.env.INTAKE_GITHUB_OWNER ?? "finit-os";
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 
 function json(statusCode: number, body: unknown) {
   return { statusCode, headers: JSON_HEADERS, body: JSON.stringify(body) };
-}
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 }
 
 interface PostBody {
@@ -102,19 +103,10 @@ export const handler: Handler = async (event: HandlerEvent) => {
       });
 
       if (!commitResult.ok) {
-        await notifyOperator({
-          toOperator: OPERATOR_EMAIL,
-          subject: `[Finit intake] FAILED commit for ${row.client_slug} — manual recovery needed`,
-          bodyHtml: `<p>Intake for <b>${escapeHtml(row.client_slug ?? "")}</b> finished but the GitHub commit failed after 3 retries.</p>
-<p>Error: <code>${escapeHtml(commitResult.error ?? "unknown")}</code></p>
-<p>Supabase row is still alive (token: <code>${escapeHtml(row.token)}</code>). You can:</p>
-<ol>
-<li>Re-run /api/intake/submit (idempotent — completed_at only set on success).</li>
-<li>Or recover via /01.2-process-intake using the Supabase MCP fallback.</li>
-</ol>
-<pre>${escapeHtml(JSON.stringify(row.state_json ?? {}, null, 2))}</pre>`,
-          bodyText: `Commit failed for ${row.client_slug}. Error: ${commitResult.error}. Token: ${row.token}.`,
-        });
+        await markError(
+          row.token,
+          `GitHub commit failed after ${commitResult.attempts} attempts: ${commitResult.error ?? "unknown"}`
+        );
         return json(502, {
           ok: false,
           error: "github_commit_failed",
@@ -125,20 +117,12 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
       await markCompleted(row.token);
 
-      await notifyOperator({
-        toOperator: OPERATOR_EMAIL,
-        subject: `[Finit intake] Completed: ${row.client_slug}`,
-        bodyHtml: `<p>Intake completed for <b>${escapeHtml(row.client_slug ?? "")}</b> (${escapeHtml(row.email)}).</p>
-<p>Committed to <code>${escapeHtml(GITHUB_OWNER)}/${escapeHtml(row.client_slug ?? "")}</code> on attempt ${commitResult.attempts}.</p>
-<p>Next: open the client repo in Claude Code, boot ritual auto-routes to <code>/01.2-process-intake</code>.</p>
-${injection.suspicious ? `<p><b>⚠ Note:</b> state_json contains patterns that look like prompt-injection (${escapeHtml(injection.hits.join(", "))}). Review before processing.</p>` : ""}`,
-        bodyText: `Intake completed: ${row.client_slug} (${row.email}). Committed on attempt ${commitResult.attempts}.${injection.suspicious ? ` Suspicious: ${injection.hits.join(", ")}` : ""}`,
-      });
-
       return json(200, {
         ok: true,
         flavor: "paying_client",
         commit_attempts: commitResult.attempts,
+        injection_suspicious: injection.suspicious,
+        injection_hits: injection.hits,
       });
     }
 
@@ -152,42 +136,21 @@ ${injection.suspicious ? `<p><b>⚠ Note:</b> state_json contains patterns that 
       },
     });
 
-    const sendResult = await sendMiniReport(row.email, report);
-    if (!sendResult.ok) {
-      await notifyOperator({
-        toOperator: OPERATOR_EMAIL,
-        subject: `[Finit lead-magnet] Send FAILED to ${row.email}`,
-        bodyHtml: `<p>Lead-magnet mini-report send failed for <b>${escapeHtml(row.email)}</b>.</p>
-<p>Error: <code>${escapeHtml(sendResult.error ?? "unknown")}</code></p>
-<p>The prospect can retry via the closing-summary 'stuur opnieuw' button.</p>`,
-        bodyText: `Lead-magnet send failed: ${row.email}. Error: ${sendResult.error}.`,
-      });
-      return json(502, {
-        ok: false,
-        error: "send_failed",
-        message: sendResult.error,
-      });
-    }
+    await saveMiniReport(row.token, {
+      subject: report.subject,
+      html: report.html,
+      text: report.text,
+    });
 
     await markCompleted(row.token);
 
-    await notifyOperator({
-      toOperator: OPERATOR_EMAIL,
-      subject: `[Finit lead-magnet] New intake: ${row.email}`,
-      bodyHtml: `<p>New lead-magnet intake completed.</p>
-<ul>
-<li>Email: ${escapeHtml(row.email)}</li>
-<li>Name: ${escapeHtml([row.first_name, row.last_name].filter(Boolean).join(" "))}</li>
-<li>Company: ${escapeHtml(row.company_name ?? "")}</li>
-<li>Sector: ${escapeHtml(row.sector ?? "(unknown)")}</li>
-<li>Maturity: ${row.maturity_score ?? "n/a"} (${row.maturity_confidence ?? "n/a"})</li>
-</ul>
-<p>Mini-report sent. Follow up via Karel's calendar link.</p>
-${injection.suspicious ? `<p><b>⚠ Note:</b> state_json contains patterns that look like prompt-injection (${escapeHtml(injection.hits.join(", "))}).</p>` : ""}`,
-      bodyText: `Lead-magnet completed: ${row.email}. Sector: ${row.sector}. Maturity: ${row.maturity_score}.${injection.suspicious ? ` Suspicious: ${injection.hits.join(", ")}` : ""}`,
+    return json(200, {
+      ok: true,
+      flavor: "lead_magnet",
+      mini_report_saved: true,
+      injection_suspicious: injection.suspicious,
+      injection_hits: injection.hits,
     });
-
-    return json(200, { ok: true, flavor: "lead_magnet" });
   } catch (err) {
     return json(500, {
       ok: false,

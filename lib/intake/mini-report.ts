@@ -1,26 +1,20 @@
 /**
- * Lead-magnet mini-report generator + transactional email.
+ * Lead-magnet mini-report generator.
  *
- * Triggered from /api/intake/submit when flavor === "lead_magnet". Produces:
- *   - A short HTML mini-report (maturity score, top 2 opportunities,
- *     indicative EUR/month savings range, Calendly CTA).
- *   - A transactional send to the prospect via Resend.
+ * Triggered from /api/intake/submit when flavor === "lead_magnet". Produces a
+ * short HTML mini-report (maturity score, top 2 opportunities, indicative
+ * EUR/month savings range, Calendly CTA) and saves it onto the Supabase row.
  *
- * Why Resend (vs. Postmark / gws-Gmail-API):
- *   - Resend is the modern, low-config default for Next.js / Netlify SaaS.
- *   - Postmark is a fine alternative if the operator has an existing account.
- *   - gws-Gmail-API is operator-domain-personal and DRAFT-only by hard rule
- *     (CLAUDE.md). Transactional sends to prospects are explicitly OK to
- *     auto-send per the spec's "Universal acceptance criteria" — but we
- *     should keep the operator's personal Gmail OUT of that path.
+ * v1 (current): the operator drafts the prospect email by hand via gws Gmail
+ * (read the mini_report_html column off Supabase). Keeps everything DRAFT-only
+ * per CLAUDE.md and removes Resend setup friction.
  *
- * The operator can swap providers by replacing `sendEmail` below; the HTML
- * builder is provider-neutral.
+ * Phase F (deferred): auto-send via Resend. Re-add a `sendMiniReport` function
+ * that POSTs to https://api.resend.com/emails with RESEND_API_KEY + RESEND_FROM,
+ * and call it from the submit handler in place of `saveMiniReport`.
  */
 import type { IntakePersonalization } from "@/lib/intake/types";
 import type { IntakeStateJson } from "@/lib/intake/supabase-intake";
-
-const RESEND_ENDPOINT = "https://api.resend.com/emails";
 
 export interface MiniReportInputs {
   personalization: IntakePersonalization;
@@ -248,78 +242,9 @@ ${ctaUrl}
   };
 }
 
-/**
- * Send the mini-report via Resend. Returns ok=false on failure (so the submit
- * handler can email the operator without throwing).
- */
-export async function sendMiniReport(
-  to: string,
-  report: MiniReport
-): Promise<{ ok: boolean; error?: string }> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const fromAddr = process.env.RESEND_FROM ?? "Finit <hello@finitsolutions.be>";
-  if (!apiKey) return { ok: false, error: "RESEND_API_KEY not set" };
-
-  try {
-    const res = await fetch(RESEND_ENDPOINT, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: fromAddr,
-        to: [to],
-        subject: report.subject,
-        html: report.html,
-        text: report.text,
-      }),
-    });
-    if (!res.ok) {
-      const body = await res.text();
-      return { ok: false, error: `Resend ${res.status}: ${body.slice(0, 200)}` };
-    }
-    return { ok: true };
-  } catch (err) {
-    return { ok: false, error: err instanceof Error ? err.message : String(err) };
-  }
-}
-
-/**
- * Operator notification email — sent for both flavors on submit so the
- * operator sees activity in their inbox immediately. Uses Resend so the
- * operator's Gmail draft hard-lock is honored (no auto-send via gws).
- */
-export async function notifyOperator(opts: {
-  toOperator: string;
-  subject: string;
-  bodyHtml: string;
-  bodyText: string;
-}): Promise<{ ok: boolean; error?: string }> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const fromAddr = process.env.RESEND_FROM ?? "Finit <hello@finitsolutions.be>";
-  if (!apiKey) return { ok: false, error: "RESEND_API_KEY not set" };
-  try {
-    const res = await fetch(RESEND_ENDPOINT, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: fromAddr,
-        to: [opts.toOperator],
-        subject: opts.subject,
-        html: opts.bodyHtml,
-        text: opts.bodyText,
-      }),
-    });
-    if (!res.ok) {
-      const body = await res.text();
-      return { ok: false, error: `Resend ${res.status}: ${body.slice(0, 200)}` };
-    }
-    return { ok: true };
-  } catch (err) {
-    return { ok: false, error: err instanceof Error ? err.message : String(err) };
-  }
-}
+// Resend integration intentionally removed for v1.
+// Restore here for Phase F (auto-send mini-reports) by re-introducing:
+//   - export async function sendMiniReport(to: string, report: MiniReport)
+//   - export async function notifyOperator({ toOperator, subject, bodyHtml, bodyText })
+// Both POST to https://api.resend.com/emails with Bearer process.env.RESEND_API_KEY
+// and `from: process.env.RESEND_FROM`. See spec §"Implementation phases → Phase F".
