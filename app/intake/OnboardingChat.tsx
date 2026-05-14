@@ -145,7 +145,19 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
     ? initial
     : { token, personalization: MOCK_PERSONALIZATION_JSON, goal_status: {} };
   const [language, setLanguage] = React.useState<Language>(initialState.personalization.language);
-  const [messages, setMessages] = React.useState<ChatMessage[]>([]);
+
+  // Reload-resume: if the server has Anthropic conversation history saved
+  // (state.messages from prior turns), rebuild the visible chat bubbles
+  // before the conversation kicks off so the user sees their prior
+  // exchanges instead of a blank shell.
+  const initialMessages = React.useMemo<ChatMessage[]>(() => {
+    if (useMock) return [];
+    const raw = (initialState.state?.messages as unknown) ?? [];
+    if (!Array.isArray(raw)) return [];
+    return rebuildChatHistory(raw, initialState.personalization.language);
+  }, [useMock, initialState.state, initialState.personalization.language]);
+
+  const [messages, setMessages] = React.useState<ChatMessage[]>(initialMessages);
   const [activeWidget, setActiveWidget] = React.useState<AnyWidget | null>(null);
   const [goalStatus, setGoalStatus] = React.useState<Record<string, 'open' | 'probing' | 'satisfied'>>(
     initialState.goal_status,
@@ -155,13 +167,15 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
 
   const scrollAnchorRef = React.useRef<HTMLDivElement | null>(null);
   const aborterRef = React.useRef<AbortController | null>(null);
+  const isResume = !useMock && initialMessages.length > 0;
 
   // Auto-scroll to the bottom on new content
   React.useEffect(() => {
     scrollAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [messages, activeWidget, thinking]);
 
-  // Kick the conversation off on mount.
+  // Kick the conversation off on mount. On resume, the server's op:'start'
+  // path closes out any pending widget tool_use and re-prompts the user.
   React.useEffect(() => {
     void startConversation();
     return () => aborterRef.current?.abort();
@@ -234,7 +248,20 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         signal: ac.signal,
       });
       if (!res.ok || !res.body) {
-        throw new Error(`stream error: ${res.status}`);
+        // Try to surface the actual server error instead of a bare status
+        // code — saves us guessing in the next round of debugging.
+        let detail = '';
+        try {
+          const errBody = await res.clone().json();
+          detail = ` — ${JSON.stringify(errBody)}`;
+        } catch {
+          try {
+            detail = ` — ${(await res.clone().text()).slice(0, 200)}`;
+          } catch {
+            /* ignore */
+          }
+        }
+        throw new Error(`stream error: ${res.status}${detail}`);
       }
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -552,30 +579,35 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         </div>
       ) : null}
 
-      {/* Conversation */}
+      {/* Conversation + sidebar — 2-column on lg+, stacked on mobile */}
       <main className="flex-1 overflow-y-auto">
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 px-4 py-6 md:px-6 md:py-8">
-          <div aria-live="polite" className="flex flex-col gap-4">
-            {messages.map((m) => (
-              <MessageBubble key={m.id} message={m} />
-            ))}
-            {thinking ? <ThinkingDots /> : null}
-            {activeWidget ? (
-              <WidgetSlot widget={activeWidget} language={language} token={token} onSubmit={submitWidget} />
-            ) : null}
-            {done ? (
-              <div className="rounded-2xl border border-[#C9D0E2] bg-[#F2F4FA] p-5 text-center">
-                <p className="text-[0.875rem] font-medium text-[#1A2D63]">
-                  {language === 'nl'
-                    ? 'Bedankt, je antwoorden zijn veilig opgeslagen.'
-                    : language === 'fr'
-                      ? 'Merci, vos réponses sont enregistrées.'
-                      : 'Thanks, your answers are safely stored.'}
-                </p>
+        <div className="mx-auto flex w-full max-w-6xl gap-0 lg:gap-6">
+          <div className="flex-1 min-w-0">
+            <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 px-4 py-6 md:px-6 md:py-8">
+              <div aria-live="polite" className="flex flex-col gap-4">
+                {messages.map((m) => (
+                  <MessageBubble key={m.id} message={m} />
+                ))}
+                {thinking ? <ThinkingDots /> : null}
+                {activeWidget ? (
+                  <WidgetSlot widget={activeWidget} language={language} token={token} onSubmit={submitWidget} />
+                ) : null}
+                {done ? (
+                  <div className="rounded-2xl border border-[#C9D0E2] bg-[#F2F4FA] p-5 text-center">
+                    <p className="text-[0.875rem] font-medium text-[#1A2D63]">
+                      {language === 'nl'
+                        ? 'Bedankt, je antwoorden zijn veilig opgeslagen.'
+                        : language === 'fr'
+                          ? 'Merci, vos réponses sont enregistrées.'
+                          : 'Thanks, your answers are safely stored.'}
+                    </p>
+                  </div>
+                ) : null}
               </div>
-            ) : null}
+              <div ref={scrollAnchorRef} className="h-4" />
+            </div>
           </div>
-          <div ref={scrollAnchorRef} className="h-4" />
+          <ProgressSidebar goals={GOALS} status={goalStatus} language={language} />
         </div>
       </main>
 
@@ -646,6 +678,124 @@ function ThinkingDots() {
   );
 }
 
+/* ------------------------------------------------------------------ *
+ * Reload-resume helper — rebuild ChatMessage[] from server-side
+ * Anthropic MessageParam[] so a page refresh shows the prior chat.
+ *
+ * Skips kickoff/resume strings ("Hallo, ik ben er..." etc — these are
+ * synthetic protocol nudges, not real user content) and tool_use
+ * blocks (widgets are transient UI; the user already answered them
+ * via the matching tool_result). Renders text from assistant blocks
+ * and reconstructs user submissions from tool_result payloads.
+ * ------------------------------------------------------------------ */
+
+type AnthropicTextBlock = { type: 'text'; text: string };
+type AnthropicToolUseBlock = { type: 'tool_use'; id: string; name: string; input: unknown };
+type AnthropicToolResultBlock = {
+  type: 'tool_result';
+  tool_use_id: string;
+  content: string | unknown[];
+};
+type AnthropicContentBlock =
+  | AnthropicTextBlock
+  | AnthropicToolUseBlock
+  | AnthropicToolResultBlock;
+type AnthropicMessageParam = {
+  role: 'user' | 'assistant';
+  content: string | AnthropicContentBlock[];
+};
+
+const KICKOFF_PHRASES = new Set([
+  'Hallo, ik ben er. We kunnen beginnen.',
+  'Hi, I\'m ready to start.',
+  "Bonjour, je suis prêt(e). Allons-y.",
+  'Ik ben terug. Laten we verder gaan waar we gebleven waren.',
+  "I'm back. Let's pick up where we left off.",
+  'Je reprends. Reprenons là où nous nous étions arrêtés.',
+]);
+
+function rebuildChatHistory(
+  raw: unknown[],
+  language: Language,
+): ChatMessage[] {
+  const out: ChatMessage[] = [];
+  let counter = 0;
+  for (const msgRaw of raw) {
+    if (!msgRaw || typeof msgRaw !== 'object') continue;
+    const msg = msgRaw as AnthropicMessageParam;
+    if (msg.role === 'assistant') {
+      const blocks = Array.isArray(msg.content) ? msg.content : [];
+      const textParts: string[] = [];
+      if (typeof msg.content === 'string') {
+        textParts.push(msg.content);
+      } else {
+        for (const block of blocks) {
+          if (block && (block as AnthropicTextBlock).type === 'text') {
+            textParts.push((block as AnthropicTextBlock).text);
+          }
+        }
+      }
+      const text = textParts.join('\n').trim();
+      if (text && text !== '(no content)') {
+        out.push({
+          id: `restored-a-${counter++}`,
+          role: 'assistant',
+          text,
+        });
+      }
+    } else if (msg.role === 'user') {
+      // Pure-string user content (kickoff / resume nudges / fallback) —
+      // skip system-y kickoff phrases; render anything else as a user bubble.
+      if (typeof msg.content === 'string') {
+        const trimmed = msg.content.trim();
+        if (!trimmed || KICKOFF_PHRASES.has(trimmed)) continue;
+        out.push({
+          id: `restored-u-${counter++}`,
+          role: 'user',
+          text: trimmed,
+        });
+        continue;
+      }
+      // Array content — find tool_result blocks; each is a widget answer.
+      const blocks = Array.isArray(msg.content) ? msg.content : [];
+      for (const block of blocks) {
+        if (!block || (block as AnthropicContentBlock).type !== 'tool_result') continue;
+        const tr = block as AnthropicToolResultBlock;
+        const contentStr = typeof tr.content === 'string' ? tr.content : '';
+        if (contentStr === '{"ok":true}' || !contentStr) continue;
+        // Try to parse as a serialized WidgetSubmission (server side
+        // writes these as renderSubmissionForAgent JSON).
+        try {
+          const parsed = JSON.parse(contentStr) as WidgetSubmission;
+          if (parsed && typeof parsed === 'object' && 'value' in parsed) {
+            out.push({
+              id: `restored-u-${counter++}`,
+              role: 'user',
+              submission: parsed,
+              text: renderSubmissionPreview(parsed, language),
+            });
+            continue;
+          }
+        } catch {
+          /* not a JSON submission */
+        }
+        // Fallback — render raw text
+        out.push({
+          id: `restored-u-${counter++}`,
+          role: 'user',
+          text: contentStr,
+        });
+      }
+    }
+  }
+  return out;
+}
+
+/* ------------------------------------------------------------------ *
+ * Progress UI — compact dots in the header for mobile, full sidebar
+ * (cards with label, status pill, captured-answer preview) on desktop.
+ * ------------------------------------------------------------------ */
+
 function ProgressDots({
   goals,
   status,
@@ -656,7 +806,7 @@ function ProgressDots({
   language: Language;
 }) {
   return (
-    <div className="hidden items-center gap-1.5 rounded-full border border-[#E8E6DC] bg-[#FDFBF7] px-2 py-1.5 sm:inline-flex">
+    <div className="hidden items-center gap-1.5 rounded-full border border-[#E8E6DC] bg-[#FDFBF7] px-2 py-1.5 sm:inline-flex lg:!hidden">
       {goals.map((g) => {
         const s = status[g.id];
         const label = language === 'nl' ? g.label_nl : language === 'fr' ? g.label_fr : g.label_en;
@@ -677,6 +827,180 @@ function ProgressDots({
         );
       })}
     </div>
+  );
+}
+
+/**
+ * Full progress sidebar — shown lg+ next to the chat. Each goal is a
+ * card with label, short description, status pill, and (when satisfied)
+ * a tiny check. Marine palette only — no other accent hues.
+ */
+function ProgressSidebar({
+  goals,
+  status,
+  language,
+}: {
+  goals: typeof GOALS;
+  status: Record<string, 'open' | 'probing' | 'satisfied'>;
+  language: Language;
+}) {
+  const total = goals.length;
+  const satisfied = goals.filter((g) => status[g.id] === 'satisfied').length;
+  const probing = goals.filter((g) => status[g.id] === 'probing').length;
+  const pct = Math.round((satisfied / total) * 100);
+
+  const goalDescriptions: Record<string, { nl: string; fr: string; en: string }> = {
+    operational_reality: {
+      nl: 'Hoe ziet een typische week eruit?',
+      fr: 'À quoi ressemble une semaine type ?',
+      en: 'What does a typical week look like?',
+    },
+    value_drains: {
+      nl: 'Waar lekt er tijd weg?',
+      fr: 'Où le temps fuit-il ?',
+      en: 'Where does time leak away?',
+    },
+    ai_maturity: {
+      nl: 'Wat hebben jullie al geprobeerd?',
+      fr: "Qu'avez-vous déjà essayé ?",
+      en: 'What have you tried already?',
+    },
+    system_landscape: {
+      nl: 'Welke tools draaien er?',
+      fr: 'Quels outils utilisez-vous ?',
+      en: 'Which tools are in play?',
+    },
+    economic_stakes: {
+      nl: 'Wat kost het echt?',
+      fr: 'Quel est le coût réel ?',
+      en: 'What does it really cost?',
+    },
+    magic_wand: {
+      nl: 'Eén proces, automatisch — welk?',
+      fr: 'Un processus automatique — lequel ?',
+      en: 'One process, automated — which?',
+    },
+  };
+
+  const headerCopy = {
+    nl: { title: 'Voortgang', counter: `${satisfied}/${total} thema's afgerond` },
+    fr: { title: 'Progression', counter: `${satisfied}/${total} thèmes terminés` },
+    en: { title: 'Progress', counter: `${satisfied}/${total} topics covered` },
+  }[language];
+
+  const statusPill = (s: 'open' | 'probing' | 'satisfied' | undefined) => {
+    if (s === 'satisfied') {
+      return {
+        text: language === 'nl' ? 'Klaar' : language === 'fr' ? 'Fait' : 'Done',
+        cls: 'bg-[#1A2D63] text-[#FDFBF7]',
+      };
+    }
+    if (s === 'probing') {
+      return {
+        text: language === 'nl' ? 'Bezig' : language === 'fr' ? 'En cours' : 'In progress',
+        cls: 'bg-[#E5E9F4] text-[#1A2D63]',
+      };
+    }
+    return {
+      text: language === 'nl' ? 'Te doen' : language === 'fr' ? 'À faire' : 'To do',
+      cls: 'bg-[#F2EFE6] text-[#76706A]',
+    };
+  };
+
+  return (
+    <aside className="hidden lg:block w-[300px] shrink-0">
+      <div className="sticky top-[68px] flex flex-col gap-3 px-4 py-6 pr-6">
+        {/* Heading + bar */}
+        <div>
+          <div className="flex items-baseline justify-between gap-2">
+            <h2 className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[#697597]">
+              {headerCopy.title}
+            </h2>
+            <span className="text-[0.75rem] text-[#76706A]">{pct}%</span>
+          </div>
+          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#EFE9DA]">
+            <div
+              className="h-full rounded-full bg-[#1A2D63] transition-all duration-500 ease-out"
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+          <p className="mt-2 text-[0.75rem] text-[#76706A]">
+            {headerCopy.counter}
+            {probing > 0 ? (
+              <span className="ml-1 text-[#697597]">
+                ({probing} {language === 'nl' ? 'lopend' : language === 'fr' ? 'en cours' : 'active'})
+              </span>
+            ) : null}
+          </p>
+        </div>
+
+        {/* Goal cards */}
+        <ol className="flex flex-col gap-2">
+          {goals.map((g, i) => {
+            const s = status[g.id];
+            const label = language === 'nl' ? g.label_nl : language === 'fr' ? g.label_fr : g.label_en;
+            const desc = goalDescriptions[g.id]?.[language] ?? '';
+            const pill = statusPill(s);
+            const isActive = s === 'probing';
+            const isDone = s === 'satisfied';
+            return (
+              <li
+                key={g.id}
+                className={[
+                  'group relative rounded-xl border px-3.5 py-3 transition-all',
+                  isDone
+                    ? 'border-[#C9D0E2] bg-[#F2F4FA]'
+                    : isActive
+                      ? 'border-[#C9D0E2] bg-[#FFFEFA] shadow-[0_1px_2px_rgba(60,50,30,0.04),0_8px_16px_-10px_rgba(20,30,60,0.12)]'
+                      : 'border-[#E8E6DC] bg-[#FFFEFA]',
+                ].join(' ')}
+              >
+                <div className="flex items-start gap-2.5">
+                  <span
+                    aria-hidden="true"
+                    className={[
+                      'mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[0.625rem] font-semibold transition-colors',
+                      isDone
+                        ? 'bg-[#1A2D63] text-[#FDFBF7]'
+                        : isActive
+                          ? 'bg-[#FDFBF7] text-[#1A2D63] ring-2 ring-[#1A2D63]'
+                          : 'bg-[#F2EFE6] text-[#A29B92]',
+                    ].join(' ')}
+                  >
+                    {isDone ? '✓' : i + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <p
+                        className={[
+                          'text-[0.875rem] font-semibold leading-snug',
+                          isDone ? 'text-[#1A2D63]' : 'text-[#322D26]',
+                        ].join(' ')}
+                      >
+                        {label}
+                      </p>
+                      <span
+                        className={[
+                          'shrink-0 rounded-full px-2 py-0.5 text-[0.625rem] font-medium uppercase tracking-[0.04em]',
+                          pill.cls,
+                        ].join(' ')}
+                      >
+                        {pill.text}
+                      </span>
+                    </div>
+                    {desc ? (
+                      <p className="mt-0.5 text-[0.75rem] leading-relaxed text-[#76706A]">
+                        {desc}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </aside>
   );
 }
 

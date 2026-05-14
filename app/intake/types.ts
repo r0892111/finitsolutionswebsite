@@ -228,6 +228,12 @@ export interface IntakeState {
   token: string;
   personalization: IntakePersonalization;
   goal_status: Record<string, "open" | "probing" | "satisfied">;
+  /**
+   * Raw server-side state_json passthrough. Contains `messages` (the
+   * Anthropic conversation history) so the client can rebuild the chat
+   * on reload. Schemaless on purpose — server may stash other keys here.
+   */
+  state?: Record<string, unknown>;
   /** Server-provided opening message (i18n'd in personalization.language). */
   opening_assistant_text?: string;
   /** When set, the chat shell resumes mid-flow with a friendly welcome-back banner. */

@@ -202,6 +202,10 @@ export const handler = stream(async (event) => {
   const persistedAnswers: Record<string, unknown> =
     (persistedState.answers as Record<string, unknown>) ?? {};
 
+  console.log(
+    `[intake/chat] op=${body.op} token=${body.token.slice(0, 8)}... history.length=${history.length}`,
+  );
+
   // ----- Build the new user message --------------------------------------
   let newUserMessage: Anthropic.MessageParam | null = null;
 
@@ -441,13 +445,24 @@ export const handler = stream(async (event) => {
       }
 
       // ----- Persist updated state ------------------------------------------
+      // Filter out empty text blocks — Anthropic rejects {type:'text', text:''}
+      // in subsequent turns' history. Better a missing block than a poison one.
+      const filteredAssistantBlocks = assistantBlocks.filter((b) => {
+        if (b.type === "text") {
+          return typeof b.text === "string" && b.text.trim().length > 0;
+        }
+        return true;
+      });
       const newAssistantMessage: Anthropic.MessageParam = {
         role: "assistant",
         content:
-          assistantBlocks.length > 0
-            ? assistantBlocks
-            : [{ type: "text", text: "" }],
+          filteredAssistantBlocks.length > 0
+            ? filteredAssistantBlocks
+            : [{ type: "text", text: "(no content)" }],
       };
+      console.log(
+        `[intake/chat] persisting turn — text_blocks=${filteredAssistantBlocks.filter((b) => b.type === "text").length} tool_use_blocks=${filteredAssistantBlocks.filter((b) => b.type === "tool_use").length}`,
+      );
       const updatedHistory: Anthropic.MessageParam[] = [
         ...history,
         newUserMessage!,
@@ -478,6 +493,7 @@ export const handler = stream(async (event) => {
       // The natural end of the SSE stream (reader.read() → done=true) is
       // what tells the client this turn is over.
     } catch (err) {
+      console.error("[intake/chat] stream error:", err);
       send({
         type: "error",
         message: err instanceof Error ? err.message : "unknown",

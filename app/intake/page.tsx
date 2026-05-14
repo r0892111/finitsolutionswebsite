@@ -93,6 +93,7 @@ function IntakeInner() {
           token,
           personalization: data.personalization,
           goal_status: data.goal_status ?? {},
+          state: data.state ?? {},
         };
         if (!cancelled) {
           setState(normalized);
