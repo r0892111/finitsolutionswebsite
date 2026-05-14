@@ -51,7 +51,17 @@ function IntakeInner() {
           credentials: 'same-origin',
         });
         if (res.status === 404) {
-          if (!cancelled) setError('not_found');
+          // Distinguish "token not in DB" (real backend, JSON body) from
+          // "API route not deployed yet" (dev mode, HTML 404 page) — fall
+          // through to mock in the latter case so the page is dogfoodable
+          // on the widgets branch before the backend lands.
+          const ct = res.headers.get('content-type') ?? '';
+          if (ct.includes('application/json')) {
+            if (!cancelled) setError('not_found');
+          } else {
+            console.info('intake-state: backend not deployed, using mock');
+            if (!cancelled) setState(null);
+          }
           return;
         }
         if (res.status === 410) {
