@@ -421,7 +421,13 @@ export const handler = stream(async (event) => {
                 email: parsedInput.email as string | undefined,
               });
             } else if (toolName === "submit_intake") {
-              send({ type: "submit_intake" });
+              // Agent has confirmed the intake is complete. The client's
+              // `done` event handler is what shows the "thanks, your
+              // answers are saved" banner — emit it ONLY here, never per
+              // stream. (Actual finalize via /api/intake/submit is a
+              // follow-up; for now the row stays open and the operator's
+              // queue check picks it up.)
+              send({ type: "done", ok: true });
             }
           }
           currentBlock = null;
@@ -466,7 +472,11 @@ export const handler = stream(async (event) => {
         console.error("[intake/chat] state persist failed:", persistErr);
       }
 
-      send({ type: "done", ok: true });
+      // NOTE: do NOT emit `done` per stream. The client's `done` handler
+      // means "intake fully complete — clear widget, show thanks banner".
+      // We only emit it when the agent calls submit_intake (handled above).
+      // The natural end of the SSE stream (reader.read() → done=true) is
+      // what tells the client this turn is over.
     } catch (err) {
       send({
         type: "error",
