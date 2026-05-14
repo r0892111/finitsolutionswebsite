@@ -19,7 +19,7 @@
  * caller. Keep it deterministic (sort object keys, don't interpolate
  * timestamps) so the cache prefix stays stable across requests.
  */
-import type { IntakePersonalization } from "@/app/intake/types";
+import type { IntakePersonalization } from "@/lib/intake/types";
 
 const GOAL_DESCRIPTIONS_NL: Record<string, string> = {
   operational_reality:

@@ -14,7 +14,7 @@ import type {
   IntakePersonalization,
   Language,
   IntakeFlavor,
-} from "@/app/intake/types";
+} from "@/lib/intake/types";
 
 export type GoalStatus = "open" | "probing" | "satisfied";
 

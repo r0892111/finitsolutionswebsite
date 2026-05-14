@@ -17,7 +17,7 @@
  * The operator can swap providers by replacing `sendEmail` below; the HTML
  * builder is provider-neutral.
  */
-import type { IntakePersonalization } from "@/app/intake/types";
+import type { IntakePersonalization } from "@/lib/intake/types";
 import type { IntakeStateJson } from "@/lib/intake/supabase-intake";
 
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
