@@ -15,6 +15,7 @@ import {
   type GoalStatusJson,
 } from "../../lib/intake/supabase-intake";
 import { isPlausibleToken } from "../../lib/intake/token-mint";
+import type { IntakeStateResponse } from "../../lib/intake/types";
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 
@@ -33,10 +34,10 @@ async function handleGet(event: HandlerEvent) {
     if (row.expires_at && new Date(row.expires_at) < new Date()) {
       return json(410, { error: "expired" });
     }
-    return json(200, {
-      personalization_json: row.personalization_json,
-      state_json: row.state_json ?? {},
-      goal_status_json: row.goal_status_json ?? {},
+    const body: IntakeStateResponse = {
+      personalization: row.personalization_json,
+      goal_status: row.goal_status_json ?? {},
+      state: row.state_json ?? {},
       language: row.language,
       flavor: row.flavor,
       completed_at: row.completed_at,
@@ -48,7 +49,8 @@ async function handleGet(event: HandlerEvent) {
         role: row.role,
         sector: row.sector,
       },
-    });
+    };
+    return json(200, body);
   } catch (err) {
     return json(500, {
       error: "internal_error",

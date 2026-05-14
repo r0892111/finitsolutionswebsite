@@ -137,11 +137,13 @@ interface Props {
 }
 
 export function OnboardingChat({ token, initial, useMock = true }: Props) {
-  const initialState: IntakeState = initial ?? {
-    token,
-    personalization: MOCK_PERSONALIZATION_JSON,
-    goal_status: {},
-  };
+  // Defensive: a partial `initial` (object exists, but `.personalization`
+  // is missing — usually a wire-shape drift from /api/intake/state) would
+  // crash on first render. Fall back to mock if the personalization slot
+  // is empty, not just if the whole object is.
+  const initialState: IntakeState = initial?.personalization
+    ? initial
+    : { token, personalization: MOCK_PERSONALIZATION_JSON, goal_status: {} };
   const [language, setLanguage] = React.useState<Language>(initialState.personalization.language);
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [activeWidget, setActiveWidget] = React.useState<AnyWidget | null>(null);

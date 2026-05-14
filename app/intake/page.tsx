@@ -20,7 +20,7 @@ import { useSearchParams } from 'next/navigation';
 import { AlertCircle, Sparkles } from 'lucide-react';
 
 import OnboardingChat from './OnboardingChat';
-import type { IntakeState } from './types';
+import type { IntakeState, IntakeStateResponse } from './types';
 
 export const dynamic = 'force-static';
 
@@ -76,9 +76,26 @@ function IntakeInner() {
           if (!cancelled) setState(null); // null => let OnboardingChat use MOCK
           return;
         }
-        const data = (await res.json()) as IntakeState;
+        const data = (await res.json()) as IntakeStateResponse;
+        // Defensive guard against wire-shape drift (e.g. backend returns
+        // snake_case column names instead of the camelCase contract). A
+        // partial object would crash OnboardingChat at first render —
+        // safer to fall through to mock and surface the issue in console.
+        if (!data?.personalization?.language) {
+          console.warn(
+            'intake-state: response missing personalization.language — falling back to mock',
+            data,
+          );
+          if (!cancelled) setState(null);
+          return;
+        }
+        const normalized: IntakeState = {
+          token,
+          personalization: data.personalization,
+          goal_status: data.goal_status ?? {},
+        };
         if (!cancelled) {
-          setState(data);
+          setState(normalized);
           setUseMock(false);
         }
       } catch (err) {

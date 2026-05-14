@@ -233,3 +233,33 @@ export interface IntakeState {
   /** When set, the chat shell resumes mid-flow with a friendly welcome-back banner. */
   resumed?: { from_goal: string; assistant_text: string };
 }
+
+/**
+ * Wire shape for `GET /api/intake/state?t=<token>`.
+ *
+ * Mirrored in [lib/intake/types.ts](../../lib/intake/types.ts) — both files
+ * must stay in sync until the post-merge consolidation. Single source of
+ * truth for the contract between `netlify/functions/intake-state.ts` (the
+ * producer) and this page (the consumer).
+ *
+ * Note: keys are camelCase / no `_json` suffix. The DB column names
+ * (`personalization_json` etc.) stay inside the function — wire shape ≠
+ * Postgres schema. The token is intentionally NOT echoed back (the client
+ * already has it from the URL).
+ */
+export interface IntakeStateResponse {
+  personalization: IntakePersonalization;
+  goal_status: Record<string, "open" | "probing" | "satisfied">;
+  state: Record<string, unknown>;
+  language: "nl" | "fr" | "en";
+  flavor: "paying_client" | "lead_magnet";
+  completed_at: string | null;
+  identity: {
+    first_name: string | null;
+    last_name: string | null;
+    company_name: string | null;
+    email: string;
+    role: string | null;
+    sector: string | null;
+  };
+}

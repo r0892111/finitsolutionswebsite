@@ -75,3 +75,36 @@ export interface IntakePersonalization {
   minted_at?: string;
   minted_by_operator?: string;
 }
+
+/**
+ * Wire shape for `GET /api/intake/state?t=<token>`.
+ *
+ * Single source of truth used by BOTH `netlify/functions/intake-state.ts`
+ * (the producer) and `app/intake/page.tsx` (the consumer). Adding a field
+ * here is a contract change — both sides must update.
+ *
+ * Note: keys are camelCase / no `_json` suffix. The DB column names
+ * (`personalization_json`, `goal_status_json`, `state_json`) stay inside
+ * the function — the wire shape is the consumer's contract, not the
+ * Postgres schema.
+ *
+ * The token is intentionally NOT echoed back (the client already has it
+ * from the URL; echoing it would needlessly broaden its blast radius if
+ * the JSON ever leaked).
+ */
+export interface IntakeStateResponse {
+  personalization: IntakePersonalization;
+  goal_status: Record<string, "open" | "probing" | "satisfied">;
+  state: Record<string, unknown>;
+  language: Language;
+  flavor: IntakeFlavor;
+  completed_at: string | null;
+  identity: {
+    first_name: string | null;
+    last_name: string | null;
+    company_name: string | null;
+    email: string;
+    role: string | null;
+    sector: string | null;
+  };
+}
