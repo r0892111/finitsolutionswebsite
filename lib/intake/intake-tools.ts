@@ -190,7 +190,7 @@ export const INTAKE_TOOLS: Anthropic.Tool[] = [
               name: { type: "string" },
               domain: {
                 type: "string",
-                description: "For logo.clearbit.com/<domain>.",
+                description: "Used for img.logo.dev/<domain> lookup.",
               },
               tier: { type: "string", enum: ["primary", "secondary"] },
             },
@@ -206,7 +206,7 @@ export const INTAKE_TOOLS: Anthropic.Tool[] = [
         },
         ask_admin_contact: {
           type: "boolean",
-          description: "Default true; asks 'Wie heeft admin-toegang?' inline.",
+          description: "Default false. Only set to true when admin access is genuinely needed for follow-up (rare). If unset/false, the widget skips the admin-contact field entirely.",
         },
       },
       required: ["widget_id", "prompt", "category", "options"],

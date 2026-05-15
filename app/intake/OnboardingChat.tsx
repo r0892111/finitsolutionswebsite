@@ -35,15 +35,21 @@
  */
 
 import * as React from 'react';
-import { ChevronDown, RotateCcw, Sparkles } from 'lucide-react';
+import { Check, ChevronDown, RotateCcw, Sparkles } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
+  StickToBottomNudge,
 } from '@/components/ai-elements/conversation';
 import { Shimmer } from '@/components/ai-elements/shimmer';
+
+import { ChatInput } from './ChatInput';
 
 import type {
   AnyWidget,
@@ -55,14 +61,24 @@ import type {
   WidgetSubmission,
 } from './types';
 
-import { TextWidget } from './widgets/TextWidget';
-import { LongTextVoiceWidget } from './widgets/LongTextVoiceWidget';
 import { SingleSelectWidget } from './widgets/SingleSelectWidget';
 import { MultiSelectWidget } from './widgets/MultiSelectWidget';
 import { SliderWidget } from './widgets/SliderWidget';
 import { ConfirmWidget } from './widgets/ConfirmWidget';
 import { SystemPickerWidget } from './widgets/SystemPickerWidget';
 import { ClosingSummaryWidget } from './widgets/ClosingSummaryWidget';
+
+/** Widgets that render structured UI above the chat input. Ask_text and
+ *  ask_long_text_voice no longer render a widget — the always-on input
+ *  handles those. */
+const STRUCTURED_WIDGET_KINDS = new Set([
+  'ask_single_select',
+  'ask_multi_select',
+  'ask_slider',
+  'ask_confirm',
+  'system_picker',
+  'closing_summary',
+]);
 
 /* ------------------------------------------------------------------ *
  * Mock personalization payload — replaced by /api/intake/state in
@@ -154,10 +170,78 @@ const GOALS: { id: string; label_nl: string; label_fr: string; label_en: string 
  * as Claude's "Spelunking…" / GPT's "Thinking…" feel.
  * ------------------------------------------------------------------ */
 
+/**
+ * Cycling "thinking" verbs — Claude-Code-style flavor. List is long
+ * enough that consecutive turns rarely repeat the same word, which
+ * keeps the loading state feeling alive rather than canned.
+ */
 const THINKING_VERBS: Record<Language, string[]> = {
-  nl: ['Aan het denken', 'Aan het samenvatten', 'Antwoord verwerken', 'Vraag voorbereiden'],
-  en: ['Thinking', 'Reasoning', 'Saving your answer', 'Preparing next question'],
-  fr: ['Réflexion', 'Analyse', 'Enregistrement', 'Préparation'],
+  nl: [
+    'Aan het denken',
+    'Aan het puzzelen',
+    'Aan het broeden',
+    'Aan het peinzen',
+    'Aan het mijmeren',
+    'Aan het kauwen',
+    'Aan het brouwen',
+    'Aan het filteren',
+    'Verbanden leggen',
+    'Gedachten ordenen',
+    'Antwoord smeden',
+    'Antwoord borduren',
+    'Hersenen kraken',
+    'Even nadenken',
+    'Vraag verwerken',
+    'Antwoord polijsten',
+    'Notities maken',
+    'Even doorzoeken',
+    'Aan het knutselen',
+    'Aan het mediteren',
+  ],
+  en: [
+    'Thinking',
+    'Pondering',
+    'Mulling',
+    'Spelunking',
+    'Cogitating',
+    'Synthesizing',
+    'Brewing',
+    'Marinating',
+    'Ruminating',
+    'Sifting',
+    'Connecting dots',
+    'Weighing options',
+    'Untangling',
+    'Reflecting',
+    'Cooking up an answer',
+    'Threading the needle',
+    'Reasoning',
+    'Pattern-matching',
+    'Drafting',
+    'Polishing',
+  ],
+  fr: [
+    'Réflexion',
+    'En train de mijoter',
+    'Cogitation',
+    'Méditation',
+    'Délibération',
+    'Tissage des idées',
+    'Brainstorming',
+    'En train de peser',
+    'En train de relier',
+    'Analyse en cours',
+    'Mise au point',
+    'En train de filtrer',
+    'En train de polir',
+    'Rédaction',
+    'Examen attentif',
+    'En train de remuer',
+    'Synthèse en cours',
+    'Aiguisage',
+    'Démêlage',
+    'Composition',
+  ],
 };
 
 interface Props {
@@ -195,6 +279,7 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
     initialState.goal_status,
   );
   const [thinking, setThinking] = React.useState(false);
+  const [streaming, setStreaming] = React.useState(false);
   const [done, setDone] = React.useState(false);
 
   const aborterRef = React.useRef<AbortController | null>(null);
@@ -360,6 +445,34 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
       // the discriminated union stays exhaustive.
     } else if (event.type === 'widget') {
       setActiveWidget(event.widget);
+      // Client-side progress safety net: if the widget carries a goal_id,
+      // make sure that goal is at least "probing" and demote any other
+      // still-probing goal to "satisfied". The server *should* emit
+      // goal_update for this, but the model frequently forgets — without
+      // this, the progress bar stays at 0% for the whole conversation.
+      const gid = event.widget.goal_id;
+      if (gid && GOALS.some((g) => g.id === gid)) {
+        setGoalStatus((prev) => {
+          if (prev[gid] === 'satisfied') return prev; // user moved back? leave it
+          const next: Record<string, 'open' | 'probing' | 'satisfied'> = { ...prev };
+          for (const id of Object.keys(next)) {
+            if (id !== gid && next[id] === 'probing') next[id] = 'satisfied';
+          }
+          next[gid] = 'probing';
+          return next;
+        });
+      }
+      // closing_summary signals end of goal collection — mark any still-
+      // probing goals as satisfied so the progress bar caps at 100%.
+      if (event.widget.kind === 'closing_summary') {
+        setGoalStatus((prev) => {
+          const next: Record<string, 'open' | 'probing' | 'satisfied'> = { ...prev };
+          for (const id of Object.keys(next)) {
+            if (next[id] === 'probing') next[id] = 'satisfied';
+          }
+          return next;
+        });
+      }
     } else if (event.type === 'goal_update') {
       setGoalStatus((prev) => {
         const next: Record<string, 'open' | 'probing' | 'satisfied'> = {
@@ -383,6 +496,15 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
     } else if (event.type === 'done') {
       setDone(true);
       setActiveWidget(null);
+      // Final safety net: cap progress at 100% by satisfying any still-
+      // open or probing goals once the intake is closed.
+      setGoalStatus((prev) => {
+        const next: Record<string, 'open' | 'probing' | 'satisfied'> = { ...prev };
+        for (const g of GOALS) {
+          if (next[g.id] !== 'satisfied') next[g.id] = 'satisfied';
+        }
+        return next;
+      });
     } else if (event.type === 'error') {
       cancelThinking();
       setMessages((prev) => [
@@ -404,6 +526,7 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
     aborterRef.current?.abort();
     const ac = new AbortController();
     aborterRef.current = ac;
+    setStreaming(true);
     beginThinking();
     try {
       const res = await fetch('/api/intake/chat', {
@@ -456,6 +579,7 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
       }
     } finally {
       cancelThinking();
+      setStreaming(false);
       // If the connection dropped mid-stream, make sure the paced
       // renderer finalizes whatever text it has rather than leaving
       // the bubble in a streaming state forever.
@@ -691,14 +815,17 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
   };
 
   const submitWidget = async (submission: WidgetSubmission) => {
-    // Persist what the user picked into the chat thread as a "user bubble"
+    // Persist what the user picked into the chat thread as a "user bubble".
+    // We pass the widget itself so the preview can resolve option labels
+    // (e.g. "Echt" instead of the underlying value "real").
+    const preview = renderSubmissionPreview(submission, language, activeWidget ?? undefined);
     setMessages((prev) => [
       ...prev,
       {
         id: `msg-${Date.now()}`,
         role: 'user',
         submission,
-        text: renderSubmissionPreview(submission, language),
+        text: preview,
       },
     ]);
     setActiveWidget(null);
@@ -706,6 +833,28 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
       return mockDispatch();
     }
     await sendToServer({ op: 'submit_widget', submission });
+  };
+
+  /**
+   * Free-text / voice reply from the always-on ChatInput. If a text
+   * widget (ask_text / ask_long_text_voice) is pending, the server
+   * matches by tool_use_id and fills its tool_result. Otherwise the
+   * text is appended as a plain user message.
+   */
+  const submitText = async (text: string) => {
+    setMessages((prev) => [
+      ...prev,
+      { id: `msg-${Date.now()}`, role: 'user', text },
+    ]);
+    // Always clear any active widget — for text widgets the server matches
+    // by tool_use_id and fills the tool_result; for structured widgets
+    // the user used the "type freely" override so we hide the now-bypassed
+    // widget UI.
+    setActiveWidget(null);
+    if (useMock) {
+      return mockDispatch();
+    }
+    await sendToServer({ op: 'submit_text', text });
   };
 
   /* ------------------------------------------------------------ *
@@ -718,31 +867,41 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
   const reduced = useReducedMotion();
 
   return (
-    <div className="grid h-[100dvh] grid-rows-[auto_minmax(0,1fr)_auto] bg-[#FDFBF7] text-[#2A2620]">
-      {/* Header */}
+    <div className="grid h-[100dvh] grid-rows-[auto_minmax(0,1fr)] bg-[#FDFBF7] text-[#2A2620]">
+      {/* Header — single row + thin progress line */}
       <header className="z-20 border-b border-[#E8E6DC] bg-[#FDFBF7]/85 backdrop-blur supports-[backdrop-filter]:bg-[#FDFBF7]/70">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3 md:px-6">
-          <div className="flex min-w-0 items-center gap-3">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2 md:px-6">
+          <div className="flex min-w-0 items-center gap-2.5">
             <div
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#1A2D63] text-[#FDFBF7] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.20),0_2px_4px_rgba(20,30,60,0.18)]"
+              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[#1A2D63] text-[#FDFBF7] shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.20),0_1px_2px_rgba(20,30,60,0.18)]"
               aria-hidden="true"
             >
-              <Sparkles className="h-4 w-4" />
+              <Sparkles className="h-3 w-3" />
             </div>
-            <div className="min-w-0">
-              <p className="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-[#697597]">
-                {HEADER[language].eyebrow}
-              </p>
-              <p className="truncate text-[0.875rem] font-semibold text-[#1A2D63]">
-                {initialState.personalization.client_legal_name ?? 'Finit OS'}
-              </p>
-            </div>
+            <p className="truncate text-[0.8125rem] font-semibold text-[#1A2D63]">
+              {initialState.personalization.client_legal_name ?? 'Finit OS'}
+            </p>
+            <span className="hidden text-[#C9CBC4] sm:inline" aria-hidden="true">·</span>
+            <p className="hidden truncate text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-[#697597] sm:inline">
+              {HEADER[language].eyebrow}
+            </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <ProgressDots goals={GOALS} status={goalStatus} language={language} />
+          <div className="flex items-center gap-2.5">
+            <span className="text-[0.6875rem] tabular-nums text-[#76706A]">
+              {Math.round((GOALS.filter((g) => goalStatus[g.id] === 'satisfied').length / GOALS.length) * 100)}%
+            </span>
             <LanguageSwitcher value={language} onChange={setLanguage} />
           </div>
+        </div>
+        {/* Thin progress line — fills navy as goals complete */}
+        <div className="h-[2px] w-full bg-[#EFE9DA]">
+          <div
+            className="h-full bg-[#1A2D63] transition-all duration-500 ease-out"
+            style={{
+              width: `${Math.round((GOALS.filter((g) => goalStatus[g.id] === 'satisfied').length / GOALS.length) * 100)}%`,
+            }}
+          />
         </div>
         {initial?.resumed ? (
           <div className="border-t border-[#C9D0E2] bg-[#F2F4FA]">
@@ -750,7 +909,7 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
               <div className="rounded-full bg-[#1A2D63] p-1.5 text-[#FDFBF7]">
                 <RotateCcw className="h-3.5 w-3.5" />
               </div>
-              <p className="text-[0.875rem] text-[#1A2D63]">
+              <p className="text-[0.8125rem] text-[#1A2D63]">
                 <span className="font-semibold">{HEADER[language].welcomeBack}.</span>{' '}
                 {initial.resumed.assistant_text}
               </p>
@@ -759,81 +918,77 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         ) : null}
       </header>
 
-      {/* Middle row — conversation + sidebar. min-h-0 + overflow-hidden so the
-          Conversation's StickToBottom can claim the available height without
-          dragging the page along with it. The active widget renders INLINE
-          at the bottom of the message list — keeps it impossible to hide
-          behind a layout bug, and StickToBottom keeps it auto-scrolled into
-          view. */}
+      {/* Main row — chat column (with its OWN inner grid for
+          conversation + widget-slot + input) and sidebar column. The
+          input and widget-slot live INSIDE the chat column so they
+          match its width, not the full viewport. */}
       <div className="min-h-0 w-full overflow-hidden">
-        <div className="mx-auto grid h-full w-full max-w-6xl grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-6 lg:px-6">
-          <div className="relative flex min-h-0 flex-col">
-            <Conversation aria-live="polite">
-              <ConversationContent className="mx-auto w-full max-w-2xl px-4 md:px-0">
-                <AnimatePresence initial={false}>
-                  {messages.map((m) => (
-                    <MessageRow key={m.id} message={m} reduced={!!reduced} />
-                  ))}
-                </AnimatePresence>
-                {thinking ? <ThinkingShimmer language={language} /> : null}
-                {activeWidget ? (
-                  <div className="pt-1">
-                    <WidgetSlot
-                      widget={activeWidget}
-                      language={language}
-                      token={token}
-                      onSubmit={submitWidget}
-                    />
-                  </div>
-                ) : null}
-                {done ? <DoneCallout language={language} /> : null}
-              </ConversationContent>
-              <ConversationScrollButton />
-            </Conversation>
+        <div className="mx-auto grid h-full w-full max-w-6xl grid-cols-1 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-6 lg:px-6">
+          {/* Chat column — internal grid: conversation (1fr) / widget / input */}
+          <div className="grid min-h-0 grid-rows-[minmax(0,1fr)_auto_auto]">
+            <div className="relative flex min-h-0 flex-col">
+              <Conversation aria-live="polite">
+                <ConversationContent className="mx-auto w-full max-w-2xl px-4 pb-6 md:px-0">
+                  <AnimatePresence initial={false}>
+                    {messages.map((m) => (
+                      <MessageRow key={m.id} message={m} reduced={!!reduced} />
+                    ))}
+                  </AnimatePresence>
+                  {thinking ? <ThinkingShimmer language={language} /> : null}
+                  {done ? <DoneCallout language={language} /> : null}
+                  {/* Nudge: whenever a widget arrives or finishes, re-stick
+                      to bottom so the layout-shift from the widget-slot
+                      growing doesn't leave the latest message hidden. */}
+                  <StickToBottomNudge
+                    trigger={`${activeWidget?.widget_id ?? 'none'}|${messages.length}`}
+                  />
+                </ConversationContent>
+                <ConversationScrollButton />
+              </Conversation>
+            </div>
+
+            {/* Widget-slot — only for structured widgets, animated entrance.
+                popLayout mode prevents the exiting widget from briefly
+                stacking with the entering one (which caused the chat row
+                to shrink twice and the latest message to overlap). */}
+            <AnimatePresence initial={false} mode="popLayout">
+              {activeWidget && STRUCTURED_WIDGET_KINDS.has(activeWidget.kind) ? (
+                <motion.div
+                  key={activeWidget.widget_id}
+                  initial={reduced ? false : { opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduced ? { opacity: 0 } : { opacity: 0, y: 8 }}
+                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] as const }}
+                  className="mx-auto w-full max-w-2xl px-4 pb-2 md:px-0"
+                >
+                  <WidgetSlot
+                    widget={activeWidget}
+                    language={language}
+                    token={token}
+                    onSubmit={submitWidget}
+                  />
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+
+            {/* Always-on chat input — same max-width as chat messages.
+                Stays fully enabled even when a widget is active; the user
+                can answer via the widget OR type/dictate at any time. */}
+            {!done ? (
+              <div className="mx-auto w-full max-w-2xl">
+                <ChatInput
+                  language={language}
+                  token={token}
+                  busy={thinking || streaming}
+                  onSendText={(text) => void submitText(text)}
+                />
+              </div>
+            ) : null}
           </div>
+
           <ProgressSidebar goals={GOALS} status={goalStatus} language={language} />
         </div>
       </div>
-
-      {/* Footer — always-visible status strip. Shows topic counter, thinking
-          state, current widget kind for diagnostics, and the re-prompt
-          escape hatch if the agent goes silent. */}
-      <footer className="border-t border-[#E8E6DC] bg-[#FDFBF7]/95 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2 md:px-6">
-          <p className="text-[0.6875rem] text-[#76706A]">
-            {satisfied}/{totalGoals}{' '}
-            {language === 'nl'
-              ? "thema's afgerond"
-              : language === 'fr'
-                ? 'thèmes terminés'
-                : 'topics covered'}
-            {probing > 0 ? (
-              <span className="ml-1 text-[#697597]">
-                ({probing}{' '}
-                {language === 'nl' ? 'lopend' : language === 'fr' ? 'en cours' : 'in progress'})
-              </span>
-            ) : null}
-            {thinking ? (
-              <span className="ml-2 text-[#697597]">
-                · {language === 'nl' ? 'bezig…' : language === 'fr' ? 'en cours…' : 'thinking…'}
-              </span>
-            ) : null}
-          </p>
-          {!done && !thinking && !activeWidget && messages.length > 0 && !useMock ? (
-            <button
-              type="button"
-              onClick={() => void sendToServer({ op: 'start' })}
-              className="rounded-md border border-[#C9D0E2] bg-[#FFFEFA] px-2.5 py-1 text-[0.6875rem] font-medium text-[#1A2D63] transition-colors hover:bg-[#F2F4FA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63]"
-            >
-              {language === 'nl'
-                ? 'Geen invoerveld? Vraag opnieuw'
-                : language === 'fr'
-                  ? 'Pas de champ ? Reposer la question'
-                  : 'No input? Re-prompt'}
-            </button>
-          ) : null}
-        </div>
-      </footer>
     </div>
   );
 }
@@ -856,13 +1011,8 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
     const hasText = !!message.text && message.text.length > 0;
     if (!hasText) return null;
     return (
-      <motion.div className="flex items-start gap-2" {...anim}>
-        <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
-          <Sparkles className="h-2.5 w-2.5" />
-        </div>
-        <div className="flex min-w-0 max-w-[90%] flex-1 flex-col gap-1">
-          <AssistantBubble text={message.text!} streaming={!!message.streaming} />
-        </div>
+      <motion.div className="w-full" {...anim}>
+        <AssistantText text={message.text!} streaming={!!message.streaming} />
       </motion.div>
     );
   }
@@ -878,36 +1028,103 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
   }
   // user
   return (
-    <motion.div className="flex items-start justify-end gap-2" {...anim}>
-      <div className="max-w-[78%] rounded-xl rounded-tr-sm bg-[#1A2D63] px-3 py-1.5 text-[#FDFBF7] shadow-[0_2px_6px_-2px_rgba(20,30,60,0.22)]">
-        <p className="whitespace-pre-wrap text-[0.75rem] leading-[1.5]">{message.text}</p>
+    <motion.div className="flex w-full justify-end" {...anim}>
+      <div className="max-w-[78%] rounded-2xl rounded-tr-sm bg-[#1A2D63] px-3 py-1.5 text-[#FDFBF7] shadow-[0_2px_6px_-2px_rgba(20,30,60,0.22)]">
+        <p className="whitespace-pre-wrap text-[0.8125rem] leading-[1.5]">{message.text}</p>
       </div>
     </motion.div>
   );
 }
 
-function AssistantBubble({ text, streaming }: { text: string; streaming: boolean }) {
+/**
+ * Assistant text — Claude Code-style: no avatar, no bubble border,
+ * just plain prose left-aligned. Renders markdown (GFM) so the agent
+ * can use **bold**, bullet lists, and line breaks meaningfully.
+ */
+function AssistantText({ text, streaming }: { text: string; streaming: boolean }) {
   return (
-    <div
-      className="min-w-0 max-w-full rounded-xl rounded-tl-sm border border-[#E8E6DC] bg-[#FFFEFA] px-3 py-1.5 shadow-[0_1px_2px_rgba(60,50,30,0.03)]"
-      style={{ overflowAnchor: 'none' }}
-    >
-      <p className="whitespace-pre-wrap text-[0.75rem] leading-[1.5] text-[#2A2620]">
-        {text}
-        {streaming ? (
-          <span
-            aria-hidden="true"
-            className="ml-0.5 inline-block h-[0.85em] w-[2px] translate-y-[2px] animate-pulse rounded-sm bg-[#1A2D63] align-middle"
-          />
-        ) : null}
-      </p>
+    <div className="min-w-0 max-w-full" style={{ overflowAnchor: 'none' }}>
+      <div className="prose-intake text-[0.8125rem] leading-[1.55] text-[#2A2620]">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            // Headings — scaled down from defaults so they read as
+            // emphatic sub-section markers within a chat bubble, not
+            // page-level titles.
+            h1: ({ children }) => (
+              <h3 className="mb-1.5 mt-3 text-[0.9375rem] font-semibold leading-snug text-[#1A2D63] first:mt-0">
+                {children}
+              </h3>
+            ),
+            h2: ({ children }) => (
+              <h3 className="mb-1.5 mt-3 text-[0.875rem] font-semibold leading-snug text-[#1A2D63] first:mt-0">
+                {children}
+              </h3>
+            ),
+            h3: ({ children }) => (
+              <h4 className="mb-1 mt-2.5 text-[0.8125rem] font-semibold leading-snug text-[#1A2D63] first:mt-0">
+                {children}
+              </h4>
+            ),
+            h4: ({ children }) => (
+              <h5 className="mb-1 mt-2 text-[0.75rem] font-semibold uppercase tracking-[0.04em] text-[#697597] first:mt-0">
+                {children}
+              </h5>
+            ),
+            p: ({ children }) => <p className="m-0 mb-2 last:mb-0 whitespace-pre-wrap">{children}</p>,
+            strong: ({ children }) => <strong className="font-semibold text-[#1A2D63]">{children}</strong>,
+            em: ({ children }) => <em className="italic">{children}</em>,
+            ul: ({ children }) => <ul className="my-2 ml-4 list-disc space-y-1">{children}</ul>,
+            ol: ({ children }) => <ol className="my-2 ml-4 list-decimal space-y-1">{children}</ol>,
+            li: ({ children }) => <li className="leading-[1.55]">{children}</li>,
+            blockquote: ({ children }) => (
+              <blockquote className="my-2 border-l-2 border-[#C9D0E2] pl-3 text-[#57514A]">
+                {children}
+              </blockquote>
+            ),
+            code: ({ children }) => (
+              <code className="rounded bg-[#F2EFE6] px-1 py-0.5 text-[0.8em] text-[#322D26]">{children}</code>
+            ),
+            hr: () => <hr className="my-3 border-t border-[#E8E6DC]" />,
+            a: ({ href, children }) => {
+              // Models sometimes use [text](.) or [text](#) to "emphasize"
+              // a question — that produced ugly fake-link underlines.
+              // Treat empty/dummy hrefs as bold instead of broken links.
+              const isReal = !!href && href !== '#' && href !== '.' && !href.startsWith('javascript:');
+              if (!isReal) {
+                return <strong className="font-semibold text-[#1A2D63]">{children}</strong>;
+              }
+              return (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#1A2D63] underline underline-offset-2"
+                >
+                  {children}
+                </a>
+              );
+            },
+          }}
+        >
+          {text}
+        </ReactMarkdown>
+      </div>
+      {streaming ? (
+        <span
+          aria-hidden="true"
+          className="ml-0.5 inline-block h-[0.85em] w-[2px] translate-y-[2px] animate-pulse rounded-sm bg-[#1A2D63] align-middle"
+        />
+      ) : null}
     </div>
   );
 }
 
 function ThinkingShimmer({ language }: { language: Language }) {
   const verbs = THINKING_VERBS[language];
-  const [i, setI] = React.useState(0);
+  // Pick a random starting verb so successive thinking states don't
+  // always begin with the same word — feels less canned.
+  const [i, setI] = React.useState(() => Math.floor(Math.random() * verbs.length));
   const reduced = useReducedMotion();
   React.useEffect(() => {
     if (reduced) return;
@@ -915,16 +1132,32 @@ function ThinkingShimmer({ language }: { language: Language }) {
     return () => clearInterval(t);
   }, [verbs.length, reduced]);
   return (
-    <div className="flex items-start gap-2">
-      <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
-        <Sparkles className="h-2.5 w-2.5" />
+    <>
+      <style>{`
+        @keyframes intake-asterisk {
+          0%, 100% { transform: rotate(0deg); }
+          50%      { transform: rotate(180deg); }
+        }
+      `}</style>
+      <div className="flex items-baseline gap-2">
+        <span
+          aria-hidden="true"
+          className="inline-block text-[1rem] leading-none text-[#1A2D63]"
+          style={
+            reduced
+              ? undefined
+              : { animation: 'intake-asterisk 2.4s ease-in-out infinite' }
+          }
+        >
+          ✻
+        </span>
+        <div className="text-[0.8125rem] leading-[1.55]">
+          <Shimmer duration={1.6} spread={2}>
+            {`${verbs[i]}…`}
+          </Shimmer>
+        </div>
       </div>
-      <div className="pt-0.5 text-[0.75rem] leading-[1.5]">
-        <Shimmer duration={1.6} spread={2}>
-          {`${verbs[i]}…`}
-        </Shimmer>
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -1060,44 +1293,11 @@ function rebuildChatHistory(
  * (cards with label, status pill, captured-answer preview) on desktop.
  * ------------------------------------------------------------------ */
 
-function ProgressDots({
-  goals,
-  status,
-  language,
-}: {
-  goals: typeof GOALS;
-  status: Record<string, 'open' | 'probing' | 'satisfied'>;
-  language: Language;
-}) {
-  return (
-    <div className="hidden items-center gap-1.5 rounded-full border border-[#E8E6DC] bg-[#FDFBF7] px-2 py-1.5 sm:inline-flex lg:!hidden">
-      {goals.map((g) => {
-        const s = status[g.id];
-        const label = language === 'nl' ? g.label_nl : language === 'fr' ? g.label_fr : g.label_en;
-        return (
-          <span
-            key={g.id}
-            title={label}
-            aria-label={`${label}: ${s ?? 'open'}`}
-            className={[
-              'h-2 w-2 rounded-full transition-all',
-              s === 'satisfied'
-                ? 'bg-[#1A2D63] scale-100'
-                : s === 'probing'
-                  ? 'bg-[#757F9E] scale-100 ring-2 ring-[#C9D0E2]'
-                  : 'bg-[#D8D5C7] scale-90',
-            ].join(' ')}
-          />
-        );
-      })}
-    </div>
-  );
-}
-
 /**
- * Full progress sidebar — shown lg+ next to the chat. Each goal is a
- * card with label, short description, status pill, and (when satisfied)
- * a tiny check. Marine palette only — no other accent hues.
+ * Vertical stepper sidebar — Stripe-checkout style. Numbered circles
+ * connected by a thin line, label to the right, current step subtly
+ * highlighted. Header already shows the percentage so the sidebar
+ * focuses on "where am I in the journey".
  */
 function ProgressSidebar({
   goals,
@@ -1108,157 +1308,86 @@ function ProgressSidebar({
   status: Record<string, 'open' | 'probing' | 'satisfied'>;
   language: Language;
 }) {
-  const total = goals.length;
-  const satisfied = goals.filter((g) => status[g.id] === 'satisfied').length;
-  const probing = goals.filter((g) => status[g.id] === 'probing').length;
-  const pct = Math.round((satisfied / total) * 100);
-
-  const goalDescriptions: Record<string, { nl: string; fr: string; en: string }> = {
-    operational_reality: {
-      nl: 'Hoe ziet een typische week eruit?',
-      fr: 'À quoi ressemble une semaine type ?',
-      en: 'What does a typical week look like?',
-    },
-    value_drains: {
-      nl: 'Waar lekt er tijd weg?',
-      fr: 'Où le temps fuit-il ?',
-      en: 'Where does time leak away?',
-    },
-    ai_maturity: {
-      nl: 'Wat hebben jullie al geprobeerd?',
-      fr: "Qu'avez-vous déjà essayé ?",
-      en: 'What have you tried already?',
-    },
-    system_landscape: {
-      nl: 'Welke tools draaien er?',
-      fr: 'Quels outils utilisez-vous ?',
-      en: 'Which tools are in play?',
-    },
-    economic_stakes: {
-      nl: 'Wat kost het echt?',
-      fr: 'Quel est le coût réel ?',
-      en: 'What does it really cost?',
-    },
-    magic_wand: {
-      nl: 'Eén proces, automatisch — welk?',
-      fr: 'Un processus automatique — lequel ?',
-      en: 'One process, automated — which?',
-    },
-  };
-
   const headerCopy = {
-    nl: { title: 'Voortgang', counter: `${satisfied}/${total} thema's afgerond` },
-    fr: { title: 'Progression', counter: `${satisfied}/${total} thèmes terminés` },
-    en: { title: 'Progress', counter: `${satisfied}/${total} topics covered` },
+    nl: 'Overzicht',
+    fr: 'Aperçu',
+    en: 'Overview',
   }[language];
 
-  const statusPill = (s: 'open' | 'probing' | 'satisfied' | undefined) => {
-    if (s === 'satisfied') {
-      return {
-        text: language === 'nl' ? 'Klaar' : language === 'fr' ? 'Fait' : 'Done',
-        cls: 'bg-[#1A2D63] text-[#FDFBF7]',
-      };
-    }
-    if (s === 'probing') {
-      return {
-        text: language === 'nl' ? 'Bezig' : language === 'fr' ? 'En cours' : 'In progress',
-        cls: 'bg-[#E5E9F4] text-[#1A2D63]',
-      };
-    }
-    return {
-      text: language === 'nl' ? 'Te doen' : language === 'fr' ? 'À faire' : 'To do',
-      cls: 'bg-[#F2EFE6] text-[#76706A]',
-    };
+  const statusCopy = (s: 'open' | 'probing' | 'satisfied' | undefined): string | null => {
+    if (s === 'satisfied') return language === 'nl' ? 'Klaar' : language === 'fr' ? 'Fait' : 'Done';
+    if (s === 'probing') return language === 'nl' ? 'Bezig' : language === 'fr' ? 'En cours' : 'In progress';
+    return null;
   };
 
   return (
-    <aside className="hidden lg:block w-[300px] shrink-0 overflow-y-auto">
-      <div className="flex flex-col gap-3 py-6 pr-2">
-        {/* Heading + bar */}
-        <div>
-          <div className="flex items-baseline justify-between gap-2">
-            <h2 className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[#697597]">
-              {headerCopy.title}
-            </h2>
-            <span className="text-[0.75rem] text-[#76706A]">{pct}%</span>
-          </div>
-          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#EFE9DA]">
-            <div
-              className="h-full rounded-full bg-[#1A2D63] transition-all duration-500 ease-out"
-              style={{ width: `${pct}%` }}
-            />
-          </div>
-          <p className="mt-2 text-[0.75rem] text-[#76706A]">
-            {headerCopy.counter}
-            {probing > 0 ? (
-              <span className="ml-1 text-[#697597]">
-                ({probing} {language === 'nl' ? 'lopend' : language === 'fr' ? 'en cours' : 'active'})
-              </span>
-            ) : null}
-          </p>
-        </div>
+    <aside className="hidden lg:block w-[260px] shrink-0 overflow-y-auto">
+      <div className="flex flex-col gap-4 py-6 pr-2">
+        <h2 className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[#697597]">
+          {headerCopy}
+        </h2>
 
-        {/* Goal cards */}
-        <ol className="flex flex-col gap-2">
+        <ol className="relative flex flex-col">
+          {/* Connecting vertical line — passes through the circle row of
+              each li. Circle row is items-center; circle is h-5 (20px),
+              row starts after py-2 (8px), so circle center is at
+              8 + 10 = 18px from the li's top. */}
+          <span
+            aria-hidden="true"
+            className="absolute left-[9px] w-px bg-[#E8E6DC]"
+            style={{ top: '18px', bottom: '18px' }}
+          />
           {goals.map((g, i) => {
             const s = status[g.id];
             const label = language === 'nl' ? g.label_nl : language === 'fr' ? g.label_fr : g.label_en;
-            const desc = goalDescriptions[g.id]?.[language] ?? '';
-            const pill = statusPill(s);
             const isActive = s === 'probing';
             const isDone = s === 'satisfied';
+            const sub = statusCopy(s);
             return (
-              <li
-                key={g.id}
-                className={[
-                  'group relative rounded-xl border px-3.5 py-3 transition-all',
-                  isDone
-                    ? 'border-[#C9D0E2] bg-[#F2F4FA]'
-                    : isActive
-                      ? 'border-[#C9D0E2] bg-[#FFFEFA] shadow-[0_1px_2px_rgba(60,50,30,0.04),0_8px_16px_-10px_rgba(20,30,60,0.12)]'
-                      : 'border-[#E8E6DC] bg-[#FFFEFA]',
-                ].join(' ')}
-              >
-                <div className="flex items-start gap-2.5">
+              <li key={g.id} className="relative py-2">
+                <div className="flex items-center gap-3">
                   <span
                     aria-hidden="true"
                     className={[
-                      'mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[0.625rem] font-semibold transition-colors',
+                      'relative z-[1] inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full transition-all',
                       isDone
-                        ? 'bg-[#1A2D63] text-[#FDFBF7]'
+                        ? 'border-2 border-[#1A2D63] bg-[#1A2D63] text-[#FDFBF7]'
                         : isActive
-                          ? 'bg-[#FDFBF7] text-[#1A2D63] ring-2 ring-[#1A2D63]'
-                          : 'bg-[#F2EFE6] text-[#A29B92]',
+                          ? 'border-2 border-[#1A2D63] bg-[#FDFBF7] text-[#1A2D63]'
+                          : 'border border-[#D8D5C7] bg-[#FDFBF7] text-[#A29B92]',
                     ].join(' ')}
                   >
-                    {isDone ? '✓' : i + 1}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <p
-                        className={[
-                          'text-[0.875rem] font-semibold leading-snug',
-                          isDone ? 'text-[#1A2D63]' : 'text-[#322D26]',
-                        ].join(' ')}
-                      >
-                        {label}
-                      </p>
-                      <span
-                        className={[
-                          'shrink-0 rounded-full px-2 py-0.5 text-[0.625rem] font-medium uppercase tracking-[0.04em]',
-                          pill.cls,
-                        ].join(' ')}
-                      >
-                        {pill.text}
+                    {isDone ? (
+                      <Check className="h-2.5 w-2.5" strokeWidth={3} />
+                    ) : (
+                      <span className="text-[0.625rem] font-semibold leading-none">
+                        {i + 1}
                       </span>
-                    </div>
-                    {desc ? (
-                      <p className="mt-0.5 text-[0.75rem] leading-relaxed text-[#76706A]">
-                        {desc}
-                      </p>
-                    ) : null}
-                  </div>
+                    )}
+                  </span>
+                  <p
+                    className={[
+                      'text-[0.75rem] leading-snug transition-colors',
+                      isDone
+                        ? 'font-medium text-[#697597]'
+                        : isActive
+                          ? 'font-semibold text-[#1A2D63]'
+                          : 'font-medium text-[#76706A]',
+                    ].join(' ')}
+                  >
+                    {label}
+                  </p>
                 </div>
+                {sub ? (
+                  <p
+                    className={[
+                      'ml-8 mt-0.5 text-[0.625rem] leading-tight',
+                      isActive ? 'text-[#1A2D63]' : 'text-[#A29B92]',
+                    ].join(' ')}
+                  >
+                    {sub}
+                  </p>
+                ) : null}
               </li>
             );
           })}
@@ -1349,23 +1478,11 @@ function WidgetSlot({
     }) as WidgetSubmission;
 
   switch (widget.kind) {
+    // ask_text and ask_long_text_voice no longer render — the always-on
+    // ChatInput at the bottom handles all free-text/voice replies.
     case 'ask_text':
-      return (
-        <div className="animate-fade-in">
-          <TextWidget widget={widget} language={language} onSubmit={(v) => onSubmit(wrap(v))} />
-        </div>
-      );
     case 'ask_long_text_voice':
-      return (
-        <div className="animate-fade-in">
-          <LongTextVoiceWidget
-            widget={widget}
-            language={language}
-            token={token}
-            onSubmit={(v) => onSubmit(wrap(v))}
-          />
-        </div>
-      );
+      return null;
     case 'ask_single_select':
       return (
         <div className="animate-fade-in">
@@ -1411,12 +1528,37 @@ function WidgetSlot({
  * Helpers
  * ------------------------------------------------------------------ */
 
-function renderSubmissionPreview(submission: WidgetSubmission, language: Language): string {
+function renderSubmissionPreview(
+  submission: WidgetSubmission,
+  language: Language,
+  widget?: AnyWidget,
+): string {
   const v = submission.value;
-  if (typeof v === 'string') return v;
-  if (typeof v === 'number') return String(v);
-  if (typeof v === 'boolean') return v ? (language === 'nl' ? 'ja' : language === 'fr' ? 'oui' : 'yes') : language === 'nl' ? 'nee' : language === 'fr' ? 'non' : 'no';
-  if (Array.isArray(v)) return v.join(', ');
+
+  // Translate select values to user-facing labels when the widget is known.
+  // Otherwise the chat bubble shows raw codes like "real" instead of "Echt".
+  const labelFor = (val: string): string => {
+    if (!widget) return val;
+    if (widget.kind === 'ask_single_select' || widget.kind === 'ask_multi_select') {
+      const opt = widget.options.find((o) => o.value === val);
+      return opt?.label ?? val;
+    }
+    return val;
+  };
+
+  if (typeof v === 'string') return labelFor(v);
+  if (typeof v === 'number') {
+    if (widget?.kind === 'ask_slider' && widget.unit) return `${v} ${widget.unit}`;
+    return String(v);
+  }
+  if (typeof v === 'boolean') {
+    return v
+      ? language === 'nl' ? 'ja' : language === 'fr' ? 'oui' : 'yes'
+      : language === 'nl' ? 'nee' : language === 'fr' ? 'non' : 'no';
+  }
+  if (Array.isArray(v)) {
+    return v.map((entry) => (typeof entry === 'string' ? labelFor(entry) : String(entry))).join(', ');
+  }
   if (v && typeof v === 'object') {
     if ('selected' in v) {
       const sp = v as { selected: { name: string }[]; none_selected: boolean; unsure_probe_at_kickoff: boolean };
@@ -1429,6 +1571,12 @@ function renderSubmissionPreview(submission: WidgetSubmission, language: Languag
     }
     if ('choice' in v) {
       return String((v as { choice: string }).choice);
+    }
+    if ('confirmed' in v) {
+      const conf = (v as { confirmed: boolean }).confirmed;
+      return conf
+        ? language === 'nl' ? 'ja' : language === 'fr' ? 'oui' : 'yes'
+        : language === 'nl' ? 'nee' : language === 'fr' ? 'non' : 'no';
     }
   }
   return '...';

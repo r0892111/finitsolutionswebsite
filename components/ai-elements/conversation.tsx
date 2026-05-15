@@ -10,7 +10,7 @@
 
 import { ArrowDown } from 'lucide-react';
 import type { ComponentProps } from 'react';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { StickToBottom, useStickToBottomContext } from 'use-stick-to-bottom';
 
 import { cn } from '@/lib/utils';
@@ -65,4 +65,24 @@ export const ConversationScrollButton = ({
       <span>Latest</span>
     </button>
   );
+};
+
+/**
+ * Imperative "scroll to bottom" hook for the host page — fires when the
+ * `trigger` prop changes (typically: a new widget arrives, conversation
+ * finishes streaming, etc.). Without this, layout-shift caused by the
+ * widget-slot growing pushes the user out of "stuck to bottom" state and
+ * the latest message ends up visually hidden behind the widget.
+ */
+export const StickToBottomNudge = ({ trigger }: { trigger: unknown }) => {
+  const { scrollToBottom } = useStickToBottomContext();
+  useEffect(() => {
+    // Small delay so the grid resize settles before we scroll. Otherwise
+    // we scroll to the OLD bottom and the new bottom is below.
+    const t = setTimeout(() => {
+      scrollToBottom();
+    }, 60);
+    return () => clearTimeout(t);
+  }, [trigger, scrollToBottom]);
+  return null;
 };

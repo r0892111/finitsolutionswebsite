@@ -29,7 +29,7 @@ const GOAL_DESCRIPTIONS_NL: Record<string, string> = {
   ai_maturity:
     "Goal 3 — AI-volwassenheid + visie. Huidige staat (wat ze hebben geprobeerd), doelstaat (wat 'klaar' betekent voor hen), eerdere pogingen (Make / Zapier / custom / huurde devs) + waarom die niet bleven. Buzzword-only → vraag concreet wat ze hebben geprobeerd of gelezen.",
   system_landscape:
-    "Goal 4 — Systeem-landschap. Elk IT-systeem, per categorie, met admin-contact. Universele categorieën (CRM, email, file storage, boekhouding, projectmgmt, comms, kalender) + sector-specifieke. Voor elk: 'wie heeft admin-toegang?'. Expliciet 'we gebruiken hier niets voor' is een geldig antwoord. Gebruik de system_picker widget — laat de personalization JSON `system_options` per categorie voor je werken.",
+    "Goal 4 — Systeem-landschap. Elk IT-systeem, per categorie. Universele categorieën (CRM, email, file storage, boekhouding, projectmgmt, comms, kalender) + sector-specifieke. Expliciet 'we gebruiken hier niets voor' is een geldig antwoord. Gebruik de system_picker widget — laat de personalization JSON `system_options` per categorie voor je werken. Admin-contact is een OPTIONEEL veldje in de widget; als de gebruiker het invult prima, anders sla het over en vraag er NIET opnieuw naar via chat — er zijn belangrijkere vragen.",
   economic_stakes:
     "Goal 5 — Economische inzet. 3 uur-waarde-getallen (zaakvoerder / manager-tier / ops-tier, EUR). Voor het ergste lek uit Goal 2: geschatte uren × wie × uurwaarde = EUR/maand. Anker met ranges ('tussen 80 en 150?'); val terug op Belgische sector-gemiddelden als er geen antwoord komt.",
   magic_wand:
@@ -44,7 +44,7 @@ const GOAL_DESCRIPTIONS_FR: Record<string, string> = {
   ai_maturity:
     "Goal 3 — Maturité IA + vision. État actuel, état-cible, tentatives précédentes (Make / Zapier / sur mesure) + pourquoi ça n'a pas tenu.",
   system_landscape:
-    "Goal 4 — Paysage des systèmes. Chaque outil IT par catégorie, avec contact admin. Utilise le widget system_picker.",
+    "Goal 4 — Paysage des systèmes. Chaque outil IT par catégorie. Utilise le widget system_picker. Le contact admin est un champ OPTIONNEL dans le widget ; s'il n'est pas rempli, passe à la suite sans redemander — d'autres questions sont plus importantes.",
   economic_stakes:
     "Goal 5 — Enjeux économiques. 3 chiffres valeur/heure (gérant / manager / opérationnel, EUR). Pour le pire drain : heures × qui × valeur-heure = EUR/mois.",
   magic_wand:
@@ -59,7 +59,7 @@ const GOAL_DESCRIPTIONS_EN: Record<string, string> = {
   ai_maturity:
     "Goal 3 — AI maturity + stated vision. Current state, target state, prior attempts (Make / Zapier / custom / hired devs) + why they didn't stick.",
   system_landscape:
-    "Goal 4 — System landscape. Every IT system per category, with admin contact. Use the system_picker widget.",
+    "Goal 4 — System landscape. Every IT system per category. Use the system_picker widget. Admin contact is an OPTIONAL field inside the widget; if blank, skip it and do NOT re-ask via chat — there are more important questions.",
   economic_stakes:
     "Goal 5 — Economic stakes. 3 hour-value numbers (owner / manager / ops, EUR). For the worst drain: hours × who × hour value = EUR/month.",
   magic_wand:
@@ -261,19 +261,29 @@ export function buildIntakeSystemPrompt(p: IntakePersonalization): string {
   // -- 6. Tool-use mechanics --------------------------------------------------
   lines.push("=== Tool use ===", "");
   lines.push(
-    "You have 8 widget tools (ask_text, ask_long_text_voice, ask_single_select, ask_multi_select, ask_slider, ask_confirm, system_picker, closing_summary) and 4 state tools (save_answer, update_goal_status, request_resume_link, submit_intake).",
+    "You have 6 widget tools (ask_single_select, ask_multi_select, ask_slider, ask_confirm, system_picker, closing_summary) and 4 state tools (save_answer, update_goal_status, request_resume_link, submit_intake). The chat shell has an always-visible text-input with a voice mic at the bottom — the user can type or dictate any reply there without needing a widget.",
+    "",
+    "When to use a widget vs. plain text:",
+    "  - PLAIN TEXT (no widget): for open questions, follow-ups, clarifications, walkthroughs. Just ask the question in your assistant turn. The user replies via the chat input (typing or speaking).",
+    "  - WIDGET: only when the answer benefits from structured input — pick-one from a known set (ask_single_select), pick-many (ask_multi_select), a number on a scale (ask_slider), yes/no/approx confirmation (ask_confirm), the logo-tile system catalogue (system_picker), or the final review (closing_summary).",
     "",
     "Patterns:",
-    "  - Open with a short warm assistant message that references 1-2 sales-call highlights. THEN render a widget.",
-    "  - One widget per turn. Don't stack widgets in a single response.",
-    "  - After receiving the user's submission (delivered as a tool_result), call save_answer with the structured value, then update_goal_status if the goal's confidence signals are now met, then render the next widget.",
-    "  - For Goal 4 (system_landscape): render ONE system_picker per category. CRM first if the prospect is sales-driven, bookkeeping first if they're admin-driven, etc.",
-    "  - If the user types a paragraph instead of clicking a widget, accept that as the answer — call save_answer with what you extracted.",
+    "  - Open with a short warm assistant message that references 1-2 sales-call highlights, then ask the first question (plain text or widget — your call).",
+    "  - One widget per turn max. Don't stack widgets.",
+    "  - After receiving the user's submission OR typed/dictated reply, call save_answer with the structured value, call update_goal_status if confidence signals are met, then ask the next question.",
+    "  - For long-form questions (process walkthroughs, vision, magic-wand), prefer plain text AND mention that they can dictate it via the mic — e.g. 'Voel je vrij om dit gewoon in te spreken via de mic — ratel maar, ik filter het wel.' / 'You can just record this — speak freely, I'll piece it together.'",
+    "  - For Goal 4 (system_landscape): render ONE system_picker per category. CRM first if sales-driven, bookkeeping first if admin-driven.",
     "  - When ALL prioritized goals are satisfied OR the user signals 'I'm done', render closing_summary. Only call submit_intake AFTER they confirm via closing_summary.",
     "",
-    "HARD RULE — every assistant turn MUST end by calling exactly one of: a widget tool (ask_text, ask_long_text_voice, ask_single_select, ask_multi_select, ask_slider, ask_confirm, system_picker, closing_summary), submit_intake, or request_resume_link. Never finish a turn with only assistant text. If you don't know what to ask next, render ask_text with the question typed out. Text without a widget at the end will leave the user stuck on a blank screen.",
+    "Concision: keep assistant text 1-3 short sentences per turn. Widgets do the visual heavy lifting for structured choices; plain text carries the conversation for everything else.",
     "",
-    "Concision: keep assistant text 1-3 short sentences per turn. The widgets do the heavy lifting visually.",
+    "Formatting your text — USE MARKDOWN. The chat renders markdown:",
+    "  - **bold** for key numbers, names, tools, and the most important phrase per turn (use sparingly — 1-3 bolds max per message)",
+    "  - bullet lists (`- item`) when you list 2+ items the user said or want to reflect back",
+    "  - `## Heading` only for clear section shifts (e.g. acknowledging an answer THEN moving to a new topic — heading marks the pivot)",
+    "  - empty lines between paragraphs so dense answers don't read as one wall of text",
+    "  - NEVER use `[text](.)` or `[text](#)` to fake-emphasize — use **bold** instead. Don't invent links.",
+    "Good example: 'Helder — **2u per twee weken** aan copy-paste. Tweede lek: prospect-info zoeken voor cold outreach.\\n\\n**Volgende vraag:** hoeveel tijd gaat daar wekelijks in zitten?'",
     ""
   );
 

@@ -113,13 +113,18 @@ export interface WidgetSubmission {
  * a contract change — both sides must update.
  * ------------------------------------------------------------------ */
 
-export type IntakeChatOp = "start" | "submit_widget";
+export type IntakeChatOp = "start" | "submit_widget" | "submit_text";
 
 export interface IntakeChatRequestBody {
   token: string;
   op: IntakeChatOp;
   /** Required when op === 'submit_widget'. */
   submission?: WidgetSubmission;
+  /** Required when op === 'submit_text' — free-form user reply typed in
+   *  the chat input. If a widget tool_use is pending (e.g. ask_text), the
+   *  text fills that tool_result; otherwise it's appended as a plain
+   *  user message. */
+  text?: string;
   /** Optional language override (defaults to row.language from Supabase). */
   language?: Language;
 }

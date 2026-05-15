@@ -39,7 +39,7 @@ export interface PreFilledValue<T = string | number | boolean> {
 
 export interface SystemOption {
   name: string;
-  domain: string; // for logo.clearbit.com/<domain>
+  domain: string; // used to build img.logo.dev/<domain> URLs
   tier?: "primary" | "secondary";
   client_count?: number;
 }

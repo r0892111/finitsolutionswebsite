@@ -17,6 +17,7 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { request as httpsRequest } from "node:https";
 
 import { INTAKE_TOOLS } from "../../lib/intake/intake-tools.ts";
 import { buildIntakeSystemPrompt } from "../../lib/intake/intake-system-prompt.ts";
@@ -156,10 +157,110 @@ async function persistState(
 // Anthropic client (uses Deno.env)
 // ---------------------------------------------------------------------------
 
+/**
+ * Custom fetch that uses node:https directly instead of globalThis.fetch.
+ *
+ * Why: Netlify Edge's bootstrap (v2-17-1 at time of writing) injects a
+ * `patchFetchWithRewrites` wrapper on globalThis.fetch that rewrites
+ * `api.anthropic.com` → `<SITE_URL>/.netlify/ai/...` (their AI Gateway
+ * proxy). In local dev the proxy points at the production site URL and
+ * the connection resets, so every Anthropic call hangs forever. Going
+ * through node:https bypasses globalThis.fetch entirely.
+ */
+async function unwrappedFetch(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+): Promise<Response> {
+  const urlStr =
+    typeof input === "string"
+      ? input
+      : input instanceof URL
+        ? input.toString()
+        : input.url;
+  const url = new URL(urlStr);
+
+  const headers: Record<string, string> = {};
+  if (init?.headers) {
+    const h = new Headers(init.headers as HeadersInit);
+    h.forEach((v, k) => {
+      headers[k] = v;
+    });
+  }
+
+  return new Promise<Response>((resolve, reject) => {
+    const req = httpsRequest(
+      {
+        hostname: url.hostname,
+        port: url.port ? Number(url.port) : 443,
+        path: url.pathname + url.search,
+        method: init?.method ?? "GET",
+        headers,
+      },
+      (res) => {
+        const stream = new ReadableStream<Uint8Array>({
+          start(controller) {
+            res.on("data", (chunk: Uint8Array) => controller.enqueue(chunk));
+            res.on("end", () => {
+              try {
+                controller.close();
+              } catch {
+                /* already closed */
+              }
+            });
+            res.on("error", (err: Error) => {
+              try {
+                controller.error(err);
+              } catch {
+                /* ignore */
+              }
+            });
+          },
+          cancel() {
+            res.destroy();
+          },
+        });
+
+        const responseHeaders = new Headers();
+        for (const [k, v] of Object.entries(res.headers)) {
+          if (typeof v === "string") responseHeaders.set(k, v);
+          else if (Array.isArray(v)) responseHeaders.set(k, v.join(", "));
+        }
+
+        resolve(
+          new Response(stream, {
+            status: res.statusCode ?? 200,
+            headers: responseHeaders,
+          }),
+        );
+      },
+    );
+
+    req.on("error", reject);
+
+    const body = init?.body;
+    if (body !== undefined && body !== null) {
+      if (typeof body === "string") {
+        req.write(body);
+      } else if (body instanceof Uint8Array) {
+        req.write(body);
+      } else if (body instanceof ArrayBuffer) {
+        req.write(new Uint8Array(body));
+      }
+      // FormData / streams not handled — Anthropic SDK uses JSON strings.
+    }
+    req.end();
+  });
+}
+
 function makeAnthropic(): Anthropic {
   const key = Deno.env.get("ANTHROPIC_API_KEY");
   if (!key) throw new Error("ANTHROPIC_API_KEY is not set");
-  return new Anthropic({ apiKey: key });
+  return new Anthropic({
+    apiKey: key,
+    // @ts-expect-error — fetch is part of the SDK options at runtime; type
+    // narrowing for the deno/node bundle differs from upstream typings.
+    fetch: unwrappedFetch,
+  });
 }
 
 function buildSystemBlocks(row: IntakeRow): Anthropic.TextBlockParam[] {
@@ -268,11 +369,14 @@ export default async (req: Request): Promise<Response> => {
   if (typeof body.token !== "string" || body.token.length < 16) {
     return errResp(400, "missing_or_invalid_token");
   }
-  if (body.op !== "start" && body.op !== "submit_widget") {
+  if (body.op !== "start" && body.op !== "submit_widget" && body.op !== "submit_text") {
     return errResp(400, "invalid_op");
   }
   if (body.op === "submit_widget" && (!body.submission || typeof body.submission.widget_id !== "string")) {
     return errResp(400, "missing_submission");
+  }
+  if (body.op === "submit_text" && (typeof body.text !== "string" || body.text.trim().length === 0)) {
+    return errResp(400, "missing_text");
   }
 
   let row: IntakeRow | null;
@@ -321,7 +425,7 @@ export default async (req: Request): Promise<Response> => {
         };
       }
     }
-  } else {
+  } else if (body.op === "submit_widget") {
     const pending = pendingToolUseBlocks(history);
     const submission = body.submission!;
     if (pending.length === 0) {
@@ -343,6 +447,45 @@ export default async (req: Request): Promise<Response> => {
               : '{"ok":true}',
         })),
       };
+    }
+  } else {
+    // submit_text — free-form user reply from the always-on chat input.
+    // If there's a pending widget tool_use (typically ask_text or
+    // ask_long_text_voice — both expect a single text answer), fill its
+    // tool_result with the typed text so the chain stays consistent.
+    // Otherwise append as a plain user message.
+    const pending = pendingToolUseBlocks(history);
+    const text = body.text!.trim();
+    const textWidget = pending.find(
+      (p) => p.name === "ask_text" || p.name === "ask_long_text_voice",
+    );
+    if (textWidget) {
+      newUserMessage = {
+        role: "user",
+        content: pending.map((p) => ({
+          type: "tool_result" as const,
+          tool_use_id: p.id,
+          content:
+            p.id === textWidget.id
+              ? JSON.stringify({ widget_id: textWidget.id, kind: textWidget.name, value: text })
+              : '{"ok":true}',
+        })),
+      };
+    } else if (pending.length > 0) {
+      // Pending non-text widget — user typed a free-text override instead
+      // of using the widget. Resolve all pending tool_uses with the
+      // typed text wrapped as a generic "user_text_override" payload so
+      // the model can still read it.
+      newUserMessage = {
+        role: "user",
+        content: pending.map((p) => ({
+          type: "tool_result" as const,
+          tool_use_id: p.id,
+          content: JSON.stringify({ user_text_override: text }),
+        })),
+      };
+    } else {
+      newUserMessage = { role: "user", content: text };
     }
   }
 
@@ -423,7 +566,6 @@ export default async (req: Request): Promise<Response> => {
       const turnMessages: Anthropic.MessageParam[] = [];
       let chainStep = 0;
       let stopperCalled = false;
-      let textOnlyRecoveryUsed = false;
 
       chainLoop: while (chainStep < MAX_CHAIN_STEPS) {
         chainStep++;
@@ -616,27 +758,10 @@ export default async (req: Request): Promise<Response> => {
         }
 
         if (toolUses.length === 0) {
-          // Model text-replied without calling any tool. Without a widget
-          // the user is stuck on a blank screen — nudge once, then break
-          // out if it still doesn't comply.
-          if (textOnlyRecoveryUsed) {
-            console.warn(
-              `[intake/chat] chain ${chainStep} → text-only response again after nudge; giving up (user may be stuck)`,
-            );
-            break chainLoop;
-          }
-          textOnlyRecoveryUsed = true;
-          console.warn(
-            `[intake/chat] chain ${chainStep} → text-only response; injecting widget-mandatory reminder and retrying`,
-          );
-          const reminderMsg: Anthropic.MessageParam = {
-            role: "user",
-            content:
-              "<system-reminder>You ended your turn without calling a widget tool. Render exactly one widget now (ask_text / ask_long_text_voice / ask_single_select / ask_multi_select / ask_slider / ask_confirm / system_picker / closing_summary) — or submit_intake if all goals are satisfied — so the user can respond. Without a widget the user is stuck on a blank screen.</system-reminder>",
-          };
-          turnMessages.push(reminderMsg);
-          messagesForApi.push(reminderMsg);
-          continue chainLoop;
+          // Pure text turn — the model asked a question conversationally
+          // and is waiting for the user. The always-on chat input
+          // handles the reply. End the chain here.
+          break chainLoop;
         }
 
         // Only state tools were called (save_answer / update_goal_status /
