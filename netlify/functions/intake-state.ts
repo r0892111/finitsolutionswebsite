@@ -52,9 +52,24 @@ async function handleGet(event: HandlerEvent) {
     };
     return json(200, body);
   } catch (err) {
+    console.error("[intake-state GET] error:", err);
+    let message = "unknown";
+    if (err instanceof Error) {
+      message = err.message;
+    } else if (err && typeof err === "object") {
+      const e = err as { message?: string; code?: string; details?: string };
+      message = e.message ?? e.details ?? `(${e.code ?? "no-code"})`;
+    } else if (typeof err === "string") {
+      message = err;
+    }
     return json(500, {
       error: "internal_error",
-      message: err instanceof Error ? err.message : "unknown",
+      message,
+      env_check: {
+        has_supabase_url: !!process.env.SUPABASE_URL,
+        has_service_role: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+        has_anthropic: !!process.env.ANTHROPIC_API_KEY,
+      },
     });
   }
 }

@@ -31,17 +31,16 @@
   status = 200
   force = true
 
-# Finit OS interactive intake — Netlify Functions
-# Frontend calls /api/intake/* + /api/lead-magnet/start; redirected to functions.
+# Finit OS interactive intake — chat is a Netlify Edge Function (Deno),
+# the rest are regular Netlify Functions (Node). Edge avoids AWS Lambda
+# Streaming's framing 502s; see netlify/edge-functions/intake-chat.ts.
+[[edge_functions]]
+  path = "/api/intake/chat"
+  function = "intake-chat"
+
 [[redirects]]
   from = "/api/intake/state"
   to = "/.netlify/functions/intake-state"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/intake/chat"
-  to = "/.netlify/functions/intake-chat"
   status = 200
   force = true
 
