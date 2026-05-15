@@ -27,7 +27,11 @@ export default function IntakeLayout({ children }: { children: React.ReactNode }
         body.intake-mode nav,
         body.intake-mode footer,
         body.intake-mode [data-cookie-banner] { display: none !important; }
-        body.intake-mode { overflow: auto !important; }
+        /* Lock the body so the fixed-viewport grid in OnboardingChat is the
+           only scroller. Stops the page itself from growing as messages
+           accumulate. */
+        body.intake-mode { overflow: hidden !important; }
+        html.intake-mode-html { overflow: hidden !important; }
         @keyframes intake-fade-in {
           from { opacity: 0; transform: translateY(6px); }
           to   { opacity: 1; transform: translateY(0); }

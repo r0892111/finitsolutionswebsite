@@ -206,11 +206,20 @@ export interface WidgetSubmission {
  * /api/intake/chat emits. Client renders accordingly.
  * ------------------------------------------------------------------ */
 
+export type ChainStepTool = "save_answer" | "update_goal_status" | "request_resume_link";
+
+export interface ChainStep {
+  tool: ChainStepTool;
+  label: string;
+  status: "complete" | "active";
+}
+
 export type StreamEvent =
   | { type: "assistant_text_delta"; text: string }
   | { type: "assistant_text_done" }
   | { type: "widget"; widget: AnyWidget }
   | { type: "goal_update"; goal_id: string; status: "open" | "probing" | "satisfied" }
+  | { type: "chain_step"; tool: ChainStepTool; label: string; status: "complete" | "active" }
   | { type: "done" }
   | { type: "error"; message: string };
 
@@ -222,6 +231,12 @@ export interface ChatMessage {
   submission?: WidgetSubmission;
   /** Streaming-in-progress flag for the typing cursor. */
   streaming?: boolean;
+  /**
+   * Internal "what I did" trace (save_answer / update_goal_status / etc).
+   * Surfaced via the AI Elements ChainOfThought block; only present on
+   * assistant messages that were preceded by silent state-tool calls.
+   */
+  chain_steps?: ChainStep[];
 }
 
 export interface IntakeState {

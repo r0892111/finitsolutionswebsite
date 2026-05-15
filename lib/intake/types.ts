@@ -138,6 +138,12 @@ export type IntakeStreamEvent =
   | { type: "assistant_text_done" }
   | { type: "widget"; widget: Record<string, unknown> & { kind: WidgetKind; widget_id: string } }
   | { type: "goal_update"; goal_id: string; status: "open" | "probing" | "satisfied" }
+  | {
+      type: "chain_step";
+      tool: "save_answer" | "update_goal_status" | "request_resume_link";
+      label: string;
+      status: "complete" | "active";
+    }
   | { type: "circuit_breaker"; tokens: number; hint: string }
   | { type: "submit_intake" }
   | { type: "request_resume_link"; email?: string }

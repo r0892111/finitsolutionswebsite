@@ -3,17 +3,30 @@
 /**
  * OnboardingChat — the chat shell that hosts the interactive intake.
  *
- * Responsibilities:
- *   - Render assistant streaming text + chat bubbles
- *   - Inject the active widget below the latest assistant message
- *   - Show a 6-dot progress indicator (one dot per primary information goal)
- *   - Header: brand mark + language switcher + resume hint
- *   - Submit widget answers back to /api/intake/chat (SSE)
+ * Layout: fixed-viewport CSS grid (`100dvh`, `grid-rows-[auto_minmax(0,1fr)_auto]`)
+ *   - top row: sticky header with brand, progress dots, language switcher
+ *   - middle row: scrollable conversation (AI Elements Conversation, which
+ *     uses StickToBottom for auto-scroll + "scroll to latest" chip) +
+ *     desktop progress sidebar
+ *   - bottom row: footer slot. Holds the active widget when one is up,
+ *     otherwise the small "X/Y topics covered" counter.
+ *
+ * Smoothness pass:
+ *   - assistant_text_delta is rAF-batched (one React update per frame
+ *     instead of one per token) — kills jitter on long streaming msgs
+ *   - each Message animates in once via Framer Motion (opacity + 4px slide)
+ *   - prefers-reduced-motion → all motion stripped
+ *   - thinking indicator (`ThinkingShimmer`) only shows after 350 ms grace,
+ *     so fast Anthropic responses don't flash a loader
+ *   - chain-of-thought block surfaces silent state-tool calls
+ *     (save_answer / update_goal_status / request_resume_link) above the
+ *     assistant turn that emitted them.
  *
  * Stream protocol (mirrored in [types.ts](./types.ts) `StreamEvent`):
  *   - assistant_text_delta + assistant_text_done — typing
- *   - widget — UI to render
+ *   - widget — UI to render in the footer slot
  *   - goal_update — fills the progress dots
+ *   - chain_step — internal-tool trace (save_answer / update_goal_status / ...)
  *   - done — conversation closed; submit endpoint fires server-side
  *
  * Until Web-backend ships /api/intake/*, this component runs against
@@ -23,9 +36,24 @@
 
 import * as React from 'react';
 import { ChevronDown, RotateCcw, Sparkles } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from '@/components/ai-elements/conversation';
+import {
+  ChainOfThought,
+  ChainOfThoughtContent,
+  ChainOfThoughtHeader,
+  ChainOfThoughtStep,
+} from '@/components/ai-elements/chain-of-thought';
+import { Shimmer } from '@/components/ai-elements/shimmer';
 
 import type {
   AnyWidget,
+  ChainStep,
   ChatMessage,
   IntakePersonalization,
   IntakeState,
@@ -128,6 +156,17 @@ const GOALS: { id: string; label_nl: string; label_fr: string; label_en: string 
   { id: 'magic_wand', label_nl: 'Magic wand', label_fr: 'Baguette magique', label_en: 'Magic wand' },
 ];
 
+/* ------------------------------------------------------------------ *
+ * Thinking-indicator copy — cycling verbs per language. Same family
+ * as Claude's "Spelunking…" / GPT's "Thinking…" feel.
+ * ------------------------------------------------------------------ */
+
+const THINKING_VERBS: Record<Language, string[]> = {
+  nl: ['Aan het denken', 'Aan het samenvatten', 'Antwoord verwerken', 'Vraag voorbereiden'],
+  en: ['Thinking', 'Reasoning', 'Saving your answer', 'Preparing next question'],
+  fr: ['Réflexion', 'Analyse', 'Enregistrement', 'Préparation'],
+};
+
 interface Props {
   token: string;
   /** Server-provided initial state. If omitted, falls back to MOCK_PERSONALIZATION_JSON. */
@@ -165,21 +204,81 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
   const [thinking, setThinking] = React.useState(false);
   const [done, setDone] = React.useState(false);
 
-  const scrollAnchorRef = React.useRef<HTMLDivElement | null>(null);
   const aborterRef = React.useRef<AbortController | null>(null);
-  const isResume = !useMock && initialMessages.length > 0;
-
-  // Auto-scroll to the bottom on new content
-  React.useEffect(() => {
-    scrollAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, [messages, activeWidget, thinking]);
+  // rAF batching for assistant_text_delta — one React update per frame.
+  const pendingDeltaRef = React.useRef('');
+  const rafScheduledRef = React.useRef(false);
+  // 350 ms grace before showing the thinking indicator (Claude's trick).
+  const thinkingTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Kick the conversation off on mount. On resume, the server's op:'start'
   // path closes out any pending widget tool_use and re-prompts the user.
   React.useEffect(() => {
     void startConversation();
-    return () => aborterRef.current?.abort();
+    return () => {
+      aborterRef.current?.abort();
+      if (thinkingTimerRef.current) clearTimeout(thinkingTimerRef.current);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* ------------------------------------------------------------ *
+   * Streaming-delta batcher — buffers tokens between rAF ticks
+   * so React re-renders at most once per frame.
+   * ------------------------------------------------------------ */
+
+  const flushDelta = React.useCallback(() => {
+    const delta = pendingDeltaRef.current;
+    pendingDeltaRef.current = '';
+    rafScheduledRef.current = false;
+    if (!delta) return;
+    setMessages((prev) => {
+      const last = prev[prev.length - 1];
+      if (last && last.role === 'assistant' && last.streaming) {
+        const updated: ChatMessage = { ...last, text: (last.text ?? '') + delta };
+        return [...prev.slice(0, -1), updated];
+      }
+      return [
+        ...prev,
+        {
+          id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          role: 'assistant',
+          text: delta,
+          streaming: true,
+        },
+      ];
+    });
+  }, []);
+
+  const queueDelta = React.useCallback(
+    (text: string) => {
+      pendingDeltaRef.current += text;
+      if (rafScheduledRef.current) return;
+      rafScheduledRef.current = true;
+      if (typeof window === 'undefined') {
+        flushDelta();
+        return;
+      }
+      window.requestAnimationFrame(flushDelta);
+    },
+    [flushDelta],
+  );
+
+  /* ------------------------------------------------------------ *
+   * Thinking-indicator gating (350 ms grace).
+   * ------------------------------------------------------------ */
+
+  const beginThinking = React.useCallback(() => {
+    if (thinkingTimerRef.current) clearTimeout(thinkingTimerRef.current);
+    thinkingTimerRef.current = setTimeout(() => setThinking(true), 350);
+  }, []);
+
+  const cancelThinking = React.useCallback(() => {
+    if (thinkingTimerRef.current) {
+      clearTimeout(thinkingTimerRef.current);
+      thinkingTimerRef.current = null;
+    }
+    setThinking(false);
   }, []);
 
   /* ------------------------------------------------------------ *
@@ -187,30 +286,47 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
    * ------------------------------------------------------------ */
 
   const handleStreamEvent = (event: StreamEvent) => {
+    // Any real event means the model is responding — drop the loader.
+    if (event.type !== 'error') cancelThinking();
+
     if (event.type === 'assistant_text_delta') {
-      setMessages((prev) => {
-        const last = prev[prev.length - 1];
-        if (last && last.role === 'assistant' && last.streaming) {
-          const updated = { ...last, text: (last.text ?? '') + event.text };
-          return [...prev.slice(0, -1), updated];
-        }
-        return [
-          ...prev,
-          {
-            id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-            role: 'assistant',
-            text: event.text,
-            streaming: true,
-          },
-        ];
-      });
+      queueDelta(event.text);
     } else if (event.type === 'assistant_text_done') {
+      // Flush any in-flight delta synchronously before marking done.
+      flushDelta();
       setMessages((prev) => {
         const last = prev[prev.length - 1];
         if (last && last.role === 'assistant' && last.streaming) {
           return [...prev.slice(0, -1), { ...last, streaming: false }];
         }
         return prev;
+      });
+    } else if (event.type === 'chain_step') {
+      const step: ChainStep = {
+        tool: event.tool,
+        label: event.label,
+        status: event.status,
+      };
+      setMessages((prev) => {
+        const last = prev[prev.length - 1];
+        // Attach to the current streaming assistant message; otherwise
+        // open a new trace-only assistant bubble that the subsequent
+        // text/widget turn will fill.
+        if (last && last.role === 'assistant' && last.streaming) {
+          return [
+            ...prev.slice(0, -1),
+            { ...last, chain_steps: [...(last.chain_steps ?? []), step] },
+          ];
+        }
+        return [
+          ...prev,
+          {
+            id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+            role: 'assistant',
+            streaming: true,
+            chain_steps: [step],
+          },
+        ];
       });
     } else if (event.type === 'widget') {
       setActiveWidget(event.widget);
@@ -220,6 +336,7 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
       setDone(true);
       setActiveWidget(null);
     } else if (event.type === 'error') {
+      cancelThinking();
       setMessages((prev) => [
         ...prev,
         {
@@ -239,7 +356,7 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
     aborterRef.current?.abort();
     const ac = new AbortController();
     aborterRef.current = ac;
-    setThinking(true);
+    beginThinking();
     try {
       const res = await fetch('/api/intake/chat', {
         method: 'POST',
@@ -290,7 +407,8 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         handleStreamEvent({ type: 'error', message: 'Verbinding viel weg. Herlaad alstublieft.' });
       }
     } finally {
-      setThinking(false);
+      flushDelta();
+      cancelThinking();
     }
   };
 
@@ -301,8 +419,8 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
 
   const mockStep = React.useRef(0);
   const mockDispatch = async () => {
-    setThinking(true);
-    await new Promise((r) => setTimeout(r, 350));
+    beginThinking();
+    await new Promise((r) => setTimeout(r, 600));
 
     const steps: (() => StreamEvent[])[] = [
       // Step 0 — opening + first widget (text)
@@ -323,8 +441,14 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         },
         { type: 'goal_update', goal_id: 'operational_reality', status: 'probing' },
       ],
-      // Step 1 — long-text-voice
+      // Step 1 — long-text-voice (with mock chain_step trace)
       () => [
+        {
+          type: 'chain_step',
+          tool: 'save_answer',
+          label: 'Antwoord opslaan (operational_reality)',
+          status: 'complete',
+        },
         ...streamSentence(
           "Top, dat helpt enorm. Eén ding dat me opviel bij Karel's notities: 'offerte-opvolging' kwam meermaals terug. Kan je me daar wat meer over vertellen, het mag uitgebreid, en je mag het ook gewoon inspreken.",
         ),
@@ -343,6 +467,12 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
       ],
       // Step 2 — single-select
       () => [
+        {
+          type: 'chain_step',
+          tool: 'save_answer',
+          label: 'Antwoord opslaan (value_drains)',
+          status: 'complete',
+        },
         ...streamSentence(
           'Helder. Even tussendoor, hoe zou jij jullie huidig AI-gebruik typeren?',
         ),
@@ -491,7 +621,7 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
 
     const step = steps[mockStep.current];
     if (!step) {
-      setThinking(false);
+      cancelThinking();
       return;
     }
     mockStep.current += 1;
@@ -501,7 +631,9 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
       await new Promise((r) => setTimeout(r, evt.type === 'assistant_text_delta' ? 12 : 60));
       handleStreamEvent(evt);
     }
-    setThinking(false);
+    // Make sure last delta gets flushed and indicator is off.
+    flushDelta();
+    cancelThinking();
   };
 
   const startConversation = async () => {
@@ -534,13 +666,14 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
   const totalGoals = GOALS.length;
   const satisfied = GOALS.filter((g) => goalStatus[g.id] === 'satisfied').length;
   const probing = GOALS.filter((g) => goalStatus[g.id] === 'probing').length;
+  const reduced = useReducedMotion();
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FDFBF7] text-[#2A2620]">
+    <div className="grid h-[100dvh] grid-rows-[auto_minmax(0,1fr)_auto] bg-[#FDFBF7] text-[#2A2620]">
       {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-[#E8E6DC] bg-[#FDFBF7]/85 backdrop-blur supports-[backdrop-filter]:bg-[#FDFBF7]/70">
-        <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-4 py-3 md:px-6">
-          <div className="flex items-center gap-3 min-w-0">
+      <header className="z-20 border-b border-[#E8E6DC] bg-[#FDFBF7]/85 backdrop-blur supports-[backdrop-filter]:bg-[#FDFBF7]/70">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3 md:px-6">
+          <div className="flex min-w-0 items-center gap-3">
             <div
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#1A2D63] text-[#FDFBF7] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.20),0_2px_4px_rgba(20,30,60,0.18)]"
               aria-hidden="true"
@@ -562,65 +695,75 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
             <LanguageSwitcher value={language} onChange={setLanguage} />
           </div>
         </div>
+        {initial?.resumed ? (
+          <div className="border-t border-[#C9D0E2] bg-[#F2F4FA]">
+            <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-2 md:px-6">
+              <div className="rounded-full bg-[#1A2D63] p-1.5 text-[#FDFBF7]">
+                <RotateCcw className="h-3.5 w-3.5" />
+              </div>
+              <p className="text-[0.875rem] text-[#1A2D63]">
+                <span className="font-semibold">{HEADER[language].welcomeBack}.</span>{' '}
+                {initial.resumed.assistant_text}
+              </p>
+            </div>
+          </div>
+        ) : null}
       </header>
 
-      {/* Resume banner */}
-      {initial?.resumed ? (
-        <div className="border-b border-[#C9D0E2] bg-[#F2F4FA]">
-          <div className="mx-auto flex w-full max-w-3xl items-center gap-3 px-4 py-3 md:px-6">
-            <div className="rounded-full bg-[#1A2D63] p-1.5 text-[#FDFBF7]">
-              <RotateCcw className="h-3.5 w-3.5" />
-            </div>
-            <p className="text-[0.875rem] text-[#1A2D63]">
-              <span className="font-semibold">{HEADER[language].welcomeBack}.</span>{' '}
-              {initial.resumed.assistant_text}
-            </p>
-          </div>
-        </div>
-      ) : null}
-
-      {/* Conversation + sidebar — 2-column on lg+, stacked on mobile */}
-      <main className="flex-1 overflow-y-auto">
-        <div className="mx-auto flex w-full max-w-6xl gap-0 lg:gap-6">
-          <div className="flex-1 min-w-0">
-            <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 px-4 py-6 md:px-6 md:py-8">
-              <div aria-live="polite" className="flex flex-col gap-4">
-                {messages.map((m) => (
-                  <MessageBubble key={m.id} message={m} />
-                ))}
-                {thinking ? <ThinkingDots /> : null}
-                {activeWidget ? (
-                  <WidgetSlot widget={activeWidget} language={language} token={token} onSubmit={submitWidget} />
-                ) : null}
-                {done ? (
-                  <div className="rounded-2xl border border-[#C9D0E2] bg-[#F2F4FA] p-5 text-center">
-                    <p className="text-[0.875rem] font-medium text-[#1A2D63]">
-                      {language === 'nl'
-                        ? 'Bedankt, je antwoorden zijn veilig opgeslagen.'
-                        : language === 'fr'
-                          ? 'Merci, vos réponses sont enregistrées.'
-                          : 'Thanks, your answers are safely stored.'}
-                    </p>
-                  </div>
-                ) : null}
-              </div>
-              <div ref={scrollAnchorRef} className="h-4" />
-            </div>
+      {/* Middle row — conversation + sidebar. min-h-0 + overflow-hidden so the
+          Conversation's StickToBottom can claim the available height without
+          dragging the page along with it. */}
+      <div className="min-h-0 w-full overflow-hidden">
+        <div className="mx-auto grid h-full w-full max-w-6xl grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-6 lg:px-6">
+          <div className="relative flex min-h-0 flex-col">
+            <Conversation aria-live="polite">
+              <ConversationContent className="mx-auto w-full max-w-3xl px-4 md:px-0">
+                <AnimatePresence initial={false}>
+                  {messages.map((m) => (
+                    <MessageRow key={m.id} message={m} reduced={!!reduced} />
+                  ))}
+                </AnimatePresence>
+                {thinking ? <ThinkingShimmer language={language} /> : null}
+                {done ? <DoneCallout language={language} /> : null}
+              </ConversationContent>
+              <ConversationScrollButton />
+            </Conversation>
           </div>
           <ProgressSidebar goals={GOALS} status={goalStatus} language={language} />
         </div>
-      </main>
+      </div>
 
-      {/* Footer hint */}
-      <footer className="border-t border-[#E8E6DC] bg-[#FDFBF7]/80 py-2.5 text-center">
-        <p className="text-[0.75rem] text-[#76706A]">
-          {satisfied}/{totalGoals} {language === 'nl' ? "thema's afgerond" : language === 'fr' ? 'thèmes terminés' : 'topics covered'}
-          {probing > 0 ? (
-            <span className="ml-1 text-[#697597]">
-              ({probing} {language === 'nl' ? 'lopend' : language === 'fr' ? 'en cours' : 'in progress'})
-            </span>
-          ) : null}
-        </p>
+      {/* Footer — pinned widget area OR the topic counter. */}
+      <footer className="border-t border-[#E8E6DC] bg-[#FDFBF7]/95 backdrop-blur shadow-[0_-8px_24px_-12px_rgba(20,30,60,0.08)]">
+        {activeWidget ? (
+          <div className="max-h-[55vh] overflow-y-auto">
+            <div className="mx-auto w-full max-w-3xl px-4 py-4 md:px-6 md:py-5">
+              <WidgetSlot
+                widget={activeWidget}
+                language={language}
+                token={token}
+                onSubmit={submitWidget}
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2.5 md:px-6">
+            <p className="text-[0.75rem] text-[#76706A]">
+              {satisfied}/{totalGoals}{' '}
+              {language === 'nl'
+                ? "thema's afgerond"
+                : language === 'fr'
+                  ? 'thèmes terminés'
+                  : 'topics covered'}
+              {probing > 0 ? (
+                <span className="ml-1 text-[#697597]">
+                  ({probing}{' '}
+                  {language === 'nl' ? 'lopend' : language === 'fr' ? 'en cours' : 'in progress'})
+                </span>
+              ) : null}
+            </p>
+          </div>
+        )}
       </footer>
     </div>
   );
@@ -630,50 +773,124 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
  * Sub-components
  * ------------------------------------------------------------------ */
 
-function MessageBubble({ message }: { message: ChatMessage }) {
+function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boolean }) {
+  const anim = reduced
+    ? {}
+    : {
+        initial: { opacity: 0, y: 8 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0 },
+        transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] as const },
+      };
+
   if (message.role === 'assistant') {
+    const hasText = !!message.text && message.text.length > 0;
+    const hasSteps = !!message.chain_steps && message.chain_steps.length > 0;
+    if (!hasText && !hasSteps) return null;
     return (
-      <div className="flex items-start gap-3">
+      <motion.div className="flex items-start gap-3" {...anim}>
         <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
           <Sparkles className="h-3.5 w-3.5" />
         </div>
-        <div className="min-w-0 flex-1 rounded-2xl rounded-tl-sm border border-[#E8E6DC] bg-[#FFFEFA] px-4 py-3 shadow-[0_1px_2px_rgba(60,50,30,0.04),0_8px_18px_-10px_rgba(60,50,30,0.08)]">
-          <p className="whitespace-pre-wrap text-[0.9375rem] leading-relaxed text-[#2A2620]">
-            {message.text}
-            {message.streaming ? <span className="ml-0.5 inline-block w-[2px] h-[1em] bg-[#1A2D63] align-middle animate-pulse" /> : null}
-          </p>
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          {hasSteps ? <ChainOfThoughtBlock steps={message.chain_steps!} /> : null}
+          {hasText ? <AssistantBubble text={message.text!} streaming={!!message.streaming} /> : null}
         </div>
-      </div>
+      </motion.div>
     );
   }
   if (message.role === 'system') {
     return (
-      <div className="rounded-lg border border-[#E8DCC9] bg-[#FAF5EC] px-4 py-2 text-center text-[0.8125rem] text-[#74532A]">
+      <motion.div
+        className="rounded-lg border border-[#E8DCC9] bg-[#FAF5EC] px-4 py-2 text-center text-[0.8125rem] text-[#74532A]"
+        {...anim}
+      >
         {message.text}
-      </div>
+      </motion.div>
     );
   }
   // user
   return (
-    <div className="flex items-start justify-end gap-3">
+    <motion.div className="flex items-start justify-end gap-3" layout="position" {...anim}>
       <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-[#1A2D63] px-4 py-3 text-[#FDFBF7] shadow-[0_2px_8px_-2px_rgba(20,30,60,0.25)]">
         <p className="whitespace-pre-wrap text-[0.9375rem] leading-relaxed">{message.text}</p>
+      </div>
+    </motion.div>
+  );
+}
+
+function AssistantBubble({ text, streaming }: { text: string; streaming: boolean }) {
+  return (
+    <div
+      className="min-w-0 max-w-full rounded-2xl rounded-tl-sm border border-[#E8E6DC] bg-[#FFFEFA] px-4 py-3 shadow-[0_1px_2px_rgba(60,50,30,0.04),0_8px_18px_-10px_rgba(60,50,30,0.08)]"
+      style={{ overflowAnchor: 'none' }}
+    >
+      <p className="whitespace-pre-wrap text-[0.9375rem] leading-relaxed text-[#2A2620]">
+        {text}
+        {streaming ? (
+          <span
+            aria-hidden="true"
+            className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] animate-pulse rounded-sm bg-[#1A2D63] align-middle"
+          />
+        ) : null}
+      </p>
+    </div>
+  );
+}
+
+function ChainOfThoughtBlock({ steps }: { steps: ChainStep[] }) {
+  return (
+    <ChainOfThought defaultOpen={false}>
+      <ChainOfThoughtHeader>
+        Wat ik intern deed ·{' '}
+        <span className="font-semibold text-[#1A2D63]">{steps.length}</span>
+      </ChainOfThoughtHeader>
+      <ChainOfThoughtContent>
+        {steps.map((s, idx) => (
+          <ChainOfThoughtStep
+            key={`${s.tool}-${idx}`}
+            label={s.label}
+            status={s.status === 'active' ? 'active' : 'complete'}
+          />
+        ))}
+      </ChainOfThoughtContent>
+    </ChainOfThought>
+  );
+}
+
+function ThinkingShimmer({ language }: { language: Language }) {
+  const verbs = THINKING_VERBS[language];
+  const [i, setI] = React.useState(0);
+  const reduced = useReducedMotion();
+  React.useEffect(() => {
+    if (reduced) return;
+    const t = setInterval(() => setI((x) => (x + 1) % verbs.length), 1500);
+    return () => clearInterval(t);
+  }, [verbs.length, reduced]);
+  return (
+    <div className="flex items-start gap-3">
+      <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
+        <Sparkles className="h-3.5 w-3.5" />
+      </div>
+      <div className="pt-2 text-[0.9375rem] leading-relaxed">
+        <Shimmer duration={1.6} spread={2}>
+          {`${verbs[i]}…`}
+        </Shimmer>
       </div>
     </div>
   );
 }
 
-function ThinkingDots() {
+function DoneCallout({ language }: { language: Language }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
-        <Sparkles className="h-3.5 w-3.5" />
-      </div>
-      <div className="inline-flex items-center gap-1 rounded-2xl rounded-tl-sm border border-[#E8E6DC] bg-[#FFFEFA] px-4 py-3.5">
-        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#697597] [animation-delay:-0.32s]" />
-        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#697597] [animation-delay:-0.16s]" />
-        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#697597]" />
-      </div>
+    <div className="rounded-2xl border border-[#C9D0E2] bg-[#F2F4FA] p-5 text-center">
+      <p className="text-[0.875rem] font-medium text-[#1A2D63]">
+        {language === 'nl'
+          ? 'Bedankt, je antwoorden zijn veilig opgeslagen.'
+          : language === 'fr'
+            ? 'Merci, vos réponses sont enregistrées.'
+            : 'Thanks, your answers are safely stored.'}
+      </p>
     </div>
   );
 }
@@ -908,8 +1125,8 @@ function ProgressSidebar({
   };
 
   return (
-    <aside className="hidden lg:block w-[300px] shrink-0">
-      <div className="sticky top-[68px] flex flex-col gap-3 px-4 py-6 pr-6">
+    <aside className="hidden lg:block w-[300px] shrink-0 overflow-y-auto">
+      <div className="flex flex-col gap-3 py-6 pr-2">
         {/* Heading + bar */}
         <div>
           <div className="flex items-baseline justify-between gap-2">

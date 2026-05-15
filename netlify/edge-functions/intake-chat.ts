@@ -55,6 +55,37 @@ function isWidgetTool(name: string): name is WidgetKind {
   return (WIDGET_TOOL_NAMES as ReadonlySet<string>).has(name);
 }
 
+type ChainStepTool = "save_answer" | "update_goal_status" | "request_resume_link";
+
+function chainStepLabel(
+  tool: ChainStepTool,
+  language: Language,
+  input: Record<string, unknown>,
+): string {
+  if (tool === "save_answer") {
+    const key =
+      (input.key as string | undefined) ??
+      (input.goal_id as string | undefined) ??
+      (input.widget_id as string | undefined) ??
+      "";
+    const suffix = key ? ` (${key})` : "";
+    if (language === "fr") return `Enregistrement de votre réponse${suffix}`;
+    if (language === "en") return `Saving your answer${suffix}`;
+    return `Antwoord opslaan${suffix}`;
+  }
+  if (tool === "update_goal_status") {
+    const goalId = (input.goal_id as string | undefined) ?? "";
+    const status = (input.status as string | undefined) ?? "";
+    if (language === "fr") return `Mise à jour du thème (${goalId}: ${status})`;
+    if (language === "en") return `Updating goal (${goalId}: ${status})`;
+    return `Thema bijwerken (${goalId}: ${status})`;
+  }
+  // request_resume_link
+  if (language === "fr") return "Lien de reprise demandé";
+  if (language === "en") return "Resume link requested";
+  return "Hervat-link aangevraagd";
+}
+
 // ---------------------------------------------------------------------------
 // Types — local for the row shape; rest from lib/intake/types.
 // ---------------------------------------------------------------------------
@@ -490,6 +521,12 @@ export default async (req: Request): Promise<Response> => {
                       newGoalStatus[goalId] = status;
                       send({ type: "goal_update", goal_id: goalId, status });
                     }
+                    send({
+                      type: "chain_step",
+                      tool: "update_goal_status",
+                      label: chainStepLabel("update_goal_status", language, parsedInput),
+                      status: "complete",
+                    });
                   } else if (toolName === "save_answer") {
                     const goalId =
                       (parsedInput.key as string | undefined) ??
@@ -498,10 +535,22 @@ export default async (req: Request): Promise<Response> => {
                     if (goalId) {
                       updatedAnswers[goalId] = parsedInput.value ?? parsedInput;
                     }
+                    send({
+                      type: "chain_step",
+                      tool: "save_answer",
+                      label: chainStepLabel("save_answer", language, parsedInput),
+                      status: "complete",
+                    });
                   } else if (toolName === "request_resume_link") {
                     send({
                       type: "request_resume_link",
                       email: parsedInput.email as string | undefined,
+                    });
+                    send({
+                      type: "chain_step",
+                      tool: "request_resume_link",
+                      label: chainStepLabel("request_resume_link", language, parsedInput),
+                      status: "complete",
                     });
                   } else if (toolName === "submit_intake") {
                     send({ type: "done", ok: true });
