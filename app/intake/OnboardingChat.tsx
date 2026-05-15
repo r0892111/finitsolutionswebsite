@@ -263,7 +263,10 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
 
   const beginThinking = React.useCallback(() => {
     if (thinkingTimerRef.current) clearTimeout(thinkingTimerRef.current);
-    thinkingTimerRef.current = setTimeout(() => setThinking(true), 350);
+    // Smaller grace than the original 350ms — the chain loop can take
+    // 2-4s before any user-visible event arrives, so we want the
+    // shimmer up promptly.
+    thinkingTimerRef.current = setTimeout(() => setThinking(true), 150);
   }, []);
 
   const cancelThinking = React.useCallback(() => {
@@ -286,8 +289,19 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
       // eslint-disable-next-line no-console
       console.debug('[intake] event', event.type, event);
     }
-    // Any real event means the model is responding — drop the loader.
-    if (event.type !== 'error') cancelThinking();
+    // Drop the thinking indicator only when *user-visible* content
+    // actually starts (text token, widget, terminal). Early-loop events
+    // like chain_step or goal_update fire 1-2s before the model
+    // generates text — hiding the loader then leaves a visible "dead
+    // air" gap where the user sees nothing happening.
+    if (
+      event.type === 'assistant_text_delta' ||
+      event.type === 'widget' ||
+      event.type === 'done' ||
+      event.type === 'error'
+    ) {
+      cancelThinking();
+    }
 
     if (event.type === 'assistant_text_delta') {
       queueDelta(event.text);

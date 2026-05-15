@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
+// Static export (output:'export' + trailingSlash:true) is required for
+// the production Netlify build, but in `next dev` it makes /intake
+// route through /intake/index.html which Netlify dev's proxy can't
+// resolve. Apply the export config only outside of dev.
+const isDev = process.env.NODE_ENV === 'development';
 const nextConfig = {
-  output: 'export',
-  trailingSlash: true,
+  ...(isDev ? {} : { output: 'export', trailingSlash: true }),
   images: {
     unoptimized: true,
     remotePatterns: [
