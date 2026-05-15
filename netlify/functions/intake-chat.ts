@@ -46,7 +46,11 @@ import type {
 } from "../../lib/intake/types";
 
 // Sonnet 4.6 = best speed/intelligence balance for conversational intake.
+// Haiku 4.5 = fallback when Sonnet is overloaded — same family, lighter,
+// almost always has capacity. Slight quality dip but the conversation
+// stays alive instead of erroring out.
 const MODEL = "claude-sonnet-4-6";
+const FALLBACK_MODEL = "claude-haiku-4-5-20251001";
 const MAX_TOKENS = 4096;
 const CIRCUIT_BREAKER_TOKENS = 50_000;
 const MAX_HISTORY_MESSAGES = 100;
@@ -337,13 +341,20 @@ export const handler = stream(async (event) => {
       // whole streaming block. Retry is GUARDED — only fires while nothing
       // has been sent to the client yet, so we never produce duplicate
       // text or widgets if the first attempt partially streamed.
-      const MAX_ATTEMPTS = 3;
+      //
+      // Strategy: 3 attempts on Sonnet 4.6 (with 2s+4s backoffs), then
+      // 1 attempt on Haiku 4.5 as a fallback. Haiku has separate capacity
+      // and almost always responds even when Sonnet is hot.
+      const MAX_SONNET_ATTEMPTS = 3;
+      const MAX_TOTAL_ATTEMPTS = MAX_SONNET_ATTEMPTS + 1;
       let currentBlock: CurrentBlock | null = null;
       let attempt = 0;
 
       while (true) {
+      const useFallback = attempt >= MAX_SONNET_ATTEMPTS;
+      const activeModel = useFallback ? FALLBACK_MODEL : MODEL;
       const sdkStream = client.messages.stream({
-        model: MODEL,
+        model: activeModel,
         max_tokens: MAX_TOKENS,
         system: systemBlocks,
         tools: INTAKE_TOOLS,
@@ -462,14 +473,16 @@ export const handler = stream(async (event) => {
           isOverloaded &&
           !textEmitted &&
           assistantBlocks.length === 0 &&
-          attempt < MAX_ATTEMPTS - 1;
+          attempt < MAX_TOTAL_ATTEMPTS - 1;
         if (!safeToRetry) throw streamErr;
         attempt++;
-        const backoff = attempt * 2000; // 2s, 4s
+        const willFallback = attempt >= MAX_SONNET_ATTEMPTS;
+        // Sonnet retries: 2s, 4s. Fallback to Haiku: no extra wait.
+        const backoff = willFallback ? 0 : attempt * 2000;
         console.warn(
-          `[intake/chat] anthropic overloaded — retry ${attempt}/${MAX_ATTEMPTS - 1} in ${backoff}ms`,
+          `[intake/chat] anthropic overloaded on ${activeModel} — ${willFallback ? `falling back to ${FALLBACK_MODEL}` : `retry ${attempt}/${MAX_SONNET_ATTEMPTS - 1} in ${backoff}ms`}`,
         );
-        await new Promise((r) => setTimeout(r, backoff));
+        if (backoff > 0) await new Promise((r) => setTimeout(r, backoff));
         // Reset transient per-attempt state. newGoalStatus/updatedAnswers
         // are unchanged because we never reached the tool_use processing.
         currentBlock = null;
