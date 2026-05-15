@@ -295,6 +295,11 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
   const streamDoneRef = React.useRef(false);
   // 150 ms grace before showing the thinking indicator.
   const thinkingTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Submit-handoff guard: the chat function emits `done` once when the
+  // agent calls submit_intake, but the SSE stream can replay or the user
+  // may resume after submit — we only want to POST /api/intake/submit
+  // once per session.
+  const submitFiredRef = React.useRef(false);
 
   // Kick the conversation off on mount. On resume, the server's op:'start'
   // path closes out any pending widget tool_use and re-prompts the user.
@@ -505,6 +510,23 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         }
         return next;
       });
+      // Submit handoff: trigger the server-side finalize (paying_client →
+      // commit to client repo + mark completed; lead_magnet → render mini
+      // report + mark completed). Fire-and-forget — the UI already shows
+      // the "Bedankt" state from setDone(true). If the submit fails, the
+      // operator's queue check in finit-company surfaces it via the row's
+      // error_message column. Guarded by submitFiredRef so a replayed
+      // SSE stream or resume can't double-fire.
+      if (!useMock && !submitFiredRef.current) {
+        submitFiredRef.current = true;
+        void fetch('/api/intake/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+        }).catch((err) => {
+          console.warn('[intake] submit handoff failed:', err);
+        });
+      }
     } else if (event.type === 'error') {
       cancelThinking();
       setMessages((prev) => [
