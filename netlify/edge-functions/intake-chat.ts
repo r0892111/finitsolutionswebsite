@@ -350,7 +350,6 @@ export default async (req: Request): Promise<Response> => {
         ...((row!.goal_status_json as Record<string, GoalStatus>) ?? {}),
       };
       const updatedAnswers: Record<string, unknown> = { ...persistedAnswers };
-      const assistantBlocks: Anthropic.ContentBlockParam[] = [];
       let textEmitted = false;
 
       console.log(`[intake/chat] stream start; calling Anthropic (model=${MODEL_PRIMARY})`);
@@ -382,143 +381,206 @@ export default async (req: Request): Promise<Response> => {
         }
       }
 
-      let currentBlock: CurrentBlock | null = null;
-      let attempt = 0;
+      // Chain loop: when the agent emits ONLY state tools (save_answer,
+      // update_goal_status, request_resume_link) without a widget or
+      // submit_intake, the server auto-resolves the tool_uses with
+      // {"ok":true} and calls Anthropic again. Without this, the client
+      // sees "stream end (textEmitted=false)" and nothing renders — the
+      // agent intended "save THEN render widget" as one logical turn but
+      // Anthropic emits them as separate model calls.
+      const MAX_CHAIN_STEPS = 8;
+      const turnMessages: Anthropic.MessageParam[] = [];
+      let chainStep = 0;
+      let stopperCalled = false;
 
-      while (true) {
-        const useFallback = attempt >= MAX_SONNET_ATTEMPTS;
-        const activeModel = useFallback ? MODEL_FALLBACK : MODEL_PRIMARY;
+      chainLoop: while (chainStep < MAX_CHAIN_STEPS) {
+        chainStep++;
 
-        console.log(`[intake/chat] opening Anthropic stream (model=${activeModel}, msgs=${messagesForApi.length})`);
-        const sdkStream = client.messages.stream({
-          model: activeModel,
-          max_tokens: MAX_TOKENS,
-          system: systemBlocks,
-          tools: INTAKE_TOOLS,
-          messages: messagesForApi,
-        });
+        const stepBlocks: Anthropic.ContentBlockParam[] = [];
+        let currentBlock: CurrentBlock | null = null;
+        let attempt = 0;
 
-        let firstEventLogged = false;
-        try {
-          for await (const evt of sdkStream) {
-            if (!firstEventLogged) {
-              console.log(`[intake/chat] first Anthropic event: ${evt.type}`);
-              firstEventLogged = true;
-            }
-            if (evt.type === "content_block_start") {
-              const cb = evt.content_block;
-              if (cb.type === "text") {
-                currentBlock = { type: "text", text: "" };
-              } else if (cb.type === "tool_use") {
-                currentBlock = {
-                  type: "tool_use",
-                  id: cb.id,
-                  name: cb.name,
-                  partialJson: "",
-                };
+        // Retry loop (overload backoff)
+        retryLoop: while (true) {
+          const useFallback = attempt >= MAX_SONNET_ATTEMPTS;
+          const activeModel = useFallback ? MODEL_FALLBACK : MODEL_PRIMARY;
+
+          console.log(`[intake/chat] chain ${chainStep} → opening Anthropic stream (model=${activeModel}, msgs=${messagesForApi.length})`);
+          const sdkStream = client.messages.stream({
+            model: activeModel,
+            max_tokens: MAX_TOKENS,
+            system: systemBlocks,
+            tools: INTAKE_TOOLS,
+            messages: messagesForApi,
+          });
+
+          let firstEventLogged = false;
+          try {
+            for await (const evt of sdkStream) {
+              if (!firstEventLogged) {
+                console.log(`[intake/chat] chain ${chainStep} → first Anthropic event: ${evt.type}`);
+                firstEventLogged = true;
               }
-            } else if (evt.type === "content_block_delta") {
-              if (!currentBlock) continue;
-              if (evt.delta.type === "text_delta" && currentBlock.type === "text") {
-                currentBlock.text += evt.delta.text;
-                send({ type: "assistant_text_delta", text: evt.delta.text });
-                textEmitted = true;
-              } else if (
-                evt.delta.type === "input_json_delta" &&
-                currentBlock.type === "tool_use"
-              ) {
-                currentBlock.partialJson += evt.delta.partial_json;
-              }
-            } else if (evt.type === "content_block_stop") {
-              if (!currentBlock) continue;
-              if (currentBlock.type === "text") {
-                assistantBlocks.push({ type: "text", text: currentBlock.text });
-              } else {
-                let parsedInput: Record<string, unknown> = {};
-                try {
-                  parsedInput = currentBlock.partialJson
-                    ? (JSON.parse(currentBlock.partialJson) as Record<string, unknown>)
-                    : {};
-                } catch (err) {
-                  console.warn(
-                    `[intake/chat] could not parse tool input for ${currentBlock.name}:`,
-                    err,
-                  );
+              if (evt.type === "content_block_start") {
+                const cb = evt.content_block;
+                if (cb.type === "text") {
+                  currentBlock = { type: "text", text: "" };
+                } else if (cb.type === "tool_use") {
+                  currentBlock = {
+                    type: "tool_use",
+                    id: cb.id,
+                    name: cb.name,
+                    partialJson: "",
+                  };
                 }
-
-                assistantBlocks.push({
-                  type: "tool_use",
-                  id: currentBlock.id,
-                  name: currentBlock.name,
-                  input: parsedInput,
-                });
-
-                const toolName = currentBlock.name;
-
-                if (isWidgetTool(toolName)) {
-                  const widgetId =
-                    (parsedInput.widget_id as string | undefined) ??
-                    `w-${currentBlock.id.slice(-8)}`;
-                  send({
-                    type: "widget",
-                    widget: {
-                      ...parsedInput,
-                      kind: toolName,
-                      widget_id: widgetId,
-                    },
-                  });
-                } else if (toolName === "update_goal_status") {
-                  const goalId = parsedInput.goal_id as string | undefined;
-                  const status = parsedInput.status as GoalStatus | undefined;
-                  if (goalId && status) {
-                    newGoalStatus[goalId] = status;
-                    send({ type: "goal_update", goal_id: goalId, status });
-                  }
-                } else if (toolName === "save_answer") {
-                  const goalId =
-                    (parsedInput.key as string | undefined) ??
-                    (parsedInput.goal_id as string | undefined) ??
-                    (parsedInput.widget_id as string | undefined);
-                  if (goalId) {
-                    updatedAnswers[goalId] = parsedInput.value ?? parsedInput;
-                  }
-                } else if (toolName === "request_resume_link") {
-                  send({
-                    type: "request_resume_link",
-                    email: parsedInput.email as string | undefined,
-                  });
-                } else if (toolName === "submit_intake") {
-                  send({ type: "done", ok: true });
+              } else if (evt.type === "content_block_delta") {
+                if (!currentBlock) continue;
+                if (evt.delta.type === "text_delta" && currentBlock.type === "text") {
+                  currentBlock.text += evt.delta.text;
+                  send({ type: "assistant_text_delta", text: evt.delta.text });
+                  textEmitted = true;
+                } else if (
+                  evt.delta.type === "input_json_delta" &&
+                  currentBlock.type === "tool_use"
+                ) {
+                  currentBlock.partialJson += evt.delta.partial_json;
                 }
+              } else if (evt.type === "content_block_stop") {
+                if (!currentBlock) continue;
+                if (currentBlock.type === "text") {
+                  stepBlocks.push({ type: "text", text: currentBlock.text });
+                } else {
+                  let parsedInput: Record<string, unknown> = {};
+                  try {
+                    parsedInput = currentBlock.partialJson
+                      ? (JSON.parse(currentBlock.partialJson) as Record<string, unknown>)
+                      : {};
+                  } catch (err) {
+                    console.warn(
+                      `[intake/chat] could not parse tool input for ${currentBlock.name}:`,
+                      err,
+                    );
+                  }
+
+                  stepBlocks.push({
+                    type: "tool_use",
+                    id: currentBlock.id,
+                    name: currentBlock.name,
+                    input: parsedInput,
+                  });
+
+                  const toolName = currentBlock.name;
+
+                  if (isWidgetTool(toolName)) {
+                    const widgetId =
+                      (parsedInput.widget_id as string | undefined) ??
+                      `w-${currentBlock.id.slice(-8)}`;
+                    send({
+                      type: "widget",
+                      widget: {
+                        ...parsedInput,
+                        kind: toolName,
+                        widget_id: widgetId,
+                      },
+                    });
+                  } else if (toolName === "update_goal_status") {
+                    const goalId = parsedInput.goal_id as string | undefined;
+                    const status = parsedInput.status as GoalStatus | undefined;
+                    if (goalId && status) {
+                      newGoalStatus[goalId] = status;
+                      send({ type: "goal_update", goal_id: goalId, status });
+                    }
+                  } else if (toolName === "save_answer") {
+                    const goalId =
+                      (parsedInput.key as string | undefined) ??
+                      (parsedInput.goal_id as string | undefined) ??
+                      (parsedInput.widget_id as string | undefined);
+                    if (goalId) {
+                      updatedAnswers[goalId] = parsedInput.value ?? parsedInput;
+                    }
+                  } else if (toolName === "request_resume_link") {
+                    send({
+                      type: "request_resume_link",
+                      email: parsedInput.email as string | undefined,
+                    });
+                  } else if (toolName === "submit_intake") {
+                    send({ type: "done", ok: true });
+                  }
+                }
+                currentBlock = null;
               }
-              currentBlock = null;
+              // message_start / message_delta / message_stop are ignored.
             }
-            // message_start / message_delta / message_stop are ignored.
+            break retryLoop; // streamed cleanly — exit retry loop
+          } catch (streamErr) {
+            const msg = streamErr instanceof Error ? streamErr.message : String(streamErr);
+            const isOverloaded = /overloaded|529/i.test(msg);
+            const safeToRetry =
+              isOverloaded &&
+              !textEmitted &&
+              stepBlocks.length === 0 &&
+              attempt < MAX_TOTAL_ATTEMPTS - 1;
+            if (!safeToRetry) throw streamErr;
+            attempt++;
+            const willFallback = attempt >= MAX_SONNET_ATTEMPTS;
+            const backoff = willFallback ? 0 : attempt * 2000;
+            console.warn(
+              `[intake/chat] anthropic overloaded on ${activeModel} — ${
+                willFallback
+                  ? `falling back to ${MODEL_FALLBACK}`
+                  : `retry ${attempt}/${MAX_SONNET_ATTEMPTS - 1} in ${backoff}ms`
+              }`,
+            );
+            if (backoff > 0) await new Promise((r) => setTimeout(r, backoff));
+            currentBlock = null;
+            continue retryLoop;
           }
-          break; // streamed cleanly — exit retry loop
-        } catch (streamErr) {
-          const msg = streamErr instanceof Error ? streamErr.message : String(streamErr);
-          const isOverloaded = /overloaded|529/i.test(msg);
-          const safeToRetry =
-            isOverloaded &&
-            !textEmitted &&
-            assistantBlocks.length === 0 &&
-            attempt < MAX_TOTAL_ATTEMPTS - 1;
-          if (!safeToRetry) throw streamErr;
-          attempt++;
-          const willFallback = attempt >= MAX_SONNET_ATTEMPTS;
-          const backoff = willFallback ? 0 : attempt * 2000;
-          console.warn(
-            `[intake/chat] anthropic overloaded on ${activeModel} — ${
-              willFallback
-                ? `falling back to ${MODEL_FALLBACK}`
-                : `retry ${attempt}/${MAX_SONNET_ATTEMPTS - 1} in ${backoff}ms`
-            }`,
-          );
-          if (backoff > 0) await new Promise((r) => setTimeout(r, backoff));
-          currentBlock = null;
-          continue;
         }
+
+        // Filter empty text blocks (Anthropic rejects them in subsequent turns)
+        const filteredStep = stepBlocks.filter((b) => {
+          if (b.type === "text") return typeof b.text === "string" && b.text.trim().length > 0;
+          return true;
+        });
+        const stepAssistantMsg: Anthropic.MessageParam = {
+          role: "assistant",
+          content: filteredStep.length > 0 ? filteredStep : [{ type: "text", text: "(no content)" }],
+        };
+        turnMessages.push(stepAssistantMsg);
+        messagesForApi.push(stepAssistantMsg);
+
+        // Decide whether to stop or chain. Stop when:
+        //   - the step had no tool calls (pure text response) OR
+        //   - the step called a widget tool (waiting for user) OR
+        //   - the step called submit_intake (intake done).
+        const toolUses = filteredStep.filter(
+          (b): b is Anthropic.ToolUseBlockParam => b.type === "tool_use",
+        );
+        const calledStopper = toolUses.some(
+          (t) => isWidgetTool(t.name) || t.name === "submit_intake",
+        );
+        if (toolUses.length === 0 || calledStopper) {
+          stopperCalled = calledStopper;
+          break chainLoop;
+        }
+
+        // Only state tools were called (save_answer / update_goal_status /
+        // request_resume_link). Auto-resolve with {"ok":true} and continue.
+        console.log(`[intake/chat] chain ${chainStep} → only state tools (${toolUses.map((t) => t.name).join(", ")}); auto-resolving and continuing`);
+        const toolResultMsg: Anthropic.MessageParam = {
+          role: "user",
+          content: toolUses.map((t) => ({
+            type: "tool_result" as const,
+            tool_use_id: t.id,
+            content: '{"ok":true}',
+          })),
+        };
+        turnMessages.push(toolResultMsg);
+        messagesForApi.push(toolResultMsg);
+      }
+
+      if (chainStep >= MAX_CHAIN_STEPS) {
+        console.warn(`[intake/chat] hit MAX_CHAIN_STEPS=${MAX_CHAIN_STEPS} without a widget — possible model loop`);
       }
 
       if (textEmitted) {
@@ -526,30 +588,13 @@ export default async (req: Request): Promise<Response> => {
       }
 
       // ----- Persist updated state -------------------------------------------
-      // Filter empty text blocks — Anthropic rejects {type:'text', text:''} in
-      // subsequent turns' history.
-      const filteredAssistantBlocks = assistantBlocks.filter((b) => {
-        if (b.type === "text") {
-          return typeof b.text === "string" && b.text.trim().length > 0;
-        }
-        return true;
-      });
-      const newAssistantMessage: Anthropic.MessageParam = {
-        role: "assistant",
-        content:
-          filteredAssistantBlocks.length > 0
-            ? filteredAssistantBlocks
-            : [{ type: "text", text: "(no content)" }],
-      };
       console.log(
-        `[intake/chat] persisting turn — text_blocks=${
-          filteredAssistantBlocks.filter((b) => b.type === "text").length
-        } tool_use_blocks=${filteredAssistantBlocks.filter((b) => b.type === "tool_use").length}`,
+        `[intake/chat] persisting turn — chain_steps=${chainStep} new_msgs=${turnMessages.length} stopper=${stopperCalled}`,
       );
       const updatedHistory: Anthropic.MessageParam[] = [
         ...history,
         newUserMessage!,
-        newAssistantMessage,
+        ...turnMessages,
       ];
 
       const updatedState: ServerStateJson = {
