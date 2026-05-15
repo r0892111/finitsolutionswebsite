@@ -719,7 +719,10 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
 
       {/* Middle row — conversation + sidebar. min-h-0 + overflow-hidden so the
           Conversation's StickToBottom can claim the available height without
-          dragging the page along with it. */}
+          dragging the page along with it. The active widget renders INLINE
+          at the bottom of the message list — keeps it impossible to hide
+          behind a layout bug, and StickToBottom keeps it auto-scrolled into
+          view. */}
       <div className="min-h-0 w-full overflow-hidden">
         <div className="mx-auto grid h-full w-full max-w-6xl grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-6 lg:px-6">
           <div className="relative flex min-h-0 flex-col">
@@ -731,6 +734,16 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
                   ))}
                 </AnimatePresence>
                 {thinking ? <ThinkingShimmer language={language} /> : null}
+                {activeWidget ? (
+                  <div className="pt-1">
+                    <WidgetSlot
+                      widget={activeWidget}
+                      language={language}
+                      token={token}
+                      onSubmit={submitWidget}
+                    />
+                  </div>
+                ) : null}
                 {done ? <DoneCallout language={language} /> : null}
               </ConversationContent>
               <ConversationScrollButton />
@@ -740,23 +753,10 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         </div>
       </div>
 
-      {/* Footer — pinned widget area + always-visible status strip. The
-          strip stays even when a widget is active so the user always
-          sees the re-prompt button + state indicator. Easier to diagnose
-          "I'm stuck" when the widget never arrives. */}
-      <footer className="border-t border-[#E8E6DC] bg-[#FDFBF7]/95 backdrop-blur shadow-[0_-8px_24px_-12px_rgba(20,30,60,0.08)]">
-        {activeWidget ? (
-          <div className="max-h-[55vh] overflow-y-auto border-b border-[#E8E6DC]/60">
-            <div className="mx-auto w-full max-w-2xl px-4 py-3 md:px-6 md:py-4">
-              <WidgetSlot
-                widget={activeWidget}
-                language={language}
-                token={token}
-                onSubmit={submitWidget}
-              />
-            </div>
-          </div>
-        ) : null}
+      {/* Footer — always-visible status strip. Shows topic counter, thinking
+          state, current widget kind for diagnostics, and the re-prompt
+          escape hatch if the agent goes silent. */}
+      <footer className="border-t border-[#E8E6DC] bg-[#FDFBF7]/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2 md:px-6">
           <p className="text-[0.6875rem] text-[#76706A]">
             {satisfied}/{totalGoals}{' '}
@@ -991,11 +991,16 @@ function rebuildChatHistory(
         });
       }
     } else if (msg.role === 'user') {
-      // Pure-string user content (kickoff / resume nudges / fallback) —
-      // skip system-y kickoff phrases; render anything else as a user bubble.
+      // Pure-string user content (kickoff / resume nudges / synthetic
+      // system-reminders the edge function injects when the model
+      // skipped a widget). None of these are real user content —
+      // they're protocol scaffolding and shouldn't render as bubbles.
       if (typeof msg.content === 'string') {
         const trimmed = msg.content.trim();
-        if (!trimmed || KICKOFF_PHRASES.has(trimmed)) continue;
+        if (!trimmed) continue;
+        if (KICKOFF_PHRASES.has(trimmed)) continue;
+        // Server-injected reminders are wrapped in <system-reminder> tags.
+        if (trimmed.startsWith('<system-reminder>')) continue;
         out.push({
           id: `restored-u-${counter++}`,
           role: 'user',
