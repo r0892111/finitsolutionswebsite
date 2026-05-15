@@ -219,11 +219,18 @@ export function buildIntakeSystemPrompt(p: IntakePersonalization): string {
 
   // -- 4. Flavor-specific guidance -------------------------------------------
   if (p.flavor === "lead_magnet") {
+    // Per-goal directives come from emphasis above (skip / trim / top_3_only).
+    // This block intentionally does NOT restate them — duplicating them led to
+    // contradictory orders when the personalization JSON drifted from the
+    // hardcoded text. Keep this block to length + output + closing condition.
+    const nonSkippedGoals = goalOrder.filter(
+      (g) => (emphasis as Record<string, string>)[g] !== "skip",
+    );
     lines.push("=== Lead-magnet variant (compressed) ===", "");
     lines.push(
-      "This is a lead-magnet intake (~10-12 min). Compress goals per the emphasis directives above — Goal 5 is SKIPPED entirely; Goal 1 is trimmed to one question; Goal 4 covers only CRM/email/bookkeeping.",
+      "This is a lead-magnet intake (~10-12 min). Per-goal compression is set by the emphasis directives above — obey them strictly. NEVER probe deeper than the directive allows; compressed flow tolerates one follow-up per goal max.",
       "",
-      "The output is a mini-report emailed to the prospect, not a client kickoff. Keep the energy upbeat, the questions tight, and end with the closing_summary widget once 4 of 4 prioritized goals (2, 3, 4-top-3, 6) are at high confidence.",
+      `The output is a mini-report emailed to the prospect, not a client kickoff. Keep the energy upbeat, the questions tight, and end with the closing_summary widget once these non-skipped goals are at high confidence: ${nonSkippedGoals.join(", ")}.`,
       ""
     );
   } else {
