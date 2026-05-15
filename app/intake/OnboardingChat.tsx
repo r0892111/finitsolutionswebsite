@@ -747,8 +747,8 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
             </div>
           </div>
         ) : (
-          <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2.5 md:px-6">
-            <p className="text-[0.75rem] text-[#76706A]">
+          <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2 md:px-6">
+            <p className="text-[0.6875rem] text-[#76706A]">
               {satisfied}/{totalGoals}{' '}
               {language === 'nl'
                 ? "thema's afgerond"
@@ -762,6 +762,19 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
                 </span>
               ) : null}
             </p>
+            {!done && !thinking && messages.length > 0 && !useMock ? (
+              <button
+                type="button"
+                onClick={() => void sendToServer({ op: 'start' })}
+                className="rounded-md border border-[#C9D0E2] bg-[#FFFEFA] px-2.5 py-1 text-[0.6875rem] font-medium text-[#1A2D63] transition-colors hover:bg-[#F2F4FA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63]"
+              >
+                {language === 'nl'
+                  ? 'Geen invoerveld? Vraag opnieuw'
+                  : language === 'fr'
+                    ? 'Pas de champ ? Reposer la question'
+                    : 'No input? Re-prompt'}
+              </button>
+            ) : null}
           </div>
         )}
       </footer>
