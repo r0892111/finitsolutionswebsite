@@ -286,6 +286,13 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
    * ------------------------------------------------------------ */
 
   const handleStreamEvent = (event: StreamEvent) => {
+    // Debug breadcrumb — keep until intake is rock-solid. The browser
+    // console makes it easy to confirm which events arrived for a given
+    // turn (and in what order) when a widget mysteriously doesn't show.
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line no-console
+      console.debug('[intake] event', event.type, event);
+    }
     // Any real event means the model is responding — drop the loader.
     if (event.type !== 'error') cancelThinking();
 
@@ -733,10 +740,13 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         </div>
       </div>
 
-      {/* Footer — pinned widget area OR the topic counter. */}
+      {/* Footer — pinned widget area + always-visible status strip. The
+          strip stays even when a widget is active so the user always
+          sees the re-prompt button + state indicator. Easier to diagnose
+          "I'm stuck" when the widget never arrives. */}
       <footer className="border-t border-[#E8E6DC] bg-[#FDFBF7]/95 backdrop-blur shadow-[0_-8px_24px_-12px_rgba(20,30,60,0.08)]">
         {activeWidget ? (
-          <div className="max-h-[55vh] overflow-y-auto">
+          <div className="max-h-[55vh] overflow-y-auto border-b border-[#E8E6DC]/60">
             <div className="mx-auto w-full max-w-2xl px-4 py-3 md:px-6 md:py-4">
               <WidgetSlot
                 widget={activeWidget}
@@ -746,37 +756,41 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
               />
             </div>
           </div>
-        ) : (
-          <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2 md:px-6">
-            <p className="text-[0.6875rem] text-[#76706A]">
-              {satisfied}/{totalGoals}{' '}
-              {language === 'nl'
-                ? "thema's afgerond"
-                : language === 'fr'
-                  ? 'thèmes terminés'
-                  : 'topics covered'}
-              {probing > 0 ? (
-                <span className="ml-1 text-[#697597]">
-                  ({probing}{' '}
-                  {language === 'nl' ? 'lopend' : language === 'fr' ? 'en cours' : 'in progress'})
-                </span>
-              ) : null}
-            </p>
-            {!done && !thinking && messages.length > 0 && !useMock ? (
-              <button
-                type="button"
-                onClick={() => void sendToServer({ op: 'start' })}
-                className="rounded-md border border-[#C9D0E2] bg-[#FFFEFA] px-2.5 py-1 text-[0.6875rem] font-medium text-[#1A2D63] transition-colors hover:bg-[#F2F4FA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63]"
-              >
-                {language === 'nl'
-                  ? 'Geen invoerveld? Vraag opnieuw'
-                  : language === 'fr'
-                    ? 'Pas de champ ? Reposer la question'
-                    : 'No input? Re-prompt'}
-              </button>
+        ) : null}
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2 md:px-6">
+          <p className="text-[0.6875rem] text-[#76706A]">
+            {satisfied}/{totalGoals}{' '}
+            {language === 'nl'
+              ? "thema's afgerond"
+              : language === 'fr'
+                ? 'thèmes terminés'
+                : 'topics covered'}
+            {probing > 0 ? (
+              <span className="ml-1 text-[#697597]">
+                ({probing}{' '}
+                {language === 'nl' ? 'lopend' : language === 'fr' ? 'en cours' : 'in progress'})
+              </span>
             ) : null}
-          </div>
-        )}
+            {thinking ? (
+              <span className="ml-2 text-[#697597]">
+                · {language === 'nl' ? 'bezig…' : language === 'fr' ? 'en cours…' : 'thinking…'}
+              </span>
+            ) : null}
+          </p>
+          {!done && !thinking && !activeWidget && messages.length > 0 && !useMock ? (
+            <button
+              type="button"
+              onClick={() => void sendToServer({ op: 'start' })}
+              className="rounded-md border border-[#C9D0E2] bg-[#FFFEFA] px-2.5 py-1 text-[0.6875rem] font-medium text-[#1A2D63] transition-colors hover:bg-[#F2F4FA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63]"
+            >
+              {language === 'nl'
+                ? 'Geen invoerveld? Vraag opnieuw'
+                : language === 'fr'
+                  ? 'Pas de champ ? Reposer la question'
+                  : 'No input? Re-prompt'}
+            </button>
+          ) : null}
+        </div>
       </footer>
     </div>
   );
