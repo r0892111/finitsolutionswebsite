@@ -26,7 +26,7 @@
  *   - [intake-flow.md §Permission scope]
  */
 import { stream } from "@netlify/functions";
-import { PassThrough } from "node:stream";
+import { Readable } from "node:stream";
 import Anthropic from "@anthropic-ai/sdk";
 import {
   getSessionByToken,
@@ -281,15 +281,33 @@ export const handler = stream(async (event) => {
   const systemBlocks = buildSystemBlocks(row);
 
   // ----- Stream setup ----------------------------------------------------
-  // PassThrough = standard Node Duplex purpose-built for "I write here, you
-  // read there" pipelines. Replaces the prior `Readable({ read() {} })` push
-  // pattern, which was triggering AWS Lambda Streaming's "unexpected end of
-  // JSON input" 502 — the awslambda runtime needs proper backpressure +
-  // end-of-stream signaling to write the trailer metadata, and an
-  // empty-read() Readable doesn't deliver that consistently.
-  const bodyStream = new PassThrough();
+  // Web ReadableStream wrapped in Node.Readable.fromWeb for @netlify/
+  // functions stream() compatibility. The Web ReadableStream gives us
+  // unambiguous controller.close() semantics that AWS Lambda Streaming
+  // can decode reliably (vs the prior PassThrough buffering pattern that
+  // intermittently produced "unexpected end of JSON input" 502s).
+  const encoder = new TextEncoder();
+  let streamController!: ReadableStreamDefaultController<Uint8Array>;
+  const webStream = new ReadableStream<Uint8Array>({
+    start(controller) {
+      streamController = controller;
+      // Heartbeat comment (SSE-spec: lines starting with `:` are ignored
+      // by event handlers). Forces immediate bytes-on-the-wire so AWS
+      // doesn't perceive the stream as malformed during Anthropic latency.
+      controller.enqueue(encoder.encode(`:open\n\n`));
+    },
+  });
+  const bodyStream = Readable.fromWeb(
+    webStream as unknown as import("node:stream/web").ReadableStream<Uint8Array>,
+  );
+  let streamClosed = false;
   const send = (e: IntakeStreamEvent) => {
-    bodyStream.write(`data: ${JSON.stringify(e)}\n\n`);
+    if (streamClosed) return;
+    try {
+      streamController.enqueue(encoder.encode(`data: ${JSON.stringify(e)}\n\n`));
+    } catch {
+      /* controller already closed — silently drop */
+    }
   };
 
   type CurrentBlock =
@@ -575,9 +593,15 @@ export const handler = stream(async (event) => {
       }
       send({ type: "error", message: friendly });
     } finally {
-      // PassThrough end() = clean EOF, signals AWS Lambda Streaming to
-      // write its trailer metadata so the response decodes properly.
-      bodyStream.end();
+      // Web ReadableStream close() = clean EOF, signals AWS Lambda
+      // Streaming to write its trailer metadata so the response decodes
+      // properly on the client side.
+      streamClosed = true;
+      try {
+        streamController.close();
+      } catch {
+        /* already closed */
+      }
     }
   })();
 
