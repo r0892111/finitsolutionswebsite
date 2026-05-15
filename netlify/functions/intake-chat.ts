@@ -26,7 +26,7 @@
  *   - [intake-flow.md §Permission scope]
  */
 import { stream } from "@netlify/functions";
-import { Readable } from "node:stream";
+import { PassThrough } from "node:stream";
 import Anthropic from "@anthropic-ai/sdk";
 import {
   getSessionByToken,
@@ -277,9 +277,15 @@ export const handler = stream(async (event) => {
   const systemBlocks = buildSystemBlocks(row);
 
   // ----- Stream setup ----------------------------------------------------
-  const bodyStream = new Readable({ read() {} });
+  // PassThrough = standard Node Duplex purpose-built for "I write here, you
+  // read there" pipelines. Replaces the prior `Readable({ read() {} })` push
+  // pattern, which was triggering AWS Lambda Streaming's "unexpected end of
+  // JSON input" 502 — the awslambda runtime needs proper backpressure +
+  // end-of-stream signaling to write the trailer metadata, and an
+  // empty-read() Readable doesn't deliver that consistently.
+  const bodyStream = new PassThrough();
   const send = (e: IntakeStreamEvent) => {
-    bodyStream.push(`data: ${JSON.stringify(e)}\n\n`);
+    bodyStream.write(`data: ${JSON.stringify(e)}\n\n`);
   };
 
   type CurrentBlock =
@@ -499,7 +505,9 @@ export const handler = stream(async (event) => {
         message: err instanceof Error ? err.message : "unknown",
       });
     } finally {
-      bodyStream.push(null);
+      // PassThrough end() = clean EOF, signals AWS Lambda Streaming to
+      // write its trailer metadata so the response decodes properly.
+      bodyStream.end();
     }
   })();
 
