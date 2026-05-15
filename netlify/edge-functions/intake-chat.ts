@@ -324,43 +324,38 @@ export default async (req: Request): Promise<Response> => {
   const systemBlocks = buildSystemBlocks(row);
 
   // ----- Stream setup -------------------------------------------------------
+  // Work runs INSIDE the ReadableStream `start` callback (not a fire-and-
+  // forget IIFE) so Deno/Edge keeps the function alive until the stream
+  // closes. The previous IIFE pattern raced against the runtime: response
+  // returned → runtime considered work done → IIFE got cancelled mid-Anthropic.
   const encoder = new TextEncoder();
-  let streamController!: ReadableStreamDefaultController<Uint8Array>;
-  let streamClosed = false;
 
-  const webStream = new ReadableStream<Uint8Array>({
-    start(controller) {
-      streamController = controller;
-      // Comment frame — forces immediate bytes-on-the-wire so reverse proxies
-      // never see the response as truncated during Anthropic's first-token
-      // latency.
-      controller.enqueue(encoder.encode(`:open\n\n`));
-    },
-  });
-
-  const send = (e: IntakeStreamEvent) => {
-    if (streamClosed) return;
-    try {
-      streamController.enqueue(encoder.encode(`data: ${JSON.stringify(e)}\n\n`));
-    } catch {
-      /* controller already closed */
-    }
-  };
-
-  // ----- Async work — kick off Anthropic stream + translate events ---------
   type CurrentBlock =
     | { type: "text"; text: string }
     | { type: "tool_use"; id: string; name: string; partialJson: string };
 
-  (async () => {
-    const newGoalStatus: Record<string, GoalStatus> = {
-      ...((row!.goal_status_json as Record<string, GoalStatus>) ?? {}),
-    };
-    const updatedAnswers: Record<string, unknown> = { ...persistedAnswers };
-    const assistantBlocks: Anthropic.ContentBlockParam[] = [];
-    let textEmitted = false;
+  const webStream = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      let closed = false;
+      const send = (e: IntakeStreamEvent) => {
+        if (closed) return;
+        try {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(e)}\n\n`));
+        } catch {
+          /* controller already closed */
+        }
+      };
 
-    try {
+      const newGoalStatus: Record<string, GoalStatus> = {
+        ...((row!.goal_status_json as Record<string, GoalStatus>) ?? {}),
+      };
+      const updatedAnswers: Record<string, unknown> = { ...persistedAnswers };
+      const assistantBlocks: Anthropic.ContentBlockParam[] = [];
+      let textEmitted = false;
+
+      console.log(`[intake/chat] stream start; calling Anthropic (model=${MODEL_PRIMARY})`);
+
+      try {
       // Pre-flight token count + circuit breaker on long histories.
       if (trimmedHistory.length >= 30) {
         try {
@@ -394,6 +389,7 @@ export default async (req: Request): Promise<Response> => {
         const useFallback = attempt >= MAX_SONNET_ATTEMPTS;
         const activeModel = useFallback ? MODEL_FALLBACK : MODEL_PRIMARY;
 
+        console.log(`[intake/chat] opening Anthropic stream (model=${activeModel}, msgs=${messagesForApi.length})`);
         const sdkStream = client.messages.stream({
           model: activeModel,
           max_tokens: MAX_TOKENS,
@@ -402,8 +398,13 @@ export default async (req: Request): Promise<Response> => {
           messages: messagesForApi,
         });
 
+        let firstEventLogged = false;
         try {
           for await (const evt of sdkStream) {
+            if (!firstEventLogged) {
+              console.log(`[intake/chat] first Anthropic event: ${evt.type}`);
+              firstEventLogged = true;
+            }
             if (evt.type === "content_block_start") {
               const cb = evt.content_block;
               if (cb.type === "text") {
@@ -566,18 +567,20 @@ export default async (req: Request): Promise<Response> => {
       } catch (persistErr) {
         console.error("[intake/chat] state persist failed:", persistErr);
       }
-    } catch (err) {
-      console.error("[intake/chat] stream error:", err);
-      send({ type: "error", message: friendlyError(language, err) });
-    } finally {
-      streamClosed = true;
-      try {
-        streamController.close();
-      } catch {
-        /* already closed */
+      } catch (err) {
+        console.error("[intake/chat] stream error:", err);
+        send({ type: "error", message: friendlyError(language, err) });
+      } finally {
+        closed = true;
+        try {
+          controller.close();
+        } catch {
+          /* already closed */
+        }
+        console.log(`[intake/chat] stream end (textEmitted=${textEmitted})`);
       }
-    }
-  })();
+    },
+  });
 
   return new Response(webStream, {
     status: 200,
