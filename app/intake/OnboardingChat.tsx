@@ -776,6 +776,9 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
                 · {language === 'nl' ? 'bezig…' : language === 'fr' ? 'en cours…' : 'thinking…'}
               </span>
             ) : null}
+            <span className="ml-2 font-mono text-[#94908A]">
+              · widget={activeWidget?.kind ?? 'null'}
+            </span>
           </p>
           {!done && !thinking && !activeWidget && messages.length > 0 && !useMock ? (
             <button
