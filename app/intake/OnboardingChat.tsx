@@ -43,17 +43,10 @@ import {
   ConversationContent,
   ConversationScrollButton,
 } from '@/components/ai-elements/conversation';
-import {
-  ChainOfThought,
-  ChainOfThoughtContent,
-  ChainOfThoughtHeader,
-  ChainOfThoughtStep,
-} from '@/components/ai-elements/chain-of-thought';
 import { Shimmer } from '@/components/ai-elements/shimmer';
 
 import type {
   AnyWidget,
-  ChainStep,
   ChatMessage,
   IntakePersonalization,
   IntakeState,
@@ -309,36 +302,32 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         return prev;
       });
     } else if (event.type === 'chain_step') {
-      const step: ChainStep = {
-        tool: event.tool,
-        label: event.label,
-        status: event.status,
-      };
-      setMessages((prev) => {
-        const last = prev[prev.length - 1];
-        // Attach to the current streaming assistant message; otherwise
-        // open a new trace-only assistant bubble that the subsequent
-        // text/widget turn will fill.
-        if (last && last.role === 'assistant' && last.streaming) {
-          return [
-            ...prev.slice(0, -1),
-            { ...last, chain_steps: [...(last.chain_steps ?? []), step] },
-          ];
-        }
-        return [
-          ...prev,
-          {
-            id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-            role: 'assistant',
-            streaming: true,
-            chain_steps: [step],
-          },
-        ];
-      });
+      // Intentionally ignored on the client — the server still emits
+      // these for telemetry, but the "Wat ik intern deed" panel cluttered
+      // the chat without adding user value. Keep accepting the event so
+      // the discriminated union stays exhaustive.
     } else if (event.type === 'widget') {
       setActiveWidget(event.widget);
     } else if (event.type === 'goal_update') {
-      setGoalStatus((prev) => ({ ...prev, [event.goal_id]: event.status }));
+      setGoalStatus((prev) => {
+        const next: Record<string, 'open' | 'probing' | 'satisfied'> = {
+          ...prev,
+          [event.goal_id]: event.status,
+        };
+        // The intake design is sequential — one goal probing at a time.
+        // The model frequently moves to a new goal without explicitly
+        // marking the previous one satisfied. Heuristic: if THIS event
+        // sets a goal to "probing", auto-promote any *other* still-
+        // probing goal to "satisfied" so the progress bar advances.
+        if (event.status === 'probing') {
+          for (const id of Object.keys(next)) {
+            if (id !== event.goal_id && next[id] === 'probing') {
+              next[id] = 'satisfied';
+            }
+          }
+        }
+        return next;
+      });
     } else if (event.type === 'done') {
       setDone(true);
       setActiveWidget(null);
@@ -776,9 +765,6 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
                 · {language === 'nl' ? 'bezig…' : language === 'fr' ? 'en cours…' : 'thinking…'}
               </span>
             ) : null}
-            <span className="ml-2 font-mono text-[#94908A]">
-              · widget={activeWidget?.kind ?? 'null'}
-            </span>
           </p>
           {!done && !thinking && !activeWidget && messages.length > 0 && !useMock ? (
             <button
@@ -815,16 +801,14 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
 
   if (message.role === 'assistant') {
     const hasText = !!message.text && message.text.length > 0;
-    const hasSteps = !!message.chain_steps && message.chain_steps.length > 0;
-    if (!hasText && !hasSteps) return null;
+    if (!hasText) return null;
     return (
       <motion.div className="flex items-start gap-2" {...anim}>
         <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
           <Sparkles className="h-2.5 w-2.5" />
         </div>
         <div className="flex min-w-0 max-w-[90%] flex-1 flex-col gap-1">
-          {hasSteps ? <ChainOfThoughtBlock steps={message.chain_steps!} /> : null}
-          {hasText ? <AssistantBubble text={message.text!} streaming={!!message.streaming} /> : null}
+          <AssistantBubble text={message.text!} streaming={!!message.streaming} />
         </div>
       </motion.div>
     );
@@ -865,26 +849,6 @@ function AssistantBubble({ text, streaming }: { text: string; streaming: boolean
         ) : null}
       </p>
     </div>
-  );
-}
-
-function ChainOfThoughtBlock({ steps }: { steps: ChainStep[] }) {
-  return (
-    <ChainOfThought defaultOpen={false}>
-      <ChainOfThoughtHeader>
-        Wat ik intern deed ·{' '}
-        <span className="font-semibold text-[#1A2D63]">{steps.length}</span>
-      </ChainOfThoughtHeader>
-      <ChainOfThoughtContent>
-        {steps.map((s, idx) => (
-          <ChainOfThoughtStep
-            key={`${s.tool}-${idx}`}
-            label={s.label}
-            status={s.status === 'active' ? 'active' : 'complete'}
-          />
-        ))}
-      </ChainOfThoughtContent>
-    </ChainOfThought>
   );
 }
 

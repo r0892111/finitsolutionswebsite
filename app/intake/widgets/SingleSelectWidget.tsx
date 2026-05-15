@@ -35,9 +35,9 @@ export function SingleSelectWidget({ widget, language, onSubmit, disabled }: Pro
   const finalValue = isOther ? otherText.trim() : (selected ?? '');
 
   return (
-    <div className="w-full rounded-2xl border border-[#E8E6DC] bg-[#FFFEFA] p-5 shadow-[0_1px_2px_rgba(60,50,30,0.04),0_18px_40px_-16px_rgba(60,50,30,0.12)]">
-      <h3 className="mb-4 text-[1rem] font-semibold text-[#322D26]">{widget.prompt}</h3>
-      <div className="space-y-2" role="radiogroup" aria-label={widget.prompt}>
+    <div className="w-full rounded-xl border border-[#E8E6DC] bg-[#FFFEFA] p-3 shadow-[0_1px_2px_rgba(60,50,30,0.03)]">
+      <h3 className="mb-2.5 text-[0.8125rem] font-semibold text-[#322D26]">{widget.prompt}</h3>
+      <div className="space-y-1.5" role="radiogroup" aria-label={widget.prompt}>
         {widget.options.map((opt) => {
           const active = selected === opt.value;
           return (
@@ -49,8 +49,8 @@ export function SingleSelectWidget({ widget, language, onSubmit, disabled }: Pro
               onClick={() => setSelected(opt.value)}
               disabled={disabled}
               className={[
-                'flex w-full items-start gap-3 rounded-lg border px-4 py-3 text-left transition-all',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]',
+                'flex w-full items-start gap-2 rounded-lg border px-3 py-1.5 text-left transition-all',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]',
                 'disabled:cursor-not-allowed disabled:opacity-60',
                 active
                   ? 'border-[#1A2D63] bg-[#F2F4FA] shadow-[0_0_0_1px_rgba(26,45,99,0.3)]'
@@ -59,19 +59,19 @@ export function SingleSelectWidget({ widget, language, onSubmit, disabled }: Pro
             >
               <span
                 className={[
-                  'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors',
+                  'mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors',
                   active ? 'border-[#1A2D63] bg-[#1A2D63]' : 'border-[#B8B5A6] bg-white',
                 ].join(' ')}
                 aria-hidden="true"
               >
-                {active ? <Check className="h-3 w-3 text-white" strokeWidth={3} /> : null}
+                {active ? <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} /> : null}
               </span>
               <span className="flex-1">
-                <span className={`block text-[0.9375rem] font-medium ${active ? 'text-[#1A2D63]' : 'text-[#2A2620]'}`}>
+                <span className={`block text-[0.75rem] font-medium ${active ? 'text-[#1A2D63]' : 'text-[#2A2620]'}`}>
                   {opt.label}
                 </span>
                 {opt.description ? (
-                  <span className="mt-0.5 block text-[0.8125rem] text-[#76706A]">{opt.description}</span>
+                  <span className="mt-0.5 block text-[0.6875rem] text-[#76706A]">{opt.description}</span>
                 ) : null}
               </span>
             </button>
@@ -85,8 +85,8 @@ export function SingleSelectWidget({ widget, language, onSubmit, disabled }: Pro
             onClick={() => setSelected('__other__')}
             disabled={disabled}
             className={[
-              'flex w-full items-start gap-3 rounded-lg border px-4 py-3 text-left transition-all',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]',
+              'flex w-full items-start gap-2 rounded-lg border px-3 py-1.5 text-left transition-all',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]',
               isOther
                 ? 'border-[#1A2D63] bg-[#F2F4FA]'
                 : 'border-dashed border-[#D8D5C7] bg-white hover:border-[#B8B5A6]',
@@ -94,14 +94,14 @@ export function SingleSelectWidget({ widget, language, onSubmit, disabled }: Pro
           >
             <span
               className={[
-                'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border',
+                'mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border',
                 isOther ? 'border-[#1A2D63] bg-[#1A2D63]' : 'border-[#B8B5A6] bg-white',
               ].join(' ')}
               aria-hidden="true"
             >
-              {isOther ? <Check className="h-3 w-3 text-white" strokeWidth={3} /> : null}
+              {isOther ? <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} /> : null}
             </span>
-            <span className="flex-1 text-[0.9375rem] font-medium text-[#322D26]">{copy.other}</span>
+            <span className="flex-1 text-[0.75rem] font-medium text-[#322D26]">{copy.other}</span>
           </button>
         ) : null}
         {isOther ? (
@@ -111,16 +111,16 @@ export function SingleSelectWidget({ widget, language, onSubmit, disabled }: Pro
             onChange={(e) => setOtherText(e.target.value)}
             placeholder={copy.otherPlaceholder}
             autoFocus
-            className="w-full rounded-lg border border-[#E8E6DC] bg-white px-3.5 py-2.5 text-[0.9375rem] text-[#2A2620] placeholder:text-[#94908A] focus:border-[#1A2D63] focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/15"
+            className="w-full rounded-md border border-[#E8E6DC] bg-white px-2.5 py-1.5 text-[0.75rem] text-[#2A2620] placeholder:text-[#94908A] focus:border-[#1A2D63] focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/15"
           />
         ) : null}
       </div>
-      <div className="mt-5 flex justify-end">
+      <div className="mt-3 flex justify-end">
         <button
           type="button"
           onClick={() => canSubmit && onSubmit(finalValue)}
           disabled={disabled || !canSubmit}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#0F1D47] bg-[#1A2D63] px-5 py-2.5 text-[0.9375rem] font-medium text-[#FDFBF7] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.20),0_1px_2px_rgba(20,30,60,0.22),0_6px_14px_-2px_rgba(20,30,60,0.32)] transition-all hover:-translate-y-px hover:bg-[#4D5A82] active:translate-y-px active:bg-[#0F1D47] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-2 focus-visible:outline-[#1A2D63] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+          className="inline-flex items-center justify-center gap-1.5 rounded-md border border-[#0F1D47] bg-[#1A2D63] px-3 py-1.5 text-[0.75rem] font-medium text-[#FDFBF7] shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.16),0_1px_2px_rgba(20,30,60,0.18)] transition-all hover:bg-[#4D5A82] active:bg-[#0F1D47] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-1 focus-visible:outline-[#1A2D63] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {copy.submit}
         </button>

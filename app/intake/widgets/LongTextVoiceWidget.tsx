@@ -154,8 +154,8 @@ export function LongTextVoiceWidget({ widget, language, token, onSubmit, disable
   };
 
   return (
-    <div className="w-full rounded-2xl border border-[#E8E6DC] bg-[#FFFEFA] p-5 shadow-[0_1px_2px_rgba(60,50,30,0.04),0_18px_40px_-16px_rgba(60,50,30,0.12)]">
-      <label htmlFor={`longtext-${widget.widget_id}`} className="mb-3 block text-[1rem] font-semibold text-[#322D26]">
+    <div className="w-full rounded-xl border border-[#E8E6DC] bg-[#FFFEFA] p-3 shadow-[0_1px_2px_rgba(60,50,30,0.03)]">
+      <label htmlFor={`longtext-${widget.widget_id}`} className="mb-2 block text-[0.8125rem] font-semibold text-[#322D26]">
         {widget.prompt}
       </label>
       <div className="relative">
@@ -165,9 +165,9 @@ export function LongTextVoiceWidget({ widget, language, token, onSubmit, disable
           onChange={(e) => setValue(e.target.value)}
           placeholder={widget.placeholder}
           disabled={disabled || recState === 'recording' || recState === 'transcribing'}
-          rows={5}
+          rows={3}
           autoFocus
-          className="w-full resize-y rounded-lg border border-[#E8E6DC] bg-white px-3.5 py-3 text-[0.9375rem] leading-relaxed text-[#2A2620] placeholder:text-[#94908A] transition-colors focus:border-[#1A2D63] focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/15 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full resize-y rounded-md border border-[#E8E6DC] bg-white px-2.5 py-1.5 text-[0.75rem] leading-[1.55] text-[#2A2620] placeholder:text-[#94908A] transition-colors focus:border-[#1A2D63] focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/15 disabled:cursor-not-allowed disabled:opacity-60"
         />
         {recState === 'recording' ? (
           <div className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-[#1A2D63] px-2.5 py-1 text-[0.6875rem] font-medium text-[#FDFBF7]">
@@ -187,22 +187,22 @@ export function LongTextVoiceWidget({ widget, language, token, onSubmit, disable
         <p className="mt-2 text-[0.8125rem] text-[#A04A2A]">{copy.micDenied}</p>
       ) : null}
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
+      <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5">
           {voiceEnabled ? (
             recState === 'recording' ? (
               <button
                 type="button"
                 onClick={stopRecording}
                 disabled={disabled}
-                className="inline-flex items-center gap-2 rounded-lg border border-[#0F1D47] bg-[#1A2D63] px-3.5 py-2 text-[0.875rem] font-medium text-[#FDFBF7] transition-all hover:bg-[#4D5A82] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-2 focus-visible:outline-[#1A2D63]"
+                className="inline-flex items-center gap-1.5 rounded-md border border-[#0F1D47] bg-[#1A2D63] px-2.5 py-1 text-[0.6875rem] font-medium text-[#FDFBF7] transition-all hover:bg-[#4D5A82] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-1 focus-visible:outline-[#1A2D63]"
               >
-                <MicOff className="h-4 w-4" />
+                <MicOff className="h-3 w-3" />
                 {copy.recordStop}
               </button>
             ) : recState === 'transcribing' ? (
-              <span className="inline-flex items-center gap-2 rounded-lg border border-[#C9D0E2] bg-[#F2F4FA] px-3.5 py-2 text-[0.875rem] font-medium text-[#1A2D63]">
-                <Loader2 className="h-4 w-4 animate-spin" />
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-[#C9D0E2] bg-[#F2F4FA] px-2.5 py-1 text-[0.6875rem] font-medium text-[#1A2D63]">
+                <Loader2 className="h-3 w-3 animate-spin" />
                 {copy.transcribing}
               </span>
             ) : (
@@ -210,22 +210,22 @@ export function LongTextVoiceWidget({ widget, language, token, onSubmit, disable
                 type="button"
                 onClick={startRecording}
                 disabled={disabled}
-                className="inline-flex items-center gap-2 rounded-lg border border-[#D8D5C7] bg-[#FDFBF7] px-3.5 py-2 text-[0.875rem] font-medium text-[#2A2620] transition-all hover:-translate-y-px hover:border-[#B8B5A6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7] disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-1.5 rounded-md border border-[#D8D5C7] bg-[#FDFBF7] px-2.5 py-1 text-[0.6875rem] font-medium text-[#2A2620] transition-all hover:border-[#B8B5A6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <Mic className="h-4 w-4" />
+                <Mic className="h-3 w-3" />
                 {copy.recordStart}
               </button>
             )
           ) : null}
           {!canSubmit ? (
-            <span className="text-[0.75rem] text-[#76706A]">{copy.minChars(minChars)}</span>
+            <span className="text-[0.6875rem] text-[#76706A]">{copy.minChars(minChars)}</span>
           ) : null}
         </div>
         <button
           type="button"
           onClick={() => canSubmit && onSubmit(value.trim())}
           disabled={disabled || !canSubmit || recState === 'recording' || recState === 'transcribing'}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#0F1D47] bg-[#1A2D63] px-5 py-2.5 text-[0.9375rem] font-medium text-[#FDFBF7] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.20),0_1px_2px_rgba(20,30,60,0.22),0_6px_14px_-2px_rgba(20,30,60,0.32)] transition-all hover:-translate-y-px hover:bg-[#4D5A82] active:translate-y-px active:bg-[#0F1D47] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-2 focus-visible:outline-[#1A2D63] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+          className="inline-flex items-center justify-center gap-1.5 rounded-md border border-[#0F1D47] bg-[#1A2D63] px-3 py-1.5 text-[0.75rem] font-medium text-[#FDFBF7] shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.16),0_1px_2px_rgba(20,30,60,0.18)] transition-all hover:bg-[#4D5A82] active:bg-[#0F1D47] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-1 focus-visible:outline-[#1A2D63] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {copy.submit}
         </button>

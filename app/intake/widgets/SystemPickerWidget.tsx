@@ -271,27 +271,27 @@ export function SystemPickerWidget({ widget, language, onSubmit, disabled }: Pro
   const canSubmit = none || unsure || totalSelected > 0;
 
   return (
-    <div className="w-full rounded-2xl border border-[#E8E6DC] bg-[#FFFEFA] p-6 shadow-[0_1px_2px_rgba(60,50,30,0.04),0_18px_40px_-16px_rgba(60,50,30,0.12)]">
+    <div className="w-full rounded-xl border border-[#E8E6DC] bg-[#FFFEFA] p-3 shadow-[0_1px_2px_rgba(60,50,30,0.03)]">
       {widget.category_label_nl && language === 'nl' ? (
-        <p className="mb-1 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[#697597]">
+        <p className="mb-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-[#697597]">
           {widget.category_label_nl}
         </p>
       ) : widget.category_label_fr && language === 'fr' ? (
-        <p className="mb-1 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[#697597]">
+        <p className="mb-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-[#697597]">
           {widget.category_label_fr}
         </p>
       ) : widget.category_label_en && language === 'en' ? (
-        <p className="mb-1 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[#697597]">
+        <p className="mb-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-[#697597]">
           {widget.category_label_en}
         </p>
       ) : null}
 
-      <h3 className="mb-5 text-[1.125rem] font-semibold leading-snug text-[#322D26]">
+      <h3 className="mb-2.5 text-[0.875rem] font-semibold leading-snug text-[#322D26]">
         {widget.prompt}
       </h3>
 
       {/* Logo grid: 3 cols on mobile, 6 across desktop per spec */}
-      <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
+      <div className="grid grid-cols-3 gap-2 md:grid-cols-6">
         {widget.options.map((option) => (
           <LogoTile
             key={option.name}
@@ -411,15 +411,15 @@ export function SystemPickerWidget({ widget, language, onSubmit, disabled }: Pro
       ) : null}
 
       {/* Submit row */}
-      <div className="mt-6 flex items-center justify-between gap-3">
-        <p className="text-[0.8125rem] text-[#76706A]" aria-live="polite">
+      <div className="mt-3 flex items-center justify-between gap-2">
+        <p className="text-[0.6875rem] text-[#76706A]" aria-live="polite">
           {none ? copy.noneHelper : unsure ? copy.unsureHelper : copy.selectedSummary(totalSelected)}
         </p>
         <button
           type="button"
           onClick={handleSubmit}
           disabled={disabled || !canSubmit}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#0F1D47] bg-[#1A2D63] px-5 py-2.5 text-[0.9375rem] font-medium text-[#FDFBF7] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.20),0_1px_2px_rgba(20,30,60,0.22),0_6px_14px_-2px_rgba(20,30,60,0.32)] transition-all hover:-translate-y-px hover:bg-[#4D5A82] hover:shadow-[inset_0_1.5px_0_rgba(255,255,255,0.28),inset_0_-1px_0_rgba(0,0,0,0.22),0_2px_4px_rgba(20,30,60,0.20),0_12px_24px_-4px_rgba(20,30,60,0.40)] active:translate-y-px active:bg-[#0F1D47] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-2 focus-visible:outline-[#1A2D63] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+          className="inline-flex items-center justify-center gap-1.5 rounded-md border border-[#0F1D47] bg-[#1A2D63] px-3 py-1.5 text-[0.75rem] font-medium text-[#FDFBF7] shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.16),0_1px_2px_rgba(20,30,60,0.18)] transition-all hover:bg-[#4D5A82] active:bg-[#0F1D47] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-1 focus-visible:outline-[#1A2D63] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {copy.submit}
         </button>

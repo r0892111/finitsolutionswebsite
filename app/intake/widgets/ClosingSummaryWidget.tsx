@@ -87,14 +87,14 @@ export function ClosingSummaryWidget({ widget, language, onSubmit, disabled }: P
   };
 
   return (
-    <div className="w-full rounded-2xl border border-[#E8E6DC] bg-[#FFFEFA] p-6 shadow-[0_1px_2px_rgba(60,50,30,0.04),0_18px_40px_-16px_rgba(60,50,30,0.12)]">
-      <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#C9D0E2] bg-[#F2F4FA] px-3 py-1 text-[0.75rem] font-medium text-[#1A2D63]">
-        <Sparkles className="h-3.5 w-3.5" />
+    <div className="w-full rounded-xl border border-[#E8E6DC] bg-[#FFFEFA] p-3 shadow-[0_1px_2px_rgba(60,50,30,0.03)]">
+      <div className="mb-2.5 inline-flex items-center gap-1.5 rounded-full border border-[#C9D0E2] bg-[#F2F4FA] px-2 py-0.5 text-[0.625rem] font-medium text-[#1A2D63]">
+        <Sparkles className="h-3 w-3" />
         {copy.intro}
       </div>
 
       {widget.prompt ? (
-        <p className="mb-4 text-[1rem] font-medium text-[#322D26]">{widget.prompt}</p>
+        <p className="mb-2.5 text-[0.8125rem] font-medium text-[#322D26]">{widget.prompt}</p>
       ) : null}
 
       <div className="mb-2 text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-[#697597]">
@@ -184,13 +184,13 @@ export function ClosingSummaryWidget({ widget, language, onSubmit, disabled }: P
         </>
       ) : null}
 
-      <div className="mt-6 flex flex-wrap items-center justify-end gap-2">
+      <div className="mt-3 flex flex-wrap items-center justify-end gap-1.5">
         {revisit.length > 0 ? (
           <button
             type="button"
             onClick={() => onSubmit({ proceed: false, revisit })}
             disabled={disabled}
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#D8D5C7] bg-[#FDFBF7] px-4 py-2.5 text-[0.875rem] font-medium text-[#2A2620] transition-all hover:border-[#B8B5A6] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7] disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center justify-center gap-1.5 rounded-md border border-[#D8D5C7] bg-[#FDFBF7] px-2.5 py-1.5 text-[0.75rem] font-medium text-[#2A2620] transition-all hover:border-[#B8B5A6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {copy.revisitOne} ({revisit.length})
           </button>
@@ -199,7 +199,7 @@ export function ClosingSummaryWidget({ widget, language, onSubmit, disabled }: P
           type="button"
           onClick={() => onSubmit({ proceed: true, revisit: revisit.length > 0 ? revisit : undefined })}
           disabled={disabled}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#0F1D47] bg-[#1A2D63] px-5 py-2.5 text-[0.9375rem] font-medium text-[#FDFBF7] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.20),0_1px_2px_rgba(20,30,60,0.22),0_6px_14px_-2px_rgba(20,30,60,0.32)] transition-all hover:-translate-y-px hover:bg-[#4D5A82] active:translate-y-px active:bg-[#0F1D47] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-2 focus-visible:outline-[#1A2D63] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+          className="inline-flex items-center justify-center gap-1.5 rounded-md border border-[#0F1D47] bg-[#1A2D63] px-3 py-1.5 text-[0.75rem] font-medium text-[#FDFBF7] shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.16),0_1px_2px_rgba(20,30,60,0.18)] transition-all hover:bg-[#4D5A82] active:bg-[#0F1D47] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-1 focus-visible:outline-[#1A2D63] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {copy.submit}
         </button>

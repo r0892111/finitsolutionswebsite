@@ -34,19 +34,19 @@ export function SliderWidget({ widget, language, onSubmit, disabled }: Props) {
   const pct = ((value - widget.min) / (widget.max - widget.min)) * 100;
 
   return (
-    <div className="w-full rounded-2xl border border-[#E8E6DC] bg-[#FFFEFA] p-5 shadow-[0_1px_2px_rgba(60,50,30,0.04),0_18px_40px_-16px_rgba(60,50,30,0.12)]">
-      <h3 className="mb-5 text-[1rem] font-semibold text-[#322D26]">{widget.prompt}</h3>
+    <div className="w-full rounded-xl border border-[#E8E6DC] bg-[#FFFEFA] p-3 shadow-[0_1px_2px_rgba(60,50,30,0.03)]">
+      <h3 className="mb-2.5 text-[0.8125rem] font-semibold text-[#322D26]">{widget.prompt}</h3>
 
-      <div className="flex items-baseline justify-center gap-2">
-        <span className="tabular-nums text-[2.5rem] font-bold leading-none text-[#1A2D63]">
+      <div className="flex items-baseline justify-center gap-1.5">
+        <span className="tabular-nums text-[1.5rem] font-bold leading-none text-[#1A2D63]">
           {value}
         </span>
         {widget.unit ? (
-          <span className="text-[1rem] font-medium text-[#697597]">{widget.unit}</span>
+          <span className="text-[0.75rem] font-medium text-[#697597]">{widget.unit}</span>
         ) : null}
       </div>
 
-      <div className="mt-6">
+      <div className="mt-3">
         <input
           type="range"
           min={widget.min}
@@ -63,7 +63,7 @@ export function SliderWidget({ widget, language, onSubmit, disabled }: Props) {
             } as React.CSSProperties
           }
         />
-        <div className="mt-2 flex justify-between text-[0.75rem] text-[#76706A]">
+        <div className="mt-1.5 flex justify-between text-[0.625rem] text-[#76706A]">
           <span>
             {widget.min}
             {widget.unit ? ` ${widget.unit}` : ''}
@@ -75,7 +75,7 @@ export function SliderWidget({ widget, language, onSubmit, disabled }: Props) {
         </div>
 
         {widget.anchor_labels && widget.anchor_labels.length > 0 ? (
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-2 flex flex-wrap gap-1.5">
             {widget.anchor_labels.map((a) => (
               <button
                 key={a.value}
@@ -83,8 +83,8 @@ export function SliderWidget({ widget, language, onSubmit, disabled }: Props) {
                 onClick={() => setValue(a.value)}
                 disabled={disabled}
                 className={[
-                  'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[0.75rem] font-medium transition-all',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]',
+                  'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[0.6875rem] font-medium transition-all',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A2D63] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]',
                   value === a.value
                     ? 'border-[#1A2D63] bg-[#E4E8F2] text-[#1A2D63]'
                     : 'border-[#E8E6DC] bg-[#FDFBF7] text-[#57514A] hover:border-[#D8D5C7]',
@@ -101,12 +101,12 @@ export function SliderWidget({ widget, language, onSubmit, disabled }: Props) {
         ) : null}
       </div>
 
-      <div className="mt-6 flex justify-end">
+      <div className="mt-3 flex justify-end">
         <button
           type="button"
           onClick={() => onSubmit(value)}
           disabled={disabled}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#0F1D47] bg-[#1A2D63] px-5 py-2.5 text-[0.9375rem] font-medium text-[#FDFBF7] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.20),0_1px_2px_rgba(20,30,60,0.22),0_6px_14px_-2px_rgba(20,30,60,0.32)] transition-all hover:-translate-y-px hover:bg-[#4D5A82] active:translate-y-px active:bg-[#0F1D47] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-2 focus-visible:outline-[#1A2D63] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+          className="inline-flex items-center justify-center gap-1.5 rounded-md border border-[#0F1D47] bg-[#1A2D63] px-3 py-1.5 text-[0.75rem] font-medium text-[#FDFBF7] shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.16),0_1px_2px_rgba(20,30,60,0.18)] transition-all hover:bg-[#4D5A82] active:bg-[#0F1D47] focus-visible:outline-none focus-visible:outline-[2px] focus-visible:outline-offset-1 focus-visible:outline-[#1A2D63] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {copy.submit}
         </button>
