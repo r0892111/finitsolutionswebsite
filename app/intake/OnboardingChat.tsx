@@ -198,10 +198,17 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
   const [done, setDone] = React.useState(false);
 
   const aborterRef = React.useRef<AbortController | null>(null);
-  // rAF batching for assistant_text_delta — one React update per frame.
-  const pendingDeltaRef = React.useRef('');
-  const rafScheduledRef = React.useRef(false);
-  // 350 ms grace before showing the thinking indicator (Claude's trick).
+  // Paced character-by-character text rendering — decouples the network's
+  // arrival cadence from the visual typewriter so it feels the same
+  // whether the SSE proxy buffers (local netlify dev) or streams cleanly
+  // (production edge function). incomingRef accumulates what the server
+  // has sent, renderedRef is what's currently visible; an rAF tick walks
+  // rendered toward incoming at ~3 chars/frame (~180 chars/s).
+  const incomingTextRef = React.useRef('');
+  const renderedTextRef = React.useRef('');
+  const renderAnimRef = React.useRef<number | null>(null);
+  const streamDoneRef = React.useRef(false);
+  // 150 ms grace before showing the thinking indicator.
   const thinkingTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Kick the conversation off on mount. On resume, the server's op:'start'
@@ -211,51 +218,90 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
     return () => {
       aborterRef.current?.abort();
       if (thinkingTimerRef.current) clearTimeout(thinkingTimerRef.current);
+      if (renderAnimRef.current !== null && typeof window !== 'undefined') {
+        window.cancelAnimationFrame(renderAnimRef.current);
+        renderAnimRef.current = null;
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /* ------------------------------------------------------------ *
-   * Streaming-delta batcher — buffers tokens between rAF ticks
-   * so React re-renders at most once per frame.
+   * Paced text renderer — walks `rendered` toward `incoming` one
+   * frame at a time, ~3 chars per frame. Produces smooth typewriter
+   * animation regardless of how fast/bursty the network delivers.
    * ------------------------------------------------------------ */
 
-  const flushDelta = React.useCallback(() => {
-    const delta = pendingDeltaRef.current;
-    pendingDeltaRef.current = '';
-    rafScheduledRef.current = false;
-    if (!delta) return;
+  const CHARS_PER_FRAME = 3;
+
+  const renderTick = React.useCallback(() => {
+    const incoming = incomingTextRef.current;
+    const rendered = renderedTextRef.current;
+
+    if (rendered.length >= incoming.length) {
+      // Caught up. If the server has signalled end-of-stream, finalize
+      // by marking the bubble non-streaming and resetting buffers.
+      if (streamDoneRef.current) {
+        streamDoneRef.current = false;
+        incomingTextRef.current = '';
+        renderedTextRef.current = '';
+        renderAnimRef.current = null;
+        setMessages((prev) => {
+          const last = prev[prev.length - 1];
+          if (last && last.role === 'assistant' && last.streaming) {
+            return [...prev.slice(0, -1), { ...last, streaming: false }];
+          }
+          return prev;
+        });
+        return;
+      }
+      // Otherwise pause; queueDelta will restart us when new text arrives.
+      renderAnimRef.current = null;
+      return;
+    }
+
+    const nextLen = Math.min(incoming.length, rendered.length + CHARS_PER_FRAME);
+    const next = incoming.slice(0, nextLen);
+    renderedTextRef.current = next;
+
     setMessages((prev) => {
       const last = prev[prev.length - 1];
       if (last && last.role === 'assistant' && last.streaming) {
-        const updated: ChatMessage = { ...last, text: (last.text ?? '') + delta };
-        return [...prev.slice(0, -1), updated];
+        return [...prev.slice(0, -1), { ...last, text: next }];
       }
       return [
         ...prev,
         {
           id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
           role: 'assistant',
-          text: delta,
+          text: next,
           streaming: true,
         },
       ];
     });
+
+    renderAnimRef.current =
+      typeof window === 'undefined' ? null : window.requestAnimationFrame(renderTick);
   }, []);
 
   const queueDelta = React.useCallback(
     (text: string) => {
-      pendingDeltaRef.current += text;
-      if (rafScheduledRef.current) return;
-      rafScheduledRef.current = true;
-      if (typeof window === 'undefined') {
-        flushDelta();
-        return;
-      }
-      window.requestAnimationFrame(flushDelta);
+      incomingTextRef.current += text;
+      if (renderAnimRef.current !== null || typeof window === 'undefined') return;
+      renderAnimRef.current = window.requestAnimationFrame(renderTick);
     },
-    [flushDelta],
+    [renderTick],
   );
+
+  const finalizeStream = React.useCallback(() => {
+    // Mark end-of-stream; the tick loop will finalize once rendered
+    // catches up to incoming. If the loop is paused (caught up already),
+    // kick it once to flip streaming=false.
+    streamDoneRef.current = true;
+    if (renderAnimRef.current === null && typeof window !== 'undefined') {
+      renderAnimRef.current = window.requestAnimationFrame(renderTick);
+    }
+  }, [renderTick]);
 
   /* ------------------------------------------------------------ *
    * Thinking-indicator gating (350 ms grace).
@@ -306,15 +352,7 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
     if (event.type === 'assistant_text_delta') {
       queueDelta(event.text);
     } else if (event.type === 'assistant_text_done') {
-      // Flush any in-flight delta synchronously before marking done.
-      flushDelta();
-      setMessages((prev) => {
-        const last = prev[prev.length - 1];
-        if (last && last.role === 'assistant' && last.streaming) {
-          return [...prev.slice(0, -1), { ...last, streaming: false }];
-        }
-        return prev;
-      });
+      finalizeStream();
     } else if (event.type === 'chain_step') {
       // Intentionally ignored on the client — the server still emits
       // these for telemetry, but the "Wat ik intern deed" panel cluttered
@@ -417,8 +455,11 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         handleStreamEvent({ type: 'error', message: 'Verbinding viel weg. Herlaad alstublieft.' });
       }
     } finally {
-      flushDelta();
       cancelThinking();
+      // If the connection dropped mid-stream, make sure the paced
+      // renderer finalizes whatever text it has rather than leaving
+      // the bubble in a streaming state forever.
+      if (incomingTextRef.current.length > 0) finalizeStream();
     }
   };
 
@@ -641,8 +682,6 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
       await new Promise((r) => setTimeout(r, evt.type === 'assistant_text_delta' ? 12 : 60));
       handleStreamEvent(evt);
     }
-    // Make sure last delta gets flushed and indicator is off.
-    flushDelta();
     cancelThinking();
   };
 
