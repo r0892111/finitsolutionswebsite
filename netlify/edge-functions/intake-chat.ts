@@ -423,6 +423,7 @@ export default async (req: Request): Promise<Response> => {
       const turnMessages: Anthropic.MessageParam[] = [];
       let chainStep = 0;
       let stopperCalled = false;
+      let textOnlyRecoveryUsed = false;
 
       chainLoop: while (chainStep < MAX_CHAIN_STEPS) {
         chainStep++;
@@ -599,18 +600,43 @@ export default async (req: Request): Promise<Response> => {
         messagesForApi.push(stepAssistantMsg);
 
         // Decide whether to stop or chain. Stop when:
-        //   - the step had no tool calls (pure text response) OR
         //   - the step called a widget tool (waiting for user) OR
-        //   - the step called submit_intake (intake done).
+        //   - the step called submit_intake (intake done) OR
+        //   - we already used the text-only nudge and the model still
+        //     refused to render a widget (give up to avoid loops).
         const toolUses = filteredStep.filter(
           (b): b is Anthropic.ToolUseBlockParam => b.type === "tool_use",
         );
         const calledStopper = toolUses.some(
           (t) => isWidgetTool(t.name) || t.name === "submit_intake",
         );
-        if (toolUses.length === 0 || calledStopper) {
-          stopperCalled = calledStopper;
+        if (calledStopper) {
+          stopperCalled = true;
           break chainLoop;
+        }
+
+        if (toolUses.length === 0) {
+          // Model text-replied without calling any tool. Without a widget
+          // the user is stuck on a blank screen — nudge once, then break
+          // out if it still doesn't comply.
+          if (textOnlyRecoveryUsed) {
+            console.warn(
+              `[intake/chat] chain ${chainStep} → text-only response again after nudge; giving up (user may be stuck)`,
+            );
+            break chainLoop;
+          }
+          textOnlyRecoveryUsed = true;
+          console.warn(
+            `[intake/chat] chain ${chainStep} → text-only response; injecting widget-mandatory reminder and retrying`,
+          );
+          const reminderMsg: Anthropic.MessageParam = {
+            role: "user",
+            content:
+              "<system-reminder>You ended your turn without calling a widget tool. Render exactly one widget now (ask_text / ask_long_text_voice / ask_single_select / ask_multi_select / ask_slider / ask_confirm / system_picker / closing_summary) — or submit_intake if all goals are satisfied — so the user can respond. Without a widget the user is stuck on a blank screen.</system-reminder>",
+          };
+          turnMessages.push(reminderMsg);
+          messagesForApi.push(reminderMsg);
+          continue chainLoop;
         }
 
         // Only state tools were called (save_answer / update_goal_status /

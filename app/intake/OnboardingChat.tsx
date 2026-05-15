@@ -788,11 +788,11 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
     const hasSteps = !!message.chain_steps && message.chain_steps.length > 0;
     if (!hasText && !hasSteps) return null;
     return (
-      <motion.div className="flex items-start gap-2.5" {...anim}>
-        <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
-          <Sparkles className="h-3 w-3" />
+      <motion.div className="flex items-start gap-2" {...anim}>
+        <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
+          <Sparkles className="h-2.5 w-2.5" />
         </div>
-        <div className="flex min-w-0 max-w-[88%] flex-1 flex-col gap-1.5">
+        <div className="flex min-w-0 max-w-[90%] flex-1 flex-col gap-1">
           {hasSteps ? <ChainOfThoughtBlock steps={message.chain_steps!} /> : null}
           {hasText ? <AssistantBubble text={message.text!} streaming={!!message.streaming} /> : null}
         </div>
@@ -802,7 +802,7 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
   if (message.role === 'system') {
     return (
       <motion.div
-        className="rounded-lg border border-[#E8DCC9] bg-[#FAF5EC] px-3 py-1.5 text-center text-[0.75rem] text-[#74532A]"
+        className="rounded-md border border-[#E8DCC9] bg-[#FAF5EC] px-2.5 py-1 text-center text-[0.6875rem] text-[#74532A]"
         {...anim}
       >
         {message.text}
@@ -811,9 +811,9 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
   }
   // user
   return (
-    <motion.div className="flex items-start justify-end gap-2.5" {...anim}>
-      <div className="max-w-[78%] rounded-2xl rounded-tr-sm bg-[#1A2D63] px-3.5 py-2 text-[#FDFBF7] shadow-[0_2px_6px_-2px_rgba(20,30,60,0.22)]">
-        <p className="whitespace-pre-wrap text-[0.8125rem] leading-[1.55]">{message.text}</p>
+    <motion.div className="flex items-start justify-end gap-2" {...anim}>
+      <div className="max-w-[78%] rounded-xl rounded-tr-sm bg-[#1A2D63] px-3 py-1.5 text-[#FDFBF7] shadow-[0_2px_6px_-2px_rgba(20,30,60,0.22)]">
+        <p className="whitespace-pre-wrap text-[0.75rem] leading-[1.5]">{message.text}</p>
       </div>
     </motion.div>
   );
@@ -822,15 +822,15 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
 function AssistantBubble({ text, streaming }: { text: string; streaming: boolean }) {
   return (
     <div
-      className="min-w-0 max-w-full rounded-2xl rounded-tl-sm border border-[#E8E6DC] bg-[#FFFEFA] px-3.5 py-2 shadow-[0_1px_2px_rgba(60,50,30,0.03),0_6px_14px_-10px_rgba(60,50,30,0.08)]"
+      className="min-w-0 max-w-full rounded-xl rounded-tl-sm border border-[#E8E6DC] bg-[#FFFEFA] px-3 py-1.5 shadow-[0_1px_2px_rgba(60,50,30,0.03)]"
       style={{ overflowAnchor: 'none' }}
     >
-      <p className="whitespace-pre-wrap text-[0.8125rem] leading-[1.55] text-[#2A2620]">
+      <p className="whitespace-pre-wrap text-[0.75rem] leading-[1.5] text-[#2A2620]">
         {text}
         {streaming ? (
           <span
             aria-hidden="true"
-            className="ml-0.5 inline-block h-[0.9em] w-[2px] translate-y-[2px] animate-pulse rounded-sm bg-[#1A2D63] align-middle"
+            className="ml-0.5 inline-block h-[0.85em] w-[2px] translate-y-[2px] animate-pulse rounded-sm bg-[#1A2D63] align-middle"
           />
         ) : null}
       </p>
@@ -868,11 +868,11 @@ function ThinkingShimmer({ language }: { language: Language }) {
     return () => clearInterval(t);
   }, [verbs.length, reduced]);
   return (
-    <div className="flex items-start gap-2.5">
-      <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
-        <Sparkles className="h-3 w-3" />
+    <div className="flex items-start gap-2">
+      <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
+        <Sparkles className="h-2.5 w-2.5" />
       </div>
-      <div className="pt-1 text-[0.8125rem] leading-[1.55]">
+      <div className="pt-0.5 text-[0.75rem] leading-[1.5]">
         <Shimmer duration={1.6} spread={2}>
           {`${verbs[i]}…`}
         </Shimmer>
@@ -883,8 +883,8 @@ function ThinkingShimmer({ language }: { language: Language }) {
 
 function DoneCallout({ language }: { language: Language }) {
   return (
-    <div className="rounded-2xl border border-[#C9D0E2] bg-[#F2F4FA] p-5 text-center">
-      <p className="text-[0.875rem] font-medium text-[#1A2D63]">
+    <div className="rounded-xl border border-[#C9D0E2] bg-[#F2F4FA] p-3.5 text-center">
+      <p className="text-[0.75rem] font-medium text-[#1A2D63]">
         {language === 'nl'
           ? 'Bedankt, je antwoorden zijn veilig opgeslagen.'
           : language === 'fr'

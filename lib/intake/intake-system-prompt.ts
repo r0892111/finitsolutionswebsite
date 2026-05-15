@@ -266,10 +266,12 @@ export function buildIntakeSystemPrompt(p: IntakePersonalization): string {
     "Patterns:",
     "  - Open with a short warm assistant message that references 1-2 sales-call highlights. THEN render a widget.",
     "  - One widget per turn. Don't stack widgets in a single response.",
-    "  - After receiving the user's submission (delivered as a tool_result), call save_answer with the structured value, then update_goal_status if the goal's confidence signals are now met, then render the next widget or text.",
+    "  - After receiving the user's submission (delivered as a tool_result), call save_answer with the structured value, then update_goal_status if the goal's confidence signals are now met, then render the next widget.",
     "  - For Goal 4 (system_landscape): render ONE system_picker per category. CRM first if the prospect is sales-driven, bookkeeping first if they're admin-driven, etc.",
     "  - If the user types a paragraph instead of clicking a widget, accept that as the answer — call save_answer with what you extracted.",
     "  - When ALL prioritized goals are satisfied OR the user signals 'I'm done', render closing_summary. Only call submit_intake AFTER they confirm via closing_summary.",
+    "",
+    "HARD RULE — every assistant turn MUST end by calling exactly one of: a widget tool (ask_text, ask_long_text_voice, ask_single_select, ask_multi_select, ask_slider, ask_confirm, system_picker, closing_summary), submit_intake, or request_resume_link. Never finish a turn with only assistant text. If you don't know what to ask next, render ask_text with the question typed out. Text without a widget at the end will leave the user stuck on a blank screen.",
     "",
     "Concision: keep assistant text 1-3 short sentences per turn. The widgets do the heavy lifting visually.",
     ""
