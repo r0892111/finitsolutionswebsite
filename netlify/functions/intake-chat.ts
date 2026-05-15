@@ -500,10 +500,36 @@ export const handler = stream(async (event) => {
       // what tells the client this turn is over.
     } catch (err) {
       console.error("[intake/chat] stream error:", err);
-      send({
-        type: "error",
-        message: err instanceof Error ? err.message : "unknown",
-      });
+      // Friendly error mapping per language. Raw err.message is rarely
+      // useful to the prospect (e.g. JSON-stringified Anthropic error
+      // payloads); map common cases to plain-language Dutch/FR/EN.
+      const raw = err instanceof Error ? err.message : String(err);
+      const isOverloaded = /overloaded|529/i.test(raw);
+      const isRateLimited = /rate.?limit|429/i.test(raw);
+      let friendly: string;
+      if (isOverloaded) {
+        friendly =
+          language === "fr"
+            ? "Le service est temporairement saturé. Réessaie dans une minute."
+            : language === "en"
+              ? "The service is temporarily overloaded. Try again in a minute."
+              : "Het systeem is even overbelast. Probeer over een minuut opnieuw.";
+      } else if (isRateLimited) {
+        friendly =
+          language === "fr"
+            ? "Trop de requêtes en peu de temps. Une petite pause et on reprend."
+            : language === "en"
+              ? "Too many requests in a short time. Brief pause and we'll continue."
+              : "Even teveel verkeer. Kleine pauze en we gaan verder.";
+      } else {
+        friendly =
+          language === "fr"
+            ? "Une erreur s'est produite. Réessaie en envoyant ta réponse à nouveau."
+            : language === "en"
+              ? "Something went wrong. Try submitting your answer again."
+              : "Er ging iets mis. Probeer je antwoord opnieuw te versturen.";
+      }
+      send({ type: "error", message: friendly });
     } finally {
       // PassThrough end() = clean EOF, signals AWS Lambda Streaming to
       // write its trailer metadata so the response decodes properly.
