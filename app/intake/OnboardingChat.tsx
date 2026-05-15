@@ -717,7 +717,7 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
         <div className="mx-auto grid h-full w-full max-w-6xl grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-6 lg:px-6">
           <div className="relative flex min-h-0 flex-col">
             <Conversation aria-live="polite">
-              <ConversationContent className="mx-auto w-full max-w-3xl px-4 md:px-0">
+              <ConversationContent className="mx-auto w-full max-w-2xl px-4 md:px-0">
                 <AnimatePresence initial={false}>
                   {messages.map((m) => (
                     <MessageRow key={m.id} message={m} reduced={!!reduced} />
@@ -737,7 +737,7 @@ export function OnboardingChat({ token, initial, useMock = true }: Props) {
       <footer className="border-t border-[#E8E6DC] bg-[#FDFBF7]/95 backdrop-blur shadow-[0_-8px_24px_-12px_rgba(20,30,60,0.08)]">
         {activeWidget ? (
           <div className="max-h-[55vh] overflow-y-auto">
-            <div className="mx-auto w-full max-w-3xl px-4 py-4 md:px-6 md:py-5">
+            <div className="mx-auto w-full max-w-2xl px-4 py-3 md:px-6 md:py-4">
               <WidgetSlot
                 widget={activeWidget}
                 language={language}
@@ -788,11 +788,11 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
     const hasSteps = !!message.chain_steps && message.chain_steps.length > 0;
     if (!hasText && !hasSteps) return null;
     return (
-      <motion.div className="flex items-start gap-3" {...anim}>
-        <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
-          <Sparkles className="h-3.5 w-3.5" />
+      <motion.div className="flex items-start gap-2.5" {...anim}>
+        <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
+          <Sparkles className="h-3 w-3" />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
+        <div className="flex min-w-0 max-w-[88%] flex-1 flex-col gap-1.5">
           {hasSteps ? <ChainOfThoughtBlock steps={message.chain_steps!} /> : null}
           {hasText ? <AssistantBubble text={message.text!} streaming={!!message.streaming} /> : null}
         </div>
@@ -802,7 +802,7 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
   if (message.role === 'system') {
     return (
       <motion.div
-        className="rounded-lg border border-[#E8DCC9] bg-[#FAF5EC] px-4 py-2 text-center text-[0.8125rem] text-[#74532A]"
+        className="rounded-lg border border-[#E8DCC9] bg-[#FAF5EC] px-3 py-1.5 text-center text-[0.75rem] text-[#74532A]"
         {...anim}
       >
         {message.text}
@@ -811,9 +811,9 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
   }
   // user
   return (
-    <motion.div className="flex items-start justify-end gap-3" layout="position" {...anim}>
-      <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-[#1A2D63] px-4 py-3 text-[#FDFBF7] shadow-[0_2px_8px_-2px_rgba(20,30,60,0.25)]">
-        <p className="whitespace-pre-wrap text-[0.9375rem] leading-relaxed">{message.text}</p>
+    <motion.div className="flex items-start justify-end gap-2.5" {...anim}>
+      <div className="max-w-[78%] rounded-2xl rounded-tr-sm bg-[#1A2D63] px-3.5 py-2 text-[#FDFBF7] shadow-[0_2px_6px_-2px_rgba(20,30,60,0.22)]">
+        <p className="whitespace-pre-wrap text-[0.8125rem] leading-[1.55]">{message.text}</p>
       </div>
     </motion.div>
   );
@@ -822,15 +822,15 @@ function MessageRow({ message, reduced }: { message: ChatMessage; reduced: boole
 function AssistantBubble({ text, streaming }: { text: string; streaming: boolean }) {
   return (
     <div
-      className="min-w-0 max-w-full rounded-2xl rounded-tl-sm border border-[#E8E6DC] bg-[#FFFEFA] px-4 py-3 shadow-[0_1px_2px_rgba(60,50,30,0.04),0_8px_18px_-10px_rgba(60,50,30,0.08)]"
+      className="min-w-0 max-w-full rounded-2xl rounded-tl-sm border border-[#E8E6DC] bg-[#FFFEFA] px-3.5 py-2 shadow-[0_1px_2px_rgba(60,50,30,0.03),0_6px_14px_-10px_rgba(60,50,30,0.08)]"
       style={{ overflowAnchor: 'none' }}
     >
-      <p className="whitespace-pre-wrap text-[0.9375rem] leading-relaxed text-[#2A2620]">
+      <p className="whitespace-pre-wrap text-[0.8125rem] leading-[1.55] text-[#2A2620]">
         {text}
         {streaming ? (
           <span
             aria-hidden="true"
-            className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] animate-pulse rounded-sm bg-[#1A2D63] align-middle"
+            className="ml-0.5 inline-block h-[0.9em] w-[2px] translate-y-[2px] animate-pulse rounded-sm bg-[#1A2D63] align-middle"
           />
         ) : null}
       </p>
@@ -868,11 +868,11 @@ function ThinkingShimmer({ language }: { language: Language }) {
     return () => clearInterval(t);
   }, [verbs.length, reduced]);
   return (
-    <div className="flex items-start gap-3">
-      <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
-        <Sparkles className="h-3.5 w-3.5" />
+    <div className="flex items-start gap-2.5">
+      <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#FDFBF7]">
+        <Sparkles className="h-3 w-3" />
       </div>
-      <div className="pt-2 text-[0.9375rem] leading-relaxed">
+      <div className="pt-1 text-[0.8125rem] leading-[1.55]">
         <Shimmer duration={1.6} spread={2}>
           {`${verbs[i]}…`}
         </Shimmer>
@@ -973,15 +973,17 @@ function rebuildChatHistory(
         });
         continue;
       }
-      // Array content — find tool_result blocks; each is a widget answer.
+      // Array content — find tool_result blocks; each is either a widget
+      // answer (real user input) or a synthetic protocol nudge from the
+      // edge function (e.g. "User did not respond yet…" auto-resolves
+      // when the page is reloaded with a pending tool_use). Only the
+      // former is real user content — render only those.
       const blocks = Array.isArray(msg.content) ? msg.content : [];
       for (const block of blocks) {
         if (!block || (block as AnthropicContentBlock).type !== 'tool_result') continue;
         const tr = block as AnthropicToolResultBlock;
         const contentStr = typeof tr.content === 'string' ? tr.content : '';
-        if (contentStr === '{"ok":true}' || !contentStr) continue;
-        // Try to parse as a serialized WidgetSubmission (server side
-        // writes these as renderSubmissionForAgent JSON).
+        if (!contentStr || contentStr === '{"ok":true}') continue;
         try {
           const parsed = JSON.parse(contentStr) as WidgetSubmission;
           if (parsed && typeof parsed === 'object' && 'value' in parsed) {
@@ -991,17 +993,10 @@ function rebuildChatHistory(
               submission: parsed,
               text: renderSubmissionPreview(parsed, language),
             });
-            continue;
           }
         } catch {
-          /* not a JSON submission */
+          /* synthetic protocol nudge — skip; not real user content */
         }
-        // Fallback — render raw text
-        out.push({
-          id: `restored-u-${counter++}`,
-          role: 'user',
-          text: contentStr,
-        });
       }
     }
   }
