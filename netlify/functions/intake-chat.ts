@@ -332,6 +332,16 @@ export const handler = stream(async (event) => {
         }
       }
 
+      // Retry-on-overload loop. Anthropic's overloaded_error / 529 only
+      // surfaces during async iteration of messages.stream(), so wrap the
+      // whole streaming block. Retry is GUARDED — only fires while nothing
+      // has been sent to the client yet, so we never produce duplicate
+      // text or widgets if the first attempt partially streamed.
+      const MAX_ATTEMPTS = 3;
+      let currentBlock: CurrentBlock | null = null;
+      let attempt = 0;
+
+      while (true) {
       const sdkStream = client.messages.stream({
         model: MODEL,
         max_tokens: MAX_TOKENS,
@@ -340,8 +350,7 @@ export const handler = stream(async (event) => {
         messages: messagesForApi,
       });
 
-      let currentBlock: CurrentBlock | null = null;
-
+      try {
       for await (const evt of sdkStream) {
         if (evt.type === "content_block_start") {
           const cb = evt.content_block;
@@ -445,6 +454,28 @@ export const handler = stream(async (event) => {
         // message_start / message_delta / message_stop are ignored —
         // we surface our own `done` event after persistence.
       }
+      break; // streaming completed cleanly — exit retry loop
+      } catch (streamErr) {
+        const msg = streamErr instanceof Error ? streamErr.message : String(streamErr);
+        const isOverloaded = /overloaded|529/i.test(msg);
+        const safeToRetry =
+          isOverloaded &&
+          !textEmitted &&
+          assistantBlocks.length === 0 &&
+          attempt < MAX_ATTEMPTS - 1;
+        if (!safeToRetry) throw streamErr;
+        attempt++;
+        const backoff = attempt * 2000; // 2s, 4s
+        console.warn(
+          `[intake/chat] anthropic overloaded — retry ${attempt}/${MAX_ATTEMPTS - 1} in ${backoff}ms`,
+        );
+        await new Promise((r) => setTimeout(r, backoff));
+        // Reset transient per-attempt state. newGoalStatus/updatedAnswers
+        // are unchanged because we never reached the tool_use processing.
+        currentBlock = null;
+        continue;
+      }
+      } // end retry loop
 
       if (textEmitted) {
         send({ type: "assistant_text_done" });
