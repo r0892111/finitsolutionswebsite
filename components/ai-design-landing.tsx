@@ -1635,10 +1635,10 @@ const UseCasesSection = () => {
     <section ref={sectionRef} id="use-cases" className="pt-8 md:pt-12 pb-4 md:pb-6 bg-[#FDFBF7]">
       <div className="text-center mb-8 md:mb-10 px-6 md:px-12">
         <h2 className="text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
-          Hoe wij AI inzetten voor klanten
+          Dit kan AI vandaag al voor je bedrijf doen
         </h2>
         <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-2xl mx-auto">
-          Dit doen AI-systemen vandaag al voor bedrijven zoals die van jou.
+          Niet zomaar ChatGPT. De grootste winst zit in processen die elke week opnieuw tijd kosten.
         </p>
       </div>
 
@@ -1716,339 +1716,250 @@ const UseCasesSection = () => {
   );
 };
 
-// --- How It Works Card Expansion Data ---
-const howItWorksDetails = {
-  gesprek: [
-    "We tonen exact waar je vandaag tijd verliest",
-    "We identificeren wat meteen automatiseerbaar is",
-    "Je krijgt een inschatting van tijd- en omzetwinst",
-  ],
-  bouw: [
-    "We automatiseren offertes, opvolging, administratie en meer",
-    "We koppelen je tools zodat alles samenwerkt",
-    "Alles op maat van jouw manier van werken",
-  ],
-  resultaat: [
-    "Je systeem werkt dag én nacht, zonder fouten",
-    "Minder manueel werk voor jou en je team",
-    "Meer omzet zonder extra personeel",
-  ],
-};
+// --- Aanpak Section ("Hoe pakken we dit aan?") — AI Audit + AI-Brein ---
+const auditPoints = [
+  "Hoe jullie processen vandaag lopen",
+  "Welke systemen gebruikt worden",
+  "Waar tijd verloren gaat",
+  "Waar automatisering het meeste impact heeft",
+];
 
-// --- How It Works Section Component ---
-const HowItWorksSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const pinContainerRef = useRef<HTMLDivElement>(null);
-  const headerWrapperRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const underlinePathRef = useRef<SVGPathElement>(null);
-  const cardsWrapperRef = useRef<HTMLDivElement>(null);
-  const cardsContainerRef = useRef<HTMLDivElement>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const line1Ref = useRef<SVGPathElement>(null);
-  const line2Ref = useRef<SVGPathElement>(null);
-  const mobileLineRef = useRef<SVGPathElement>(null);
-  const card1Ref = useRef<HTMLDivElement>(null);
-  const card2Ref = useRef<HTMLDivElement>(null);
-  const card3Ref = useRef<HTMLDivElement>(null);
-  const ctaDesktopRef = useRef<HTMLDivElement>(null);
-  const ctaMobileRef = useRef<HTMLDivElement>(null);
-
-  // Calculate and update SVG line paths based on card positions
-  const updateLinePaths = useCallback(() => {
-    if (!cardsContainerRef.current || !card1Ref.current || !card2Ref.current || !card3Ref.current) return;
-    if (!line1Ref.current || !line2Ref.current || !svgRef.current) return;
-
-    const card1Width = card1Ref.current.offsetWidth;
-    const card2Width = card2Ref.current.offsetWidth;
-
-    const card1Left = card1Ref.current.offsetLeft;
-    const card2Left = card2Ref.current.offsetLeft;
-    const card3Left = card3Ref.current.offsetLeft;
-
-    const containerWidth = cardsContainerRef.current.offsetWidth;
-    const containerHeight = cardsContainerRef.current.offsetHeight;
-    svgRef.current.setAttribute('viewBox', `0 0 ${containerWidth} ${containerHeight}`);
-
-    // Y position: vertically centered on the cards
-    const connectionY = card1Ref.current.offsetTop + card1Ref.current.offsetHeight / 2;
-
-    // Line 1: Card 1 right edge -> Card 2 left edge
-    const line1StartX = card1Left + card1Width;
-    const line1EndX = card2Left;
-
-    // Line 2: Card 2 right edge -> Card 3 left edge
-    const line2StartX = card2Left + card2Width;
-    const line2EndX = card3Left;
-
-    const midX1 = (line1StartX + line1EndX) / 2;
-    const path1 = `M ${line1StartX},${connectionY} C ${midX1},${connectionY} ${midX1},${connectionY} ${line1EndX},${connectionY}`;
-
-    const midX2 = (line2StartX + line2EndX) / 2;
-    const path2 = `M ${line2StartX},${connectionY} C ${midX2},${connectionY} ${midX2},${connectionY} ${line2EndX},${connectionY}`;
-
-    line1Ref.current.setAttribute('d', path1);
-    line2Ref.current.setAttribute('d', path2);
-  }, []);
-
-  // Calculate line paths on mount and resize (only for mobile; desktop handled in GSAP setup)
-  useEffect(() => {
-    updateLinePaths();
-  }, [updateLinePaths]);
+const AanpakSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
+  const cardShadow =
+    "shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]";
 
   return (
-    <section ref={sectionRef} id="process" className="bg-[#FDFBF7] relative pt-8 md:pt-12 pb-0 md:pb-0">
-      <div ref={pinContainerRef} className="relative">
+    <section id="aanpak" className="pt-8 md:pt-12 pb-8 md:pb-12 px-6 md:px-12 bg-[#FDFBF7]">
+      <div className="max-w-[73.33rem] mx-auto">
         {/* Header */}
-        <div ref={headerWrapperRef} className="pb-6 md:pb-10">
-          <div className="max-w-[73.33rem] mx-auto px-6 md:px-12 text-center">
-            <h2 ref={headingRef} className="text-4xl md:text-5xl font-newsreader text-[#1A2D63] leading-[1.15] mb-4">
-              Hoe wij AI{" "}
-              <span className="relative inline-block">
-                <span className="relative z-10">voor jou laten werken</span>
-                <svg
-                  className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
-                  viewBox="0 0 200 20"
-                  preserveAspectRatio="none"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    ref={underlinePathRef}
-                    d="M3 14 Q40 4 100 12 Q160 18 197 8"
-                    stroke="#1A2D63"
-                    strokeOpacity="0.15"
-                    strokeWidth="10"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
-                </svg>
-              </span>
-            </h2>
-            <p ref={subtitleRef} className="text-[#1A2D63]/60 text-lg md:text-xl max-w-xl mx-auto">
-              Simpel, snel, en zonder dat jij iets hoeft te leren.
+        <div className="text-center mb-8 md:mb-10 max-w-2xl mx-auto">
+          <h2 className="font-newsreader text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
+            Hoe pakken we dit aan?
+          </h2>
+          <p className="text-[#1A2D63]/60 text-lg md:text-xl">
+            Eerst willen we begrijpen hoe jullie bedrijf vandaag werkt en waar automatisering &eacute;cht
+            verschil maakt. Dat begint altijd met een AI Audit.
+          </p>
+        </div>
+
+        {/* Two blocks: AI Audit + AI-Brein */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
+
+          {/* Block 1 — De AI Audit */}
+          <div className={`relative rounded-3xl bg-white p-8 md:p-10 flex flex-col ${cardShadow}`}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-11 h-11 rounded-2xl bg-[#1A2D63]/[0.08] border border-[#1A2D63]/10 flex items-center justify-center flex-shrink-0">
+                <FileText className="w-5 h-5 text-[#1A2D63]" />
+              </div>
+              <h3 className="font-newsreader text-2xl md:text-3xl text-[#1A2D63]">De AI Audit</h3>
+            </div>
+
+            <p className="text-[#1A2D63]/65 text-base md:text-lg leading-relaxed mb-5">
+              Veel bedrijven starten met losse AI-tools zonder eerst te kijken hoe hun processen &eacute;cht
+              werken. Daardoor ontstaan systemen die niet samenwerken en automatiseringen die weinig gebruikt
+              worden. Daarom starten wij altijd met een audit. We brengen in kaart:
             </p>
+
+            <ul className="space-y-3 mb-6">
+              {auditPoints.map((point, i) => (
+                <li key={i} className="flex items-start gap-2.5 text-base md:text-lg text-[#1A2D63]/75">
+                  <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Price callout */}
+            <div className="mt-auto rounded-2xl bg-[#1A2D63]/[0.05] border border-[#1A2D63]/10 p-5">
+              <p className="font-newsreader text-2xl md:text-[1.75rem] text-[#1A2D63] leading-tight mb-1">
+                Vaste prijs: &euro;3.500 <span className="text-[#1A2D63]/50 text-lg">excl. btw</span>
+              </p>
+              <p className="text-[#1A2D63]/65 text-[15px] leading-snug">
+                Volledig verrekenbaar bij verdere ontwikkeling. Inclusief analyse, &lsquo;AI-Brein&rsquo; en een
+                volledig rapport op maat.
+              </p>
+            </div>
+          </div>
+
+          {/* Block 2 — Het AI-Brein */}
+          <div className={`relative rounded-3xl bg-white p-8 md:p-10 flex flex-col ${cardShadow}`}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-11 h-11 rounded-2xl bg-[#1A2D63]/[0.08] border border-[#1A2D63]/10 flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-5 h-5 text-[#1A2D63]" />
+              </div>
+              <h3 className="font-newsreader text-2xl md:text-3xl text-[#1A2D63]">Het AI-Brein</h3>
+            </div>
+
+            <p className="text-[#1A2D63]/65 text-base md:text-lg leading-relaxed mb-5">
+              AI werkt pas &eacute;cht goed wanneer het je bedrijf begrijpt. Tijdens elke audit bouwen we een
+              centrale kennisstructuur van je processen, systemen en workflows &mdash; op &eacute;&eacute;n plek,
+              in een structuur die AI kan gebruiken om sneller en slimmer te werken.
+            </p>
+            <p className="text-[#1A2D63]/65 text-base md:text-lg leading-relaxed mb-5">
+              Het Brein vormt de fundering van elk AI-traject. Nieuwe oplossingen bouwen verder op kennis die al
+              aanwezig is, waardoor automatiseringen sneller en consistenter werken &mdash; met veel minder
+              manuele opvolging.
+            </p>
+
+            <div className="mt-auto">
+              <img
+                src="/AIbreinvisual.png"
+                alt="Het AI-Brein: een kennisstructuur van processen, systemen en documenten waarop AI verderbouwt."
+                className="w-full h-52 md:h-60 object-cover"
+                style={{
+                  maskImage:
+                    "linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%)",
+                  WebkitMaskImage:
+                    "linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%)",
+                  maskComposite: "intersect",
+                  WebkitMaskComposite: "source-in",
+                }}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Cards Container - rises from below during Phase 3 */}
-        <div ref={cardsWrapperRef} className="w-full px-6 md:px-12 pb-16 md:pb-20">
-          <div className="max-w-[73.33rem] mx-auto w-full">
-            {/* Cards Container with Connecting Lines */}
-            <div ref={cardsContainerRef} className="relative mb-6 md:mb-8 overflow-visible">
+        {/* CTA */}
+        <div className="text-center mt-10 md:mt-12">
+          <button
+            type="button"
+            onClick={() => {
+              onCtaClick?.();
+              pushEvent("cta_click", { cta_label: "aanpak_calendly", location: "aanpak" });
+            }}
+            className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
+          >
+            <Calendar className="w-5 h-5" />
+            <span>Plan een kennismakingsgesprek</span>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-              {/* Desktop: Horizontal connecting line segments between cards */}
-              <svg
-                ref={svgRef}
-                className="absolute top-0 left-0 w-full h-full z-0 hidden md:block pointer-events-none overflow-visible"
-                viewBox="0 0 1100 400"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <linearGradient id="line1Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#1A2D63" stopOpacity="0" />
-                    <stop offset="12%" stopColor="#1A2D63" stopOpacity="0.65" />
-                    <stop offset="88%" stopColor="#1A2D63" stopOpacity="0.65" />
-                    <stop offset="100%" stopColor="#1A2D63" stopOpacity="0" />
-                  </linearGradient>
-                  <linearGradient id="line2Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#1A2D63" stopOpacity="0" />
-                    <stop offset="12%" stopColor="#1A2D63" stopOpacity="0.65" />
-                    <stop offset="88%" stopColor="#1A2D63" stopOpacity="0.65" />
-                    <stop offset="100%" stopColor="#1A2D63" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
+// --- Resultaten Section (praktijkcases) ---
+const resultatenCases = [
+  {
+    icon: ShoppingCart,
+    sector: "E-commerce",
+    uitdaging:
+      "Een webshop verwerkte dagelijks manueel orders, supportmails, trackingvragen en betalingsopvolging. De mailbox werd de bottleneck van het bedrijf.",
+    aanpak:
+      "We bouwden een intelligent mailsysteem dat inkomende mails automatisch categoriseert, standaardvragen verwerkt en bestellingen voorbereidt voor controle.",
+    resultaat: [
+      "Standaardorders verwerkt in 2 minuten i.p.v. 20",
+      "60 tot 70% van supportvragen automatisch verwerkt",
+      "Grote vermindering van repetitief mailwerk",
+      "Meer tijd voor groei en klantopvolging",
+    ],
+  },
+  {
+    icon: Ticket,
+    sector: "Toerisme / gidsbedrijf",
+    uitdaging:
+      "Boekingen kwamen binnen via website, WhatsApp en mail, zonder centraal overzicht. Planning, opvolging en facturatie gebeurden volledig manueel.",
+    aanpak:
+      "We bouwden één centraal systeem dat aanvragen automatisch verwerkt, gidsen inplant, agenda’s synchroniseert en opvolging automatiseert.",
+    resultaat: [
+      "Alle communicatie en planning gecentraliseerd",
+      "Quasi geen manuele administratie meer",
+      "Sneller opvolgen van klanten en gidsen",
+      "Meer focus op ondernemen i.p.v. operationeel werk",
+    ],
+  },
+];
 
-                <path
-                  ref={line1Ref}
-                  d=""
-                  stroke="url(#line1Gradient)"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                  fill="none"
-                  style={{ opacity: 1 }}
-                />
+const ResultatenSection = () => {
+  const cardShadow =
+    "shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]";
 
-                <path
-                  ref={line2Ref}
-                  d=""
-                  stroke="url(#line2Gradient)"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                  fill="none"
-                  style={{ opacity: 1 }}
-                />
-              </svg>
+  return (
+    <section id="resultaten" className="pt-8 md:pt-12 pb-8 md:pb-12 px-6 md:px-12 bg-[#FDFBF7]">
+      <div className="max-w-[73.33rem] mx-auto">
+        <div className="text-center mb-8 md:mb-10 max-w-2xl mx-auto">
+          <h2 className="font-newsreader text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
+            Resultaten uit de praktijk
+          </h2>
+          <p className="text-[#1A2D63]/60 text-lg md:text-xl">
+            Enkele voorbeelden van hoe we vandaag repetitief werk en administratie automatiseren binnen bedrijven.
+          </p>
+        </div>
 
-              {/* Mobile: Vertical Connecting Line SVG */}
-              <svg
-                className="absolute left-1/2 top-0 w-24 h-full -translate-x-1/2 z-0 md:hidden pointer-events-none overflow-visible"
-                viewBox="0 0 80 900"
-                preserveAspectRatio="none"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <linearGradient id="mobileLineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#1A2D63" stopOpacity="0.15" />
-                    <stop offset="15%" stopColor="#1A2D63" stopOpacity="0.35" />
-                    <stop offset="85%" stopColor="#1A2D63" stopOpacity="0.35" />
-                    <stop offset="100%" stopColor="#1A2D63" stopOpacity="0.15" />
-                  </linearGradient>
-                </defs>
-                <path
-                  ref={mobileLineRef}
-                  d="M 40,30
-                     Q 55,120 40,240
-                     Q 25,360 40,480
-                     Q 55,600 40,720
-                     Q 25,820 40,870"
-                  stroke="url(#mobileLineGradient)"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  fill="none"
-                  style={{ strokeDasharray: 1200, strokeDashoffset: 0 }}
-                />
-              </svg>
-
-              {/* 3 Steps - Same level on desktop */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8 relative z-10 md:items-start">
-
-                {/* Step 1 */}
-                <div
-                  ref={card1Ref}
-                  className="group relative rounded-3xl p-8 md:p-10
-                             bg-white
-                             shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
-                >
-                  {/* Watermark number */}
-                  <div className="absolute -top-4 -left-2 md:-top-5 md:-left-3">
-                    <span className="font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.18] select-none">01</span>
-                  </div>
-
-                  <div className="relative pt-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-2xl border-2 border-[#1A2D63]/25 bg-transparent flex items-center justify-center">
-                        <MessageSquare className="w-5 h-5 text-[#1A2D63]/50" />
-                      </div>
-                      <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">30 min vrijblijvend</span>
-                    </div>
-
-                    <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">
-                      Analyse
-                    </h3>
-
-                    <ul className="space-y-3">
-                      {howItWorksDetails.gesprek.map((point, i) => (
-                        <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
-                          <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
+          {resultatenCases.map((c, i) => (
+            <div key={i} className={`rounded-3xl bg-white p-8 md:p-10 flex flex-col ${cardShadow}`}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-11 h-11 rounded-2xl bg-[#1A2D63]/[0.08] border border-[#1A2D63]/10 flex items-center justify-center flex-shrink-0">
+                  <c.icon className="w-5 h-5 text-[#1A2D63]" />
                 </div>
+                <h3 className="font-newsreader text-2xl md:text-3xl text-[#1A2D63]">{c.sector}</h3>
+              </div>
 
-                {/* Step 2 */}
-                <div
-                  ref={card2Ref}
-                  className="group relative rounded-3xl p-8 md:p-10
-                             bg-white
-                             shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
-                >
-                  {/* Watermark number */}
-                  <div className="absolute -top-4 -left-2 md:-top-5 md:-left-3">
-                    <span className="font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.22] select-none">02</span>
-                  </div>
+              <div className="mb-4">
+                <span className="text-[11px] font-medium uppercase tracking-wider text-[#1A2D63]/45">Uitdaging</span>
+                <p className="text-[#1A2D63]/70 text-base md:text-lg leading-relaxed mt-1">{c.uitdaging}</p>
+              </div>
 
-                  <div className="relative pt-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1A2D63]/15 to-[#1A2D63]/5 border border-[#1A2D63]/10 flex items-center justify-center">
-                        <Settings className="w-5 h-5 text-[#1A2D63]/70" />
-                      </div>
-                      <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">2–4 weken</span>
-                    </div>
+              <div className="mb-5">
+                <span className="text-[11px] font-medium uppercase tracking-wider text-[#1A2D63]/45">Aanpak</span>
+                <p className="text-[#1A2D63]/70 text-base md:text-lg leading-relaxed mt-1">{c.aanpak}</p>
+              </div>
 
-                    <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">
-                      Bouw
-                    </h3>
-
-                    <ul className="space-y-3">
-                      {howItWorksDetails.bouw.map((point, i) => (
-                        <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
-                          <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Step 3 */}
-                <div
-                  ref={card3Ref}
-                  className="group relative rounded-3xl p-8 md:p-10
-                             bg-white
-                             shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]"
-                >
-                  {/* Watermark number */}
-                  <div className="absolute -top-4 -left-2 md:-top-5 md:-left-3">
-                    <span className="font-newsreader text-6xl md:text-7xl font-light text-[#1A2D63]/[0.28] select-none">03</span>
-                  </div>
-
-                  <div className="relative pt-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-2xl bg-[#1A2D63]/15 flex items-center justify-center">
-                        <Rocket className="w-5 h-5 text-[#1A2D63]" />
-                      </div>
-                      <span className="text-xs md:text-sm font-medium text-[#1A2D63]/50 uppercase tracking-wider">24/7 actief</span>
-                    </div>
-
-                    <h3 className="text-2xl md:text-3xl font-semibold text-[#1A2D63] mb-4">
-                      Resultaat
-                    </h3>
-
-                    <ul className="space-y-3">
-                      {howItWorksDetails.resultaat.map((point, i) => (
-                        <li key={i} className="flex items-start gap-2 text-base md:text-lg text-[#1A2D63]/75">
-                          <Check className="w-5 h-5 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+              <div className="mt-auto rounded-2xl bg-[#1A2D63]/[0.05] border border-[#1A2D63]/10 p-5">
+                <span className="text-[11px] font-medium uppercase tracking-wider text-[#1A2D63]/45">Resultaat</span>
+                <ul className="space-y-2.5 mt-2">
+                  {c.resultaat.map((r, j) => (
+                    <li key={j} className="flex items-start gap-2.5 text-[15px] md:text-base text-[#1A2D63]/80">
+                      <Check className="w-4 h-4 text-[#1A2D63]/50 mt-0.5 flex-shrink-0" />
+                      <span>{r}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
-            {/* CTA Button - centered below Card 2 (middle column) */}
-            <div ref={ctaDesktopRef} className="hidden md:flex justify-center mt-8">
-              <button
-                type="button"
-                onClick={onCtaClick}
-                className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
-              >
-                <Calendar className="w-5 h-5" />
-                <span>Plan een kennismakingsgesprek</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
+// --- Waarom Finit Section ---
+const waaromPijlers = [
+  { icon: Calculator, title: "Vaste prijs", text: "Je weet vooraf wat het kost. Geen verrassingen achteraf." },
+  { icon: Target, title: "Duidelijke mijlpalen", text: "Tijdens elk traject is duidelijk wat er gebouwd wordt en wanneer iets klaar is." },
+  { icon: MessageSquare, title: "Één aanspreekpunt", text: "Eén vast contact dat planning, kwaliteit en communicatie bewaakt." },
+  { icon: Check, title: "Jullie eigendom", text: "Alles wat we ontwikkelen blijft eigendom van jullie bedrijf, ook als jullie later zonder ons verder willen." },
+];
 
-            {/* Mobile CTA - centered below cards */}
-            <div ref={ctaMobileRef} className="text-center mt-8 md:hidden">
-              <button
-                type="button"
-                onClick={onCtaClick}
-                className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
-              >
-                <Calendar className="w-5 h-5" />
-                <span>Plan een kennismakingsgesprek</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+const WaaromFinitSection = () => {
+  const cardShadow =
+    "shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]";
+
+  return (
+    <section id="waarom" className="pt-8 md:pt-12 pb-8 md:pb-12 px-6 md:px-12 bg-[#FDFBF7]">
+      <div className="max-w-[73.33rem] mx-auto">
+        <div className="text-center mb-8 md:mb-10 max-w-2xl mx-auto">
+          <h2 className="font-newsreader text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
+            Waarom Finit?
+          </h2>
+          <p className="text-[#1A2D63]/60 text-lg md:text-xl">
+            Vaste prijs. Duidelijke mijlpalen. E&eacute;n aanspreekpunt. Jullie eigendom.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+          {waaromPijlers.map((p, i) => (
+            <div key={i} className={`rounded-3xl bg-white p-7 md:p-8 flex flex-col ${cardShadow}`}>
+              <div className="w-11 h-11 rounded-2xl bg-[#1A2D63]/[0.08] border border-[#1A2D63]/10 flex items-center justify-center mb-4">
+                <p.icon className="w-5 h-5 text-[#1A2D63]" />
+              </div>
+              <h3 className="font-newsreader text-xl md:text-2xl text-[#1A2D63] mb-2">{p.title}</h3>
+              <p className="text-[#1A2D63]/65 text-[15px] md:text-base leading-relaxed">{p.text}</p>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -2276,7 +2187,7 @@ export function AIDesignLanding() {
       }
 
       // Determine active section based on scroll position
-      const sectionIds = ["recognition", "process", "use-cases", "faq", "contact"];
+      const sectionIds = ["recognition", "aanpak", "resultaten", "faq", "contact"];
       let current = "";
       for (const id of sectionIds) {
         const el = document.getElementById(id);
@@ -2349,8 +2260,8 @@ export function AIDesignLanding() {
           <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
             {[
               { label: "Herken jij dit?", id: "recognition" },
-              { label: "Ons proces", id: "process" },
-              { label: "Voorbeelden", id: "use-cases" },
+              { label: "Onze aanpak", id: "aanpak" },
+              { label: "Resultaten", id: "resultaten" },
               { label: "FAQ", id: "faq" },
               { label: "Contact", id: "contact" },
             ].map((item) => (
@@ -2401,18 +2312,18 @@ export function AIDesignLanding() {
                   location: "mobile_nav",
                 });
               }}
-              className="flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-xs font-medium px-3.5 py-2 transition-opacity duration-300"
+              className="flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-sm font-medium px-4 py-2.5 transition-opacity duration-300"
               style={{ opacity: mobileMenuOpen ? 0 : navScrollProgress, pointerEvents: !mobileMenuOpen && navScrollProgress > 0.5 ? 'auto' : 'none' }}
             >
-              <Calendar className="w-3.5 h-3.5" />
+              <Calendar className="w-4 h-4" />
               <span>Plan een gesprek</span>
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="flex items-center justify-center w-11 h-11 rounded-full text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-colors"
+              className="flex items-center justify-center w-12 h-12 rounded-full text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-colors"
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+              {mobileMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
             </button>
           </div>
         </div>
@@ -2474,8 +2385,10 @@ export function AIDesignLanding() {
                 {[
                   { label: "Home", id: "hero" },
                   { label: "Herken jij dit?", id: "recognition" },
-                  { label: "Ons proces", id: "process" },
-                  { label: "Voorbeelden", id: "use-cases" },
+                  { label: "Wat AI kan", id: "use-cases" },
+                  { label: "Onze aanpak", id: "aanpak" },
+                  { label: "Resultaten", id: "resultaten" },
+                  { label: "Waarom Finit?", id: "waarom" },
                   { label: "FAQ", id: "faq" },
                   { label: "Contact", id: "contact" },
                 ].map((item) => (
@@ -2667,16 +2580,30 @@ export function AIDesignLanding() {
       <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={0} />
 
       {/* ============================================ */}
-      {/* HOW IT WORKS SECTION                        */}
+      {/* USE CASES SECTION (Dit kan AI vandaag doen)  */}
       {/* ============================================ */}
-      <HowItWorksSection onCtaClick={openForm} />
+      <UseCasesSection />
 
       <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={0} />
 
       {/* ============================================ */}
-      {/* USE CASES SECTION                          */}
+      {/* AANPAK SECTION (AI Audit + AI-Brein)         */}
       {/* ============================================ */}
-      <UseCasesSection />
+      <AanpakSection onCtaClick={openForm} />
+
+      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={1} />
+
+      {/* ============================================ */}
+      {/* RESULTATEN SECTION (praktijkcases)           */}
+      {/* ============================================ */}
+      <ResultatenSection />
+
+      <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={0} />
+
+      {/* ============================================ */}
+      {/* WAAROM FINIT SECTION                         */}
+      {/* ============================================ */}
+      <WaaromFinitSection />
 
       <SectionDivider fromColor="#FDFBF7" toColor="#FDFBF7" variant={1} />
 
