@@ -23,6 +23,7 @@ import {
   Headphones,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Building2,
   Calculator,
   Megaphone,
@@ -40,6 +41,7 @@ import {
   Menu,
   X,
   TrendingUp,
+  Workflow,
   type LucideIcon,
 } from 'lucide-react';
 import { CookieSettingsLink } from '@/components/cookie-settings-link';
@@ -654,11 +656,11 @@ const MobileLogoCarousel = () => {
 
 // --- Recognition Section ("Herken jij dit?") ---
 const recognitionItems = [
-  "Je weet dat AI kan helpen, maar je wil geen geld uitgeven aan iets dat niets oplevert.",
-  "Je hebt al demo's gezien, maar niemand kon concreet tonen wat het in jouw bedrijf bespaart.",
-  "Je wil eerlijk advies over wat wél automatiseerbaar is — en wat niet.",
-  "Je zoekt geen \"AI-tool\", maar iemand die meedenkt over je processen.",
-  "Je wil klein starten, snel resultaat zien en daarna pas opschalen.",
+  "Je weet dat AI interessant is, maar je weet niet waar je moet beginnen.",
+  "Je hebt al demo's gezien, maar niemand kon concreet tonen wat het jouw bedrijf oplevert.",
+  "Je wil eerst weten waar AI vandaag écht tijd kan besparen binnen jouw bedrijf.",
+  "Je zoekt geen AI-tool, maar iemand die meedenkt over hoe jouw bedrijf werkt.",
+  "Je wil klein starten, snel resultaat zien en daarna verder bouwen.",
 ];
 
 const RecognitionSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
@@ -729,7 +731,7 @@ const RecognitionSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
             className="group inline-flex items-center gap-2.5 bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
           >
             <Calendar className="w-4 h-4" />
-            <span>Plan een kennismakingsgesprek</span>
+            <span>Plan een kennismaking</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -1638,7 +1640,7 @@ const UseCasesSection = () => {
           Dit kan AI vandaag al voor je bedrijf doen
         </h2>
         <p className="text-[#1A2D63]/60 text-lg md:text-xl max-w-2xl mx-auto">
-          Niet zomaar ChatGPT. De grootste winst zit in processen die elke week opnieuw tijd kosten.
+          Enkele taken die we voor KMO&apos;s automatiseren.
         </p>
       </div>
 
@@ -1718,10 +1720,11 @@ const UseCasesSection = () => {
 
 // --- Aanpak Section ("Hoe pakken we dit aan?") — AI Audit + AI-Brein ---
 const auditPoints = [
-  "Hoe jullie processen vandaag lopen",
-  "Welke systemen gebruikt worden",
+  "Hoe je team vandaag werkt",
   "Waar tijd verloren gaat",
-  "Waar automatisering het meeste impact heeft",
+  "Welke taken repetitief zijn",
+  "Waar automatisering de grootste impact heeft",
+  "Welke opportuniteiten snel resultaat kunnen opleveren",
 ];
 
 const AanpakSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
@@ -1737,8 +1740,8 @@ const AanpakSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
             Hoe pakken we dit aan?
           </h2>
           <p className="text-[#1A2D63]/60 text-lg md:text-xl">
-            Eerst willen we begrijpen hoe jullie bedrijf vandaag werkt en waar automatisering &eacute;cht
-            verschil maakt. Dat begint altijd met een AI Audit.
+            We starten niet met AI-tools, maar met inzicht in hoe jouw bedrijf werkt. Daarom begint
+            elk traject met een AI Audit.
           </p>
         </div>
 
@@ -1755,9 +1758,9 @@ const AanpakSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
             </div>
 
             <p className="text-[#1A2D63]/65 text-base md:text-lg leading-relaxed mb-5">
-              Veel bedrijven starten met losse AI-tools zonder eerst te kijken hoe hun processen &eacute;cht
-              werken. Daardoor ontstaan systemen die niet samenwerken en automatiseringen die weinig gebruikt
-              worden. Daarom starten wij altijd met een audit. We brengen in kaart:
+              Veel bedrijven experimenteren met AI zonder eerst te weten waar de grootste winst zit.
+              Daardoor ontstaan losse oplossingen die weinig gebruikt worden of niet goed samenwerken.
+              Met de AI Audit brengen we in kaart waar automatisering het meeste verschil kan maken:
             </p>
 
             <ul className="space-y-3 mb-6">
@@ -1775,8 +1778,8 @@ const AanpakSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
                 Vaste prijs: &euro;3.500 <span className="text-[#1A2D63]/50 text-lg">excl. btw</span>
               </p>
               <p className="text-[#1A2D63]/65 text-[15px] leading-snug">
-                Volledig verrekenbaar bij verdere ontwikkeling. Inclusief analyse, &lsquo;AI-Brein&rsquo; en een
-                volledig rapport op maat.
+                Inclusief analyse, rapport op maat en de opbouw van jouw AI-Brein. Volledig verrekenbaar
+                bij verdere ontwikkeling.
               </p>
             </div>
           </div>
@@ -1791,14 +1794,14 @@ const AanpakSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
             </div>
 
             <p className="text-[#1A2D63]/65 text-base md:text-lg leading-relaxed mb-5">
-              AI werkt pas &eacute;cht goed wanneer het je bedrijf begrijpt. Tijdens elke audit bouwen we een
-              centrale kennisstructuur van je processen, systemen en workflows &mdash; op &eacute;&eacute;n plek,
-              in een structuur die AI kan gebruiken om sneller en slimmer te werken.
+              De meeste AI-projecten mislukken omdat elke oplossing op zichzelf staat. Daarom bouwen we tijdens
+              de audit het AI-Brein: een centrale kennisstructuur waarin processen, systemen, informatie en
+              workflows samenkomen.
             </p>
             <p className="text-[#1A2D63]/65 text-base md:text-lg leading-relaxed mb-5">
-              Het Brein vormt de fundering van elk AI-traject. Nieuwe oplossingen bouwen verder op kennis die al
-              aanwezig is, waardoor automatiseringen sneller en consistenter werken &mdash; met veel minder
-              manuele opvolging.
+              Nieuwe automatiseringen bouwen verder op die kennis, waardoor ze sneller ontwikkeld worden, beter
+              samenwerken en eenvoudiger uitbreidbaar zijn. Zo bouw je geen losse AI-tools, maar een fundament
+              waarop toekomstige automatiseringen kunnen verderbouwen naarmate je bedrijf groeit.
             </p>
 
             <div className="mt-auto">
@@ -1830,7 +1833,7 @@ const AanpakSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
             className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
           >
             <Calendar className="w-5 h-5" />
-            <span>Plan een kennismakingsgesprek</span>
+            <span>Plan een kennismaking</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -1883,7 +1886,7 @@ const ResultatenSection = () => {
             Resultaten uit de praktijk
           </h2>
           <p className="text-[#1A2D63]/60 text-lg md:text-xl">
-            Enkele voorbeelden van hoe we vandaag repetitief werk en administratie automatiseren binnen bedrijven.
+            Minder administratie, snellere processen en meer tijd voor klanten.
           </p>
         </div>
 
@@ -1928,10 +1931,10 @@ const ResultatenSection = () => {
 
 // --- Waarom Finit Section ---
 const waaromPijlers = [
-  { icon: Calculator, title: "Vaste prijs", text: "Je weet vooraf wat het kost. Geen verrassingen achteraf." },
-  { icon: Target, title: "Duidelijke mijlpalen", text: "Tijdens elk traject is duidelijk wat er gebouwd wordt en wanneer iets klaar is." },
-  { icon: MessageSquare, title: "Één aanspreekpunt", text: "Eén vast contact dat planning, kwaliteit en communicatie bewaakt." },
-  { icon: Check, title: "Jullie eigendom", text: "Alles wat we ontwikkelen blijft eigendom van jullie bedrijf, ook als jullie later zonder ons verder willen." },
+  { icon: Target, title: "Eerst begrijpen, dan bouwen", text: "We analyseren hoe je bedrijf vandaag werkt voordat we oplossingen voorstellen." },
+  { icon: Sparkles, title: "Geen losse AI-tools", text: "We bouwen een fundament waarop toekomstige automatiseringen kunnen verderbouwen." },
+  { icon: Workflow, title: "Van strategie tot implementatie", text: "Van AI Audit tot werkende oplossing: één partner voor het volledige traject." },
+  { icon: Check, title: "Jullie eigendom", text: "Alles wat we ontwikkelen blijft eigendom van jouw bedrijf." },
 ];
 
 const WaaromFinitSection = () => {
@@ -1943,10 +1946,10 @@ const WaaromFinitSection = () => {
       <div className="max-w-[73.33rem] mx-auto">
         <div className="text-center mb-8 md:mb-10 max-w-2xl mx-auto">
           <h2 className="font-newsreader text-4xl md:text-5xl text-[#1A2D63] leading-[1.15] mb-4">
-            Waarom Finit?
+            Waarom bedrijven voor Finit kiezen
           </h2>
           <p className="text-[#1A2D63]/60 text-lg md:text-xl">
-            Vaste prijs. Duidelijke mijlpalen. E&eacute;n aanspreekpunt. Jullie eigendom.
+            We vertrekken vanuit hoe jouw bedrijf werkt, zodat we automatiseringen bouwen die blijvende waarde opleveren.
           </p>
         </div>
 
@@ -2258,6 +2261,42 @@ export function AIDesignLanding() {
           </div>
 
           <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+            {/* Producten dropdown */}
+            <div className="relative group">
+              <button
+                className="flex items-center gap-1 text-base font-medium text-[#1A2D63]/80 hover:text-[#1A2D63] transition-colors"
+              >
+                Producten
+                <ChevronDown className="w-4 h-4 mt-0.5 transition-transform duration-200 group-hover:rotate-180" />
+              </button>
+
+              {/* Hover panel (pt-3 = invisible bridge so the cursor can travel from button to panel) */}
+              <div className="absolute top-full left-0 pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200">
+                <div className="w-[34rem] rounded-2xl bg-white border border-[#1A2D63]/[0.08] p-5 shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)]">
+                  <a href="https://voicelink.me" target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 group/item">
+                    {/* Teaser image */}
+                    <div className="flex-shrink-0 w-24 h-36 rounded-xl overflow-hidden bg-[#1A2D63]/[0.04] border border-[#1A2D63]/[0.06]">
+                      <img
+                        src="/Phone mock banner.png"
+                        alt="VoiceLink WhatsApp-mockup"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {/* Text */}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="font-newsreader text-xl text-[#1A2D63]">VoiceLink</span>
+                        <ArrowRight className="w-4 h-4 text-[#1A2D63]/40 group-hover/item:translate-x-1 group-hover/item:text-[#1A2D63] transition-all" />
+                      </div>
+                      <p className="text-[#1A2D63]/70 text-base leading-relaxed">
+                        Beheer je CRM via WhatsApp. Voeg klantnotities toe, maak taken aan en vraag CRM-informatie op met een spraakbericht.
+                      </p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+
             {[
               { label: "Herken jij dit?", id: "recognition" },
               { label: "Onze aanpak", id: "aanpak" },
@@ -2271,7 +2310,7 @@ export function AIDesignLanding() {
                 className={`text-base font-medium transition-colors ${
                   activeSection === item.id
                     ? 'text-[#1A2D63]'
-                    : 'text-[#1A2D63]/60 hover:text-[#1A2D63]'
+                    : 'text-[#1A2D63]/80 hover:text-[#1A2D63]'
                 }`}
               >
                 {item.label}
@@ -2298,7 +2337,7 @@ export function AIDesignLanding() {
             }}
             >
               <Calendar className="w-4 h-4" />
-              <span>Plan een kennismakingsgesprek</span>
+              <span>Plan een kennismaking</span>
             </button>
 
           {/* Mobile CTA + hamburger */}
@@ -2362,7 +2401,7 @@ export function AIDesignLanding() {
                 className="w-full inline-flex items-center justify-center gap-2 bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium"
               >
                 <Calendar className="w-4 h-4" />
-                Plan een kennismakingsgesprek
+                Plan een kennismaking
               </button>
               <div className="w-full bg-white rounded-2xl px-6 py-5 border border-[#1A2D63]/[0.06] shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] flex flex-col items-center gap-2 text-center">
                 <p className="text-[#475D8F]/70 text-xs font-instrument tracking-widest uppercase">Bel gerust op</p>
@@ -2401,6 +2440,16 @@ export function AIDesignLanding() {
                     <ChevronRight className="w-5 h-5 text-[#1A2D63]/30" />
                   </button>
                 ))}
+                <a
+                  href="https://voicelink.me"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between w-full py-4 border-b border-[#1A2D63]/10 text-[#1A2D63] hover:text-[#475D8F] transition-colors"
+                >
+                  <span className="text-lg font-medium">VoiceLink</span>
+                  <ChevronRight className="w-5 h-5 text-[#1A2D63]/30" />
+                </a>
               </div>
             </div>
 
@@ -2425,9 +2474,9 @@ export function AIDesignLanding() {
           <div ref={heroTextRef} className="relative z-10 text-center max-w-3xl">
             <div className="mb-6">
               <h1 className="font-newsreader text-5xl lg:text-6xl xl:text-[4.25rem] leading-[1.1] tracking-tight text-[#1A2D63]">
-                AI-systemen die 24/7{" "}
+                Minder administratie.{" "}
                 <span className="relative inline-block">
-                  <span className="relative z-10">voor je werken.</span>
+                  <span className="relative z-10">Meer tijd voor je bedrijf.</span>
                   <svg
                     className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
                     viewBox="0 0 200 20"
@@ -2449,7 +2498,7 @@ export function AIDesignLanding() {
             </div>
 
             <p className="font-instrument text-lg lg:text-xl text-[#475D8F] leading-relaxed max-w-2xl mx-auto mb-8">
-              Finit helpt KMO&apos;s de stap richting AI te zetten — van grondige analyse tot krachtige systemen die écht tijd besparen.
+              We bouwen maatwerk AI-oplossingen voor KMO&apos;s die repetitieve processen automatiseren. Zo werkt je team sneller, maak je minder fouten en hou je meer tijd over voor klanten.
             </p>
 
             <div className="flex flex-row items-center justify-center gap-3 mb-6">
@@ -2465,7 +2514,7 @@ export function AIDesignLanding() {
                 className="group bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Plan een kennismakingsgesprek</span>
+                <span>Plan een kennismaking</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -2482,9 +2531,9 @@ export function AIDesignLanding() {
         <div className="md:hidden relative z-10 px-4 sm:px-6 pt-28 pb-6">
           <div className="text-center max-w-[22rem] sm:max-w-[28rem] mx-auto">
             <h1 className="font-newsreader text-[2.5rem] sm:text-5xl leading-[1.1] tracking-tight text-[#1A2D63] mb-5">
-              AI-systemen die 24/7{" "}
+              Minder administratie.{" "}
               <span className="relative inline-block">
-                <span className="relative z-10">voor je werken.</span>
+                <span className="relative z-10">Meer tijd voor je bedrijf.</span>
                 <svg
                   className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"
                   viewBox="0 0 200 20"
@@ -2505,7 +2554,7 @@ export function AIDesignLanding() {
             </h1>
 
             <p className="font-instrument text-base sm:text-[17px] text-[#475D8F] leading-relaxed max-w-lg mx-auto mb-6">
-            Finit helpt KMO&apos;s de stap richting AI te zetten — van grondige analyse tot krachtige systemen die écht tijd besparen.
+            We bouwen maatwerk AI-oplossingen voor KMO&apos;s die repetitieve processen automatiseren. Zo werkt je team sneller, maak je minder fouten en hou je meer tijd over voor klanten.
             </p>
 
             <div className="flex flex-col items-center justify-center gap-3 mb-5">
@@ -2521,7 +2570,7 @@ export function AIDesignLanding() {
                 className="group w-full bg-[#1A2D63] text-white px-6 py-3.5 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Plan een kennismakingsgesprek</span>
+                <span>Plan een kennismaking</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -2638,7 +2687,7 @@ export function AIDesignLanding() {
                 className="inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
               >
                 <Calendar className="w-5 h-5 md:w-6 md:h-6" />
-                Plan een kennismakingsgesprek
+                Plan een kennismaking
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
               </button>
               <p className="text-sm text-[#1A2D63]/40">
@@ -2692,7 +2741,7 @@ export function AIDesignLanding() {
                   className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
                 >
                   <Calendar className="w-4 h-4" />
-                  Plan een kennismakingsgesprek
+                  Plan een kennismaking
                 </button>
                 <a
                   href="mailto:contact@finitsolutions.be"
