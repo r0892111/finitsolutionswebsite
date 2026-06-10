@@ -2385,7 +2385,7 @@ export function AIDesignLanding() {
             className="absolute inset-0 bg-[#FDFBF7]/95 backdrop-blur-xl"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="relative z-10 flex flex-col h-full pt-24 pb-8 px-6">
+          <div className="relative z-10 flex flex-col h-full pt-24 pb-8 px-6 overflow-y-auto overscroll-contain">
             {/* Top: CTA + phone */}
             <div className="flex flex-col gap-4 mb-8">
               <button
@@ -2423,7 +2423,6 @@ export function AIDesignLanding() {
               <div className="border-t border-[#1A2D63]/10">
                 {[
                   { label: "Home", id: "hero" },
-                  { label: "Herken jij dit?", id: "recognition" },
                   { label: "Wat AI kan", id: "use-cases" },
                   { label: "Onze aanpak", id: "aanpak" },
                   { label: "Resultaten", id: "resultaten" },
@@ -2528,11 +2527,11 @@ export function AIDesignLanding() {
         </div>
 
         {/* Mobile layout */}
-        <div className="md:hidden relative z-10 px-4 sm:px-6 pt-28 pb-6">
-          <div className="text-center max-w-[22rem] sm:max-w-[28rem] mx-auto">
-            <h1 className="font-newsreader text-[2.5rem] sm:text-5xl leading-[1.1] tracking-tight text-[#1A2D63] mb-5">
+        <div className="md:hidden relative z-10 px-4 sm:px-6 pt-36 pb-6">
+          <div className="text-center max-w-[26rem] sm:max-w-[34rem] mx-auto">
+            <h1 className="font-newsreader text-[min(2.5rem,7.6vw)] sm:text-5xl leading-[1.1] tracking-tight text-[#1A2D63] mb-5">
               Minder administratie.{" "}
-              <span className="relative inline-block">
+              <span className="relative inline-block whitespace-nowrap">
                 <span className="relative z-10">Meer tijd voor je bedrijf.</span>
                 <svg
                   className="absolute -bottom-1 left-0 w-full h-[0.35em] z-0"

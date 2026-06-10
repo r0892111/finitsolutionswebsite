@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
+  ArrowLeft,
   Check,
   Mail,
   Linkedin,
@@ -132,26 +133,36 @@ export function DirectBookingLanding() {
             transition: "padding 0.3s",
           }}
         >
-          <a href="/" className="flex items-center gap-3">
-            <img
-              src="/Finit Logo Blue@4x.png"
-              alt="Finit Logo"
-              style={{
-                height: `${24 + (1 - navScrollProgress) * 6}px`,
-                transition: "height 0.3s",
-              }}
-              className="w-auto object-contain md:hidden"
-            />
-            <img
-              src="/Finit Logo Blue@4x.png"
-              alt="Finit Logo"
-              style={{
-                height: `${32 + (1 - navScrollProgress) * 14}px`,
-                transition: "height 0.3s",
-              }}
-              className="w-auto object-contain hidden md:block"
-            />
-          </a>
+          <div className="flex items-center gap-3 sm:gap-4">
+            <a
+              href="/"
+              className="group inline-flex items-center gap-2 rounded-full border border-[#1A2D63]/15 bg-white/70 px-3.5 py-2 text-sm font-medium text-[#1A2D63] hover:bg-[#1A2D63]/5 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+              <span className="hidden sm:inline">Terug naar home</span>
+              <span className="sm:hidden">Home</span>
+            </a>
+            <a href="/" className="flex items-center gap-3">
+              <img
+                src="/Finit Logo Blue@4x.png"
+                alt="Finit Logo"
+                style={{
+                  height: `${24 + (1 - navScrollProgress) * 6}px`,
+                  transition: "height 0.3s",
+                }}
+                className="w-auto object-contain md:hidden"
+              />
+              <img
+                src="/Finit Logo Blue@4x.png"
+                alt="Finit Logo"
+                style={{
+                  height: `${32 + (1 - navScrollProgress) * 14}px`,
+                  transition: "height 0.3s",
+                }}
+                className="w-auto object-contain hidden md:block"
+              />
+            </a>
+          </div>
 
         </div>
       </nav>
