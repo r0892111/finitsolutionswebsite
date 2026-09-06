@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Finit Solutions | AI systemen die 24/7 voor je werken',
-  description: 'Finit helpt KMO\'s de stap richting AI te zetten — van grondige analyse tot krachtige systemen die écht tijd besparen.',
+  title: 'Finit Solutions | Wij bouwen het AI-brein dat je administratie doet',
+  description:
+    'Offertes, klachten, planning en facturen die zichzelf afhandelen. Zet je eigen AI-brein op vanaf 295 euro, of laat ons het bouwen. Voor zelfstandigen en KMO\'s in België.',
 };
 
 export default function HomeLayout({
@@ -10,6 +11,6 @@ export default function HomeLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // This layout doesn't render Navbar/Footer since AIDesignLanding has its own
+  // Deze layout rendert geen Navbar/Footer: FinitHome brengt zijn eigen mee.
   return <>{children}</>;
 }
