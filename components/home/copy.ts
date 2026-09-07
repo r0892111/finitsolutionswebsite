@@ -49,14 +49,14 @@ export const CTA_LESREEKS = "Start de lesreeks";
 export const CTA_KENNISMAKING = "Plan een kennismaking";
 export const CTA_GESPREK_KORT = "Plan een gesprek";
 
-// 1. Hero. Titel van Alex; de uitleg komt uit les 1.2 en 1.3.
+// 1. Hero. Titel van Alex; de sub is een belofte, geen disclaimer: wat jij legt, wat wij daarop bouwen.
 export const HERO = {
   h1: ["Leg jouw", "AI-fundament"],
-  sub: "AI kan alleen maar wat je hem vertelt. Daarom leg je eerst een fundament: alle kennis over jouw bedrijf, zo opgeschreven dat een AI ermee kan werken. Dat bouw je zelf, door te praten met je computer. Om daar een werkend en veilig systeem van te maken is voorlopig nog een ontwikkelaar nodig. Dat deel doen wij.",
+  sub: "In de lesreeks leg je zelf je AI-fundament: alle kennis over jouw bedrijf, zo opgeschreven dat AI ermee kan werken. Jij praat, de AI schrijft. Wij bouwen daarop de AI-werknemers die elke dag werk uit je handen nemen.",
   punten: [
-    "Jij praat, de AI schrijft. Geen programmeerkennis nodig.",
+    "Geen programmeerkennis nodig. We tonen stap voor stap hoe je alles installeert.",
     "Je eindigt met een lijst van wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
-    "Wij bouwen daarna de systemen die dat werk uit je handen nemen.",
+    "Alles op die lijst bouwen wij, voor één vaste prijs.",
   ],
   ondersteund: "Ondersteund door",
 };
