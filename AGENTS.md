@@ -10,6 +10,10 @@ This document provides guidance for AI coding agents working on this Next.js 14 
 - **Output**: Static export (SSG)
 - **i18n**: Dutch (nl) and English (en) via React Context
 
+## Homepage on branch `rework/homepage-lesreeks` (read this first)
+
+The homepage on this branch has its own copy and styling rules, decided with Alex on 2026-09-07. Before touching anything under `components/home/` or the `hp-` block in `app/globals.css`, read `HOMEPAGE_REWORK.md` (decisions, style rules, open points) and `components/home/README.md` (section order, copy rules). `FINIT_STYLE_GUIDE.md` does **not** apply to the homepage. All homepage text lives in `components/home/copy.ts`. Never push this branch to `main` without Alex.
+
 ## Build/Dev Commands
 
 ```bash

@@ -650,3 +650,144 @@ html {
   66%  { transform: scale(var(--s, 1)) translate(calc(400%/3), 130%) }
   100% { transform: scale(var(--s, 1)) translate(calc(400%/3), 0) }
 }
+
+/* =====================================================================
+   Homepage 2026-09 (branch rework/homepage-lesreeks)
+   Schone, witte opmaak. Marineblauw als merkkleur, pilvormige knoppen
+   zoals de cookiebanner en de vorige site. Bricolage Grotesque voor
+   koppen, Schibsted Grotesk voor de rest.
+   ===================================================================== */
+.hp {
+  font-family: var(--font-schibsted), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "liga" 1, "calt" 1;
+}
+.hp ::selection { background: #B8C5E6; color: #1A2D63; }
+
+.hp-display {
+  font-family: var(--font-bricolage), var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+  font-variation-settings: "opsz" 96;
+  letter-spacing: -0.022em;
+}
+.hp-display-sm { font-variation-settings: "opsz" 48; letter-spacing: -0.012em; }
+
+/* Knoppen: pillen, zoals op de vorige site en in de cookiebanner */
+.hp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+.hp-btn:focus-visible { outline: 2px solid #1A2D63; outline-offset: 3px; }
+.hp-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+.hp-btn--lg { min-height: 3.25rem; padding: 0 1.625rem; font-size: 1rem; }
+.hp-btn--md { min-height: 2.625rem; padding: 0 1.25rem; font-size: 0.9375rem; }
+.hp-btn--sm { min-height: 2.25rem; padding: 0 1rem; font-size: 0.875rem; }
+
+.hp-btn--primary {
+  color: #fff;
+  background: #1A2D63;
+  box-shadow: 0 8px 20px -8px rgba(26, 45, 99, 0.45);
+}
+.hp-btn--primary:hover:not(:disabled) { background: #2A4488; transform: translateY(-1px); box-shadow: 0 12px 26px -8px rgba(26, 45, 99, 0.5); }
+.hp-btn--primary:active:not(:disabled) { background: #14234F; transform: translateY(0); box-shadow: 0 4px 10px -6px rgba(26, 45, 99, 0.4); }
+
+.hp-btn--secondary {
+  color: #1A2D63;
+  background: #fff;
+  border-color: rgba(26, 45, 99, 0.22);
+}
+.hp-btn--secondary:hover:not(:disabled) { background: rgba(26, 45, 99, 0.04); border-color: rgba(26, 45, 99, 0.4); }
+.hp-btn--secondary:active:not(:disabled) { background: rgba(26, 45, 99, 0.08); }
+
+/* Knop op een marineblauwe ondergrond */
+.hp-btn--light {
+  color: #1A2D63;
+  background: #fff;
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.35);
+}
+.hp-btn--light:hover:not(:disabled) { background: #EEF2FB; transform: translateY(-1px); }
+.hp-btn--light:active:not(:disabled) { background: #DCE4F7; transform: translateY(0); }
+
+.hp-link {
+  color: #1A2D63;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(26, 45, 99, 0.35);
+  transition: text-decoration-color 160ms ease;
+}
+.hp-link:hover { text-decoration-color: #1A2D63; }
+
+/* Kaarten: wit, zachte schaduw */
+.hp-card {
+  background: #fff;
+  border: 1px solid #E3E7EF;
+  border-radius: 20px;
+  box-shadow: 0 1px 2px rgba(26, 45, 99, 0.04), 0 16px 40px -24px rgba(26, 45, 99, 0.25);
+}
+
+.hp-card--accent {
+  border-color: #1A2D63;
+  box-shadow: 0 0 0 1px #1A2D63, 0 1px 2px rgba(26, 45, 99, 0.04), 0 20px 44px -22px rgba(26, 45, 99, 0.45);
+}
+
+/* De handgetekende onderstreping van de vorige site, onder het laatste woord van een kop */
+.hp-onder { position: relative; display: inline-block; white-space: nowrap; }
+.hp-onder > svg { position: absolute; left: -2%; right: -2%; bottom: -0.08em; width: 104%; height: 0.32em; pointer-events: none; }
+
+/* Vinkje voor lijstjes */
+.hp-check { flex: none; width: 20px; height: 20px; border-radius: 9999px; background: #E6ECF9; color: #1A2D63; display: inline-flex; align-items: center; justify-content: center; }
+.hp-check--donker { background: rgba(255, 255, 255, 0.14); color: #fff; }
+.hp-check--niet { background: #EEF0F5; color: #6C7590; }
+
+/* Openklikbare rijen onder de prijskaarten: hoogte van 0fr naar 1fr, zodat de inhoud in de DOM blijft */
+.hp-vouw { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms ease; }
+.hp-vouw[data-open="true"] { grid-template-rows: 1fr; }
+.hp-vouw > div { overflow: hidden; }
+
+/* Veelgestelde vragen: native <details>, eigen plusje */
+.hp-details > summary { list-style: none; cursor: pointer; }
+.hp-details > summary::-webkit-details-marker { display: none; }
+.hp-details .hp-plus { transition: transform 160ms ease; }
+.hp-details[open] .hp-plus { transform: rotate(45deg); }
+
+/* Logo's van VLAIO en Start it @KBC in de hero */
+.hp-logo { opacity: 0.9; transition: opacity 160ms ease; }
+.hp-logo:hover { opacity: 1; }
+
+/* Integraties: chip per tool, laatste chip is het plusje voor de rest */
+.hp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid #E3E7EF;
+  background: #fff;
+  padding: 0.5rem 0.9375rem 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1A2D63;
+  white-space: nowrap;
+}
+.hp-chip--plus { border-style: dashed; border-color: rgba(26, 45, 99, 0.35); background: transparent; padding-left: 0.875rem; }
+
+/* Eén keer beweging bij het laden van de hero */
+@media (prefers-reduced-motion: no-preference) {
+  .hp-rise { opacity: 0; transform: translateY(12px); animation: hp-rise 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+}
+@keyframes hp-rise { to { opacity: 1; transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hp *, .hp *::before, .hp *::after { transition-duration: 0ms !important; animation: none !important; }
+}

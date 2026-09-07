@@ -25,26 +25,40 @@ const generalSans = Inter({
   display: 'swap',
 });
 
+const SITE_TITLE = 'Finit Solutions | Leg jouw AI-fundament';
+const SITE_DESCRIPTION =
+  'AI kan alleen maar wat je hem vertelt. Leg eerst een fundament: alle kennis over jouw bedrijf, zo opgeschreven dat een AI ermee kan werken. Daarna bouwen wij de systemen die het werk overnemen. Prijzen vooraf bekend.';
+
 export const metadata: Metadata = {
-  title: 'Finit Solutions | AI systemen die 24/7 voor je werken',
-  description: 'Finit helpt KMO\'s de stap richting AI te zetten — van grondige analyse tot krachtige systemen die écht tijd besparen.',
-  metadataBase: new URL('https://finitsolutions.be'),
-  icons: {
-    icon: '/Finit Logomark@4x.png',
-    shortcut: '/Finit Logomark@4x.png',
-    apple: '/Finit Logomark@4x.png'
+  title: {
+    default: SITE_TITLE,
+    template: '%s | Finit Solutions',
   },
+  description: SITE_DESCRIPTION,
+  metadataBase: new URL('https://finitsolutions.be'),
+  applicationName: 'Finit Solutions',
+  // Iconen: echte favicon.ico (16/32/48) + PNG's, Apple-icoon op marineblauw, manifest-iconen 192/512.
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
+  manifest: '/site.webmanifest',
   openGraph: {
-    title: 'Finit Solutions | AI systemen die 24/7 voor je werken',
-    description: 'Finit helpt KMO\'s de stap richting AI te zetten — van grondige analyse tot krachtige systemen die écht tijd besparen.',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     url: 'https://finitsolutions.be',
     siteName: 'Finit Solutions',
     images: [
       {
-        url: '/Finit Logomark@4x.png',
+        url: '/og-image.png',
         width: 1200,
-        height: 1200,
-        alt: 'Finit Solutions Logo',
+        height: 630,
+        alt: 'Finit Solutions: leg jouw AI-fundament',
       },
     ],
     locale: 'nl_BE',
@@ -52,9 +66,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Finit Solutions | AI systemen die 24/7 voor je werken',
-    description: 'Finit helpt KMO\'s de stap richting AI te zetten — van grondige analyse tot krachtige systemen die écht tijd besparen.',
-    images: ['/Finit Logomark@4x.png'],
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ['/og-image.png'],
     creator: '@finitsolutions',
   },
   robots: {
@@ -83,12 +97,8 @@ export default function RootLayout({
   return (
     <html lang="nl">
       <head>
-        {/* Comprehensive favicon configuration */}
-        <link rel="icon" type="image/png" sizes="32x32" href="/Finit Logomark@4x.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/Finit Logomark@4x.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/Finit Logomark@4x.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-        <meta name="theme-color" content="#395686" />
+        {/* Iconen en manifest komen uit `metadata.icons` / `metadata.manifest` hierboven. */}
+        <meta name="theme-color" content="#1A2D63" />
 
         {/* JSON-LD Structured Data for Google Business Profile */}
         <script
@@ -99,9 +109,9 @@ export default function RootLayout({
               "@type": "ProfessionalService",
               "name": "Finit Solutions",
               "url": "https://finitsolutions.be",
-              "logo": "https://finitsolutions.be/Finit Logomark@4x.png",
-              "image": "https://finitsolutions.be/Finit Logomark@4x.png",
-              "description": "Finit helpt KMO's de stap richting AI te zetten — van grondige analyse tot krachtige systemen die écht tijd besparen.",
+              "logo": "https://finitsolutions.be/icon-512.png",
+              "image": "https://finitsolutions.be/og-image.png",
+              "description": SITE_DESCRIPTION,
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Leuven",
@@ -116,7 +126,7 @@ export default function RootLayout({
               },
               "telephone": ["+32 495 702 314", "+32 468 029 945"],
               "email": "contact@finitsolutions.be",
-              "vatID": "BE1020600643",
+              "vatID": "BE1036433716",
               "foundingDate": "2024",
               "numberOfEmployees": {
                 "@type": "QuantitativeValue",
@@ -127,9 +137,10 @@ export default function RootLayout({
                 "@type": "Country",
                 "name": "Belgium"
               },
-              "serviceType": ["AI Automatisering", "Bedrijfsautomatisering", "AI Consulting", "Software op maat"],
+              "serviceType": ["AI-opleiding voor zaakvoerders", "AI-automatisering", "Bedrijfsautomatisering"],
               "sameAs": [
-                "https://www.linkedin.com/company/finitsolutions/"
+                "https://www.linkedin.com/company/finitsolutions/",
+                "https://www.instagram.com/finitsolutions/"
               ],
               "openingHoursSpecification": [
                 {
