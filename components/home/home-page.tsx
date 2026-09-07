@@ -14,7 +14,8 @@ import {
   VAT_NUMBER,
 } from "@/lib/finit-links";
 import { useConsent } from "@/contexts/consent-context";
-import { BreinPagina } from "./brein-pagina";
+import { BreinKaart } from "./brein-kaart";
+import { DrieBeats } from "./drie-beats";
 import { GesprekForm } from "./gesprek-form";
 import {
   CTA_LESREEKS,
@@ -31,14 +32,17 @@ import {
 
 /**
  * De homepage. Eén lange pagina, elke sectie beantwoordt de vraag die de lezer
- * op dat moment heeft. Alle tekst staat in ./copy.ts.
+ * op dat moment heeft; die vraag staat klein boven de kop. Alle tekst staat in ./copy.ts.
  *
- * Opmaak: warm papier, marineblauw voor koppen en knoppen, één lettertype,
- * hairlines als scheiding. Geen scroll-animaties, geen chatbot, geen iconen-tegels.
+ * Opmaak: warm papier met verdiepte banden voor ritme, marineblauw voor de
+ * navigatiebalk, koppen, knoppen en het slot. Bricolage Grotesque voor koppen en
+ * prijzen, Schibsted Grotesk voor de rest. Hairlines als scheiding. Eén keer
+ * beweging: de kaart in de hero tekent zich in. Verder staat alles stil.
  */
 
 const CONTAINER = "mx-auto w-full max-w-[72rem] px-5 sm:px-8";
-const H2 = "text-balance text-[1.75rem] font-bold leading-[1.12] tracking-[-0.02em] text-[#1A2D63] sm:text-[2.1rem] lg:text-[2.4rem]";
+const H2 = "fs-display text-balance text-[1.9rem] font-bold leading-[1.05] text-[#1A2D63] sm:text-[2.3rem] lg:text-[2.7rem]";
+const VRAAG = "mb-3 text-[0.9375rem] font-medium text-[#757F9E]";
 const LEAD = "text-[1.0625rem] leading-[1.6] text-[#57514A] sm:text-[1.125rem]";
 
 const trackLesreeks = (location: string) =>
@@ -71,15 +75,7 @@ function LesreeksKnop({
 export function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const { openSettings } = useConsent();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   // Het mobiele menu blokkeert het scrollen en sluit zichzelf op een breed scherm.
   useEffect(() => {
@@ -106,23 +102,12 @@ export function HomePage() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#2A2620]">
       {/* ---------------------------------------------------------------- */}
-      {/* Navigatie                                                         */}
+      {/* Navigatie: marineblauwe balk                                      */}
       {/* ---------------------------------------------------------------- */}
-      <header
-        className={`sticky top-0 z-40 border-b bg-[#FDFBF7] transition-colors duration-200 ${
-          scrolled || menuOpen ? "border-[#E8E6DC]" : "border-transparent"
-        }`}
-      >
+      <header className="sticky top-0 z-40 bg-[#1A2D63] text-[#FDFBF7]">
         <div className={`${CONTAINER} flex h-16 items-center justify-between gap-6`}>
           <a href="#top" className="flex shrink-0 items-center" aria-label="Finit Solutions, naar boven">
-            <Image
-              src="/Finit Logo Blue@4x.png"
-              alt="Finit Solutions"
-              width={1698}
-              height={480}
-              priority
-              className="h-7 w-auto"
-            />
+            <Image src="/finit-logo-white.svg" alt="Finit Solutions" width={424} height={120} priority className="h-7 w-auto" />
           </a>
 
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Hoofdnavigatie">
@@ -130,7 +115,7 @@ export function HomePage() {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-[0.9375rem] font-medium text-[#57514A] transition-colors hover:text-[#1A2D63]"
+                className="text-[0.9375rem] font-medium text-[#FDFBF7]/75 transition-colors hover:text-[#FDFBF7]"
               >
                 {item.label}
               </a>
@@ -138,11 +123,11 @@ export function HomePage() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <LesreeksKnop location="nav" size="md" className="hidden sm:inline-flex" />
+            <LesreeksKnop location="nav" size="md" variant="cream" className="hidden sm:inline-flex" />
             <button
               type="button"
               onClick={() => setMenuOpen((v) => !v)}
-              className="flex h-11 w-11 items-center justify-center rounded-[8px] text-[#1A2D63] transition-colors hover:bg-[#F5F3EC] lg:hidden"
+              className="flex h-11 w-11 items-center justify-center rounded-[8px] text-[#FDFBF7] transition-colors hover:bg-white/10 lg:hidden"
               aria-label={menuOpen ? "Menu sluiten" : "Menu openen"}
               aria-expanded={menuOpen}
             >
@@ -154,14 +139,14 @@ export function HomePage() {
 
       {menuOpen && (
         <div className="fixed inset-x-0 bottom-0 top-16 z-30 overflow-y-auto bg-[#FDFBF7] lg:hidden">
-          <div className={`${CONTAINER} flex min-h-full flex-col pb-8 pt-4`}>
+          <div className={`${CONTAINER} flex min-h-full flex-col pb-8 pt-2`}>
             <nav className="border-b border-[#E8E6DC]" aria-label="Mobiele navigatie">
               {NAV.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
                   onClick={() => setMenuOpen(false)}
-                  className="block border-t border-[#E8E6DC] py-4 text-[1.375rem] font-semibold text-[#1A2D63]"
+                  className="fs-display block border-t border-[#E8E6DC] py-4 text-[1.5rem] font-semibold text-[#1A2D63]"
                 >
                   {item.label}
                 </a>
@@ -169,11 +154,7 @@ export function HomePage() {
             </nav>
             <div className="mt-8 flex flex-col gap-3">
               <LesreeksKnop location="mobile_menu" className="w-full" />
-              <button
-                type="button"
-                onClick={() => openGesprek("mobile_menu")}
-                className="fs-btn fs-btn--secondary fs-btn--lg w-full"
-              >
+              <button type="button" onClick={() => openGesprek("mobile_menu")} className="fs-btn fs-btn--secondary fs-btn--lg w-full">
                 {SLOT.gesprekKnop}
               </button>
             </div>
@@ -186,19 +167,19 @@ export function HomePage() {
 
       <main id="top" className="scroll-mt-16">
         {/* -------------------------------------------------------------- */}
-        {/* 1. Hero                                                        */}
+        {/* 1. Hero: de thesis, met de kaart van een brein                 */}
         {/* -------------------------------------------------------------- */}
-        <section className={`${CONTAINER} pb-16 pt-10 sm:pb-20 sm:pt-16 lg:pb-28 lg:pt-20`}>
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center lg:gap-16">
-            <div>
-              <h1 className="text-balance text-[2.1rem] font-bold leading-[1.06] tracking-[-0.025em] text-[#1A2D63] sm:text-[2.6rem] lg:text-[2.5rem] xl:text-[2.8rem]">
+        <section className={`${CONTAINER} pb-16 pt-10 sm:pb-20 sm:pt-14 lg:pb-24 lg:pt-16`}>
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-14">
+            <div className="lg:pt-10">
+              <h1 className="fs-display text-balance text-[2.5rem] font-bold leading-[1.02] text-[#1A2D63] sm:text-[3rem] lg:text-[3.1rem] xl:text-[3.5rem]">
                 {HERO.h1.map((regel) => (
                   <span key={regel} className="block">
                     {regel}
                   </span>
                 ))}
               </h1>
-              <p className={`mt-6 max-w-[36rem] ${LEAD}`}>{HERO.sub}</p>
+              <p className={`mt-6 max-w-[34rem] ${LEAD}`}>{HERO.sub}</p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <LesreeksKnop location="hero" className="w-full sm:w-auto" />
@@ -209,23 +190,24 @@ export function HomePage() {
               <p className="mt-5 text-[0.9375rem] leading-[1.5] text-[#76706A]">{HERO.meta}</p>
             </div>
 
-            <BreinPagina />
+            <BreinKaart />
           </div>
         </section>
 
         {/* -------------------------------------------------------------- */}
-        {/* 2. Waarom ChatGPT je werk niet doet                            */}
+        {/* 2. Zo leert een AI jouw zaak kennen (drie beats)               */}
         {/* -------------------------------------------------------------- */}
         <section className="border-t border-[#E8E6DC]">
           <div className={`${CONTAINER} py-16 sm:py-24`}>
             <div className="grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-20">
               <div className="max-w-[36rem]">
+                <p className={VRAAG}>{WAAROM.vraag}</p>
                 <h2 className={H2}>{WAAROM.h2}</h2>
                 <p className={`mt-6 ${LEAD}`}>{WAAROM.p1}</p>
                 <p className={`mt-4 ${LEAD}`}>{WAAROM.p2}</p>
                 <p className={`mt-4 ${LEAD}`}>{WAAROM.p3}</p>
               </div>
-              <div className="lg:pt-2">
+              <div className="lg:pt-9">
                 <p className="text-[0.9375rem] font-medium text-[#76706A]">{WAAROM.lijstTitel}</p>
                 <ul className="mt-3 divide-y divide-[#E8E6DC] border-y border-[#E8E6DC]">
                   {WAAROM.lijst.map((item) => (
@@ -236,39 +218,37 @@ export function HomePage() {
                 </ul>
               </div>
             </div>
+
+            <div className="mt-14 sm:mt-16">
+              <DrieBeats />
+            </div>
           </div>
         </section>
 
         {/* -------------------------------------------------------------- */}
-        {/* 3. Wat er verandert (nu / straks)                              */}
+        {/* 3. Wat wij daarna bouwen (nu / straks), verdiepte band         */}
         {/* -------------------------------------------------------------- */}
-        <section className="border-t border-[#E8E6DC]">
+        <section className="bg-[#F5F3EC]">
           <div className={`${CONTAINER} py-16 sm:py-24`}>
             <div className="max-w-[40rem]">
+              <p className={VRAAG}>{VERANDERT.vraag}</p>
               <h2 className={H2}>{VERANDERT.h2}</h2>
               <p className={`mt-5 ${LEAD}`}>{VERANDERT.intro}</p>
             </div>
 
-            <div className="mt-10 border-t border-[#E8E6DC]">
+            <div className="mt-10 border-t border-[#D8D5C7]">
               <div className="hidden gap-x-10 py-3 text-[0.8125rem] font-medium text-[#76706A] md:grid md:grid-cols-2">
                 <span>{VERANDERT.kolomNu}</span>
                 <span>{VERANDERT.kolomStraks}</span>
               </div>
               {VERANDERT.rijen.map((rij) => (
-                <div
-                  key={rij.nu}
-                  className="grid gap-y-3 border-b border-[#E8E6DC] py-5 md:grid-cols-2 md:gap-x-10 md:py-6"
-                >
+                <div key={rij.nu} className="grid gap-y-3 border-b border-[#D8D5C7] py-5 md:grid-cols-2 md:gap-x-10 md:py-6">
                   <p className="text-[1.0625rem] leading-[1.5] text-[#57514A]">
-                    <span className="mb-1 block text-[0.75rem] font-medium text-[#94908A] md:hidden">
-                      {VERANDERT.kolomNu}
-                    </span>
+                    <span className="mb-1 block text-[0.75rem] font-medium text-[#94908A] md:hidden">{VERANDERT.kolomNu}</span>
                     {rij.nu}
                   </p>
                   <p className="text-[1.0625rem] font-medium leading-[1.5] text-[#1A2D63]">
-                    <span className="mb-1 block text-[0.75rem] font-medium text-[#94908A] md:hidden">
-                      {VERANDERT.kolomStraks}
-                    </span>
+                    <span className="mb-1 block text-[0.75rem] font-medium text-[#94908A] md:hidden">{VERANDERT.kolomStraks}</span>
                     {rij.straks}
                   </p>
                 </div>
@@ -281,76 +261,76 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         {/* 4. Hoe het werkt + prijzen                                     */}
         {/* -------------------------------------------------------------- */}
-        <section id="hoe-het-werkt" className="scroll-mt-16 border-t border-[#E8E6DC]">
+        <section id="hoe-het-werkt" className="scroll-mt-16">
           <div className={`${CONTAINER} py-16 sm:py-24`}>
             <div className="max-w-[40rem]">
+              <p className={VRAAG}>{HOE.vraag}</p>
               <h2 className={H2}>{HOE.h2}</h2>
               <p className={`mt-5 ${LEAD}`}>{HOE.intro}</p>
             </div>
 
-            <ol
-              id="prijzen"
-              className="mt-12 grid scroll-mt-24 gap-12 border-t border-[#E8E6DC] pt-8 md:grid-cols-3 md:gap-8"
-            >
-              {HOE.stappen.map((stap) => (
-                <li key={stap.label} className="flex flex-col">
-                  <p className="text-[0.8125rem] font-medium text-[#76706A]">{stap.label}</p>
-                  <h3 className="mt-2 text-[1.5rem] font-semibold leading-[1.15] tracking-[-0.01em] text-[#1A2D63]">
-                    {stap.titel}
-                  </h3>
-                  <p className="mt-1.5 text-[0.9375rem] font-medium text-[#4D5A82]">{stap.rol}</p>
-
-                  <div className="mt-5 border-t border-[#E8E6DC] pt-5">
-                    <p className="text-[2rem] font-semibold leading-none tracking-[-0.02em] text-[#1A2D63]">
-                      {stap.prijs}
-                    </p>
-                    <p className="mt-2 text-[0.9375rem] leading-[1.5] text-[#57514A]">{stap.prijsDetail}</p>
-                  </div>
-
-                  <p className="mt-5 text-[1rem] leading-[1.6] text-[#2A2620]">{stap.body}</p>
-                  <p className="mt-3 text-[0.9375rem] leading-[1.6] text-[#57514A]">{stap.resultaat}</p>
-
-                  {stap.cta && (
-                    <div className="mt-6">
-                      <LesreeksKnop location="stappen" className="w-full sm:w-auto" />
-                      {stap.ctaNoot && (
-                        <p className="mt-3 text-[0.875rem] leading-[1.5] text-[#76706A]">{stap.ctaNoot}</p>
-                      )}
+            <ol id="prijzen" className="mt-12 grid scroll-mt-24 gap-10 md:grid-cols-3 md:gap-6 lg:gap-8">
+              {HOE.stappen.map((stap, i) => {
+                const uitgelicht = i === 0;
+                return (
+                  <li
+                    key={stap.label}
+                    className={
+                      uitgelicht
+                        ? "fs-paper flex flex-col rounded-[12px] border border-[#E8E6DC] bg-[#FFFEFA] p-6 sm:p-7"
+                        : "flex flex-col border-t border-[#E8E6DC] pt-6 md:pt-7"
+                    }
+                  >
+                    <div className="flex items-baseline gap-3">
+                      <span className="fs-display text-[2rem] font-bold leading-none text-[#1A2D63]">{i + 1}</span>
+                      <span className="text-[0.8125rem] font-medium text-[#76706A]">{stap.label.replace(/^Stap \d · /, "")}</span>
                     </div>
-                  )}
-                </li>
-              ))}
+                    <h3 className="fs-display fs-display-sm mt-4 text-[1.5rem] font-semibold leading-[1.12] text-[#1A2D63]">{stap.titel}</h3>
+                    <p className="mt-1.5 text-[0.9375rem] font-medium text-[#4D5A82]">{stap.rol}</p>
+
+                    <div className="mt-5 border-t border-[#E8E6DC] pt-5">
+                      <p className="fs-display text-[2.5rem] font-bold leading-none text-[#1A2D63]">{stap.prijs}</p>
+                      <p className="mt-2 text-[0.9375rem] leading-[1.5] text-[#57514A]">{stap.prijsDetail}</p>
+                    </div>
+
+                    <p className="mt-5 text-[1rem] leading-[1.6] text-[#2A2620]">{stap.body}</p>
+                    <p className="mt-3 text-[0.9375rem] leading-[1.6] text-[#57514A]">{stap.resultaat}</p>
+
+                    {stap.cta && (
+                      <div className="mt-6">
+                        <LesreeksKnop location="stappen" className="w-full" />
+                        {stap.ctaNoot && <p className="mt-3 text-[0.875rem] leading-[1.5] text-[#76706A]">{stap.ctaNoot}</p>}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ol>
             <p className="mt-8 text-[0.8125rem] text-[#76706A]">{HOE.btwNoot}</p>
 
             <div className="mt-12 max-w-[52rem] rounded-[12px] bg-[#F5F3EC] p-6 sm:p-8">
-              <h3 className="text-[1.25rem] font-semibold leading-snug text-[#1A2D63]">{HOE.waarom.h3}</h3>
+              <h3 className="fs-display fs-display-sm text-[1.35rem] font-semibold leading-snug text-[#1A2D63]">{HOE.waarom.h3}</h3>
               <p className="mt-3 text-[1rem] leading-[1.6] text-[#2A2620] sm:text-[1.0625rem]">{HOE.waarom.p}</p>
             </div>
           </div>
         </section>
 
         {/* -------------------------------------------------------------- */}
-        {/* 5. Over ons                                                    */}
+        {/* 5. Over ons, verdiepte band                                     */}
         {/* -------------------------------------------------------------- */}
-        <section id="over-ons" className="scroll-mt-16 border-t border-[#E8E6DC]">
+        <section id="over-ons" className="scroll-mt-16 bg-[#F5F3EC]">
           <div className={`${CONTAINER} py-16 sm:py-24`}>
+            <p className={VRAAG}>{OVER.vraag}</p>
             <h2 className={H2}>{OVER.h2}</h2>
 
             <div className="mt-10 grid gap-6 sm:grid-cols-3 lg:gap-8">
               {OVER.team.map((lid) => (
                 <div key={lid.naam} className="grid grid-cols-[5.5rem_1fr] items-start gap-4 sm:block">
-                  <div className="relative aspect-square w-full overflow-hidden rounded-[10px] border border-[#E8E6DC] bg-[#F5F3EC]">
-                    <Image
-                      src={lid.foto}
-                      alt={lid.alt}
-                      fill
-                      sizes="(min-width: 640px) 30vw, 6rem"
-                      className="object-cover object-top"
-                    />
+                  <div className="relative aspect-square w-full overflow-hidden rounded-[10px] border border-[#D8D5C7] bg-[#F5F3EC]">
+                    <Image src={lid.foto} alt={lid.alt} fill sizes="(min-width: 640px) 30vw, 6rem" className="fs-foto object-cover object-top" />
                   </div>
                   <div className="sm:mt-4">
-                    <p className="text-[1.125rem] font-semibold text-[#1A2D63]">{lid.naam}</p>
+                    <p className="fs-display fs-display-sm text-[1.25rem] font-semibold text-[#1A2D63]">{lid.naam}</p>
                     <p className="mt-1 text-[0.9375rem] leading-[1.55] text-[#57514A]">{lid.rol}</p>
                   </div>
                 </div>
@@ -361,20 +341,8 @@ export function HomePage() {
 
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
               <span className="text-[0.8125rem] font-medium text-[#76706A]">{OVER.logosLabel}</span>
-              <Image
-                src="/SI @KBC Black (2).png"
-                alt="Start it @KBC"
-                width={400}
-                height={120}
-                className="h-6 w-auto opacity-70"
-              />
-              <Image
-                src="/VLAIO_sponsorlogo-antraciet.png"
-                alt="VLAIO"
-                width={400}
-                height={120}
-                className="h-6 w-auto opacity-70"
-              />
+              <Image src="/SI @KBC Black (2).png" alt="Start it @KBC" width={400} height={120} className="h-6 w-auto opacity-70" />
+              <Image src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" width={400} height={120} className="h-6 w-auto opacity-70" />
             </div>
           </div>
         </section>
@@ -382,13 +350,13 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         {/* 6. Vragen                                                      */}
         {/* -------------------------------------------------------------- */}
-        <section id="vragen" className="scroll-mt-16 border-t border-[#E8E6DC]">
+        <section id="vragen" className="scroll-mt-16">
           <div className={`${CONTAINER} py-16 sm:py-24`}>
             <div className="max-w-[46rem]">
               <h2 className={H2}>{VRAGEN.h2}</h2>
               <div className="mt-8 border-t border-[#E8E6DC]">
                 {VRAGEN.items.map((item) => (
-                  <details key={item.q} className="fs-details group border-b border-[#E8E6DC]">
+                  <details key={item.q} className="fs-details border-b border-[#E8E6DC]">
                     <summary className="flex items-start justify-between gap-6 py-5 text-[1.0625rem] font-medium leading-snug text-[#1A2D63] sm:text-[1.125rem]">
                       <span>{item.q}</span>
                       <span className="fs-plus mt-1 shrink-0 text-[#76706A]" aria-hidden="true">
@@ -410,10 +378,8 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         <section className="bg-[#1A2D63] text-[#FDFBF7]">
           <div className={`${CONTAINER} py-16 sm:py-24`}>
-            <div className="max-w-[40rem]">
-              <h2 className="text-balance text-[1.75rem] font-bold leading-[1.12] tracking-[-0.02em] sm:text-[2.1rem] lg:text-[2.4rem]">
-                {SLOT.h2}
-              </h2>
+            <div className="max-w-[42rem]">
+              <h2 className="fs-display text-balance text-[2rem] font-bold leading-[1.05] sm:text-[2.5rem] lg:text-[3rem]">{SLOT.h2}</h2>
               <p className="mt-5 text-[1.0625rem] leading-[1.6] text-[#FDFBF7]/80 sm:text-[1.125rem]">{SLOT.p}</p>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
                 <LesreeksKnop location="slot" variant="cream" className="w-full sm:w-auto" />
@@ -440,37 +406,23 @@ export function HomePage() {
               <p className="font-medium text-[#FDFBF7]">{FOOTER.bedrijf}</p>
               <p>{FOOTER.plaats}</p>
               <p>
-                <a href={`mailto:${CONTACT_EMAIL}`} className="transition-colors hover:text-[#FDFBF7]">
-                  {CONTACT_EMAIL}
-                </a>
+                <a href={`mailto:${CONTACT_EMAIL}`} className="transition-colors hover:text-[#FDFBF7]">{CONTACT_EMAIL}</a>
               </p>
               <p>
-                <a href={PHONE_LINK} className="transition-colors hover:text-[#FDFBF7]">
-                  {PHONE_NUMBER}
-                </a>
+                <a href={PHONE_LINK} className="transition-colors hover:text-[#FDFBF7]">{PHONE_NUMBER}</a>
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-x-12 gap-y-2 text-[0.9375rem] leading-[1.7] sm:grid-cols-[auto_auto]">
               <div className="flex flex-col">
-                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#FDFBF7]">
-                  Instagram
-                </a>
-                <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#FDFBF7]">
-                  LinkedIn
-                </a>
+                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#FDFBF7]">Instagram</a>
+                <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#FDFBF7]">LinkedIn</a>
               </div>
               <div className="flex flex-col">
                 {FOOTER.links.map((l) => (
-                  <a key={l.href} href={l.href} className="transition-colors hover:text-[#FDFBF7]">
-                    {l.label}
-                  </a>
+                  <a key={l.href} href={l.href} className="transition-colors hover:text-[#FDFBF7]">{l.label}</a>
                 ))}
-                <button
-                  type="button"
-                  onClick={openSettings}
-                  className="text-left transition-colors hover:text-[#FDFBF7]"
-                >
+                <button type="button" onClick={openSettings} className="text-left transition-colors hover:text-[#FDFBF7]">
                   Cookie-instellingen
                 </button>
               </div>

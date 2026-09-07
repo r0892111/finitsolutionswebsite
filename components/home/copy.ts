@@ -42,11 +42,46 @@ export const BREIN_PAGINA = {
     jij: "Offerte voor 6 stopcontacten bij Peeters, plaatsbezoek was gisteren.",
     ai: "6 × 49 euro + 45 euro voorrijkost = 339 euro excl. btw. Onder de 5.000, dus Els hoeft niet na te kijken. Ze staat klaar in je map Offertes.",
   },
-  onderschrift: "Boven: één pagina uit een AI-brein. Onder: wat de AI ermee doet.",
+};
+
+/** De kaart in de hero: het brein als pagina's die naar elkaar verwijzen. */
+export const BREIN_KAART = {
+  aria: "Kaart van het AI-brein van Elektro Janssen: pagina's zoals Offertes, Klanten, Prijzen en Planning die naar elkaar verwijzen.",
+  onderschrift: "Zo ziet een AI-brein eruit: jouw zaak als pagina's die naar elkaar verwijzen. Hier is Offertes opengeklapt, met wat de AI ermee doet.",
+};
+
+/** Drie stilstaande beelden: praten → pagina's → antwoord. */
+export const BEATS = {
+  een: {
+    label: "1 · Jij praat",
+    duur: "14:32",
+    titel: "Praatsessie 2 · je klantreis, van eerste contact tot factuur",
+    uitleg: "Je spreekt op je gsm in hoe je zaak draait, aan de hand van een lijst met onderwerpen. Praten gaat sneller dan typen.",
+  },
+  twee: {
+    label: "2 · De AI schrijft",
+    map: "Elektro Janssen · brein",
+    aantal: "41 pagina's",
+    paginas: [
+      { naam: "Offertes", wanneer: "gisteren" },
+      { naam: "Klanten", wanneer: "gisteren" },
+      { naam: "Prijzen", wanneer: "3 dagen geleden" },
+      { naam: "Planning", wanneer: "3 dagen geleden" },
+      { naam: "Werkbonnen", wanneer: "vorige week" },
+    ],
+    uitleg: "Uit je opnames en je documenten schrijft de AI pagina's in gewone taal. Jij leest na en verbetert waar hij ernaast zit.",
+  },
+  drie: {
+    label: "3 · Jij vraagt",
+    vraag: "Wat rekenen we aan voor een nieuwbouw?",
+    antwoord: "Nieuwbouw gaat altijd op plan, nooit op foto. Prijs per punt zoals op je prijslijst, en Els kijkt na boven 5.000 euro. Zal ik de offerte klaarzetten?",
+    uitleg: "Vanaf dan kent de AI je zaak bij elke vraag, in een venster op je computer. Niets meer uitleggen of inplakken.",
+  },
 };
 
 // 2. "Waarom lukt dat niet met ChatGPT? Wat is zo'n brein dan?"
 export const WAAROM = {
+  vraag: "Waarom lukt dat niet met ChatGPT?",
   h2: "Zo leert een AI jouw zaak kennen",
   p1: "ChatGPT weet niet wat jij aanrekent of hoe je een klacht afhandelt. Je krijgt een algemeen antwoord en doet het toch zelf. Je prijslijst elke keer opnieuw inplakken helpt even, maar de rest van je zaak zit nog altijd in jouw hoofd.",
   p2: "Een AI-brein is jouw zaak, één keer opgeschreven: een map met pagina's in gewone taal, zoals de pagina hierboven. De AI leest die map zelf, bij elke vraag die je stelt in een venster op je computer, zoals bij ChatGPT. Jij hoeft niets meer uit te leggen of in te plakken.",
@@ -63,6 +98,7 @@ export const WAAROM = {
 
 // 3. "En wat heb ik daar dan aan?" (dit zijn resultaten van stap 2)
 export const VERANDERT = {
+  vraag: "En wat heb ik daar dan aan?",
   h2: "Wat wij daarna voor je bouwen",
   intro: "Voorbeelden van wat wij na de lesreeks bouwen, bovenop jouw brein. Jij bepaalt per taak of de AI zelf mag versturen of eerst langs jou passeert.",
   kolomNu: "Nu",
@@ -102,6 +138,7 @@ export type Stap = {
 
 // 4. "Hoe gaat dat concreet, en wat kost het?"
 export const HOE = {
+  vraag: "Wat moet ik doen, en wat kost het?",
   h2: "Hoe het werkt",
   intro: "In drie stappen. Je kent de prijs van elke stap voor je begint.",
   stappen: [
@@ -144,6 +181,7 @@ export const HOE = {
 
 // 5. "Wie zijn jullie, kan ik dit vertrouwen?"
 export const OVER = {
+  vraag: "Wie zijn jullie?",
   h2: "Drie mensen, in Leuven",
   team: [
     {

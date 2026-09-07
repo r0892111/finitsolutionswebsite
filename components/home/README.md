@@ -6,7 +6,8 @@ Vier bestanden, één idee: **de pagina beantwoordt de vragen van een niet-techn
 |---|---|
 | `copy.ts` | Alle tekst, als data. Copy aanpassen = alleen dit bestand. |
 | `home-page.tsx` | De pagina: navigatie, zeven secties, footer. Geen scroll-animaties. |
-| `brein-pagina.tsx` | Het beeld in de hero: één pagina uit een AI-brein plus wat de AI ermee doet. |
+| `brein-kaart.tsx` | Het beeld in de hero: het brein als kaart van pagina's die naar elkaar verwijzen, met "Offertes" opengeklapt eronder. Hover over een bolletje licht de verbindingen op. |
+| `drie-beats.tsx` | Drie stilstaande beelden onder sectie 2: jij praat (spraakmemo) → de AI schrijft (pagina's) → jij vraagt (antwoord). |
 | `gesprek-form.tsx` | "Vraag een gesprek aan" (popup). Stuurt naar de n8n-flow met dezelfde veldnamen als vroeger (`naam`, `telefoonnummer`, `email`). |
 
 Links en contactgegevens staan in `lib/finit-links.ts`. **`SKOOL_URL` moet nog ingevuld worden:** de knop "Start de lesreeks" gaat rechtstreeks naar Skool, niet naar een formulier.
@@ -31,4 +32,4 @@ Links en contactgegevens staan in `lib/finit-links.ts`. **`SKOOL_URL` moet nog i
 
 ## Opmaak
 
-Warm papier (`#FDFBF7`), marineblauw (`#1A2D63`) voor koppen en knoppen, één lettertype (Schibsted Grotesk via `next/font`), hairlines als scheiding. Knoppen volgen het Finit-designsysteem (vlakke vulling + glazen rand, `app/globals.css` onder "Homepage 2026-09"). Bewust weggelaten: gradients, gloed, glas-effecten, iconen-tegels, badges, scroll-animaties, chatbot-mockups.
+Warm papier (`#FDFBF7`) met verdiepte banden (`#F5F3EC`) voor ritme, marineblauw (`#1A2D63`) voor navigatiebalk, koppen, knoppen en slot. Twee lettertypes via `next/font`: Bricolage Grotesque voor koppen en prijzen, Schibsted Grotesk voor lopende tekst. Boven elke kop staat klein de vraag van de lezer die de sectie beantwoordt. Eén keer beweging: de kaart in de hero tekent zich in. Knoppen volgen het Finit-designsysteem (vlakke vulling + glazen rand, `app/globals.css` onder "Homepage 2026-09"). Bewust weggelaten: gradients, gloed, glas-effecten, iconen-tegels, badges, scroll-animaties, chatbot-mockups.

@@ -797,3 +797,35 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .fs-home *, .fs-home *::before, .fs-home *::after { transition-duration: 0ms !important; animation: none !important; }
 }
+
+/* --- Homepage 2026-09, tweede ontwerpronde: display-font, kaart, beats --- */
+.fs-display {
+  font-family: var(--font-bricolage), var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+  font-variation-settings: "opsz" 96;
+  letter-spacing: -0.02em;
+}
+.fs-display-sm { font-variation-settings: "opsz" 48; letter-spacing: -0.015em; }
+
+/* De brein-kaart: lijnen tekenen zich één keer in, bolletjes en labels verschijnen. */
+.fs-edge { stroke: #C9D0E2; stroke-width: 1; transition: stroke 160ms cubic-bezier(0.4, 0, 0.2, 1), stroke-width 160ms cubic-bezier(0.4, 0, 0.2, 1); }
+.fs-edge[data-actief="true"] { stroke: #1A2D63; stroke-width: 1.5; }
+.fs-node { cursor: default; }
+.fs-node text { fill: #57514A; font-size: 12.5px; transition: fill 160ms cubic-bezier(0.4, 0, 0.2, 1); }
+.fs-node[data-actief="true"] text { fill: #1A2D63; font-weight: 600; }
+.fs-node circle { transition: r 160ms cubic-bezier(0.4, 0, 0.2, 1); }
+@media (prefers-reduced-motion: no-preference) {
+  .fs-edge { stroke-dasharray: 1; stroke-dashoffset: 1; animation: fs-draw 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .fs-node { opacity: 0; animation: fs-appear 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .fs-rise { opacity: 0; transform: translateY(10px); animation: fs-rise 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+}
+@keyframes fs-draw { to { stroke-dashoffset: 0; } }
+@keyframes fs-appear { to { opacity: 1; } }
+@keyframes fs-rise { to { opacity: 1; transform: translateY(0); } }
+
+/* Foto's als inkt op papier; kleur bij hover. */
+.fs-foto { filter: grayscale(1) contrast(1.05); mix-blend-mode: multiply; transition: filter 200ms cubic-bezier(0.4, 0, 0.2, 1); }
+.fs-foto:hover { filter: grayscale(0) contrast(1); }
+
+/* Spraakmemo-balkjes */
+.fs-wave { display: flex; align-items: center; gap: 2px; height: 28px; }
+.fs-wave span { display: block; width: 3px; border-radius: 2px; background: #1A2D63; opacity: 0.55; }
