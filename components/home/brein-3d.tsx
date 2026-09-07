@@ -244,10 +244,10 @@ export function Brein3D() {
 
       // Lichtpuntjes: informatie die over de lijnen loopt.
       if (!stil && nu > VORM) {
-        if (nu - laatstePuls > 700 && pulsen.length < 7) {
+        if (nu - laatstePuls > 1600 && pulsen.length < 4) {
           const kandidaten = LIJNEN.map((l, i) => i).filter((i) => !LIJNEN[i].sub && pts[LIJNEN[i].a].z > -0.2 && pts[LIJNEN[i].b].z > -0.2);
           if (kandidaten.length) {
-            pulsen.push({ lijn: kandidaten[Math.floor(Math.random() * kandidaten.length)], t: 0, v: 0.0009 + Math.random() * 0.0007 });
+            pulsen.push({ lijn: kandidaten[Math.floor(Math.random() * kandidaten.length)], t: 0, v: 0.00032 + Math.random() * 0.00022 });
             laatstePuls = nu;
           }
         }
@@ -257,11 +257,11 @@ export function Brein3D() {
           const x = a.x + (b.x - a.x) * p.t, y = a.y + (b.y - a.y) * p.t;
           const fade = Math.min(1, p.t * 6, (1 - p.t) * 6);
           const staart = Math.max(0, p.t - 0.12);
-          ctx.strokeStyle = `rgba(${ACCENT},${fade * 0.55})`;
-          ctx.lineWidth = 1.6;
+          ctx.strokeStyle = `rgba(${ACCENT},${fade * 0.28})`;
+          ctx.lineWidth = 1.2;
           ctx.beginPath(); ctx.moveTo(a.x + (b.x - a.x) * staart, a.y + (b.y - a.y) * staart); ctx.lineTo(x, y); ctx.stroke();
-          ctx.fillStyle = `rgba(${ACCENT},${fade})`;
-          ctx.beginPath(); ctx.arc(x, y, 2.6, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = `rgba(${ACCENT},${fade * 0.6})`;
+          ctx.beginPath(); ctx.arc(x, y, 2.1, 0, Math.PI * 2); ctx.fill();
         }
       }
 
@@ -282,13 +282,6 @@ export function Brein3D() {
         } else {
           ctx.fillStyle = actief ? `rgba(${ACCENT},1)` : `rgba(${NAVY},${k.soort === "sub" ? alpha * 0.75 : alpha})`;
           ctx.beginPath(); ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2); ctx.fill();
-        }
-        if (k.open || actief) {
-          ctx.setLineDash([2.5, 3]);
-          ctx.strokeStyle = actief ? `rgba(${ACCENT},0.9)` : `rgba(${NAVY},${alpha * 0.8})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.arc(pt.x, pt.y, r + 5.5, 0, Math.PI * 2); ctx.stroke();
-          ctx.setLineDash([]);
         }
       }
 
@@ -352,7 +345,7 @@ export function Brein3D() {
       vorige = t;
       tijd = t - t0;
       if (!slepen) {
-        q = qNorm(qMul(qDraai(as(tijd), dt * 0.00017), q));
+        q = qNorm(qMul(qDraai(as(tijd), dt * 0.00008), q));
         if (Math.abs(spinX) + Math.abs(spinY) > 1e-5) {
           q = qNorm(qMul(qDraai([1, 0, 0], spinX * dt), qMul(qDraai([0, 1, 0], spinY * dt), q)));
           spinX *= 0.94; spinY *= 0.94;
