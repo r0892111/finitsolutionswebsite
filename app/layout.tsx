@@ -25,9 +25,9 @@ const generalSans = Inter({
   display: 'swap',
 });
 
-const SITE_TITLE = 'Finit Solutions | Leer een AI hoe jouw zaak werkt';
+const SITE_TITLE = 'Finit Solutions | AI-systemen die 24/7 voor je werken';
 const SITE_DESCRIPTION =
-  'Bouw in een paar avonden zelf een AI die jouw zaak kent. Daarna bouwen wij er systemen op die werk uit je handen nemen. Vaste prijzen, geen IT-kennis nodig.';
+  'Minder administratie, meer tijd voor je bedrijf. Je leert de AI eerst hoe jouw bedrijf werkt, daarna bouwen wij AI-oplossingen op maat die repetitieve processen automatiseren. Vaste prijzen.';
 
 export const metadata: Metadata = {
   title: {
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Finit Solutions: leer een AI hoe jouw zaak werkt',
+        alt: 'Finit Solutions: minder administratie, meer tijd voor je bedrijf',
       },
     ],
     locale: 'nl_BE',

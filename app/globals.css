@@ -653,188 +653,121 @@ html {
 
 /* =====================================================================
    Homepage 2026-09 (branch rework/homepage-lesreeks)
-   Warm papier + marine. Eén font (Schibsted Grotesk), hairlines,
-   knoppen volgens het Finit-designsysteem (flat fill + glazen rand).
+   Schone, witte opmaak. Marineblauw als merkkleur, pilvormige knoppen
+   zoals de cookiebanner en de vorige site. Bricolage Grotesque voor
+   koppen, Schibsted Grotesk voor de rest.
    ===================================================================== */
-.fs-home {
+.hp {
   font-family: var(--font-schibsted), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: "liga" 1, "calt" 1;
 }
-.fs-home ::selection { background: #C9D0E2; color: #1A2D63; }
-.fs-tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+.hp ::selection { background: #B8C5E6; color: #1A2D63; }
 
-.fs-btn {
-  position: relative;
+.hp-display {
+  font-family: var(--font-bricolage), var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+  font-variation-settings: "opsz" 96;
+  letter-spacing: -0.022em;
+}
+.hp-display-sm { font-variation-settings: "opsz" 48; letter-spacing: -0.012em; }
+
+/* Knoppen: pillen, zoals op de vorige site en in de cookiebanner */
+.hp-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   font-weight: 500;
   line-height: 1;
-  border-radius: 8px;
+  border-radius: 9999px;
   border: 1px solid transparent;
   cursor: pointer;
   white-space: nowrap;
   text-decoration: none;
-  transition:
-    background-color 160ms cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 160ms cubic-bezier(0.4, 0, 0.2, 1),
-    color 160ms cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 160ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
-.fs-btn:focus-visible { outline: 2px solid #757F9E; outline-offset: 2px; }
-.fs-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
-.fs-btn--lg { min-height: 3rem; padding: 0 1.375rem; font-size: 1rem; }
-.fs-btn--md { min-height: 2.5rem; padding: 0 1rem; font-size: 0.9375rem; }
+.hp-btn:focus-visible { outline: 2px solid #1A2D63; outline-offset: 3px; }
+.hp-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+.hp-btn--lg { min-height: 3.25rem; padding: 0 1.625rem; font-size: 1rem; }
+.hp-btn--md { min-height: 2.625rem; padding: 0 1.25rem; font-size: 0.9375rem; }
+.hp-btn--sm { min-height: 2.25rem; padding: 0 1rem; font-size: 0.875rem; }
 
-.fs-btn--primary {
-  color: #FDFBF7;
+.hp-btn--primary {
+  color: #fff;
   background: #1A2D63;
-  border-color: #0F1D47;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.22),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-    0 1px 2px rgba(20, 30, 60, 0.22),
-    0 6px 14px -2px rgba(20, 30, 60, 0.32);
+  box-shadow: 0 8px 20px -8px rgba(26, 45, 99, 0.45);
 }
-.fs-btn--primary:hover:not(:disabled) {
-  background: #2E3F71;
-  transform: translateY(-1px);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.22),
-    0 2px 4px rgba(20, 30, 60, 0.2),
-    0 12px 24px -4px rgba(20, 30, 60, 0.4);
-}
-.fs-btn--primary:active:not(:disabled) {
-  background: #0F1D47;
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
+.hp-btn--primary:hover:not(:disabled) { background: #2A4488; transform: translateY(-1px); box-shadow: 0 12px 26px -8px rgba(26, 45, 99, 0.5); }
+.hp-btn--primary:active:not(:disabled) { background: #14234F; transform: translateY(0); box-shadow: 0 4px 10px -6px rgba(26, 45, 99, 0.4); }
 
-.fs-btn--secondary {
-  color: #2A2620;
-  background: #FDFBF7;
-  border-color: #D8D5C7;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(60, 50, 30, 0.05),
-    0 1px 2px rgba(60, 50, 30, 0.06),
-    0 4px 10px -2px rgba(60, 50, 30, 0.1);
+.hp-btn--secondary {
+  color: #1A2D63;
+  background: #fff;
+  border-color: rgba(26, 45, 99, 0.22);
 }
-.fs-btn--secondary:hover:not(:disabled) {
-  background: #FFFFFF;
-  border-color: #B8B5A6;
-  transform: translateY(-1px);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 0 rgba(60, 50, 30, 0.07),
-    0 2px 4px rgba(60, 50, 30, 0.07),
-    0 10px 20px -4px rgba(60, 50, 30, 0.16);
-}
-.fs-btn--secondary:active:not(:disabled) {
-  background: #F5F3EC;
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 5px rgba(60, 50, 30, 0.1);
-}
+.hp-btn--secondary:hover:not(:disabled) { background: rgba(26, 45, 99, 0.04); border-color: rgba(26, 45, 99, 0.4); }
+.hp-btn--secondary:active:not(:disabled) { background: rgba(26, 45, 99, 0.08); }
 
 /* Knop op een marineblauwe ondergrond */
-.fs-btn--cream {
+.hp-btn--light {
   color: #1A2D63;
-  background: #FDFBF7;
-  border-color: #E8E6DC;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
-    0 1px 2px rgba(0, 0, 0, 0.18),
-    0 6px 14px -2px rgba(0, 0, 0, 0.28);
+  background: #fff;
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.35);
 }
-.fs-btn--cream:hover:not(:disabled) { background: #FFFFFF; transform: translateY(-1px); }
-.fs-btn--cream:active:not(:disabled) { background: #F5F3EC; transform: translateY(1px); }
+.hp-btn--light:hover:not(:disabled) { background: #EEF2FB; transform: translateY(-1px); }
+.hp-btn--light:active:not(:disabled) { background: #DCE4F7; transform: translateY(0); }
 
-.fs-link {
+.hp-link {
   color: #1A2D63;
   text-decoration: underline;
-  text-decoration-color: #A6B0CC;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  transition: text-decoration-color 160ms cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration-color: rgba(26, 45, 99, 0.35);
+  transition: text-decoration-color 160ms ease;
 }
-.fs-link:hover { text-decoration-color: #1A2D63; }
+.hp-link:hover { text-decoration-color: #1A2D63; }
 
-/* Papieren kaart: zacht kussen, geen gloed */
-.fs-paper {
-  box-shadow:
-    0 1px 2px rgba(60, 50, 30, 0.06),
-    0 12px 32px -16px rgba(60, 50, 30, 0.24),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+/* Kaarten: wit, zachte schaduw */
+.hp-card {
+  background: #fff;
+  border: 1px solid #E3E7EF;
+  border-radius: 20px;
+  box-shadow: 0 1px 2px rgba(26, 45, 99, 0.04), 0 16px 40px -24px rgba(26, 45, 99, 0.25);
 }
+
+.hp-card--accent {
+  border-color: #1A2D63;
+  box-shadow: 0 0 0 1px #1A2D63, 0 1px 2px rgba(26, 45, 99, 0.04), 0 20px 44px -22px rgba(26, 45, 99, 0.45);
+}
+
+/* De handgetekende onderstreping van de vorige site, onder het laatste woord van een kop */
+.hp-onder { position: relative; display: inline-block; white-space: nowrap; }
+.hp-onder > svg { position: absolute; left: -2%; right: -2%; bottom: -0.08em; width: 104%; height: 0.32em; pointer-events: none; }
+
+/* Vinkje voor lijstjes */
+.hp-check { flex: none; width: 20px; height: 20px; border-radius: 9999px; background: #E6ECF9; color: #1A2D63; display: inline-flex; align-items: center; justify-content: center; }
+.hp-check--donker { background: rgba(255, 255, 255, 0.14); color: #fff; }
 
 /* Veelgestelde vragen: native <details>, eigen plusje */
-.fs-details > summary { list-style: none; cursor: pointer; }
-.fs-details > summary::-webkit-details-marker { display: none; }
-.fs-details .fs-plus { transition: transform 160ms cubic-bezier(0.4, 0, 0.2, 1); }
-.fs-details[open] .fs-plus { transform: rotate(45deg); }
+.hp-details > summary { list-style: none; cursor: pointer; }
+.hp-details > summary::-webkit-details-marker { display: none; }
+.hp-details .hp-plus { transition: transform 160ms ease; }
+.hp-details[open] .hp-plus { transform: rotate(45deg); }
 
-.fs-input {
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid #D8D5C7;
-  background: #FFFEFA;
-  color: #2A2620;
-  padding: 0.75rem 0.875rem;
-  font-size: 1rem;
-  line-height: 1.4;
-  transition: border-color 160ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 160ms cubic-bezier(0.4, 0, 0.2, 1);
+/* Logo's van integraties: grijs, kleur bij hover */
+.hp-logo { filter: grayscale(1); opacity: 0.55; transition: opacity 160ms ease, filter 160ms ease; }
+.hp-logo:hover { filter: grayscale(0); opacity: 1; }
+.hp-logo-kleur { opacity: 0.8; transition: opacity 160ms ease; }
+.hp-logo-kleur:hover { opacity: 1; }
+
+/* Eén keer beweging bij het laden van de hero */
+@media (prefers-reduced-motion: no-preference) {
+  .hp-rise { opacity: 0; transform: translateY(12px); animation: hp-rise 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 }
-.fs-input::placeholder { color: #94908A; }
-.fs-input:focus { outline: none; border-color: #1A2D63; box-shadow: 0 0 0 3px rgba(26, 45, 99, 0.15); }
+@keyframes hp-rise { to { opacity: 1; transform: translateY(0); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .fs-home *, .fs-home *::before, .fs-home *::after { transition-duration: 0ms !important; animation: none !important; }
+  .hp *, .hp *::before, .hp *::after { transition-duration: 0ms !important; animation: none !important; }
 }
-
-/* --- Homepage 2026-09, tweede ontwerpronde: display-font, kaart, beats --- */
-.fs-display {
-  font-family: var(--font-bricolage), var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
-  font-variation-settings: "opsz" 96;
-  letter-spacing: -0.02em;
-}
-.fs-display-sm { font-variation-settings: "opsz" 48; letter-spacing: -0.015em; }
-
-/* De brein-kaart: lijnen tekenen zich één keer in, bolletjes en labels verschijnen. */
-.fs-edge { stroke: #C9D0E2; stroke-width: 1; transition: stroke 160ms cubic-bezier(0.4, 0, 0.2, 1), stroke-width 160ms cubic-bezier(0.4, 0, 0.2, 1); }
-.fs-edge[data-actief="true"] { stroke: #1A2D63; stroke-width: 1.5; }
-.fs-node { cursor: default; }
-.fs-node text { fill: #57514A; font-size: 12.5px; transition: fill 160ms cubic-bezier(0.4, 0, 0.2, 1); }
-.fs-node[data-actief="true"] text { fill: #1A2D63; font-weight: 600; }
-.fs-node circle { transition: r 160ms cubic-bezier(0.4, 0, 0.2, 1); }
-@media (prefers-reduced-motion: no-preference) {
-  .fs-edge { stroke-dasharray: 1; stroke-dashoffset: 1; animation: fs-draw 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  .fs-node { opacity: 0; animation: fs-appear 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  .fs-rise { opacity: 0; transform: translateY(10px); animation: fs-rise 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-}
-@keyframes fs-draw { to { stroke-dashoffset: 0; } }
-@keyframes fs-appear { to { opacity: 1; } }
-@keyframes fs-rise { to { opacity: 1; transform: translateY(0); } }
-
-/* Foto's als inkt op papier; kleur bij hover. */
-.fs-foto { filter: grayscale(1) contrast(1.05); mix-blend-mode: multiply; transition: filter 200ms cubic-bezier(0.4, 0, 0.2, 1); }
-.fs-foto:hover { filter: grayscale(0) contrast(1); }
-
-/* Spraakmemo-balkjes */
-.fs-wave { display: flex; align-items: center; gap: 2px; height: 28px; }
-.fs-wave span { display: block; width: 3px; border-radius: 2px; background: #1A2D63; opacity: 0.55; }
-
-/* --- Homepage 2026-09, derde ronde: logo-strip, sticky mobiele knop --- */
-.fs-logo { filter: grayscale(1); opacity: 0.55; transition: opacity 160ms cubic-bezier(0.4, 0, 0.2, 1), filter 160ms cubic-bezier(0.4, 0, 0.2, 1); }
-.fs-logo:hover { filter: grayscale(0); opacity: 1; }
-.fs-logo-kleur { opacity: 0.7; transition: opacity 160ms cubic-bezier(0.4, 0, 0.2, 1); }
-.fs-logo-kleur:hover { opacity: 1; }
-.fs-sticky { transform: translateY(110%); transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1); }
-.fs-sticky[data-zichtbaar="true"] { transform: translateY(0); }
-.fs-check { flex: none; width: 18px; height: 18px; border-radius: 9999px; background: #E4E8F2; color: #1A2D63; display: inline-flex; align-items: center; justify-content: center; }

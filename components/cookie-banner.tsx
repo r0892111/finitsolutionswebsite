@@ -4,46 +4,38 @@ import { useConsent } from '@/contexts/consent-context';
 import Link from 'next/link';
 
 export function CookieBanner() {
-  const { showBanner, rejectAll, updateChoices } = useConsent();
+  const { showBanner, acceptAll, openSettings } = useConsent();
 
   if (!showBanner) return null;
 
-  // De banner belooft "geen advertenties, geen doorverkoop", dus zet [Ok]
-  // enkel statistieken aan. Marketing- en social-cookies blijven uit tenzij
-  // iemand ze zelf aanvinkt via Cookievoorkeuren in de footer.
-  const accepteerStatistieken = () =>
-    updateChoices(
-      { essential: true, statistics: true, marketing: false, social: false },
-      'banner'
-    );
-
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 sm:bottom-6 sm:left-auto sm:right-6 sm:max-w-sm">
-      <div className="bg-white rounded-2xl shadow-xl border border-[#1A2D63]/10 p-6">
-        <p className="font-instrument text-[15px] leading-relaxed text-[#1A2D63] mb-5">
-          We gebruiken enkel cookies om te zien welke pagina&apos;s mensen
-          lezen. Geen advertenties, geen doorverkoop.
+      <div className="bg-white rounded-2xl shadow-xl p-6">
+        <h3 className="text-xl font-bold text-[#1C2C55] font-montserrat mb-3">
+          Wij gebruiken cookies
+        </h3>
+        <p className="text-sm text-gray-600 leading-relaxed mb-5">
+          Voor een optimale ervaring gebruiken we cookies om onze site en services te verbeteren. Meer
+          informatie vind je in onze{' '}
+          <Link href="/cookieverklaring" className="underline text-gray-600 hover:text-gray-900">
+            Cookie Policy
+          </Link>
+          .
         </p>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-5">
           <button
-            onClick={accepteerStatistieken}
-            className="px-6 py-2.5 rounded-full bg-[#1A2D63] text-white font-instrument font-medium text-sm hover:bg-[#2A4488] transition-colors"
+            onClick={acceptAll}
+            className="px-6 py-2.5 rounded-full border-2 border-[#1C2C55] text-[#1C2C55] font-semibold text-sm hover:bg-[#1C2C55] hover:text-white transition-colors"
           >
-            Ok
+            Accepteren
           </button>
           <button
-            onClick={rejectAll}
-            className="px-6 py-2.5 rounded-full border border-[#1A2D63]/20 text-[#1A2D63] font-instrument font-medium text-sm hover:bg-[#1A2D63]/[0.04] transition-colors"
+            onClick={openSettings}
+            className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
           >
-            Liever niet
+            Voorkeuren
           </button>
         </div>
-        <Link
-          href="/cookieverklaring"
-          className="inline-block mt-4 font-instrument text-xs text-[#475D8F]/70 underline underline-offset-2 hover:text-[#1A2D63] transition-colors"
-        >
-          Cookiebeleid
-        </Link>
       </div>
     </div>
   );

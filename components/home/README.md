@@ -1,37 +1,35 @@
 # Homepage (rework 2026-09)
 
-Vier bestanden, één idee: **de pagina beantwoordt de vragen van een niet-technische zaakvoerder, in de volgorde waarin hij ze zich stelt.**
+Drie bestanden, één idee: **de pagina volgt de opbouw van de vorige homepage en de landingspagina's, met hun tekst, en verandert alleen wat het nieuwe model vereist.**
 
 | Bestand | Wat |
 |---|---|
-| `copy.ts` | Alle tekst, als data. Copy aanpassen = alleen dit bestand. |
-| `home-page.tsx` | De pagina: navigatie, zeven secties, footer. Geen scroll-animaties. |
-| `brein-3d.tsx` | Het beeld in de hero: het brein als ruimtelijke structuur die traag draait (bolletjes = pagina's, lijnen = verwijzingen). Geen library: punten op een bol, per beeldje gedraaid en met perspectief geprojecteerd in SVG. Muis draait mee, slepen draait harder, bij "minder beweging" staat het stil. |
-| `gesprek-form.tsx` | "Vraag een gesprek aan" (popup). Stuurt naar de n8n-flow met dezelfde veldnamen als vroeger (`naam`, `telefoonnummer`, `email`). |
+| `copy.ts` | Alle tekst, als data. Copy aanpassen = alleen dit bestand. Bij elke sectie staat waar de tekst vandaan komt (vorige homepage of landingspagina). |
+| `home-page.tsx` | De pagina: navigatie en mobiel menu (dezelfde opbouw en tekst als vroeger), acht secties, footer. |
+| `brein-3d.tsx` | Het beeld in de hero: het AI-brein als doorzichtige bol op een `<canvas>`. Stippen zijn stukken kennis over de zaak, lijnen de verbanden, lichtpuntjes de informatie die erover loopt. Geen library. Draait traag, volgt de muis, slepen draait harder. Stopt buiten beeld, halveert op aanraakschermen, staat stil bij "minder beweging". |
+
+Het formulier is het bestaande `components/contact-form-popup.tsx` (zelfde n8n-flow, zelfde velden `naam`, `telefoonnummer`, `email`, zelfde `/bedankt`-pagina). De cookiebanner is `components/cookie-banner.tsx` zoals vóór de rework.
 
 Links en contactgegevens staan in `lib/finit-links.ts`. **`SKOOL_URL` moet nog ingevuld worden:** de knop "Start de lesreeks" gaat rechtstreeks naar Skool, niet naar een formulier.
 
 ## De volgorde (en de vraag die elke sectie beantwoordt)
 
-De opbouw volgt de landingspagina's (`components/landing/*`, plan in `LANDING-PAGES-PLAN.md`), met de teksten herschreven naar het nieuwe model:
-
-1. **Hero** — herkenning (ChatGPT kent je zaak niet) + wat wij doen, één hoofdknop, drie zekerheden eronder, "Ondersteund door". Geen prijs in de hero.
-2. **Herken je dit?** — zes zinnen waarop de lezer knikt, dan "Het hoeft niet zo te zijn."
-3. **Stel dat de AI je zaak wél kent** — drie oplossingskaarten (stap 1 en stap 2), nu/straks, en de logo's van wat we koppelen.
-4. **Hoe wij werken** — drie stappen met de prijs vooraf; stap 1 uitgelicht; waarom de klant eerst zelf begint.
-5. **Bewijs** — echte quote (Bas, PRS Rotselaar) en drie eerdere resultaten, op marineblauw.
-6. **Drie mensen, in Leuven** — compact, echte foto's.
-7. **Vragen** — in de volgorde waarin de lezer ze zich stelt: resultaat, inspanning, geld, risico's.
-8. **Slot** — kaart met twee uitgangen: lesreeks (Skool) of gesprek (formulier). Op mobiel blijft "Start de lesreeks" onderaan plakken zodra de hero voorbij is.
+1. **Hero** (`#hero`): "Minder administratie. Meer tijd voor je bedrijf." Twee knoppen: lesreeks (Skool) en kennismaking (formulier). Drie vinkjes, "Ondersteund door". Geen prijs in de hero.
+2. **Herken jij dit?** (`#recognition`): zes zinnen waarop de lezer knikt, dan "Het hoeft niet zo te zijn." en een knop.
+3. **Wij zorgen ervoor dat AI jouw werk overneemt** (`#use-cases`): 15+ → 2 uur, drie voorbeelden, "En alles wat repetitief is", integratielogo's.
+4. **Hoe wij AI voor jou laten werken** (`#aanpak`): drie stappen met de prijs erbij (lesreeks € 95 → € 295, bouw € 4.500, onderhoud € 90 per maand), dan het blok "Het AI-brein" met de tekst van het vroegere "Hoe pakken we dit aan?".
+5. **Resultaten uit de praktijk** (`#resultaten`): de twee cases en de quote van Bas, op marineblauw.
+6. **Waarom bedrijven voor Finit kiezen** (`#waarom`): de vier pijlers.
+7. **Veelgestelde vragen** (`#faq`): de tien vragen van vroeger plus drie nieuwe (wat is een AI-brein, moet ik technisch zijn, wat met mijn gegevens).
+8. **Contact** (`#contact`): "Ontdek wat AI jouw bedrijf oplevert", knop naar het formulier, link naar de lesreeks.
 
 ## Regels voor de copy
 
-- Elke zin moet door iemand zonder IT-kennis in één keer begrepen worden. Jargon meteen in gewone woorden uitleggen.
+- Tekst van de vorige homepage en landingspagina's letterlijk overnemen waar het kan. Alleen aanpassen wat het model verandert (AI Audit → lesreeks, prijzen, nazorg).
 - Het heet een **lesreeks** (geen cursus) en een **AI-brein**. Het programma heet Claude en wordt bij de eerste vermelding uitgelegd.
-- Stap 1 levert een AI die je zaak kent plus een lijst met knelpunten. Alles wat "vanzelf vertrekt" is stap 2. Hou die twee uit elkaar.
-- Geen gedachtestreepjes, geen emoji, geen "niet X, maar Y", geen drieslagen als reflex, geen oneliners voor het effect, geen "echt/gewoon/eigenlijk".
-- Prijzen altijd excl. btw, en de Claude-abonnementskost altijd erbij vermeld.
+- Geen gedachtestreepjes, geen plaatsnaam.
+- Prijzen altijd excl. btw, de Claude-abonnementskost erbij vermeld.
 
 ## Opmaak
 
-Warm papier (`#FDFBF7`) met verdiepte banden (`#F5F3EC`) voor ritme, marineblauw (`#1A2D63`) voor navigatiebalk, koppen, knoppen en slot. Twee lettertypes via `next/font`: Bricolage Grotesque voor koppen en prijzen, Schibsted Grotesk voor lopende tekst. Boven elke kop staat klein de vraag van de lezer die de sectie beantwoordt. Eén keer beweging: de kaart in de hero tekent zich in. Knoppen volgen het Finit-designsysteem (vlakke vulling + glazen rand, `app/globals.css` onder "Homepage 2026-09"). Bewust weggelaten: gradients, gloed, glas-effecten, iconen-tegels, badges, scroll-animaties, chatbot-mockups.
+Wit, met lichtblauwgrijze banden (`#F5F7FB`) voor ritme en marineblauw (`#1A2D63`) voor koppen, knoppen, de resultaten-band en de footer. Pilvormige knoppen zoals in de cookiebanner en op de vorige site. Bricolage Grotesque voor koppen en prijzen, Schibsted Grotesk voor de rest (via `next/font`, in `app/(home)/layout.tsx`). De handgetekende streep onder het laatste woord van een kop komt van de vorige site. Stijlen staan in `app/globals.css` onder "Homepage 2026-09" (prefix `hp-`).

@@ -2,29 +2,26 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { ArrowRight, Calendar, ChevronDown, ChevronRight, Linkedin, Mail, Menu, Phone, X } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
-import {
-  CONTACT_EMAIL,
-  INSTAGRAM_URL,
-  LINKEDIN_URL,
-  PHONE_LINK,
-  PHONE_NUMBER,
-  SKOOL_URL,
-  VAT_NUMBER,
-} from "@/lib/finit-links";
+import { ContactFormPopup, useContactForm } from "@/components/contact-form-popup";
 import { useConsent } from "@/contexts/consent-context";
+import { CONTACT_EMAIL, INSTAGRAM_URL, LINKEDIN_URL, SKOOL_URL, VAT_NUMBER } from "@/lib/finit-links";
 import { Brein3D } from "./brein-3d";
-import { GesprekForm } from "./gesprek-form";
 import {
+  CTA_GESPREK_KORT,
+  CTA_KENNISMAKING,
   CTA_LESREEKS,
   FOOTER,
   HERKEN,
   HERO,
   HOE,
   LOGOS,
-  NAV,
+  MENU,
+  NAV_DESKTOP,
+  NAV_MOBIEL,
   OPLOSSING,
+  PRODUCTEN,
   RESULTATEN,
   SLOT,
   VRAGEN,
@@ -35,65 +32,63 @@ import {
 /**
  * De homepage, in de opbouw van de vorige homepage en de landingspagina's:
  * hero → herken jij dit → AI neemt je werk over → hoe wij werken (+ prijzen)
- * → resultaten → waarom Finit → vragen → slot. Alle tekst staat in ./copy.ts.
+ * → resultaten → waarom Finit → vragen → contact. Alle tekst staat in ./copy.ts.
  *
- * Opmaak: warm papier met verdiepte banden, marineblauw voor navigatiebalk,
- * koppen, knoppen en de resultaten-band. Bricolage Grotesque voor koppen en
- * prijzen, Schibsted Grotesk voor de rest. Eén bewegend element: het brein in
- * de hero. Verder staat alles stil.
+ * Navigatie en mobiel menu: dezelfde opbouw en tekst als de vorige homepage.
+ * Het formulier is het bestaande ContactFormPopup (zelfde n8n-flow, zelfde
+ * velden, zelfde /bedankt-pagina). De lesreeks-knop gaat rechtstreeks naar Skool.
  */
 
-const CONTAINER = "mx-auto w-full max-w-[72rem] px-5 sm:px-8";
-const H2 = "fs-display text-balance text-[1.9rem] font-bold leading-[1.05] text-[#1A2D63] sm:text-[2.3rem] lg:text-[2.7rem]";
-const LEAD = "text-[1.0625rem] leading-[1.6] text-[#57514A] sm:text-[1.125rem]";
+const CONTAINER = "mx-auto w-full max-w-[74rem] px-5 sm:px-8";
+const H2 = "hp-display text-balance text-[2rem] font-bold leading-[1.06] text-[#1A2D63] sm:text-[2.5rem] lg:text-[2.9rem]";
+const LEAD = "text-[1.0625rem] leading-[1.65] text-[#3D4766] sm:text-[1.125rem]";
+const H3 = "hp-display hp-display-sm text-[1.3rem] font-semibold leading-[1.2] text-[#1A2D63]";
 
-const trackLesreeks = (location: string) => pushEvent("cta_click", { cta_label: "lesreeks", location });
-
-function LesreeksKnop({
-  location,
-  size = "lg",
-  className = "",
-  variant = "primary",
-}: {
-  location: string;
-  size?: "lg" | "md";
-  className?: string;
-  variant?: "primary" | "cream";
-}) {
+/** De handgetekende streep onder het laatste woord van een kop, zoals op de vorige site. */
+function Onder({ children }: { children: React.ReactNode }) {
   return (
-    <a
-      href={SKOOL_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={() => trackLesreeks(location)}
-      className={`fs-btn fs-btn--${variant} fs-btn--${size} ${className}`}
-    >
-      {CTA_LESREEKS}
-    </a>
-  );
-}
-
-function Vinkje({ donker = false }: { donker?: boolean }) {
-  return (
-    <span className="fs-check mt-0.5" aria-hidden="true" style={donker ? { background: "rgba(253,251,247,0.14)", color: "#FDFBF7" } : undefined}>
-      <svg width="10" height="8" viewBox="0 0 10 8">
-        <path d="M1 4l2.6 2.6L9 1" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <span className="hp-onder">
+      {children}
+      <svg viewBox="0 0 200 20" preserveAspectRatio="none" fill="none" aria-hidden="true">
+        <path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke="#1A2D63" strokeOpacity="0.15" strokeWidth="10" strokeLinecap="round" />
       </svg>
     </span>
   );
 }
 
+function Vinkje({ donker = false }: { donker?: boolean }) {
+  return (
+    <span className={`hp-check mt-0.5 ${donker ? "hp-check--donker" : ""}`} aria-hidden="true">
+      <svg width="11" height="9" viewBox="0 0 11 9">
+        <path d="M1 4.5l3 3L10 1" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+  );
+}
+
+const trackLesreeks = (location: string) => pushEvent("cta_click", { cta_label: "lesreeks", location });
+
+function LesreeksKnop({ location, size = "lg", className = "", variant = "primary" }: { location: string; size?: "lg" | "md"; className?: string; variant?: "primary" | "light" | "secondary" }) {
+  return (
+    <a href={SKOOL_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackLesreeks(location)} className={`hp-btn hp-btn--${variant} hp-btn--${size} ${className}`}>
+      {CTA_LESREEKS}
+      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+    </a>
+  );
+}
+
 function FaqAntwoord({ blokken }: { blokken: FaqBlok[] }) {
   return (
-    <div className="space-y-3 pb-6 pr-6 text-[1rem] leading-[1.6] text-[#57514A] sm:pr-10">
+    <div className="space-y-3 pb-6 pr-8 text-[1rem] leading-[1.65] text-[#3D4766] sm:pr-12">
       {blokken.map((b, i) => {
-        if (b.t === "h") return <p key={i} className="pt-1 font-semibold text-[#2A2620]">{b.tekst}</p>;
+        if (b.t === "h") return <p key={i} className="pt-1 font-semibold text-[#1A2D63]">{b.tekst}</p>;
+        if (b.t === "res") return <p key={i} className="font-medium text-[#1A2D63]">{b.tekst}</p>;
         if (b.t === "list")
           return (
             <ul key={i} className="space-y-2">
               {b.items.map((item) => (
                 <li key={item} className="flex items-start gap-3">
-                  <span className="mt-[0.65em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#1A2D63]" aria-hidden="true" />
+                  <span className="mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#1A2D63]" aria-hidden="true" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -106,14 +101,24 @@ function FaqAntwoord({ blokken }: { blokken: FaqBlok[] }) {
 }
 
 export function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [formOpen, setFormOpen] = useState(false);
-  const [voorbijHero, setVoorbijHero] = useState(false);
+  const [navScrollProgress, setNavScrollProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isOpen, openForm, closeForm } = useContactForm();
   const { openSettings } = useConsent();
 
-  // Sticky knop op mobiel zodra de hero uit beeld is.
+  // Navigatiebalk: doorzichtig bovenaan, wit met wazige rand zodra je scrolt (zoals vroeger).
   useEffect(() => {
-    const onScroll = () => setVoorbijHero(window.scrollY > 640);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setNavScrollProgress(y <= 100 ? 0 : y >= 300 ? 1 : (y - 100) / 200);
+      let current = "";
+      for (const item of NAV_DESKTOP) {
+        const el = document.getElementById(item.id);
+        if (el && el.getBoundingClientRect().top <= 120) current = item.id;
+      }
+      setActiveSection(current);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -121,143 +126,246 @@ export function HomePage() {
 
   // Het mobiele menu blokkeert het scrollen en sluit zichzelf op een breed scherm.
   useEffect(() => {
-    if (!menuOpen) return;
+    if (!mobileMenuOpen) return;
     document.body.style.overflow = "hidden";
-    const onResize = () => {
-      if (window.innerWidth >= 1024) setMenuOpen(false);
-    };
+    const onResize = () => { if (window.innerWidth >= 1024) setMobileMenuOpen(false); };
     window.addEventListener("resize", onResize);
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("resize", onResize);
-    };
-  }, [menuOpen]);
+    return () => { document.body.style.overflow = ""; window.removeEventListener("resize", onResize); };
+  }, [mobileMenuOpen]);
 
-  const openGesprek = useCallback((location: string) => {
-    setMenuOpen(false);
-    setFormOpen(true);
-    pushEvent("cta_click", { cta_label: "gesprek", location });
-    pushEvent("form_open", { intent: "gesprek", location });
+  const navigateToSection = useCallback((id: string) => {
+    setMobileMenuOpen(false);
+    requestAnimationFrame(() => {
+      if (id === "hero") { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }, []);
-  const closeGesprek = useCallback(() => setFormOpen(false), []);
+
+  const gesprek = useCallback((label: string, location: string) => {
+    setMobileMenuOpen(false);
+    openForm();
+    pushEvent("cta_click", { cta_label: label, location });
+  }, [openForm]);
+
+  const GesprekKnop = ({ label = CTA_KENNISMAKING, ctaLabel, location, variant = "primary", size = "lg", className = "" }: { label?: string; ctaLabel: string; location: string; variant?: "primary" | "secondary" | "light"; size?: "lg" | "md"; className?: string }) => (
+    <button type="button" onClick={() => gesprek(ctaLabel, location)} className={`hp-btn hp-btn--${variant} hp-btn--${size} ${className}`}>
+      <Calendar className="h-4 w-4" aria-hidden="true" />
+      <span>{label}</span>
+    </button>
+  );
+
+  const navBg = navScrollProgress > 0 ? `rgba(255,255,255,${0.86 * navScrollProgress})` : "transparent";
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] text-[#2A2620]">
+    <div className="hp min-h-screen overflow-x-hidden bg-white text-[#3D4766]">
       {/* ---------------------------------------------------------------- */}
-      {/* Navigatie: marineblauwe balk                                      */}
+      {/* Navigatie (opbouw van de vorige homepage)                          */}
       {/* ---------------------------------------------------------------- */}
-      <header className="sticky top-0 z-40 bg-[#1A2D63] text-[#FDFBF7]">
-        <div className={`${CONTAINER} flex h-16 items-center justify-between gap-6`}>
-          <a href="#top" className="flex shrink-0 items-center" aria-label="Finit Solutions, naar boven">
-            <Image src="/finit-logo-white.svg" alt="Finit Solutions" width={424} height={120} priority className="h-7 w-auto" />
-          </a>
+      <nav
+        className="fixed top-0 z-40 w-full"
+        style={{
+          background: navBg,
+          backdropFilter: navScrollProgress > 0 ? `blur(${14 * navScrollProgress}px)` : "none",
+          WebkitBackdropFilter: navScrollProgress > 0 ? `blur(${14 * navScrollProgress}px)` : "none",
+          borderBottom: `1px solid rgba(26, 45, 99, ${0.1 * navScrollProgress})`,
+          transition: "background 0.3s, backdrop-filter 0.3s, border-bottom 0.3s",
+        }}
+      >
+        <div
+          className="relative mx-auto flex max-w-[93.33rem] items-center justify-between px-4 sm:px-6"
+          style={{ paddingTop: `${12 + (1 - navScrollProgress) * 10}px`, paddingBottom: `${12 + (1 - navScrollProgress) * 10}px`, transition: "padding 0.3s" }}
+        >
+          <button type="button" onClick={() => navigateToSection("hero")} className="flex shrink-0 items-center" aria-label="Finit Solutions, naar boven">
+            <Image
+              src="/Finit Logo Blue@4x.png"
+              alt="Finit Logo"
+              width={1698}
+              height={480}
+              priority
+              className="w-auto object-contain"
+              style={{ height: `${28 + (1 - navScrollProgress) * 10}px`, transition: "height 0.3s" }}
+            />
+          </button>
 
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Hoofdnavigatie">
-            {NAV.map((item) => (
-              <a key={item.href} href={item.href} className="text-[0.9375rem] font-medium text-[#FDFBF7]/75 transition-colors hover:text-[#FDFBF7]">
+          {/* Desktop: Producten + secties */}
+          <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
+            <div className="group relative">
+              <button type="button" className="flex items-center gap-1 text-[0.9375rem] font-medium text-[#1A2D63]/80 transition-colors hover:text-[#1A2D63]">
+                {PRODUCTEN.label}
+                <ChevronDown className="mt-0.5 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" aria-hidden="true" />
+              </button>
+              <div className="invisible absolute left-0 top-full translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                <div className="hp-card w-[32rem] p-5">
+                  <a href={PRODUCTEN.voicelink.url} target="_blank" rel="noopener noreferrer" className="group/item flex items-center gap-5">
+                    <div className="h-36 w-24 shrink-0 overflow-hidden rounded-xl border border-[#E3E7EF] bg-[#F5F7FB]">
+                      <Image src="/phone-mock-menu.webp" alt="VoiceLink WhatsApp-mockup" width={240} height={298} className="h-full w-full object-cover" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="mb-1.5 flex items-center gap-2">
+                        <span className="hp-display hp-display-sm text-[1.25rem] font-semibold text-[#1A2D63]">{PRODUCTEN.voicelink.naam}</span>
+                        <ArrowRight className="h-4 w-4 text-[#1A2D63]/40 transition-all group-hover/item:translate-x-1 group-hover/item:text-[#1A2D63]" aria-hidden="true" />
+                      </div>
+                      <p className="text-[0.9375rem] leading-relaxed text-[#3D4766]">{PRODUCTEN.voicelink.tekst}</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            {NAV_DESKTOP.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => navigateToSection(item.id)}
+                className={`text-[0.9375rem] font-medium transition-colors ${activeSection === item.id ? "text-[#1A2D63]" : "text-[#1A2D63]/70 hover:text-[#1A2D63]"}`}
+              >
                 {item.label}
-              </a>
+              </button>
             ))}
-          </nav>
+          </div>
 
-          <div className="flex items-center gap-2">
-            <LesreeksKnop location="nav" size="md" variant="cream" className="hidden sm:inline-flex" />
+          <div className="hidden lg:block">
+            <GesprekKnop ctaLabel="nav_calendly" location="nav" size="md" />
+          </div>
+
+          {/* Mobiel: knop verschijnt bij het scrollen + hamburger */}
+          <div className="flex items-center gap-2 lg:hidden">
             <button
               type="button"
-              onClick={() => setMenuOpen((v) => !v)}
-              className="flex h-11 w-11 items-center justify-center rounded-[8px] text-[#FDFBF7] transition-colors hover:bg-white/10 lg:hidden"
-              aria-label={menuOpen ? "Menu sluiten" : "Menu openen"}
-              aria-expanded={menuOpen}
+              onClick={() => gesprek("mobile_nav_calendly", "mobile_nav")}
+              className="hp-btn hp-btn--primary hp-btn--sm transition-opacity duration-300"
+              style={{ opacity: mobileMenuOpen ? 0 : navScrollProgress, pointerEvents: !mobileMenuOpen && navScrollProgress > 0.5 ? "auto" : "none" }}
+              tabIndex={!mobileMenuOpen && navScrollProgress > 0.5 ? 0 : -1}
             >
-              {menuOpen ? <X className="h-6 w-6" strokeWidth={1.75} /> : <Menu className="h-6 w-6" strokeWidth={1.75} />}
+              <Calendar className="h-4 w-4" aria-hidden="true" />
+              <span>{CTA_GESPREK_KORT}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((v) => !v)}
+              className="flex h-12 w-12 items-center justify-center rounded-full text-[#1A2D63] transition-colors hover:bg-[#1A2D63]/5"
+              aria-label={mobileMenuOpen ? MENU.sluiten : MENU.openen}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X className="h-8 w-8" strokeWidth={1.75} /> : <Menu className="h-8 w-8" strokeWidth={1.75} />}
             </button>
           </div>
         </div>
-      </header>
+      </nav>
 
-      {menuOpen && (
-        <div className="fixed inset-x-0 bottom-0 top-16 z-30 overflow-y-auto bg-[#FDFBF7] lg:hidden">
-          <div className={`${CONTAINER} flex min-h-full flex-col pb-8 pt-2`}>
-            <nav className="border-b border-[#E8E6DC]" aria-label="Mobiele navigatie">
-              {NAV.map((item) => (
-                <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="fs-display block border-t border-[#E8E6DC] py-4 text-[1.5rem] font-semibold text-[#1A2D63]">
-                  {item.label}
+      {/* Mobiel menu, schermvullend (opbouw van de vorige homepage) */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-30 lg:hidden">
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-xl" onClick={() => setMobileMenuOpen(false)} />
+          <div className="relative z-10 flex h-full flex-col overflow-y-auto overscroll-contain px-6 pb-8 pt-24">
+            <div className="mb-8 flex flex-col gap-4">
+              <GesprekKnop ctaLabel="mobile_nav_calendly" location="mobile_nav" className="w-full" />
+              <div className="hp-card flex flex-col items-center gap-2 px-6 py-5 text-center">
+                <p className="text-xs uppercase tracking-widest text-[#6C7590]">{MENU.belTitel}</p>
+                <a
+                  href={FOOTER.telefoons[0].link}
+                  className="hp-display text-[1.9rem] font-semibold leading-tight text-[#1A2D63] underline decoration-[#1A2D63]/20 underline-offset-4 transition-colors hover:text-[#2A4488] hover:decoration-[#1A2D63]/60"
+                  onClick={() => pushEvent("contact_click", { method: "phone", location: "mobile_menu" })}
+                >
+                  {FOOTER.telefoons[0].nummer}
                 </a>
-              ))}
-            </nav>
-            <div className="mt-8 flex flex-col gap-3">
-              <LesreeksKnop location="mobile_menu" className="w-full" />
-              <button type="button" onClick={() => openGesprek("mobile_menu")} className="fs-btn fs-btn--secondary fs-btn--lg w-full">
-                {SLOT.gesprekKnop}
-              </button>
+                <p className="text-sm text-[#6C7590]">{MENU.uren}</p>
+              </div>
             </div>
-            <a href={PHONE_LINK} className="mt-8 text-center text-[1rem] text-[#57514A]">
-              of bel ons op {PHONE_NUMBER}
-            </a>
+
+            <div className="flex-1">
+              <div className="border-t border-[#1A2D63]/10">
+                {NAV_MOBIEL.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => navigateToSection(item.id)}
+                    className="flex w-full items-center justify-between border-b border-[#1A2D63]/10 py-4 text-[#1A2D63] transition-colors hover:text-[#475D8F]"
+                  >
+                    <span className="text-lg font-medium">{item.label}</span>
+                    <ChevronRight className="h-5 w-5 text-[#1A2D63]/30" aria-hidden="true" />
+                  </button>
+                ))}
+                <a
+                  href={PRODUCTEN.voicelink.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex w-full items-center justify-between border-b border-[#1A2D63]/10 py-4 text-[#1A2D63] transition-colors hover:text-[#475D8F]"
+                >
+                  <span className="text-lg font-medium">{PRODUCTEN.voicelink.naam}</span>
+                  <ChevronRight className="h-5 w-5 text-[#1A2D63]/30" aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-2 pt-4 text-sm text-[#1A2D63]/60">
+              <Mail className="h-4 w-4" aria-hidden="true" />
+              <a href={`mailto:${CONTACT_EMAIL}`} className="transition-colors hover:text-[#1A2D63]">{CONTACT_EMAIL}</a>
+            </div>
           </div>
         </div>
       )}
 
-      <main id="top" className="scroll-mt-16">
+      <main>
         {/* -------------------------------------------------------------- */}
         {/* 1. Hero                                                        */}
         {/* -------------------------------------------------------------- */}
-        <section className={`${CONTAINER} pb-14 pt-10 sm:pb-16 sm:pt-14 lg:pb-20 lg:pt-16`}>
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,0.98fr)_minmax(0,1.02fr)] lg:items-center lg:gap-12">
-            <div>
-              <h1 className="fs-display text-balance text-[2.5rem] font-bold leading-[1.02] text-[#1A2D63] sm:text-[3rem] lg:text-[2.9rem] xl:text-[3.3rem]">
-                {HERO.h1.map((regel) => (
-                  <span key={regel} className="block">
-                    {regel}
-                  </span>
-                ))}
+        <header id="hero" className={`${CONTAINER} pb-16 pt-32 sm:pt-36 lg:pb-24 lg:pt-40`}>
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-10">
+            <div className="hp-rise">
+              <h1 className="hp-display text-balance text-[2.15rem] font-bold leading-[1.02] text-[#1A2D63] min-[400px]:text-[2.4rem] sm:text-[3.2rem] lg:text-[3.1rem] xl:text-[3.6rem]">
+                <span className="block">{HERO.h1[0]}</span>
+                <Onder>{HERO.h1[1]}</Onder>
               </h1>
-              <p className={`mt-6 max-w-[34rem] ${LEAD}`}>{HERO.sub}</p>
+              <p className={`mt-6 max-w-[36rem] ${LEAD}`}>{HERO.sub}</p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <LesreeksKnop location="hero" className="w-full sm:w-auto" />
-                <button type="button" onClick={() => openGesprek("hero")} className="fs-btn fs-btn--secondary fs-btn--lg w-full sm:w-auto">
-                  {SLOT.gesprekKnop}
-                </button>
+                <GesprekKnop ctaLabel="hero_calendly" location="hero" variant="secondary" className="w-full sm:w-auto" />
               </div>
 
               <ul className="mt-7 space-y-2.5">
                 {HERO.punten.map((punt) => (
-                  <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#57514A]">
+                  <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#3D4766]">
                     <Vinkje />
                     <span>{punt}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3">
-                <span className="text-[0.8125rem] font-medium text-[#94908A]">{HERO.ondersteund}</span>
-                <Image src="/SI @KBC Black (2).png" alt="Start it @KBC" width={400} height={120} className="fs-logo h-6 w-auto" />
-                <Image src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" width={400} height={120} className="fs-logo h-6 w-auto" />
+              <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
+                <span className="text-[0.8125rem] font-medium text-[#6C7590]">{HERO.ondersteund}</span>
+                <Image src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" width={400} height={120} className="hp-logo h-6 w-auto" />
+                <Image src="/SI @KBC Black (2).png" alt="Start it @KBC" width={400} height={120} className="hp-logo h-6 w-auto" />
               </div>
             </div>
 
-            <Brein3D />
+            <div className="mx-auto w-full max-w-[26rem] lg:max-w-none">
+              <Brein3D />
+            </div>
           </div>
-        </section>
+        </header>
 
         {/* -------------------------------------------------------------- */}
         {/* 2. Herken jij dit?                                             */}
         {/* -------------------------------------------------------------- */}
-        <section className="border-t border-[#E8E6DC]">
-          <div className={`${CONTAINER} py-16 sm:py-24`}>
-            <div className="max-w-[46rem]">
-              <h2 className={H2}>{HERKEN.h2}</h2>
+        <section id="recognition" className="scroll-mt-20 border-t border-[#E3E7EF]">
+          <div className={`${CONTAINER} py-20 sm:py-28`}>
+            <div className="max-w-[44rem]">
+              <h2 className={H2}>Herken jij <Onder>dit?</Onder></h2>
               <p className={`mt-4 ${LEAD}`}>{HERKEN.intro}</p>
-              <ul className="mt-10 border-t border-[#E8E6DC]">
-                {HERKEN.items.map((item) => (
-                  <li key={item} className="flex items-start gap-4 border-b border-[#E8E6DC] py-4 text-[1.0625rem] leading-[1.55] text-[#2A2620] sm:text-[1.125rem]">
-                    <span className="mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#1A2D63]" aria-hidden="true" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="fs-display mt-10 text-[1.6rem] font-semibold leading-tight text-[#1A2D63] sm:text-[1.9rem]">{HERKEN.overgang}</p>
+            </div>
+            <ol className="mt-12 grid gap-x-10 gap-y-7 sm:grid-cols-2">
+              {HERKEN.items.map((item, i) => (
+                <li key={item} className="flex items-start gap-5 border-t border-[#E3E7EF] pt-5">
+                  <span className="hp-display w-8 shrink-0 text-[1.5rem] font-bold leading-none text-[#1A2D63]/30">{String(i + 1).padStart(2, "0")}</span>
+                  <p className="text-[1.0625rem] leading-[1.55] text-[#1A2D63] sm:text-[1.125rem]">{item}</p>
+                </li>
+              ))}
+            </ol>
+            <div className="mt-14 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <p className="hp-display text-[1.7rem] font-semibold leading-tight text-[#1A2D63] sm:text-[2rem]">{HERKEN.overgang}</p>
+              <GesprekKnop ctaLabel="recognition_calendly" location="recognition" className="w-full sm:w-auto" />
             </div>
           </div>
         </section>
@@ -265,114 +373,113 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         {/* 3. Wij zorgen ervoor dat AI jouw werk overneemt                */}
         {/* -------------------------------------------------------------- */}
-        <section className="bg-[#F5F3EC]">
-          <div className={`${CONTAINER} py-16 sm:py-24`}>
+        <section id="use-cases" className="scroll-mt-20 bg-[#F5F7FB]">
+          <div className={`${CONTAINER} py-20 sm:py-28`}>
             <div className="grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:gap-16">
               <div className="max-w-[40rem]">
-                <h2 className={H2}>{OPLOSSING.h2}</h2>
+                <h2 className={H2}>{OPLOSSING.h2[0]} <Onder>{OPLOSSING.h2[1]}</Onder></h2>
                 <p className={`mt-5 ${LEAD}`}>{OPLOSSING.intro}</p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                {[OPLOSSING.zonder, OPLOSSING.met].map((blok, i) => (
-                  <div key={blok.label} className={`rounded-[12px] border p-5 sm:p-6 ${i === 1 ? "border-[#1A2D63] bg-[#1A2D63] text-[#FDFBF7]" : "border-[#D8D5C7] bg-[#FFFEFA] text-[#1A2D63]"}`}>
-                    <p className={`text-[0.8125rem] font-medium ${i === 1 ? "text-[#FDFBF7]/70" : "text-[#76706A]"}`}>{blok.label}</p>
-                    <p className="fs-display mt-2 text-[2.75rem] font-bold leading-none sm:text-[3.25rem]">{blok.getal}</p>
-                    <p className={`mt-2 text-[0.875rem] leading-[1.4] ${i === 1 ? "text-[#FDFBF7]/75" : "text-[#57514A]"}`}>{blok.eenheid}</p>
-                  </div>
-                ))}
+              <div className="flex items-stretch gap-3 sm:gap-4">
+                <div className="hp-card flex-1 p-5 sm:p-6">
+                  <p className="text-[0.8125rem] font-medium uppercase tracking-wide text-[#6C7590]">{OPLOSSING.zonder.label}</p>
+                  <p className="hp-display mt-2 text-[2.75rem] font-bold leading-none text-[#1A2D63] sm:text-[3.25rem]">{OPLOSSING.zonder.getal}</p>
+                  <p className="mt-2 text-[0.875rem] leading-[1.4] text-[#3D4766]">{OPLOSSING.zonder.eenheid}</p>
+                </div>
+                <div className="flex items-center text-[#1A2D63]/40" aria-hidden="true">
+                  <ArrowRight className="h-6 w-6" />
+                </div>
+                <div className="flex-1 rounded-[20px] bg-[#1A2D63] p-5 text-white shadow-[0_16px_40px_-20px_rgba(26,45,99,0.6)] sm:p-6">
+                  <p className="text-[0.8125rem] font-medium uppercase tracking-wide text-white/70">{OPLOSSING.met.label}</p>
+                  <p className="hp-display mt-2 text-[2.75rem] font-bold leading-none sm:text-[3.25rem]">{OPLOSSING.met.getal}</p>
+                  <p className="mt-2 text-[0.875rem] leading-[1.4] text-white/75">{OPLOSSING.met.eenheid}</p>
+                </div>
               </div>
             </div>
 
             <div className="mt-12 grid gap-5 md:grid-cols-3 lg:gap-6">
               {OPLOSSING.kaarten.map((k) => (
-                <div key={k.titel} className="fs-paper rounded-[12px] border border-[#E8E6DC] bg-[#FFFEFA] p-6 sm:p-7">
-                  <h3 className="fs-display fs-display-sm text-[1.35rem] font-semibold leading-[1.15] text-[#1A2D63]">{k.titel}</h3>
-                  <p className="mt-3 text-[0.9375rem] leading-[1.6] text-[#57514A]">{k.body}</p>
+                <div key={k.titel} className="hp-card p-6 sm:p-7">
+                  <h3 className={H3}>{k.titel}</h3>
+                  <p className="mt-3 text-[0.9375rem] leading-[1.65] text-[#3D4766]">{k.body}</p>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 rounded-[12px] border border-dashed border-[#B8B5A6] p-6 sm:flex sm:items-center sm:justify-between sm:gap-8 sm:p-7">
-              <div>
-                <h3 className="fs-display fs-display-sm text-[1.25rem] font-semibold leading-snug text-[#1A2D63]">{OPLOSSING.breedteTitel}</h3>
-                <p className="mt-2 text-[0.9375rem] leading-[1.6] text-[#57514A]">{OPLOSSING.breedteBody}</p>
-              </div>
-              <LesreeksKnop location="breedte" className="mt-5 w-full sm:mt-0 sm:w-auto sm:shrink-0" />
-            </div>
+            <button
+              type="button"
+              onClick={() => gesprek("breadth_card_calendly", "solutions")}
+              className="group mt-6 flex w-full items-center gap-5 rounded-[20px] border border-dashed border-[#1A2D63]/30 p-6 text-left transition-colors hover:border-[#1A2D63]/60 hover:bg-white sm:p-7"
+            >
+              <span className="hp-display hidden shrink-0 text-[2.5rem] font-bold leading-none text-[#1A2D63]/30 sm:block" aria-hidden="true">+</span>
+              <span className="min-w-0 flex-1">
+                <span className={`block ${H3}`}>{OPLOSSING.breedteTitel}</span>
+                <span className="mt-1.5 block text-[0.9375rem] leading-[1.6] text-[#3D4766]">{OPLOSSING.breedteBody}</span>
+              </span>
+              <ArrowRight className="h-5 w-5 shrink-0 text-[#1A2D63]/50 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+            </button>
 
             <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <span className="text-[0.8125rem] font-medium text-[#76706A]">{OPLOSSING.koppelingen}</span>
+              <span className="text-[0.8125rem] font-medium text-[#6C7590]">{OPLOSSING.koppelingen}</span>
               {LOGOS.map((l) => (
-                <Image key={l.naam} src={l.src} alt={l.naam} title={l.naam} width={120} height={40} className="fs-logo-kleur h-6 w-auto" />
+                <Image key={l.naam} src={l.src} alt={l.naam} title={l.naam} width={120} height={40} className="hp-logo-kleur h-6 w-auto" />
               ))}
             </div>
           </div>
         </section>
 
         {/* -------------------------------------------------------------- */}
-        {/* 4. Hoe wij AI voor jou laten werken + prijzen                  */}
+        {/* 4. Hoe wij AI voor jou laten werken + prijzen + het AI-brein   */}
         {/* -------------------------------------------------------------- */}
-        <section id="hoe-het-werkt" className="scroll-mt-16">
-          <div className={`${CONTAINER} py-16 sm:py-24`}>
-            <div className="max-w-[40rem]">
-              <h2 className={H2}>{HOE.h2}</h2>
+        <section id="aanpak" className="scroll-mt-20">
+          <div className={`${CONTAINER} py-20 sm:py-28`}>
+            <div className="max-w-[42rem]">
+              <h2 className={H2}>{HOE.h2[0]} <Onder>{HOE.h2[1]}</Onder></h2>
               <p className={`mt-5 ${LEAD}`}>{HOE.intro}</p>
             </div>
 
-            <ol id="prijzen" className="mt-12 grid scroll-mt-24 gap-10 md:grid-cols-3 md:gap-6 lg:gap-8">
-              {HOE.stappen.map((stap, i) => {
-                const uitgelicht = i === 0;
-                return (
-                  <li
-                    key={stap.nummer}
-                    className={
-                      uitgelicht
-                        ? "fs-paper flex flex-col rounded-[12px] border border-[#E8E6DC] bg-[#FFFEFA] p-6 sm:p-7"
-                        : "flex flex-col border-t border-[#E8E6DC] pt-6 md:pt-7"
-                    }
-                  >
-                    <div className="flex items-baseline gap-3">
-                      <span className="fs-display text-[2rem] font-bold leading-none text-[#1A2D63]">{stap.nummer}</span>
-                      <span className="text-[0.8125rem] font-medium text-[#76706A]">{stap.tijd}</span>
+            <ol className="mt-12 grid gap-5 md:grid-cols-3 lg:gap-6">
+              {HOE.stappen.map((stap, i) => (
+                <li key={stap.nummer} className={`hp-card flex flex-col p-6 sm:p-7 ${i === 0 ? "hp-card--accent" : ""}`}>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="hp-display text-[1.75rem] font-bold leading-none text-[#1A2D63]/30">{stap.nummer}</span>
+                    <span className="rounded-full bg-[#E6ECF9] px-3 py-1 text-[0.75rem] font-medium text-[#1A2D63]">{stap.tijd}</span>
+                  </div>
+                  <h3 className={`mt-4 ${H3} text-[1.45rem]`}>{stap.titel}</h3>
+                  <ul className="mt-5 space-y-2.5">
+                    {stap.punten.map((punt) => (
+                      <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#3D4766]">
+                        <Vinkje />
+                        <span>{punt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-6 border-t border-[#E3E7EF] pt-5">
+                    <p className="text-[0.8125rem] font-medium uppercase tracking-wide text-[#6C7590]">{stap.prijsLabel}</p>
+                    <p className="hp-display mt-1 text-[2.25rem] font-bold leading-none text-[#1A2D63]">{stap.prijs}</p>
+                    <p className="mt-2 text-[0.9rem] leading-[1.5] text-[#3D4766]">{stap.prijsDetail}</p>
+                  </div>
+                  {stap.cta && (
+                    <div className="mt-6">
+                      <LesreeksKnop location="stappen" className="w-full" />
+                      {stap.ctaNoot && <p className="mt-3 text-center text-[0.8125rem] text-[#6C7590]">{stap.ctaNoot}</p>}
                     </div>
-                    <h3 className="fs-display fs-display-sm mt-4 text-[1.45rem] font-semibold leading-[1.12] text-[#1A2D63]">{stap.titel}</h3>
-
-                    <ul className="mt-5 space-y-2.5">
-                      {stap.punten.map((punt) => (
-                        <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#2A2620]">
-                          <Vinkje />
-                          <span>{punt}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="mt-6 border-t border-[#E8E6DC] pt-5">
-                      <p className="fs-display text-[2.5rem] font-bold leading-none text-[#1A2D63]">{stap.prijs}</p>
-                      <p className="mt-2 text-[0.9375rem] leading-[1.5] text-[#57514A]">{stap.prijsDetail}</p>
-                    </div>
-
-                    {stap.cta && (
-                      <div className="mt-6">
-                        <LesreeksKnop location="stappen" className="w-full" />
-                        {stap.ctaNoot && <p className="mt-3 text-[0.875rem] leading-[1.5] text-[#76706A]">{stap.ctaNoot}</p>}
-                      </div>
-                    )}
-                  </li>
-                );
-              })}
+                  )}
+                </li>
+              ))}
             </ol>
 
-            <div className="mt-14 grid gap-8 rounded-[12px] bg-[#F5F3EC] p-6 sm:p-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-14">
+            <div className="mt-14 grid gap-8 rounded-[24px] bg-[#F5F7FB] p-7 sm:p-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-14">
               <div>
-                <h3 className="fs-display fs-display-sm text-[1.5rem] font-semibold leading-snug text-[#1A2D63]">{HOE.aanpak.h3}</h3>
-                <p className="mt-4 text-[1rem] leading-[1.65] text-[#2A2620] sm:text-[1.0625rem]">{HOE.aanpak.p1}</p>
-                <p className="mt-3 text-[1rem] leading-[1.65] text-[#2A2620] sm:text-[1.0625rem]">{HOE.aanpak.p2}</p>
+                <h3 className={`${H3} text-[1.5rem]`}>{HOE.brein.h3}</h3>
+                <p className="mt-4 text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]">{HOE.brein.p1}</p>
+                <p className="mt-3 text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]">{HOE.brein.p2}</p>
               </div>
               <div className="lg:pt-1">
-                <p className="text-[0.9375rem] font-medium text-[#76706A]">{HOE.aanpak.lijstTitel}</p>
-                <ul className="mt-3 space-y-2.5">
-                  {HOE.aanpak.lijst.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-[1rem] leading-[1.5] text-[#2A2620]">
+                <p className="text-[0.9375rem] font-medium text-[#1A2D63]">{HOE.brein.lijstTitel}</p>
+                <ul className="mt-4 space-y-2.5">
+                  {HOE.brein.lijst.map((item) => (
+                    <li key={item} className="flex items-start gap-3 text-[1rem] leading-[1.5] text-[#3D4766]">
                       <Vinkje />
                       <span>{item}</span>
                     </li>
@@ -380,38 +487,42 @@ export function HomePage() {
                 </ul>
               </div>
             </div>
+
+            <div className="mt-10 flex justify-center">
+              <GesprekKnop ctaLabel="aanpak_calendly" location="aanpak" className="w-full sm:w-auto" />
+            </div>
           </div>
         </section>
 
         {/* -------------------------------------------------------------- */}
         {/* 5. Resultaten uit de praktijk, marineblauwe band                */}
         {/* -------------------------------------------------------------- */}
-        <section id="resultaten" className="scroll-mt-16 bg-[#1A2D63] text-[#FDFBF7]">
-          <div className={`${CONTAINER} py-16 sm:py-24`}>
+        <section id="resultaten" className="scroll-mt-20 bg-[#1A2D63] text-white">
+          <div className={`${CONTAINER} py-20 sm:py-28`}>
             <div className="max-w-[40rem]">
-              <h2 className="fs-display text-balance text-[1.9rem] font-bold leading-[1.05] sm:text-[2.3rem] lg:text-[2.7rem]">{RESULTATEN.h2}</h2>
-              <p className="mt-4 text-[1.0625rem] leading-[1.6] text-[#FDFBF7]/75 sm:text-[1.125rem]">{RESULTATEN.intro}</p>
+              <h2 className="hp-display text-balance text-[2rem] font-bold leading-[1.06] sm:text-[2.5rem] lg:text-[2.9rem]">{RESULTATEN.h2}</h2>
+              <p className="mt-4 text-[1.0625rem] leading-[1.65] text-white/75 sm:text-[1.125rem]">{RESULTATEN.intro}</p>
             </div>
 
-            <div className="mt-10 grid gap-5 md:grid-cols-2 lg:gap-6">
+            <div className="mt-12 grid gap-5 md:grid-cols-2 lg:gap-6">
               {RESULTATEN.cases.map((c) => (
-                <div key={c.sector} className="rounded-[12px] border border-white/10 bg-white/[0.06] p-6 sm:p-7">
-                  <h3 className="fs-display fs-display-sm text-[1.35rem] font-semibold leading-[1.15]">{c.sector}</h3>
-                  <dl className="mt-5 space-y-4 text-[0.9375rem] leading-[1.6]">
+                <div key={c.sector} className="rounded-[20px] border border-white/10 bg-white/[0.06] p-6 sm:p-8">
+                  <h3 className="hp-display hp-display-sm text-[1.4rem] font-semibold leading-[1.2]">{c.sector}</h3>
+                  <dl className="mt-6 space-y-5 text-[0.9375rem] leading-[1.65]">
                     <div>
-                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.06em] text-[#FDFBF7]/55">{RESULTATEN.labels.uitdaging}</dt>
-                      <dd className="mt-1 text-[#FDFBF7]/85">{c.uitdaging}</dd>
+                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.08em] text-white/55">{RESULTATEN.labels.uitdaging}</dt>
+                      <dd className="mt-1.5 text-white/85">{c.uitdaging}</dd>
                     </div>
                     <div>
-                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.06em] text-[#FDFBF7]/55">{RESULTATEN.labels.aanpak}</dt>
-                      <dd className="mt-1 text-[#FDFBF7]/85">{c.aanpak}</dd>
+                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.08em] text-white/55">{RESULTATEN.labels.aanpak}</dt>
+                      <dd className="mt-1.5 text-white/85">{c.aanpak}</dd>
                     </div>
                     <div>
-                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.06em] text-[#FDFBF7]/55">{RESULTATEN.labels.resultaat}</dt>
+                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.08em] text-white/55">{RESULTATEN.labels.resultaat}</dt>
                       <dd className="mt-2">
                         <ul className="space-y-2">
                           {c.resultaat.map((r) => (
-                            <li key={r} className="flex items-start gap-3 text-[#FDFBF7]">
+                            <li key={r} className="flex items-start gap-3 text-white">
                               <Vinkje donker />
                               <span>{r}</span>
                             </li>
@@ -424,16 +535,16 @@ export function HomePage() {
               ))}
             </div>
 
-            <div className="mt-10 flex flex-col items-start gap-5 border-t border-white/10 pt-10 sm:flex-row sm:items-center sm:gap-7">
+            <div className="mt-12 flex flex-col items-start gap-6 border-t border-white/10 pt-12 sm:flex-row sm:items-center sm:gap-8">
               <div
-                className="h-20 w-20 shrink-0 rounded-full border-2 border-[#FDFBF7]/20 sm:h-24 sm:w-24"
+                className="h-24 w-24 shrink-0 rounded-full border-2 border-white/20 sm:h-28 sm:w-28"
                 role="img"
                 aria-label={RESULTATEN.naam}
                 style={{ backgroundImage: `url('${RESULTATEN.foto}')`, backgroundSize: "150%", backgroundPosition: "center 25%", backgroundRepeat: "no-repeat" }}
               />
               <div>
-                <blockquote className="text-[1.125rem] leading-[1.5] sm:text-[1.25rem]">&ldquo;{RESULTATEN.quote}&rdquo;</blockquote>
-                <p className="mt-2 text-[0.9375rem] text-[#FDFBF7]/65">{RESULTATEN.naam}</p>
+                <blockquote className="hp-display hp-display-sm text-[1.35rem] font-medium leading-[1.4] sm:text-[1.6rem]">&ldquo;{RESULTATEN.quote}&rdquo;</blockquote>
+                <p className="mt-3 text-[0.9375rem] text-white/65">&mdash; {RESULTATEN.naam}</p>
               </div>
             </div>
           </div>
@@ -442,17 +553,18 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         {/* 6. Waarom bedrijven voor Finit kiezen                          */}
         {/* -------------------------------------------------------------- */}
-        <section className="border-b border-[#E8E6DC]">
-          <div className={`${CONTAINER} py-16 sm:py-24`}>
-            <div className="max-w-[40rem]">
+        <section id="waarom" className="scroll-mt-20">
+          <div className={`${CONTAINER} py-20 sm:py-28`}>
+            <div className="max-w-[42rem]">
               <h2 className={H2}>{WAAROM.h2}</h2>
               <p className={`mt-4 ${LEAD}`}>{WAAROM.intro}</p>
             </div>
-            <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
-              {WAAROM.pijlers.map((p) => (
-                <div key={p.titel} className="border-t border-[#E8E6DC] pt-5">
-                  <h3 className="fs-display fs-display-sm text-[1.2rem] font-semibold leading-snug text-[#1A2D63]">{p.titel}</h3>
-                  <p className="mt-2 text-[0.9375rem] leading-[1.6] text-[#57514A]">{p.body}</p>
+            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+              {WAAROM.pijlers.map((p, i) => (
+                <div key={p.titel} className="hp-card p-6 sm:p-7">
+                  <span className="hp-display text-[1.25rem] font-bold leading-none text-[#1A2D63]/30">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className={`mt-4 ${H3} text-[1.2rem]`}>{p.titel}</h3>
+                  <p className="mt-2.5 text-[0.9375rem] leading-[1.65] text-[#3D4766]">{p.body}</p>
                 </div>
               ))}
             </div>
@@ -462,18 +574,18 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         {/* 7. Veelgestelde vragen                                         */}
         {/* -------------------------------------------------------------- */}
-        <section id="faq" className="scroll-mt-16">
-          <div className={`${CONTAINER} py-16 sm:py-24`}>
-            <div className="max-w-[46rem]">
-              <h2 className={H2}>{VRAGEN.h2}</h2>
-              <div className="mt-8 border-t border-[#E8E6DC]">
-                {VRAGEN.items.map((item) => (
-                  <details key={item.q} className="fs-details border-b border-[#E8E6DC]">
+        <section id="faq" className="scroll-mt-20 bg-[#F5F7FB]">
+          <div className={`${CONTAINER} py-20 sm:py-28`}>
+            <div className="mx-auto max-w-[48rem]">
+              <h2 className={`${H2} text-center`}>{VRAGEN.h2}</h2>
+              <div className="hp-card mt-10 px-6 sm:px-8">
+                {VRAGEN.items.map((item, i) => (
+                  <details key={item.q} className={`hp-details ${i > 0 ? "border-t border-[#E3E7EF]" : ""}`}>
                     <summary className="flex items-start justify-between gap-6 py-5 text-[1.0625rem] font-medium leading-snug text-[#1A2D63] sm:text-[1.125rem]">
                       <span>{item.q}</span>
-                      <span className="fs-plus mt-1 shrink-0 text-[#76706A]" aria-hidden="true">
-                        <svg width="16" height="16" viewBox="0 0 16 16">
-                          <path d="M8 2v12M2 8h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      <span className="hp-plus mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" aria-hidden="true">
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                          <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
                         </svg>
                       </span>
                     </summary>
@@ -486,76 +598,85 @@ export function HomePage() {
         </section>
 
         {/* -------------------------------------------------------------- */}
-        {/* 8. Slot                                                        */}
+        {/* 8. Contact                                                     */}
         {/* -------------------------------------------------------------- */}
-        <section className="bg-[#F5F3EC]">
-          <div className={`${CONTAINER} py-16 sm:py-24`}>
-            <div className="fs-paper mx-auto max-w-[46rem] rounded-[14px] border border-[#E8E6DC] bg-[#FFFEFA] px-6 py-10 text-center sm:px-12 sm:py-14">
-              <h2 className="fs-display text-balance text-[2rem] font-bold leading-[1.05] text-[#1A2D63] sm:text-[2.5rem] lg:text-[2.8rem]">{SLOT.h2}</h2>
+        <section id="contact" className="scroll-mt-20">
+          <div className={`${CONTAINER} py-20 sm:py-28`}>
+            <div className="mx-auto max-w-[44rem] text-center">
+              <h2 className={H2}>{SLOT.h2}</h2>
               <p className={`mx-auto mt-5 max-w-[36rem] ${LEAD}`}>{SLOT.p}</p>
-              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <LesreeksKnop location="slot" className="w-full sm:w-auto" />
-                <button type="button" onClick={() => openGesprek("slot")} className="fs-btn fs-btn--secondary fs-btn--lg w-full sm:w-auto">
-                  {SLOT.gesprekKnop}
-                </button>
+              <div className="mt-8 flex justify-center">
+                <GesprekKnop ctaLabel="secondary_calendly" location="secondary_cta" className="w-full sm:w-auto" />
               </div>
-              <p className="mt-5 text-[0.875rem] text-[#76706A]">{SLOT.micro}</p>
+              <p className="mt-4 text-[0.875rem] text-[#6C7590]">{SLOT.micro}</p>
+              <p className="mt-6">
+                <a href={SKOOL_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackLesreeks("contact")} className="hp-link text-[1rem] font-medium">
+                  {SLOT.lesreeksLink}
+                </a>
+              </p>
             </div>
           </div>
         </section>
       </main>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Footer                                                            */}
+      {/* Footer (opbouw van de vorige homepage)                             */}
       {/* ---------------------------------------------------------------- */}
-      <footer className="bg-[#1A2D63] pb-24 text-[#FDFBF7]/70 sm:pb-0">
-        <div className={`${CONTAINER} py-10 sm:py-12`}>
-          <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-            <div className="text-[0.9375rem] leading-[1.7]">
-              <p className="font-medium text-[#FDFBF7]">{FOOTER.bedrijf}</p>
-              <p>{FOOTER.plaats}</p>
-              <p>
-                <a href={`mailto:${CONTACT_EMAIL}`} className="transition-colors hover:text-[#FDFBF7]">{CONTACT_EMAIL}</a>
-              </p>
-              <p>
-                <a href={PHONE_LINK} className="transition-colors hover:text-[#FDFBF7]">{PHONE_NUMBER}</a>
-                <span className="text-[#FDFBF7]/45"> · {FOOTER.uren}</span>
-              </p>
+      <footer className="bg-[#1A2D63] text-white/75">
+        <div className={`${CONTAINER} py-14 sm:py-16`}>
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] lg:gap-16">
+            <div>
+              <h2 className="hp-display text-balance text-[1.75rem] font-bold leading-[1.1] text-white sm:text-[2.1rem]">{SLOT.h2}</h2>
+              <p className="mt-3 max-w-[32rem] text-[1rem] leading-[1.65] text-white/70">{SLOT.p}</p>
+              <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <GesprekKnop ctaLabel="footer_calendly" location="footer_cta" variant="light" className="w-full sm:w-auto" />
+                <a href={`mailto:${CONTACT_EMAIL}`} onClick={() => pushEvent("contact_click", { method: "email", location: "footer_cta" })} className="inline-flex items-center gap-2 text-[0.9375rem] text-white/80 transition-colors hover:text-white">
+                  <Mail className="h-4 w-4" aria-hidden="true" />
+                  {CONTACT_EMAIL}
+                </a>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-12 gap-y-2 text-[0.9375rem] leading-[1.7] sm:grid-cols-[auto_auto]">
-              <div className="flex flex-col">
-                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#FDFBF7]">Instagram</a>
-                <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#FDFBF7]">LinkedIn</a>
-              </div>
-              <div className="flex flex-col">
-                {FOOTER.links.map((l) => (
-                  <a key={l.href} href={l.href} className="transition-colors hover:text-[#FDFBF7]">{l.label}</a>
-                ))}
-                <button type="button" onClick={openSettings} className="text-left transition-colors hover:text-[#FDFBF7]">
-                  Cookie-instellingen
-                </button>
-              </div>
+            <div>
+              <h3 className="text-[0.8125rem] font-medium uppercase tracking-[0.08em] text-white/55">{FOOTER.contactTitel}</h3>
+              <ul className="mt-4 space-y-3 text-[0.9375rem]">
+                <li className="flex items-start gap-3">
+                  <Phone className="mt-1 h-4 w-4 shrink-0 text-white/55" aria-hidden="true" />
+                  <div className="flex flex-col">
+                    {FOOTER.telefoons.map((t) => (
+                      <a key={t.link} href={t.link} onClick={() => pushEvent("contact_click", { method: "phone", location: "footer" })} className="transition-colors hover:text-white">{t.nummer}</a>
+                    ))}
+                  </div>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 shrink-0 text-white/55" aria-hidden="true" />
+                  <a href={`mailto:${CONTACT_EMAIL}`} onClick={() => pushEvent("contact_click", { method: "email", location: "footer_contact" })} className="transition-colors hover:text-white">{CONTACT_EMAIL}</a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Linkedin className="h-4 w-4 shrink-0 text-white/55" aria-hidden="true" />
+                  <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" onClick={() => pushEvent("contact_click", { method: "linkedin", location: "footer_contact" })} className="transition-colors hover:text-white">LinkedIn</a>
+                  <span className="text-white/30" aria-hidden="true">·</span>
+                  <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" onClick={() => pushEvent("contact_click", { method: "instagram", location: "footer_contact" })} className="transition-colors hover:text-white">Instagram</a>
+                </li>
+              </ul>
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-6 text-[0.8125rem] text-[#FDFBF7]/50 sm:flex-row sm:justify-between">
-            <span>BTW {VAT_NUMBER}</span>
-            <span>© {new Date().getFullYear()} Finit Solutions</span>
+          <div className="mt-12 flex flex-col items-start gap-5 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+            <Image src="/finit-logo-white.svg" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto" />
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.8125rem] text-white/60">
+              <span>BTW: {VAT_NUMBER}</span>
+              {FOOTER.links.map((l) => (
+                <a key={l.href} href={l.href} className="transition-colors hover:text-white">{l.label}</a>
+              ))}
+              <button type="button" onClick={openSettings} className="underline underline-offset-2 transition-colors hover:text-white">{FOOTER.cookies}</button>
+            </div>
           </div>
+          <p className="mt-6 text-[0.8125rem] text-white/45">© {new Date().getFullYear()} Finit Solutions</p>
         </div>
       </footer>
 
-      {/* Sticky knop op mobiel, zodra de hero voorbij is */}
-      <div
-        className="fs-sticky fixed inset-x-0 bottom-0 z-20 border-t border-[#E8E6DC] bg-[#FDFBF7] px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:hidden"
-        data-zichtbaar={voorbijHero && !menuOpen && !formOpen}
-        aria-hidden={!voorbijHero}
-      >
-        <LesreeksKnop location="sticky" className="w-full" />
-      </div>
-
-      <GesprekForm open={formOpen} onClose={closeGesprek} />
+      <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </div>
   );
 }
