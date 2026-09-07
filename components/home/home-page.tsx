@@ -23,6 +23,7 @@ import {
   OPLOSSING,
   PRODUCTEN,
   RESULTATEN,
+  SKOOL,
   SLOT,
   VRAGEN,
   WAAROM,
@@ -423,19 +424,32 @@ export function HomePage() {
               ))}
             </div>
 
+            {/* De deur naar de lesreeks: knop, Skool-woordmerk en de cover van de community. */}
             <a
               href={SKOOL_URL}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackLesreeks("breedte")}
-              className="group mt-6 flex w-full items-center gap-5 rounded-[20px] border border-dashed border-[#1A2D63]/30 p-6 text-left transition-colors hover:border-[#1A2D63]/60 hover:bg-white sm:p-7"
+              className="hp-card group mt-6 grid overflow-hidden text-left transition-shadow hover:shadow-[0_24px_48px_-24px_rgba(26,45,99,0.45)] md:grid-cols-[minmax(0,5fr)_minmax(0,4fr)]"
             >
-              <span className="hp-display hidden shrink-0 text-[2.5rem] font-bold leading-none text-[#1A2D63]/45 sm:block" aria-hidden="true">+</span>
-              <span className="min-w-0 flex-1">
-                <span className={`block ${H3}`}>{OPLOSSING.breedteTitel}</span>
-                <span className="mt-1.5 block text-[0.9375rem] leading-[1.6] text-[#3D4766]">{OPLOSSING.breedteBody}</span>
+              <span className="flex flex-col justify-center p-6 sm:p-7 lg:p-9">
+                <span className="flex items-center gap-2 text-[0.8125rem] font-medium uppercase tracking-wide text-[#6C7590]">
+                  <span>{SKOOL.label}</span>
+                  <Image src="/skool-wordmark.svg" alt="Skool" width={62} height={20} className="h-[1.05rem] w-auto" />
+                </span>
+                <span className={`mt-3 block ${H3} text-[1.5rem]`}>{SKOOL.titel}</span>
+                <span className="mt-2 block text-[0.9375rem] leading-[1.6] text-[#3D4766]">{SKOOL.body}</span>
+                <span className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <span className="hp-btn hp-btn--primary hp-btn--md">
+                    {SKOOL.knop}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                  </span>
+                  <span className="text-[0.8125rem] leading-[1.5] text-[#6C7590]">{SKOOL.noot}</span>
+                </span>
               </span>
-              <ArrowRight className="h-5 w-5 shrink-0 text-[#1A2D63]/50 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              <span className="relative min-h-[11rem] bg-[#F5F7FB] md:min-h-0">
+                <Image src="/skool-cover.webp" alt={SKOOL.coverAlt} fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+              </span>
             </a>
 
             <div className="mt-14 text-center">

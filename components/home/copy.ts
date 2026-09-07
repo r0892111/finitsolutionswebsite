@@ -102,10 +102,19 @@ export const OPLOSSING = {
       body: "Elk prospect krijgt op het juiste moment de juiste mail, zonder dat jij eraan moet denken.",
     },
   ],
-  breedteTitel: "En alles wat repetitief is in jouw bedrijf",
-  breedteBody: "In de lesreeks breng je in kaart wat je team dagelijks doet. Daaruit rolt een lijst van wat AI eerst kan overnemen.",
   koppelingen: "We integreren met al je tools",
   koppelingenPlus: "zowat alles wat je al gebruikt",
+};
+
+// Het blok onder de drie kaarten: de deur naar de lesreeks, met de cover van de community op Skool.
+// Bewust de cover en niet een screenshot met ledental.
+export const SKOOL = {
+  label: "De lesreeks op",
+  titel: "En alles wat repetitief is in jouw bedrijf",
+  body: "In de lesreeks breng je in kaart wat je team dagelijks doet. Daaruit rolt een lijst van wat AI eerst kan overnemen. Die lijst bouwen wij.",
+  knop: "Start zelf met je AI-fundament",
+  noot: "Online, in het Nederlands, op eigen tempo. € 95 voor de eerste 20 deelnemers.",
+  coverAlt: "De cover van de lesreeks op Skool: een whiteboard met de negen stappen naar je AI-fundament.",
 };
 
 export type Logo = { naam: string; src: string; woordmerk?: boolean };
