@@ -749,6 +749,7 @@ html {
 /* Vinkje voor lijstjes */
 .hp-check { flex: none; width: 20px; height: 20px; border-radius: 9999px; background: #E6ECF9; color: #1A2D63; display: inline-flex; align-items: center; justify-content: center; }
 .hp-check--donker { background: rgba(255, 255, 255, 0.14); color: #fff; }
+.hp-check--niet { background: #EEF0F5; color: #6C7590; }
 
 /* Veelgestelde vragen: native <details>, eigen plusje */
 .hp-details > summary { list-style: none; cursor: pointer; }

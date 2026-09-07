@@ -169,35 +169,36 @@ export const HOE = {
       tijd: "2 tot 4 weken",
       wie: "Wij",
       titel: "De bouw",
-      intro: "Wij vertalen jouw plannen naar een werkend en veilig systeem. We bouwen alleen op een fundament dat jij gelegd hebt: zo gaat het sneller en weten we vooraf wat het kost.",
+      intro: "Wij maken van jouw lijst AI-werknemers die bij jou draaien. We bouwen alleen op een fundament dat jij gelegd hebt: zo weten we vooraf wat het kost.",
       punten: [
-        "We automatiseren offertes, opvolging en/of administratie",
-        "We koppelen je tools zodat alles samenwerkt",
-        "Alles op maat van jouw manier van werken",
+        "Alles op je lijst dat op je fundament draait, hoeveel het er ook zijn",
+        "Gekoppeld aan de software die je al gebruikt",
+        "Getest voor hij live gaat: hij verstuurt niets zelf, en één knop zet alles stil",
       ],
       prijsLabel: "Vaste prijs",
       prijs: "€ 4.500",
-      prijsDetail: "excl. btw. Inclusief 30 dagen nazorg tot alles perfect loopt.",
+      prijsDetail: "excl. btw. Eén prijs voor alle AI-werknemers uit je fundament, inclusief 30 dagen nazorg.",
     },
     {
       nummer: "03",
       tijd: "24/7 actief",
       wie: "Je AI-werknemer",
       titel: "Resultaat",
-      intro: "Het werk gebeurt op de achtergrond. Wij houden het systeem draaiend en up-to-date.",
+      intro: "Het werk gebeurt op de achtergrond. Wij houden het systeem draaiend, veilig en up-to-date.",
       punten: [
-        "Offertes worden automatisch verstuurd en opgevolgd",
+        "Offertes staan klaar en worden opgevolgd, zonder dat jij eraan denkt",
         "Minder manueel werk voor jou en je team",
         "Meer omzet zonder extra personeel",
       ],
       prijsLabel: "Onderhoud",
       prijs: "€ 90",
-      prijsDetail: "per maand, excl. btw, voor server, updates en opvolging. Maandelijks opzegbaar.",
+      prijsDetail: "per maand, excl. btw, voor hosting, bewaking, backups en updates. Maandelijks opzegbaar.",
     },
   ] as Stap[],
   // Waarom je het fundament zelf legt. Uit les 1.1, 1.2 en 1.3: de consultant-vergelijking,
   // "jij kent je bedrijf het allerbeste", de eenmalige inspanning, toekomstbestendig.
   fundament: {
+    label: "Stap 01",
     h3: "Waarom je het fundament zelf legt",
     alineas: [
       "Toen we bij onze eerste klanten AI implementeerden, leerden we het op de harde manier: je moet eerst weten waar AI nuttig is, anders is er geen return on investment. En hoe meer we documenteerden tijdens die analyse, hoe beter het resultaat bij de bouw. Gewoon omdat er meer context was.",
@@ -217,6 +218,48 @@ export const HOE = {
     eerlijk: [
       "Dit is geen snelle fix. Zoek je een tool die je installeert en die morgen je werk doet, dan ben je bij ons aan het verkeerde adres. Reken op een tiental uur, verspreid over een paar avonden.",
       "Elk softwarepakket en elke AI-consultant verkoopt je dat het in 1-2-3 gebeurt. Dat is niet zo. AI die echt in je processen zit, waar je op kunt rekenen en die je met rust kunt laten, vraagt inspanning. Van jou en van ons. Dat is precies waarom hij daarna blijft werken.",
+    ],
+  },
+  // Wat je koopt voor € 4.500. De grens is die uit stap 7 van de lesreeks: eerst de schermtest
+  // (moet er een scherm getekend worden dat er nog niet is? dan is het geen agent), dan de
+  // breintest (draait het op het fundament? dan zit het erin). Geen plafond op het aantal.
+  bouw: {
+    label: "Stap 02",
+    h3: "Wat je koopt voor € 4.500",
+    intro: "Eén vaste prijs voor alles wat er uit je fundament komt aan werk dat een AI-werknemer kan overnemen. Hoeveel het er ook zijn. De grens ligt niet bij het aantal, maar bij het soort werk.",
+    welTitel: "Zit erin",
+    wel: [
+      "Elke AI-werknemer die op je fundament draait: mails sorteren en beantwoorden, offertes klaarzetten en opvolgen, documenten opmaken, gegevens van het ene systeem naar het andere brengen, een ochtendbriefing, een melding als er iets binnenkomt dat niet mag blijven liggen",
+      "De koppelingen met de software die je al gebruikt",
+      "De assistent waarmee je al je AI-werknemers aanstuurt",
+      "30 dagen nazorg, tot het zeven dagen na elkaar zonder één bugmelding draait",
+    ],
+    nietTitel: "Zit er niet in",
+    niet: [
+      "Nieuwe software met een scherm dat er nog niet is: een website, een webshop, een klantenportaal, een boekingsmodule, een database die je nog niet hebt. Dat is een apart traject met een aparte prijs.",
+      "Planning zelf, want dat is een roostersysteem. Wel het bericht naar de klant zodra er iets verzet wordt.",
+    ],
+    dicht: "Zit een systeem dicht, zoals sommige sectorpakketten of overheidsportalen, dan bouwen we tot aan de knop: alles verzameld en opgemaakt, het laatste klikken doe jij. Dat hoor je in de lesreeks, niet achteraf.",
+    // De regels die op elke AI-werknemer getest worden voor hij live gaat.
+    veiligTitel: "Wat er gebeurt voor hij bij jou mag draaien",
+    veilig: [
+      { titel: "Hij verstuurt niets zelf", body: "Standaard zet hij klaar en druk jij op verzenden. Wil je dat hij een taak wél zelf afwerkt, dan beslis jij dat, per taak, in de lesreeks. We testen het op elke AI-werknemer." },
+      { titel: "Hij komt niet bij wat hij niet mag zien", body: "Wachtwoorden, sleutels en certificaten zijn afgeschermd. Ook dat testen we, elke keer." },
+      { titel: "Hij antwoordt nooit uit het niets", body: "Elk antwoord moet aantoonbaar uit jouw fundament komen. Anders gaat hij niet live." },
+      { titel: "Eén knop en alles staat stil", body: "Elke AI-werknemer heeft een kostenplafond en een pauzeknop. Die pauzeknop testen we vlak voor de oplevering." },
+    ],
+    proces: "Vóór een AI-werknemer bij jou draait, krijgt hij een geschreven opdracht met wat hij mag en niet mag, controleren we elke koppeling tegen de echte documentatie van dat pakket, en moet hij een testreeks halen. Bij de oplevering volgen tien controles. Eén rode vlag en hij gaat niet live.",
+  },
+  // Wat de € 90 per maand dekt. Geen cijfers over backup-frequentie of uptime: die liggen nog niet vast.
+  onderhoud: {
+    label: "Stap 03",
+    h3: "Wat de € 90 per maand dekt",
+    intro: "Een AI-systeem zonder onderhoud verschuift binnen zes maanden van werkend naar wankel. Modellen veranderen, koppelingen wijzigen, je bedrijf schuift op. Daarom houden wij het draaiend.",
+    punten: [
+      { titel: "Hosting bij ons", body: "Je AI-werknemers draaien op onze servers. Jij hoeft niets te installeren of te beheren." },
+      { titel: "Bewaking en verwittiging", body: "Wij zien het als er iets hapert, meestal voor jij het merkt. Bug? Gratis. Koppeling veranderd? Gratis." },
+      { titel: "Backups, beveiligingsupdates en nieuwe versies", body: "Je gegevens worden bewaard, het systeem blijft veilig, en nieuwe AI-ontwikkelingen die jij ook moet hebben, voeren wij door." },
+      { titel: "Van jou, ook als je stopt", body: "Zolang wij het onderhouden, beheren wij de toegang: zo kan niemand er per ongeluk iets in breken. Stop je, dan krijg je alles mee: de code, je gegevens en een dag begeleiding om het over te nemen." },
     ],
   },
 };
@@ -263,7 +306,7 @@ export const WAAROM = {
     { titel: "Eerst begrijpen, dan bouwen", body: "Jij legt eerst zelf je fundament, want jij kent je bedrijf het best. Wij bouwen alleen daarop, en alleen wat opbrengt." },
     { titel: "Geen losse AI-tools", body: "Elke automatisering bouwt verder op je fundament. Geen losse tools die elkaar niet kennen." },
     { titel: "Prijs vooraf bekend", body: "Van lesreeks tot werkende oplossing: één partner, en je weet op voorhand wat elke stap kost." },
-    { titel: "Jullie eigendom", body: "Je fundament staat op je eigen computer en is van jou. Ook wat we daarna bouwen blijft van jouw bedrijf." },
+    { titel: "Jullie eigendom", body: "Je fundament staat op je eigen computer en is van jou. Wat we daarna bouwen ook: stop je met het onderhoud, dan krijg je de code en je gegevens mee." },
   ],
 };
 
@@ -309,7 +352,7 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
     {
       q: "Welke processen kunnen jullie automatiseren?",
       a: [
-        { t: "p", tekst: "De vuistregel: doet je team het nu handmatig, en volgt het vaste stappen? Dan kunnen wij het overnemen." },
+        { t: "p", tekst: "De vuistregel: doet je team het nu handmatig, en volgt het vaste stappen? Dan kunnen wij het overnemen. Wat we niet bouwen: nieuwe software met een scherm dat er nog niet is, zoals een website of een klantenportaal." },
         { t: "h", tekst: "Enkele succesverhalen bij onze klanten:" },
         { t: "h", tekst: "1. E-commerce" },
         { t: "p", tekst: "Een webshop kreeg dagelijks 50 klantemails over bestellingen, leveringen en retouren, allemaal handmatig beantwoord. We koppelden zijn mailbox aan webshop en zijn kennisbank. Zijn AI-systeem beantwoordt klantemails automatisch, zet bestellingen klaar in de webshop en schakelt alleen een echte medewerker in als de vraag te complex is." },
@@ -349,8 +392,8 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
         { t: "p", tekst: "Je kent elke prijs op voorhand. Geen verrassingen achteraf." },
         { t: "list", items: [
           "De lesreeks: € 95 voor de eerste 20 deelnemers, daarna € 295. Eenmalig. Plus je eigen abonnement van Claude of ChatGPT, ± € 20 per maand.",
-          "De bouw: € 4.500, vaste prijs, inclusief 30 dagen nazorg. Alleen als jij daarvoor kiest.",
-          "Het onderhoud: € 90 per maand voor server, updates en opvolging. Maandelijks opzegbaar.",
+          "De bouw: € 4.500, vaste prijs, voor alle AI-werknemers uit je fundament, inclusief 30 dagen nazorg. Alleen als jij daarvoor kiest.",
+          "Het onderhoud: € 90 per maand voor hosting, bewaking, backups en updates. Maandelijks opzegbaar.",
         ] },
         { t: "p", tekst: "Concreet voorbeeld: als je team 10 uur per week kwijt is aan handmatige taken, kost dat je € 15.000 tot 20.000 per jaar. Een bouw van € 4.500 verdient zichzelf terug in 3 tot 6 maanden. En daarna blijft het werken, jaar na jaar, met minimale extra kosten." },
         { t: "p", tekst: "Alle prijzen excl. btw." },
@@ -414,7 +457,7 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
       q: "Wat als er iets misloopt met de automatisering?",
       a: [
         { t: "p", tekst: "Elke oplossing heeft een test- en integratieperiode. Tijdens de nazorg kijken we aandachtig mee naar alle handelingen. We moedigen je team aan om het systeem te proberen breken, in de echte drukte van je bedrijf, zodat we de kinderziektes vinden vóór we weggaan." },
-        { t: "p", tekst: "Na oplevering laten we je niet in de steek. Elke oplossing bevat ingebouwde monitoring: wij worden onmiddellijk verwittigd als er iets hapert. Bug? Gratis. API veranderd? Gratis. Onze verantwoordelijkheid, niet de jouwe. Het onderhoud (server, updates en opvolging) zit in de € 90 per maand; je betaalt alleen extra voor nieuwe features die je later wilt toevoegen." },
+        { t: "p", tekst: "Na oplevering laten we je niet in de steek. Elke oplossing bevat ingebouwde monitoring: wij worden onmiddellijk verwittigd als er iets hapert. Bug? Gratis. API veranderd? Gratis. Onze verantwoordelijkheid, niet de jouwe. Het onderhoud (hosting, bewaking, backups en updates) zit in de € 90 per maand; je betaalt alleen extra voor nieuwe features die je later wilt toevoegen." },
       ],
     },
     {

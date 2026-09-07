@@ -43,6 +43,8 @@ const CONTAINER = "mx-auto w-full max-w-[74rem] px-5 sm:px-8";
 const H2 = "hp-display text-balance text-[2rem] font-bold leading-[1.06] text-[#1A2D63] sm:text-[2.5rem] lg:text-[2.9rem]";
 const LEAD = "text-[1.0625rem] leading-[1.65] text-[#3D4766] sm:text-[1.125rem]";
 const H3 = "hp-display hp-display-sm text-[1.3rem] font-semibold leading-[1.2] text-[#1A2D63]";
+/** Label "Stap 01/02/03" boven de detailblokken onder de prijskaarten. */
+const STAP_LABEL = "text-[0.8125rem] font-medium uppercase tracking-wide text-[#6C7590]";
 /** Gecentreerde sectiekop met intro. */
 const KOP = "mx-auto max-w-[44rem] text-center";
 /** Eén icoon per pijler in "Waarom Finit", in de volgorde van WAAROM.pijlers. */
@@ -65,6 +67,17 @@ function Vinkje({ donker = false }: { donker?: boolean }) {
     <span className={`hp-check mt-0.5 ${donker ? "hp-check--donker" : ""}`} aria-hidden="true">
       <svg width="11" height="9" viewBox="0 0 11 9">
         <path d="M1 4.5l3 3L10 1" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+  );
+}
+
+/** Tegenhanger van het vinkje, voor wat er níét in zit. */
+function Kruisje() {
+  return (
+    <span className="hp-check hp-check--niet mt-0.5" aria-hidden="true">
+      <svg width="9" height="9" viewBox="0 0 9 9">
+        <path d="M1.5 1.5l6 6M7.5 1.5l-6 6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
       </svg>
     </span>
   );
@@ -490,7 +503,8 @@ export function HomePage() {
 
             <div className="mt-14 grid gap-8 rounded-[24px] bg-[#F5F7FB] p-7 sm:p-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-14">
               <div>
-                <h3 className={`${H3} text-[1.5rem]`}>{HOE.fundament.h3}</h3>
+                <p className={STAP_LABEL}>{HOE.fundament.label}</p>
+                <h3 className={`mt-2 ${H3} text-[1.5rem]`}>{HOE.fundament.h3}</h3>
                 {HOE.fundament.alineas.map((a) => (
                   <p key={a} className="mt-4 text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]">{a}</p>
                 ))}
@@ -511,6 +525,65 @@ export function HomePage() {
                   ))}
                 </div>
               </div>
+            </div>
+
+            {/* Stap 02: wat je koopt voor € 4.500, en wat er gebeurt voor een AI-werknemer live mag. */}
+            <div className="hp-card mt-6 p-7 sm:p-10">
+              <p className={STAP_LABEL}>{HOE.bouw.label}</p>
+              <h3 className={`mt-2 ${H3} text-[1.5rem]`}>{HOE.bouw.h3}</h3>
+              <p className="mt-4 max-w-[44rem] text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]">{HOE.bouw.intro}</p>
+              <div className="mt-7 grid gap-7 md:grid-cols-2 md:gap-10">
+                <div>
+                  <p className="text-[0.9375rem] font-medium text-[#1A2D63]">{HOE.bouw.welTitel}</p>
+                  <ul className="mt-4 space-y-3">
+                    {HOE.bouw.wel.map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-[0.9375rem] leading-[1.55] text-[#3D4766]">
+                        <Vinkje />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-[0.9375rem] font-medium text-[#1A2D63]">{HOE.bouw.nietTitel}</p>
+                  <ul className="mt-4 space-y-3">
+                    {HOE.bouw.niet.map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-[0.9375rem] leading-[1.55] text-[#3D4766]">
+                        <Kruisje />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-5 border-l-2 border-[#1A2D63]/40 pl-4 text-[0.9375rem] leading-[1.6] text-[#3D4766]">{HOE.bouw.dicht}</p>
+                </div>
+              </div>
+              <div className="mt-9 border-t border-[#E3E7EF] pt-8">
+                <h4 className={`${H3} text-[1.2rem]`}>{HOE.bouw.veiligTitel}</h4>
+                <ul className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                  {HOE.bouw.veilig.map((v) => (
+                    <li key={v.titel} className="rounded-[16px] bg-[#F5F7FB] p-5">
+                      <p className="text-[0.9375rem] font-semibold leading-[1.35] text-[#1A2D63]">{v.titel}</p>
+                      <p className="mt-2 text-[0.875rem] leading-[1.55] text-[#3D4766]">{v.body}</p>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-6 max-w-[52rem] text-[0.9375rem] leading-[1.65] text-[#3D4766]">{HOE.bouw.proces}</p>
+              </div>
+            </div>
+
+            {/* Stap 03: wat de € 90 per maand dekt, en wat er van jou blijft. */}
+            <div className="mt-6 rounded-[24px] bg-[#F5F7FB] p-7 sm:p-10">
+              <p className={STAP_LABEL}>{HOE.onderhoud.label}</p>
+              <h3 className={`mt-2 ${H3} text-[1.5rem]`}>{HOE.onderhoud.h3}</h3>
+              <p className="mt-4 max-w-[44rem] text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]">{HOE.onderhoud.intro}</p>
+              <ul className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                {HOE.onderhoud.punten.map((v) => (
+                  <li key={v.titel} className="rounded-[16px] bg-white p-5">
+                    <p className="text-[0.9375rem] font-semibold leading-[1.35] text-[#1A2D63]">{v.titel}</p>
+                    <p className="mt-2 text-[0.875rem] leading-[1.55] text-[#3D4766]">{v.body}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div className="mt-10 flex justify-center">
