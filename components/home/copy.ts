@@ -79,7 +79,7 @@ export const HERKEN = {
     "Je zoekt geen AI-tool, maar iemand die meedenkt over hoe jouw bedrijf werkt.",
     "Je wil klein starten, snel resultaat zien en daarna verder bouwen.",
   ],
-  overgang: "Het hoeft niet zo te zijn.",
+  overgang: "Herkenbaar? Dan zit je hier goed.",
 };
 
 // 3. Wat AI kan (landingspagina's)
@@ -104,18 +104,28 @@ export const OPLOSSING = {
   ],
   breedteTitel: "En alles wat repetitief is in jouw bedrijf",
   breedteBody: "In de lesreeks breng je in kaart wat je team dagelijks doet. Daaruit rolt een lijst van wat AI eerst kan overnemen.",
-  koppelingen: "We integreren met al je tools:",
+  koppelingen: "We integreren met al je tools",
+  koppelingenPlus: "zowat alles wat je al gebruikt",
 };
 
-export const LOGOS = [
+export type Logo = { naam: string; src: string; woordmerk?: boolean };
+// Bekende tools van Belgische KMO's. De tool-*.svg's komen van Simple Icons (CC0), in de kleur van het merk.
+export const LOGOS: Logo[] = [
   { naam: "Teamleader", src: "/Teamleader_Icon.svg" },
+  { naam: "Odoo", src: "/tool-odoo.svg" },
   { naam: "Outlook", src: "/Microsoft_Office_Outlook_(2018–2024).svg" },
   { naam: "Gmail", src: "/Gmail_icon_(2020).png" },
   { naam: "Excel", src: "/Microsoft_Office_Excel_(2019–2025).svg" },
   { naam: "Microsoft Teams", src: "/Microsoft_Office_Teams_(2019–2025).svg" },
+  { naam: "WhatsApp", src: "/tool-whatsapp.svg" },
+  { naam: "Google Agenda", src: "/tool-googlecalendar.svg" },
+  { naam: "Google Drive", src: "/tool-googledrive.svg" },
+  { naam: "HubSpot", src: "/tool-hubspot.svg" },
   { naam: "Pipedrive", src: "/Pipedrive_id-7ejZnwv_0.svg" },
   { naam: "Shopify", src: "/shopify_icon.png" },
-  { naam: "Stripe", src: "/Stripe_Logo,_revised_2016.svg.webp" },
+  { naam: "WooCommerce", src: "/tool-woocommerce.svg" },
+  { naam: "Stripe", src: "/Stripe_Logo,_revised_2016.svg.webp", woordmerk: true },
+  { naam: "Notion", src: "/tool-notion.svg" },
 ];
 
 export type Stap = {
@@ -135,7 +145,7 @@ export type Stap = {
 // 4. Hoe wij AI voor jou laten werken (landingspagina's), met de stappen van het nieuwe model
 export const HOE = {
   h2: ["Hoe wij AI voor jou laten", "werken"],
-  intro: "We starten niet met AI-tools, maar met inzicht in hoe jouw bedrijf werkt. Daarom leg je eerst zelf je fundament. Pas daarna bouwen we, en alleen wat opbrengt.",
+  intro: "We starten niet met AI-tools, maar met inzicht in hoe jouw bedrijf werkt. Dat inzicht heb jij, niet wij. Daarom leg je eerst zelf je fundament. Pas daarna bouwen we, en alleen wat opbrengt.",
   stappen: [
     {
       nummer: "01",
@@ -159,7 +169,7 @@ export const HOE = {
       tijd: "2 tot 4 weken",
       wie: "Wij",
       titel: "De bouw",
-      intro: "Wij vertalen jouw plannen naar een werkend en veilig systeem. Omdat het fundament er al ligt, gaat dat sneller en weten we vooraf wat het kost.",
+      intro: "Wij vertalen jouw plannen naar een werkend en veilig systeem. We bouwen alleen op een fundament dat jij gelegd hebt: zo gaat het sneller en weten we vooraf wat het kost.",
       punten: [
         "We automatiseren offertes, opvolging en/of administratie",
         "We koppelen je tools zodat alles samenwerkt",
@@ -185,15 +195,16 @@ export const HOE = {
       prijsDetail: "per maand, excl. btw, voor server, updates en opvolging. Maandelijks opzegbaar.",
     },
   ] as Stap[],
-  // Waarom eerst een fundament? Uit les 1.1, 1.2 en 2.1.
+  // Waarom je het fundament zelf legt. Uit les 1.1, 1.2 en 1.3: de consultant-vergelijking,
+  // "jij kent je bedrijf het allerbeste", de eenmalige inspanning, toekomstbestendig.
   fundament: {
-    h3: "Waarom eerst een fundament?",
+    h3: "Waarom je het fundament zelf legt",
     alineas: [
       "Toen we bij onze eerste klanten AI implementeerden, leerden we het op de harde manier: je moet eerst weten waar AI nuttig is, anders is er geen return on investment. En hoe meer we documenteerden tijdens die analyse, hoe beter het resultaat bij de bouw. Gewoon omdat er meer context was.",
-      "Alleen kent de zaakvoerder zijn bedrijf veel beter dan wij. Dus goten we onze aanpak in een versie waarmee je het zelf doet: de AI bevraagt jou, zoals wij dat vroeger deden. Je bespaart de kost van die analyse en alle kennis blijft in eigen huis.",
-      "Het resultaat is een map met tekstbestanden in gewone taal: je processen, je systemen, wie wat doet, je prijzen, je huistaal. Een centrale bron van waarheid waar elke AI mee kan werken, vandaag en met de betere modellen van morgen. En elke automatisering die we daarna bouwen, vertrekt van diezelfde kennis.",
+      "Andere bureaus sturen een dure consultant om die analyse voor jou te doen. Wij niet. Jij kent je bedrijf het allerbeste en je weet zelf waar je grootste frustraties en tijdvreters zitten. Daarom stelt de AI jou in de lesreeks dezelfde vragen die wij vroeger ter plaatse stelden, en schrijft hij alles op.",
+      "Het is een eenmalige inspanning. Je bespaart de kost van zo'n analysetraject, alle kennis blijft in eigen huis, en je leert onderweg de belangrijkste concepten van AI. Geen opleiding tot AI-expert, wel wat een zaakvoerder vandaag moet weten om de juiste keuzes te maken. Zo maak je je bedrijf toekomstbestendig. Elke automatisering die we daarna bouwen, vertrekt van diezelfde kennis.",
     ],
-    lijstTitel: "Wat er in je fundament komt:",
+    lijstTitel: "Je fundament is een map met tekstbestanden in gewone taal. Daarin komt:",
     lijst: [
       "Hoe je bedrijf geld verdient",
       "Wie wat doet en wie beslist",
@@ -245,7 +256,7 @@ export const WAAROM = {
   h2: "Waarom bedrijven voor Finit kiezen",
   intro: "We vertrekken vanuit hoe jouw bedrijf werkt, zodat we automatiseringen bouwen die blijvende waarde opleveren.",
   pijlers: [
-    { titel: "Eerst begrijpen, dan bouwen", body: "Je brengt eerst je bedrijf in kaart. Pas dan bouwen we, en alleen wat opbrengt." },
+    { titel: "Eerst begrijpen, dan bouwen", body: "Jij legt eerst zelf je fundament, want jij kent je bedrijf het best. Wij bouwen alleen daarop, en alleen wat opbrengt." },
     { titel: "Geen losse AI-tools", body: "Elke automatisering bouwt verder op je fundament. Geen losse tools die elkaar niet kennen." },
     { titel: "Prijs vooraf bekend", body: "Van lesreeks tot werkende oplossing: één partner, en je weet op voorhand wat elke stap kost." },
     { titel: "Jullie eigendom", body: "Je fundament staat op je eigen computer en is van jou. Ook wat we daarna bouwen blijft van jouw bedrijf." },
@@ -273,8 +284,8 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
     {
       q: "Waarom bouw ik dat zelf en niet jullie?",
       a: [
-        { t: "p", tekst: "Omdat jij je bedrijf het allerbeste kent en zelf weet waar je grootste frustraties en tijdvreters zitten. Vroeger deden wij die analyse ter plaatse, in meer dan 25 trajecten. Nu stelt de AI jou dezelfde vragen als wij toen. Je bespaart de kost van die analyse en de kennis blijft bij jou." },
-        { t: "p", tekst: "Liever alles uit handen geven? Dat kan ook. Plan een kennismaking, dan bekijken we wat bij jouw bedrijf past." },
+        { t: "p", tekst: "Omdat jij je bedrijf het allerbeste kent en zelf weet waar je grootste frustraties en tijdvreters zitten. Andere bureaus sturen daar een dure consultant voor. Die kent na een week nog altijd minder van jouw bedrijf dan jij. Daarom stelt de AI jou nu dezelfde vragen die wij vroeger ter plaatse stelden, en schrijft hij alles op." },
+        { t: "p", tekst: "Het is een eenmalige inspanning die je de kost van zo'n analysetraject bespaart. Onderweg leer je de belangrijkste concepten van AI, precies wat een zaakvoerder vandaag nodig heeft, en die kennis neem je mee in elke stap die je bedrijf daarna zet. Daarom bouwen we ook alleen op een fundament dat jij zelf gelegd hebt." },
       ],
     },
     {
@@ -288,7 +299,7 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
       q: "Hoeveel tijd kost de lesreeks?",
       a: [
         { t: "p", tekst: "Reken op een tiental uur, verspreid over een paar avonden of namiddagen. Op sommige momenten wacht je op de AI, bijvoorbeeld als hij een export van je mailbox verwerkt. Op de andere momenten praat je zo uitgebreid mogelijk over je bedrijf. Hoe meer je vertelt, hoe beter het resultaat." },
-        { t: "p", tekst: "Beschouw het alsof je iemand opleidt om morgen jouw functie over te nemen. Dan leg je ook serieus wat uit." },
+        { t: "p", tekst: "Beschouw het alsof je iemand opleidt om morgen jouw functie over te nemen. Dan leg je ook serieus wat uit. En je doet het één keer: elke automatisering die we daarna bouwen, vertrekt van hetzelfde fundament." },
       ],
     },
     {
@@ -372,10 +383,10 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
     {
       q: "Hoe lang duurt het voor de automatisering live staat?",
       a: [
-        { t: "p", tekst: "Totaal traject: 6 tot 12 weken, afhankelijk van complexiteit en je eigen tempo in de lesreeks." },
+        { t: "p", tekst: "Reken op 4 tot 7 weken van de eerste les tot een automatisering die live staat, afhankelijk van de complexiteit en je eigen tempo in de lesreeks. Daarna volgen 30 dagen nazorg." },
         { t: "h", tekst: "Fase 1: de lesreeks (2 tot 3 weken)" },
         { t: "p", tekst: "Je legt je fundament en ziet waar de winst zit. Geen maanden voorbereiding." },
-        { t: "h", tekst: "Fase 2: de bouw (2 tot 6 weken)" },
+        { t: "h", tekst: "Fase 2: de bouw (2 tot 4 weken)" },
         { t: "p", tekst: "We bouwen en testen de automatisering. Je ziet tussentijds al resultaten." },
         { t: "h", tekst: "Fase 3: nazorg (30 dagen)" },
         { t: "p", tekst: "Het systeem is live en jullie gebruiken het. Wij kijken intensief mee en lossen direct op als er iets niet perfect loopt. Pas als het 100% stabiel draait, ronden we af. Theorie en praktijk kunnen verschillen, en wij blijven erbij tot het écht werkt voor jouw team." },
@@ -417,12 +428,14 @@ export const SLOT = {
   h2: "Ontdek wat AI jouw bedrijf oplevert",
   p: "In 30 minuten bespreken we je huidige situatie en maken we een inschatting van wat mogelijk is.",
   knop: CTA_KENNISMAKING,
-  micro: "We werken met een beperkt aantal bedrijven tegelijk.",
+  micro: "Gratis en vrijblijvend. We werken met een beperkt aantal bedrijven tegelijk.",
   lesreeksLink: "Of leg meteen je fundament in de lesreeks",
 };
 
 // Footer (vorige homepage, zonder plaatsnaam)
 export const FOOTER = {
+  slotTitel: "Klaar om je bedrijf te automatiseren?",
+  slotTekst: "Leg eerst je fundament in de lesreeks. Vragen vooraf? Mail ons gerust.",
   contactTitel: "Contact",
   telefoons: [
     { nummer: "+32 495 70 23 14", link: "tel:+32495702314" },

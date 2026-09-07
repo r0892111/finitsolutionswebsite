@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { ArrowRight, Calendar, ChevronDown, ChevronRight, Linkedin, Mail, Menu, Phone, X } from "lucide-react";
+import { ArrowRight, Calendar, ChevronDown, ChevronRight, Euro, KeyRound, Layers, Linkedin, Mail, Menu, Phone, Plus, Workflow, X } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { ContactFormPopup, useContactForm } from "@/components/contact-form-popup";
 import { useConsent } from "@/contexts/consent-context";
@@ -43,6 +43,10 @@ const CONTAINER = "mx-auto w-full max-w-[74rem] px-5 sm:px-8";
 const H2 = "hp-display text-balance text-[2rem] font-bold leading-[1.06] text-[#1A2D63] sm:text-[2.5rem] lg:text-[2.9rem]";
 const LEAD = "text-[1.0625rem] leading-[1.65] text-[#3D4766] sm:text-[1.125rem]";
 const H3 = "hp-display hp-display-sm text-[1.3rem] font-semibold leading-[1.2] text-[#1A2D63]";
+/** Gecentreerde sectiekop met intro. */
+const KOP = "mx-auto max-w-[44rem] text-center";
+/** Eén icoon per pijler in "Waarom Finit", in de volgorde van WAAROM.pijlers. */
+const PIJLER_ICONEN = [Layers, Workflow, Euro, KeyRound];
 
 /** De handgetekende streep onder het laatste woord van een kop, zoals op de vorige site. */
 function Onder({ children }: { children: React.ReactNode }) {
@@ -310,7 +314,7 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         {/* 1. Hero                                                        */}
         {/* -------------------------------------------------------------- */}
-        <header id="hero" className={`${CONTAINER} pb-16 pt-32 sm:pt-36 lg:pb-24 lg:pt-40`}>
+        <header id="hero" className={`${CONTAINER} pb-12 pt-32 sm:pt-36 lg:pb-10 lg:pt-32`}>
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-10">
             <div className="hp-rise">
               <h1 className="hp-display text-balance text-[2.15rem] font-bold leading-[1.02] text-[#1A2D63] min-[400px]:text-[2.4rem] sm:text-[3.2rem] lg:text-[3.1rem] xl:text-[3.6rem]">
@@ -349,21 +353,21 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         {/* 2. Herken jij dit?                                             */}
         {/* -------------------------------------------------------------- */}
-        <section id="recognition" className="scroll-mt-20 border-t border-[#E3E7EF]">
-          <div className={`${CONTAINER} py-20 sm:py-28`}>
-            <div className="max-w-[44rem]">
+        <section id="recognition" className="scroll-mt-20">
+          <div className={`${CONTAINER} pb-20 pt-12 sm:pb-28 sm:pt-14 lg:pt-10`}>
+            <div className={KOP}>
               <h2 className={H2}>Herken jij <Onder>dit?</Onder></h2>
               <p className={`mt-4 ${LEAD}`}>{HERKEN.intro}</p>
             </div>
             <ol className="mt-12 grid gap-x-10 gap-y-7 sm:grid-cols-2">
               {HERKEN.items.map((item, i) => (
-                <li key={item} className="flex items-start gap-5 border-t border-[#E3E7EF] pt-5">
-                  <span className="hp-display w-8 shrink-0 text-[1.5rem] font-bold leading-none text-[#1A2D63]/30">{String(i + 1).padStart(2, "0")}</span>
+                <li key={item} className="flex items-baseline gap-5 border-t border-[#E3E7EF] pt-5">
+                  <span className="hp-display w-8 shrink-0 text-[1.5rem] font-bold leading-none text-[#1A2D63]/45">{String(i + 1).padStart(2, "0")}</span>
                   <p className="text-[1.0625rem] leading-[1.55] text-[#1A2D63] sm:text-[1.125rem]">{item}</p>
                 </li>
               ))}
             </ol>
-            <div className="mt-14 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-14 flex flex-col items-center gap-6 text-center">
               <p className="hp-display text-[1.7rem] font-semibold leading-tight text-[#1A2D63] sm:text-[2rem]">{HERKEN.overgang}</p>
               <GesprekKnop ctaLabel="recognition_calendly" location="recognition" className="w-full sm:w-auto" />
             </div>
@@ -375,18 +379,18 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         <section id="use-cases" className="scroll-mt-20 bg-[#F5F7FB]">
           <div className={`${CONTAINER} py-20 sm:py-28`}>
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:gap-16">
-              <div className="max-w-[40rem]">
-                <h2 className={H2}>{OPLOSSING.h2[0]} <Onder>{OPLOSSING.h2[1]}</Onder></h2>
-                <p className={`mt-5 ${LEAD}`}>{OPLOSSING.intro}</p>
-              </div>
+            <div className={KOP}>
+              <h2 className={H2}>{OPLOSSING.h2[0]} <Onder>{OPLOSSING.h2[1]}</Onder></h2>
+              <p className={`mt-5 ${LEAD}`}>{OPLOSSING.intro}</p>
+            </div>
+            <div className="mx-auto mt-10 max-w-[34rem]">
               <div className="flex items-stretch gap-3 sm:gap-4">
                 <div className="hp-card flex-1 p-5 sm:p-6">
                   <p className="text-[0.8125rem] font-medium uppercase tracking-wide text-[#6C7590]">{OPLOSSING.zonder.label}</p>
                   <p className="hp-display mt-2 text-[2.75rem] font-bold leading-none text-[#1A2D63] sm:text-[3.25rem]">{OPLOSSING.zonder.getal}</p>
                   <p className="mt-2 text-[0.875rem] leading-[1.4] text-[#3D4766]">{OPLOSSING.zonder.eenheid}</p>
                 </div>
-                <div className="flex items-center text-[#1A2D63]/40" aria-hidden="true">
+                <div className="flex items-center text-[#1A2D63]/50" aria-hidden="true">
                   <ArrowRight className="h-6 w-6" />
                 </div>
                 <div className="flex-1 rounded-[20px] bg-[#1A2D63] p-5 text-white shadow-[0_16px_40px_-20px_rgba(26,45,99,0.6)] sm:p-6">
@@ -413,7 +417,7 @@ export function HomePage() {
               onClick={() => trackLesreeks("breedte")}
               className="group mt-6 flex w-full items-center gap-5 rounded-[20px] border border-dashed border-[#1A2D63]/30 p-6 text-left transition-colors hover:border-[#1A2D63]/60 hover:bg-white sm:p-7"
             >
-              <span className="hp-display hidden shrink-0 text-[2.5rem] font-bold leading-none text-[#1A2D63]/30 sm:block" aria-hidden="true">+</span>
+              <span className="hp-display hidden shrink-0 text-[2.5rem] font-bold leading-none text-[#1A2D63]/45 sm:block" aria-hidden="true">+</span>
               <span className="min-w-0 flex-1">
                 <span className={`block ${H3}`}>{OPLOSSING.breedteTitel}</span>
                 <span className="mt-1.5 block text-[0.9375rem] leading-[1.6] text-[#3D4766]">{OPLOSSING.breedteBody}</span>
@@ -421,11 +425,20 @@ export function HomePage() {
               <ArrowRight className="h-5 w-5 shrink-0 text-[#1A2D63]/50 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </a>
 
-            <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <span className="text-[0.8125rem] font-medium text-[#6C7590]">{OPLOSSING.koppelingen}</span>
-              {LOGOS.map((l) => (
-                <Image key={l.naam} src={l.src} alt={l.naam} title={l.naam} width={120} height={40} className="hp-logo-kleur h-6 w-auto" />
-              ))}
+            <div className="mt-14 text-center">
+              <p className="text-[0.8125rem] font-medium uppercase tracking-wide text-[#6C7590]">{OPLOSSING.koppelingen}</p>
+              <ul className="mx-auto mt-5 flex max-w-[58rem] flex-wrap justify-center gap-2.5">
+                {LOGOS.map((l) => (
+                  <li key={l.naam} className="hp-chip">
+                    <Image src={l.src} alt={l.naam} width={48} height={48} className={l.woordmerk ? "h-5 w-auto" : "h-5 w-5 object-contain"} />
+                    {!l.woordmerk && <span>{l.naam}</span>}
+                  </li>
+                ))}
+                <li className="hp-chip hp-chip--plus">
+                  <Plus className="h-4 w-4" aria-hidden="true" />
+                  <span>{OPLOSSING.koppelingenPlus}</span>
+                </li>
+              </ul>
             </div>
           </div>
         </section>
@@ -435,7 +448,7 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         <section id="aanpak" className="scroll-mt-20">
           <div className={`${CONTAINER} py-20 sm:py-28`}>
-            <div className="max-w-[42rem]">
+            <div className={KOP}>
               <h2 className={H2}>{HOE.h2[0]} <Onder>{HOE.h2[1]}</Onder></h2>
               <p className={`mt-5 ${LEAD}`}>{HOE.intro}</p>
             </div>
@@ -444,7 +457,7 @@ export function HomePage() {
               {HOE.stappen.map((stap, i) => (
                 <li key={stap.nummer} className={`hp-card flex flex-col p-6 sm:p-7 ${i === 0 ? "hp-card--accent" : ""}`}>
                   <div className="flex items-center justify-between gap-3">
-                    <span className="hp-display text-[1.75rem] font-bold leading-none text-[#1A2D63]/30">{stap.nummer}</span>
+                    <span className="hp-display text-[1.75rem] font-bold leading-none text-[#1A2D63]/45">{stap.nummer}</span>
                     <span className="flex flex-wrap justify-end gap-1.5">
                       <span className="rounded-full bg-[#E6ECF9] px-3 py-1 text-[0.75rem] font-medium text-[#1A2D63]">{stap.wie}</span>
                       <span className="rounded-full border border-[#E3E7EF] px-3 py-1 text-[0.75rem] font-medium text-[#6C7590]">{stap.tijd}</span>
@@ -507,7 +520,7 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         <section id="resultaten" className="scroll-mt-20 bg-[#1A2D63] text-white">
           <div className={`${CONTAINER} py-20 sm:py-28`}>
-            <div className="max-w-[40rem]">
+            <div className={KOP}>
               <h2 className="hp-display text-balance text-[2rem] font-bold leading-[1.06] sm:text-[2.5rem] lg:text-[2.9rem]">{RESULTATEN.h2}</h2>
               <p className="mt-4 text-[1.0625rem] leading-[1.65] text-white/75 sm:text-[1.125rem]">{RESULTATEN.intro}</p>
             </div>
@@ -518,15 +531,15 @@ export function HomePage() {
                   <h3 className="hp-display hp-display-sm text-[1.4rem] font-semibold leading-[1.2]">{c.sector}</h3>
                   <dl className="mt-6 space-y-5 text-[0.9375rem] leading-[1.65]">
                     <div>
-                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.08em] text-white/55">{RESULTATEN.labels.uitdaging}</dt>
-                      <dd className="mt-1.5 text-white/85">{c.uitdaging}</dd>
+                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.08em] text-white/65">{RESULTATEN.labels.uitdaging}</dt>
+                      <dd className="mt-1.5 text-white/90">{c.uitdaging}</dd>
                     </div>
                     <div>
-                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.08em] text-white/55">{RESULTATEN.labels.aanpak}</dt>
-                      <dd className="mt-1.5 text-white/85">{c.aanpak}</dd>
+                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.08em] text-white/65">{RESULTATEN.labels.aanpak}</dt>
+                      <dd className="mt-1.5 text-white/90">{c.aanpak}</dd>
                     </div>
                     <div>
-                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.08em] text-white/55">{RESULTATEN.labels.resultaat}</dt>
+                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.08em] text-white/65">{RESULTATEN.labels.resultaat}</dt>
                       <dd className="mt-2">
                         <ul className="space-y-2">
                           {c.resultaat.map((r) => (
@@ -552,7 +565,7 @@ export function HomePage() {
               />
               <div>
                 <blockquote className="hp-display hp-display-sm text-[1.35rem] font-medium leading-[1.4] sm:text-[1.6rem]">&ldquo;{RESULTATEN.quote}&rdquo;</blockquote>
-                <p className="mt-3 text-[0.9375rem] text-white/65">&mdash; {RESULTATEN.naam}</p>
+                <p className="mt-3 text-[0.9375rem] text-white/75">{RESULTATEN.naam}</p>
               </div>
             </div>
           </div>
@@ -563,18 +576,23 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         <section id="waarom" className="scroll-mt-20">
           <div className={`${CONTAINER} py-20 sm:py-28`}>
-            <div className="max-w-[42rem]">
+            <div className={KOP}>
               <h2 className={H2}>{WAAROM.h2}</h2>
               <p className={`mt-4 ${LEAD}`}>{WAAROM.intro}</p>
             </div>
             <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-              {WAAROM.pijlers.map((p, i) => (
-                <div key={p.titel} className="hp-card p-6 sm:p-7">
-                  <span className="hp-display text-[1.25rem] font-bold leading-none text-[#1A2D63]/30">{String(i + 1).padStart(2, "0")}</span>
-                  <h3 className={`mt-4 ${H3} text-[1.2rem]`}>{p.titel}</h3>
-                  <p className="mt-2.5 text-[0.9375rem] leading-[1.65] text-[#3D4766]">{p.body}</p>
-                </div>
-              ))}
+              {WAAROM.pijlers.map((p, i) => {
+                const Icoon = PIJLER_ICONEN[i] ?? Layers;
+                return (
+                  <div key={p.titel} className="hp-card p-6 sm:p-7">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" aria-hidden="true">
+                      <Icoon className="h-5 w-5" strokeWidth={1.75} />
+                    </span>
+                    <h3 className={`mt-5 ${H3} text-[1.2rem]`}>{p.titel}</h3>
+                    <p className="mt-2.5 text-[0.9375rem] leading-[1.65] text-[#3D4766]">{p.body}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -634,10 +652,10 @@ export function HomePage() {
         <div className={`${CONTAINER} py-14 sm:py-16`}>
           <div className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] lg:gap-16">
             <div>
-              <h2 className="hp-display text-balance text-[1.75rem] font-bold leading-[1.1] text-white sm:text-[2.1rem]">{SLOT.h2}</h2>
-              <p className="mt-3 max-w-[32rem] text-[1rem] leading-[1.65] text-white/70">{SLOT.p}</p>
+              <h2 className="hp-display text-balance text-[1.75rem] font-bold leading-[1.1] text-white sm:text-[2.1rem]">{FOOTER.slotTitel}</h2>
+              <p className="mt-3 max-w-[32rem] text-[1rem] leading-[1.65] text-white/70">{FOOTER.slotTekst}</p>
               <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-                <GesprekKnop ctaLabel="footer_calendly" location="footer_cta" variant="light" className="w-full sm:w-auto" />
+                <LesreeksKnop location="footer_cta" variant="light" className="w-full sm:w-auto" />
                 <a href={`mailto:${CONTACT_EMAIL}`} onClick={() => pushEvent("contact_click", { method: "email", location: "footer_cta" })} className="inline-flex items-center gap-2 text-[0.9375rem] text-white/80 transition-colors hover:text-white">
                   <Mail className="h-4 w-4" aria-hidden="true" />
                   {CONTACT_EMAIL}
@@ -646,10 +664,10 @@ export function HomePage() {
             </div>
 
             <div>
-              <h3 className="text-[0.8125rem] font-medium uppercase tracking-[0.08em] text-white/55">{FOOTER.contactTitel}</h3>
+              <h3 className="text-[0.8125rem] font-medium uppercase tracking-[0.08em] text-white/65">{FOOTER.contactTitel}</h3>
               <ul className="mt-4 space-y-3 text-[0.9375rem]">
                 <li className="flex items-start gap-3">
-                  <Phone className="mt-1 h-4 w-4 shrink-0 text-white/55" aria-hidden="true" />
+                  <Phone className="mt-1 h-4 w-4 shrink-0 text-white/65" aria-hidden="true" />
                   <div className="flex flex-col">
                     {FOOTER.telefoons.map((t) => (
                       <a key={t.link} href={t.link} onClick={() => pushEvent("contact_click", { method: "phone", location: "footer" })} className="transition-colors hover:text-white">{t.nummer}</a>
@@ -657,11 +675,11 @@ export function HomePage() {
                   </div>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 shrink-0 text-white/55" aria-hidden="true" />
+                  <Mail className="h-4 w-4 shrink-0 text-white/65" aria-hidden="true" />
                   <a href={`mailto:${CONTACT_EMAIL}`} onClick={() => pushEvent("contact_click", { method: "email", location: "footer_contact" })} className="transition-colors hover:text-white">{CONTACT_EMAIL}</a>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Linkedin className="h-4 w-4 shrink-0 text-white/55" aria-hidden="true" />
+                  <Linkedin className="h-4 w-4 shrink-0 text-white/65" aria-hidden="true" />
                   <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" onClick={() => pushEvent("contact_click", { method: "linkedin", location: "footer_contact" })} className="transition-colors hover:text-white">LinkedIn</a>
                   <span className="text-white/30" aria-hidden="true">·</span>
                   <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" onClick={() => pushEvent("contact_click", { method: "instagram", location: "footer_contact" })} className="transition-colors hover:text-white">Instagram</a>
@@ -680,7 +698,7 @@ export function HomePage() {
               <button type="button" onClick={openSettings} className="underline underline-offset-2 transition-colors hover:text-white">{FOOTER.cookies}</button>
             </div>
           </div>
-          <p className="mt-6 text-[0.8125rem] text-white/45">© {new Date().getFullYear()} Finit Solutions</p>
+          <p className="mt-6 text-[0.8125rem] text-white/55">© {new Date().getFullYear()} Finit Solutions</p>
         </div>
       </footer>
 

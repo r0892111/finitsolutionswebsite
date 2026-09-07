@@ -15,13 +15,13 @@ Links en contactgegevens staan in `lib/finit-links.ts`. **`SKOOL_URL` moet nog i
 ## De volgorde (en de vraag die elke sectie beantwoordt)
 
 1. **Hero** (`#hero`): "Leg jouw AI-fundament", met de uitleg uit les 1.2 en 1.3 (AI kan alleen wat je hem vertelt, dus eerst een fundament; het technische werk daarna doen wij). Twee knoppen: lesreeks (Skool) en kennismaking (formulier). Drie vinkjes, "Ondersteund door". Geen prijs in de hero.
-2. **Herken jij dit?** (`#recognition`): zes zinnen waarop de lezer knikt, dan "Het hoeft niet zo te zijn." en een knop.
-3. **Wij zorgen ervoor dat AI jouw werk overneemt** (`#use-cases`): 15+ → 2 uur, drie voorbeelden, "En alles wat repetitief is", integratielogo's.
-4. **Hoe wij AI voor jou laten werken** (`#aanpak`): drie stappen met de prijs erbij (lesreeks € 95 → € 295, bouw € 4.500, onderhoud € 90 per maand), dan het blok "Waarom eerst een fundament?" met de uitleg uit les 1.1 en 1.2 en de eerlijke noot dat het geen snelle fix is.
+2. **Herken jij dit?** (`#recognition`): drie knelpunten en drie wensen waarop de lezer knikt, dan "Herkenbaar? Dan zit je hier goed." en een knop. De kop staat op een gewoon laptopscherm al onder de hero in beeld, zonder scrollen.
+3. **Wij zorgen ervoor dat AI jouw werk overneemt** (`#use-cases`): 15+ → 2 uur, drie voorbeelden, "En alles wat repetitief is", vijftien tool-chips plus een chip "zowat alles wat je al gebruikt".
+4. **Hoe wij AI voor jou laten werken** (`#aanpak`): drie stappen met de prijs erbij (lesreeks € 95 → € 295, bouw € 4.500, onderhoud € 90 per maand), dan het blok "Waarom je het fundament zelf legt": de les van de eerste klanten, de vergelijking met de dure consultant, de eenmalige inspanning en wat je onderweg leert (les 1.1, 1.2 en 1.3), plus de eerlijke noot dat het geen snelle fix is. Zelf leggen is de regel, geen optie: "we bouwen alleen op een fundament dat jij gelegd hebt" staat in stap 2, in pijler 1 en in de FAQ.
 5. **Resultaten uit de praktijk** (`#resultaten`): de twee cases en de quote van Bas, op marineblauw.
 6. **Waarom bedrijven voor Finit kiezen** (`#waarom`): de vier pijlers.
 7. **Veelgestelde vragen** (`#faq`): de tien vragen van vroeger plus drie nieuwe (wat is een AI-brein, moet ik technisch zijn, wat met mijn gegevens).
-8. **Contact** (`#contact`): "Ontdek wat AI jouw bedrijf oplevert", knop naar het formulier, link naar de lesreeks.
+8. **Contact** (`#contact`): "Ontdek wat AI jouw bedrijf oplevert", knop naar het formulier, link naar de lesreeks. De footer heeft een eigen kop ("Klaar om je bedrijf te automatiseren?") met de lesreeks-knop, zodat dezelfde tekst niet twee keer na elkaar staat.
 
 ## Regels voor de copy
 
@@ -32,4 +32,4 @@ Links en contactgegevens staan in `lib/finit-links.ts`. **`SKOOL_URL` moet nog i
 
 ## Opmaak
 
-Wit, met lichtblauwgrijze banden (`#F5F7FB`) voor ritme en marineblauw (`#1A2D63`) voor koppen, knoppen, de resultaten-band en de footer. Pilvormige knoppen zoals in de cookiebanner en op de vorige site. Bricolage Grotesque voor koppen en prijzen, Schibsted Grotesk voor de rest (via `next/font`, in `app/(home)/layout.tsx`). De handgetekende streep onder het laatste woord van een kop komt van de vorige site. Stijlen staan in `app/globals.css` onder "Homepage 2026-09" (prefix `hp-`).
+Wit, met lichtblauwgrijze banden (`#F5F7FB`) voor ritme en marineblauw (`#1A2D63`) voor koppen, knoppen, de resultaten-band en de footer. Sectiekoppen en hun intro staan gecentreerd; geen scheidingslijn tussen hero en eerste sectie. De tool-logo's (`public/tool-*.svg`) komen van Simple Icons (CC0), in de merkkleur. Pilvormige knoppen zoals in de cookiebanner en op de vorige site. Bricolage Grotesque voor koppen en prijzen, Schibsted Grotesk voor de rest (via `next/font`, in `app/(home)/layout.tsx`). De handgetekende streep onder het laatste woord van een kop komt van de vorige site. Stijlen staan in `app/globals.css` onder "Homepage 2026-09" (prefix `hp-`).
