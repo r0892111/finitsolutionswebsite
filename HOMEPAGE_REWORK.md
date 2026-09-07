@@ -1,5 +1,7 @@
 # Homepage-rework: branch `rework/homepage-lesreeks`
 
+> **Update 7 september 2026, namiddag.** Alex heeft op basis van deze branch een tweede ronde gedaan op `copy/homepage-optimalisatie` (zie [§ Tweede ronde](#tweede-ronde-copy-optimalisaties-van-alex) onderaan). Tag `homepage-rework-v1` bevriest de oplevering hieronder; `rework/homepage-lesreeks` zelf is niet aangeraakt.
+
 Overdracht voor Karel. Dit is de herwerkte homepage voor het lesreeks-model, gebouwd op 7 september 2026 op een aparte branch. **Niet gemerged naar `main`.** Alex beslist wanneer en of dat gebeurt. Werk verder op deze branch, of maak er een nieuwe branch van.
 
 Alles wat hieronder staat is samen met Alex beslist en getest. De korte versie: de copy en de opmaak op deze branch zijn het vertrekpunt, niet de versie van 6 september op `main`.
@@ -55,6 +57,7 @@ Zeven commits bovenop `main` (`2c3c7ad`, "nieuwe website NU"):
 | `components/contact-form-popup.tsx` | Het bestaande formulier (n8n-flow). Ongewijzigd, wordt door de homepage gebruikt. |
 | `lib/finit-links.ts` | Links en contactgegevens, waaronder `SKOOL_URL`. |
 | `public/tool-*.svg` | Zeven tool-logo's van Simple Icons (CC0), in de merkkleur. |
+| `public/skool-cover.webp`, `public/skool-wordmark.svg` | Cover van de community op Skool (720 px, 32 kB) en het Skool-woordmerk in de eigen merkkleuren, voor het Skool-blok. |
 | `public/og-image.png`, `public/favicon.ico`, `public/phone-mock-menu.webp` | OG-beeld, favicon-set, kleine telefoon-mockup voor het Producten-menu. |
 | `scripts/homepage/shot.mjs`, `perf.mjs` | Screenshot op een gekozen schermmaat, en tekentijd van het brein meten. |
 
@@ -121,14 +124,18 @@ Ritme van de secties: wit (hero + Herken jij dit?), band (Wat AI kan), wit (Hoe 
 
 ## Het brein in de hero
 
-`components/home/brein-3d.tsx`. Zeventien pagina's van een fictief installatiebedrijf (Offertes, Klanten, Prijzen, Planning, ...) als bolletjes met lijnen ertussen, plus kleinere subpagina's. Bij het laden vliegen ze in 1,5 s op hun plaats, daarna tuimelt de structuur traag rond een as die zelf verschuift (geen vaste draaias, quaternions). Lichtpuntjes lopen over de lijnen, labels wijken voor elkaar, hover licht een bolletje en zijn lijnen op, slepen tuimelt mee.
+`components/home/brein-3d.tsx`. Zeventien pagina's van een fictief installatiebedrijf (Offertes, Klanten, Prijzen, Planning, ...) als bolletjes met lijnen ertussen, plus twee tot drie subpagina's per pagina. Bij het laden vliegen ze in 1,5 s op hun plaats, daarna tuimelt de structuur traag rond een as die zelf verschuift (geen vaste draaias, quaternions). Labels wijken voor elkaar, hover licht een bolletje en zijn lijnen op, slepen tuimelt mee.
 
-Draaiknoppen, allemaal bovenaan of in `stap()`:
+**Golven** (sinds de tweede ronde): af en toe komt er een vraag binnen bij één pagina. Die licht op, en lichtpuntjes lopen over haar lijnen naar de verbonden pagina's, die op hun beurt oplichten en het signaal nog één stap doorgeven. Dat is hoe het fundament werkt (index → pagina → verwante pagina's) en het geeft het neurale gevoel zonder het beeld oneerlijk te maken. **Scherptediepte:** wat achteraan ligt vervaagt sneller en krijgt een zachte, bredere schijf.
+
+Draaiknoppen, allemaal bovenaan of in `stap()` en `teken()`:
 
 - Tuimelsnelheid: `dt * 0.00008` in de `qDraai`-aanroep. Hoger is sneller.
-- Lichtpuntjes: interval 1600 ms, maximaal 4 tegelijk, snelheid `0.00032 + Math.random() * 0.00022`, dekking `fade * 0.28` (spoor) en `fade * 0.6` (puntje).
+- Golven: nieuwe golf elke 2600 ms zolang er minder dan 6 puntjes onderweg zijn; start met 4 lijnen, elke volgende stap 3, tot diepte 2; kracht per stap `× 0.55`; nooit meer dan 28 puntjes. Snelheid `0.00034 + Math.random() * 0.00018`.
+- Gloed van een pagina: halfwaardetijd 380 ms (`verval`); halo tot `r × (2.6 + 1.4 × g)`; kleur mengt van marineblauw naar accent via `meng(g)`.
+- Scherptediepte: lijnen `d^1.5`, bolletjes `d^1.4`, zachte schijf onder `d < 0.42`.
 - Startpositie: `Q0` (kanteling en welk bolletje vooraan staat).
-- Pagina's en lijnen: de lijst met labels, `SUBS` en `HOOFDLIJNEN`.
+- Pagina's en lijnen: de lijst met labels, `SUBS` (aantal per pagina: `i % 2 === 0 ? 3 : 2`) en `HOOFDLIJNEN`.
 
 Prestaties: in dev-modus gemeten 0,5 ms per beeldje gemiddeld, 1 ms maximaal (retina, 1440 px), op een budget van 16,7 ms per beeldje. De productiebuild is lichter. Stopt buiten beeld (IntersectionObserver), 30 fps op aanraakschermen, stilstaand beeld bij "minder beweging". Meten kan met `node scripts/homepage/perf.mjs http://localhost:3000/`.
 
@@ -149,13 +156,17 @@ node scripts/homepage/shot.mjs http://localhost:3000/ mobiel.png 390 844 1 2    
 
 ## Open punten, voor Alex
 
-1. `SKOOL_URL` in `lib/finit-links.ts` (regel 26) staat nog op `https://www.skool.com/`. Invullen zodra de community-link er is.
+1. ~~`SKOOL_URL` in `lib/finit-links.ts` staat nog op `https://www.skool.com/`.~~ Ingevuld op 7 september: `https://www.skool.com/finit-solutions-3358`.
 2. De structured data in `app/layout.tsx` (regel 117) bevat nog Leuven als adres. Site-breed, bewust niet aangeraakt.
 3. De oude landingspagina's (`/hoe-het-werkt`, `/plan-gesprek`, `/succesverhalen`, ...) beschrijven nog het € 3.500-model en zijn niet gelinkt vanaf de homepage.
 4. De vier nieuwe transcripten van de lesreeks (les 1.3, 2.1, 2.2, 2.3) staan bij Alex in `~/Skool` en zijn nog niet nagelezen. Ze staan niet in dit repo.
 5. De e-commerce-case zegt in de resultatensectie "60 tot 70% van supportvragen automatisch" en in de FAQ "van 50 naar 5 mails per dag". Dat meet iets anders; Alex kiest of er één cijfer komt.
 6. `business_model.md` zegt dat tokens in de € 90 zitten, les 8.6 zegt "eigen abonnement". De site claimt daarom alleen server, updates en opvolging.
 7. `HomepageNewPlan.md` (maart 2026) is een ouder plan en is door deze branch ingehaald.
+8. Stap 02 zegt nog "2 tot 4 weken", terwijl de bouw nu een onbeperkt aantal AI-werknemers dekt. Alex bevestigt of dat blijft staan.
+9. Backup-frequentie, uptime en security-baselines liggen nog niet vast (playbook §8, bij Jord). Daarom staan er op de site alleen categorieën (hosting, bewaking, backups, updates), geen cijfers. Niet toevoegen zonder Jord.
+10. De community op Skool heeft op 7 september 5 leden. Daarom toont het Skool-blok de cover en geen screenshot met ledental.
+11. De herschreven prompt van stap 7 van de lesreeks ("Oplossingen": schermtest eerst, breintest tweede, geen plafond, mapping bakjes → secties, twee extra scopingvragen) staat nog in geen enkel repo. Alex zet hem in de lesreeks en, als hij wil, in finit-company.
 
 ## Werken met Claude Code op deze branch
 
@@ -163,3 +174,31 @@ node scripts/homepage/shot.mjs http://localhost:3000/ mobiel.png 390 844 1 2    
 - Blijf op deze branch (of een branch daarvan). Nooit naar `main` pushen zonder Alex.
 - Na elke wijziging: `npx tsc --noEmit`, dan `npm run dev` en op 390 px kijken, dan een draft-deploy voor Alex.
 - Niets veranderen aan `components/contact-form-popup.tsx`, `components/cookie-banner.tsx` en de n8n-flow.
+
+
+## Tweede ronde: copy-optimalisaties van Alex
+
+Branch `copy/homepage-optimalisatie`, 7 september 2026, bovenop tag `homepage-rework-v1`. Eén commit per punt, zodat elk punt apart terug te draaien is (`git revert <commit>`). Niets gepusht, niets gemerged; Alex beslist wanneer.
+
+| Commit | Punt |
+|---|---|
+| `links: echte Skool-URL` | `SKOOL_URL` ingevuld. |
+| `copy: hero-sub als belofte` | Hero-sub: wat jij legt, wat wij daarop bouwen. De verontschuldigende zin "voorlopig nog een ontwikkelaar nodig" is weg. |
+| `copy: 'geen snelle fix' als kwalificatie` | Twee alinea's die bewust afschrikken wie een snelle fix zoekt. |
+| `copy: stap 02 en 03 verantwoord` | Nieuwe detailblokken "Stap 02: wat je koopt voor € 4.500" en "Stap 03: wat de € 90 per maand dekt" onder de prijskaarten. Pijler "Jullie eigendom" en drie FAQ-antwoorden op dezelfde lijn. |
+| `homepage: Skool-blok als echte deur` | Knop "Start zelf met je AI-fundament", Skool-woordmerk, cover van de community. |
+| `brein: golven, scherptediepte, dichter` | Zie [§ Het brein in de hero](#het-brein-in-de-hero). |
+
+### Beslissingen die erbij kwamen (van Alex)
+
+12. **De bouw is € 4.500 vast, ongeacht de omvang.** Het is een loss leader; de marge zit in de € 90 per maand hosting. De scope moet streng zijn in soort, ruim in aantal.
+13. **De grens uit stap 7 van de lesreeks is de grens op de site.** Twee tests, in deze volgorde: moet er een scherm getekend worden dat er nog niet is? Dan buiten (website, webshop, klantenportaal, boekingsmodule, nieuwe database), ook als het het brein zou gebruiken. Draait het op het brein? Dan binnen. Geen plafond. Zit een systeem dicht, dan tot aan de knop, en dat valt ook binnen. De assistent boven de AI-werknemers zit erin.
+14. **Het veiligheidsverhaal staat op de site.** De vier regels die op elke AI-werknemer getest worden (niets zelf versturen tenzij de klant dat per taak kiest, afgeschermde sleutels, aantoonbaar uit het fundament, pauzeknop en kostenplafond) komen uit `finit-company/finit/skills/11.2-agent-smoke-test` en `12.1-dev-go-live`. Daarom is "verstuurd" overal "staat klaar" geworden waar het botste.
+15. **Het eigendomsverhaal wordt volledig verteld.** Tijdens het onderhoud beheert Finit de toegang (playbook §9); bij vertrek krijgt de klant code, gegevens en een dag begeleiding (exit-protocol). "Maandelijks opzegbaar" blijft staan.
+16. **Twee labels voor dezelfde knop.** "Start de lesreeks" in nav en hero, "Start zelf met je AI-fundament" op het Skool-blok. Bewust: kort waar het een knop is, met resultaat waar het een deur is.
+17. **Het brein blijft letterlijk waar.** Geen neuraal netwerk als cliché; wel golven die de werking van het fundament tonen, en scherptediepte. Het onderschrift blijft kloppen.
+
+### Gecontroleerd
+
+- `npx tsc --noEmit` schoon, `npm run build` slaagt.
+- Screenshots op 1440×900 (vouw), 1440 volledige pagina en 390 volledige pagina, via `scripts/homepage/shot.mjs` op de statische `out/`-map. "Herken jij dit?" staat nog boven de vouw.
