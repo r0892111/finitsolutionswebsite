@@ -154,6 +154,7 @@ export type Stap = {
 // 4. Hoe wij AI voor jou laten werken (landingspagina's), met de stappen van het nieuwe model
 export const HOE = {
   h2: ["Hoe wij AI voor jou laten", "werken"],
+  meer: "Meer over deze stap",
   intro: "We starten niet met AI-tools, maar met inzicht in hoe jouw bedrijf werkt. Dat inzicht heb jij, niet wij. Daarom leg je eerst zelf je fundament. Pas daarna bouwen we, en alleen wat opbrengt.",
   stappen: [
     {
@@ -206,9 +207,10 @@ export const HOE = {
   ] as Stap[],
   // Waarom je het fundament zelf legt. Uit les 1.1, 1.2 en 1.3: de consultant-vergelijking,
   // "jij kent je bedrijf het allerbeste", de eenmalige inspanning, toekomstbestendig.
+  // De drie blokken hieronder staan in één openklikbaar blok onder de prijskaarten; `kort` is de regel in de dichte rij.
   fundament: {
-    label: "Stap 01",
     h3: "Waarom je het fundament zelf legt",
+    kort: "Jij kent je bedrijf het best. Daarom leg jij het, en bouwen wij alleen daarop.",
     alineas: [
       "Toen we bij onze eerste klanten AI implementeerden, leerden we het op de harde manier: je moet eerst weten waar AI nuttig is, anders is er geen return on investment. En hoe meer we documenteerden tijdens die analyse, hoe beter het resultaat bij de bouw. Gewoon omdat er meer context was.",
       "Andere bureaus sturen een dure consultant om die analyse voor jou te doen. Wij niet. Jij kent je bedrijf het allerbeste en je weet zelf waar je grootste frustraties en tijdvreters zitten. Daarom stelt de AI jou in de lesreeks dezelfde vragen die wij vroeger ter plaatse stelden, en schrijft hij alles op.",
@@ -233,8 +235,8 @@ export const HOE = {
   // (moet er een scherm getekend worden dat er nog niet is? dan is het geen agent), dan de
   // breintest (draait het op het fundament? dan zit het erin). Geen plafond op het aantal.
   bouw: {
-    label: "Stap 02",
     h3: "Wat je koopt voor € 4.500",
+    kort: "Eén vaste prijs, hoeveel AI-werknemers er ook uit je fundament komen. En wat er gebeurt voor één ervan live mag.",
     intro: "Eén vaste prijs voor alles wat er uit je fundament komt aan werk dat een AI-werknemer kan overnemen. Hoeveel het er ook zijn. De grens ligt niet bij het aantal, maar bij het soort werk.",
     welTitel: "Zit erin",
     wel: [
@@ -261,8 +263,8 @@ export const HOE = {
   },
   // Wat de € 90 per maand dekt. Geen cijfers over backup-frequentie of uptime: die liggen nog niet vast.
   onderhoud: {
-    label: "Stap 03",
     h3: "Wat de € 90 per maand dekt",
+    kort: "Hosting, bewaking, backups en updates. En wat er van jou blijft als je stopt.",
     intro: "Een AI-systeem zonder onderhoud verschuift binnen zes maanden van werkend naar wankel. Modellen veranderen, koppelingen wijzigen, je bedrijf schuift op. Daarom houden wij het draaiend.",
     punten: [
       { titel: "Hosting bij ons", body: "Je AI-werknemers draaien op onze servers. Jij hoeft niets te installeren of te beheren." },

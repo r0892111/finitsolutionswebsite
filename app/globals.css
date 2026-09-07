@@ -751,6 +751,11 @@ html {
 .hp-check--donker { background: rgba(255, 255, 255, 0.14); color: #fff; }
 .hp-check--niet { background: #EEF0F5; color: #6C7590; }
 
+/* Openklikbare rijen onder de prijskaarten: hoogte van 0fr naar 1fr, zodat de inhoud in de DOM blijft */
+.hp-vouw { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms ease; }
+.hp-vouw[data-open="true"] { grid-template-rows: 1fr; }
+.hp-vouw > div { overflow: hidden; }
+
 /* Veelgestelde vragen: native <details>, eigen plusje */
 .hp-details > summary { list-style: none; cursor: pointer; }
 .hp-details > summary::-webkit-details-marker { display: none; }

@@ -108,6 +108,7 @@ Ritme van de secties: wit (hero + Herken jij dit?), band (Wat AI kan), wit (Hoe 
 - Chips: `hp-chip` voor de tool-logo's, `hp-chip--plus` (gestippeld) voor "zowat alles wat je al gebruikt".
 - Vinkjes: `hp-check` (lichtblauw rondje), `hp-check--donker` op marineblauw.
 - FAQ: native `<details>` met eigen plusje (`hp-details`, `hp-plus`).
+- Openklikbare rijen onder de prijskaarten: `hp-vouw` (grid-rows van 0fr naar 1fr, de inhoud blijft in de DOM; `aria-expanded` op de knop).
 - Iconen (lucide) alleen waar ze iets betekenen: de vier pijlers hebben een icoon omdat ze geen volgorde zijn; de drie stappen en de zes herkenzinnen hebben nummers omdat je ze telt of doorloopt.
 
 **Contrast en uitlijning**
@@ -188,6 +189,7 @@ Branch `copy/homepage-optimalisatie`, 7 september 2026, bovenop tag `homepage-re
 | `copy: stap 02 en 03 verantwoord` | Nieuwe detailblokken "Stap 02: wat je koopt voor € 4.500" en "Stap 03: wat de € 90 per maand dekt" onder de prijskaarten. Pijler "Jullie eigendom" en drie FAQ-antwoorden op dezelfde lijn. |
 | `homepage: Skool-blok als echte deur` | Knop "Start zelf met je AI-fundament", Skool-woordmerk, cover van de community. |
 | `brein: golven, scherptediepte, dichter` | Zie [§ Het brein in de hero](#het-brein-in-de-hero). |
+| `homepage: stappen in detail als één openklikbaar blok` | Op feedback van Alex: de drie detailblokken onder de prijskaarten zijn één blok met drie openklikbare rijen geworden (`STAP_DETAILS` in `home-page.tsx`, stap 01 standaard open, één tegelijk). Elke prijskaart linkt onderaan met "Meer over deze stap" naar de juiste rij. |
 
 ### Beslissingen die erbij kwamen (van Alex)
 
