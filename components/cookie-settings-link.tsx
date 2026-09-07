@@ -15,7 +15,7 @@ export function CookieSettingsLink() {
         openSettings();
       }}
       type="button"
-      className="text-sm py-2 cursor-pointer underline text-inherit hover:text-white transition-colors"
+      className="text-sm cursor-pointer underline text-inherit hover:text-white transition-colors align-baseline"
       aria-label="Cookie-instellingen openen"
     >
       {t('footer.cookie.settings')}
