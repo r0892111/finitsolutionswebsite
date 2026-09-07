@@ -7,8 +7,11 @@ import { BREIN_3D } from "./copy";
  * Het beeld in de hero: het AI-brein van een fictief installatiebedrijf als
  * een zwevende structuur van bolletjes en lijnen. Elke bol is een stuk kennis
  * over de zaak (offertes, planning, klanten...), elke lijn een verband, de
- * kleine bolletjes zijn onderliggende pagina's. Lichtpuntjes lopen over de
- * lijnen: informatie die van de ene pagina naar de andere stroomt.
+ * kleine bolletjes zijn onderliggende pagina's. Af en toe komt er een vraag
+ * binnen bij één pagina: die licht op, en het signaal loopt door naar de
+ * pagina's die ermee verbonden zijn, en van daar nog een stap verder. Zo
+ * werkt het fundament ook: van de index naar de pagina naar wat ermee
+ * samenhangt. Wat achteraan ligt is zachter en vager (scherptediepte).
  *
  * Bij het laden komen de bolletjes van overal aangevlogen en vallen ze op
  * hun plaats: losse kennis die structuur krijgt. Daarna tuimelt de structuur
@@ -104,7 +107,7 @@ const idx = (label: string) => KNOPEN.findIndex((k) => k.label === label);
 const SUBS: [number, number][] = [];
 LABELS.forEach((label, i) => {
   const ouder = idx(label);
-  const aantal = i % 3 === 0 ? 2 : 1;
+  const aantal = i % 2 === 0 ? 3 : 2;
   for (let k = 0; k < aantal; k++) {
     const u = norm(KNOPEN[ouder].p);
     const a = rnd() * Math.PI * 2;
@@ -128,12 +131,19 @@ const HOOFDLIJNEN: [string, string][] = [
   ["Planning", "Agenda"], ["Planning", "Tom"], ["Planning", "Leveranciers"],
   ["Werkbonnen", "Onderhoud"], ["Facturatie", "Boekhouder"],
   ["Leveranciers", "Materiaal"], ["Klachten", "Els"], ["Onderhoud", "Agenda"],
+  ["Facturatie", "Werkbonnen"], ["Mailbox", "Agenda"], ["Klanten", "Klachten"], ["Prijzen", "Leveranciers"],
+  ["Tom", "Werkbonnen"], ["Els", "Mailbox"], ["Nieuwbouw", "Planning"], ["Onderhoud", "Klanten"],
 ];
 type Lijn = { a: number; b: number; sub: boolean };
 const LIJNEN: Lijn[] = [
   ...HOOFDLIJNEN.map(([a, b]) => ({ a: idx(a), b: idx(b), sub: false })),
   ...SUBS.map(([s, o]) => ({ a: o, b: s, sub: true })),
 ];
+// Welke lijnen aan elke knoop hangen, voor de golven die door de structuur lopen.
+const BUREN: number[][] = KNOPEN.map(() => []);
+LIJNEN.forEach((l, i) => { BUREN[l.a].push(i); BUREN[l.b].push(i); });
+// Kleur tussen marineblauw (g = 0) en de accentkleur (g = 1), voor wat oplicht.
+const meng = (g: number) => `${Math.round(26 + 36 * g)},${Math.round(45 + 54 * g)},${Math.round(99 + 122 * g)}`;
 
 // Tekenvlak in logische eenheden; wordt geschaald naar de breedte van het kader.
 const W = 600;
@@ -165,7 +175,8 @@ function straal(k: Knoop, pt: Punt) {
 
 const uit = (t: number) => 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3); // ease-out
 
-type Puls = { lijn: number; t: number; v: number };
+/** Een lichtpuntje op een lijn, onderweg van knoop `van` naar de andere kant. `diepte` telt de stappen sinds de vraag binnenkwam. */
+type Puls = { lijn: number; t: number; v: number; van: number; diepte: number; kracht: number };
 
 export function Brein3D() {
   const wrap = useRef<HTMLDivElement>(null);
@@ -207,6 +218,17 @@ export function Brein3D() {
     let vorige = 0, raf = 0, zichtbaar = true, frame = 0, tijd = 0, t0 = -1;
     let pulsen: Puls[] = [];
     let laatstePuls = 0;
+    const gloed = new Float32Array(KNOPEN.length); // hoe fel elke knoop nu oplicht (0..1)
+    const andereKant = (l: Lijn, van: number) => (l.a === van ? l.b : l.a);
+    // Een golf: vanuit één knoop vertrekken lichtpuntjes over (een deel van) zijn lijnen.
+    const golf = (van: number, diepte: number, kracht: number, max: number, behalve = -1) => {
+      const lijnen = BUREN[van].filter((i) => i !== behalve && !pulsen.some((p) => p.lijn === i));
+      for (let k = lijnen.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [lijnen[k], lijnen[j]] = [lijnen[j], lijnen[k]]; }
+      for (const i of lijnen.slice(0, max)) {
+        if (pulsen.length >= 28) break;
+        pulsen.push({ lijn: i, t: 0, v: 0.00034 + Math.random() * 0.00018, van, diepte, kracht: LIJNEN[i].sub ? kracht * 0.7 : kracht });
+      }
+    };
     const pts: Punt[] = KNOPEN.map(() => ({ x: 0, y: 0, d: 0, s: 1, z: 0 }));
     const VORM = 1500; // ms: de bolletjes vliegen naar hun plaats
 
@@ -236,32 +258,37 @@ export function Brein3D() {
         const a = pts[l.a], b = pts[l.b];
         const d = Math.min(a.d, b.d);
         const actief = hover >= 0 && (l.a === hover || l.b === hover);
-        const alpha = (actief ? 0.95 : (l.sub ? 0.07 : 0.12) + (l.sub ? 0.3 : 0.62) * d) * vorm;
-        ctx.strokeStyle = actief ? `rgba(${ACCENT},${alpha})` : `rgba(${NAVY},${alpha})`;
-        ctx.lineWidth = (actief ? 1.8 : l.sub ? 0.7 : 0.9 + 0.7 * d) * (0.8 + 0.2 * a.s);
+        const g = actief ? 0 : Math.max(gloed[l.a], gloed[l.b]);
+        const diep = Math.pow(d, 1.5); // scherptediepte: wat achteraan ligt, vervaagt sneller
+        const alpha = (actief ? 0.95 : (l.sub ? 0.05 : 0.09) + (l.sub ? 0.28 : 0.6) * diep + g * 0.4) * vorm;
+        ctx.strokeStyle = actief ? `rgba(${ACCENT},${alpha})` : `rgba(${meng(g)},${alpha})`;
+        ctx.lineWidth = (actief ? 1.8 : (l.sub ? 0.7 : 0.8 + 0.8 * diep) + g * 0.6) * (0.8 + 0.2 * a.s);
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
       }
 
-      // Lichtpuntjes: informatie die over de lijnen loopt.
+      // Golven: een vraag komt binnen bij één pagina, die licht op, en het signaal loopt door
+      // naar wat ermee verbonden is, en van daar nog een stap verder.
       if (!stil && nu > VORM) {
-        if (nu - laatstePuls > 1600 && pulsen.length < 4) {
-          const kandidaten = LIJNEN.map((l, i) => i).filter((i) => !LIJNEN[i].sub && pts[LIJNEN[i].a].z > -0.2 && pts[LIJNEN[i].b].z > -0.2);
+        if (nu - laatstePuls > 2600 && pulsen.length < 6) {
+          const kandidaten = KNOPEN.map((_, i) => i).filter((i) => KNOPEN[i].soort !== "sub" && pts[i].z > -0.1 && gloed[i] < 0.2);
           if (kandidaten.length) {
-            pulsen.push({ lijn: kandidaten[Math.floor(Math.random() * kandidaten.length)], t: 0, v: 0.00032 + Math.random() * 0.00022 });
+            const start = kandidaten[Math.floor(Math.random() * kandidaten.length)];
+            gloed[start] = 1;
+            golf(start, 0, 1, 4);
             laatstePuls = nu;
           }
         }
         for (const p of pulsen) {
           const l = LIJNEN[p.lijn];
-          const a = pts[l.a], b = pts[l.b];
-          const x = a.x + (b.x - a.x) * p.t, y = a.y + (b.y - a.y) * p.t;
-          const fade = Math.min(1, p.t * 6, (1 - p.t) * 6);
-          const staart = Math.max(0, p.t - 0.12);
-          ctx.strokeStyle = `rgba(${ACCENT},${fade * 0.28})`;
-          ctx.lineWidth = 1.2;
-          ctx.beginPath(); ctx.moveTo(a.x + (b.x - a.x) * staart, a.y + (b.y - a.y) * staart); ctx.lineTo(x, y); ctx.stroke();
-          ctx.fillStyle = `rgba(${ACCENT},${fade * 0.6})`;
-          ctx.beginPath(); ctx.arc(x, y, 2.1, 0, Math.PI * 2); ctx.fill();
+          const van = pts[p.van], naar = pts[andereKant(l, p.van)];
+          const x = van.x + (naar.x - van.x) * p.t, y = van.y + (naar.y - van.y) * p.t;
+          const fade = Math.min(1, p.t * 6, (1 - p.t) * 4) * p.kracht;
+          const staart = Math.max(0, p.t - 0.16);
+          ctx.strokeStyle = `rgba(${ACCENT},${fade * 0.32})`;
+          ctx.lineWidth = l.sub ? 0.9 : 1.3;
+          ctx.beginPath(); ctx.moveTo(van.x + (naar.x - van.x) * staart, van.y + (naar.y - van.y) * staart); ctx.lineTo(x, y); ctx.stroke();
+          ctx.fillStyle = `rgba(${ACCENT},${fade * 0.7})`;
+          ctx.beginPath(); ctx.arc(x, y, l.sub ? 1.6 : 2.1, 0, Math.PI * 2); ctx.fill();
         }
       }
 
@@ -272,16 +299,32 @@ export function Brein3D() {
         const pt = pts[i];
         const r = straal(k, pt);
         const actief = i === hover;
-        const alpha = 0.28 + 0.72 * pt.d;
+        const g = gloed[i];
+        const alpha = 0.2 + 0.8 * Math.pow(pt.d, 1.4);
+        // Scherptediepte: wat achteraan ligt krijgt een zachte, bredere schijf in plaats van een scherpe rand.
+        if (pt.d < 0.42 && k.soort !== "persoon") {
+          ctx.fillStyle = `rgba(${NAVY},${alpha * 0.22})`;
+          ctx.beginPath(); ctx.arc(pt.x, pt.y, r * 2.1, 0, Math.PI * 2); ctx.fill();
+        }
+        // Gloed: een pagina die net een golf ontving, licht even op.
+        if (g > 0.02) {
+          const rr = r * (2.6 + 1.4 * g);
+          const halo = ctx.createRadialGradient(pt.x, pt.y, r * 0.4, pt.x, pt.y, rr);
+          halo.addColorStop(0, `rgba(${ACCENT},${0.5 * g})`);
+          halo.addColorStop(1, `rgba(${ACCENT},0)`);
+          ctx.fillStyle = halo;
+          ctx.beginPath(); ctx.arc(pt.x, pt.y, rr, 0, Math.PI * 2); ctx.fill();
+        }
         if (k.soort === "persoon") {
           ctx.fillStyle = "#fff";
           ctx.beginPath(); ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2); ctx.fill();
-          ctx.strokeStyle = actief ? `rgba(${ACCENT},1)` : `rgba(${NAVY},${alpha})`;
+          ctx.strokeStyle = actief ? `rgba(${ACCENT},1)` : `rgba(${meng(g)},${Math.min(1, alpha + g * 0.5)})`;
           ctx.lineWidth = 1.6;
           ctx.stroke();
         } else {
-          ctx.fillStyle = actief ? `rgba(${ACCENT},1)` : `rgba(${NAVY},${k.soort === "sub" ? alpha * 0.75 : alpha})`;
-          ctx.beginPath(); ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2); ctx.fill();
+          const a2 = k.soort === "sub" ? alpha * 0.75 : alpha;
+          ctx.fillStyle = actief ? `rgba(${ACCENT},1)` : `rgba(${meng(g)},${Math.min(1, a2 + g * 0.6)})`;
+          ctx.beginPath(); ctx.arc(pt.x, pt.y, r * (1 + 0.25 * g), 0, Math.PI * 2); ctx.fill();
         }
       }
 
@@ -354,8 +397,16 @@ export function Brein3D() {
       muisKX += (doelX - muisKX) * 0.06;
       muisKY += (doelY - muisKY) * 0.06;
       extra = qNorm(qMul(qDraai([1, 0, 0], muisKX), qDraai([0, 1, 0], muisKY)));
+      const aangekomen = pulsen.filter((p) => p.t + p.v * dt >= 1);
       for (const p of pulsen) p.t += p.v * dt;
       pulsen = pulsen.filter((p) => p.t < 1);
+      for (const p of aangekomen) {
+        const doel = andereKant(LIJNEN[p.lijn], p.van);
+        gloed[doel] = Math.max(gloed[doel], p.kracht);
+        if (p.diepte < 2 && KNOPEN[doel].soort !== "sub") golf(doel, p.diepte + 1, p.kracht * 0.55, 3, p.lijn);
+      }
+      const verval = Math.pow(0.5, dt / 380);
+      for (let i = 0; i < gloed.length; i++) gloed[i] = gloed[i] < 0.01 ? 0 : gloed[i] * verval;
       zoekHover();
       teken(tijd);
     };
