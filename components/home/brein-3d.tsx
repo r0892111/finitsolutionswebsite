@@ -5,30 +5,44 @@ import { BREIN_3D } from "./copy";
 
 /**
  * Het beeld in de hero: het AI-brein van een fictief installatiebedrijf als
- * een doorzichtige bol. Elke stip is een stuk kennis over de zaak (offertes,
- * planning, klanten...), elke lijn een verband. Kleine stippen zijn de
- * onderliggende pagina's. Lichtpuntjes lopen over de lijnen: informatie die
- * van de ene pagina naar de andere stroomt.
+ * een zwevende structuur van bolletjes en lijnen. Elke bol is een stuk kennis
+ * over de zaak (offertes, planning, klanten...), elke lijn een verband, de
+ * kleine bolletjes zijn onderliggende pagina's. Lichtpuntjes lopen over de
+ * lijnen: informatie die van de ene pagina naar de andere stroomt.
  *
- * Geen library. Alles wordt per beeldje op een <canvas> getekend, dat is
- * veel goedkoper dan honderden SVG-elementen bijwerken. De lus staat stil
- * zodra de bol uit beeld is, halveert op aanraakschermen, en tekent één
- * stilstaand beeld voor wie "minder beweging" heeft ingesteld.
+ * Bij het laden komen de bolletjes van overal aangevlogen en vallen ze op
+ * hun plaats: losse kennis die structuur krijgt. Daarna tuimelt de structuur
+ * traag rond een as die zelf blijft verschuiven, zodat er geen vaste
+ * draaias is. Slepen tuimelt mee, de muis kantelt licht.
+ *
+ * Geen library. Alles wordt per beeldje op een <canvas> getekend. De lus
+ * staat stil zodra het beeld uit beeld is, halveert op aanraakschermen, en
+ * tekent één stilstaand beeld voor wie "minder beweging" heeft ingesteld.
  */
 
 type P3 = [number, number, number];
+type Q = [number, number, number, number]; // w, x, y, z
 type Soort = "hub" | "pagina" | "persoon" | "sub";
-type Knoop = { label: string; p: P3; soort: Soort; open?: boolean };
+type Knoop = { label: string; p: P3; soort: Soort; open?: boolean; fase: number; start: P3; vertraging: number };
 
 const NAVY = "26,45,99";
 const ACCENT = "62,99,221";
 
-// Punten gelijkmatig over een bol verdeeld (Fibonacci-spiraal). Deterministisch.
-function opBol(i: number, n: number, straal: number): P3 {
+// Vaste pseudo-toevalsreeks, zodat het beeld bij elke lading hetzelfde is.
+function reeks(zaad: number) {
+  let s = zaad;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+const rnd = reeks(20260907);
+
+function opBol(i: number, n: number): P3 {
   const y = 1 - (i / (n - 1)) * 2;
   const r = Math.sqrt(Math.max(0, 1 - y * y));
   const phi = i * Math.PI * (3 - Math.sqrt(5));
-  return [Math.cos(phi) * r * straal, y * straal, Math.sin(phi) * r * straal];
+  return [Math.cos(phi) * r, y, Math.sin(phi) * r];
 }
 function norm(v: P3): P3 {
   const l = Math.hypot(v[0], v[1], v[2]) || 1;
@@ -38,36 +52,69 @@ function schaal(v: P3, s: number): P3 {
   return [v[0] * s, v[1] * s, v[2] * s];
 }
 
+// Quaternions: de stand van de structuur, en kleine draaiingen rond een willekeurige as.
+function qDraai(as: P3, hoek: number): Q {
+  const h = hoek / 2, s = Math.sin(h);
+  return [Math.cos(h), as[0] * s, as[1] * s, as[2] * s];
+}
+function qMul(a: Q, b: Q): Q {
+  return [
+    a[0] * b[0] - a[1] * b[1] - a[2] * b[2] - a[3] * b[3],
+    a[0] * b[1] + a[1] * b[0] + a[2] * b[3] - a[3] * b[2],
+    a[0] * b[2] - a[1] * b[3] + a[2] * b[0] + a[3] * b[1],
+    a[0] * b[3] + a[1] * b[2] - a[2] * b[1] + a[3] * b[0],
+  ];
+}
+function qNorm(q: Q): Q {
+  const l = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
+  return [q[0] / l, q[1] / l, q[2] / l, q[3] / l];
+}
+function qRoteer(q: Q, v: P3): P3 {
+  const [w, x, y, z] = q;
+  const [vx, vy, vz] = v;
+  // v' = v + 2w(u × v) + 2(u × (u × v)) met u = (x, y, z)
+  const cx = y * vz - z * vy, cy = z * vx - x * vz, cz = x * vy - y * vx;
+  const dx = y * cz - z * cy, dy = z * cx - x * cz, dz = x * cy - y * cx;
+  return [vx + 2 * (w * cx + dx), vy + 2 * (w * cy + dy), vz + 2 * (w * cz + dz)];
+}
+
 const LABELS = [
   "Offertes", "Klanten", "Prijzen", "Planning", "Werkbonnen", "Facturatie", "Leveranciers", "Materiaal",
   "Klachten", "Nieuwbouw", "WhatsApp", "Mailbox", "Agenda", "Onderhoud", "Boekhouder", "Tom", "Els",
 ];
 
-const KNOPEN: Knoop[] = [{ label: "Klantreis", p: [0, 0.02, 0], soort: "hub" }];
+function verstrooid(p: P3): P3 {
+  // Beginpositie bij het laden: ver weg en willekeurig, van daar vliegt de bol naar zijn plaats.
+  const r = norm([rnd() * 2 - 1, rnd() * 2 - 1, rnd() * 2 - 1]);
+  return [p[0] * 1.4 + r[0] * 1.6, p[1] * 1.4 + r[1] * 1.2, p[2] * 1.4 + r[2] * 1.6];
+}
+
+const KNOPEN: Knoop[] = [];
+const voegToe = (label: string, p: P3, soort: Soort, open = false) => {
+  KNOPEN.push({ label, p, soort, open, fase: rnd() * Math.PI * 2, start: verstrooid(p), vertraging: rnd() * 500 });
+};
+voegToe("Klantreis", [0, 0.02, 0], "hub");
 LABELS.forEach((label, i) => {
-  KNOPEN.push({
-    label,
-    p: opBol(i, LABELS.length, 0.86),
-    soort: label === "Tom" || label === "Els" ? "persoon" : "pagina",
-    open: label === "Offertes",
-  });
+  const straal = 0.62 + rnd() * 0.36;
+  voegToe(label, schaal(opBol(i, LABELS.length), straal), label === "Tom" || label === "Els" ? "persoon" : "pagina", label === "Offertes");
 });
 const idx = (label: string) => KNOPEN.findIndex((k) => k.label === label);
 
-// Onderliggende pagina's: kleine stippen op het oppervlak, rond hun hoofdpagina.
-const SUBS: [number, number][] = []; // [subindex, ouderindex]
+// Onderliggende pagina's: kleine bolletjes iets buiten hun hoofdpagina.
+const SUBS: [number, number][] = [];
 LABELS.forEach((label, i) => {
   const ouder = idx(label);
   const aantal = i % 3 === 0 ? 2 : 1;
   for (let k = 0; k < aantal; k++) {
     const u = norm(KNOPEN[ouder].p);
-    const a = (i * 2.399 + k * 2.1) % (Math.PI * 2);
+    const a = rnd() * Math.PI * 2;
     const w: P3 = Math.abs(u[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];
     const p1 = norm([u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]]);
     const p2: P3 = [u[1] * p1[2] - u[2] * p1[1], u[2] * p1[0] - u[0] * p1[2], u[0] * p1[1] - u[1] * p1[0]];
-    const j = 0.3;
+    const j = 0.34;
     const dir = norm([u[0] + j * (p1[0] * Math.cos(a) + p2[0] * Math.sin(a)), u[1] + j * (p1[1] * Math.cos(a) + p2[1] * Math.sin(a)), u[2] + j * (p1[2] * Math.cos(a) + p2[2] * Math.sin(a))]);
-    KNOPEN.push({ label: "", p: schaal(dir, 1), soort: "sub" });
+    const r = Math.hypot(...KNOPEN[ouder].p) + 0.16 + rnd() * 0.12;
+    voegToe("", schaal(dir, r), "sub");
     SUBS.push([KNOPEN.length - 1, ouder]);
   }
 });
@@ -90,35 +137,33 @@ const LIJNEN: Lijn[] = [
 
 // Tekenvlak in logische eenheden; wordt geschaald naar de breedte van het kader.
 const W = 600;
-const H = 560;
+const H = 540;
 const CX = 300;
-const CY = 270;
-const R = 222;
-const F = 720;
-const TILT = -0.3;
-// De rand van de bol zoals de camera hem ziet (perspectief maakt het silhouet iets groter dan R).
-const RS = (R * F) / Math.sqrt(F * F - R * R);
+const CY = 262;
+const R = 215;
+const F = 760;
 
-// Startstand: "Offertes" vooraan.
-const O = KNOPEN[idx("Offertes")].p;
-const THETA0 = -Math.atan2(O[0], O[2]);
+// Beginstand: licht gekanteld, "Offertes" vooraan.
+const Q0: Q = (() => {
+  const o = norm(KNOPEN[idx("Offertes")].p);
+  const naarVoor = qDraai([0, 1, 0], -Math.atan2(o[0], o[2]));
+  return qNorm(qMul(qDraai([1, 0, 0], -0.28), naarVoor));
+})();
 
 type Punt = { x: number; y: number; d: number; s: number; z: number };
 
-function projecteer(p: P3, cT: number, sT: number, cX: number, sX: number): Punt {
-  const [x, y, z] = p;
-  const x1 = x * cT + z * sT;
-  const z1 = -x * sT + z * cT;
-  const y2 = y * cX - z1 * sX;
-  const z2 = y * sX + z1 * cX;
-  const s = F / (F - z2 * R);
-  return { x: CX + x1 * R * s, y: CY - y2 * R * s, d: (z2 + 1) / 2, s, z: z2 };
+function projecteer(p: P3, q: Q): Punt {
+  const [x, y, z] = qRoteer(q, p);
+  const s = F / (F - z * R);
+  return { x: CX + x * R * s, y: CY - y * R * s, d: Math.max(0, Math.min(1, (z + 1.1) / 2.2)), s, z };
 }
 
 function straal(k: Knoop, pt: Punt) {
-  const basis = k.soort === "hub" ? 6.5 : k.soort === "sub" ? 2 : k.open ? 6 : 4.6;
-  return basis * (0.72 + 0.5 * pt.d) * pt.s;
+  const basis = k.soort === "hub" ? 6.5 : k.soort === "sub" ? 2.1 : k.open ? 6 : 4.6;
+  return basis * (0.7 + 0.5 * pt.d) * pt.s;
 }
+
+const uit = (t: number) => 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3); // ease-out
 
 type Puls = { lijn: number; t: number; v: number };
 
@@ -128,8 +173,7 @@ export function Brein3D() {
   const placeholderRef = useRef<SVGSVGElement>(null);
 
   // Stilstaand beginbeeld voor de server (tot het canvas overneemt).
-  const cT0 = Math.cos(THETA0), sT0 = Math.sin(THETA0), cX0 = Math.cos(TILT), sX0 = Math.sin(TILT);
-  const eerste = KNOPEN.map((k) => projecteer(k.p, cT0, sT0, cX0, sX0));
+  const eerste = KNOPEN.map((k) => projecteer(k.p, Q0));
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -155,136 +199,56 @@ export function Brein3D() {
     };
     meet();
 
-    let theta = THETA0;
-    let draai = 0, draaiDoel = 0;
-    let tilt = TILT, tiltDoel = TILT;
-    let slepen = false, laatsteX = 0, laatsteT = 0, spin = 0;
+    let q: Q = Q0;                 // stand van de structuur
+    let extra: Q = [1, 0, 0, 0];   // kanteling door de muis (veert terug)
+    let doelX = 0, doelY = 0, muisKX = 0, muisKY = 0;
+    let slepen = false, laatsteX = 0, laatsteY = 0, laatsteT = 0, spinX = 0, spinY = 0;
     let hover = -1, muisX = -1, muisY = -1;
-    let vorige = 0, raf = 0, zichtbaar = true, frame = 0;
+    let vorige = 0, raf = 0, zichtbaar = true, frame = 0, tijd = 0, t0 = -1;
     let pulsen: Puls[] = [];
     let laatstePuls = 0;
     const pts: Punt[] = KNOPEN.map(() => ({ x: 0, y: 0, d: 0, s: 1, z: 0 }));
+    const VORM = 1500; // ms: de bolletjes vliegen naar hun plaats
 
-    const ringPunten = (n: number, f: (t: number) => P3) => {
-      const r: P3[] = [];
-      for (let i = 0; i <= n; i++) r.push(f((i / n) * Math.PI * 2));
-      return r;
-    };
-    const breedtes = [-0.62, -0.32, 0, 0.32, 0.62].map((y) => {
-      const rr = Math.sqrt(1 - y * y);
-      return ringPunten(56, (t) => [Math.cos(t) * rr, y, Math.sin(t) * rr] as P3);
-    });
-    const meridianen = [0, 1, 2, 3, 4, 5].map((k) => {
-      const phi = (k * Math.PI) / 6;
-      return ringPunten(56, (t) => [Math.sin(t) * Math.cos(phi), Math.cos(t), Math.sin(t) * Math.sin(phi)] as P3);
-    });
-    const raster = [...breedtes, ...meridianen];
-
-    const tekenRing = (punten: P3[], cT: number, sT: number, cX: number, sX: number, voor: boolean, alpha: number) => {
-      let open = false;
-      ctx.beginPath();
-      let a = projecteer(punten[0], cT, sT, cX, sX);
-      for (let i = 0; i < punten.length - 1; i++) {
-        const b = projecteer(punten[i + 1], cT, sT, cX, sX);
-        const vooraan = (a.z + b.z) * 0.5 >= 0;
-        if (vooraan === voor) {
-          if (!open) { ctx.moveTo(a.x, a.y); open = true; }
-          ctx.lineTo(b.x, b.y);
-        } else open = false;
-        a = b;
-      }
-      ctx.strokeStyle = `rgba(${NAVY},${alpha})`;
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
+    const positie = (k: Knoop, nu: number): P3 => {
+      const adem = 1 + 0.018 * Math.sin(nu * 0.0011 + k.fase);
+      if (stil || nu >= VORM + k.vertraging) return schaal(k.p, adem);
+      const f = uit((nu - k.vertraging) / VORM);
+      return [
+        (k.start[0] + (k.p[0] - k.start[0]) * f) * adem,
+        (k.start[1] + (k.p[1] - k.start[1]) * f) * adem,
+        (k.start[2] + (k.p[2] - k.start[2]) * f) * adem,
+      ];
     };
 
-    const teken = (t: number) => {
-      const th = theta + draai;
-      const cT = Math.cos(th), sT = Math.sin(th), cX = Math.cos(tilt), sX = Math.sin(tilt);
-      for (let i = 0; i < KNOPEN.length; i++) pts[i] = projecteer(KNOPEN[i].p, cT, sT, cX, sX);
+    const teken = (nu: number) => {
+      const stand = qNorm(qMul(extra, q));
+      const vorm = stil ? 1 : uit(nu / (VORM + 400));
+      for (let i = 0; i < KNOPEN.length; i++) pts[i] = projecteer(positie(KNOPEN[i], nu), stand);
 
       ctx.setTransform(dpr * schaalF, 0, 0, dpr * schaalF, 0, 0);
       ctx.clearRect(0, 0, W, H);
 
-      // Schaduw onder de bol.
-      ctx.save();
-      ctx.translate(CX, CY + RS + 22);
-      ctx.scale(1, 0.18);
-      const sch = ctx.createRadialGradient(0, 0, 0, 0, 0, R * 0.95);
-      sch.addColorStop(0, `rgba(${NAVY},0.10)`);
-      sch.addColorStop(1, `rgba(${NAVY},0)`);
-      ctx.fillStyle = sch;
-      ctx.beginPath(); ctx.arc(0, 0, R * 0.95, 0, Math.PI * 2); ctx.fill();
-      ctx.restore();
-
-      // Achterkant: raster, lijnen en stippen, daarna de doorschijnende bol erover.
-      for (const ring of raster) tekenRing(ring, cT, sT, cX, sX, false, 0.08);
-      const tekenLijnen = (voor: boolean) => {
-        for (const l of LIJNEN) {
-          const a = pts[l.a], b = pts[l.b];
-          const z = (a.z + b.z) * 0.5;
-          if ((z >= 0) !== voor) continue;
-          const d = Math.min(a.d, b.d);
-          const actief = hover >= 0 && (l.a === hover || l.b === hover);
-          const alpha = actief ? 0.95 : (l.sub ? 0.08 : 0.14) + (l.sub ? 0.3 : 0.62) * d;
-          ctx.strokeStyle = actief ? `rgba(${ACCENT},${alpha})` : `rgba(${NAVY},${alpha})`;
-          ctx.lineWidth = (actief ? 1.8 : l.sub ? 0.7 : 0.9 + 0.7 * d) * (0.8 + 0.2 * a.s);
-          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-        }
-      };
-      const tekenStippen = (voor: boolean) => {
-        for (let i = 0; i < KNOPEN.length; i++) {
-          const pt = pts[i];
-          if ((pt.z >= 0) !== voor) continue;
-          const k = KNOPEN[i];
-          const r = straal(k, pt);
-          const actief = i === hover;
-          const alpha = 0.3 + 0.7 * pt.d;
-          if (k.soort === "persoon") {
-            ctx.fillStyle = "#fff";
-            ctx.beginPath(); ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2); ctx.fill();
-            ctx.strokeStyle = actief ? `rgba(${ACCENT},1)` : `rgba(${NAVY},${alpha})`;
-            ctx.lineWidth = 1.6;
-            ctx.stroke();
-          } else {
-            ctx.fillStyle = actief ? `rgba(${ACCENT},1)` : `rgba(${NAVY},${k.soort === "sub" ? alpha * 0.75 : alpha})`;
-            ctx.beginPath(); ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2); ctx.fill();
-          }
-          if (k.open || actief) {
-            ctx.setLineDash([2.5, 3]);
-            ctx.strokeStyle = actief ? `rgba(${ACCENT},0.9)` : `rgba(${NAVY},${alpha * 0.8})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.arc(pt.x, pt.y, r + 5.5, 0, Math.PI * 2); ctx.stroke();
-            ctx.setLineDash([]);
-          }
-        }
-      };
-      tekenLijnen(false);
-      tekenStippen(false);
-
-      // De bol zelf: glas met licht van linksboven.
-      const glas = ctx.createRadialGradient(CX - RS * 0.38, CY - RS * 0.42, RS * 0.05, CX, CY, RS);
-      glas.addColorStop(0, "rgba(255,255,255,0.78)");
-      glas.addColorStop(0.55, "rgba(238,243,252,0.62)");
-      glas.addColorStop(1, "rgba(214,224,246,0.72)");
-      ctx.fillStyle = glas;
-      ctx.beginPath(); ctx.arc(CX, CY, RS, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = `rgba(${NAVY},0.14)`;
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      // Voorkant.
-      for (const ring of raster) tekenRing(ring, cT, sT, cX, sX, true, 0.17);
-      tekenLijnen(true);
-      tekenStippen(true);
+      // Lijnen, van achter naar voor.
+      const volgorde = LIJNEN.map((l, i) => ({ i, z: (pts[l.a].z + pts[l.b].z) * 0.5 })).sort((a, b) => a.z - b.z);
+      for (const { i } of volgorde) {
+        const l = LIJNEN[i];
+        const a = pts[l.a], b = pts[l.b];
+        const d = Math.min(a.d, b.d);
+        const actief = hover >= 0 && (l.a === hover || l.b === hover);
+        const alpha = (actief ? 0.95 : (l.sub ? 0.07 : 0.12) + (l.sub ? 0.3 : 0.62) * d) * vorm;
+        ctx.strokeStyle = actief ? `rgba(${ACCENT},${alpha})` : `rgba(${NAVY},${alpha})`;
+        ctx.lineWidth = (actief ? 1.8 : l.sub ? 0.7 : 0.9 + 0.7 * d) * (0.8 + 0.2 * a.s);
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      }
 
       // Lichtpuntjes: informatie die over de lijnen loopt.
-      if (!stil) {
-        if (t - laatstePuls > 700 && pulsen.length < 7) {
-          const kandidaten = LIJNEN.map((l, i) => i).filter((i) => !LIJNEN[i].sub && pts[LIJNEN[i].a].z > -0.1 && pts[LIJNEN[i].b].z > -0.1);
+      if (!stil && nu > VORM) {
+        if (nu - laatstePuls > 700 && pulsen.length < 7) {
+          const kandidaten = LIJNEN.map((l, i) => i).filter((i) => !LIJNEN[i].sub && pts[LIJNEN[i].a].z > -0.2 && pts[LIJNEN[i].b].z > -0.2);
           if (kandidaten.length) {
             pulsen.push({ lijn: kandidaten[Math.floor(Math.random() * kandidaten.length)], t: 0, v: 0.0009 + Math.random() * 0.0007 });
-            laatstePuls = t;
+            laatstePuls = nu;
           }
         }
         for (const p of pulsen) {
@@ -292,34 +256,70 @@ export function Brein3D() {
           const a = pts[l.a], b = pts[l.b];
           const x = a.x + (b.x - a.x) * p.t, y = a.y + (b.y - a.y) * p.t;
           const fade = Math.min(1, p.t * 6, (1 - p.t) * 6);
-          const diepte = a.z + (b.z - a.z) * p.t;
-          const alpha = fade * (diepte >= 0 ? 1 : 0.35);
           const staart = Math.max(0, p.t - 0.12);
-          ctx.strokeStyle = `rgba(${ACCENT},${alpha * 0.55})`;
+          ctx.strokeStyle = `rgba(${ACCENT},${fade * 0.55})`;
           ctx.lineWidth = 1.6;
           ctx.beginPath(); ctx.moveTo(a.x + (b.x - a.x) * staart, a.y + (b.y - a.y) * staart); ctx.lineTo(x, y); ctx.stroke();
-          ctx.fillStyle = `rgba(${ACCENT},${alpha})`;
+          ctx.fillStyle = `rgba(${ACCENT},${fade})`;
           ctx.beginPath(); ctx.arc(x, y, 2.6, 0, Math.PI * 2); ctx.fill();
         }
       }
 
-      // Labels: alleen vooraan, met een witte rand voor contrast.
+      // Bolletjes, van achter naar voor.
+      const stippen = KNOPEN.map((_, i) => i).sort((a, b) => pts[a].z - pts[b].z);
+      for (const i of stippen) {
+        const k = KNOPEN[i];
+        const pt = pts[i];
+        const r = straal(k, pt);
+        const actief = i === hover;
+        const alpha = 0.28 + 0.72 * pt.d;
+        if (k.soort === "persoon") {
+          ctx.fillStyle = "#fff";
+          ctx.beginPath(); ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = actief ? `rgba(${ACCENT},1)` : `rgba(${NAVY},${alpha})`;
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = actief ? `rgba(${ACCENT},1)` : `rgba(${NAVY},${k.soort === "sub" ? alpha * 0.75 : alpha})`;
+          ctx.beginPath(); ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2); ctx.fill();
+        }
+        if (k.open || actief) {
+          ctx.setLineDash([2.5, 3]);
+          ctx.strokeStyle = actief ? `rgba(${ACCENT},0.9)` : `rgba(${NAVY},${alpha * 0.8})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.arc(pt.x, pt.y, r + 5.5, 0, Math.PI * 2); ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
+
+      // Labels: alleen vooraan, met een witte rand voor contrast. Wat over een ander label
+      // zou vallen, wordt overgeslagen (belangrijkste en voorste labels eerst).
       ctx.textBaseline = "middle";
       ctx.lineJoin = "round";
-      for (let i = 0; i < KNOPEN.length; i++) {
+      const getekend: { x1: number; y1: number; x2: number; y2: number }[] = [];
+      const labelVolgorde = [...stippen].reverse().sort((a, b) => {
+        const pa = KNOPEN[a].soort === "hub" || KNOPEN[a].open || a === hover ? 0 : 1;
+        const pb = KNOPEN[b].soort === "hub" || KNOPEN[b].open || b === hover ? 0 : 1;
+        return pa - pb;
+      });
+      for (const i of labelVolgorde) {
         const k = KNOPEN[i];
         if (k.soort === "sub") continue;
         const pt = pts[i];
         const actief = i === hover;
-        const grens = k.soort === "hub" || k.open ? 0.2 : 0.46;
+        const grens = k.soort === "hub" || k.open ? 0.2 : 0.5;
         if (pt.d < grens && !actief) continue;
-        const alpha = actief ? 1 : k.soort === "hub" || k.open ? Math.max(0.75, pt.d) : 0.3 + 0.7 * ((pt.d - grens) / (1 - grens));
+        const alpha = (actief ? 1 : k.soort === "hub" || k.open ? Math.max(0.75, pt.d) : 0.3 + 0.7 * ((pt.d - grens) / (1 - grens))) * vorm;
         const r = straal(k, pt);
         const groot = k.soort === "hub" || k.open || actief;
         ctx.font = `${groot ? 700 : 500} ${groot ? 13.5 : 12.5}px ${font}`;
         const links = pt.x < CX;
         ctx.textAlign = links ? "right" : "left";
         const x = links ? pt.x - r - 7 : pt.x + r + 7;
+        const breedte = ctx.measureText(k.label).width;
+        const vak = { x1: links ? x - breedte : x, y1: pt.y - 8, x2: links ? x : x + breedte, y2: pt.y + 8 };
+        if (getekend.some((g) => vak.x1 < g.x2 + 6 && vak.x2 > g.x1 - 6 && vak.y1 < g.y2 + 2 && vak.y2 > g.y1 - 2)) continue;
+        getekend.push(vak);
         ctx.lineWidth = 4;
         ctx.strokeStyle = `rgba(255,255,255,${0.95 * alpha})`;
         ctx.strokeText(k.label, x, pt.y);
@@ -332,29 +332,39 @@ export function Brein3D() {
       if (muisX < 0) { hover = -1; return; }
       let beste = -1, afstand = 20;
       for (let i = 0; i < KNOPEN.length; i++) {
-        if (KNOPEN[i].soort === "sub" || pts[i].z < 0) continue;
+        if (KNOPEN[i].soort === "sub" || pts[i].z < -0.1) continue;
         const dd = Math.hypot(pts[i].x - muisX, pts[i].y - muisY);
         if (dd < afstand) { afstand = dd; beste = i; }
       }
       hover = beste;
     };
 
+    // De draaias verschuift zelf traag, zodat de structuur tuimelt in plaats van rond één as te draaien.
+    const as = (nu: number): P3 =>
+      norm([Math.sin(nu * 0.000041 + 1.1) * 0.9, 0.55 + 0.45 * Math.cos(nu * 0.000029), Math.cos(nu * 0.000053 + 0.4) * 0.8]);
+
     const stap = (t: number) => {
       raf = zichtbaar ? requestAnimationFrame(stap) : 0;
       frame++;
       if (aanraking && frame % 2) return; // 30 beelden per seconde op aanraakschermen
+      if (t0 < 0) t0 = t;
       const dt = vorige ? Math.min(t - vorige, 64) : 16;
       vorige = t;
+      tijd = t - t0;
       if (!slepen) {
-        theta += dt * 0.00016 + spin * dt;
-        spin *= 0.94;
+        q = qNorm(qMul(qDraai(as(tijd), dt * 0.00017), q));
+        if (Math.abs(spinX) + Math.abs(spinY) > 1e-5) {
+          q = qNorm(qMul(qDraai([1, 0, 0], spinX * dt), qMul(qDraai([0, 1, 0], spinY * dt), q)));
+          spinX *= 0.94; spinY *= 0.94;
+        }
       }
-      draai += (draaiDoel - draai) * 0.06;
-      tilt += (tiltDoel - tilt) * 0.06;
+      muisKX += (doelX - muisKX) * 0.06;
+      muisKY += (doelY - muisKY) * 0.06;
+      extra = qNorm(qMul(qDraai([1, 0, 0], muisKX), qDraai([0, 1, 0], muisKY)));
       for (const p of pulsen) p.t += p.v * dt;
       pulsen = pulsen.filter((p) => p.t < 1);
       zoekHover();
-      teken(t);
+      teken(tijd);
     };
 
     const lokaal = (e: PointerEvent) => {
@@ -365,20 +375,21 @@ export function Brein3D() {
       const { x, y } = lokaal(e);
       if (slepen) {
         const nu = performance.now();
-        const dx = e.clientX - laatsteX;
-        theta += dx * 0.006;
-        spin = (dx * 0.006) / Math.max(8, nu - laatsteT);
-        laatsteX = e.clientX;
-        laatsteT = nu;
+        const dx = e.clientX - laatsteX, dy = e.clientY - laatsteY;
+        const dtS = Math.max(8, nu - laatsteT);
+        q = qNorm(qMul(qDraai([1, 0, 0], -dy * 0.006), qMul(qDraai([0, 1, 0], dx * 0.006), q)));
+        spinY = (dx * 0.006) / dtS;
+        spinX = (-dy * 0.006) / dtS;
+        laatsteX = e.clientX; laatsteY = e.clientY; laatsteT = nu;
         return;
       }
       if (e.pointerType !== "mouse") return;
       muisX = x; muisY = y;
-      draaiDoel = ((x / W) * 2 - 1) * 0.35;
-      tiltDoel = TILT + ((y / H) * 2 - 1) * 0.14;
+      doelY = ((x / W) * 2 - 1) * 0.3;
+      doelX = ((y / H) * 2 - 1) * 0.16;
     };
-    const onLeave = () => { draaiDoel = 0; tiltDoel = TILT; muisX = -1; muisY = -1; hover = -1; };
-    const onDown = (e: PointerEvent) => { slepen = true; spin = 0; laatsteX = e.clientX; laatsteT = performance.now(); draaiDoel = 0; };
+    const onLeave = () => { doelX = 0; doelY = 0; muisX = -1; muisY = -1; hover = -1; };
+    const onDown = (e: PointerEvent) => { slepen = true; spinX = 0; spinY = 0; laatsteX = e.clientX; laatsteY = e.clientY; laatsteT = performance.now(); doelX = 0; doelY = 0; };
     const onUp = () => { slepen = false; };
 
     if (stil) {
@@ -400,7 +411,7 @@ export function Brein3D() {
       if (zichtbaar && !was && !stil) { vorige = 0; raf = requestAnimationFrame(stap); }
     }, { threshold: 0.05 });
     io.observe(box);
-    const ro = new ResizeObserver(() => { meet(); teken(performance.now()); });
+    const ro = new ResizeObserver(() => { meet(); teken(stil ? 0 : tijd); });
     ro.observe(box);
     if (!stil) raf = requestAnimationFrame(stap);
 
@@ -417,10 +428,9 @@ export function Brein3D() {
 
   return (
     <figure className="w-full">
-      <div ref={wrap} className="hp-rise relative select-none cursor-grab active:cursor-grabbing" style={{ touchAction: "pan-y", animationDelay: "120ms" }}>
+      <div ref={wrap} className="relative select-none cursor-grab active:cursor-grabbing" style={{ touchAction: "pan-y" }}>
         <canvas ref={canvasRef} hidden className="block w-full" role="img" aria-label={BREIN_3D.aria} />
         <svg ref={placeholderRef} viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full" aria-hidden="true">
-          <circle cx={CX} cy={CY} r={RS} fill="#EEF2FB" stroke="#1A2D63" strokeOpacity={0.14} />
           {LIJNEN.filter((l) => !l.sub).map((l, i) => (
             <line key={i} x1={eerste[l.a].x} y1={eerste[l.a].y} x2={eerste[l.b].x} y2={eerste[l.b].y} stroke="#1A2D63" strokeOpacity={0.12 + 0.6 * Math.min(eerste[l.a].d, eerste[l.b].d)} strokeWidth={1} />
           ))}

@@ -406,9 +406,11 @@ export function HomePage() {
               ))}
             </div>
 
-            <button
-              type="button"
-              onClick={() => gesprek("breadth_card_calendly", "solutions")}
+            <a
+              href={SKOOL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackLesreeks("breedte")}
               className="group mt-6 flex w-full items-center gap-5 rounded-[20px] border border-dashed border-[#1A2D63]/30 p-6 text-left transition-colors hover:border-[#1A2D63]/60 hover:bg-white sm:p-7"
             >
               <span className="hp-display hidden shrink-0 text-[2.5rem] font-bold leading-none text-[#1A2D63]/30 sm:block" aria-hidden="true">+</span>
@@ -417,7 +419,7 @@ export function HomePage() {
                 <span className="mt-1.5 block text-[0.9375rem] leading-[1.6] text-[#3D4766]">{OPLOSSING.breedteBody}</span>
               </span>
               <ArrowRight className="h-5 w-5 shrink-0 text-[#1A2D63]/50 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-            </button>
+            </a>
 
             <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
               <span className="text-[0.8125rem] font-medium text-[#6C7590]">{OPLOSSING.koppelingen}</span>
@@ -443,9 +445,13 @@ export function HomePage() {
                 <li key={stap.nummer} className={`hp-card flex flex-col p-6 sm:p-7 ${i === 0 ? "hp-card--accent" : ""}`}>
                   <div className="flex items-center justify-between gap-3">
                     <span className="hp-display text-[1.75rem] font-bold leading-none text-[#1A2D63]/30">{stap.nummer}</span>
-                    <span className="rounded-full bg-[#E6ECF9] px-3 py-1 text-[0.75rem] font-medium text-[#1A2D63]">{stap.tijd}</span>
+                    <span className="flex flex-wrap justify-end gap-1.5">
+                      <span className="rounded-full bg-[#E6ECF9] px-3 py-1 text-[0.75rem] font-medium text-[#1A2D63]">{stap.wie}</span>
+                      <span className="rounded-full border border-[#E3E7EF] px-3 py-1 text-[0.75rem] font-medium text-[#6C7590]">{stap.tijd}</span>
+                    </span>
                   </div>
                   <h3 className={`mt-4 ${H3} text-[1.45rem]`}>{stap.titel}</h3>
+                  <p className="mt-2 text-[0.9375rem] leading-[1.6] text-[#3D4766]">{stap.intro}</p>
                   <ul className="mt-5 space-y-2.5">
                     {stap.punten.map((punt) => (
                       <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#3D4766]">
@@ -471,20 +477,22 @@ export function HomePage() {
 
             <div className="mt-14 grid gap-8 rounded-[24px] bg-[#F5F7FB] p-7 sm:p-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-14">
               <div>
-                <h3 className={`${H3} text-[1.5rem]`}>{HOE.brein.h3}</h3>
-                <p className="mt-4 text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]">{HOE.brein.p1}</p>
-                <p className="mt-3 text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]">{HOE.brein.p2}</p>
+                <h3 className={`${H3} text-[1.5rem]`}>{HOE.fundament.h3}</h3>
+                {HOE.fundament.alineas.map((a) => (
+                  <p key={a} className="mt-4 text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]">{a}</p>
+                ))}
               </div>
               <div className="lg:pt-1">
-                <p className="text-[0.9375rem] font-medium text-[#1A2D63]">{HOE.brein.lijstTitel}</p>
+                <p className="text-[0.9375rem] font-medium text-[#1A2D63]">{HOE.fundament.lijstTitel}</p>
                 <ul className="mt-4 space-y-2.5">
-                  {HOE.brein.lijst.map((item) => (
+                  {HOE.fundament.lijst.map((item) => (
                     <li key={item} className="flex items-start gap-3 text-[1rem] leading-[1.5] text-[#3D4766]">
                       <Vinkje />
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
+                <p className="mt-6 border-l-2 border-[#1A2D63]/30 pl-4 text-[0.9375rem] leading-[1.6] text-[#3D4766]">{HOE.fundament.eerlijk}</p>
               </div>
             </div>
 

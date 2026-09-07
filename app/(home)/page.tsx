@@ -1,9 +1,9 @@
 import { HomePage } from "@/components/home/home-page";
 import { Metadata } from "next";
 
-const TITLE = "Finit Solutions | AI-systemen die 24/7 voor je werken";
+const TITLE = "Finit Solutions | Leg jouw AI-fundament";
 const DESCRIPTION =
-  "Minder administratie, meer tijd voor je bedrijf. Je leert de AI eerst hoe jouw bedrijf werkt, daarna bouwen wij AI-oplossingen op maat die repetitieve processen automatiseren. Vaste prijzen.";
+  "AI kan alleen maar wat je hem vertelt. Leg eerst een fundament: alle kennis over jouw bedrijf, zo opgeschreven dat een AI ermee kan werken. Daarna bouwen wij de systemen die het werk overnemen. Prijzen vooraf bekend.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
