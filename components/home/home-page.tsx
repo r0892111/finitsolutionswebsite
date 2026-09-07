@@ -171,7 +171,6 @@ function BouwDetail() {
               </li>
             ))}
           </ul>
-          <p className="mt-5 border-l-2 border-[#1A2D63]/40 pl-4 text-[0.9375rem] leading-[1.6] text-[#3D4766]">{HOE.bouw.dicht}</p>
         </div>
       </div>
       <div className="mt-9 border-t border-[#E3E7EF] pt-8">

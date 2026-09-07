@@ -110,8 +110,8 @@ export const OPLOSSING = {
 // Bewust de cover en niet een screenshot met ledental.
 export const SKOOL = {
   label: "De lesreeks op",
-  titel: "En alles wat repetitief is in jouw bedrijf",
-  body: "In de lesreeks breng je in kaart wat je team dagelijks doet. Daaruit rolt een lijst van wat AI eerst kan overnemen. Die lijst bouwen wij.",
+  titel: "Leg je AI-fundament",
+  body: "In de lesreeks draag je alles wat je over je bedrijf weet over aan een AI-brein: je processen, je klanten, je prijzen, je manier van werken. Daarna weet AI wat jij weet.",
   knop: "Start zelf met je AI-fundament",
   noot: "Online, in het Nederlands, op eigen tempo. € 95 voor de eerste 20 deelnemers.",
   coverAlt: "De cover van de lesreeks op Skool: een whiteboard met de negen stappen naar je AI-fundament.",
@@ -179,7 +179,7 @@ export const HOE = {
       tijd: "2 tot 4 weken",
       wie: "Wij",
       titel: "De bouw",
-      intro: "Wij maken van jouw lijst AI-werknemers die bij jou draaien. We bouwen alleen op een fundament dat jij gelegd hebt: zo weten we vooraf wat het kost.",
+      intro: "We bouwen op het fundament dat jij legt. Daarop zetten we de AI-werknemers die je cruciale dagelijkse processen overnemen.",
       punten: [
         "Alles op je lijst dat op je fundament draait, hoeveel het er ook zijn",
         "Gekoppeld aan de software die je al gebruikt",
@@ -248,9 +248,8 @@ export const HOE = {
     nietTitel: "Zit er niet in",
     niet: [
       "Nieuwe software met een scherm dat er nog niet is: een website, een webshop, een klantenportaal, een boekingsmodule, een database die je nog niet hebt. Dat is een apart traject met een aparte prijs.",
-      "Planning zelf, want dat is een roostersysteem. Wel het bericht naar de klant zodra er iets verzet wordt.",
+      "Gesloten of maatwerksoftware zonder koppeling of export. Die valt buiten de scope van de implementatie in dit pakket.",
     ],
-    dicht: "Zit een systeem dicht, zoals sommige sectorpakketten of overheidsportalen, dan bouwen we tot aan de knop: alles verzameld en opgemaakt, het laatste klikken doe jij. Dat hoor je in de lesreeks, niet achteraf.",
     // De regels die op elke AI-werknemer getest worden voor hij live gaat.
     veiligTitel: "Wat er gebeurt voor hij bij jou mag draaien",
     veilig: [
