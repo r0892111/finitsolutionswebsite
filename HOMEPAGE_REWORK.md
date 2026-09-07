@@ -167,7 +167,7 @@ node scripts/homepage/shot.mjs http://localhost:3000/ mobiel.png 390 844 1 2    
 8. Stap 02 zegt nog "2 tot 4 weken", terwijl de bouw nu een onbeperkt aantal AI-werknemers dekt. Alex bevestigt of dat blijft staan.
 9. Backup-frequentie, uptime en security-baselines liggen nog niet vast (playbook §8, bij Jord). Daarom staan er op de site alleen categorieën (hosting, bewaking, backups, updates), geen cijfers. Niet toevoegen zonder Jord.
 10. De community op Skool heeft op 7 september 5 leden. Daarom toont het Skool-blok de cover en geen screenshot met ledental.
-11. De herschreven prompt van stap 7 van de lesreeks ("Oplossingen": schermtest eerst, breintest tweede, geen plafond, mapping bakjes → secties, twee extra scopingvragen) staat nog in geen enkel repo. Alex zet hem in de lesreeks en, als hij wil, in finit-company.
+11. De herschreven prompt van stap 7 van de lesreeks ("Oplossingen": schermtest, bereikbaarheidstest, breintest, geen plafond, mapping bakjes → secties, twee extra scopingvragen) staat nog in geen enkel repo. Alex zet hem in de lesreeks en, als hij wil, in finit-company.
 
 ## Werken met Claude Code op deze branch
 
@@ -194,7 +194,7 @@ Branch `copy/homepage-optimalisatie`, 7 september 2026, bovenop tag `homepage-re
 ### Beslissingen die erbij kwamen (van Alex)
 
 12. **De bouw is € 4.500 vast, ongeacht de omvang.** Het is een loss leader; de marge zit in de € 90 per maand hosting. De scope moet streng zijn in soort, ruim in aantal.
-13. **De grens uit stap 7 van de lesreeks is de grens op de site.** Twee tests, in deze volgorde: moet er een scherm getekend worden dat er nog niet is? Dan buiten (website, webshop, klantenportaal, boekingsmodule, nieuwe database), ook als het het brein zou gebruiken. Draait het op het brein? Dan binnen. Geen plafond. De assistent boven de AI-werknemers zit erin. **Gesloten of maatwerksoftware zonder koppeling of export valt buiten de implementatie** (Alex, 7 september, avond). Let op: de herwerkte stap-7-prompt zegt bij bakje 2 nog "tot aan de knop = binnen"; die moet hierop afgestemd worden (open punt 11).
+13. **De grens uit stap 7 van de lesreeks is de grens op de site.** Twee tests, in deze volgorde: moet er een scherm getekend worden dat er nog niet is? Dan buiten (website, webshop, klantenportaal, boekingsmodule, nieuwe database), ook als het het brein zou gebruiken. Draait het op het brein? Dan binnen. Geen plafond. De assistent boven de AI-werknemers zit erin. **Gesloten of maatwerksoftware zonder koppeling of export valt buiten de implementatie** (Alex, 7 september, avond). De stap-7-prompt is hierop afgestemd: drie tests (scherm → buiten; geen koppeling en geen export → buiten, onbekend → vraagteken; brein → binnen).
 14. **Het veiligheidsverhaal staat op de site.** De vier regels die op elke AI-werknemer getest worden (niets zelf versturen tenzij de klant dat per taak kiest, afgeschermde sleutels, aantoonbaar uit het fundament, pauzeknop en kostenplafond) komen uit `finit-company/finit/skills/11.2-agent-smoke-test` en `12.1-dev-go-live`. Daarom is "verstuurd" overal "staat klaar" geworden waar het botste.
 15. **Het eigendomsverhaal wordt volledig verteld.** Tijdens het onderhoud beheert Finit de toegang (playbook §9); bij vertrek krijgt de klant code, gegevens en een dag begeleiding (exit-protocol). "Maandelijks opzegbaar" blijft staan.
 16. **Twee labels voor dezelfde knop.** "Start de lesreeks" in nav en hero, "Start zelf met je AI-fundament" op het Skool-blok. Bewust: kort waar het een knop is, met resultaat waar het een deur is.
