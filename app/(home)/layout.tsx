@@ -1,16 +1,18 @@
-import { Metadata } from 'next';
+import { Schibsted_Grotesk } from 'next/font/google';
 
-export const metadata: Metadata = {
-  title: 'Finit Solutions | Wij bouwen het AI-brein dat je administratie doet',
-  description:
-    'Offertes, klachten, planning en facturen die zichzelf afhandelen. Zet je eigen AI-brein op vanaf 295 euro, of laat ons het bouwen. Voor zelfstandigen en KMO\'s in België.',
-};
+// Eén lettertype voor de hele homepage: koppen, lopende tekst en knoppen.
+// next/font slaat het bij de build lokaal op, dus geen extern font-verzoek in de browser.
+const schibsted = Schibsted_Grotesk({
+  subsets: ['latin', 'latin-ext'],
+  display: 'swap',
+  variable: '--font-schibsted',
+});
 
 export default function HomeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Deze layout rendert geen Navbar/Footer: FinitHome brengt zijn eigen mee.
-  return <>{children}</>;
+  // Geen Navbar/Footer van de rest van de site: de homepage brengt zijn eigen mee.
+  return <div className={`${schibsted.variable} fs-home`}>{children}</div>;
 }
