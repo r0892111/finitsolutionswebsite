@@ -505,7 +505,11 @@ export function HomePage() {
                     </li>
                   ))}
                 </ul>
-                <p className="mt-6 border-l-2 border-[#1A2D63]/30 pl-4 text-[0.9375rem] leading-[1.6] text-[#3D4766]">{HOE.fundament.eerlijk}</p>
+                <div className="mt-6 space-y-3 border-l-2 border-[#1A2D63]/40 pl-4">
+                  {HOE.fundament.eerlijk.map((a, i) => (
+                    <p key={a} className={`text-[0.9375rem] leading-[1.6] ${i === 0 ? "font-medium text-[#1A2D63]" : "text-[#3D4766]"}`}>{a}</p>
+                  ))}
+                </div>
               </div>
             </div>
 

@@ -213,7 +213,11 @@ export const HOE = {
       "Je prijzen, je partners en je huistaal",
       "Waar tijd verloren gaat en wat AI eerst kan overnemen",
     ],
-    eerlijk: "Eerlijk: dit is geen snelle fix. Reken op een tiental uur, verspreid over een paar avonden. Maar je legt het fundament waar de toekomst van je bedrijf op leunt.",
+    // Bewust een kwalificatie, geen geruststelling: wie een snelle fix zoekt, haakt hier af.
+    eerlijk: [
+      "Dit is geen snelle fix. Zoek je een tool die je installeert en die morgen je werk doet, dan ben je bij ons aan het verkeerde adres. Reken op een tiental uur, verspreid over een paar avonden.",
+      "Elk softwarepakket en elke AI-consultant verkoopt je dat het in 1-2-3 gebeurt. Dat is niet zo. AI die echt in je processen zit, waar je op kunt rekenen en die je met rust kunt laten, vraagt inspanning. Van jou en van ons. Dat is precies waarom hij daarna blijft werken.",
+    ],
   },
 };
 
