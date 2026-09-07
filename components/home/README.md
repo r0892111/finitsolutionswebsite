@@ -1,5 +1,7 @@
 # Homepage (rework 2026-09)
 
+Overdracht, beslissingen, stijlregels en open punten: `HOMEPAGE_REWORK.md` in de root van het repo.
+
 Drie bestanden, één idee: **de pagina volgt de opbouw en schrijfstijl van de vorige homepage en de landingspagina's, en de uitleg die Alex in de lesreeks-video's geeft (hoofdstuk 1 en 2, transcripten in `~/Skool`).**
 
 | Bestand | Wat |

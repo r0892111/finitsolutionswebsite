@@ -1,5 +1,7 @@
 # Finit Solutions — Landing Page Style, Copy & Conversion Guide
 
+> **Let op (september 2026):** de homepage op branch `rework/homepage-lesreeks` volgt deze gids niet. Zie `HOMEPAGE_REWORK.md` voor de regels die daar gelden.
+
 Use this document as the single source of truth when building or redesigning any Finit Solutions landing page. It captures every design decision from the homepage (`components/ai-design-landing.tsx`) plus the copywriting principles from `vikingbeast-analyse.md`.
 
 ---
