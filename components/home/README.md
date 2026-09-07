@@ -6,21 +6,23 @@ Vier bestanden, één idee: **de pagina beantwoordt de vragen van een niet-techn
 |---|---|
 | `copy.ts` | Alle tekst, als data. Copy aanpassen = alleen dit bestand. |
 | `home-page.tsx` | De pagina: navigatie, zeven secties, footer. Geen scroll-animaties. |
-| `brein-kaart.tsx` | Het beeld in de hero: het brein als kaart van pagina's die naar elkaar verwijzen, met "Offertes" opengeklapt eronder. Hover over een bolletje licht de verbindingen op. |
-| `drie-beats.tsx` | Drie stilstaande beelden onder sectie 2: jij praat (spraakmemo) → de AI schrijft (pagina's) → jij vraagt (antwoord). |
+| `brein-3d.tsx` | Het beeld in de hero: het brein als ruimtelijke structuur die traag draait (bolletjes = pagina's, lijnen = verwijzingen). Geen library: punten op een bol, per beeldje gedraaid en met perspectief geprojecteerd in SVG. Muis draait mee, slepen draait harder, bij "minder beweging" staat het stil. |
 | `gesprek-form.tsx` | "Vraag een gesprek aan" (popup). Stuurt naar de n8n-flow met dezelfde veldnamen als vroeger (`naam`, `telefoonnummer`, `email`). |
 
 Links en contactgegevens staan in `lib/finit-links.ts`. **`SKOOL_URL` moet nog ingevuld worden:** de knop "Start de lesreeks" gaat rechtstreeks naar Skool, niet naar een formulier.
 
 ## De volgorde (en de vraag die elke sectie beantwoordt)
 
-1. **Hero** — "Wat is dit, is dit voor mij?" Herkenning (ChatGPT kent je zaak niet) + wat wij doen (wij leren je een AI opzetten die dat wel doet). Geen prijs in de hero; wel de belofte dat alle prijzen op de pagina staan.
-2. **Zo leert een AI jouw zaak kennen** — "Waarom lukt dat niet met ChatGPT, en wat is een brein dan?"
-3. **Wat wij daarna voor je bouwen** — "En wat heb ik daaraan?" Nu/straks-voorbeelden, uitdrukkelijk als resultaat van stap 2.
-4. **Hoe het werkt** — "Hoe gaat dat concreet en wat kost het?" Drie stappen met de prijs bovenaan, en waarom de klant eerst zelf bouwt (dat is de reden dat stap 1 goedkoop is en stap 2 een vaste prijs heeft).
-5. **Drie mensen, in Leuven** — "Wie zijn jullie?" Echte foto's, concrete eerdere resultaten.
-6. **Vragen** — de "ja maar"-vragen, ingeklapt.
-7. **Slot** — één keer navy, twee uitgangen: lesreeks (Skool) of gesprek (formulier).
+De opbouw volgt de landingspagina's (`components/landing/*`, plan in `LANDING-PAGES-PLAN.md`), met de teksten herschreven naar het nieuwe model:
+
+1. **Hero** — herkenning (ChatGPT kent je zaak niet) + wat wij doen, één hoofdknop, drie zekerheden eronder, "Ondersteund door". Geen prijs in de hero.
+2. **Herken je dit?** — zes zinnen waarop de lezer knikt, dan "Het hoeft niet zo te zijn."
+3. **Stel dat de AI je zaak wél kent** — drie oplossingskaarten (stap 1 en stap 2), nu/straks, en de logo's van wat we koppelen.
+4. **Hoe wij werken** — drie stappen met de prijs vooraf; stap 1 uitgelicht; waarom de klant eerst zelf begint.
+5. **Bewijs** — echte quote (Bas, PRS Rotselaar) en drie eerdere resultaten, op marineblauw.
+6. **Drie mensen, in Leuven** — compact, echte foto's.
+7. **Vragen** — in de volgorde waarin de lezer ze zich stelt: resultaat, inspanning, geld, risico's.
+8. **Slot** — kaart met twee uitgangen: lesreeks (Skool) of gesprek (formulier). Op mobiel blijft "Start de lesreeks" onderaan plakken zodra de hero voorbij is.
 
 ## Regels voor de copy
 

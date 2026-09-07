@@ -50,7 +50,6 @@ export function GesprekForm({ open, onClose }: { open: boolean; onClose: () => v
           telefoonnummer: data.get("telefoon"),
           email: data.get("email"),
           zaak: data.get("zaak"),
-          vraag: data.get("vraag"),
           intent: "gesprek",
           bron,
         }),
@@ -103,15 +102,9 @@ export function GesprekForm({ open, onClose }: { open: boolean; onClose: () => v
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               <Veld label={FORM.velden.naam} name="naam" autoComplete="name" required inputRef={firstField} />
-              <Veld label={FORM.velden.zaak} name="zaak" autoComplete="organization" required />
               <Veld label={FORM.velden.email} name="email" type="email" autoComplete="email" required />
               <Veld label={FORM.velden.telefoon} name="telefoon" type="tel" autoComplete="tel" required />
-              <div>
-                <label htmlFor="gesprek-vraag" className="mb-1.5 block text-[0.875rem] font-medium text-[#57514A]">
-                  {FORM.velden.vraag}
-                </label>
-                <textarea id="gesprek-vraag" name="vraag" rows={3} className="fs-input resize-none" />
-              </div>
+              <Veld label={FORM.velden.zaak} name="zaak" autoComplete="organization" />
 
               {status === "error" && (
                 <p className="rounded-[8px] bg-[#F5F3EC] px-4 py-3 text-[0.9375rem] text-[#2A2620]">
@@ -125,6 +118,7 @@ export function GesprekForm({ open, onClose }: { open: boolean; onClose: () => v
               <button type="submit" disabled={status === "sending"} className="fs-btn fs-btn--primary fs-btn--lg w-full">
                 {status === "sending" ? FORM.bezig : FORM.submit}
               </button>
+              <p className="text-center text-[0.8125rem] text-[#76706A]">{FORM.onder}</p>
             </form>
           </>
         )}
