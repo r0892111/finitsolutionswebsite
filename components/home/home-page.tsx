@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { ArrowRight, Calendar, ChevronDown, ChevronRight, Euro, KeyRound, Layers, Linkedin, Mail, Menu, Phone, Plus, Workflow, X } from "lucide-react";
+import { ArrowRight, BellRing, BookOpen, Calendar, ChevronDown, ChevronRight, Euro, KeyRound, Layers, Linkedin, Lock, Unlock, Mail, MailCheck, Menu, Pause, Phone, Plus, Server, ShieldCheck, Workflow, X } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { ContactFormPopup, useContactForm } from "@/components/contact-form-popup";
 import { useConsent } from "@/contexts/consent-context";
@@ -48,6 +48,9 @@ const H3 = "hp-display hp-display-sm text-[1.3rem] font-semibold leading-[1.2] t
 const KOP = "mx-auto max-w-[44rem] text-center";
 /** Eén icoon per pijler in "Waarom Finit", in de volgorde van WAAROM.pijlers. */
 const PIJLER_ICONEN = [Layers, Workflow, Euro, KeyRound];
+/** Iconen bij de vier veiligheidsregels (stap 02) en de vier onderdelen van het onderhoud (stap 03), in volgorde van de copy. */
+const VEILIG_ICONEN = [MailCheck, Lock, BookOpen, Pause];
+const ONDERHOUD_ICONEN = [Server, BellRing, ShieldCheck, Unlock];
 
 /** De handgetekende streep onder het laatste woord van een kop, zoals op de vorige site. */
 function Onder({ children }: { children: React.ReactNode }) {
@@ -61,9 +64,9 @@ function Onder({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Vinkje({ donker = false }: { donker?: boolean }) {
+function Vinkje({ donker = false, wit = false }: { donker?: boolean; wit?: boolean }) {
   return (
-    <span className={`hp-check mt-0.5 ${donker ? "hp-check--donker" : ""}`} aria-hidden="true">
+    <span className={`hp-check mt-0.5 ${donker ? "hp-check--donker" : ""} ${wit ? "hp-check--wit" : ""}`} aria-hidden="true">
       <svg width="11" height="9" viewBox="0 0 11 9">
         <path d="M1 4.5l3 3L10 1" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -117,27 +120,36 @@ function FaqAntwoord({ blokken }: { blokken: FaqBlok[] }) {
 }
 
 /** Inhoud van de drie openklikbare rijen onder de prijskaarten (stap 01, 02, 03). */
+const RIJ_LABEL = "text-[0.8125rem] font-semibold uppercase tracking-wide text-[#1A2D63]";
+const RIJ_TEKST = "text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]";
+
 function FundamentDetail() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-14">
-      <div>
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-12">
+      <div className="space-y-6">
         {HOE.fundament.alineas.map((a) => (
-          <p key={a} className="mt-4 text-[1rem] leading-[1.7] text-[#3D4766] first:mt-0 sm:text-[1.0625rem]">{a}</p>
+          <div key={a.kop}>
+            <p className={`${H3} text-[1.1rem]`}>{a.kop}</p>
+            <p className={`mt-2 ${RIJ_TEKST}`}>{a.tekst}</p>
+          </div>
         ))}
       </div>
-      <div>
-        <p className="text-[0.9375rem] font-medium text-[#1A2D63]">{HOE.fundament.lijstTitel}</p>
-        <ul className="mt-4 space-y-2.5">
-          {HOE.fundament.lijst.map((item) => (
-            <li key={item} className="flex items-start gap-3 text-[1rem] leading-[1.5] text-[#3D4766]">
-              <Vinkje />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-6 space-y-3 border-l-2 border-[#1A2D63]/40 pl-4">
+      <div className="space-y-5">
+        <div className="rounded-[16px] bg-[#F5F7FB] p-5 sm:p-6">
+          <p className="text-[0.9375rem] font-semibold leading-[1.4] text-[#1A2D63]">{HOE.fundament.lijstTitel}</p>
+          <ul className="mt-4 space-y-2.5">
+            {HOE.fundament.lijst.map((item) => (
+              <li key={item} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#3D4766]">
+                <Vinkje />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {/* De kwalificatie: de belangrijkste zinnen van de rij, dus het meeste contrast. */}
+        <div className="rounded-[16px] bg-[#1A2D63] p-5 text-white sm:p-6">
           {HOE.fundament.eerlijk.map((a, i) => (
-            <p key={a} className={`text-[0.9375rem] leading-[1.6] ${i === 0 ? "font-medium text-[#1A2D63]" : "text-[#3D4766]"}`}>{a}</p>
+            <p key={a} className={i === 0 ? "text-[1rem] font-semibold leading-[1.55] text-white" : "mt-3 text-[0.9375rem] leading-[1.6] text-white/85"}>{a}</p>
           ))}
         </div>
       </div>
@@ -148,21 +160,35 @@ function FundamentDetail() {
 function BouwDetail() {
   return (
     <div>
-      <p className="max-w-[44rem] text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]">{HOE.bouw.intro}</p>
-      <div className="mt-7 grid gap-7 md:grid-cols-2 md:gap-10">
-        <div>
-          <p className="text-[0.9375rem] font-medium text-[#1A2D63]">{HOE.bouw.welTitel}</p>
+      <p className={`max-w-[44rem] ${RIJ_TEKST}`}>{HOE.bouw.intro}</p>
+      <ul className="mt-6 grid gap-4 sm:grid-cols-3">
+        {HOE.bouw.feiten.map((f) => (
+          <li key={f.getal} className="rounded-[16px] border border-[#E3E7EF] bg-white p-5">
+            <p className="hp-display text-[2rem] font-bold leading-none text-[#1A2D63]">{f.getal}</p>
+            <p className="mt-2 text-[0.875rem] leading-[1.5] text-[#3D4766]">{f.label}</p>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-5 grid gap-5 md:grid-cols-2">
+        <div className="rounded-[16px] bg-[#E6ECF9] p-5 sm:p-6">
+          <p className={RIJ_LABEL}>{HOE.bouw.welTitel}</p>
           <ul className="mt-4 space-y-3">
             {HOE.bouw.wel.map((item) => (
-              <li key={item} className="flex items-start gap-3 text-[0.9375rem] leading-[1.55] text-[#3D4766]">
-                <Vinkje />
+              <li key={item} className="flex items-start gap-3 text-[0.9375rem] font-medium leading-[1.5] text-[#1A2D63]">
+                <Vinkje wit />
                 <span>{item}</span>
               </li>
             ))}
           </ul>
+          <p className="mt-5 text-[0.75rem] font-medium uppercase tracking-wide text-[#6C7590]">{HOE.bouw.voorbeeldenTitel}</p>
+          <ul className="mt-2.5 flex flex-wrap gap-2">
+            {HOE.bouw.voorbeelden.map((v) => (
+              <li key={v} className="hp-chip hp-chip--klein">{v}</li>
+            ))}
+          </ul>
         </div>
-        <div>
-          <p className="text-[0.9375rem] font-medium text-[#1A2D63]">{HOE.bouw.nietTitel}</p>
+        <div className="rounded-[16px] border border-[#E3E7EF] bg-white p-5 sm:p-6">
+          <p className={RIJ_LABEL}>{HOE.bouw.nietTitel}</p>
           <ul className="mt-4 space-y-3">
             {HOE.bouw.niet.map((item) => (
               <li key={item} className="flex items-start gap-3 text-[0.9375rem] leading-[1.55] text-[#3D4766]">
@@ -173,17 +199,24 @@ function BouwDetail() {
           </ul>
         </div>
       </div>
-      <div className="mt-9 border-t border-[#E3E7EF] pt-8">
-        <h4 className={`${H3} text-[1.2rem]`}>{HOE.bouw.veiligTitel}</h4>
-        <ul className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {HOE.bouw.veilig.map((v) => (
-            <li key={v.titel} className="rounded-[16px] bg-[#F5F7FB] p-5">
-              <p className="text-[0.9375rem] font-semibold leading-[1.35] text-[#1A2D63]">{v.titel}</p>
-              <p className="mt-2 text-[0.875rem] leading-[1.55] text-[#3D4766]">{v.body}</p>
-            </li>
-          ))}
+      {/* De vier regels die op elke AI-werknemer getest worden: marineblauw, met een icoon per regel. */}
+      <div className="mt-5 rounded-[16px] bg-[#1A2D63] p-6 text-white sm:p-8">
+        <h4 className="hp-display hp-display-sm text-[1.2rem] font-semibold leading-[1.2] text-white">{HOE.bouw.veiligTitel}</h4>
+        <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {HOE.bouw.veilig.map((v, i) => {
+            const Icoon = VEILIG_ICONEN[i] ?? Lock;
+            return (
+              <li key={v.titel}>
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/12" aria-hidden="true">
+                  <Icoon className="h-4 w-4 text-white" />
+                </span>
+                <p className="mt-3 text-[0.9375rem] font-semibold leading-[1.35] text-white">{v.titel}</p>
+                <p className="mt-1.5 text-[0.875rem] leading-[1.55] text-white/85">{v.body}</p>
+              </li>
+            );
+          })}
         </ul>
-        <p className="mt-6 max-w-[52rem] text-[0.9375rem] leading-[1.65] text-[#3D4766]">{HOE.bouw.proces}</p>
+        <p className="mt-6 border-t border-white/15 pt-5 text-[0.9rem] leading-[1.6] text-white/85">{HOE.bouw.proces}</p>
       </div>
     </div>
   );
@@ -192,14 +225,27 @@ function BouwDetail() {
 function OnderhoudDetail() {
   return (
     <div>
-      <p className="max-w-[44rem] text-[1rem] leading-[1.7] text-[#3D4766] sm:text-[1.0625rem]">{HOE.onderhoud.intro}</p>
-      <ul className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {HOE.onderhoud.punten.map((v) => (
-          <li key={v.titel} className="rounded-[16px] bg-[#F5F7FB] p-5">
-            <p className="text-[0.9375rem] font-semibold leading-[1.35] text-[#1A2D63]">{v.titel}</p>
-            <p className="mt-2 text-[0.875rem] leading-[1.55] text-[#3D4766]">{v.body}</p>
-          </li>
-        ))}
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] lg:items-start lg:gap-8">
+        <p className={RIJ_TEKST}>{HOE.onderhoud.intro}</p>
+        <div className="rounded-[16px] border border-[#E3E7EF] bg-white p-5">
+          <p className="hp-display text-[2rem] font-bold leading-none text-[#1A2D63]">{HOE.onderhoud.feit.getal}</p>
+          <p className="mt-2 text-[0.875rem] leading-[1.5] text-[#3D4766]">{HOE.onderhoud.feit.label}</p>
+        </div>
+      </div>
+      <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {HOE.onderhoud.punten.map((v, i) => {
+          const Icoon = ONDERHOUD_ICONEN[i] ?? Server;
+          const accent = i === HOE.onderhoud.punten.length - 1; // "Van jou, ook als je stopt": de vertrouwenskaart
+          return (
+            <li key={v.titel} className={`rounded-[16px] p-5 ${accent ? "bg-[#1A2D63]" : "bg-[#F5F7FB]"}`}>
+              <span className={`flex h-9 w-9 items-center justify-center rounded-full ${accent ? "bg-white/12" : "bg-[#E6ECF9]"}`} aria-hidden="true">
+                <Icoon className={`h-4 w-4 ${accent ? "text-white" : "text-[#1A2D63]"}`} />
+              </span>
+              <p className={`mt-3 text-[0.9375rem] font-semibold leading-[1.35] ${accent ? "text-white" : "text-[#1A2D63]"}`}>{v.titel}</p>
+              <p className={`mt-1.5 text-[0.875rem] leading-[1.55] ${accent ? "text-white/85" : "text-[#3D4766]"}`}>{v.body}</p>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

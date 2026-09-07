@@ -108,7 +108,7 @@ Ritme van de secties: wit (hero + Herken jij dit?), band (Wat AI kan), wit (Hoe 
 - Chips: `hp-chip` voor de tool-logo's, `hp-chip--plus` (gestippeld) voor "zowat alles wat je al gebruikt".
 - Vinkjes: `hp-check` (lichtblauw rondje), `hp-check--donker` op marineblauw.
 - FAQ: native `<details>` met eigen plusje (`hp-details`, `hp-plus`).
-- Openklikbare rijen onder de prijskaarten: `hp-vouw` (grid-rows van 0fr naar 1fr, de inhoud blijft in de DOM; `aria-expanded` op de knop).
+- Openklikbare rijen onder de prijskaarten: `hp-vouw` (grid-rows van 0fr naar 1fr, de inhoud blijft in de DOM; `aria-expanded` op de knop). Binnen de rijen: `hp-check--wit` (vinkje op het lichtblauwe paneel), `hp-chip--klein` (de voorbeelden bij "Zit erin"), en marineblauwe panelen (`bg-[#1A2D63]`) voor wat het meeste contrast verdient: de kwalificatie in 01, de vier veiligheidsregels in 02, de vertrouwenskaart in 03. Iconen: `VEILIG_ICONEN` en `ONDERHOUD_ICONEN` in `home-page.tsx`.
 - Iconen (lucide) alleen waar ze iets betekenen: de vier pijlers hebben een icoon omdat ze geen volgorde zijn; de drie stappen en de zes herkenzinnen hebben nummers omdat je ze telt of doorloopt.
 
 **Contrast en uitlijning**
@@ -189,6 +189,7 @@ Branch `copy/homepage-optimalisatie`, 7 september 2026, bovenop tag `homepage-re
 | `copy: stap 02 en 03 verantwoord` | Nieuwe detailblokken "Stap 02: wat je koopt voor € 4.500" en "Stap 03: wat de € 90 per maand dekt" onder de prijskaarten. Pijler "Jullie eigendom" en drie FAQ-antwoorden op dezelfde lijn. |
 | `homepage: Skool-blok als echte deur` | Knop "Start zelf met je AI-fundament", Skool-woordmerk, cover van de community. |
 | `brein: golven, scherptediepte, dichter` | Zie [§ Het brein in de hero](#het-brein-in-de-hero). |
+| `homepage: hiërarchie in de drie rijen` | Op feedback van Alex ("een dump van tekst"): 01 met koppen per alinea en de kwalificatie in marineblauw; 02 met drie cijfers bovenaan, "Zit erin" lichtblauw met voorbeeld-chips, "Zit er niet in" wit, veiligheidsregels marineblauw met iconen; 03 met € 90 als cijfer, iconen en "Van jou, ook als je stopt" als accentkaart. |
 | `homepage: stappen in detail als één openklikbaar blok` | Op feedback van Alex: de drie detailblokken onder de prijskaarten zijn één blok met drie openklikbare rijen geworden (`STAP_DETAILS` in `home-page.tsx`, stap 01 standaard open, één tegelijk). Elke prijskaart linkt onderaan met "Meer over deze stap" naar de juiste rij. |
 
 ### Beslissingen die erbij kwamen (van Alex)

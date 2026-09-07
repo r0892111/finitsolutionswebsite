@@ -211,10 +211,11 @@ export const HOE = {
   fundament: {
     h3: "Waarom je het fundament zelf legt",
     kort: "Jij kent je bedrijf het best. Daarom leg jij het, en bouwen wij alleen daarop.",
+    // Elke alinea heeft een korte kop, zodat de rij scanbaar is.
     alineas: [
-      "Toen we bij onze eerste klanten AI implementeerden, leerden we het op de harde manier: je moet eerst weten waar AI nuttig is, anders is er geen return on investment. En hoe meer we documenteerden tijdens die analyse, hoe beter het resultaat bij de bouw. Gewoon omdat er meer context was.",
-      "Andere bureaus sturen een dure consultant om die analyse voor jou te doen. Wij niet. Jij kent je bedrijf het allerbeste en je weet zelf waar je grootste frustraties en tijdvreters zitten. Daarom stelt de AI jou in de lesreeks dezelfde vragen die wij vroeger ter plaatse stelden, en schrijft hij alles op.",
-      "Het is een eenmalige inspanning. Je bespaart de kost van zo'n analysetraject, alle kennis blijft in eigen huis, en je leert onderweg de belangrijkste concepten van AI. Geen opleiding tot AI-expert, wel wat een zaakvoerder vandaag moet weten om de juiste keuzes te maken. Zo maak je je bedrijf toekomstbestendig. Elke automatisering die we daarna bouwen, vertrekt van diezelfde kennis.",
+      { kop: "Wat we zelf leerden", tekst: "Toen we bij onze eerste klanten AI implementeerden, leerden we het op de harde manier: je moet eerst weten waar AI nuttig is, anders is er geen return on investment. En hoe meer we documenteerden tijdens die analyse, hoe beter het resultaat bij de bouw. Gewoon omdat er meer context was." },
+      { kop: "Waarom jij, en niet een consultant", tekst: "Andere bureaus sturen een dure consultant om die analyse voor jou te doen. Wij niet. Jij kent je bedrijf het allerbeste en je weet zelf waar je grootste frustraties en tijdvreters zitten. Daarom stelt de AI jou in de lesreeks dezelfde vragen die wij vroeger ter plaatse stelden, en schrijft hij alles op." },
+      { kop: "Eén keer, en het blijft van jou", tekst: "Het is een eenmalige inspanning. Je bespaart de kost van zo'n analysetraject, alle kennis blijft in eigen huis, en je leert onderweg de belangrijkste concepten van AI. Geen opleiding tot AI-expert, wel wat een zaakvoerder vandaag moet weten om de juiste keuzes te maken. Zo maak je je bedrijf toekomstbestendig. Elke automatisering die we daarna bouwen, vertrekt van diezelfde kennis." },
     ],
     lijstTitel: "Je fundament is een map met tekstbestanden in gewone taal. Daarin komt:",
     lijst: [
@@ -238,12 +239,26 @@ export const HOE = {
     h3: "Wat je koopt voor € 4.500",
     kort: "Eén vaste prijs, hoeveel AI-werknemers er ook uit je fundament komen. En wat er gebeurt voor één ervan live mag.",
     intro: "Eén vaste prijs voor alles wat er uit je fundament komt aan werk dat een AI-werknemer kan overnemen. Hoeveel het er ook zijn. De grens ligt niet bij het aantal, maar bij het soort werk.",
+    // Drie cijfers bovenaan de rij, dan pas de lijsten.
+    feiten: [
+      { getal: "€ 4.500", label: "vaste prijs, excl. btw, hoeveel AI-werknemers er ook uit je fundament komen" },
+      { getal: "30", label: "dagen nazorg, tot het zeven dagen na elkaar zonder één bugmelding draait" },
+      { getal: "10", label: "controles voor een AI-werknemer bij jou live mag" },
+    ],
     welTitel: "Zit erin",
     wel: [
-      "Elke AI-werknemer die op je fundament draait: mails sorteren en beantwoorden, offertes klaarzetten en opvolgen, documenten opmaken, gegevens van het ene systeem naar het andere brengen, een ochtendbriefing, een melding als er iets binnenkomt dat niet mag blijven liggen",
+      "Elke AI-werknemer die op je fundament draait",
       "De koppelingen met de software die je al gebruikt",
       "De assistent waarmee je al je AI-werknemers aanstuurt",
-      "30 dagen nazorg, tot het zeven dagen na elkaar zonder één bugmelding draait",
+    ],
+    voorbeeldenTitel: "Bijvoorbeeld",
+    voorbeelden: [
+      "Mails sorteren en beantwoorden",
+      "Offertes klaarzetten en opvolgen",
+      "Documenten opmaken",
+      "Gegevens van het ene systeem naar het andere",
+      "Een ochtendbriefing",
+      "Een melding als iets niet mag blijven liggen",
     ],
     nietTitel: "Zit er niet in",
     niet: [
@@ -264,6 +279,7 @@ export const HOE = {
   onderhoud: {
     h3: "Wat de € 90 per maand dekt",
     kort: "Hosting, bewaking, backups en updates. En wat er van jou blijft als je stopt.",
+    feit: { getal: "€ 90", label: "per maand, excl. btw. Maandelijks opzegbaar." },
     intro: "Een AI-systeem zonder onderhoud verschuift binnen zes maanden van werkend naar wankel. Modellen veranderen, koppelingen wijzigen, je bedrijf schuift op. Daarom houden wij het draaiend.",
     punten: [
       { titel: "Hosting bij ons", body: "Je AI-werknemers draaien op onze servers. Jij hoeft niets te installeren of te beheren." },
