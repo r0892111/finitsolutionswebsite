@@ -148,6 +148,8 @@ export type Stap = {
   punten: string[];
   prijsLabel: string;
   prijs: string;
+  /** Doorstreepte prijs naast de actieprijs, bv. de prijs na de eerste 20 deelnemers. */
+  prijsOud?: string;
   prijsDetail: string;
   cta?: string;
   ctaNoot?: string;
@@ -172,7 +174,8 @@ export const HOE = {
       ],
       prijsLabel: "Lesreeks",
       prijs: "€ 95",
-      prijsDetail: "excl. btw voor de eerste 20 deelnemers, daarna € 295. Plus een betalend abonnement van Claude of ChatGPT, ± € 20 per maand.",
+      prijsOud: "€ 295",
+      prijsDetail: "excl. btw voor de eerste 20 deelnemers. Plus een betalend abonnement van Claude of ChatGPT, ± € 20 per maand.",
       cta: CTA_LESREEKS,
       ctaNoot: "Online, in het Nederlands, op eigen tempo.",
     },

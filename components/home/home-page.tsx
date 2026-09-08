@@ -628,7 +628,14 @@ export function HomePage() {
                   </ul>
                   <div className="mt-6 border-t border-[#E3E7EF] pt-5">
                     <p className="text-[0.8125rem] font-medium uppercase tracking-wide text-[#6C7590]">{stap.prijsLabel}</p>
-                    <p className="hp-display mt-1 text-[2.25rem] font-bold leading-none text-[#1A2D63]">{stap.prijs}</p>
+                    <p className="mt-1 flex flex-wrap items-baseline gap-x-3">
+                      <span className="hp-display text-[2.25rem] font-bold leading-none text-[#1A2D63]">{stap.prijs}</span>
+                      {stap.prijsOud && (
+                        <s className="hp-display text-[1.25rem] font-semibold leading-none text-[#6C7590] decoration-[#6C7590]/70 decoration-[1.5px]">
+                          <span className="sr-only">daarna </span>{stap.prijsOud}
+                        </s>
+                      )}
+                    </p>
                     <p className="mt-2 text-[0.9rem] leading-[1.5] text-[#3D4766]">{stap.prijsDetail}</p>
                   </div>
                   {stap.cta && (
