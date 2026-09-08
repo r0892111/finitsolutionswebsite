@@ -108,7 +108,7 @@ Ritme van de secties: wit (hero + Herken jij dit?), band (Wat AI kan), wit (Hoe 
 - Chips: `hp-chip` voor de tool-logo's, `hp-chip--plus` (gestippeld) voor "zowat alles wat je al gebruikt".
 - Vinkjes: `hp-check` (lichtblauw rondje), `hp-check--donker` op marineblauw.
 - FAQ: native `<details>` met eigen plusje (`hp-details`, `hp-plus`).
-- Openklikbare rijen onder de prijskaarten: `hp-vouw` (grid-rows van 0fr naar 1fr, de inhoud blijft in de DOM; `aria-expanded` op de knop).
+- Openklikbare rijen onder de prijskaarten: `hp-vouw` (grid-rows van 0fr naar 1fr, de inhoud blijft in de DOM; `aria-expanded` op de knop). Binnen de rijen: `hp-check--wit` (vinkje op het lichtblauwe paneel), `hp-chip--klein` (de voorbeelden bij "Zit erin"), en marineblauwe panelen (`bg-[#1A2D63]`) voor wat het meeste contrast verdient: de kwalificatie in 01, de vier veiligheidsregels in 02, de vertrouwenskaart in 03. Iconen: `VEILIG_ICONEN` en `ONDERHOUD_ICONEN` in `home-page.tsx`.
 - Iconen (lucide) alleen waar ze iets betekenen: de vier pijlers hebben een icoon omdat ze geen volgorde zijn; de drie stappen en de zes herkenzinnen hebben nummers omdat je ze telt of doorloopt.
 
 **Contrast en uitlijning**
@@ -167,7 +167,7 @@ node scripts/homepage/shot.mjs http://localhost:3000/ mobiel.png 390 844 1 2    
 8. Stap 02 zegt nog "2 tot 4 weken", terwijl de bouw nu een onbeperkt aantal AI-werknemers dekt. Alex bevestigt of dat blijft staan.
 9. Backup-frequentie, uptime en security-baselines liggen nog niet vast (playbook §8, bij Jord). Daarom staan er op de site alleen categorieën (hosting, bewaking, backups, updates), geen cijfers. Niet toevoegen zonder Jord.
 10. De community op Skool heeft op 7 september 5 leden. Daarom toont het Skool-blok de cover en geen screenshot met ledental.
-11. De herschreven prompt van stap 7 van de lesreeks ("Oplossingen": schermtest eerst, breintest tweede, geen plafond, mapping bakjes → secties, twee extra scopingvragen) staat nog in geen enkel repo. Alex zet hem in de lesreeks en, als hij wil, in finit-company.
+11. De herschreven prompt van stap 7 van de lesreeks ("Oplossingen": schermtest, bereikbaarheidstest, breintest, geen plafond, mapping bakjes → secties, twee extra scopingvragen) staat nog in geen enkel repo. Alex zet hem in de lesreeks en, als hij wil, in finit-company.
 
 ## Werken met Claude Code op deze branch
 
@@ -189,12 +189,13 @@ Branch `copy/homepage-optimalisatie`, 7 september 2026, bovenop tag `homepage-re
 | `copy: stap 02 en 03 verantwoord` | Nieuwe detailblokken "Stap 02: wat je koopt voor € 4.500" en "Stap 03: wat de € 90 per maand dekt" onder de prijskaarten. Pijler "Jullie eigendom" en drie FAQ-antwoorden op dezelfde lijn. |
 | `homepage: Skool-blok als echte deur` | Knop "Start zelf met je AI-fundament", Skool-woordmerk, cover van de community. |
 | `brein: golven, scherptediepte, dichter` | Zie [§ Het brein in de hero](#het-brein-in-de-hero). |
+| `homepage: hiërarchie in de drie rijen` | Op feedback van Alex ("een dump van tekst"): 01 met koppen per alinea en de kwalificatie in marineblauw; 02 met drie cijfers bovenaan, "Zit erin" lichtblauw met voorbeeld-chips, "Zit er niet in" wit, veiligheidsregels marineblauw met iconen; 03 met € 90 als cijfer, iconen en "Van jou, ook als je stopt" als accentkaart. |
 | `homepage: stappen in detail als één openklikbaar blok` | Op feedback van Alex: de drie detailblokken onder de prijskaarten zijn één blok met drie openklikbare rijen geworden (`STAP_DETAILS` in `home-page.tsx`, stap 01 standaard open, één tegelijk). Elke prijskaart linkt onderaan met "Meer over deze stap" naar de juiste rij. |
 
 ### Beslissingen die erbij kwamen (van Alex)
 
 12. **De bouw is € 4.500 vast, ongeacht de omvang.** Het is een loss leader; de marge zit in de € 90 per maand hosting. De scope moet streng zijn in soort, ruim in aantal.
-13. **De grens uit stap 7 van de lesreeks is de grens op de site.** Twee tests, in deze volgorde: moet er een scherm getekend worden dat er nog niet is? Dan buiten (website, webshop, klantenportaal, boekingsmodule, nieuwe database), ook als het het brein zou gebruiken. Draait het op het brein? Dan binnen. Geen plafond. Zit een systeem dicht, dan tot aan de knop, en dat valt ook binnen. De assistent boven de AI-werknemers zit erin.
+13. **De grens uit stap 7 van de lesreeks is de grens op de site.** Twee tests, in deze volgorde: moet er een scherm getekend worden dat er nog niet is? Dan buiten (website, webshop, klantenportaal, boekingsmodule, nieuwe database), ook als het het brein zou gebruiken. Draait het op het brein? Dan binnen. Geen plafond. De assistent boven de AI-werknemers zit erin. **Gesloten of maatwerksoftware zonder koppeling of export valt buiten de implementatie** (Alex, 7 september, avond). De stap-7-prompt is hierop afgestemd: drie tests (scherm → buiten; geen koppeling en geen export → buiten, onbekend → vraagteken; brein → binnen).
 14. **Het veiligheidsverhaal staat op de site.** De vier regels die op elke AI-werknemer getest worden (niets zelf versturen tenzij de klant dat per taak kiest, afgeschermde sleutels, aantoonbaar uit het fundament, pauzeknop en kostenplafond) komen uit `finit-company/finit/skills/11.2-agent-smoke-test` en `12.1-dev-go-live`. Daarom is "verstuurd" overal "staat klaar" geworden waar het botste.
 15. **Het eigendomsverhaal wordt volledig verteld.** Tijdens het onderhoud beheert Finit de toegang (playbook §9); bij vertrek krijgt de klant code, gegevens en een dag begeleiding (exit-protocol). "Maandelijks opzegbaar" blijft staan.
 16. **Twee labels voor dezelfde knop.** "Start de lesreeks" in nav en hero, "Start zelf met je AI-fundament" op het Skool-blok. Bewust: kort waar het een knop is, met resultaat waar het een deur is.

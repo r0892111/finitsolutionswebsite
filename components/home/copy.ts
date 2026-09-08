@@ -110,8 +110,8 @@ export const OPLOSSING = {
 // Bewust de cover en niet een screenshot met ledental.
 export const SKOOL = {
   label: "De lesreeks op",
-  titel: "En alles wat repetitief is in jouw bedrijf",
-  body: "In de lesreeks breng je in kaart wat je team dagelijks doet. Daaruit rolt een lijst van wat AI eerst kan overnemen. Die lijst bouwen wij.",
+  titel: "Leg je AI-fundament",
+  body: "In de lesreeks draag je alles wat je over je bedrijf weet over aan een AI-brein: je processen, je klanten, je prijzen, je manier van werken. Daarna weet AI wat jij weet.",
   knop: "Start zelf met je AI-fundament",
   noot: "Online, in het Nederlands, op eigen tempo. € 95 voor de eerste 20 deelnemers.",
   coverAlt: "De cover van de lesreeks op Skool: een whiteboard met de negen stappen naar je AI-fundament.",
@@ -179,7 +179,7 @@ export const HOE = {
       tijd: "2 tot 4 weken",
       wie: "Wij",
       titel: "De bouw",
-      intro: "Wij maken van jouw lijst AI-werknemers die bij jou draaien. We bouwen alleen op een fundament dat jij gelegd hebt: zo weten we vooraf wat het kost.",
+      intro: "We bouwen op het fundament dat jij legt. Daarop zetten we de AI-werknemers die je cruciale dagelijkse processen overnemen.",
       punten: [
         "Alles op je lijst dat op je fundament draait, hoeveel het er ook zijn",
         "Gekoppeld aan de software die je al gebruikt",
@@ -211,10 +211,11 @@ export const HOE = {
   fundament: {
     h3: "Waarom je het fundament zelf legt",
     kort: "Jij kent je bedrijf het best. Daarom leg jij het, en bouwen wij alleen daarop.",
+    // Elke alinea heeft een korte kop, zodat de rij scanbaar is.
     alineas: [
-      "Toen we bij onze eerste klanten AI implementeerden, leerden we het op de harde manier: je moet eerst weten waar AI nuttig is, anders is er geen return on investment. En hoe meer we documenteerden tijdens die analyse, hoe beter het resultaat bij de bouw. Gewoon omdat er meer context was.",
-      "Andere bureaus sturen een dure consultant om die analyse voor jou te doen. Wij niet. Jij kent je bedrijf het allerbeste en je weet zelf waar je grootste frustraties en tijdvreters zitten. Daarom stelt de AI jou in de lesreeks dezelfde vragen die wij vroeger ter plaatse stelden, en schrijft hij alles op.",
-      "Het is een eenmalige inspanning. Je bespaart de kost van zo'n analysetraject, alle kennis blijft in eigen huis, en je leert onderweg de belangrijkste concepten van AI. Geen opleiding tot AI-expert, wel wat een zaakvoerder vandaag moet weten om de juiste keuzes te maken. Zo maak je je bedrijf toekomstbestendig. Elke automatisering die we daarna bouwen, vertrekt van diezelfde kennis.",
+      { kop: "Wat we zelf leerden", tekst: "Toen we bij onze eerste klanten AI implementeerden, leerden we het op de harde manier: je moet eerst weten waar AI nuttig is, anders is er geen return on investment. En hoe meer we documenteerden tijdens die analyse, hoe beter het resultaat bij de bouw. Gewoon omdat er meer context was." },
+      { kop: "Waarom jij, en niet een consultant", tekst: "Andere bureaus sturen een dure consultant om die analyse voor jou te doen. Wij niet. Jij kent je bedrijf het allerbeste en je weet zelf waar je grootste frustraties en tijdvreters zitten. Daarom stelt de AI jou in de lesreeks dezelfde vragen die wij vroeger ter plaatse stelden, en schrijft hij alles op." },
+      { kop: "Eén keer, en het blijft van jou", tekst: "Het is een eenmalige inspanning. Je bespaart de kost van zo'n analysetraject, alle kennis blijft in eigen huis, en je leert onderweg de belangrijkste concepten van AI. Geen opleiding tot AI-expert, wel wat een zaakvoerder vandaag moet weten om de juiste keuzes te maken. Zo maak je je bedrijf toekomstbestendig. Elke automatisering die we daarna bouwen, vertrekt van diezelfde kennis." },
     ],
     lijstTitel: "Je fundament is een map met tekstbestanden in gewone taal. Daarin komt:",
     lijst: [
@@ -238,19 +239,32 @@ export const HOE = {
     h3: "Wat je koopt voor € 4.500",
     kort: "Eén vaste prijs, hoeveel AI-werknemers er ook uit je fundament komen. En wat er gebeurt voor één ervan live mag.",
     intro: "Eén vaste prijs voor alles wat er uit je fundament komt aan werk dat een AI-werknemer kan overnemen. Hoeveel het er ook zijn. De grens ligt niet bij het aantal, maar bij het soort werk.",
+    // Drie cijfers bovenaan de rij, dan pas de lijsten.
+    feiten: [
+      { getal: "€ 4.500", label: "vaste prijs, excl. btw, hoeveel AI-werknemers er ook uit je fundament komen" },
+      { getal: "30", label: "dagen nazorg, tot het zeven dagen na elkaar zonder één bugmelding draait" },
+      { getal: "10", label: "controles voor een AI-werknemer bij jou live mag" },
+    ],
     welTitel: "Zit erin",
     wel: [
-      "Elke AI-werknemer die op je fundament draait: mails sorteren en beantwoorden, offertes klaarzetten en opvolgen, documenten opmaken, gegevens van het ene systeem naar het andere brengen, een ochtendbriefing, een melding als er iets binnenkomt dat niet mag blijven liggen",
+      "Elke AI-werknemer die op je fundament draait",
       "De koppelingen met de software die je al gebruikt",
       "De assistent waarmee je al je AI-werknemers aanstuurt",
-      "30 dagen nazorg, tot het zeven dagen na elkaar zonder één bugmelding draait",
+    ],
+    voorbeeldenTitel: "Bijvoorbeeld",
+    voorbeelden: [
+      "Mails sorteren en beantwoorden",
+      "Offertes klaarzetten en opvolgen",
+      "Documenten opmaken",
+      "Gegevens van het ene systeem naar het andere",
+      "Een ochtendbriefing",
+      "Een melding als iets niet mag blijven liggen",
     ],
     nietTitel: "Zit er niet in",
     niet: [
       "Nieuwe software met een scherm dat er nog niet is: een website, een webshop, een klantenportaal, een boekingsmodule, een database die je nog niet hebt. Dat is een apart traject met een aparte prijs.",
-      "Planning zelf, want dat is een roostersysteem. Wel het bericht naar de klant zodra er iets verzet wordt.",
+      "Gesloten of maatwerksoftware zonder koppeling of export. Die valt buiten de scope van de implementatie in dit pakket.",
     ],
-    dicht: "Zit een systeem dicht, zoals sommige sectorpakketten of overheidsportalen, dan bouwen we tot aan de knop: alles verzameld en opgemaakt, het laatste klikken doe jij. Dat hoor je in de lesreeks, niet achteraf.",
     // De regels die op elke AI-werknemer getest worden voor hij live gaat.
     veiligTitel: "Wat er gebeurt voor hij bij jou mag draaien",
     veilig: [
@@ -265,6 +279,7 @@ export const HOE = {
   onderhoud: {
     h3: "Wat de € 90 per maand dekt",
     kort: "Hosting, bewaking, backups en updates. En wat er van jou blijft als je stopt.",
+    feit: { getal: "€ 90", label: "per maand, excl. btw. Maandelijks opzegbaar." },
     intro: "Een AI-systeem zonder onderhoud verschuift binnen zes maanden van werkend naar wankel. Modellen veranderen, koppelingen wijzigen, je bedrijf schuift op. Daarom houden wij het draaiend.",
     punten: [
       { titel: "Hosting bij ons", body: "Je AI-werknemers draaien op onze servers. Jij hoeft niets te installeren of te beheren." },
