@@ -42,7 +42,7 @@ export function ThankYouLanding() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-[#1A2D63]">
+    <div className="hp min-h-screen bg-white text-[#3D4766]">
       {/* Lichte kop: alleen het logo en een weg terug. */}
       <header className="border-b border-[#E3E7EF]">
         <div className={`${CONTAINER} flex items-center justify-between py-4`}>
@@ -79,7 +79,6 @@ export function ThankYouLanding() {
               <h2 className={H2}>
                 {BEDANKT.h2[0]} <Onder>{BEDANKT.h2[1]}</Onder>
               </h2>
-              <p className={`mt-5 ${LEAD}`}>{BEDANKT.intro}</p>
             </div>
 
             <ol className="mt-12 grid gap-5 md:grid-cols-3 lg:gap-6">

@@ -1,20 +1,4 @@
-import { Bricolage_Grotesque, Schibsted_Grotesk } from 'next/font/google';
-
-// Twee lettertypes: Bricolage Grotesque voor koppen en prijzen (karakter),
-// Schibsted Grotesk voor lopende tekst en knoppen (rustig, goed leesbaar).
-// next/font slaat ze bij de build lokaal op, dus geen extern font-verzoek in de browser.
-const bricolage = Bricolage_Grotesque({
-  subsets: ['latin', 'latin-ext'],
-  display: 'swap',
-  axes: ['opsz'],
-  variable: '--font-bricolage',
-});
-
-const schibsted = Schibsted_Grotesk({
-  subsets: ['latin', 'latin-ext'],
-  display: 'swap',
-  variable: '--font-schibsted',
-});
+import { bricolage, schibsted } from '@/lib/fonts';
 
 export default function HomeLayout({
   children,

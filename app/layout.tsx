@@ -2,6 +2,8 @@ import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
 
+import { bricolage, schibsted } from '@/lib/fonts';
+
 import { Toaster } from '@/components/ui/toaster';
 import Script from 'next/script';
 import { ConsentProvider } from '@/contexts/consent-context';
@@ -231,7 +233,7 @@ export default function RootLayout({
         
         {/* Leadinfo is loaded conditionally by ConsentProvider when analytics consent is granted */}
       </head>
-      <body className={`${inter.className} ${montserrat.variable} ${generalSans.variable}`}>
+      <body className={`${inter.className} ${montserrat.variable} ${generalSans.variable} ${schibsted.variable} ${bricolage.variable}`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe 

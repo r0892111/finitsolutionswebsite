@@ -515,7 +515,6 @@ export const BEDANKT = {
   h1: ["Bedankt voor je", "aanvraag"],
   sub: "Je gegevens zijn goed aangekomen. We nemen zo snel mogelijk contact met je op, meestal binnen 24 uur.",
   h2: ["Wat gebeurt er", "nu?"],
-  intro: "Drie stappen, in die volgorde. Zo weet je precies wat je mag verwachten.",
   stappen: [
     {
       nummer: "01",
