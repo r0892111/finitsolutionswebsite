@@ -11,7 +11,7 @@
  *
  * Nodige env-variabelen in Netlify:
  *   BREVO_API_KEY      (verplicht) — Brevo → SMTP & API → API Keys
- *   CONTACT_TO_EMAIL   (optioneel) — ontvanger,  standaard alex@finitsolutions.be
+ *   CONTACT_TO_EMAIL   (optioneel) — ontvanger,  standaard contact@finitsolutions.be
  *   CONTACT_FROM_EMAIL (optioneel) — afzender,   moet een geverifieerde Brevo-sender zijn
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
@@ -20,7 +20,9 @@ const JSON_HEADERS = { "Content-Type": "application/json" };
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const TO_EMAIL = process.env.CONTACT_TO_EMAIL || "alex@finitsolutions.be";
+// contact@ is een gedeeld adres, zodat alle vennoten de aanvragen binnenkrijgen
+// en een lead niet in één persoonlijke mailbox blijft hangen.
+const TO_EMAIL = process.env.CONTACT_TO_EMAIL || "contact@finitsolutions.be";
 const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || "alex@finitsolutions.be";
 
 function json(statusCode: number, body: unknown) {
