@@ -56,6 +56,13 @@
   status = 200
   force = true
 
+# Het contactformulier van de site. Verving de n8n-webhook die stilviel.
+[[redirects]]
+  from = "/api/contact-submit"
+  to = "/.netlify/functions/contact-submit"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/api/lead-magnet/start"
   to = "/.netlify/functions/lead-magnet-start"

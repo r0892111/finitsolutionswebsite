@@ -53,49 +53,67 @@ function DotLoaderOverlay() {
 // SHARED FORM SUBMIT LOGIC
 // ============================================
 
-const WEBHOOK_URL = "https://alexfinit.app.n8n.cloud/webhook/website-contact-form";
+// De inzending gaat naar onze eigen Netlify Function (zie
+// netlify/functions/contact-submit.ts), niet meer naar n8n. Die webhook was
+// uitgevallen en de fout werd hier ingeslikt, waardoor leads stil verdwenen.
+const SUBMIT_URL = "/api/contact-submit";
+const TIMEOUT_MS = 10000;
 
 function useFormSubmit() {
   const router = useRouter();
   const pathname = usePathname();
   const [showLoader, setShowLoader] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const submitForm = useCallback(
-    (formData: ContactFormData) => {
+    async (formData: ContactFormData) => {
       const sourceUrl =
         pathname === "/"
           ? "https://finitsolutions.be"
           : `https://finitsolutions.be${pathname}`;
 
-      // Track form submission
       pushEvent("form_submit", { location: sourceUrl });
+      setError(null);
 
-      // Send to n8n webhook (fire-and-forget)
-      fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          naam: formData.naam,
-          telefoonnummer: formData.telefoonnummer,
-          email: formData.email,
-          bron: sourceUrl,
-        }),
-      }).catch(() => {
-        // silently ignore - don't block the user flow
-      });
+      // Traag netwerk mag de bezoeker niet eindeloos laten wachten.
+      const timer = new AbortController();
+      const timeout = setTimeout(() => timer.abort(), TIMEOUT_MS);
 
-      // Show full-screen dot loader
+      try {
+        const res = await fetch(SUBMIT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: timer.signal,
+          body: JSON.stringify({
+            naam: formData.naam,
+            telefoonnummer: formData.telefoonnummer,
+            email: formData.email,
+            bron: sourceUrl,
+          }),
+        });
+        if (!res.ok) throw new Error(`status ${res.status}`);
+      } catch {
+        // Bewust zichtbaar: als de aanvraag niet aankomt moet de bezoeker
+        // dat weten en een alternatief krijgen, in plaats van een
+        // bedankpagina te zien voor een mail die nooit vertrok.
+        setError(
+          "Het versturen lukte niet. Probeer het opnieuw of mail ons rechtstreeks op alex@finitsolutions.be."
+        );
+        return false;
+      } finally {
+        clearTimeout(timeout);
+      }
+
       setShowLoader(true);
-
-      // Redirect to /bedankt/ after a brief delay
       setTimeout(() => {
         router.push("/bedankt");
       }, 800);
+      return true;
     },
     [router, pathname]
   );
 
-  return { showLoader, submitForm };
+  return { showLoader, submitForm, error };
 }
 
 // ============================================
@@ -109,12 +127,13 @@ export function EmbeddedContactForm() {
     email: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { showLoader, submitForm } = useFormSubmit();
+  const { showLoader, submitForm, error } = useFormSubmit();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    submitForm(formData);
+    const ok = await submitForm(formData);
+    if (!ok) setIsSubmitting(false);
   };
 
   if (showLoader) {
@@ -189,6 +208,12 @@ export function EmbeddedContactForm() {
         />
       </div>
 
+      {error && (
+        <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700 font-instrument">
+          {error}
+        </p>
+      )}
+
       {/* Submit */}
       <button
         type="submit"
@@ -216,7 +241,7 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
     email: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { showLoader, submitForm } = useFormSubmit();
+  const { showLoader, submitForm, error } = useFormSubmit();
 
   // Lock body scroll when open
   useEffect(() => {
@@ -249,10 +274,11 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
     }
   }, [isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    submitForm(formData);
+    const ok = await submitForm(formData);
+    if (!ok) setIsSubmitting(false);
   };
 
   if (!isOpen) return null;
@@ -365,6 +391,12 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
                 placeholder="+32 495 123 456"
               />
             </div>
+
+            {error && (
+              <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700 font-instrument">
+                {error}
+              </p>
+            )}
 
             {/* Submit */}
             <button
