@@ -24,10 +24,3 @@ export const VAT_NUMBER = "BE1036433716";
  * publiek staat. Tot dan landt de knop op de Skool-startpagina.
  */
 export const SKOOL_URL = "https://www.skool.com/finit-solutions-3358";
-
-/**
- * n8n-flow achter "Plan een gesprek". De veldnamen `naam`, `telefoonnummer`
- * en `email` blijven zoals de flow ze verwacht.
- */
-export const CONTACT_WEBHOOK_URL =
-  "https://alexfinit.app.n8n.cloud/webhook/website-contact-form";

@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { ArrowRight, BellRing, BookOpen, Calendar, ChevronDown, ChevronRight, Euro, KeyRound, Layers, Linkedin, Lock, Unlock, Mail, MailCheck, Menu, Pause, Phone, Plus, Server, ShieldCheck, Workflow, X } from "lucide-react";
+import { ArrowRight, BellRing, BookOpen, Calendar, ChevronDown, ChevronRight, Euro, KeyRound, Layers, Lock, Unlock, Mail, MailCheck, Menu, Pause, Plus, Server, ShieldCheck, Workflow, X } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { ContactFormPopup, useContactForm } from "@/components/contact-form-popup";
-import { useConsent } from "@/contexts/consent-context";
-import { CONTACT_EMAIL, INSTAGRAM_URL, LINKEDIN_URL, SKOOL_URL, VAT_NUMBER } from "@/lib/finit-links";
+import { CONTACT_EMAIL, SKOOL_URL } from "@/lib/finit-links";
 import { Brein3D } from "./brein-3d";
+import { SiteFooter } from "./site-footer";
+import { CONTAINER, H2, H3, KOP, LEAD, LesreeksKnop, Onder, Vinkje, trackLesreeks } from "./ui";
 import {
   CTA_GESPREK_KORT,
   CTA_KENNISMAKING,
@@ -40,39 +41,11 @@ import {
  * velden, zelfde /bedankt-pagina). De lesreeks-knop gaat rechtstreeks naar Skool.
  */
 
-const CONTAINER = "mx-auto w-full max-w-[74rem] px-5 sm:px-8";
-const H2 = "hp-display text-balance text-[2rem] font-bold leading-[1.06] text-[#1A2D63] sm:text-[2.5rem] lg:text-[2.9rem]";
-const LEAD = "text-[1.0625rem] leading-[1.65] text-[#3D4766] sm:text-[1.125rem]";
-const H3 = "hp-display hp-display-sm text-[1.3rem] font-semibold leading-[1.2] text-[#1A2D63]";
-/** Gecentreerde sectiekop met intro. */
-const KOP = "mx-auto max-w-[44rem] text-center";
 /** Eén icoon per pijler in "Waarom Finit", in de volgorde van WAAROM.pijlers. */
 const PIJLER_ICONEN = [Layers, Workflow, Euro, KeyRound];
 /** Iconen bij de vier veiligheidsregels (stap 02) en de vier onderdelen van het onderhoud (stap 03), in volgorde van de copy. */
 const VEILIG_ICONEN = [MailCheck, Lock, BookOpen, Pause];
 const ONDERHOUD_ICONEN = [Server, BellRing, ShieldCheck, Unlock];
-
-/** De handgetekende streep onder het laatste woord van een kop, zoals op de vorige site. */
-function Onder({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="hp-onder">
-      {children}
-      <svg viewBox="0 0 200 20" preserveAspectRatio="none" fill="none" aria-hidden="true">
-        <path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke="#1A2D63" strokeOpacity="0.15" strokeWidth="10" strokeLinecap="round" />
-      </svg>
-    </span>
-  );
-}
-
-function Vinkje({ donker = false, wit = false }: { donker?: boolean; wit?: boolean }) {
-  return (
-    <span className={`hp-check mt-0.5 ${donker ? "hp-check--donker" : ""} ${wit ? "hp-check--wit" : ""}`} aria-hidden="true">
-      <svg width="11" height="9" viewBox="0 0 11 9">
-        <path d="M1 4.5l3 3L10 1" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
-  );
-}
 
 /** Tegenhanger van het vinkje, voor wat er níét in zit. */
 function Kruisje() {
@@ -82,17 +55,6 @@ function Kruisje() {
         <path d="M1.5 1.5l6 6M7.5 1.5l-6 6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
       </svg>
     </span>
-  );
-}
-
-const trackLesreeks = (location: string) => pushEvent("cta_click", { cta_label: "lesreeks", location });
-
-function LesreeksKnop({ location, size = "lg", className = "", variant = "primary" }: { location: string; size?: "lg" | "md"; className?: string; variant?: "primary" | "light" | "secondary" }) {
-  return (
-    <a href={SKOOL_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackLesreeks(location)} className={`hp-btn hp-btn--${variant} hp-btn--${size} ${className}`}>
-      {CTA_LESREEKS}
-      <ArrowRight className="h-4 w-4" aria-hidden="true" />
-    </a>
   );
 }
 
@@ -269,7 +231,6 @@ export function HomePage() {
     document.getElementById("stap-details")?.scrollIntoView({ behavior: stil ? "auto" : "smooth", block: "start" });
   };
   const { isOpen, openForm, closeForm } = useContactForm();
-  const { openSettings } = useConsent();
 
   // Navigatiebalk: doorzichtig bovenaan, wit met wazige rand zodra je scrolt (zoals vroeger).
   useEffect(() => {
@@ -854,59 +815,7 @@ export function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Footer (opbouw van de vorige homepage)                             */}
       {/* ---------------------------------------------------------------- */}
-      <footer className="bg-[#1A2D63] text-white/75">
-        <div className={`${CONTAINER} py-14 sm:py-16`}>
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] lg:gap-16">
-            <div>
-              <h2 className="hp-display text-balance text-[1.75rem] font-bold leading-[1.1] text-white sm:text-[2.1rem]">{FOOTER.slotTitel}</h2>
-              <p className="mt-3 max-w-[32rem] text-[1rem] leading-[1.65] text-white/70">{FOOTER.slotTekst}</p>
-              <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-                <LesreeksKnop location="footer_cta" variant="light" className="w-full sm:w-auto" />
-                <a href={`mailto:${CONTACT_EMAIL}`} onClick={() => pushEvent("contact_click", { method: "email", location: "footer_cta" })} className="inline-flex items-center gap-2 text-[0.9375rem] text-white/80 transition-colors hover:text-white">
-                  <Mail className="h-4 w-4" aria-hidden="true" />
-                  {CONTACT_EMAIL}
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-[0.8125rem] font-medium uppercase tracking-[0.08em] text-white/65">{FOOTER.contactTitel}</h3>
-              <ul className="mt-4 space-y-3 text-[0.9375rem]">
-                <li className="flex items-start gap-3">
-                  <Phone className="mt-1 h-4 w-4 shrink-0 text-white/65" aria-hidden="true" />
-                  <div className="flex flex-col">
-                    {FOOTER.telefoons.map((t) => (
-                      <a key={t.link} href={t.link} onClick={() => pushEvent("contact_click", { method: "phone", location: "footer" })} className="transition-colors hover:text-white">{t.nummer}</a>
-                    ))}
-                  </div>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 shrink-0 text-white/65" aria-hidden="true" />
-                  <a href={`mailto:${CONTACT_EMAIL}`} onClick={() => pushEvent("contact_click", { method: "email", location: "footer_contact" })} className="transition-colors hover:text-white">{CONTACT_EMAIL}</a>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Linkedin className="h-4 w-4 shrink-0 text-white/65" aria-hidden="true" />
-                  <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" onClick={() => pushEvent("contact_click", { method: "linkedin", location: "footer_contact" })} className="transition-colors hover:text-white">LinkedIn</a>
-                  <span className="text-white/30" aria-hidden="true">·</span>
-                  <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" onClick={() => pushEvent("contact_click", { method: "instagram", location: "footer_contact" })} className="transition-colors hover:text-white">Instagram</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-12 flex flex-col items-start gap-5 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-            <Image src="/finit-logo-white.svg" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto" />
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.8125rem] text-white/60">
-              <span>BTW: {VAT_NUMBER}</span>
-              {FOOTER.links.map((l) => (
-                <a key={l.href} href={l.href} className="transition-colors hover:text-white">{l.label}</a>
-              ))}
-              <button type="button" onClick={openSettings} className="underline underline-offset-2 transition-colors hover:text-white">{FOOTER.cookies}</button>
-            </div>
-          </div>
-          <p className="mt-6 text-[0.8125rem] text-white/55">© {new Date().getFullYear()} Finit Solutions</p>
-        </div>
-      </footer>
+      <SiteFooter />
 
       <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </div>

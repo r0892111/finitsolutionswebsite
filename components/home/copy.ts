@@ -507,6 +507,49 @@ export const SLOT = {
   lesreeksLink: "Of leg meteen je fundament in de lesreeks",
 };
 
+// De /bedankt-pagina na het formulier. De drie stappen volgen het nieuwe model
+// (kennismaking → jij legt je fundament in de lesreeks → wij bouwen), zodat de
+// pagina hetzelfde verhaal vertelt als de homepage in plaats van het oude
+// "wij komen langs met een voorstel".
+export const BEDANKT = {
+  h1: ["Bedankt voor je", "aanvraag"],
+  sub: "Je gegevens zijn goed aangekomen. We nemen zo snel mogelijk contact met je op, meestal binnen 24 uur.",
+  h2: ["Wat gebeurt er", "nu?"],
+  intro: "Drie stappen, in die volgorde. Zo weet je precies wat je mag verwachten.",
+  stappen: [
+    {
+      nummer: "01",
+      wie: "Wij",
+      tijd: "binnen 24 uur",
+      titel: "We nemen contact op",
+      body: "Een kort gesprek van een halfuur over hoe je bedrijf vandaag werkt en waar je tijd verliest. Geen verkooppraatje, wel een eerlijke inschatting of wij iets voor je kunnen betekenen.",
+    },
+    {
+      nummer: "02",
+      wie: "Jij, met de AI",
+      tijd: "2 tot 3 weken",
+      titel: "Je legt je fundament",
+      body: "In de lesreeks stelt de AI jou vragen over je processen, je klanten en je prijzen. Jij praat, hij schrijft. Je eindigt met een lijst van wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
+    },
+    {
+      nummer: "03",
+      wie: "Wij",
+      tijd: "2 tot 4 weken",
+      titel: "Wij bouwen wat op die lijst staat",
+      body: "Alles op je lijst dat op je fundament draait, voor één vaste prijs van € 4.500. Gekoppeld aan de software die je al gebruikt, en getest voor het live gaat.",
+    },
+  ],
+  // De lesreeks is de stap die de bezoeker vandaag al zelf kan zetten.
+  nu: {
+    titel: "Je hoeft niet op ons te wachten",
+    body: "Stap 02 kan je vandaag al starten. Hoe verder je fundament staat wanneer we bellen, hoe concreter het gesprek.",
+    noot: "Online, in het Nederlands, op eigen tempo. € 95 voor de eerste 20 deelnemers.",
+  },
+  vragenTitel: "Vragen in de tussentijd?",
+  belLabel: "Bel gerust op",
+  terug: "Terug naar de homepage",
+};
+
 // Footer (vorige homepage, zonder plaatsnaam)
 export const FOOTER = {
   slotTitel: "Klaar om je bedrijf te automatiseren?",
