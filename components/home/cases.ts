@@ -47,11 +47,10 @@ export const CASE_LIJST: Case[] = [
     ],
     koppelingen: ["Mailbox", "Webshop", "Kennisbank"],
     uitdaging: [
-      "Een webshop verwerkte elke dag orders, supportmails, trackingvragen en betalingsopvolging. Alles kwam binnen in één mailbox, en alles ging met de hand.",
-      "Die mailbox werd de bottleneck van het bedrijf. Hoe meer bestellingen, hoe meer tijd er naar mails ging in plaats van naar groei.",
+      "Een webshop verwerkte dagelijks manueel orders, supportmails, trackingvragen en betalingsopvolging. De mailbox werd de bottleneck van het bedrijf.",
     ],
     aanpak: {
-      intro: "We koppelden de mailbox aan de webshop en aan een kennisbank met de antwoorden op de vragen die altijd terugkomen.",
+      intro: "We bouwden een intelligent mailsysteem dat inkomende mails automatisch categoriseert, standaardvragen verwerkt en bestellingen voorbereidt voor controle.",
       stappen: [
         { titel: "Sorteren", tekst: "Elke binnenkomende mail krijgt een categorie: bestelling, levering, retour of iets anders." },
         { titel: "Beantwoorden", tekst: "Standaardvragen, zoals waar een pakje blijft, krijgen een antwoord op basis van de gegevens in de webshop." },
@@ -60,9 +59,9 @@ export const CASE_LIJST: Case[] = [
       ],
     },
     resultaat: [
-      "Standaardorders verwerkt in 2 minuten in plaats van 20",
-      "60 tot 70% van de supportvragen automatisch beantwoord",
-      "Veel minder repetitief mailwerk",
+      "Standaardorders verwerkt in 2 minuten i.p.v. 20",
+      "60 tot 70% van supportvragen automatisch verwerkt",
+      "Grote vermindering van repetitief mailwerk",
       "Meer tijd voor groei en klantopvolging",
     ],
   },
@@ -107,11 +106,10 @@ export const CASE_LIJST: Case[] = [
     ],
     koppelingen: ["Website", "WhatsApp", "Mailbox", "Agenda's", "Facturatie"],
     uitdaging: [
-      "Een gidsbedrijf met twintig gidsen kreeg boekingen binnen via de website, via WhatsApp en via mail. Er was geen centraal overzicht.",
-      "Planning, opvolging en facturatie gebeurden volledig met de hand. Elke boeking betekende heen en weer berichten met de klant en met de gids.",
+      "Boekingen kwamen binnen via website, WhatsApp en mail, zonder centraal overzicht. Planning, opvolging en facturatie gebeurden volledig manueel.",
     ],
     aanpak: {
-      intro: "We bouwden één systeem dat alle aanvragen samenbrengt en de rest van het proces overneemt.",
+      intro: "We bouwden één centraal systeem dat aanvragen automatisch verwerkt, gidsen inplant, agenda's synchroniseert en opvolging automatiseert.",
       stappen: [
         { titel: "Binnenkomen", tekst: "Elke boeking, uit elk kanaal, komt op één plek binnen." },
         { titel: "Inplannen", tekst: "De juiste gids wordt gecontacteerd en ingepland, en de agenda's blijven gelijk." },
@@ -120,10 +118,10 @@ export const CASE_LIJST: Case[] = [
       ],
     },
     resultaat: [
-      "Alle communicatie en planning op één plek",
+      "Alle communicatie en planning gecentraliseerd",
       "Quasi geen manuele administratie meer",
       "Sneller opvolgen van klanten en gidsen",
-      "Volledige focus op ondernemen",
+      "Meer focus op ondernemen i.p.v. operationeel werk",
     ],
   },
   {
@@ -167,11 +165,10 @@ export const CASE_LIJST: Case[] = [
     ],
     koppelingen: ["Mailbox", "Agenda", "Cv's"],
     uitdaging: [
-      "Een recruitmentbureau verwerkte sollicitaties volledig met de hand: cv's lezen, kandidaten mailen, gesprekken plannen.",
-      "Kandidaten wachtten daardoor dagen op een eerste reactie.",
+      "Een recruitmentbureau verwerkte sollicitaties handmatig: cv's lezen, kandidaten mailen, plannen.",
     ],
     aanpak: {
-      intro: "We bouwden een AI-werknemer die elke sollicitatie opvangt zodra ze binnenkomt.",
+      intro: "Zijn AI-systeem screent binnenkomende cv's, plant automatisch een kennismakingsgesprek in en houdt kandidaten op de hoogte.",
       stappen: [
         { titel: "Screenen", tekst: "Binnenkomende cv's worden gelezen en naast de vacature gelegd." },
         { titel: "Inplannen", tekst: "Past de kandidaat, dan wordt er automatisch een kennismakingsgesprek ingepland." },
@@ -179,9 +176,8 @@ export const CASE_LIJST: Case[] = [
       ],
     },
     resultaat: [
-      "Van dagen wachten naar opvolging op dezelfde dag",
-      "Geen extra personeel nodig",
-      "Minder administratie voor het team",
+      "Van dagen wachten naar same-day opvolging",
+      "Zonder extra personeel",
     ],
   },
   {

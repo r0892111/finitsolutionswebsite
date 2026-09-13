@@ -32,8 +32,8 @@ import {
 } from "./copy";
 
 /**
- * De homepage: hero → de teamfoto met hoe we werken → herken jij dit (met wat
- * een AI-werknemer doet en de tool-logo's) → de lesreeks → hoe wij werken
+ * De homepage: hero → de teamfoto met hoe we werken → herken jij dit (naast wat
+ * AI overneemt, met de tool-logo's) → de lesreeks → hoe wij werken
  * (+ prijzen) → cases → vragen naast het formulier. Alle tekst staat in
  * ./copy.ts, de cases in ./cases.ts.
  *
@@ -425,7 +425,7 @@ export function HomePage() {
               </div>
               <figcaption className="p-6 sm:absolute sm:bottom-5 sm:left-5 sm:max-w-[24rem] sm:rounded-[18px] sm:bg-white/95 sm:shadow-[0_20px_44px_-24px_rgba(26,45,99,0.55)] sm:backdrop-blur lg:bottom-8 lg:left-8 lg:max-w-[27rem] lg:p-7">
                 <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-[#6C7590]">{AANPAK_FOTO.label}</p>
-                <p className="hp-display hp-display-sm mt-2 text-[1.3rem] font-semibold leading-[1.2] text-[#1A2D63] lg:text-[1.55rem]">{AANPAK_FOTO.titel}</p>
+                <p className="hp-display hp-display-sm mt-2 text-[1.2rem] font-semibold leading-[1.25] text-[#1A2D63] lg:text-[1.35rem]">{AANPAK_FOTO.titel}</p>
                 <p className="mt-2.5 text-[0.9375rem] leading-[1.55] text-[#3D4766]">{AANPAK_FOTO.tekst}</p>
               </figcaption>
             </figure>
@@ -433,7 +433,7 @@ export function HomePage() {
         </div>
 
         {/* -------------------------------------------------------------- */}
-        {/* 2. Herken jij dit? Klusjes, met wat een AI-werknemer ermee doet */}
+        {/* 2. Herken jij dit? naast wat AI overneemt                      */}
         {/* -------------------------------------------------------------- */}
         <HerkenSectie onGesprek={() => gesprek("recognition_calendly", "recognition")} />
 
