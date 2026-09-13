@@ -205,3 +205,14 @@ Branch `copy/homepage-optimalisatie`, 7 september 2026, bovenop tag `homepage-re
 
 - `npx tsc --noEmit` schoon, `npm run build` slaagt.
 - Screenshots op 1440×900 (vouw), 1440 volledige pagina en 390 volledige pagina, via `scripts/homepage/shot.mjs` op de statische `out/`-map. "Herken jij dit?" staat nog boven de vouw.
+
+## Derde ronde: de review van Karel en Alex (13 september 2026)
+
+Transcript in `yap.md`. De beslissingen hieronder gaan voor op wat erboven staat waar ze botsen (punt 2, 4, 7, 14 en 17). Zie ook `components/home/README.md`.
+
+18. **Eén lijn: probleem → oplossing → hoe → knop.** Hero, foto met één statement, "Herken jij dit?" (drie punten met een tekening), de oplossing (pitch in drie zinnen), de drie stappen als werkwoorden (Opleiden, Bouwen, Onderhouden), het Skool-blok, de oplossingen die we het vaakst bouwen, FAQ naast de contactkaart. Geen voorbeelden of cijfers buiten de oplossingen.
+19. **De tweede knop is "Neem contact met ons op"** en gaat naar `/contact` (formulier met telefoonnummer, het nummer van Karel, de lesreeks). Er wordt geen kennismaking meer ingepland vanaf de homepage; de popup blijft alleen voor de landingspagina's. Het tweede telefoonnummer is uit de footer.
+20. **De cases zijn de meest voorkomende oplossingen**, zonder cijfers, sectoren, filter of aparte pagina's: er zijn nog geen referenties die dat dragen. `/cases` schrijft ze allemaal uit; `/cases/<slug>` stuurt door naar `/cases`. Zodra er echte klantcases zijn, komen die erbij.
+21. **Het brein is rustig en algemeen.** Geen pulsen, gloed of aanvliegen; een trage draai rond één as; scherp op elke pixeldichtheid (de pixelverhouding wordt bij elke meting opnieuw gelezen). Hover opent een pagina als tekstbestand. Woorden voor elk dienstenbedrijf (Jouw bedrijf, Sales, Offertes, Klanten, Prijzen, Planning, Agenda, Facturatie, Boekhouding, Service, Klachten, Mailbox, WhatsApp, Leveranciers, Wie doet wat, Werkwijze). Geen onderschrift.
+22. **Elk blok op één scherm** van een 13/14-inch laptop: basis 15 px, vanaf 1024 px `clamp(14px, 1vw, 16px)`, kleinere koppen en sectiepaddings.
+23. **Nog na te lezen door de oprichters** (staat als voorstel in `copy.ts` en `cases.ts`, aangeduid met "nieuw (review 13/09)"): het YC-citaat letterlijk nakijken, de drie herkenpunten, de pitch, kop en intro van de stappen, de panelen van stap 1 (tweede alinea), 2 en 3 (twee nieuwe beloftes: voorrang bij vragen, elke maand een uur strategie), de acht oplossingen, de FAQ-koppen, de tooltips van het brein, de contactteksten. Open: de accentkleur, een bewerkte foto, de video bij stap 1, "Vlaamse" of "Belgische" KMO's consequent.

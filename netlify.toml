@@ -69,6 +69,13 @@
   status = 200
   force = true
 
+# De pagina's per case (/cases/<slug>) bestaan niet meer sinds de review van
+# 13 september 2026: alle oplossingen staan uitgeschreven op /cases.
+[[redirects]]
+  from = "/cases/:slug"
+  to = "/cases/"
+  status = 301
+
 # Redirect rules for Next.js App Router with trailing slashes
 [[redirects]]
   from = "/*"

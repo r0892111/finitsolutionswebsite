@@ -1,234 +1,145 @@
 /**
- * De cases: één bestand, één lijst. Een nieuwe case toevoegen = een object
- * bovenaan CASE_LIJST zetten (nieuwste eerst). De homepage toont de eerste zes,
- * /cases toont alles, en elke case krijgt vanzelf een pagina op /cases/<slug>.
- * De leestijd wordt uitgerekend, die hoef je niet in te vullen.
+ * De oplossingen die we het vaakst bouwen: één bestand, één lijst. Geen
+ * klantcases met cijfers en sectoren (die referenties zijn er nog niet, review
+ * van 13 september 2026), wel de generieke oplossingen die elk bedrijf herkent.
+ * De homepage toont de eerste zes als kaart, /cases schrijft ze allemaal uit
+ * onder elkaar (anker /cases#<slug>). Een oplossing toevoegen = een object
+ * in OPLOSSING_LIJST; de volgorde hier is de volgorde op de site.
  *
- * `voorbeeld: true` is een voorbeeldcase met verzonnen inhoud, als opvulling tot
- * er echte zijn. Die krijgt het label "Voorbeeld" op de kaart en de pagina, en
- * wordt niet geïndexeerd door zoekmachines. Vervang of verwijder ze voor de site
- * live gaat met echte cases.
+ * Per oplossing: de titel is het resultaat in een paar woorden (dat is wat het
+ * grootst staat), `kort` één zin voor op de kaart, `vandaag` hoe het nu gaat,
+ * `metAI` wat de AI-werknemer doet, `jij` wat jij nog ziet of doet. `tools`
+ * zijn namen uit LOGOS in copy.ts (de ronde iconen op de kaart).
  *
- * De drie cases zonder dat label (webshop, gidsbedrijf, recruitmentbureau)
- * gebruiken alleen wat al op de site stond, in de resultatensectie en de FAQ.
- * Daarom noemen ze geen merken van software en geen extra cijfers.
- *
- * `tools` zijn namen uit LOGOS in copy.ts (met logo); `koppelingen` is vrije
- * tekst, voor systemen zonder logo of waarvan we het merk niet noemen.
+ * De teksten hergebruiken de zinnen van de vroegere cases waar dat kon; de
+ * rest is nieuw en lezen de oprichters na.
  */
 
 import { LOGOS, type Logo } from "./copy";
 
-export type Case = {
+export type Oplossing = {
   slug: string;
   titel: string;
-  sector: string;
-  samenvatting: string;
-  /** Het eerste cijfer staat groot op de kaart. */
-  cijfers: { getal: string; label: string }[];
-  tools?: string[];
-  koppelingen?: string[];
-  uitdaging: string[];
-  aanpak: { intro: string; stappen: { titel: string; tekst: string }[] };
-  resultaat: string[];
-  quote?: { tekst: string; naam: string };
-  voorbeeld?: boolean;
+  kort: string;
+  tools: string[];
+  vandaag: string;
+  metAI: string[];
+  jij: string;
 };
 
-export const CASE_LIJST: Case[] = [
+export const OPLOSSING_LIJST: Oplossing[] = [
   {
-    slug: "orderpipeline-webshop",
-    titel: "Volledige orderpipeline geautomatiseerd bij een webshop",
-    sector: "E-commerce",
-    samenvatting: "Orders, supportmails en trackingvragen liepen met de hand door één mailbox. Nu sorteert een AI-werknemer alles en zet hij bestellingen klaar ter controle.",
-    cijfers: [
-      { getal: "20 → 2 min", label: "per standaardorder" },
-      { getal: "60 tot 70%", label: "van de supportvragen automatisch beantwoord" },
+    slug: "offertes",
+    titel: "Offertes automatisch opgesteld",
+    kort: "Een aanvraag komt binnen, de offerte staat klaar met jouw prijzen.",
+    tools: ["Outlook", "WhatsApp", "Teamleader"],
+    vandaag: "Een aanvraag komt binnen in je mailbox. Je zoekt op wie het is, rekent de prijs uit, maakt de offerte op, zet ze in je CRM en mailt ze. 's Avonds, want overdag is er geen tijd.",
+    metAI: [
+      "Hij leest de aanvraag, uit mail of WhatsApp, en vraagt na wat ontbreekt.",
+      "Hij maakt de offerte op met jouw prijzen en marges, in je huisstijl.",
+      "Hij zet ze klaar in je CRM.",
+      "Na drie dagen geen antwoord? Dan staat er een opvolgmail klaar.",
     ],
-    koppelingen: ["Mailbox", "Webshop", "Kennisbank"],
-    uitdaging: [
-      "Een webshop verwerkte dagelijks manueel orders, supportmails, trackingvragen en betalingsopvolging. De mailbox werd de bottleneck van het bedrijf.",
-    ],
-    aanpak: {
-      intro: "We bouwden een intelligent mailsysteem dat inkomende mails automatisch categoriseert, standaardvragen verwerkt en bestellingen voorbereidt voor controle.",
-      stappen: [
-        { titel: "Sorteren", tekst: "Elke binnenkomende mail krijgt een categorie: bestelling, levering, retour of iets anders." },
-        { titel: "Beantwoorden", tekst: "Standaardvragen, zoals waar een pakje blijft, krijgen een antwoord op basis van de gegevens in de webshop." },
-        { titel: "Klaarzetten", tekst: "Bestellingen worden voorbereid in de webshop, zodat een medewerker alleen nog controleert." },
-        { titel: "Doorsturen", tekst: "Is een vraag te complex, dan gaat ze naar een echte medewerker." },
-      ],
-    },
-    resultaat: [
-      "Standaardorders verwerkt in 2 minuten i.p.v. 20",
-      "60 tot 70% van supportvragen automatisch verwerkt",
-      "Grote vermindering van repetitief mailwerk",
-      "Meer tijd voor groei en klantopvolging",
-    ],
+    jij: "Jij krijgt een melding dat de offerte klaarstaat, kijkt ze na en drukt op verzenden.",
   },
   {
-    slug: "offertes-installatiebedrijf",
-    titel: "Offertes op dezelfde dag de deur uit bij een installatiebedrijf",
-    sector: "Bouw & installatie",
-    samenvatting: "Aanvragen voor warmtepompen en ketels bleven dagen liggen. Nu staat de offerte klaar voor de zaakvoerder ze nakijkt, met de echte prijzen en marges.",
-    cijfers: [
-      { getal: "45 → 10 min", label: "per offerte" },
-      { getal: "Dezelfde dag", label: "antwoord op elke aanvraag" },
+    slug: "klantencontact",
+    titel: "Mails en WhatsApp automatisch beantwoord",
+    kort: "Standaardvragen krijgen meteen antwoord, de rest komt bij de juiste persoon.",
+    tools: ["Gmail", "WhatsApp", "Microsoft Teams"],
+    vandaag: "Elke dag dezelfde vragen: waar blijft mijn bestelling, wat kost dit, wanneer kunnen jullie komen. Wie ze beantwoordt, doet die dag niets anders.",
+    metAI: [
+      "Hij sorteert elke mail en elk bericht: vraag, bestelling, klacht of iets anders.",
+      "Standaardvragen beantwoordt hij meteen, met de juiste gegevens uit je systemen.",
+      "Wat hij niet zeker weet, zet hij klaar met een voorstel van antwoord.",
+      "Is een vraag te complex, dan gaat ze naar een echte medewerker.",
     ],
-    tools: ["Gmail", "WhatsApp", "Teamleader"],
-    uitdaging: [
-      "Een installatiebedrijf kreeg elke week tientallen aanvragen voor warmtepompen, ketels en airco's, via mail en via WhatsApp.",
-      "De zaakvoerder maakte elke offerte 's avonds zelf. Aanvragen bleven dagen liggen, en wie niet snel een prijs kreeg, vroeg er elders een.",
-    ],
-    aanpak: {
-      intro: "Op het fundament van het bedrijf, met de prijzen, marges en standaardopstellingen, bouwden we een AI-werknemer voor offertes.",
-      stappen: [
-        { titel: "Aanvraag lezen", tekst: "Uit elke mail of WhatsApp haalt hij wat de klant wil, en hij vraagt na wat ontbreekt." },
-        { titel: "Offerte opmaken", tekst: "Met de echte prijzen en marges, in de huisstijl, klaar in Teamleader." },
-        { titel: "Nakijken", tekst: "De zaakvoerder kijkt de offerte na en drukt op verzenden." },
-        { titel: "Opvolgen", tekst: "Na drie dagen geen antwoord? Dan staat er een opvolgmail klaar." },
-      ],
-    },
-    resultaat: [
-      "Een offerte in 10 minuten in plaats van 45",
-      "Elke aanvraag op dezelfde dag beantwoord",
-      "Geen enkele offerte meer zonder opvolging",
-    ],
-    voorbeeld: true,
+    jij: "Jij ziet alleen nog wat een mens moet zien.",
   },
   {
-    slug: "boekingen-planning-gidsbedrijf",
-    titel: "Boekingen, planning en facturatie op één plek bij een gidsbedrijf",
-    sector: "Toerisme",
-    samenvatting: "Twintig gidsen, drie kanalen en alles met de hand. Nu komt elke boeking op één plek binnen en wordt de juiste gids automatisch ingepland.",
-    cijfers: [
-      { getal: "3 → 1", label: "kanalen in één overzicht" },
-      { getal: "20", label: "gidsen automatisch ingepland" },
+    slug: "planning",
+    titel: "Planning die zichzelf vult",
+    kort: "Afspraken en werk worden ingepland op de vrije momenten van je team.",
+    tools: ["Google Agenda", "Outlook", "Teamleader"],
+    vandaag: "Een klant wil een afspraak. Je kijkt in twee agenda's, belt een collega, mailt drie voorstellen en wacht.",
+    metAI: [
+      "Hij kent de agenda's van je team en de regels van je planning.",
+      "Hij stelt de klant meteen vrije momenten voor en legt de afspraak vast.",
+      "Hij stuurt de bevestiging en de herinnering.",
+      "Verschuift er iets, dan past hij de rest aan.",
     ],
-    koppelingen: ["Website", "WhatsApp", "Mailbox", "Agenda's", "Facturatie"],
-    uitdaging: [
-      "Boekingen kwamen binnen via website, WhatsApp en mail, zonder centraal overzicht. Planning, opvolging en facturatie gebeurden volledig manueel.",
-    ],
-    aanpak: {
-      intro: "We bouwden één centraal systeem dat aanvragen automatisch verwerkt, gidsen inplant, agenda's synchroniseert en opvolging automatiseert.",
-      stappen: [
-        { titel: "Binnenkomen", tekst: "Elke boeking, uit elk kanaal, komt op één plek binnen." },
-        { titel: "Inplannen", tekst: "De juiste gids wordt gecontacteerd en ingepland, en de agenda's blijven gelijk." },
-        { titel: "Bevestigen", tekst: "Klant en gids krijgen automatisch een bevestiging." },
-        { titel: "Factureren", tekst: "De facturen worden automatisch opgesteld." },
-      ],
-    },
-    resultaat: [
-      "Alle communicatie en planning gecentraliseerd",
-      "Quasi geen manuele administratie meer",
-      "Sneller opvolgen van klanten en gidsen",
-      "Meer focus op ondernemen i.p.v. operationeel werk",
-    ],
+    jij: "Jij opent je agenda en ze staat vol.",
   },
   {
-    slug: "werkbon-tot-factuur-elektriciteitsbedrijf",
-    titel: "Van werkbon tot factuur zonder overtypen bij een elektriciteitsbedrijf",
-    sector: "Bouw & installatie",
-    samenvatting: "Werkbonnen kwamen als foto binnen op WhatsApp en werden op kantoor overgetypt. Nu wordt elke werkbon meteen een factuur ter controle.",
-    cijfers: [
-      { getal: "0 min", label: "overtypen per werkbon" },
-      { getal: "Dezelfde dag", label: "gefactureerd" },
-    ],
+    slug: "werkbon-en-facturatie",
+    titel: "Van werkbon tot factuur, zonder overtypen",
+    kort: "Een werkbon komt binnen, de factuur staat klaar in je boekhoudpakket.",
     tools: ["WhatsApp", "Odoo", "Google Drive"],
-    uitdaging: [
-      "Techniekers stuurden hun werkbonnen als foto via WhatsApp. Op kantoor typte iemand elke bon over in het boekhoudpakket.",
-      "Facturen vertrokken daardoor pas dagen na de klus, en bij het overtypen slopen er fouten in de uren en het materiaal.",
+    vandaag: "Techniekers sturen hun werkbonnen als foto via WhatsApp. Op kantoor typt iemand elke bon over in het boekhoudpakket. Facturen vertrekken pas dagen na de klus.",
+    metAI: [
+      "Hij leest de foto van de bon: klant, uren en materiaal.",
+      "Klopt het materiaal met de lijst? Ontbreekt er iets, dan vraagt hij het na bij de technieker.",
+      "Hij zet de factuur klaar in je boekhoudpakket, met de juiste tarieven.",
+      "De originele bon komt in de juiste map.",
     ],
-    aanpak: {
-      intro: "We koppelden WhatsApp aan het boekhoudpakket, met de materiaallijst en de tarieven uit het fundament.",
-      stappen: [
-        { titel: "Werkbon lezen", tekst: "Hij leest de foto van de bon: klant, uren en materiaal." },
-        { titel: "Nakijken", tekst: "Klopt het materiaal met de lijst? Ontbreekt er iets, dan vraagt hij het na bij de technieker." },
-        { titel: "Factuur klaarzetten", tekst: "In Odoo, met de juiste tarieven, ter controle." },
-        { titel: "Archiveren", tekst: "De originele bon komt in de juiste map in Google Drive." },
-      ],
-    },
-    resultaat: [
-      "Geen werkbonnen meer overtypen",
-      "Facturen op de dag van de klus",
-      "Minder fouten in uren en materiaal",
-    ],
-    voorbeeld: true,
+    jij: "Jij kijkt de factuur na en verstuurt ze op de dag van de klus.",
   },
   {
-    slug: "sollicitaties-recruitmentbureau",
-    titel: "Elke sollicitant dezelfde dag opgevolgd bij een recruitmentbureau",
-    sector: "Recruitment",
-    samenvatting: "Cv's lezen, kandidaten mailen en gesprekken plannen gebeurde met de hand. Nu screent een AI-werknemer elke sollicitatie en plant hij meteen een gesprek in.",
-    cijfers: [
-      { getal: "Dezelfde dag", label: "opvolging, in plaats van dagen wachten" },
-      { getal: "0", label: "extra personeel nodig" },
+    slug: "bestellingen",
+    titel: "Bestellingen automatisch verwerkt",
+    kort: "Elke bestelling komt op één plek binnen en wordt klaargezet ter controle.",
+    tools: ["Shopify", "WooCommerce", "Gmail"],
+    vandaag: "Orders, supportmails en trackingvragen lopen met de hand door één mailbox. De mailbox wordt de flessenhals van het bedrijf.",
+    metAI: [
+      "Elke binnenkomende mail krijgt een categorie: bestelling, levering, retour of iets anders.",
+      "Vragen zoals waar een pakje blijft, krijgen een antwoord op basis van de gegevens in de webshop.",
+      "Bestellingen worden voorbereid in de webshop.",
+      "Is een vraag te complex, dan gaat ze naar een echte medewerker.",
     ],
-    koppelingen: ["Mailbox", "Agenda", "Cv's"],
-    uitdaging: [
-      "Een recruitmentbureau verwerkte sollicitaties handmatig: cv's lezen, kandidaten mailen, plannen.",
-    ],
-    aanpak: {
-      intro: "Zijn AI-systeem screent binnenkomende cv's, plant automatisch een kennismakingsgesprek in en houdt kandidaten op de hoogte.",
-      stappen: [
-        { titel: "Screenen", tekst: "Binnenkomende cv's worden gelezen en naast de vacature gelegd." },
-        { titel: "Inplannen", tekst: "Past de kandidaat, dan wordt er automatisch een kennismakingsgesprek ingepland." },
-        { titel: "Informeren", tekst: "Kandidaten worden op de hoogte gehouden van elke stap." },
-      ],
-    },
-    resultaat: [
-      "Van dagen wachten naar same-day opvolging",
-      "Zonder extra personeel",
-    ],
+    jij: "Jij controleert alleen nog.",
   },
   {
-    slug: "leadopvolging-vastgoedkantoor",
-    titel: "Geen enkele lead meer vergeten bij een vastgoedkantoor",
-    sector: "Vastgoed",
-    samenvatting: "Aanvragen voor bezichtigingen kwamen 's avonds en in het weekend binnen en bleven liggen tot maandag. Nu krijgt elke lead binnen twee minuten antwoord.",
-    cijfers: [
-      { getal: "2 min", label: "tot het eerste antwoord, ook 's avonds" },
-      { getal: "0", label: "vergeten leads" },
+    slug: "systemen-gekoppeld",
+    titel: "Je systemen praten met elkaar",
+    kort: "Wat je in het ene systeem invult, staat ook in het andere. Geen dubbel werk.",
+    tools: ["HubSpot", "Excel", "Notion"],
+    vandaag: "Een nieuwe klant staat in je mailbox, dan in je CRM, dan in je boekhouding, dan in een Excel. Vier keer overtypen, vier kansen op een fout.",
+    metAI: [
+      "Hij zet gegevens over tussen je CRM, je boekhouding, je agenda en je bestanden.",
+      "Hij houdt ze gelijk: wijzigt er iets, dan wijzigt het overal.",
+      "Hij verwittigt als iets niet klopt.",
     ],
-    tools: ["Outlook", "Google Agenda", "Pipedrive"],
-    uitdaging: [
-      "Een vastgoedkantoor kreeg de meeste aanvragen buiten de kantooruren, via de website en via de immoportalen.",
-      "Tegen dat iemand maandag antwoordde, had de kandidaat al bij een ander kantoor een bezichtiging gepland.",
+    jij: "Jij vult alles nog één keer in.",
+  },
+  {
+    slug: "klachten",
+    titel: "Klachten meteen bij de juiste persoon",
+    kort: "Een klacht wordt herkend, geregistreerd en opgevolgd voor ze escaleert.",
+    tools: ["Outlook", "WhatsApp", "Teamleader"],
+    vandaag: "Een klacht zit tussen honderd andere mails. Ze wordt te laat gezien, en tegen dan is de klant kwaad.",
+    metAI: [
+      "Hij herkent een klacht in je mailbox of op WhatsApp, ook als het woord niet valt.",
+      "Hij registreert ze en legt ze bij wie ze moet behandelen, volgens jouw regels.",
+      "Hij stuurt de klant meteen een eerste antwoord.",
+      "Hij volgt op tot ze is afgehandeld.",
     ],
-    aanpak: {
-      intro: "Met de panden, de agenda's van de makelaars en de huistaal van het kantoor in het fundament bouwden we een AI-werknemer voor leads.",
-      stappen: [
-        { titel: "Antwoorden", tekst: "Binnen twee minuten een persoonlijk antwoord, met de info over het pand." },
-        { titel: "Inplannen", tekst: "Vrije momenten uit de agenda van de makelaar, meteen voorgesteld." },
-        { titel: "Opvolgen", tekst: "Na de bezichtiging een mail met de volgende stap." },
-        { titel: "Overdragen", tekst: "Warme leads komen bovenaan in Pipedrive." },
-      ],
-    },
-    resultaat: [
-      "Elke lead binnen 2 minuten beantwoord, ook 's avonds",
-      "Bezichtigingen ingepland zonder heen en weer te mailen",
-      "Geen enkele lead meer vergeten",
+    jij: "Jij ziet elke klacht op tijd.",
+  },
+  {
+    slug: "team-en-kennis",
+    titel: "Je kennis altijd vindbaar",
+    kort: "Wat alleen in jouw hoofd zat, kan je hele team opvragen.",
+    tools: ["Microsoft Teams", "Google Drive", "Notion"],
+    vandaag: "Hoe doen we dat ook alweer? Elke nieuwe collega vraagt het aan jou. Elke procedure zit in een hoofd, een mail of een map die niemand vindt.",
+    metAI: [
+      "Hij kent je fundament: je procedures, je prijzen, je afspraken.",
+      "Je team stelt hem vragen in gewone taal en krijgt het juiste antwoord, met de bron erbij.",
+      "Nieuwe collega's zijn sneller ingewerkt.",
     ],
-    voorbeeld: true,
+    jij: "Jij wordt minder onderbroken.",
   },
 ];
 
-/** De sectoren in de volgorde waarin ze voor het eerst voorkomen, voor de filter. */
-export const SECTOREN = Array.from(new Set(CASE_LIJST.map((c) => c.sector)));
-
 export function logoVoor(naam: string): Logo | undefined {
   return LOGOS.find((l) => l.naam === naam);
-}
-
-/** Leestijd in minuten, aan 200 woorden per minuut. */
-export function leestijd(c: Case): number {
-  const tekst = [
-    c.titel,
-    c.samenvatting,
-    ...c.uitdaging,
-    c.aanpak.intro,
-    ...c.aanpak.stappen.flatMap((s) => [s.titel, s.tekst]),
-    ...c.resultaat,
-    c.quote?.tekst ?? "",
-  ].join(" ");
-  return Math.max(1, Math.round(tekst.split(/\s+/).length / 200));
 }

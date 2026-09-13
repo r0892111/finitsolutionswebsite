@@ -2,21 +2,21 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Calendar, ChevronDown, ChevronRight, Mail, Menu, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown, ChevronRight, Mail, Menu, X } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
-import { ContactFormPopup, useContactForm } from "@/components/contact-form-popup";
 import { CONTACT_EMAIL, SKOOL_URL } from "@/lib/finit-links";
 import { Brein3D } from "./brein-3d";
-import { CaseCatalogus, Getuigenis } from "./case-kaart";
+import { Getuigenis, OplossingCatalogus } from "./case-kaart";
+import { ContactKaart } from "./contact-kaart";
 import { HerkenSectie } from "./herken-sectie";
+import { OplossingSectie } from "./oplossing-sectie";
 import { SiteFooter } from "./site-footer";
 import { STAP_DETAILS } from "./stap-details";
-import { CONTAINER, H2, H3, KOP, LEAD, LesreeksKnop, Onder, Vinkje, trackLesreeks } from "./ui";
-import { VraagFormulier } from "./vraag-formulier";
+import { CONTAINER, ContactKnop, H2, H3, KOP, LEAD, LesreeksKnop, Onder, Vinkje, trackLesreeks } from "./ui";
 import {
   AANPAK_FOTO,
   CASES,
-  CTA_KENNISMAKING,
+  CTA_CONTACT,
   CTA_LESREEKS,
   FOOTER,
   HERO,
@@ -26,30 +26,28 @@ import {
   NAV_MOBIEL,
   PRODUCTEN,
   SKOOL,
-  SLOT,
   VRAGEN,
   type FaqBlok,
 } from "./copy";
 
 /**
- * De homepage: hero → de teamfoto met hoe we werken → herken jij dit (naast wat
- * AI overneemt, met de tool-logo's) → de lesreeks → hoe wij werken
- * (+ prijzen) → cases → vragen naast het formulier. Alle tekst staat in
- * ./copy.ts, de cases in ./cases.ts.
+ * De homepage: hero → de teamfoto met één statement → herken jij dit (drie
+ * punten met een tekening) → de oplossing (met de tool-logo's) → hoe krijg jij
+ * jouw AI-werknemer (drie stappen + prijzen) → de lesreeks → de oplossingen die
+ * we het vaakst bouwen → vragen naast de contactkaart. Alle tekst staat in
+ * ./copy.ts, de oplossingen in ./cases.ts.
  *
- * Eén hoofd-CTA: de lesreeks, in de accentkleur (LesreeksKnop). De
- * kennismaking is overal de tweede knop (omlijnd), behalve in de
- * contactsectie, waar het gesprek het onderwerp is. De drie stappen zijn een
- * lijst kaarten met rechts het paneel van de gekozen stap (stap-details.tsx);
- * de lijst blijft staan terwijl je door het paneel scrolt, en onderaan het
- * paneel klik je door naar de volgende stap. Op een telefoon klapt het paneel
- * open in de kaart zelf, zodat je niet hoeft te zoeken.
+ * Eén hoofd-CTA: de lesreeks, in de accentkleur (LesreeksKnop). De tweede
+ * knop is "Neem contact met ons op" en gaat naar /contact (ContactKnop); er
+ * wordt geen kennismaking meer ingepland vanaf de homepage. De drie stappen
+ * zijn een lijst kaarten met rechts het paneel van de gekozen stap
+ * (stap-details.tsx); de lijst blijft staan terwijl je door het paneel scrolt,
+ * en onderaan het paneel klik je door naar de volgende stap. Op een telefoon
+ * klapt het paneel open in de kaart zelf.
  *
  * Navigatie en mobiel menu: dezelfde opbouw en tekst als de vorige homepage.
- * Het formulier is het bestaande ContactFormPopup (naar /api/contact-submit,
- * zelfde velden, zelfde /bedankt-pagina). De lesreeks-knop gaat rechtstreeks
- * naar Skool. Het vraagformulier onderaan (vraag-formulier.tsx) gaat naar
- * dezelfde Netlify Function.
+ * De lesreeks-knop gaat rechtstreeks naar Skool. Het vraagformulier op de
+ * contactkaart (contact-kaart.tsx) gaat naar de Netlify Function.
  */
 
 function FaqAntwoord({ blokken }: { blokken: FaqBlok[] }) {
@@ -58,6 +56,15 @@ function FaqAntwoord({ blokken }: { blokken: FaqBlok[] }) {
       {blokken.map((b, i) => {
         if (b.t === "h") return <p key={i} className="pt-1 font-semibold text-[#1A2D63]">{b.tekst}</p>;
         if (b.t === "res") return <p key={i} className="font-medium text-[#1A2D63]">{b.tekst}</p>;
+        if (b.t === "link")
+          return (
+            <p key={i}>
+              <a href={b.href} className="hp-link inline-flex items-center gap-1.5 font-medium text-[#1A2D63]">
+                {b.tekst}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </a>
+            </p>
+          );
         if (b.t === "list")
           return (
             <ul key={i} className="space-y-2">
@@ -75,10 +82,33 @@ function FaqAntwoord({ blokken }: { blokken: FaqBlok[] }) {
   );
 }
 
+/** Het pilletje "Stap 1", "Stap 2", "Stap 3": het is een traject, geen keuze. */
+function StapPil({ label }: { label: string }) {
+  return <span className="rounded-full bg-[#1A2D63] px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-white">{label}</span>;
+}
+
+/** Het citaat van Y Combinator over het "company brain", met de bron als link. */
+function Citaat({ className = "" }: { className?: string }) {
+  const c = AANPAK_FOTO.citaat;
+  return (
+    <blockquote className={className}>
+      <p className="text-[0.9375rem] leading-[1.5] text-[#3D4766]">&ldquo;{c.tekst}&rdquo;</p>
+      <cite className="mt-1.5 block text-[0.8125rem] not-italic text-[#6C7590]">
+        {c.url ? (
+          <a href={c.url} target="_blank" rel="noopener noreferrer" className="hp-link">{c.bron}</a>
+        ) : (
+          c.bron
+        )}
+      </cite>
+    </blockquote>
+  );
+}
+
 /**
- * De inhoud van het paneel bij één stap: wat je eruit haalt (de drie vinkjes),
- * de uitleg uit stap-details.tsx, en onderaan de weg naar de volgende stap.
- * `kop` voegt nummer, titel en intro toe; op een telefoon staat die al op de kaart.
+ * De inhoud van het paneel bij één stap: wat je eruit haalt (de vinkjes, alleen
+ * bij stap 1), de uitleg uit stap-details.tsx, en onderaan de weg naar de
+ * volgende stap. `kop` voegt het stapnummer en de titel toe; op een telefoon
+ * staan die al op de kaart.
  */
 function StapPaneel({ i, naarStap, kop = false }: { i: number; naarStap: (i: number) => void; kop?: boolean }) {
   const stap = HOE.stappen[i];
@@ -88,40 +118,41 @@ function StapPaneel({ i, naarStap, kop = false }: { i: number; naarStap: (i: num
   return (
     <div>
       {kop && (
-        <div>
-          <span className="hp-display text-[1.5rem] font-bold leading-none text-[#1A2D63]/45">{stap.nummer}</span>
-          <h3 className={`mt-3 ${H3} text-[1.6rem]`}>{stap.titel}</h3>
-          <p className="mt-2 max-w-[40rem] text-[1rem] leading-[1.6] text-[#3D4766]">{stap.intro}</p>
+        <div className="flex flex-wrap items-center gap-3">
+          <StapPil label={stap.stapLabel} />
+          <h3 className={`${H3} text-[1.6rem]`}>{stap.titel}</h3>
         </div>
       )}
-      <ul className={`grid gap-2.5 sm:grid-cols-3 ${kop ? "mt-6" : ""}`}>
-        {stap.punten.map((punt) => (
-          <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#1A2D63]">
-            <Vinkje />
-            <span>{punt}</span>
-          </li>
-        ))}
-      </ul>
-      <div className="mt-7 border-t border-[#E3E7EF] pt-7">
+      {stap.punten && (
+        <ul className={`grid gap-3 sm:grid-cols-3 ${kop ? "mt-5" : ""}`}>
+          {stap.punten.map((punt) => (
+            <li key={punt} className="flex items-start gap-3 text-[1rem] font-medium leading-[1.45] text-[#1A2D63]">
+              <Vinkje groot />
+              <span>{punt}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className={kop || stap.punten ? "mt-5 border-t border-[#E3E7EF] pt-5" : ""}>
         <h4 className={`${H3} text-[1.35rem]`}>{h3}</h4>
         <p className="mt-2 max-w-[44rem] text-[1rem] leading-[1.6] text-[#3D4766]">{kort}</p>
-        <div className="mt-6">
+        <div className="mt-5">
           <Inhoud />
         </div>
       </div>
-      {/* Door naar de volgende stap, zonder terug te scrollen naar de kaarten. Na stap 03: de lesreeks. */}
-      <div className="mt-8 flex flex-col gap-3 border-t border-[#E3E7EF] pt-6 sm:flex-row sm:items-center sm:justify-between">
+      {/* Door naar de volgende stap, zonder terug te scrollen naar de kaarten. Na stap 3: de lesreeks. */}
+      <div className="mt-6 flex flex-col gap-3 border-t border-[#E3E7EF] pt-5 sm:flex-row sm:items-center sm:justify-between">
         {vorige ? (
           <button type="button" onClick={() => naarStap(i - 1)} className="hp-btn hp-btn--secondary hp-btn--md w-full sm:w-auto">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            <span>{HOE.paneel.vorige}: {vorige.nummer}</span>
+            <span>{HOE.paneel.vorige}: {vorige.stapLabel}</span>
           </button>
         ) : (
           <span className="hidden sm:block" aria-hidden="true" />
         )}
         {volgende ? (
           <button type="button" onClick={() => naarStap(i + 1)} className="hp-btn hp-btn--primary hp-btn--md w-full sm:w-auto">
-            <span>{HOE.paneel.volgende}: {volgende.nummer} {volgende.titel}</span>
+            <span>{HOE.paneel.volgende}: {volgende.stapLabel}, {volgende.titel}</span>
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </button>
         ) : (
@@ -138,7 +169,7 @@ export function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   /**
    * Welke stap gekozen is (0, 1, 2) of -1: nog niets aangeklikt. Op een telefoon is dan alles
-   * dicht; op desktop toont het paneel rechts dan stap 01. Zo klopt de eerste weergave op
+   * dicht; op desktop toont het paneel rechts dan stap 1. Zo klopt de eerste weergave op
    * beide, zonder de schermbreedte te moeten kennen bij het renderen.
    */
   const [openStap, setOpenStap] = useState(-1);
@@ -161,7 +192,6 @@ export function HomePage() {
     if (!isDesktop() && openStap === i) { setOpenStap(-1); return; } // op een telefoon klapt een open kaart weer dicht
     naarStap(i);
   };
-  const { isOpen, openForm, closeForm } = useContactForm();
 
   // Navigatiebalk: doorzichtig bovenaan, wit met wazige rand zodra je scrolt (zoals vroeger).
   useEffect(() => {
@@ -196,20 +226,6 @@ export function HomePage() {
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }, []);
-
-  const gesprek = useCallback((label: string, location: string) => {
-    setMobileMenuOpen(false);
-    openForm();
-    pushEvent("cta_click", { cta_label: label, location });
-  }, [openForm]);
-
-  /** De kennismaking: standaard omlijnd (tweede knop), marineblauw alleen waar het gesprek het onderwerp is. */
-  const GesprekKnop = ({ label = CTA_KENNISMAKING, ctaLabel, location, variant = "secondary", size = "lg", className = "" }: { label?: string; ctaLabel: string; location: string; variant?: "primary" | "secondary" | "light"; size?: "lg" | "md"; className?: string }) => (
-    <button type="button" onClick={() => gesprek(ctaLabel, location)} className={`hp-btn hp-btn--${variant} hp-btn--${size} ${className}`}>
-      <Calendar className="h-4 w-4" aria-hidden="true" />
-      <span>{label}</span>
-    </button>
-  );
 
   const navBg = navScrollProgress > 0 ? `rgba(255,255,255,${0.86 * navScrollProgress})` : "transparent";
 
@@ -280,11 +296,11 @@ export function HomePage() {
             ))}
           </div>
 
-          {/* Desktop rechts: de lesreeks als de ene knop, de kennismaking als tekst (pas als er plaats is). */}
+          {/* Desktop rechts: de lesreeks als de ene knop, contact als tekst (pas als er plaats is). */}
           <div className="hidden items-center gap-5 whitespace-nowrap lg:flex">
-            <button type="button" onClick={() => gesprek("nav_calendly", "nav")} className="hidden text-[0.9375rem] font-medium text-[#1A2D63]/80 transition-colors hover:text-[#1A2D63] 2xl:block">
-              {CTA_KENNISMAKING}
-            </button>
+            <a href="/contact" onClick={() => pushEvent("cta_click", { cta_label: "contact", location: "nav" })} className="hidden text-[0.9375rem] font-medium text-[#1A2D63]/80 transition-colors hover:text-[#1A2D63] 2xl:block">
+              {CTA_CONTACT}
+            </a>
             <LesreeksKnop location="nav" size="md" />
           </div>
 
@@ -322,7 +338,7 @@ export function HomePage() {
           <div className="relative z-10 flex h-full flex-col overflow-y-auto overscroll-contain px-6 pb-8 pt-24">
             <div className="mb-8 flex flex-col gap-3">
               <LesreeksKnop location="mobile_menu" className="w-full" />
-              <GesprekKnop ctaLabel="mobile_nav_calendly" location="mobile_nav" className="w-full" />
+              <ContactKnop location="mobile_nav" className="w-full" />
               <div className="hp-card mt-1 flex flex-col items-center gap-2 px-6 py-5 text-center">
                 <p className="text-xs uppercase tracking-widest text-[#6C7590]">{MENU.belTitel}</p>
                 <a
@@ -374,21 +390,21 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         {/* 1. Hero                                                        */}
         {/* -------------------------------------------------------------- */}
-        <header id="hero" className={`${CONTAINER} pb-12 pt-32 sm:pt-36 lg:pb-10 lg:pt-32`}>
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-10">
+        <header id="hero" className={`${CONTAINER} pb-8 pt-24 sm:pt-28 lg:pb-6 lg:pt-24`}>
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-10">
             <div className="hp-rise">
-              <h1 className="hp-display text-balance text-[2.15rem] font-bold leading-[1.02] text-[#1A2D63] min-[400px]:text-[2.4rem] sm:text-[3.2rem] lg:text-[3.1rem] xl:text-[3.6rem]">
+              <h1 className="hp-display text-balance text-[2.15rem] font-bold leading-[1.02] text-[#1A2D63] min-[400px]:text-[2.4rem] sm:text-[3.2rem] lg:text-[3rem] xl:text-[3.3rem]">
                 <span className="block">{HERO.h1[0]}</span>
                 <Onder accent>{HERO.h1[1]}</Onder>
               </h1>
-              <p className={`mt-6 max-w-[36rem] ${LEAD}`}>{HERO.sub}</p>
+              <p className={`mt-5 max-w-[36rem] ${LEAD}`}>{HERO.sub}</p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <LesreeksKnop location="hero" className="w-full sm:w-auto" />
-                <GesprekKnop ctaLabel="hero_calendly" location="hero" className="w-full sm:w-auto" />
+                <ContactKnop location="hero" className="w-full sm:w-auto" />
               </div>
 
-              <ul className="mt-7 space-y-2.5">
+              <ul className="mt-6 space-y-2.5">
                 {HERO.punten.map((punt) => (
                   <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#3D4766]">
                     <Vinkje />
@@ -397,7 +413,7 @@ export function HomePage() {
                 ))}
               </ul>
 
-              <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
+              <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-3">
                 <span className="text-[0.8125rem] font-medium text-[#6C7590]">{HERO.ondersteund}</span>
                 <Image src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" width={400} height={120} className="hp-logo h-6 w-auto" />
                 <Image src="/SI @KBC Black (2).png" alt="Start it @KBC" width={400} height={120} className="hp-logo h-6 w-auto" />
@@ -411,39 +427,138 @@ export function HomePage() {
         </header>
 
         {/* -------------------------------------------------------------- */}
-        {/* 1b. De teamfoto op de naad onder de hero, met hoe we werken    */}
+        {/* 1b. De teamfoto op de naad onder de hero, met één statement    */}
         {/* -------------------------------------------------------------- */}
-        {/* Wit boven, grijs onder: de foto ligt op de overgang naar "Herken jij dit?". Geen
-            sectiekop: wat erop staat, is hoe we werken, niet wie we zijn. */}
+        {/* Wit boven, grijs onder: de foto ligt op de overgang naar "Herken jij dit?". De
+            linkerhelft is vervaagd, zodat het statement er rechtstreeks op staat; het citaat
+            van Y Combinator staat rechtsonder (op een smaller scherm onder de foto). */}
         <div className="bg-[linear-gradient(to_bottom,#FFFFFF_0,#FFFFFF_50%,#F5F7FB_50%,#F5F7FB_100%)]">
           <div className={CONTAINER}>
-            <figure className="hp-card relative overflow-hidden">
-              <div className="relative aspect-[3/2] sm:aspect-[16/9] lg:aspect-[21/8]">
-                <Image src={AANPAK_FOTO.foto} alt={AANPAK_FOTO.fotoAlt} fill sizes="(min-width: 1184px) 74rem, 100vw" className="object-cover" style={{ objectPosition: "center 42%" }} />
-                <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-[#1A2D63]/50 via-[#1A2D63]/10 to-transparent sm:block" aria-hidden="true" />
-                <span className="absolute right-3 top-3 rounded-full bg-[#1A2D63]/55 px-3 py-1 text-[0.75rem] font-medium text-white backdrop-blur-sm sm:bottom-4 sm:right-4 sm:top-auto">{AANPAK_FOTO.onderschrift}</span>
+            <div className="hp-card relative overflow-hidden">
+              <div className="relative aspect-[4/5] sm:aspect-[16/9] lg:aspect-[21/8]">
+                <Image
+                  src={AANPAK_FOTO.foto}
+                  alt={AANPAK_FOTO.fotoAlt}
+                  fill
+                  sizes="(min-width: 1184px) 74rem, 100vw"
+                  className="object-cover [filter:brightness(1.15)_contrast(1.03)]"
+                  style={{ objectPosition: "center 42%" }}
+                />
+                <div className="hp-foto-waas pointer-events-none absolute inset-y-0 left-0 hidden w-[60%] sm:block" aria-hidden="true" />
+                {/* Op een telefoon staat het scherm bovenaan in beeld: daar vervaagt de bovenkant. */}
+                <div className="hp-foto-waas-boven pointer-events-none absolute inset-x-0 top-0 h-[58%] sm:hidden" aria-hidden="true" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1A2D63]/85 via-[#1A2D63]/40 to-transparent sm:bg-gradient-to-r sm:from-[#1A2D63]/75 sm:via-[#1A2D63]/35 sm:to-transparent" aria-hidden="true" />
+                <p className="hp-display absolute inset-x-5 bottom-5 text-balance text-[1.6rem] font-bold leading-[1.08] text-white sm:inset-auto sm:left-7 sm:top-1/2 sm:max-w-[26rem] sm:-translate-y-1/2 sm:text-[2.1rem] lg:left-9 lg:max-w-[30rem] lg:text-[2.5rem]">
+                  {AANPAK_FOTO.statement}
+                </p>
+                <Citaat className="absolute bottom-5 right-5 hidden max-w-[22rem] rounded-[14px] bg-white/92 p-4 backdrop-blur lg:block" />
               </div>
-              <figcaption className="p-6 sm:absolute sm:bottom-5 sm:left-5 sm:max-w-[24rem] sm:rounded-[18px] sm:bg-white/95 sm:shadow-[0_20px_44px_-24px_rgba(26,45,99,0.55)] sm:backdrop-blur lg:bottom-8 lg:left-8 lg:max-w-[27rem] lg:p-7">
-                <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-[#6C7590]">{AANPAK_FOTO.label}</p>
-                <p className="hp-display hp-display-sm mt-2 text-[1.2rem] font-semibold leading-[1.25] text-[#1A2D63] lg:text-[1.35rem]">{AANPAK_FOTO.titel}</p>
-                <p className="mt-2.5 text-[0.9375rem] leading-[1.55] text-[#3D4766]">{AANPAK_FOTO.tekst}</p>
-              </figcaption>
-            </figure>
+              <Citaat className="p-5 lg:hidden" />
+            </div>
           </div>
         </div>
 
         {/* -------------------------------------------------------------- */}
-        {/* 2. Herken jij dit? naast wat AI overneemt                      */}
+        {/* 2. Herken jij dit? en daaronder de oplossing                   */}
         {/* -------------------------------------------------------------- */}
-        <HerkenSectie onGesprek={() => gesprek("recognition_calendly", "recognition")} />
+        <HerkenSectie />
+        <OplossingSectie />
 
         {/* -------------------------------------------------------------- */}
-        {/* 2b. De lesreeks, op de naad tussen sectie 2 en sectie 3        */}
+        {/* 3. Hoe krijg jij jouw AI-werknemer: de drie stappen + prijzen  */}
         {/* -------------------------------------------------------------- */}
-        {/* De achtergrond breekt precies in het midden: grijs boven, wit
-            onder. Daardoor ligt de kaart exact op de middenschijding van
-            de twee secties. */}
-        <div className="bg-[linear-gradient(to_bottom,#F5F7FB_0,#F5F7FB_50%,#FFFFFF_50%,#FFFFFF_100%)]">
+        <section id="aanpak" className="scroll-mt-20">
+          <div className={`${CONTAINER} py-14 sm:py-16`}>
+            <div className={KOP}>
+              <h2 className={H2}>{HOE.h2[0]} <Onder>{HOE.h2[1]}</Onder></h2>
+              <p className={`mt-4 ${LEAD}`}>{HOE.intro}</p>
+            </div>
+
+            <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:items-start lg:gap-6">
+              {/* Links: de drie kaarten. Blijven staan terwijl je rechts door het paneel scrolt. */}
+              <ol className="grid gap-4 lg:sticky lg:top-24" aria-label="De drie stappen">
+                {HOE.stappen.map((stap, i) => {
+                  const open = openStap === i; // telefoon: het paneel staat open in de kaart
+                  const actief = getoond === i; // desktop: het paneel rechts toont deze stap
+                  return (
+                    <li
+                      key={stap.stapLabel}
+                      ref={(el) => { kaarten.current[i] = el; }}
+                      data-open={open}
+                      data-actief={actief}
+                      className={`hp-card hp-stap scroll-mt-24 ${i === 0 ? "hp-card--accent" : ""}`}
+                    >
+                      <button type="button" onClick={() => kies(i)} aria-expanded={open} aria-controls={`stap-detail-${i}`} className="w-full p-4 text-left sm:p-5">
+                        <span className="flex items-center justify-between gap-3">
+                          <StapPil label={stap.stapLabel} />
+                          <span className="flex flex-wrap justify-end gap-1.5">
+                            <span className="rounded-full bg-[#E6ECF9] px-3 py-1 text-[0.75rem] font-medium text-[#1A2D63]">{stap.wie}</span>
+                            <span className="rounded-full border border-[#E3E7EF] px-3 py-1 text-[0.75rem] font-medium text-[#6C7590]">{stap.tijd}</span>
+                          </span>
+                        </span>
+                        <span className={`mt-3 block ${H3} text-[1.35rem]`}>{stap.titel}</span>
+                        <span className="mt-1 block text-[0.9375rem] leading-[1.5] text-[#3D4766]">{stap.intro}</span>
+                        <span className="mt-3.5 flex items-end justify-between gap-3 border-t border-[#E3E7EF] pt-3.5">
+                          <span>
+                            <span className="block text-[0.75rem] font-medium uppercase tracking-wide text-[#6C7590]">{stap.prijsLabel}</span>
+                            <span className="mt-1 flex flex-wrap items-baseline gap-x-2">
+                              <span className="hp-display text-[1.5rem] font-bold leading-none text-[#1A2D63]">{stap.prijs}</span>
+                              {stap.prijsOud && (
+                                <s className="hp-display text-[1rem] font-semibold leading-none text-[#6C7590] decoration-[#6C7590]/70 decoration-[1.5px]">
+                                  <span className="sr-only">daarna </span>{stap.prijsOud}
+                                </s>
+                              )}
+                            </span>
+                          </span>
+                          <span className="hp-stap-meer flex shrink-0 items-center gap-1.5 pb-0.5 text-[0.85rem] font-medium text-[#1A2D63]">
+                            <span className="lg:hidden">{open ? HOE.minder : HOE.meer}</span>
+                            <span className="hidden lg:inline">{HOE.meer}</span>
+                            <ChevronDown className={`h-4 w-4 transition-transform duration-300 lg:hidden ${open ? "rotate-180" : ""}`} aria-hidden="true" />
+                            <ChevronRight className="hidden h-4 w-4 lg:block" aria-hidden="true" />
+                          </span>
+                        </span>
+                      </button>
+                      {stap.cta && (
+                        <div className="px-4 pb-4 sm:px-5 sm:pb-5">
+                          <LesreeksKnop location="stappen" size="md" className="w-full" />
+                          {stap.ctaNoot && <p className="mt-2 text-center text-[0.8125rem] text-[#6C7590]">{stap.ctaNoot}</p>}
+                        </div>
+                      )}
+                      {/* Telefoon en tablet: het paneel klapt open in de kaart zelf. */}
+                      <div id={`stap-detail-${i}`} className="hp-vouw lg:hidden" data-open={open} aria-hidden={!open}>
+                        <div>
+                          <div className="border-t border-[#E3E7EF] px-4 pb-5 pt-5 sm:px-5">
+                            <StapPaneel i={i} naarStap={naarStap} />
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+
+              {/* Rechts: het paneel van de gekozen stap. Nieuwe inhoud schuift in. */}
+              <div ref={paneel} id="stap-paneel" className="hp-card hidden scroll-mt-24 p-6 lg:block lg:p-7">
+                <div key={getoond} className="hp-wissel">
+                  <StapPaneel i={getoond} naarStap={naarStap} kop />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-center sm:gap-6">
+              <p className="text-[1rem] text-[#3D4766]">{HOE.slotVraag}</p>
+              <ContactKnop location="aanpak" size="md" className="w-full sm:w-auto" />
+            </div>
+          </div>
+        </section>
+
+        {/* -------------------------------------------------------------- */}
+        {/* 3b. De lesreeks, op de naad tussen de stappen en de oplossingen */}
+        {/* -------------------------------------------------------------- */}
+        {/* De achtergrond breekt precies in het midden: wit boven, marineblauw
+            onder. Daardoor ligt de kaart exact op de middenschijding van de
+            twee secties: de deur naar de lesreeks, nadat je de drie stappen kent. */}
+        <div className="bg-[linear-gradient(to_bottom,#FFFFFF_0,#FFFFFF_50%,#1A2D63_50%,#1A2D63_100%)]">
           <div className={CONTAINER}>
             {/* De deur naar de lesreeks: knop, Skool-woordmerk en de cover van de community. */}
             <a
@@ -476,120 +591,34 @@ export function HomePage() {
         </div>
 
         {/* -------------------------------------------------------------- */}
-        {/* 3. Hoe wij AI voor jou laten werken + prijzen                  */}
-        {/* -------------------------------------------------------------- */}
-        <section id="aanpak" className="scroll-mt-20">
-          <div className={`${CONTAINER} py-20 sm:py-28`}>
-            <div className={KOP}>
-              <h2 className={H2}>{HOE.h2[0]} <Onder>{HOE.h2[1]}</Onder></h2>
-              <p className={`mt-5 ${LEAD}`}>{HOE.intro}</p>
-            </div>
-
-            <div className="mt-12 grid gap-5 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:items-start lg:gap-6">
-              {/* Links: de drie kaarten. Blijven staan terwijl je rechts door het paneel scrolt. */}
-              <ol className="grid gap-4 lg:sticky lg:top-24">
-                {HOE.stappen.map((stap, i) => {
-                  const open = openStap === i; // telefoon: het paneel staat open in de kaart
-                  const actief = getoond === i; // desktop: het paneel rechts toont deze stap
-                  return (
-                    <li
-                      key={stap.nummer}
-                      ref={(el) => { kaarten.current[i] = el; }}
-                      data-open={open}
-                      data-actief={actief}
-                      className={`hp-card hp-stap scroll-mt-24 ${i === 0 ? "hp-card--accent" : ""}`}
-                    >
-                      <button type="button" onClick={() => kies(i)} aria-expanded={open} aria-controls={`stap-detail-${i}`} className="w-full p-5 text-left sm:p-6">
-                        <span className="flex items-center justify-between gap-3">
-                          <span className="hp-display text-[1.5rem] font-bold leading-none text-[#1A2D63]/45">{stap.nummer}</span>
-                          <span className="flex flex-wrap justify-end gap-1.5">
-                            <span className="rounded-full bg-[#E6ECF9] px-3 py-1 text-[0.75rem] font-medium text-[#1A2D63]">{stap.wie}</span>
-                            <span className="rounded-full border border-[#E3E7EF] px-3 py-1 text-[0.75rem] font-medium text-[#6C7590]">{stap.tijd}</span>
-                          </span>
-                        </span>
-                        <span className={`mt-3 block ${H3} text-[1.3rem]`}>{stap.titel}</span>
-                        <span className="mt-1.5 block text-[0.9375rem] leading-[1.55] text-[#3D4766] lg:hidden">{stap.intro}</span>
-                        <span className="mt-4 flex items-end justify-between gap-3 border-t border-[#E3E7EF] pt-4">
-                          <span>
-                            <span className="block text-[0.75rem] font-medium uppercase tracking-wide text-[#6C7590]">{stap.prijsLabel}</span>
-                            <span className="mt-1 flex flex-wrap items-baseline gap-x-2">
-                              <span className="hp-display text-[1.75rem] font-bold leading-none text-[#1A2D63]">{stap.prijs}</span>
-                              {stap.prijsOud && (
-                                <s className="hp-display text-[1.05rem] font-semibold leading-none text-[#6C7590] decoration-[#6C7590]/70 decoration-[1.5px]">
-                                  <span className="sr-only">daarna </span>{stap.prijsOud}
-                                </s>
-                              )}
-                            </span>
-                          </span>
-                          <span className="hp-stap-meer flex shrink-0 items-center gap-1.5 pb-0.5 text-[0.85rem] font-medium text-[#1A2D63]">
-                            <span className="lg:hidden">{open ? HOE.minder : HOE.meer}</span>
-                            <span className="hidden lg:inline">{HOE.meer}</span>
-                            <ChevronDown className={`h-4 w-4 transition-transform duration-300 lg:hidden ${open ? "rotate-180" : ""}`} aria-hidden="true" />
-                            <ChevronRight className="hidden h-4 w-4 lg:block" aria-hidden="true" />
-                          </span>
-                        </span>
-                      </button>
-                      {stap.cta && (
-                        <div className="px-5 pb-5 sm:px-6 sm:pb-6">
-                          <LesreeksKnop location="stappen" size="md" className="w-full" />
-                          {stap.ctaNoot && <p className="mt-2.5 text-center text-[0.8125rem] text-[#6C7590]">{stap.ctaNoot}</p>}
-                        </div>
-                      )}
-                      {/* Telefoon en tablet: het paneel klapt open in de kaart zelf. */}
-                      <div id={`stap-detail-${i}`} className="hp-vouw lg:hidden" data-open={open} aria-hidden={!open}>
-                        <div>
-                          <div className="border-t border-[#E3E7EF] px-5 pb-6 pt-5 sm:px-6">
-                            <StapPaneel i={i} naarStap={naarStap} />
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ol>
-
-              {/* Rechts: het paneel van de gekozen stap. Nieuwe inhoud schuift in. */}
-              <div ref={paneel} id="stap-paneel" className="hp-card hidden scroll-mt-24 p-7 lg:block lg:p-9">
-                <div key={getoond} className="hp-wissel">
-                  <StapPaneel i={getoond} naarStap={naarStap} kop />
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-12 flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-center sm:gap-6">
-              <p className="text-[1rem] text-[#3D4766]">{HOE.slotVraag}</p>
-              <GesprekKnop ctaLabel="aanpak_calendly" location="aanpak" size="md" className="w-full sm:w-auto" />
-            </div>
-          </div>
-        </section>
-
-        {/* -------------------------------------------------------------- */}
-        {/* 4. Cases uit de praktijk: catalogus, elke case een eigen pagina */}
+        {/* 4. De oplossingen die we het vaakst bouwen                     */}
         {/* -------------------------------------------------------------- */}
         <section id="cases" className="scroll-mt-20 bg-[#1A2D63] text-white">
-          <div className={`${CONTAINER} py-20 sm:py-28`}>
+          <div className={`${CONTAINER} pb-14 pt-10 sm:pb-16 sm:pt-12`}>
             <div className={KOP}>
-              <h2 className="hp-display text-balance text-[2rem] font-bold leading-[1.06] sm:text-[2.5rem] lg:text-[2.9rem]">{CASES.h2}</h2>
-              <p className="mt-4 text-[1.0625rem] leading-[1.65] text-white/75 sm:text-[1.125rem]">{CASES.intro}</p>
+              {/* Zelfde maat als H2, maar wit. */}
+              <h2 className="hp-display text-balance text-[1.9rem] font-bold leading-[1.06] text-white sm:text-[2.3rem] lg:text-[2.6rem]">
+                {CASES.h2[0]} <Onder wit>{CASES.h2[1]}</Onder>
+              </h2>
             </div>
-            <div className="mt-10">
-              <CaseCatalogus donker max={6} />
+            <div className="mt-8">
+              <OplossingCatalogus max={6} />
             </div>
-            <div className="mt-10 flex justify-center">
+            <div className="mt-8 flex justify-center">
               <a href="/cases" className="hp-btn hp-btn--light hp-btn--md">
                 {CASES.allesBekijken}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
             </div>
-            <Getuigenis className="mt-14 border-t border-white/10 pt-12" />
+            <Getuigenis className="mt-12 border-t border-white/10 pt-10" />
           </div>
         </section>
 
         {/* -------------------------------------------------------------- */}
-        {/* 5. Vragen links, de kennismaking en het formulier rechts        */}
+        {/* 5. Vragen links, de contactkaart rechts                        */}
         {/* -------------------------------------------------------------- */}
         <section id="contact" className="scroll-mt-20 bg-[#F5F7FB]">
-          <div className={`${CONTAINER} grid gap-10 py-20 sm:py-28 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-start lg:gap-12`}>
+          <div className={`${CONTAINER} grid gap-10 py-14 sm:py-16 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-start lg:gap-12`}>
             <div id="faq" className="min-w-0 scroll-mt-24">
               <h2 className={H2}>{VRAGEN.h2}</h2>
               <div className="hp-card mt-8 px-6 sm:px-8">
@@ -609,20 +638,7 @@ export function HomePage() {
               </div>
             </div>
 
-            <div className="hp-card p-6 sm:p-8 lg:sticky lg:top-24">
-              <h2 className={`${H3} text-[1.5rem] sm:text-[1.7rem]`}>{SLOT.h2}</h2>
-              <p className="mt-2.5 text-[1rem] leading-[1.6] text-[#3D4766]">{SLOT.p}</p>
-              <GesprekKnop ctaLabel="secondary_calendly" location="secondary_cta" variant="primary" size="md" className="mt-5 w-full" />
-              <p className="mt-3 text-center text-[0.8125rem] text-[#6C7590]">{SLOT.micro}</p>
-              <p className="mt-3 text-center">
-                <a href={SKOOL_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackLesreeks("contact")} className="hp-link text-[0.9375rem] font-medium">
-                  {SLOT.lesreeksLink}
-                </a>
-              </p>
-              <div className="relative mt-7 border-t border-[#E3E7EF] pt-7">
-                <VraagFormulier />
-              </div>
-            </div>
+            <ContactKaart location="contact" bron="https://finitsolutions.be/#contact" className="lg:sticky lg:top-24" />
           </div>
         </section>
       </main>
@@ -631,8 +647,6 @@ export function HomePage() {
       {/* Footer (opbouw van de vorige homepage)                             */}
       {/* ---------------------------------------------------------------- */}
       <SiteFooter />
-
-      <ContactFormPopup isOpen={isOpen} onClose={closeForm} />
     </div>
   );
 }

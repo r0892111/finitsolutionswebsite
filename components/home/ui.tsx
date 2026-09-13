@@ -4,18 +4,18 @@
  * De bouwstenen van de nieuwe huisstijl: maatvoering, koppen en knoppen.
  *
  * Stonden eerst alleen in home-page.tsx. Ze staan hier apart zodat andere
- * pagina's (zoals /bedankt) er exact hetzelfde uitzien in plaats van hun
- * eigen variant te krijgen.
+ * pagina's (zoals /bedankt, /cases en /contact) er exact hetzelfde uitzien in
+ * plaats van hun eigen variant te krijgen.
  */
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { SKOOL_URL } from "@/lib/finit-links";
-import { CTA_LESREEKS } from "./copy";
+import { CTA_CONTACT, CTA_LESREEKS } from "./copy";
 
 export const CONTAINER = "mx-auto w-full max-w-[74rem] px-5 sm:px-8";
 export const H2 =
-  "hp-display text-balance text-[2rem] font-bold leading-[1.06] text-[#1A2D63] sm:text-[2.5rem] lg:text-[2.9rem]";
+  "hp-display text-balance text-[1.9rem] font-bold leading-[1.06] text-[#1A2D63] sm:text-[2.3rem] lg:text-[2.6rem]";
 export const H3 =
   "hp-display hp-display-sm text-[1.3rem] font-semibold leading-[1.2] text-[#1A2D63]";
 export const LEAD =
@@ -29,23 +29,26 @@ export const ACCENT = "#E9A13B";
 /**
  * De handgetekende streep onder het laatste woord van een kop, zoals op de vorige site.
  * `accent` maakt de streep amber; alleen voor de kop in de hero, zodat de kleur schaars blijft.
+ * `wit` is voor een kop op een marineblauwe ondergrond.
  */
-export function Onder({ children, accent = false }: { children: React.ReactNode; accent?: boolean }) {
+export function Onder({ children, accent = false, wit = false }: { children: React.ReactNode; accent?: boolean; wit?: boolean }) {
+  const kleur = accent ? ACCENT : wit ? "#FFFFFF" : "#1A2D63";
+  const opacity = accent ? 0.6 : wit ? 0.35 : 0.15;
   return (
     <span className="hp-onder">
       {children}
       <svg viewBox="0 0 200 20" preserveAspectRatio="none" fill="none" aria-hidden="true">
-        <path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke={accent ? ACCENT : "#1A2D63"} strokeOpacity={accent ? 0.6 : 0.15} strokeWidth="10" strokeLinecap="round" />
+        <path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke={kleur} strokeOpacity={opacity} strokeWidth="10" strokeLinecap="round" />
       </svg>
     </span>
   );
 }
 
-export function Vinkje({ donker = false, wit = false }: { donker?: boolean; wit?: boolean }) {
+export function Vinkje({ donker = false, wit = false, groot = false }: { donker?: boolean; wit?: boolean; groot?: boolean }) {
   return (
-    <span className={`hp-check mt-0.5 ${donker ? "hp-check--donker" : ""} ${wit ? "hp-check--wit" : ""}`} aria-hidden="true">
-      <svg width="11" height="9" viewBox="0 0 11 9">
-        <path d="M1 4.5l3 3L10 1" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <span className={`hp-check mt-0.5 ${donker ? "hp-check--donker" : ""} ${wit ? "hp-check--wit" : ""} ${groot ? "hp-check--groot" : ""}`} aria-hidden="true">
+      <svg width={groot ? 15 : 11} height={groot ? 12 : 9} viewBox="0 0 11 9">
+        <path d="M1 4.5l3 3L10 1" fill="none" stroke="currentColor" strokeWidth={groot ? 2 : 1.8} strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </span>
   );
@@ -79,6 +82,34 @@ export function LesreeksKnop({
     >
       {CTA_LESREEKS}
       <ArrowRight className="h-4 w-4" aria-hidden="true" />
+    </a>
+  );
+}
+
+/**
+ * De tweede knop: naar de contactpagina. Omlijnd, zodat de lesreeks de ene knop blijft
+ * die eruit springt. Geen popup meer: wie een vraag heeft, krijgt een pagina met het
+ * formulier en het telefoonnummer.
+ */
+export function ContactKnop({
+  location,
+  size = "lg",
+  className = "",
+  variant = "secondary",
+}: {
+  location: string;
+  size?: "lg" | "md" | "sm";
+  className?: string;
+  variant?: "secondary" | "primary" | "light";
+}) {
+  return (
+    <a
+      href="/contact"
+      onClick={() => pushEvent("cta_click", { cta_label: "contact", location })}
+      className={`hp-btn hp-btn--${variant} hp-btn--${size} ${className}`}
+    >
+      <Mail className="h-4 w-4" aria-hidden="true" />
+      {CTA_CONTACT}
     </a>
   );
 }

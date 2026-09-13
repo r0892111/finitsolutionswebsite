@@ -1,11 +1,11 @@
 "use client";
 
 /**
- * Het korte vraagformulier onderaan de homepage, naast de FAQ: naam, e-mail, vraag. Lager op
- * de drempel dan een kennismaking inplannen. Gaat naar dezelfde Netlify
- * Function als de popup (/api/contact-submit), met een veld `bericht` erbij,
- * en toont de bevestiging ter plekke in plaats van naar /bedankt te gaan
- * (die pagina gaat over het gesprek dat we inplannen).
+ * Het korte vraagformulier op de contactkaart (naast de FAQ op de homepage, en
+ * op /contact): naam, e-mail, telefoonnummer (optioneel) en de vraag. Lager op
+ * de drempel dan een gesprek inplannen. Gaat naar de Netlify Function
+ * (/api/contact-submit) met het veld `bericht` erbij, en toont de bevestiging
+ * ter plekke in plaats van naar /bedankt te gaan.
  */
 
 import { useId, useState } from "react";
@@ -23,10 +23,22 @@ const LABEL = "mb-1.5 block text-[0.8125rem] font-medium text-[#1A2D63]";
 
 type Status = "leeg" | "bezig" | "klaar" | "fout";
 
-export function VraagFormulier() {
+export function VraagFormulier({
+  metTelefoon = false,
+  bron = "https://finitsolutions.be/#contact",
+  location = "vraag",
+}: {
+  /** Ook een (optioneel) telefoonnummer vragen. */
+  metTelefoon?: boolean;
+  /** De pagina die in de mail komt te staan. */
+  bron?: string;
+  /** Voor de analytics. */
+  location?: string;
+}) {
   const id = useId();
   const [naam, setNaam] = useState("");
   const [email, setEmail] = useState("");
+  const [telefoonnummer, setTelefoonnummer] = useState("");
   const [bericht, setBericht] = useState("");
   const [website, setWebsite] = useState(""); // honeypot: onzichtbaar, blijft leeg bij mensen
   const [status, setStatus] = useState<Status>("leeg");
@@ -34,7 +46,7 @@ export function VraagFormulier() {
   const verstuur = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("bezig");
-    pushEvent("form_submit", { location: "vraag" });
+    pushEvent("form_submit", { location });
 
     const timer = new AbortController();
     const timeout = setTimeout(() => timer.abort(), TIMEOUT_MS);
@@ -43,11 +55,11 @@ export function VraagFormulier() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: timer.signal,
-        body: JSON.stringify({ naam, email, bericht, website, bron: "https://finitsolutions.be/#contact" }),
+        body: JSON.stringify({ naam, email, telefoonnummer: metTelefoon ? telefoonnummer : "", bericht, website, bron }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
       setStatus("klaar");
-      pushEvent("form_submitted", { location: "vraag" });
+      pushEvent("form_submitted", { location });
     } catch {
       setStatus("fout");
     } finally {
@@ -83,6 +95,12 @@ export function VraagFormulier() {
           <label htmlFor={`${id}-email`} className={LABEL}>{VRAAG.email}</label>
           <input id={`${id}-email`} type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className={VELD} />
         </div>
+        {metTelefoon && (
+          <div className="sm:col-span-2 lg:col-span-1 xl:col-span-2">
+            <label htmlFor={`${id}-telefoon`} className={LABEL}>{VRAAG.telefoon}</label>
+            <input id={`${id}-telefoon`} type="tel" autoComplete="tel" value={telefoonnummer} onChange={(e) => setTelefoonnummer(e.target.value)} className={VELD} />
+          </div>
+        )}
       </div>
       <div className="mt-4">
         <label htmlFor={`${id}-bericht`} className={LABEL}>{VRAAG.bericht}</label>
