@@ -100,7 +100,7 @@ export function Footer() {
               className="h-7 w-auto object-contain brightness-0 invert"
               unoptimized
             />
-            <span>BTW: BE1020600643</span>
+            <span>BTW: BE1036433716</span>
           </div>
           <div className="flex flex-wrap justify-center gap-5 text-sm text-white/60">
             <Link href="/privacy" className="hover:text-white transition-colors">

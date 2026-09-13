@@ -138,7 +138,7 @@ export function LandingFooter() {
               />
             </div>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 md:gap-6">
-              <span>BTW: BE1020600643</span>
+              <span>BTW: BE1036433716</span>
               <a href="/privacy" className="hover:text-white transition-colors">
                 Privacybeleid
               </a>

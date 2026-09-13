@@ -5,15 +5,15 @@ import { ChevronRight } from "lucide-react";
 
 export default function TermsPage() {
   return (
-    <main className="pt-20">
-      <section className="relative py-16 md:py-24 bg-background">
-        <div className="container relative mx-auto px-4">
+    <main>
+      <section className="relative py-12 sm:py-16">
+        <div className="mx-auto w-full max-w-[74rem] px-5 sm:px-8">
           <div className="max-w-3xl mx-auto">
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary mb-6"
+              className="mb-6 inline-flex items-center rounded-full bg-[#E6ECF9] px-3 py-1 text-[0.8125rem] font-medium text-[#1A2D63]"
             >
               <span>Algemene Voorwaarden</span> <ChevronRight className="h-4 w-4 ml-1" />
             </motion.p>
@@ -21,7 +21,7 @@ export default function TermsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-4xl font-bold mb-8"
+              className="hp-display mb-8 text-[2rem] font-bold leading-[1.1] text-[#1A2D63] sm:text-[2.5rem]"
             >
               Algemene Voorwaarden
             </motion.h1>
@@ -30,9 +30,9 @@ export default function TermsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="prose prose-lg dark:prose-invert max-w-none"
+              className="hp-legal"
             >
-              <p className="text-muted-foreground">
+              <p className="text-[#6C7590]">
                 Laatst bijgewerkt: {new Date().toLocaleDateString('nl-BE')}
               </p>
 

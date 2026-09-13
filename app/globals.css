@@ -702,6 +702,16 @@ html {
 .hp-btn--primary:hover:not(:disabled) { background: #2A4488; transform: translateY(-1px); box-shadow: 0 12px 26px -8px rgba(26, 45, 99, 0.5); }
 .hp-btn--primary:active:not(:disabled) { background: #14234F; transform: translateY(0); box-shadow: 0 4px 10px -6px rgba(26, 45, 99, 0.4); }
 
+/* De accentkleur: alleen voor de hoofd-CTA (de lesreeks) en wat er rechtstreeks bij hoort.
+   Marineblauwe tekst op amber haalt 6:1, wit op amber haalt de norm niet. */
+.hp-btn--accent {
+  color: #1A2D63;
+  background: #E9A13B;
+  box-shadow: 0 8px 20px -8px rgba(233, 161, 59, 0.6);
+}
+.hp-btn--accent:hover:not(:disabled) { background: #F0AE4F; transform: translateY(-1px); box-shadow: 0 12px 26px -8px rgba(233, 161, 59, 0.65); }
+.hp-btn--accent:active:not(:disabled) { background: #D8912F; transform: translateY(0); box-shadow: 0 4px 10px -6px rgba(233, 161, 59, 0.5); }
+
 .hp-btn--secondary {
   color: #1A2D63;
   background: #fff;
@@ -738,8 +748,8 @@ html {
 }
 
 .hp-card--accent {
-  border-color: #1A2D63;
-  box-shadow: 0 0 0 1px #1A2D63, 0 1px 2px rgba(26, 45, 99, 0.04), 0 20px 44px -22px rgba(26, 45, 99, 0.45);
+  border-color: #E9A13B;
+  box-shadow: 0 0 0 1px #E9A13B, 0 1px 2px rgba(26, 45, 99, 0.04), 0 20px 44px -22px rgba(233, 161, 59, 0.5);
 }
 
 /* De handgetekende onderstreping van de vorige site, onder het laatste woord van een kop */
@@ -752,10 +762,34 @@ html {
 .hp-check--niet { background: #EEF0F5; color: #6C7590; }
 .hp-check--wit { background: #fff; }
 
-/* Openklikbare rijen onder de prijskaarten: hoogte van 0fr naar 1fr, zodat de inhoud in de DOM blijft */
-.hp-vouw { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms ease; }
+/* Uitklappen: hoogte van 0fr naar 1fr, zodat de inhoud in de DOM blijft en de pagina meegroeit */
+.hp-vouw { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 420ms cubic-bezier(0.2, 0.8, 0.2, 1); }
 .hp-vouw[data-open="true"] { grid-template-rows: 1fr; }
 .hp-vouw > div { overflow: hidden; }
+.hp-vouw > div > div { opacity: 0; transform: translateY(-6px); transition: opacity 260ms ease, transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.hp-vouw[data-open="true"] > div > div { opacity: 1; transform: none; transition-delay: 90ms; }
+
+/* De drie stappen: een lijst kaarten die je aanklikt. Op een telefoon klapt het paneel open
+   in de kaart zelf (data-open); op desktop staat het paneel rechts en is de gekozen kaart
+   gemarkeerd (data-actief). De lijst blijft links staan terwijl je door het paneel scrolt. */
+.hp-stap { transition: border-color 160ms ease, box-shadow 160ms ease; }
+.hp-stap:hover { border-color: rgba(26, 45, 99, 0.45); }
+.hp-stap > button:focus-visible { outline: 2px solid #1A2D63; outline-offset: -2px; border-radius: 20px; }
+@media (max-width: 1023.98px) {
+  .hp-stap[data-open="true"] { border-color: #1A2D63; box-shadow: 0 0 0 1px #1A2D63, 0 16px 40px -24px rgba(26, 45, 99, 0.35); }
+}
+@media (min-width: 1024px) {
+  .hp-stap[data-actief="true"], .hp-stap[data-actief="true"]:hover { border-color: #1A2D63; box-shadow: 0 0 0 1px #1A2D63, 0 16px 40px -24px rgba(26, 45, 99, 0.35); }
+  .hp-stap[data-actief="true"] .hp-stap-meer { visibility: hidden; }
+}
+/* Het paneel rechts wisselt van inhoud: nieuwe inhoud schuift licht in. */
+@keyframes hp-wissel { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .hp-wissel { animation: hp-wissel 360ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hp-vouw, .hp-vouw > div > div, .hp-stap { transition: none; }
+}
 
 /* Veelgestelde vragen: native <details>, eigen plusje */
 .hp-details > summary { list-style: none; cursor: pointer; }
@@ -783,6 +817,67 @@ html {
 }
 .hp-chip--plus { border-style: dashed; border-color: rgba(26, 45, 99, 0.35); background: transparent; padding-left: 0.875rem; }
 .hp-chip--klein { padding: 0.375rem 0.75rem; font-size: 0.8125rem; font-weight: 500; white-space: normal; }
+
+/* De tooltip op het brein in de hero: volgt de bol waar de muis op staat. */
+.hp-tip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  max-width: 15rem;
+  pointer-events: none;
+  border-radius: 12px;
+  border: 1px solid #E3E7EF;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 1px 2px rgba(26, 45, 99, 0.06), 0 14px 32px -16px rgba(26, 45, 99, 0.35);
+  padding: 0.625rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #3D4766;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.hp-tip[data-open="true"] { opacity: 1; }
+.hp-tip strong { display: block; font-weight: 600; color: #1A2D63; margin-bottom: 0.125rem; }
+
+/* Juridische pagina's: lange tekst in de huisstijl, zonder elke alinea apart op te maken. */
+.hp-legal { color: #3D4766; font-size: 1rem; line-height: 1.7; }
+.hp-legal h2 { font-family: var(--font-bricolage), var(--font-schibsted), ui-sans-serif, system-ui, sans-serif; font-variation-settings: "opsz" 48; letter-spacing: -0.012em; color: #1A2D63; font-size: 1.35rem; font-weight: 600; line-height: 1.25; margin: 2.25rem 0 0.75rem; }
+.hp-legal h3 { color: #1A2D63; font-size: 1.1rem; font-weight: 600; margin: 1.75rem 0 0.5rem; }
+.hp-legal p { margin: 0 0 1rem; }
+.hp-legal ul, .hp-legal ol { margin: 0 0 1rem; padding-left: 1.25rem; }
+.hp-legal ul { list-style: disc; }
+.hp-legal ol { list-style: decimal; }
+.hp-legal li { margin: 0.25rem 0; }
+.hp-legal a { color: #1A2D63; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(26, 45, 99, 0.35); }
+.hp-legal a:hover { text-decoration-color: #1A2D63; }
+.hp-legal strong { color: #1A2D63; font-weight: 600; }
+.hp-legal table { width: 100%; border-collapse: collapse; margin: 0 0 1.25rem; font-size: 0.9375rem; }
+.hp-legal th, .hp-legal td { border: 1px solid #E3E7EF; padding: 0.5rem 0.75rem; text-align: left; vertical-align: top; }
+.hp-legal th { background: #F5F7FB; color: #1A2D63; font-weight: 600; }
+
+/* "Herken jij dit?": de tijdlijn van de AI-werknemer. Elke regel schuift na de vorige in. */
+@keyframes hp-feed-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .hp-feed > li { animation: hp-feed-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: calc(var(--i, 0) * 480ms + 120ms); }
+}
+/* De balk bovenaan de kaart: toont wanneer het volgende voorbeeld komt. Pauzeert bij hover en buiten beeld. */
+.hp-voortgang { position: absolute; left: 0; top: 0; z-index: 2; height: 3px; width: 100%; transform-origin: left; background: #1A2D63; animation: hp-voortgang 7s linear forwards; }
+.hp-voortgang[data-pauze="true"] { animation-play-state: paused; }
+@keyframes hp-voortgang { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+/* Het bolletje "Aan het werk" */
+.hp-live { position: relative; display: inline-block; width: 8px; height: 8px; border-radius: 9999px; background: #3E63DD; }
+@media (prefers-reduced-motion: no-preference) {
+  .hp-live::after { content: ""; position: absolute; inset: -4px; border-radius: 9999px; border: 2px solid #3E63DD; opacity: 0; animation: hp-live 1.8s ease-out infinite; }
+}
+@keyframes hp-live { from { opacity: 0.6; transform: scale(0.6); } to { opacity: 0; transform: scale(1.6); } }
+
+/* Case-kaarten: licht optillen bij hover, een zacht stippenpatroon in de kop */
+.hp-case { transition: transform 200ms ease, box-shadow 200ms ease; }
+.hp-case:hover { transform: translateY(-3px); box-shadow: 0 1px 2px rgba(26, 45, 99, 0.05), 0 24px 48px -24px rgba(26, 45, 99, 0.45); }
+.hp-case:focus-visible { outline: 2px solid #E9A13B; outline-offset: 3px; }
+.hp-stippen { background-image: radial-gradient(rgba(26, 45, 99, 0.1) 1px, transparent 1px); background-size: 14px 14px; }
+@media (prefers-reduced-motion: reduce) { .hp-case, .hp-case:hover { transition: none; transform: none; } }
 
 /* Eén keer beweging bij het laden van de hero */
 @media (prefers-reduced-motion: no-preference) {

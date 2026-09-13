@@ -2,8 +2,9 @@
 
 /**
  * De footer van de site. Stond eerst inline in home-page.tsx; staat hier apart
- * zodat /bedankt en de homepage dezelfde footer tonen en er maar één plek is
- * om hem aan te passen.
+ * zodat de homepage, /bedankt, de detailpagina's van de aanpak en de juridische
+ * pagina's dezelfde footer tonen en er maar één plek is om hem aan te passen.
+ * Het logo linkt naar de homepage; het btw-nummer komt uit lib/finit-links.ts.
  */
 
 import Image from "next/image";
@@ -25,7 +26,7 @@ export function SiteFooter() {
             <h2 className="hp-display text-balance text-[1.75rem] font-bold leading-[1.1] text-white sm:text-[2.1rem]">{FOOTER.slotTitel}</h2>
             <p className="mt-3 max-w-[32rem] text-[1rem] leading-[1.65] text-white/70">{FOOTER.slotTekst}</p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <LesreeksKnop location="footer_cta" variant="light" className="w-full sm:w-auto" />
+              <LesreeksKnop location="footer_cta" className="w-full sm:w-auto" />
               <a href={`mailto:${CONTACT_EMAIL}`} onClick={() => pushEvent("contact_click", { method: "email", location: "footer_cta" })} className="inline-flex items-center gap-2 text-[0.9375rem] text-white/80 transition-colors hover:text-white">
                 <Mail className="h-4 w-4" aria-hidden="true" />
                 {CONTACT_EMAIL}
@@ -59,7 +60,9 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col items-start gap-5 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <Image src="/finit-logo-white.svg" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto" />
+          <a href="/" aria-label="Finit Solutions, naar de homepage" className="inline-flex">
+            <Image src="/finit-logo-white.svg" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto" />
+          </a>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.8125rem] text-white/60">
             <span>BTW: {VAT_NUMBER}</span>
             {FOOTER.links.map((l) => (

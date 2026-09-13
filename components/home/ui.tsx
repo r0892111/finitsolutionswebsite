@@ -23,13 +23,19 @@ export const LEAD =
 /** Gecentreerde sectiekop met intro. */
 export const KOP = "mx-auto max-w-[44rem] text-center";
 
-/** De handgetekende streep onder het laatste woord van een kop, zoals op de vorige site. */
-export function Onder({ children }: { children: React.ReactNode }) {
+/** De accentkleur van de site: alleen voor de hoofd-CTA (de lesreeks) en wat er rechtstreeks bij hoort. */
+export const ACCENT = "#E9A13B";
+
+/**
+ * De handgetekende streep onder het laatste woord van een kop, zoals op de vorige site.
+ * `accent` maakt de streep amber; alleen voor de kop in de hero, zodat de kleur schaars blijft.
+ */
+export function Onder({ children, accent = false }: { children: React.ReactNode; accent?: boolean }) {
   return (
     <span className="hp-onder">
       {children}
       <svg viewBox="0 0 200 20" preserveAspectRatio="none" fill="none" aria-hidden="true">
-        <path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke="#1A2D63" strokeOpacity="0.15" strokeWidth="10" strokeLinecap="round" />
+        <path d="M3 14 Q40 4 100 12 Q160 18 197 8" stroke={accent ? ACCENT : "#1A2D63"} strokeOpacity={accent ? 0.6 : 0.15} strokeWidth="10" strokeLinecap="round" />
       </svg>
     </span>
   );
@@ -48,16 +54,20 @@ export function Vinkje({ donker = false, wit = false }: { donker?: boolean; wit?
 export const trackLesreeks = (location: string) =>
   pushEvent("cta_click", { cta_label: "lesreeks", location });
 
+/**
+ * De hoofd-CTA van de site. Standaard in de accentkleur, overal: dat is de ene knop
+ * die eruit moet springen. De andere varianten blijven voor uitzonderingen.
+ */
 export function LesreeksKnop({
   location,
   size = "lg",
   className = "",
-  variant = "primary",
+  variant = "accent",
 }: {
   location: string;
-  size?: "lg" | "md";
+  size?: "lg" | "md" | "sm";
   className?: string;
-  variant?: "primary" | "light" | "secondary";
+  variant?: "accent" | "primary" | "light" | "secondary";
 }) {
   return (
     <a

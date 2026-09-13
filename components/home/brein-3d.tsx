@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { BREIN_3D } from "./copy";
+import { BREIN_3D, BREIN_INFO } from "./copy";
 
 /**
  * Het beeld in de hero: het AI-brein van een fictief installatiebedrijf als
@@ -21,6 +21,10 @@ import { BREIN_3D } from "./copy";
  * Geen library. Alles wordt per beeldje op een <canvas> getekend. De lus
  * staat stil zodra het beeld uit beeld is, halveert op aanraakschermen, en
  * tekent één stilstaand beeld voor wie "minder beweging" heeft ingesteld.
+ *
+ * Wie met de muis over een bol gaat (of erop tikt), ziet in een kaartje wat
+ * die pagina van het fundament bevat en wat de AI ermee doet (BREIN_INFO).
+ * Het kaartje is een gewone <div> naast het canvas die per beeldje meeschuift.
  */
 
 type P3 = [number, number, number];
@@ -182,6 +186,7 @@ export function Brein3D() {
   const wrap = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const placeholderRef = useRef<SVGSVGElement>(null);
+  const tipRef = useRef<HTMLDivElement>(null);
 
   // Stilstaand beginbeeld voor de server (tot het canvas overneemt).
   const eerste = KNOPEN.map((k) => projecteer(k.p, Q0));
@@ -215,6 +220,7 @@ export function Brein3D() {
     let doelX = 0, doelY = 0, muisKX = 0, muisKY = 0;
     let slepen = false, laatsteX = 0, laatsteY = 0, laatsteT = 0, spinX = 0, spinY = 0;
     let hover = -1, muisX = -1, muisY = -1;
+    let vast = -1, getoond = -1, tikX = 0, tikY = 0; // vast: de aangetikte bol (aanraakscherm of klik)
     let vorige = 0, raf = 0, zichtbaar = true, frame = 0, tijd = 0, t0 = -1;
     let pulsen: Puls[] = [];
     let laatstePuls = 0;
@@ -364,16 +370,47 @@ export function Brein3D() {
       }
     };
 
-    const zoekHover = () => {
-      if (muisX < 0) { hover = -1; return; }
-      let beste = -1, afstand = 20;
+    const dichtste = (x: number, y: number, bereik: number) => {
+      let beste = -1, afstand = bereik;
       for (let i = 0; i < KNOPEN.length; i++) {
         if (KNOPEN[i].soort === "sub" || pts[i].z < -0.1) continue;
-        const dd = Math.hypot(pts[i].x - muisX, pts[i].y - muisY);
+        const dd = Math.hypot(pts[i].x - x, pts[i].y - y);
         if (dd < afstand) { afstand = dd; beste = i; }
       }
-      hover = beste;
+      return beste;
     };
+    const zoekHover = () => { hover = muisX < 0 ? -1 : dichtste(muisX, muisY, 20); };
+
+    // Het kaartje bij een bol: tekst wisselt alleen als de bol wisselt, de plaats volgt elk beeldje.
+    const bijwerkTip = () => {
+      const tip = tipRef.current;
+      if (!tip) return;
+      const toon = hover >= 0 ? hover : vast;
+      if (toon !== getoond) {
+        getoond = toon;
+        if (toon >= 0) {
+          const k = KNOPEN[toon];
+          tip.replaceChildren();
+          const kop = document.createElement("strong");
+          kop.textContent = k.label;
+          tip.append(kop, document.createTextNode(BREIN_INFO[k.label] ?? ""));
+          tip.dataset.open = "true";
+        } else {
+          tip.dataset.open = "false";
+        }
+      }
+      if (toon < 0) return;
+      const pt = pts[toon];
+      const r = straal(KNOPEN[toon], pt) * schaalF;
+      const x = pt.x * schaalF, y = pt.y * schaalF;
+      const breedte = tip.offsetWidth, hoogte = tip.offsetHeight;
+      const naarRechts = pt.x < CX;
+      const left = naarRechts ? x + r + 12 : x - r - 12 - breedte;
+      const top = Math.max(0, Math.min(box.clientHeight - hoogte, y - hoogte / 2));
+      tip.style.transform = `translate(${Math.round(left)}px, ${Math.round(top)}px)`;
+    };
+    // Zonder animatielus (minder beweging) tekenen we alleen opnieuw als de muis beweegt.
+    const stilBijwerk = () => { if (stil) { zoekHover(); bijwerkTip(); teken(0); } };
 
     // De draaias verschuift zelf traag, zodat de structuur tuimelt in plaats van rond één as te draaien.
     const as = (nu: number): P3 =>
@@ -408,6 +445,7 @@ export function Brein3D() {
       const verval = Math.pow(0.5, dt / 380);
       for (let i = 0; i < gloed.length; i++) gloed[i] = gloed[i] < 0.01 ? 0 : gloed[i] * verval;
       zoekHover();
+      bijwerkTip();
       teken(tijd);
     };
 
@@ -425,25 +463,36 @@ export function Brein3D() {
         spinY = (dx * 0.006) / dtS;
         spinX = (-dy * 0.006) / dtS;
         laatsteX = e.clientX; laatsteY = e.clientY; laatsteT = nu;
+        stilBijwerk();
         return;
       }
       if (e.pointerType !== "mouse") return;
       muisX = x; muisY = y;
       doelY = ((x / W) * 2 - 1) * 0.3;
       doelX = ((y / H) * 2 - 1) * 0.16;
+      stilBijwerk();
     };
-    const onLeave = () => { doelX = 0; doelY = 0; muisX = -1; muisY = -1; hover = -1; };
-    const onDown = (e: PointerEvent) => { slepen = true; spinX = 0; spinY = 0; laatsteX = e.clientX; laatsteY = e.clientY; laatsteT = performance.now(); doelX = 0; doelY = 0; };
-    const onUp = () => { slepen = false; };
+    const onLeave = () => { doelX = 0; doelY = 0; muisX = -1; muisY = -1; hover = -1; stilBijwerk(); };
+    const onDown = (e: PointerEvent) => { slepen = true; spinX = 0; spinY = 0; laatsteX = e.clientX; laatsteY = e.clientY; laatsteT = performance.now(); tikX = e.clientX; tikY = e.clientY; doelX = 0; doelY = 0; };
+    // Een tik (geen sleep) op een bol zet het kaartje vast; een tik ernaast haalt het weg.
+    const onUp = (e: PointerEvent) => {
+      if (slepen && Math.hypot(e.clientX - tikX, e.clientY - tikY) < 6) {
+        const { x, y } = lokaal(e);
+        const geraakt = dichtste(x, y, e.pointerType === "mouse" ? 20 : 34);
+        vast = geraakt === vast ? -1 : geraakt;
+        stilBijwerk();
+      }
+      slepen = false;
+    };
 
+    box.addEventListener("pointermove", onMove);
+    box.addEventListener("pointerleave", onLeave);
+    box.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointerup", onUp);
     if (stil) {
       document.fonts?.ready.then(() => { font = fontFamilie(); teken(0); });
       teken(0);
     } else {
-      box.addEventListener("pointermove", onMove);
-      box.addEventListener("pointerleave", onLeave);
-      box.addEventListener("pointerdown", onDown);
-      window.addEventListener("pointerup", onUp);
       document.fonts?.ready.then(() => { font = fontFamilie(); });
     }
     if (placeholderRef.current) placeholderRef.current.style.display = "none";
@@ -482,6 +531,7 @@ export function Brein3D() {
             <circle key={i} cx={eerste[i].x} cy={eerste[i].y} r={straal(k, eerste[i])} fill="#1A2D63" fillOpacity={0.3 + 0.7 * eerste[i].d} />
           ))}
         </svg>
+        <div ref={tipRef} className="hp-tip" data-open="false" role="status" aria-live="polite" />
       </div>
       <figcaption className="mt-3 text-center text-[0.875rem] leading-[1.5] text-[#6C7590] lg:text-left">{BREIN_3D.onderschrift}</figcaption>
     </figure>

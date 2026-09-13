@@ -9,6 +9,10 @@
  * Deze functie stuurt de inzending als mail via de Brevo API en geeft een
  * echte HTTP-status terug, zodat een storing meteen zichtbaar is.
  *
+ * Twee formulieren komen hier binnen: de popup "Plan een kennismaking"
+ * (naam, e-mail, telefoon) en het korte vraagformulier onderaan de homepage
+ * (naam, e-mail, bericht). Het onderscheid zit in het veld `bericht`.
+ *
  * Nodige env-variabelen in Netlify:
  *   BREVO_API_KEY      (verplicht) — Brevo → SMTP & API → API Keys
  *   CONTACT_TO_EMAIL   (optioneel) — ontvanger,  standaard contact@finitsolutions.be
@@ -62,6 +66,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
   const naam = pickStr(body.naam, 120);
   const email = pickStr(body.email, 200);
   const telefoon = pickStr(body.telefoonnummer, 40);
+  const bericht = pickStr(body.bericht, 3000);
   const bron = pickStr(body.bron, 300) || "onbekend";
 
   if (!naam) return json(400, { error: "missing_naam" });
@@ -80,9 +85,13 @@ export const handler: Handler = async (event: HandlerEvent) => {
     ["Pagina", bron],
   ];
 
+  const isVraag = bericht.length > 0;
+  const titel = isVraag ? "Nieuwe vraag via de website" : "Nieuwe aanvraag via de website";
+  const onderwerp = isVraag ? `Nieuwe vraag: ${naam}` : `Nieuwe aanvraag: ${naam}`;
+
   const html = `
     <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#1A2D63">
-      <h2 style="margin:0 0 16px">Nieuwe aanvraag via de website</h2>
+      <h2 style="margin:0 0 16px">${titel}</h2>
       <table cellpadding="6" style="border-collapse:collapse;font-size:15px">
         ${rijen
           .map(
@@ -91,6 +100,12 @@ export const handler: Handler = async (event: HandlerEvent) => {
           )
           .join("")}
       </table>
+      ${
+        isVraag
+          ? `<p style="margin:20px 0 6px;color:#6C7590">Vraag</p>
+      <p style="margin:0;white-space:pre-wrap;font-size:15px">${esc(bericht)}</p>`
+          : ""
+      }
     </div>`;
 
   try {
@@ -106,7 +121,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
         to: [{ email: TO_EMAIL }],
         // Antwoorden gaat rechtstreeks naar de lead.
         replyTo: { email, name: naam },
-        subject: `Nieuwe aanvraag: ${naam}`,
+        subject: onderwerp,
         htmlContent: html,
       }),
     });
