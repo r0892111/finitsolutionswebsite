@@ -87,12 +87,16 @@ function StapPil({ label }: { label: string }) {
   return <span className="rounded-full bg-[#1A2D63] px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-white">{label}</span>;
 }
 
-/** Het citaat van Y Combinator over het "company brain", met de bron als link. */
+/** Het citaat van Y Combinator over het "company brain", met het YC-logo en de bron als link. */
 function Citaat({ className = "" }: { className?: string }) {
   const c = AANPAK_FOTO.citaat;
   return (
     <blockquote className={className}>
-      <p className="text-[0.9375rem] leading-[1.5] text-[#3D4766]">&ldquo;{c.tekst}&rdquo;</p>
+      <div className="flex items-center gap-2.5">
+        <Image src={c.logo} alt="" width={28} height={28} className="h-7 w-7 rounded-[5px]" />
+        <span className="text-[0.875rem] font-semibold text-[#1A2D63]">{c.logoNaam}</span>
+      </div>
+      <p className="mt-3 text-[0.9375rem] leading-[1.5] text-[#3D4766]">&ldquo;{c.tekst}&rdquo;</p>
       <cite className="mt-1.5 block text-[0.8125rem] not-italic text-[#6C7590]">
         {c.url ? (
           <a href={c.url} target="_blank" rel="noopener noreferrer" className="hp-link">{c.bron}</a>
@@ -430,10 +434,13 @@ export function HomePage() {
         {/* 1b. De teamfoto op de naad onder de hero, met één statement    */}
         {/* -------------------------------------------------------------- */}
         {/* Wit boven, grijs onder: de foto ligt op de overgang naar "Herken jij dit?". De
-            linkerhelft is vervaagd, zodat het statement er rechtstreeks op staat; het citaat
-            van Y Combinator staat rechtsonder (op een smaller scherm onder de foto). */}
+            linkerhelft is vervaagd, zodat het statement er rechtstreeks op staat. Het citaat van
+            Y Combinator hangt als kaartje over de rechteronderhoek: half in de foto, half eronder
+            (op een smaller scherm staat het onder de foto). De foto knipt zichzelf af, het kaartje
+            staat erbuiten, zodat het niet mee afgeknipt wordt. */}
         <div className="bg-[linear-gradient(to_bottom,#FFFFFF_0,#FFFFFF_50%,#F5F7FB_50%,#F5F7FB_100%)]">
-          <div className={CONTAINER}>
+          <div className={`${CONTAINER} relative`}>
+            <Citaat className="hp-card absolute bottom-0 right-8 z-10 hidden w-[23rem] translate-y-1/2 p-5 lg:block xl:right-0" />
             <div className="hp-card relative overflow-hidden">
               <div className="relative aspect-[4/5] sm:aspect-[16/9] lg:aspect-[21/8]">
                 <Image
@@ -451,7 +458,6 @@ export function HomePage() {
                 <p className="hp-display absolute inset-x-5 bottom-5 text-balance text-[1.6rem] font-bold leading-[1.08] text-white sm:inset-auto sm:left-7 sm:top-1/2 sm:max-w-[26rem] sm:-translate-y-1/2 sm:text-[2.1rem] lg:left-9 lg:max-w-[30rem] lg:text-[2.5rem]">
                   {AANPAK_FOTO.statement}
                 </p>
-                <Citaat className="absolute bottom-5 right-5 hidden max-w-[22rem] rounded-[14px] bg-white/92 p-4 backdrop-blur lg:block" />
               </div>
               <Citaat className="p-5 lg:hidden" />
             </div>
@@ -618,27 +624,32 @@ export function HomePage() {
         {/* 5. Vragen links, de contactkaart rechts                        */}
         {/* -------------------------------------------------------------- */}
         <section id="contact" className="scroll-mt-20 bg-[#F5F7FB]">
-          <div className={`${CONTAINER} grid gap-10 py-14 sm:py-16 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-start lg:gap-12`}>
-            <div id="faq" className="min-w-0 scroll-mt-24">
-              <h2 className={H2}>{VRAGEN.h2}</h2>
-              <div className="hp-card mt-8 px-6 sm:px-8">
+          <div className={`${CONTAINER} py-14 sm:py-16`}>
+            <h2 id="faq" className={`${H2} scroll-mt-24`}>{VRAGEN.h2}</h2>
+            {/* De vragen en de contactkaart zijn even lang: de kaarten rekken mee met de langste, en
+                elke vraag krijgt een gelijk deel van de hoogte (flex-1), met de vraag in het midden. Gaat
+                er een vraag open, dan groeien beide kaarten mee. */}
+            <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-12">
+              <div className="hp-card flex min-w-0 flex-col px-6 sm:px-8">
                 {VRAGEN.items.map((item, i) => (
-                  <details key={item.q} className={`hp-details ${i > 0 ? "border-t border-[#E3E7EF]" : ""}`}>
-                    <summary className="flex items-start justify-between gap-6 py-5 text-[1.0625rem] font-medium leading-snug text-[#1A2D63]">
-                      <span>{item.q}</span>
-                      <span className="hp-plus mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" aria-hidden="true">
-                        <svg width="12" height="12" viewBox="0 0 12 12">
-                          <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                        </svg>
-                      </span>
-                    </summary>
-                    <FaqAntwoord blokken={item.a} />
-                  </details>
+                  <div key={item.q} className={`flex flex-1 flex-col justify-center ${i > 0 ? "border-t border-[#E3E7EF]" : ""}`}>
+                    <details className="hp-details">
+                      <summary className="flex items-start justify-between gap-6 py-5 text-[1.0625rem] font-medium leading-snug text-[#1A2D63]">
+                        <span>{item.q}</span>
+                        <span className="hp-plus mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" aria-hidden="true">
+                          <svg width="12" height="12" viewBox="0 0 12 12">
+                            <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                          </svg>
+                        </span>
+                      </summary>
+                      <FaqAntwoord blokken={item.a} />
+                    </details>
+                  </div>
                 ))}
               </div>
-            </div>
 
-            <ContactKaart location="contact" bron="https://finitsolutions.be/#contact" className="lg:sticky lg:top-24" />
+              <ContactKaart location="contact" bron="https://finitsolutions.be/#contact" />
+            </div>
           </div>
         </section>
       </main>

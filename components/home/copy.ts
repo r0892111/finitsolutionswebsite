@@ -129,6 +129,9 @@ export const AANPAK_FOTO = {
     tekst: "If we want every company to run on AI automation, we need a new primitive: a company brain.",
     bron: "Tom Blomfield, Y Combinator, Request for Startups 2026",
     url: "https://www.ycombinator.com/rfs#company-brain",
+    // Het logo op het kaartje, voor de geloofwaardigheid (14/09).
+    logo: "/yc-logo.svg",
+    logoNaam: "Y Combinator",
   },
   foto: "/team-start-it-kbc.jpg",
   fotoAlt: "Karel en Jort van Finit Solutions achter hun stand op een beurs.",
@@ -144,9 +147,9 @@ export const HERKEN = {
   h2: ["Herken jij", "dit?"],
   intro: "We spraken al met meer dan honderd Belgische KMO's. Dit horen we het vaakst.",
   items: [
-    { tekst: "Je bent de flessenhals: alles passeert nog langs jou.", beeld: "flessenhals" },
-    { tekst: "Je gebruikt ChatGPT, maar het kent jouw bedrijf niet.", beeld: "chatgpt" },
-    { tekst: "Je weet dat AI kan helpen, maar niet waar te beginnen.", beeld: "beginnen" },
+    { tekst: "Het dagelijkse werk passeert nog steeds langs jou.", beeld: "flessenhals" },
+    { tekst: "Je gebruikt AI zoals ChatGPT of Claude, maar het kent jouw bedrijf niet goed genoeg.", beeld: "chatgpt" },
+    { tekst: "Je weet dat AI meer werk kan overnemen, maar je weet niet waar te beginnen.", beeld: "beginnen" },
   ] as { tekst: string; beeld: HerkenBeeld }[],
   overgang: "Herkenbaar? Dan zit je hier goed.",
 };
@@ -416,23 +419,25 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
 };
 
 // 8. De contactkaart naast de FAQ en op /contact: eerst de lesreeks, dan het vraagformulier,
-// dan het nummer van Karel met zijn foto. Geen kennismaking meer inplannen. Nieuw (review 13/09).
+// dan het telefoonnummer. Geen kennismaking meer inplannen. Nieuw (review 13/09); de foto van
+// Karel is weg sinds 14/09.
 export const SLOT = {
   lesreeksTitel: "Start vandaag met de lesreeks",
   bel: "Even sparren over AI in jouw bedrijf? Bel gerust.",
-  belNaam: "Karel",
-  foto: "/karel.png",
   mailLabel: "Of mail naar",
 };
 
 // Het korte vraagformulier: lager op de drempel dan een gesprek. Gaat naar de Netlify Function
-// met het veld `bericht` erbij, en op de contactkaart ook een telefoonnummer.
+// met het veld `bericht` erbij, en op de contactkaart ook een telefoonnummer. Alle velden zijn
+// verplicht (14/09).
 export const VRAAG = {
   titel: "Liever eerst een vraag stellen?",
   sub: "Stel ze hier. Je krijgt een persoonlijk antwoord, meestal binnen 24 uur.",
   naam: "Naam",
   email: "E-mailadres",
-  telefoon: "Telefoonnummer (optioneel)",
+  telefoon: "Telefoonnummer",
+  website: "Website van je bedrijf",
+  websiteHint: "jouwbedrijf.be",
   bericht: "Je vraag",
   berichtHint: "Bijvoorbeeld: werkt dit met ons boekhoudpakket?",
   knop: "Verstuur je vraag",

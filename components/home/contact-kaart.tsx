@@ -3,12 +3,11 @@
 /**
  * De contactkaart: naast de FAQ op de homepage en op /contact. Van boven naar
  * onder: de lesreeks (de weg die we voorstellen), het vraagformulier voor wie
- * eerst iets wil vragen, en het nummer van Karel met zijn foto, zodat je ziet
- * wie je belt. Geen kennismaking meer inplannen (review van 13 september 2026).
+ * eerst iets wil vragen, en het telefoonnummer. Geen kennismaking meer inplannen
+ * (review van 13 september 2026), geen foto (14 september).
  * Tekst in copy.ts (SLOT, VRAAG, MENU, FOOTER).
  */
 
-import Image from "next/image";
 import { Mail } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
@@ -28,8 +27,7 @@ export function ContactKaart({ location, bron, className = "" }: { location: str
         <VraagFormulier metTelefoon bron={bron} location={location} />
       </div>
 
-      <div className="mt-7 flex items-start gap-4 border-t border-[#E3E7EF] pt-7">
-        <Image src={SLOT.foto} alt={SLOT.belNaam} width={96} height={96} className="h-16 w-16 shrink-0 rounded-full border border-[#E3E7EF] object-cover" />
+      <div className="mt-7 border-t border-[#E3E7EF] pt-7">
         <div className="min-w-0">
           <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-[#6C7590]">{MENU.belTitel}</p>
           <a

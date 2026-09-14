@@ -12,15 +12,15 @@ Eén idee: **de pagina volgt de schrijfstijl van de vorige homepage en de landin
 | `brein-3d.tsx` | Het beeld in de hero: het fundament als zwevende structuur van bolletjes en lijnen op een `<canvas>`, rustig (geen pulsen, geen gloed) en scherp op elke pixeldichtheid. Wie over een bol gaat of erop tikt, opent die pagina als een tekstbestand (`BREIN_INFO` in `copy.ts`). Algemene woorden voor elk dienstenbedrijf. Geen library. |
 | `herken-sectie.tsx` | "Herken jij dit?": drie punten die met "Je" beginnen, elk met een tekening, om en om links en rechts, daaronder "Herkenbaar?" met de knop. |
 | `oplossing-sectie.tsx` | De oplossing, meteen onder de herkenning: de pitch in drie zinnen op een marineblauwe kaart met een tekening, daaronder de tool-logo's. |
-| `illustraties.tsx` | De tekeningen bij de herkenning en de oplossing: eenvoudige lijntekeningen als inline SVG, één amber accent per tekening, geen beweging. |
+| `illustraties.tsx` | De tekeningen bij de herkenning en de oplossing: vier scènes als inline SVG (3 op 2) met in elke tekening dezelfde zaakvoerder, zodat de hele zin in beeld staat. Eén amber accent per tekening, geen gezichten, geen tekst, geen beweging. Gemaakt voor een lichte ondergrond: bij de herkenning zonder kader op de lichte band, op de blauwe kaart van de oplossing op een wit vlak. |
 | `stap-details.tsx` | De drie stappen (Opleiden, Bouwen, Onderhouden) in detail. Op desktop in het paneel rechts van de kaarten (de kaarten blijven staan terwijl je scrolt, onderaan klik je door naar de volgende stap); op een telefoon klapt het open in de kaart zelf. Geen prijzen in de panelen, geen voorbeelden. |
 | `case-kaart.tsx` | Een oplossing als kaart, de catalogus, en de quote van Bas. |
 | `cases-overzicht.tsx` | De pagina `/cases`: alle oplossingen volledig uitgeschreven onder elkaar. |
-| `contact-kaart.tsx` | De contactkaart naast de FAQ en op `/contact`: de lesreeks, het vraagformulier (met telefoonnummer) en het nummer van Karel met zijn foto. |
+| `contact-kaart.tsx` | De contactkaart naast de FAQ en op `/contact`: de lesreeks, het vraagformulier (met telefoonnummer) en het telefoonnummer, zonder foto. Op de homepage even lang als de FAQ. |
 | `contact-pagina.tsx` | De pagina `/contact`, waar "Neem contact met ons op" naartoe gaat. |
 | `ui.tsx` | Maatvoering, koppen, de accentkleur (`ACCENT`, `#E9A13B`) en de knoppen. `LesreeksKnop` is de hoofd-CTA en staat standaard in de accentkleur; `ContactKnop` is de tweede knop en linkt naar `/contact`. |
 | `site-header.tsx`, `site-footer.tsx` | Kop en footer voor de pagina's buiten de homepage (`/bedankt`, `/cases`, `/contact`, de juridische pagina's). Het logo linkt naar de homepage; het btw-nummer komt uit `lib/finit-links.ts`. |
-| `vraag-formulier.tsx` | Het korte vraagformulier (naam, e-mail, telefoonnummer optioneel, vraag). Gaat naar de Netlify Function `/api/contact-submit` met het veld `bericht`. |
+| `vraag-formulier.tsx` | Het korte vraagformulier (naam, e-mail, telefoonnummer, website van het bedrijf, vraag), alles verplicht. Gaat naar de Netlify Function `/api/contact-submit` met de velden `bericht` en `bedrijfswebsite` (`website` is de honeypot). |
 
 De popup `components/contact-form-popup.tsx` (naar `netlify/functions/contact-submit.ts`, daarna `/bedankt`) wordt niet meer geopend vanaf de homepage; hij blijft bestaan voor de landingspagina's. De cookiebanner is `components/cookie-banner.tsx`. Links en contactgegevens staan in `lib/finit-links.ts`.
 
@@ -42,7 +42,7 @@ De popup `components/contact-form-popup.tsx` (naar `netlify/functions/contact-su
 5. **Hoe krijg jij jouw AI-werknemer?** (`#aanpak`): Stap 1 Opleiden (lesreeks € 95 met € 295 doorstreept), Stap 2 Bouwen (€ 4.500), Stap 3 Onderhouden (€ 90 per maand), het paneel van de gekozen stap rechts.
 6. **De lesreeks** op de naad: het Skool-blok.
 7. **Wat we het vaakst bouwen** (`#cases`): de oplossingen op marineblauw, "Bekijk alle oplossingen", de quote van Bas.
-8. **Vragen en contact** (`#faq`, `#contact`): links de zeven veelgestelde vragen, rechts de contactkaart.
+8. **Vragen en contact** (`#faq`, `#contact`): links de zeven veelgestelde vragen, rechts de contactkaart, allebei even lang.
 
 ## Regels voor de copy
 

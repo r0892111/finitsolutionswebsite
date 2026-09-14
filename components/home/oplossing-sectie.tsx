@@ -28,7 +28,10 @@ export function OplossingSectie() {
               ))}
             </div>
           </div>
-          <OplossingTekening label={OPLOSSING.illustratieAria} className="mx-auto mt-8 w-full max-w-[20rem] lg:mt-0 lg:max-w-none" />
+          {/* De tekening is gemaakt voor een lichte ondergrond: op de blauwe kaart staat ze op een wit vlak. */}
+          <div className="mx-auto mt-8 w-full max-w-[30rem] rounded-[16px] bg-white p-2 sm:p-3 lg:mt-0 lg:max-w-none">
+            <OplossingTekening label={OPLOSSING.illustratieAria} className="block h-auto w-full" />
+          </div>
         </div>
 
         <div className="mt-10 text-center">

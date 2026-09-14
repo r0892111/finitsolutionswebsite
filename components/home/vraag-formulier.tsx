@@ -2,10 +2,13 @@
 
 /**
  * Het korte vraagformulier op de contactkaart (naast de FAQ op de homepage, en
- * op /contact): naam, e-mail, telefoonnummer (optioneel) en de vraag. Lager op
- * de drempel dan een gesprek inplannen. Gaat naar de Netlify Function
- * (/api/contact-submit) met het veld `bericht` erbij, en toont de bevestiging
- * ter plekke in plaats van naar /bedankt te gaan.
+ * op /contact): naam, e-mail, telefoonnummer, de website van het bedrijf en de
+ * vraag. Alles is verplicht. Lager op de drempel dan een gesprek inplannen. Gaat
+ * naar de Netlify Function (/api/contact-submit) met de velden `bericht` en
+ * `bedrijfswebsite` erbij, en toont de bevestiging ter plekke in plaats van naar
+ * /bedankt te gaan.
+ *
+ * Het veld `website` is iets anders: dat is de honeypot tegen bots.
  */
 
 import { useId, useState } from "react";
@@ -28,7 +31,7 @@ export function VraagFormulier({
   bron = "https://finitsolutions.be/#contact",
   location = "vraag",
 }: {
-  /** Ook een (optioneel) telefoonnummer vragen. */
+  /** Ook een telefoonnummer vragen. */
   metTelefoon?: boolean;
   /** De pagina die in de mail komt te staan. */
   bron?: string;
@@ -39,6 +42,7 @@ export function VraagFormulier({
   const [naam, setNaam] = useState("");
   const [email, setEmail] = useState("");
   const [telefoonnummer, setTelefoonnummer] = useState("");
+  const [bedrijfswebsite, setBedrijfswebsite] = useState("");
   const [bericht, setBericht] = useState("");
   const [website, setWebsite] = useState(""); // honeypot: onzichtbaar, blijft leeg bij mensen
   const [status, setStatus] = useState<Status>("leeg");
@@ -55,7 +59,7 @@ export function VraagFormulier({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: timer.signal,
-        body: JSON.stringify({ naam, email, telefoonnummer: metTelefoon ? telefoonnummer : "", bericht, website, bron }),
+        body: JSON.stringify({ naam, email, telefoonnummer: metTelefoon ? telefoonnummer : "", bedrijfswebsite, bericht, website, bron }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
       setStatus("klaar");
@@ -96,11 +100,16 @@ export function VraagFormulier({
           <input id={`${id}-email`} type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className={VELD} />
         </div>
         {metTelefoon && (
-          <div className="sm:col-span-2 lg:col-span-1 xl:col-span-2">
+          <div>
             <label htmlFor={`${id}-telefoon`} className={LABEL}>{VRAAG.telefoon}</label>
-            <input id={`${id}-telefoon`} type="tel" autoComplete="tel" value={telefoonnummer} onChange={(e) => setTelefoonnummer(e.target.value)} className={VELD} />
+            <input id={`${id}-telefoon`} type="tel" required autoComplete="tel" value={telefoonnummer} onChange={(e) => setTelefoonnummer(e.target.value)} className={VELD} />
           </div>
         )}
+        {/* Tekst in plaats van type="url": zo mag "jouwbedrijf.be" zonder https:// ervoor. */}
+        <div className={metTelefoon ? "" : "sm:col-span-2 lg:col-span-1 xl:col-span-2"}>
+          <label htmlFor={`${id}-bedrijfswebsite`} className={LABEL}>{VRAAG.website}</label>
+          <input id={`${id}-bedrijfswebsite`} type="text" inputMode="url" required autoComplete="url" value={bedrijfswebsite} onChange={(e) => setBedrijfswebsite(e.target.value)} placeholder={VRAAG.websiteHint} className={VELD} />
+        </div>
       </div>
       <div className="mt-4">
         <label htmlFor={`${id}-bericht`} className={LABEL}>{VRAAG.bericht}</label>

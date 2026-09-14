@@ -4,7 +4,7 @@
  * /contact: waar "Neem contact met ons op" naartoe gaat. Zelfde kop en footer
  * als de andere pagina's buiten de homepage, en dezelfde contactkaart als
  * naast de FAQ (contact-kaart.tsx): de lesreeks, het vraagformulier met
- * telefoonnummer, en het nummer van Karel. Tekst in copy.ts (CONTACT).
+ * telefoonnummer, en het telefoonnummer. Tekst in copy.ts (CONTACT).
  */
 
 import { ChevronRight } from "lucide-react";

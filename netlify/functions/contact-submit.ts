@@ -10,8 +10,11 @@
  * echte HTTP-status terug, zodat een storing meteen zichtbaar is.
  *
  * Twee formulieren komen hier binnen: de popup "Plan een kennismaking"
- * (naam, e-mail, telefoon) en het korte vraagformulier onderaan de homepage
- * (naam, e-mail, bericht). Het onderscheid zit in het veld `bericht`.
+ * (naam, e-mail, telefoon) en het korte vraagformulier op de contactkaart
+ * (naam, e-mail, telefoon, website van het bedrijf, bericht). Het onderscheid
+ * zit in het veld `bericht`. Het vraagformulier maakt alles verplicht in de
+ * browser; hier blijven alleen naam en e-mail verplicht, zodat de popup blijft
+ * werken. `bedrijfswebsite` is de echte website, `website` de honeypot.
  *
  * Nodige env-variabelen in Netlify:
  *   BREVO_API_KEY      (verplicht) — Brevo → SMTP & API → API Keys
@@ -66,6 +69,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
   const naam = pickStr(body.naam, 120);
   const email = pickStr(body.email, 200);
   const telefoon = pickStr(body.telefoonnummer, 40);
+  const bedrijfswebsite = pickStr(body.bedrijfswebsite, 200);
   const bericht = pickStr(body.bericht, 3000);
   const bron = pickStr(body.bron, 300) || "onbekend";
 
@@ -82,6 +86,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
     ["Naam", naam],
     ["E-mail", email],
     ["Telefoon", telefoon || "—"],
+    ["Website", bedrijfswebsite || "—"],
     ["Pagina", bron],
   ];
 

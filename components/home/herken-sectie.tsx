@@ -25,7 +25,8 @@ const BEELDEN: Record<HerkenBeeld, ComponentType<{ className?: string }>> = {
 export function HerkenSectie() {
   return (
     <section id="recognition" className="scroll-mt-20 bg-[#F5F7FB]">
-      <div className={`${CONTAINER} pt-12 sm:pt-14`}>
+      {/* Op desktop meer ruimte bovenaan: het YC-kaartje hangt half onder de foto erboven. */}
+      <div className={`${CONTAINER} pt-12 sm:pt-14 lg:pt-24`}>
         <div className={KOP}>
           <h2 className={H2}>
             {HERKEN.h2[0]} <Onder>{HERKEN.h2[1]}</Onder>
@@ -34,16 +35,17 @@ export function HerkenSectie() {
         </div>
 
         {/* De drie punten: tekst en tekening, om en om. De tekst staat eerst in de DOM. */}
-        <ol className="mx-auto mt-8 grid max-w-[60rem] gap-8 lg:gap-4">
+        <ol className="mx-auto mt-8 grid max-w-[60rem] gap-8 lg:gap-6">
           {HERKEN.items.map((item, i) => {
             const Beeld = BEELDEN[item.beeld];
             const tekstRechts = i % 2 === 1;
             return (
-              <li key={item.tekst} className="grid items-center gap-4 sm:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] sm:gap-8 lg:gap-12">
+              <li key={item.tekst} className="grid items-center gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:gap-8 lg:gap-12">
                 <p className={`hp-display text-balance text-[1.5rem] font-semibold leading-[1.15] text-[#1A2D63] sm:text-[1.75rem] lg:text-[1.9rem] ${tekstRechts ? "sm:order-last sm:text-right" : ""}`}>
                   {item.tekst}
                 </p>
-                <Beeld className="mx-auto h-[6.5rem] w-auto max-w-full lg:h-[7.5rem]" />
+                {/* Zonder kader: de tekening staat rechtstreeks op de lichte band. */}
+                <Beeld className="block h-auto w-full" />
               </li>
             );
           })}
