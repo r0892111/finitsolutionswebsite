@@ -448,7 +448,7 @@ export function HomePage() {
                   alt={AANPAK_FOTO.fotoAlt}
                   fill
                   sizes="(min-width: 1184px) 74rem, 100vw"
-                  className="object-cover [filter:brightness(1.15)_contrast(1.03)]"
+                  className="object-cover [filter:brightness(1.3)_contrast(1.03)]"
                   style={{ objectPosition: "center 42%" }}
                 />
                 <div className="hp-foto-waas pointer-events-none absolute inset-y-0 left-0 hidden w-[60%] sm:block" aria-hidden="true" />
