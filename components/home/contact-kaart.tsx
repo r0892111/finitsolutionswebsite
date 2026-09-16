@@ -2,7 +2,7 @@
 
 /**
  * De contactkaart: naast de FAQ op de homepage en op /contact. Van boven naar
- * onder: de lesreeks (de weg die we voorstellen), het vraagformulier voor wie
+ * onder: de onboarding op Finit OS (de weg die we voorstellen), het vraagformulier voor wie
  * eerst iets wil vragen, en het telefoonnummer. Geen kennismaking meer inplannen
  * (review van 13 september 2026), geen foto (14 september).
  * Tekst in copy.ts (SLOT, VRAAG, MENU, FOOTER).

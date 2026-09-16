@@ -485,7 +485,7 @@ export function BeginnenTekening({ className = "" }: Props) {
 /**
  * De oplossing: de AI-werknemer (het amber sterretje als hoofd) werkt aan een eigen bureau,
  * met lijnen naar de mailbox, de agenda en de boekhouding, elk met een vinkje. De stippellijn
- * loopt van de zaakvoerder naar de map op dat bureau: het fundament dat hij in de lesreeks
+ * loopt van de zaakvoerder naar de map op dat bureau: het fundament dat hij in de onboarding
  * legt. De zaakvoerder zelf zit achterover met een koffie.
  */
 export function OplossingTekening({ className = "", label }: Props & { label?: string }) {

@@ -33,11 +33,12 @@ import {
 /**
  * De homepage: hero → de teamfoto met één statement → herken jij dit (drie
  * punten met een tekening) → de oplossing (met de tool-logo's) → hoe krijg jij
- * jouw AI-werknemer (drie stappen + prijzen) → de lesreeks → de oplossingen die
+ * jouw AI-werknemer (drie stappen + prijzen) → de onboarding → de oplossingen die
  * we het vaakst bouwen → vragen naast de contactkaart. Alle tekst staat in
  * ./copy.ts, de oplossingen in ./cases.ts.
  *
- * Eén hoofd-CTA: de lesreeks, in de accentkleur (LesreeksKnop). De tweede
+ * Eén hoofd-CTA: de onboarding op Finit OS (tot 15/09 de lesreeks; de knop heet
+ * in de code nog LesreeksKnop), in de accentkleur. De tweede
  * knop is "Neem contact met ons op" en gaat naar /contact (ContactKnop); er
  * wordt geen kennismaking meer ingepland vanaf de homepage. De drie stappen
  * zijn een lijst kaarten met rechts het paneel van de gekozen stap
@@ -504,11 +505,14 @@ export function HomePage() {
                         </span>
                         <span className={`mt-3 block ${H3} text-[1.35rem]`}>{stap.titel}</span>
                         <span className="mt-1 block text-[0.9375rem] leading-[1.5] text-[#3D4766]">{stap.intro}</span>
-                        <span className="mt-3.5 flex items-end justify-between gap-3 border-t border-[#E3E7EF] pt-3.5">
+                        <span className="mt-3.5 flex flex-wrap items-end justify-between gap-3 border-t border-[#E3E7EF] pt-3.5">
                           <span>
                             <span className="block text-[0.75rem] font-medium uppercase tracking-wide text-[#6C7590]">{stap.prijsLabel}</span>
                             <span className="mt-1 flex flex-wrap items-baseline gap-x-2">
+                              {/* "vanaf": het echte voorstel komt in het strategiegesprek. */}
+                              {stap.prijsPrefix && <span className="text-[0.8125rem] font-medium text-[#6C7590]">{stap.prijsPrefix}</span>}
                               <span className="hp-display text-[1.5rem] font-bold leading-none text-[#1A2D63]">{stap.prijs}</span>
+                              {stap.prijsSub && <span className="text-[0.8125rem] font-medium text-[#6C7590]">{stap.prijsSub}</span>}
                               {stap.prijsOud && (
                                 <s className="hp-display text-[1rem] font-semibold leading-none text-[#6C7590] decoration-[#6C7590]/70 decoration-[1.5px]">
                                   <span className="sr-only">daarna </span>{stap.prijsOud}
@@ -559,11 +563,12 @@ export function HomePage() {
         </section>
 
         {/* -------------------------------------------------------------- */}
-        {/* 3b. De lesreeks, op de naad tussen de stappen en de oplossingen */}
+        {/* 3b. De onboarding, op de naad tussen de stappen en de oplossingen */}
         {/* -------------------------------------------------------------- */}
         {/* De achtergrond breekt precies in het midden: wit boven, marineblauw
             onder. Daardoor ligt de kaart exact op de middenschijding van de
-            twee secties: de deur naar de lesreeks, nadat je de drie stappen kent. */}
+            twee secties: de deur naar de onboarding, nadat je de drie stappen kent.
+            De onboarding draait vandaag nog op Skool. */}
         <div className="bg-[linear-gradient(to_bottom,#FFFFFF_0,#FFFFFF_50%,#1A2D63_50%,#1A2D63_100%)]">
           <div className={CONTAINER}>
             {/* De deur naar de lesreeks: knop, Skool-woordmerk en de cover van de community. */}

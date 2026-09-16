@@ -17,10 +17,9 @@ export const WHATSAPP_LINK = "https://wa.me/32495702314";
 export const VAT_NUMBER = "BE1036433716";
 
 /**
- * De lesreeks wordt verkocht via de community op Skool. De knop
- * "Start de lesreeks" gaat rechtstreeks daarheen, niet naar een formulier.
- *
- * TODO (Alex): vervang door de echte link naar de Finit-community zodra die
- * publiek staat. Tot dan landt de knop op de Skool-startpagina.
+ * De onboarding op Finit OS (tot 15 september 2026 de lesreeks) draait vandaag
+ * nog via de community op Skool. De knop "Start je onboarding" gaat rechtstreeks
+ * daarheen, niet naar een formulier. Zodra de onboarding in Finit OS zelf zit,
+ * wordt dit de link naar het platform.
  */
 export const SKOOL_URL = "https://www.skool.com/finit-solutions-3358";

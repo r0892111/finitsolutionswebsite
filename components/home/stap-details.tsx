@@ -7,14 +7,17 @@
  * op desktop, in de kaart op een telefoon. Bewust kort, geen prijzen (die
  * staan op de kaarten) en geen voorbeelden (die staan bij de oplossingen).
  * Het paneel is wit, dus de vakjes hierin zijn lichtgrijs of lichtblauw.
+ *
+ * Sinds 16 september 2026 is er in stap 2 één weg: het strategiegesprek, het
+ * voorstel per AI-werknemer, bouwen, live. Het AI-native traject is geschrapt.
  */
 
-import { BellRing, CalendarClock, LifeBuoy, RefreshCw, Server, ShieldCheck, Unlock } from "lucide-react";
+import { BellRing, CalendarClock, Folder, LayoutDashboard, RefreshCw, Server, ShieldCheck } from "lucide-react";
 import { HOE } from "./copy";
 import { H3, Vinkje } from "./ui";
 
-/** Iconen bij de zes onderdelen van het onderhoud (stap 3), in volgorde van de copy. */
-const ONDERHOUD_ICONEN = [Server, BellRing, RefreshCw, LifeBuoy, CalendarClock, Unlock];
+/** Iconen bij de zes onderdelen van stap 3 (Gebruiken), in volgorde van de copy. */
+const ONDERHOUD_ICONEN = [Server, LayoutDashboard, BellRing, RefreshCw, CalendarClock, Folder];
 
 export function FundamentDetail() {
   const F = HOE.fundament;
@@ -51,26 +54,30 @@ export function FundamentDetail() {
   );
 }
 
+/** Stap 2: hoe het pakket schaalt, en dan de vier stappen van gesprek tot live. */
 export function BouwDetail() {
   const stappen = HOE.bouw.volgorde;
   return (
-    <ol>
-      {stappen.map((s, i) => {
-        const laatste = i === stappen.length - 1;
-        return (
-          <li key={s.titel} className="relative flex gap-4 pb-5 last:pb-0">
-            {!laatste && <span className="absolute bottom-0 left-[15.5px] top-9 w-px bg-[#1A2D63]/15" aria-hidden="true" />}
-            <span className="hp-display relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[0.875rem] font-bold text-white">
-              {laatste ? <ShieldCheck className="h-4 w-4" aria-hidden="true" /> : i + 1}
-            </span>
-            <div className="pt-1">
-              <p className="text-[1rem] font-semibold leading-[1.35] text-[#1A2D63]">{s.titel}</p>
-              <p className="mt-1 text-[0.9375rem] leading-[1.6] text-[#3D4766]">{s.tekst}</p>
-            </div>
-          </li>
-        );
-      })}
-    </ol>
+    <div>
+      <p className="rounded-[16px] bg-[#F5F7FB] p-5 text-[0.9375rem] leading-[1.6] text-[#3D4766]">{HOE.bouw.intro}</p>
+      <ol className="mt-6">
+        {stappen.map((s, i) => {
+          const laatste = i === stappen.length - 1;
+          return (
+            <li key={s.titel} className="relative flex gap-4 pb-5 last:pb-0">
+              {!laatste && <span className="absolute bottom-0 left-[15.5px] top-9 w-px bg-[#1A2D63]/15" aria-hidden="true" />}
+              <span className="hp-display relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[0.875rem] font-bold text-white">
+                {laatste ? <ShieldCheck className="h-4 w-4" aria-hidden="true" /> : i + 1}
+              </span>
+              <div className="pt-1">
+                <p className="text-[1rem] font-semibold leading-[1.35] text-[#1A2D63]">{s.titel}</p>
+                <p className="mt-1 text-[0.9375rem] leading-[1.6] text-[#3D4766]">{s.tekst}</p>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
   );
 }
 
@@ -80,7 +87,7 @@ export function OnderhoudDetail() {
     <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
       {punten.map((v, i) => {
         const Icoon = ONDERHOUD_ICONEN[i] ?? Server;
-        const accent = i === punten.length - 1; // "Van jou, ook als je stopt": de vertrouwenskaart
+        const accent = i === punten.length - 1; // "Je fundament blijft van jou": de vertrouwenskaart
         return (
           <li key={v.titel} className={`rounded-[16px] p-4 ${accent ? "bg-[#1A2D63]" : "bg-[#F5F7FB]"}`}>
             <span className={`flex h-8 w-8 items-center justify-center rounded-full ${accent ? "bg-white/12" : "bg-[#E6ECF9]"}`} aria-hidden="true">

@@ -13,7 +13,7 @@ Eén idee: **de pagina volgt de schrijfstijl van de vorige homepage en de landin
 | `herken-sectie.tsx` | "Herken jij dit?": drie punten die met "Je" beginnen, elk met een tekening, om en om links en rechts, daaronder "Herkenbaar?" met de knop. |
 | `oplossing-sectie.tsx` | De oplossing, meteen onder de herkenning: de pitch in drie zinnen op een marineblauwe kaart met een tekening, daaronder de tool-logo's. |
 | `illustraties.tsx` | De tekeningen bij de herkenning en de oplossing: vier scènes als inline SVG (3 op 2) met in elke tekening dezelfde zaakvoerder, zodat de hele zin in beeld staat. Eén amber accent per tekening, geen gezichten, geen tekst, geen beweging. Gemaakt voor een lichte ondergrond: bij de herkenning zonder kader op de lichte band, op de blauwe kaart van de oplossing op een wit vlak. |
-| `stap-details.tsx` | De drie stappen (Opleiden, Bouwen, Onderhouden) in detail. Op desktop in het paneel rechts van de kaarten (de kaarten blijven staan terwijl je scrolt, onderaan klik je door naar de volgende stap); op een telefoon klapt het open in de kaart zelf. Geen prijzen in de panelen, geen voorbeelden. |
+| `stap-details.tsx` | De drie stappen (Opleiden, Bouwen, Gebruiken) in detail. Stap 2 begint met het strategiegesprek van 90 minuten en eindigt met je voorstel per AI-werknemer (sinds 16/09 één weg; het AI-native traject is geschrapt). Op desktop in het paneel rechts van de kaarten (de kaarten blijven staan terwijl je scrolt, onderaan klik je door naar de volgende stap); op een telefoon klapt het open in de kaart zelf. Geen prijzen in de panelen, geen voorbeelden. |
 | `case-kaart.tsx` | Een oplossing als kaart, de catalogus, en de quote van Bas. |
 | `cases-overzicht.tsx` | De pagina `/cases`: alle oplossingen volledig uitgeschreven onder elkaar. |
 | `contact-kaart.tsx` | De contactkaart naast de FAQ en op `/contact`: de lesreeks, het vraagformulier (met telefoonnummer) en het telefoonnummer, zonder foto. Op de homepage even lang als de FAQ. |
@@ -39,15 +39,15 @@ De popup `components/contact-form-popup.tsx` (naar `netlify/functions/contact-su
 2. **De foto** op de naad onder de hero: de linkerhelft vervaagd, met het statement en het citaat van Y Combinator.
 3. **Herken jij dit?** (`#recognition`): drie punten met een tekening, "Herkenbaar?" met de knop.
 4. **De oplossing** (`#oplossing`): de pitch op een marineblauwe kaart, daaronder de tool-logo's.
-5. **Hoe krijg jij jouw AI-werknemer?** (`#aanpak`): Stap 1 Opleiden (lesreeks € 95 met € 295 doorstreept), Stap 2 Bouwen (€ 4.500), Stap 3 Onderhouden (€ 90 per maand), het paneel van de gekozen stap rechts.
-6. **De lesreeks** op de naad: het Skool-blok.
+5. **Hoe krijg jij jouw AI-werknemer?** (`#aanpak`): Stap 1 Opleiden (eenmalige toegang tot Finit OS, € 95 met € 295 doorstreept, met het strategiegesprek van 90 minuten erbij), Stap 2 Bouwen (opstartkost vanaf € 1.650), Stap 3 Gebruiken (gebruikslicentie vanaf € 95 per maand); het exacte voorstel komt in het strategiegesprek, het paneel van de gekozen stap rechts.
+6. **De onboarding** op de naad: het Skool-blok ("Je onboarding, vandaag op Skool").
 7. **Wat we het vaakst bouwen** (`#cases`): de oplossingen op marineblauw, "Bekijk alle oplossingen", de quote van Bas.
 8. **Vragen en contact** (`#faq`, `#contact`): links de zeven veelgestelde vragen, rechts de contactkaart, allebei even lang.
 
 ## Regels voor de copy
 
 - Duidelijk, rechtstreeks, simpel voor niet-technische mensen, resultaatgericht. Alles wat over het model gaat, klopt met de lesreeks (jij legt het fundament, wij bouwen daarna).
-- Het heet een **lesreeks** (geen cursus) en een **AI-fundament** (in de lesreeks ook AI-brein). Claude of ChatGPT, allebei kunnen.
+- Stap 1 heet sinds 15 september 2026 **de onboarding op Finit OS** (werknaam; tot dan de lesreeks, nooit een cursus). Het resultaat heet een **AI-fundament** (ook AI-brein). De onboarding draait vandaag nog op Skool; de knop heet in de code nog `LesreeksKnop`. Claude of ChatGPT, allebei kunnen.
 - Geen gedachtestreepjes, geen uitroeptekens, geen plaatsnaam.
 - Prijzen altijd excl. btw, de Claude-abonnementskost erbij vermeld.
 - Cijfers alleen als ze kloppen. Geen cijfers bij de oplossingen zolang er geen echte referenties zijn.
