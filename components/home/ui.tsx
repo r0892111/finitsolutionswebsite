@@ -58,10 +58,9 @@ export const trackLesreeks = (location: string) =>
   pushEvent("cta_click", { cta_label: "lesreeks", location });
 
 /**
- * De hoofd-CTA van de site: de onboarding op Finit OS (tot 15/09 de lesreeks, vandaar
- * de naam in de code). Standaard in de accentkleur, overal: dat is de ene knop die
- * eruit moet springen. Gaat vandaag nog naar Skool (SKOOL_URL). De andere varianten
- * blijven voor uitzonderingen.
+ * De hoofd-CTA van de site: de lesreeks. Standaard in de accentkleur, overal: dat is
+ * de ene knop die eruit moet springen. Gaat naar Skool (SKOOL_URL). De andere
+ * varianten blijven voor uitzonderingen.
  */
 export function LesreeksKnop({
   location,

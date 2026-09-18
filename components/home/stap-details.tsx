@@ -12,12 +12,12 @@
  * voorstel per AI-werknemer, bouwen, live. Het AI-native traject is geschrapt.
  */
 
-import { BellRing, CalendarClock, Folder, LayoutDashboard, RefreshCw, Server, ShieldCheck } from "lucide-react";
+import { BellRing, CalendarClock, Folder, LifeBuoy, RefreshCw, Server, ShieldCheck } from "lucide-react";
 import { HOE } from "./copy";
 import { H3, Vinkje } from "./ui";
 
 /** Iconen bij de zes onderdelen van stap 3 (Gebruiken), in volgorde van de copy. */
-const ONDERHOUD_ICONEN = [Server, LayoutDashboard, BellRing, RefreshCw, CalendarClock, Folder];
+const ONDERHOUD_ICONEN = [Server, BellRing, RefreshCw, LifeBuoy, CalendarClock, Folder];
 
 export function FundamentDetail() {
   const F = HOE.fundament;

@@ -39,15 +39,15 @@ De popup `components/contact-form-popup.tsx` (naar `netlify/functions/contact-su
 2. **De foto** op de naad onder de hero: de linkerhelft vervaagd, met het statement en het citaat van Y Combinator.
 3. **Herken jij dit?** (`#recognition`): drie punten met een tekening, "Herkenbaar?" met de knop.
 4. **De oplossing** (`#oplossing`): de pitch op een marineblauwe kaart, daaronder de tool-logo's.
-5. **Hoe krijg jij jouw AI-werknemer?** (`#aanpak`): Stap 1 Opleiden (eenmalige toegang tot Finit OS, € 95 met € 295 doorstreept, met het strategiegesprek van 90 minuten erbij), Stap 2 Bouwen (opstartkost vanaf € 1.650), Stap 3 Gebruiken (gebruikslicentie vanaf € 95 per maand); het exacte voorstel komt in het strategiegesprek, het paneel van de gekozen stap rechts.
-6. **De onboarding** op de naad: het Skool-blok ("Je onboarding, vandaag op Skool").
+5. **Hoe krijg jij jouw AI-werknemer?** (`#aanpak`): Stap 1 Opleiden (lesreeks € 95 met € 295 doorstreept, met het strategiegesprek van 90 minuten erbij), Stap 2 Bouwen (opstartkost vanaf € 1.650), Stap 3 Gebruiken (gebruikslicentie vanaf € 95 per maand); het exacte voorstel komt in het strategiegesprek, het paneel van de gekozen stap rechts.
+6. **De lesreeks** op de naad: het Skool-blok.
 7. **Wat we het vaakst bouwen** (`#cases`): de oplossingen op marineblauw, "Bekijk alle oplossingen", de quote van Bas.
 8. **Vragen en contact** (`#faq`, `#contact`): links de zeven veelgestelde vragen, rechts de contactkaart, allebei even lang.
 
 ## Regels voor de copy
 
 - Duidelijk, rechtstreeks, simpel voor niet-technische mensen, resultaatgericht. Alles wat over het model gaat, klopt met de lesreeks (jij legt het fundament, wij bouwen daarna).
-- Stap 1 heet sinds 15 september 2026 **de onboarding op Finit OS** (werknaam; tot dan de lesreeks, nooit een cursus). Het resultaat heet een **AI-fundament** (ook AI-brein). De onboarding draait vandaag nog op Skool; de knop heet in de code nog `LesreeksKnop`. Claude of ChatGPT, allebei kunnen.
+- Het heet een **lesreeks** (geen cursus) en een **AI-fundament** (in de lesreeks ook AI-brein). De werknaam "onboarding op Finit OS" (15/09) is op 18 september 2026 teruggedraaid; Finit OS staat niet op de site. Claude of ChatGPT, allebei kunnen.
 - Geen gedachtestreepjes, geen uitroeptekens, geen plaatsnaam.
 - Prijzen altijd excl. btw, de Claude-abonnementskost erbij vermeld.
 - Cijfers alleen als ze kloppen. Geen cijfers bij de oplossingen zolang er geen echte referenties zijn.

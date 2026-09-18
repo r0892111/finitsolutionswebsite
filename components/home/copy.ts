@@ -3,20 +3,19 @@
  *
  * Basis: de opbouw en schrijfstijl van de vorige homepage en de landingspagina's
  * (duidelijk, rechtstreeks, simpel voor niet-technische mensen, resultaatgericht),
- * en de uitleg die Alex geeft in de video's van de onboarding (hoofdstuk 1 en 2):
+ * en de uitleg die Alex geeft in de video's van de lesreeks (hoofdstuk 1 en 2):
  * waarom je eerst een fundament legt, wat je bouwt, wat het oplevert, en dat
  * het technische werk daarna nog door ons gebeurt. Prijzen volgens het model:
- * eenmalige toegang tot Finit OS € 95 (daarna € 295), met het strategiegesprek
+ * lesreeks € 95 (daarna € 295), met het strategiegesprek
  * van 90 minuten erbij; daarna het bouwpakket (vanaf € 1.650 opstart,
  * gebruikslicentie vanaf € 95 per maand, per jaar). Sinds 15 september 2026;
  * de "vanaf"-prijzen sinds 16 september (yap3.md, Karel en Alex): het echte
  * voorstel, per AI-werknemer een opstartkost en een gebruikslicentie, komt in
  * het strategiegesprek. Het AI-native traject (15/09) is op 16/09 geschrapt.
  * Het heet nooit onderhoud, altijd gebruikslicentie.
- * Stap 1 heette tot 15/09 de lesreeks. Sinds de review van Alex (yap1536.md)
- * heet ze de onboarding op Finit OS: een werknaam, de definitieve naam kiezen de
- * oprichters. De onboarding draait vandaag nog op Skool. Nooit "cursus". Het
- * fundament heet ook je AI-brein.
+ * Stap 1 heet de lesreeks, geen cursus. Van 15 tot 18 september heette ze even
+ * "de onboarding op Finit OS" (yap1536.md); dat is op 18/09 teruggedraaid en
+ * Finit OS staat niet meer op de site. Het fundament heet ook je AI-brein.
  *
  * Review van 13 september 2026 (Karel en Alex, transcript in yap.md): één lijn
  * probleem → oplossing → hoe → knop. Drie herkenpunten met een tekening, dan
@@ -63,9 +62,9 @@ export const MENU = {
   openen: "Menu openen",
 };
 
-// De hoofdknop. Werknaam sinds 15/09 (was "Start de lesreeks"); gaat vandaag nog naar Skool.
-export const CTA_LESREEKS = "Start je onboarding";
-// De tweede knop. Geen kennismaking meer inplannen: de onboarding is de weg, de contactpagina is voor vragen.
+// De hoofdknop; gaat naar Skool.
+export const CTA_LESREEKS = "Start de lesreeks";
+// De tweede knop. Geen kennismaking meer inplannen: de lesreeks is de weg, de contactpagina is voor vragen.
 export const CTA_CONTACT = "Neem contact met ons op";
 
 // De lichte kop op de juridische pagina's en de cases.
@@ -76,11 +75,11 @@ export const HEADER = {
 // 1. Hero. Titel van Alex; de sub is een belofte, geen disclaimer: wat jij legt, wat wij daarop bouwen.
 export const HERO = {
   h1: ["Leg jouw", "AI-fundament"],
-  sub: "In je onboarding op Finit OS leg je zelf je AI-fundament: alle kennis over jouw bedrijf, zo opgeschreven dat AI ermee kan werken. Jij praat, de AI schrijft. Wij bouwen daarop de AI-werknemers die elke dag werk uit je handen nemen.",
+  sub: "In de lesreeks leg je zelf je AI-fundament: alle kennis over jouw bedrijf, zo opgeschreven dat AI ermee kan werken. Jij praat, de AI schrijft. Wij bouwen daarop de AI-werknemers die elke dag werk uit je handen nemen.",
   punten: [
     "Geen programmeerkennis nodig. We tonen stap voor stap hoe je alles installeert.",
     "Je eindigt met een lijst van wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
-    // Nieuw (15/09): de onboarding geeft een indicatie, het strategiegesprek het advies.
+    // Nieuw (15/09): de lesreeks geeft een indicatie, het strategiegesprek het advies.
     "Daarna krijg je in een strategiegesprek van 90 minuten ons advies en een voorstel op maat.",
   ],
   ondersteund: "Ondersteund door",
@@ -173,23 +172,22 @@ export const OPLOSSING = {
   pitch: [
     "Stel je een medewerker voor die je bedrijf even goed kent als jij: je klanten, je prijzen, je manier van werken, tot in detail.",
     "Hij zit in je mailbox, je agenda en je boekhouding, en doet de computertaken die jij vandaag zelf doet, precies zoals jij ze doet.",
-    "Dat is je AI-werknemer. Op Finit OS leid je hem op, daarna bouwen wij hem.",
+    "Dat is je AI-werknemer. In de lesreeks leid je hem op, daarna bouwen wij hem.",
   ],
   illustratieAria: "Eén AI-werknemer, gevoed door je fundament, verbonden met je mailbox, je agenda, je boekhouding en je andere systemen.",
   koppelingen: "We integreren met al je tools",
   koppelingenPlus: "zowat alles wat je al gebruikt",
 };
 
-// Het blok na de stappen: de deur naar de onboarding, met de cover van de community op Skool.
-// Bewust de cover en niet een screenshot met ledental. De onboarding draait vandaag nog op
-// Skool; zodra ze in Finit OS zelf zit, verdwijnt Skool hier (15/09).
+// Het blok na de stappen: de deur naar de lesreeks, met de cover van de community op Skool.
+// Bewust de cover en niet een screenshot met ledental.
 export const SKOOL = {
-  label: "Je onboarding, vandaag op",
+  label: "De lesreeks op",
   titel: "Leg je AI-fundament",
-  body: "In je onboarding draag je alles wat je over je bedrijf weet over aan je AI-brein: je processen, je klanten, je prijzen, je manier van werken. Daarna weet AI wat jij weet.",
+  body: "In de lesreeks draag je alles wat je over je bedrijf weet over aan een AI-brein: je processen, je klanten, je prijzen, je manier van werken. Daarna weet AI wat jij weet.",
   knop: "Start zelf met je AI-fundament",
   noot: "Online, in het Nederlands, op eigen tempo. € 95 voor de eerste 20 deelnemers.",
-  coverAlt: "De cover van de onboarding op Skool: een whiteboard met de negen stappen naar je AI-fundament.",
+  coverAlt: "De cover van de lesreeks op Skool: een whiteboard met de negen stappen naar je AI-fundament.",
 };
 
 export type Logo = { naam: string; src: string; woordmerk?: boolean };
@@ -253,14 +251,14 @@ export const HOE = {
       tijd: "2 tot 3 weken",
       wie: "Jij, met de AI",
       titel: "Opleiden",
-      intro: "Op Finit OS stelt de AI jou vragen over je bedrijf. Jij praat, hij schrijft.",
+      intro: "De AI stelt jou vragen over je bedrijf. Jij praat, hij schrijft.",
       // Wat je eruit haalt (15/09): het fundament, de analyse met de kansen en ons advies, het strategiegesprek.
       punten: [
         "Een inventaris van je bedrijf, in gewone taal, die altijd van jou blijft",
         "Een analyse met de AI-werknemers die voor jou het meest opleveren, en wat wij aanraden",
         "Een strategiegesprek van 90 minuten met Karel over de weg die bij je past",
       ],
-      prijsLabel: "Eenmalige toegang",
+      prijsLabel: "Lesreeks",
       prijs: "€ 95",
       prijsOud: "€ 295",
       cta: CTA_LESREEKS,
@@ -289,7 +287,7 @@ export const HOE = {
     },
   ] as Stap[],
   // Waarom je het fundament zelf legt. Uit les 1.1, 1.2 en 1.3, ingekort tot wat je in één blik leest.
-  // De tweede alinea is nieuw (review 13/09): de onboarding is ons eigen stappenplan uit de
+  // De tweede alinea is nieuw (review 13/09): de lesreeks is ons eigen stappenplan uit de
   // analysetrajecten. De derde is nieuw (15/09, Alex): jij kent je bedrijf, wij brengen in kaart wat AI kan.
   // De drie blokken hieronder zijn de inhoud van het paneel per stap (stap-details.tsx); `kort` is de inleidende regel.
   fundament: {
@@ -297,8 +295,8 @@ export const HOE = {
     kort: "Jij kent je bedrijf het best. Daarom leg jij het, en bouwen wij daarop.",
     alineas: [
       { kop: "Jij weet waar het wringt", tekst: "Een consultant kent je bedrijf na een week nog altijd minder dan jij. Daarom stelt de AI jou de vragen die wij vroeger ter plaatse stelden." },
-      { kop: "Ons stappenplan, jouw bedrijf", tekst: "De onboarding is ons eigen stappenplan, gegroeid uit meer dan tien analysetrajecten van meerdere weken bij KMO's. Alles wat wij daar vroegen en opschreven, doet Finit OS nu met jou, stap voor stap." },
-      { kop: "Wat AI kan overnemen, brengen we in kaart", tekst: "Jij weet hoe je moet ondernemen en je kent je bedrijf. Wat AI daar allemaal kan overnemen, weet je nog niet. Daar is analyse voor nodig, en die doet Finit OS samen met jou." },
+      { kop: "Ons stappenplan, jouw bedrijf", tekst: "De lesreeks is ons eigen stappenplan, gegroeid uit meer dan tien analysetrajecten van meerdere weken bij KMO's. Alles wat wij daar vroegen en opschreven, doet de AI nu met jou, stap voor stap." },
+      { kop: "Wat AI kan overnemen, brengen we in kaart", tekst: "Jij weet hoe je moet ondernemen en je kent je bedrijf. Wat AI daar allemaal kan overnemen, weet je nog niet. Daar is analyse voor nodig, en die doet de AI samen met jou." },
     ],
     lijstTitel: "In je fundament komt:",
     lijst: [
@@ -321,24 +319,24 @@ export const HOE = {
     kort: "Goed gedaan: je hebt ons de analyse bespaard. Vanaf hier nemen wij het over, want dit vraagt technische expertise.",
     intro: "Je stelt je pakket samen met ons, uit je fundament: van één eenvoudige AI-werknemer, zoals een die je mailbox sorteert en antwoorden klaarzet, tot meerdere die samenwerken. Hoe meer ze overnemen, hoe hoger de opstartkost en de gebruikslicentie.",
     volgorde: [
-      { titel: "Strategiegesprek van 90 minuten", tekst: "Met Karel, met je fundament en je analyse op tafel. Wij bereiden ons voor op je fundament en komen met een stappenplan en een voorstel. Inbegrepen in je onboarding, vrijblijvend." },
+      { titel: "Strategiegesprek van 90 minuten", tekst: "Met Karel, met je fundament en je analyse op tafel. Wij bereiden ons voor op je fundament en komen met een stappenplan en een voorstel. Inbegrepen in de lesreeks, vrijblijvend." },
       { titel: "Je voorstel", tekst: "Je opstartkost en je gebruikslicentie, per AI-werknemer. Wat je niet nodig hebt, laat je weg." },
       { titel: "Bouwen, koppelen, testen", tekst: "Wij ontwikkelen je AI-werknemers, koppelen ze aan de software die je al gebruikt en testen ze tot ze doen wat jij zou doen." },
       { titel: "Veilig live", tekst: "Je gegevens blijven afgeschermd en één knop zet alles stil. Daarna 30 dagen nazorg." },
     ],
   },
   // Wat je vanaf nu hebt. Geen prijs in het paneel; geen cijfers over backup-frequentie of uptime.
-  // Sinds 15/09 (Alex): Finit OS is de plek waar de klant alles ziet, aan- en uitzet, zijn fundament
-  // bijvoedt en tickets indient; "Voorrang bij vragen" (13/09) is daarin opgegaan. "Elke maand een uur
-  // strategie" (13/09, Karel) is nog niet bevestigd in het model. Het eigendom is zoals Alex het zei.
+  // Finit OS (15/09) is op 18/09 van de site gehaald; "Voorrang bij vragen" (13/09) staat er daarom
+  // terug. "Voorrang bij vragen" en "Elke maand een uur strategie" (13/09, Karel) zijn nog niet
+  // bevestigd in het model. Het eigendom is zoals Alex het zei (15/09).
   onderhoud: {
     h3: "Wat je vanaf nu hebt",
-    kort: "Je AI-werknemers staan live en werken voor je. Wij houden ze draaiend, jij volgt alles in Finit OS.",
+    kort: "Je AI-werknemers staan live en werken voor je. Wij houden ze draaiend.",
     punten: [
       { titel: "Live en aan het werk", body: "Je AI-werknemers draaien op onze servers. Jij hoeft niets te installeren of te beheren." },
-      { titel: "Alles in Finit OS", body: "Je ziet al je AI-werknemers, wat ze doen en hun logboek, en zet ze aan of uit. Daar voed je ook je fundament bij en dien je een ticket in als je ergens tegenaan loopt." },
       { titel: "Bewaakt", body: "Wij zien het als er iets hapert, meestal voor jij het merkt. Bug? Gratis. Koppeling veranderd? Gratis." },
       { titel: "Elke maand gecheckt en bijgewerkt", body: "Backups, beveiligingsupdates en nieuwe versies: nieuwe AI-ontwikkelingen die jij ook moet hebben, voeren wij door." },
+      { titel: "Voorrang bij vragen", body: "Loop je ergens tegenaan, dan sta je vooraan in de rij." },
       { titel: "Elke maand een uur strategie", body: "Eén uur per maand zitten we samen over uitbreidingen en advies." },
       { titel: "Je fundament blijft van jou", body: "De software en de AI-werknemers zijn van ons, dus blijven wij er ook verantwoordelijk voor. Je fundament is van jou: je kunt het altijd downloaden. Stop je, dan stoppen de AI-werknemers en verwijderen wij je gegevens van onze servers." },
     ],
@@ -388,7 +386,7 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
     {
       q: "Wat is een AI-fundament precies?",
       a: [
-        { t: "p", tekst: "Een map met tekstbestanden over jouw bedrijf, in gewone taal. Elk bestand is één stuk correcte informatie: je processen, welke systemen je gebruikt, wie Dirk is en wat hij doet, wat je aanrekent, je huistaal. Samen vormen ze een zorgvuldig opgebouwde inventaris van je hele bedrijf. We noemen het ook je AI-brein." },
+        { t: "p", tekst: "Een map met tekstbestanden over jouw bedrijf, in gewone taal. Elk bestand is één stuk correcte informatie: je processen, welke systemen je gebruikt, wie Dirk is en wat hij doet, wat je aanrekent, je huistaal. Samen vormen ze een zorgvuldig opgebouwde inventaris van je hele bedrijf. In de lesreeks noemen we het je AI-brein." },
         { t: "p", tekst: "Waarom zo? Stop je alles in één chat, dan raakt het geheugen van de AI vol en begint hij dingen te vergeten of te verzinnen. Met een fundament zoekt hij, net als in Wikipedia, alleen de pagina op die hij nodig heeft. Zo geeft hij het juiste antwoord, ook als een klant straks vraagt wat een warmtepomp kost." },
       ],
     },
@@ -414,26 +412,26 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
       a: [
         { t: "p", tekst: "Je kent elke prijs op voorhand. Geen verrassingen achteraf." },
         { t: "list", items: [
-          "Je onboarding op Finit OS: € 95 voor de eerste 20 deelnemers, daarna € 295. Eenmalig, met het strategiegesprek inbegrepen. Plus je eigen abonnement van Claude of ChatGPT, ± € 20 per maand.",
+          "De lesreeks: € 95 voor de eerste 20 deelnemers, daarna € 295. Eenmalig, met het strategiegesprek inbegrepen. Plus je eigen abonnement van Claude of ChatGPT, ± € 20 per maand.",
           "Het bouwpakket: vanaf € 1.650 opstart, inclusief 30 dagen nazorg. Daarna een gebruikslicentie vanaf € 95 per maand voor hosting, bewaking, backups en updates, per jaar. Elke AI-werknemer heeft zijn eigen opstartkost en gebruikslicentie: hoe meer hij overneemt en hoe meer systemen hij gebruikt, hoe hoger.",
           "Maatwerk, zoals een koppeling aan een webshop, CRM of website die er nog niet is: aan ons dagtarief van € 750, met een indicatie en een plafond vooraf. De gebruikslicentie daarvoor staat in de offerte.",
         ] },
-        { t: "p", tekst: "Je exacte prijs krijg je na je onboarding in het strategiegesprek, in een voorstel dat je zelf mee samenstelt. Wat je niet nodig hebt, laat je weg. Het minste wat je daarna kunt laten bouwen, is iets eenvoudigs als een AI-werknemer op je mailbox, voor € 1.650." },
-        { t: "p", tekst: "Te klein om te starten? Begin met je onboarding. Voor € 95 weet je waar AI in jouw bedrijf loont, voor je één euro aan ontwikkeling uitgeeft. Daarna bouwen we gefaseerd: start met de grootste tijdvreter, breid later uit als je de waarde ziet." },
+        { t: "p", tekst: "Je exacte prijs krijg je na de lesreeks in het strategiegesprek, in een voorstel dat je zelf mee samenstelt. Wat je niet nodig hebt, laat je weg. Het minste wat je daarna kunt laten bouwen, is iets eenvoudigs als een AI-werknemer op je mailbox, voor € 1.650." },
+        { t: "p", tekst: "Te klein om te starten? Begin met de lesreeks. Voor € 95 weet je waar AI in jouw bedrijf loont, voor je één euro aan ontwikkeling uitgeeft. Daarna bouwen we gefaseerd: start met de grootste tijdvreter, breid later uit als je de waarde ziet." },
         { t: "p", tekst: "Alle prijzen excl. btw." },
       ],
     },
     {
       q: "Hoe lang duurt het voor de automatisering live staat?",
       a: [
-        { t: "p", tekst: "Reken op 4 tot 7 weken van de start van je onboarding tot een automatisering die live staat, afhankelijk van de complexiteit en je eigen tempo. Daarna volgen 30 dagen nazorg." },
+        { t: "p", tekst: "Reken op 4 tot 7 weken van de eerste les tot een automatisering die live staat, afhankelijk van de complexiteit en je eigen tempo in de lesreeks. Daarna volgen 30 dagen nazorg." },
         { t: "p", tekst: "Minimale onboarding, geen intensieve training. Jouw team hoeft geen technische kennis te hebben. Wat ze wél moeten weten: wat de automatisering doet, wat er automatisch gebeurt (zodat ze geen dubbel werk doen) en waar ze de output zien, bijvoorbeeld een offerte die klaarstaat." },
       ],
     },
     {
       q: "Wat gebeurt er met de gegevens van mijn bedrijf, en wat als er iets misloopt?",
       a: [
-        { t: "p", tekst: "Je fundament staat op je eigen computer en is van jou. Ruwe exports van je mailbox of agenda blijven daar staan; alleen wat de AI eruit leert, komt in je fundament. Wat je aan de AI vertelt, gaat net als bij ChatGPT langs de servers van de maker. In je onboarding tonen we welke privacy-instelling je daar aanzet voor je iets deelt." },
+        { t: "p", tekst: "Je fundament staat op je eigen computer en is van jou. Ruwe exports van je mailbox of agenda blijven daar staan; alleen wat de AI eruit leert, komt in je fundament. Wat je aan de AI vertelt, gaat net als bij ChatGPT langs de servers van de maker. In de lesreeks tonen we welke privacy-instelling je daar aanzet voor je iets deelt." },
         { t: "p", tekst: "Na oplevering laten we je niet in de steek. Elke oplossing bevat ingebouwde monitoring: wij worden onmiddellijk verwittigd als er iets hapert. Bug? Gratis. API veranderd? Gratis. Onze verantwoordelijkheid, niet de jouwe. Hosting, bewaking, backups en updates zitten in je gebruikslicentie (vanaf € 95 per maand); je betaalt alleen extra voor uitbreidingen die je later laat bouwen." },
       ],
     },
@@ -448,11 +446,11 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
   ],
 };
 
-// 8. De contactkaart naast de FAQ en op /contact: eerst de onboarding, dan het vraagformulier,
+// 8. De contactkaart naast de FAQ en op /contact: eerst de lesreeks, dan het vraagformulier,
 // dan het telefoonnummer. Geen kennismaking meer inplannen. Nieuw (review 13/09); de foto van
 // Karel is weg sinds 14/09.
 export const SLOT = {
-  lesreeksTitel: "Start vandaag je onboarding",
+  lesreeksTitel: "Start vandaag met de lesreeks",
   bel: "Even sparren over AI in jouw bedrijf? Bel gerust.",
   mailLabel: "Of mail naar",
 };
@@ -481,14 +479,14 @@ export const VRAAG = {
 // De pagina /contact: waar "Neem contact met ons op" naartoe gaat. Nieuw (review 13/09).
 export const CONTACT = {
   metaTitel: "Contact",
-  metaBeschrijving: "Vragen over de onboarding, de bouw of je eigen situatie? Bel, mail of stuur je vraag.",
+  metaBeschrijving: "Vragen over de lesreeks, de bouw of je eigen situatie? Bel, mail of stuur je vraag.",
   kruimel: "Contact",
   h1: ["Neem contact", "met ons op"],
-  intro: "Vragen over de onboarding, de bouw of je eigen situatie? Bel, mail of stuur je vraag hieronder. Je krijgt meestal binnen 24 uur antwoord.",
+  intro: "Vragen over de lesreeks, de bouw of je eigen situatie? Bel, mail of stuur je vraag hieronder. Je krijgt meestal binnen 24 uur antwoord.",
 };
 
 // De /bedankt-pagina na het formulier. De drie stappen volgen het nieuwe model
-// (kennismaking → jij legt je fundament in je onboarding → wij bouwen), zodat de
+// (kennismaking → jij legt je fundament in de lesreeks → wij bouwen), zodat de
 // pagina hetzelfde verhaal vertelt als de homepage in plaats van het oude
 // "wij komen langs met een voorstel".
 export const BEDANKT = {
@@ -508,7 +506,7 @@ export const BEDANKT = {
       wie: "Jij, met de AI",
       tijd: "2 tot 3 weken",
       titel: "Je legt je fundament",
-      body: "In je onboarding op Finit OS stelt de AI jou vragen over je processen, je klanten en je prijzen. Jij praat, hij schrijft. Je eindigt met een lijst van wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
+      body: "In de lesreeks stelt de AI jou vragen over je processen, je klanten en je prijzen. Jij praat, hij schrijft. Je eindigt met een lijst van wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
     },
     {
       nummer: "03",
@@ -518,7 +516,7 @@ export const BEDANKT = {
       body: "In het strategiegesprek krijg je ons voorstel: wat we bouwen, je opstartkost en je gebruikslicentie. Gekoppeld aan de software die je al gebruikt, en getest voor het live gaat.",
     },
   ],
-  // De onboarding is de stap die de bezoeker vandaag al zelf kan zetten.
+  // De lesreeks is de stap die de bezoeker vandaag al zelf kan zetten.
   nu: {
     titel: "Je hoeft niet op ons te wachten",
     body: "Stap 02 kan je vandaag al starten. Hoe verder je fundament staat wanneer we bellen, hoe concreter het gesprek.",
@@ -532,7 +530,7 @@ export const BEDANKT = {
 // Footer (vorige homepage, zonder plaatsnaam). Eén telefoonnummer (Karel), zoals in het mobiele menu.
 export const FOOTER = {
   slotTitel: "Klaar om je bedrijf te automatiseren?",
-  slotTekst: "Leg eerst je fundament in je onboarding op Finit OS. Vragen vooraf? Mail ons gerust.",
+  slotTekst: "Leg eerst je fundament in de lesreeks. Vragen vooraf? Mail ons gerust.",
   contactTitel: "Contact",
   telefoons: [
     { nummer: "+32 495 70 23 14", link: "tel:+32495702314" },

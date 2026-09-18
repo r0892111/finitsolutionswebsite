@@ -16,12 +16,24 @@
  * browser; hier blijven alleen naam en e-mail verplicht, zodat de popup blijft
  * werken. `bedrijfswebsite` is de echte website, `website` de honeypot.
  *
+ * Staan de ODOO_*-variabelen ingesteld, dan wordt de inzending eerst als lead
+ * in Odoo CRM gezet (zie lib/odoo/create-lead.ts) en krijgt de mail een link
+ * naar die lead. Mislukt Odoo, dan vertrekt de mail toch, met de melding dat
+ * de lead manueel moet worden toegevoegd. De mail blijft dus het vangnet.
+ *
  * Nodige env-variabelen in Netlify:
  *   BREVO_API_KEY      (verplicht) — Brevo → SMTP & API → API Keys
  *   CONTACT_TO_EMAIL   (optioneel) — ontvanger,  standaard contact@finitsolutions.be
  *   CONTACT_FROM_EMAIL (optioneel) — afzender,   moet een geverifieerde Brevo-sender zijn
+ *   ODOO_URL, ODOO_DB, ODOO_LOGIN, ODOO_API_KEY (optioneel, samen) — Odoo CRM
+ *   ODOO_LEAD_TYPE, ODOO_TEAM_ID, ODOO_TAG_ID   (optioneel) — zie lib/odoo/create-lead.ts
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
+import { createOdooLead, odooConfigFromEnv } from "../../lib/odoo/create-lead";
+
+// Odoo mag de bezoeker niet laten wachten: de browser wacht maximaal 10 s,
+// en na Odoo moet de mail nog vertrekken.
+const ODOO_TIMEOUT_MS = 5000;
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
@@ -82,6 +94,30 @@ export const handler: Handler = async (event: HandlerEvent) => {
     return json(500, { error: "mail_not_configured" });
   }
 
+  // Eerst Odoo, zodat de mail kan zeggen of de lead er staat.
+  let odooStatus: "off" | "ok" | "failed" = "off";
+  let odooRegel = "";
+  const odoo = odooConfigFromEnv();
+  if (odoo) {
+    const odooTimer = new AbortController();
+    const odooTimeout = setTimeout(() => odooTimer.abort(), ODOO_TIMEOUT_MS);
+    try {
+      const lead = await createOdooLead(
+        odoo,
+        { naam, email, telefoon, bedrijfswebsite, bericht, bron },
+        odooTimer.signal
+      );
+      odooStatus = "ok";
+      odooRegel = `<p style="margin:16px 0 0;font-size:14px;color:#6C7590">Odoo: <a href="${esc(lead.url)}" style="color:#1A2D63">lead #${lead.id}</a></p>`;
+    } catch (err) {
+      console.error("contact-submit: Odoo-lead mislukt", err);
+      odooStatus = "failed";
+      odooRegel = `<p style="margin:16px 0 0;font-size:14px;color:#b45309">Odoo: lead aanmaken mislukt, voeg deze manueel toe.</p>`;
+    } finally {
+      clearTimeout(odooTimeout);
+    }
+  }
+
   const rijen: Array<[string, string]> = [
     ["Naam", naam],
     ["E-mail", email],
@@ -111,6 +147,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
       <p style="margin:0;white-space:pre-wrap;font-size:15px">${esc(bericht)}</p>`
           : ""
       }
+      ${odooRegel}
     </div>`;
 
   try {
@@ -141,5 +178,5 @@ export const handler: Handler = async (event: HandlerEvent) => {
     return json(502, { error: "mail_failed" });
   }
 
-  return json(200, { ok: true });
+  return json(200, { ok: true, odoo: odooStatus });
 };

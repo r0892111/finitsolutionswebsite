@@ -33,12 +33,11 @@ import {
 /**
  * De homepage: hero → de teamfoto met één statement → herken jij dit (drie
  * punten met een tekening) → de oplossing (met de tool-logo's) → hoe krijg jij
- * jouw AI-werknemer (drie stappen + prijzen) → de onboarding → de oplossingen die
+ * jouw AI-werknemer (drie stappen + prijzen) → de lesreeks → de oplossingen die
  * we het vaakst bouwen → vragen naast de contactkaart. Alle tekst staat in
  * ./copy.ts, de oplossingen in ./cases.ts.
  *
- * Eén hoofd-CTA: de onboarding op Finit OS (tot 15/09 de lesreeks; de knop heet
- * in de code nog LesreeksKnop), in de accentkleur. De tweede
+ * Eén hoofd-CTA: de lesreeks, in de accentkleur (LesreeksKnop). De tweede
  * knop is "Neem contact met ons op" en gaat naar /contact (ContactKnop); er
  * wordt geen kennismaking meer ingepland vanaf de homepage. De drie stappen
  * zijn een lijst kaarten met rechts het paneel van de gekozen stap
@@ -563,12 +562,11 @@ export function HomePage() {
         </section>
 
         {/* -------------------------------------------------------------- */}
-        {/* 3b. De onboarding, op de naad tussen de stappen en de oplossingen */}
+        {/* 3b. De lesreeks, op de naad tussen de stappen en de oplossingen */}
         {/* -------------------------------------------------------------- */}
         {/* De achtergrond breekt precies in het midden: wit boven, marineblauw
             onder. Daardoor ligt de kaart exact op de middenschijding van de
-            twee secties: de deur naar de onboarding, nadat je de drie stappen kent.
-            De onboarding draait vandaag nog op Skool. */}
+            twee secties: de deur naar de lesreeks, nadat je de drie stappen kent. */}
         <div className="bg-[linear-gradient(to_bottom,#FFFFFF_0,#FFFFFF_50%,#1A2D63_50%,#1A2D63_100%)]">
           <div className={CONTAINER}>
             {/* De deur naar de lesreeks: knop, Skool-woordmerk en de cover van de community. */}
