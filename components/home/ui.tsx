@@ -44,9 +44,9 @@ export function Onder({ children, accent = false, wit = false }: { children: Rea
   );
 }
 
-export function Vinkje({ donker = false, wit = false, groot = false }: { donker?: boolean; wit?: boolean; groot?: boolean }) {
+export function Vinkje({ donker = false, wit = false, groot = false, groen = false }: { donker?: boolean; wit?: boolean; groot?: boolean; groen?: boolean }) {
   return (
-    <span className={`hp-check mt-0.5 ${donker ? "hp-check--donker" : ""} ${wit ? "hp-check--wit" : ""} ${groot ? "hp-check--groot" : ""}`} aria-hidden="true">
+    <span className={`hp-check mt-0.5 ${donker ? "hp-check--donker" : ""} ${wit ? "hp-check--wit" : ""} ${groot ? "hp-check--groot" : ""} ${groen ? "hp-check--groen" : ""}`} aria-hidden="true">
       <svg width={groot ? 15 : 11} height={groot ? 12 : 9} viewBox="0 0 11 9">
         <path d="M1 4.5l3 3L10 1" fill="none" stroke="currentColor" strokeWidth={groot ? 2 : 1.8} strokeLinecap="round" strokeLinejoin="round" />
       </svg>

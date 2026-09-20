@@ -127,15 +127,19 @@ function StapPaneel({ i, naarStap, kop = false }: { i: number; naarStap: (i: num
           <h3 className={`${H3} text-[1.6rem]`}>{stap.titel}</h3>
         </div>
       )}
+      {/* Blok 1 van het paneel: wat je krijgt. Blok 2 (waarom en hoe) staat hieronder, achter de lijn. */}
       {stap.punten && (
-        <ul className={`grid gap-3 sm:grid-cols-3 ${kop ? "mt-5" : ""}`}>
-          {stap.punten.map((punt) => (
-            <li key={punt} className="flex items-start gap-3 text-[1rem] font-medium leading-[1.45] text-[#1A2D63]">
-              <Vinkje groot />
-              <span>{punt}</span>
-            </li>
-          ))}
-        </ul>
+        <div className={kop ? "mt-5" : ""}>
+          {stap.puntenTitel && <h4 className={`${H3} text-[1.35rem]`}>{stap.puntenTitel}</h4>}
+          <ul className={`grid gap-3 sm:grid-cols-3 ${stap.puntenTitel ? "mt-4" : ""}`}>
+            {stap.punten.map((punt) => (
+              <li key={punt} className="flex items-start gap-3 text-[1rem] font-medium leading-[1.45] text-[#1A2D63]">
+                <Vinkje groot />
+                <span>{punt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
       <div className={kop || stap.punten ? "mt-5 border-t border-[#E3E7EF] pt-5" : ""}>
         <h4 className={`${H3} text-[1.35rem]`}>{h3}</h4>

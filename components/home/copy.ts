@@ -75,7 +75,7 @@ export const HEADER = {
 // 1. Hero. Titel van Alex; de sub is een belofte, geen disclaimer: wat jij legt, wat wij daarop bouwen.
 export const HERO = {
   h1: ["Leg jouw", "AI-fundament"],
-  sub: "In de lesreeks leg je zelf je AI-fundament: alle kennis over jouw bedrijf, zo opgeschreven dat AI ermee kan werken. Jij praat, de AI schrijft. Wij bouwen daarop de AI-werknemers die elke dag werk uit je handen nemen.",
+  sub: "In de lesreeks leg je zelf je AI-fundament: alle kennis over jouw bedrijf, zo gestrucureerd dat AI ermee kan werken. Jij geeft inzicht, onze AI verwerkt. Daaruit vloeien AI-werknemers die elke dag werk uit je handen nemen.",
   punten: [
     "Geen programmeerkennis nodig. We tonen stap voor stap hoe je alles installeert.",
     "Je eindigt met een lijst van wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
@@ -184,7 +184,7 @@ export const OPLOSSING = {
 export const SKOOL = {
   label: "De lesreeks op",
   titel: "Leg je AI-fundament",
-  body: "In de lesreeks draag je alles wat je over je bedrijf weet over aan een AI-brein: je processen, je klanten, je prijzen, je manier van werken. Daarna weet AI wat jij weet.",
+  body: "Tijdens de lesreeks helpen we je in het opleiden van je AI-brein: je processen, je klanten, je prijzen, je manier van werken. Daarna weet AI wat jij weet.",
   knop: "Start zelf met je AI-fundament",
   noot: "Online, in het Nederlands, op eigen tempo. € 95 voor de eerste 20 deelnemers.",
   coverAlt: "De cover van de lesreeks op Skool: een whiteboard met de negen stappen naar je AI-fundament.",
@@ -218,6 +218,8 @@ export type Stap = {
   /** Een werkwoord: Opleiden, Bouwen, Gebruiken. */
   titel: string;
   intro: string;
+  /** Kop boven de vinkjes. Het paneel van stap 1 leest zo als twee blokken: wat je krijgt, en waarom en hoe. */
+  puntenTitel?: string;
   /** Wat je eruit haalt, als vinkjes bovenaan het paneel. Alleen bij stap 1. */
   punten?: string[];
   prijsLabel: string;
@@ -253,6 +255,8 @@ export const HOE = {
       titel: "Opleiden",
       intro: "De AI stelt jou vragen over je bedrijf. Jij praat, hij schrijft.",
       // Wat je eruit haalt (15/09): het fundament, de analyse met de kansen en ons advies, het strategiegesprek.
+      // De kop erboven is van 20/09 (Alex): het paneel moet twee duidelijke blokken zijn, eerst wat je krijgt.
+      puntenTitel: "Resultaat",
       punten: [
         "Een inventaris van je bedrijf, in gewone taal, die altijd van jou blijft",
         "Een analyse met de AI-werknemers die voor jou het meest opleveren, en wat wij aanraden",
@@ -287,24 +291,17 @@ export const HOE = {
     },
   ] as Stap[],
   // Waarom je het fundament zelf legt. Uit les 1.1, 1.2 en 1.3, ingekort tot wat je in één blik leest.
-  // De tweede alinea is nieuw (review 13/09): de lesreeks is ons eigen stappenplan uit de
-  // analysetrajecten. De derde is nieuw (15/09, Alex): jij kent je bedrijf, wij brengen in kaart wat AI kan.
-  // De drie blokken hieronder zijn de inhoud van het paneel per stap (stap-details.tsx); `kort` is de inleidende regel.
+  // Ingekort op 20/09 (Alex), in twee rondes. Eerst drie alinea's naar twee, daarna naar één
+  // doorlopende tekst: de tussenkopjes hakten één boodschap in stukjes, en het blauwe kaartje
+  // "In je fundament komt:" ernaast was een derde blok voor dezelfde stap. Wat erin komt staat nu
+  // in de zin zelf (hoe je geld verdient, wie wat doet, je processen, systemen en prijzen).
+  // "Wat AI eerst kan overnemen" is geschrapt: dat is het resultaat van de analyse, niet de inhoud
+  // van je fundament. De drie blokken hieronder zijn de inhoud van het paneel per stap
+  // (stap-details.tsx); `kort` is de inleidende regel, `eerlijk` de kwalificatie eronder.
   fundament: {
-    h3: "Waarom je het fundament zelf legt",
-    kort: "Jij kent je bedrijf het best. Daarom leg jij het, en bouwen wij daarop.",
-    alineas: [
-      { kop: "Jij weet waar het wringt", tekst: "Een consultant kent je bedrijf na een week nog altijd minder dan jij. Daarom stelt de AI jou de vragen die wij vroeger ter plaatse stelden." },
-      { kop: "Ons stappenplan, jouw bedrijf", tekst: "De lesreeks is ons eigen stappenplan, gegroeid uit meer dan tien analysetrajecten van meerdere weken bij KMO's. Alles wat wij daar vroegen en opschreven, doet de AI nu met jou, stap voor stap." },
-      { kop: "Wat AI kan overnemen, brengen we in kaart", tekst: "Jij weet hoe je moet ondernemen en je kent je bedrijf. Wat AI daar allemaal kan overnemen, weet je nog niet. Daar is analyse voor nodig, en die doet de AI samen met jou." },
-    ],
-    lijstTitel: "In je fundament komt:",
-    lijst: [
-      "Hoe je bedrijf geld verdient",
-      "Wie wat doet en wie beslist",
-      "Je processen, systemen en prijzen",
-      "Wat AI eerst kan overnemen",
-    ],
+    h3: "Waarom jij het legt, en hoe het gaat",
+    kort: "Jij kent je bedrijf het best. Daarom leg jij het fundament, en bouwen wij daarop.",
+    tekst: "Een consultant kent je bedrijf na een week nog altijd minder dan jij. Daarom stelt de AI jou de vragen die wij vroeger ter plaatse stelden, gegroeid uit meer dan tien analysetrajecten bij KMO's: hoe je geld verdient, wie wat doet en wie beslist, je processen, je systemen en je prijzen. Jij praat, de AI schrijft, en legt onderweg vast waar AI bij jou het meeste oplevert.",
     // Bewust een kwalificatie, geen geruststelling: wie een snelle fix zoekt, haakt hier af.
     eerlijk: "Geen snelle fix. AI die echt in je processen zit, vraagt een paar avonden werk. Daarom blijft hij daarna werken.",
     // De video van anderhalve minuut waarin Alex of Karel dit uitlegt. Komt later; leeg = niets tonen.
@@ -316,7 +313,9 @@ export const HOE = {
   // AI-native traject van 15/09 is op 16/09 geschrapt. Geen prijzen in het paneel (die staan op de kaart).
   bouw: {
     h3: "Nu het technische werk",
-    kort: "Goed gedaan: je hebt ons de analyse bespaard. Vanaf hier nemen wij het over, want dit vraagt technische expertise.",
+    // 20/09: "Goed gedaan, je hebt ons de analyse bespaard" klonk neerbuigend en alsof de klant
+    // ons werk had gedaan. Het gaat om de overdracht: jouw analyse is af, nu nemen wij het technische deel.
+    kort: "Je analyse is klaar. Vanaf hier helpen wij je verder: dit is het deel waar technische expertise voor nodig is.",
     intro: "Je stelt je pakket samen met ons, uit je fundament: van één eenvoudige AI-werknemer, zoals een die je mailbox sorteert en antwoorden klaarzet, tot meerdere die samenwerken. Hoe meer ze overnemen, hoe hoger de opstartkost en de gebruikslicentie.",
     volgorde: [
       { titel: "Strategiegesprek van 90 minuten", tekst: "Met Karel, met je fundament en je analyse op tafel. Wij bereiden ons voor op je fundament en komen met een stappenplan en een voorstel. Inbegrepen in de lesreeks, vrijblijvend." },
@@ -337,8 +336,7 @@ export const HOE = {
       { titel: "Bewaakt", body: "Wij zien het als er iets hapert, meestal voor jij het merkt. Bug? Gratis. Koppeling veranderd? Gratis." },
       { titel: "Elke maand gecheckt en bijgewerkt", body: "Backups, beveiligingsupdates en nieuwe versies: nieuwe AI-ontwikkelingen die jij ook moet hebben, voeren wij door." },
       { titel: "Voorrang bij vragen", body: "Loop je ergens tegenaan, dan sta je vooraan in de rij." },
-      { titel: "Elke maand een uur strategie", body: "Eén uur per maand zitten we samen over uitbreidingen en advies." },
-      { titel: "Je fundament blijft van jou", body: "De software en de AI-werknemers zijn van ons, dus blijven wij er ook verantwoordelijk voor. Je fundament is van jou: je kunt het altijd downloaden. Stop je, dan stoppen de AI-werknemers en verwijderen wij je gegevens van onze servers." },
+      { titel: "Elke maand een uur strategie", body: "Eén uur per maand zitten we samen over uitbreidingen en advies." }
     ],
   },
 };
