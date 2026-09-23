@@ -12,7 +12,6 @@ import Image from "next/image";
 import { Plus } from "lucide-react";
 import { LOGOS, OPLOSSING } from "./copy";
 import { CONTAINER } from "./ui";
-import { OplossingTekening } from "./illustraties";
 
 export function OplossingSectie() {
   return (
@@ -30,7 +29,7 @@ export function OplossingSectie() {
           </div>
           {/* De tekening is gemaakt voor een lichte ondergrond: op de blauwe kaart staat ze op een wit vlak. */}
           <div className="mx-auto mt-8 w-full max-w-[30rem] rounded-[16px] bg-white p-2 sm:p-3 lg:mt-0 lg:max-w-none">
-            <OplossingTekening label={OPLOSSING.illustratieAria} className="block h-auto w-full" />
+            <Image src="/home/aze4.png" alt={OPLOSSING.illustratieAria} width={1200} height={800} className="block h-auto w-full rounded-[10px]" />
           </div>
         </div>
 

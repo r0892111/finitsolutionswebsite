@@ -2,7 +2,7 @@
 
 /**
  * "Herken jij dit?": drie punten die de lezer herkent, elk met een tekening
- * (illustraties.tsx), om en om links en rechts van de tekst. Daaronder de
+ * (public/home/aze1-3.png), om en om links en rechts van de tekst. Daaronder de
  * vraag "Herkenbaar?" met de knop, zodat de lezer al ja zegt voor hij klikt.
  * De oplossing volgt meteen (oplossing-sectie.tsx), in dezelfde lichte band.
  *
@@ -11,15 +11,14 @@
  * Tekst in copy.ts (HERKEN).
  */
 
-import type { ComponentType } from "react";
+import Image from "next/image";
 import { HERKEN, type HerkenBeeld } from "./copy";
 import { CONTAINER, H2, KOP, LEAD, LesreeksKnop, Onder } from "./ui";
-import { BeginnenTekening, ChatgptTekening, FlessenhalsTekening } from "./illustraties";
 
-const BEELDEN: Record<HerkenBeeld, ComponentType<{ className?: string }>> = {
-  flessenhals: FlessenhalsTekening,
-  chatgpt: ChatgptTekening,
-  beginnen: BeginnenTekening,
+const BEELDEN: Record<HerkenBeeld, string> = {
+  flessenhals: "/home/aze1.png",
+  chatgpt: "/home/aze2.png",
+  beginnen: "/home/aze3.png",
 };
 
 export function HerkenSectie() {
@@ -37,15 +36,14 @@ export function HerkenSectie() {
         {/* De drie punten: tekst en tekening, om en om. De tekst staat eerst in de DOM. */}
         <ol className="mx-auto mt-8 grid max-w-[60rem] gap-8 lg:gap-6">
           {HERKEN.items.map((item, i) => {
-            const Beeld = BEELDEN[item.beeld];
             const tekstRechts = i % 2 === 1;
             return (
               <li key={item.tekst} className="grid items-center gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:gap-8 lg:gap-12">
                 <p className={`hp-display text-balance text-[1.5rem] font-semibold leading-[1.15] text-[#1A2D63] sm:text-[1.75rem] lg:text-[1.9rem] ${tekstRechts ? "sm:order-last sm:text-right" : ""}`}>
                   {item.tekst}
                 </p>
-                {/* Zonder kader: de tekening staat rechtstreeks op de lichte band. */}
-                <Beeld className="block h-auto w-full" />
+                {/* Zonder kader: de tekening staat rechtstreeks op de lichte band. Decoratief, de zin staat ernaast. */}
+                <Image src={BEELDEN[item.beeld]} alt="" width={1200} height={800} className="block h-auto w-full" />
               </li>
             );
           })}
