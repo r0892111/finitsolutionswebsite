@@ -33,13 +33,13 @@ export function HerkenSectie() {
           <p className={`mt-4 ${LEAD}`}>{HERKEN.intro}</p>
         </div>
 
-        {/* De drie punten: tekst en tekening, om en om. De tekst staat eerst in de DOM. */}
-        <ol className="mx-auto mt-8 grid max-w-[60rem] gap-8 lg:gap-6">
+        {/* De drie punten: tekst en tekening, om en om. De tekst lijnt uit naar de tekening toe. De tekst staat eerst in de DOM. */}
+        <ol className="mx-auto mt-8 grid max-w-[54rem] gap-8 lg:gap-6">
           {HERKEN.items.map((item, i) => {
             const tekstRechts = i % 2 === 1;
             return (
-              <li key={item.tekst} className="grid items-center gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:gap-8 lg:gap-12">
-                <p className={`hp-display text-balance text-[1.5rem] font-semibold leading-[1.15] text-[#1A2D63] sm:text-[1.75rem] lg:text-[1.9rem] ${tekstRechts ? "sm:order-last sm:text-right" : ""}`}>
+              <li key={item.tekst} className="grid items-center gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:gap-6 lg:gap-8">
+                <p className={`hp-display text-balance text-[1.625rem] font-semibold leading-[1.15] text-center text-[#1A2D63] sm:text-[1.9rem] lg:text-[2.1rem] ${tekstRechts ? "sm:order-last sm:text-left" : "sm:text-right"}`}>
                   {item.tekst}
                 </p>
                 {/* Zonder kader: de tekening staat rechtstreeks op de lichte band. Decoratief, de zin staat ernaast. */}

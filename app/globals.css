@@ -778,12 +778,12 @@ html {
   -webkit-mask-image: linear-gradient(to right, #000 55%, transparent);
   mask-image: linear-gradient(to right, #000 55%, transparent);
 }
-/* Telefoon: het scherm staat bovenaan in de uitsnede, de gezichten eronder. */
+/* Telefoon: waas achter het statement bovenaan de foto, loopt uit onder de laatste regel. */
 .hp-foto-waas-boven {
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
-  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent);
-  mask-image: linear-gradient(to bottom, #000 45%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 83%, transparent);
+  mask-image: linear-gradient(to bottom, #000 83%, transparent);
 }
 
 /* Uitklappen: hoogte van 0fr naar 1fr, zodat de inhoud in de DOM blijft en de pagina meegroeit */

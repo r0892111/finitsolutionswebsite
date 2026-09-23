@@ -276,7 +276,7 @@ export function HomePage() {
                 <ChevronDown className="mt-0.5 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" aria-hidden="true" />
               </button>
               <div className="invisible absolute left-0 top-full translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                <div className="hp-card w-[32rem] p-5">
+                <div className="hp-card w-[32rem] whitespace-normal p-5">
                   <a href={PRODUCTEN.voicelink.url} target="_blank" rel="noopener noreferrer" className="group/item flex items-center gap-5">
                     <div className="h-36 w-24 shrink-0 overflow-hidden rounded-xl border border-[#E3E7EF] bg-[#F5F7FB]">
                       <Image src="/phone-mock-menu.webp" alt="VoiceLink WhatsApp-mockup" width={240} height={298} className="h-full w-full object-cover" />
@@ -398,14 +398,14 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         {/* 1. Hero                                                        */}
         {/* -------------------------------------------------------------- */}
-        <header id="hero" className={`${CONTAINER} pb-8 pt-24 sm:pt-28 lg:pb-6 lg:pt-24`}>
+        <header id="hero" className={`${CONTAINER} pb-12 pt-28 sm:pt-32 lg:pb-10 lg:pt-32`}>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-10">
             <div className="hp-rise">
-              <h1 className="hp-display text-balance text-[2.15rem] font-bold leading-[1.02] text-[#1A2D63] min-[400px]:text-[2.4rem] sm:text-[3.2rem] lg:text-[3rem] xl:text-[3.3rem]">
+              <h1 className="hp-display text-balance text-[3.3rem] font-bold leading-[1.02] text-[#1A2D63] min-[400px]:text-[3.5rem] sm:text-[3.2rem] lg:text-[3.25rem] xl:text-[3.6rem]">
                 <span className="block">{HERO.h1[0]}</span>
                 <Onder accent>{HERO.h1[1]}</Onder>
               </h1>
-              <p className={`mt-5 max-w-[36rem] ${LEAD}`}>{HERO.sub}</p>
+              <p className={`mt-5 max-w-[36rem] ${LEAD} lg:text-[1.1875rem]`}>{HERO.sub}</p>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <LesreeksKnop location="hero" className="w-full sm:w-auto" />
@@ -414,21 +414,26 @@ export function HomePage() {
 
               <ul className="mt-6 space-y-2.5">
                 {HERO.punten.map((punt) => (
-                  <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#3D4766]">
+                  <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#3D4766] lg:text-[1rem]">
                     <Vinkje />
                     <span>{punt}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-3">
-                <span className="text-[0.8125rem] font-medium text-[#6C7590]">{HERO.ondersteund}</span>
-                <Image src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" width={400} height={120} className="hp-logo h-6 w-auto" />
-                <Image src="/SI @KBC Black (2).png" alt="Start it @KBC" width={400} height={120} className="hp-logo h-6 w-auto" />
+              {/* Label boven de logo's: met drie logo's past het label er niet meer naast. */}
+              <div className="mt-7">
+                <span className="text-[0.8125rem] font-medium text-[#6C7590] lg:text-[0.875rem]">{HERO.ondersteund}</span>
+                <div className="mt-2.5 flex flex-wrap items-center gap-x-7 gap-y-3">
+                  <Image src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" width={400} height={120} className="hp-logo h-7 w-auto" />
+                  <Image src="/SI @KBC Black (2).png" alt="Start it @KBC" width={400} height={120} className="hp-logo h-7 w-auto" />
+                  <Image src="/elevenlabs-grants.webp" alt="ElevenLabs Grants" width={1496} height={132} className="hp-logo h-4 w-auto translate-y-[5px]" />
+                </div>
               </div>
             </div>
 
-            <div className="mx-auto w-full max-w-[26rem] lg:max-w-none">
+            {/* Het brein staat alleen naast de tekst. Is er geen plaats voor twee kolommen, dan valt het weg. */}
+            <div className="hidden w-full lg:block">
               <Brein3D />
             </div>
           </div>
@@ -456,12 +461,15 @@ export function HomePage() {
                   style={{ objectPosition: "center 42%" }}
                 />
                 <div className="hp-foto-waas pointer-events-none absolute inset-y-0 left-0 hidden w-[60%] sm:block" aria-hidden="true" />
-                {/* Op een telefoon staat het scherm bovenaan in beeld: daar vervaagt de bovenkant. */}
-                <div className="hp-foto-waas-boven pointer-events-none absolute inset-x-0 top-0 h-[58%] sm:hidden" aria-hidden="true" />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1A2D63]/85 via-[#1A2D63]/40 to-transparent sm:bg-gradient-to-r sm:from-[#1A2D63]/75 sm:via-[#1A2D63]/35 sm:to-transparent" aria-hidden="true" />
-                <p className="hp-display absolute inset-x-5 bottom-5 text-balance text-[1.6rem] font-bold leading-[1.08] text-white sm:inset-auto sm:left-7 sm:top-1/2 sm:max-w-[26rem] sm:-translate-y-1/2 sm:text-[2.1rem] lg:left-9 lg:max-w-[30rem] lg:text-[2.5rem]">
-                  {AANPAK_FOTO.statement}
-                </p>
+                <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-[#1A2D63]/75 via-[#1A2D63]/35 to-transparent sm:block" aria-hidden="true" />
+                {/* Het statement. Op een telefoon staat het bovenaan, in een waas die even hoog is als de tekst:
+                    zo stopt de waas op elk scherm net onder de laatste regel. */}
+                <div className="absolute inset-x-0 top-0 sm:inset-y-0 sm:left-7 sm:right-auto sm:flex sm:items-center lg:left-9">
+                  <div className="hp-foto-waas-boven pointer-events-none absolute inset-0 sm:hidden" aria-hidden="true" />
+                  <p className="hp-display relative text-balance px-5 pb-9 pt-5 text-[clamp(1.75rem,8vw,2.75rem)] font-bold leading-[1.08] text-white sm:max-w-[26rem] sm:p-0 sm:text-[2.1rem] lg:max-w-[30rem] lg:text-[2.5rem]">
+                    {AANPAK_FOTO.statement}
+                  </p>
+                </div>
               </div>
               <Citaat className="p-5 lg:hidden" />
             </div>
@@ -550,15 +558,22 @@ export function HomePage() {
                 })}
               </ol>
 
-              {/* Rechts: het paneel van de gekozen stap. Nieuwe inhoud schuift in. */}
-              <div ref={paneel} id="stap-paneel" className="hp-card hidden scroll-mt-24 p-6 lg:block lg:p-7">
-                <div key={getoond} className="hp-wissel">
-                  <StapPaneel i={getoond} naarStap={naarStap} kop />
+              {/* Rechts: het paneel van de gekozen stap. Nieuwe inhoud schuift in. Daaronder de vraag. */}
+              <div className="hidden lg:block">
+                <div ref={paneel} id="stap-paneel" className="hp-card scroll-mt-24 p-6 lg:p-7">
+                  <div key={getoond} className="hp-wissel">
+                    <StapPaneel i={getoond} naarStap={naarStap} kop />
+                  </div>
+                </div>
+                <div className="mt-5 flex items-center gap-6">
+                  <p className="text-[1rem] text-[#3D4766]">{HOE.slotVraag}</p>
+                  <ContactKnop location="aanpak" size="md" />
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-center sm:gap-6">
+            {/* Telefoon en tablet: geen paneel rechts, de vraag staat onder de kaarten. */}
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6 lg:hidden">
               <p className="text-[1rem] text-[#3D4766]">{HOE.slotVraag}</p>
               <ContactKnop location="aanpak" size="md" className="w-full sm:w-auto" />
             </div>
@@ -579,24 +594,24 @@ export function HomePage() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackLesreeks("breedte")}
-              className="hp-card group grid overflow-hidden text-left transition-shadow hover:shadow-[0_24px_48px_-24px_rgba(26,45,99,0.45)] md:grid-cols-[minmax(0,5fr)_minmax(0,4fr)]"
+              className="hp-card group grid overflow-hidden text-left transition-shadow hover:shadow-[0_24px_48px_-24px_rgba(26,45,99,0.45)] max-md:border-0 md:grid-cols-[minmax(0,5fr)_minmax(0,4fr)]"
             >
               <span className="flex flex-col justify-center p-6 sm:p-7 lg:p-9">
-                <span className="flex items-center gap-2 text-[0.8125rem] font-medium uppercase tracking-wide text-[#6C7590]">
+                <span className="flex items-center gap-2 text-[0.875rem] font-medium uppercase tracking-wide text-[#6C7590]">
                   <span>{SKOOL.label}</span>
-                  <Image src="/skool-wordmark.svg" alt="Skool" width={62} height={20} className="h-[1.05rem] w-auto -translate-y-[2px]" />
+                  <Image src="/skool-wordmark.svg" alt="Skool" width={62} height={20} className="h-[1.15rem] w-auto -translate-y-[2px]" />
                 </span>
-                <span className={`mt-3 block ${H3} text-[1.5rem]`}>{SKOOL.titel}</span>
-                <span className="mt-2 block text-[0.9375rem] leading-[1.6] text-[#3D4766]">{SKOOL.body}</span>
+                <span className={`mt-3 block ${H3} text-[1.65rem] lg:text-[1.9rem]`}>{SKOOL.titel}</span>
+                <span className="mt-2 block text-[1rem] leading-[1.6] text-[#3D4766] lg:text-[1.0625rem]">{SKOOL.body}</span>
                 <span className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
-                  <span className="hp-btn hp-btn--accent hp-btn--md">
+                  <span className="hp-btn hp-btn--accent hp-btn--lg">
                     {SKOOL.knop}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                   </span>
-                  <span className="text-[0.8125rem] leading-[1.5] text-[#6C7590]">{SKOOL.noot}</span>
+                  <span className="text-[0.875rem] leading-[1.5] text-[#6C7590]">{SKOOL.noot}</span>
                 </span>
               </span>
-              <span className="relative min-h-[11rem] bg-[#F5F7FB] md:min-h-0">
+              <span className="relative aspect-[720/402] bg-[#F5F7FB] md:aspect-auto">
                 <Image src="/skool-cover.webp" alt={SKOOL.coverAlt} fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
               </span>
             </a>

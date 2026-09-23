@@ -17,7 +17,7 @@ export function OplossingSectie() {
   return (
     <section id="oplossing" className="bg-[#F5F7FB]">
       <div className={`${CONTAINER} pb-14 pt-10 sm:pb-16 sm:pt-12`}>
-        <div className="grid rounded-[20px] bg-[#1A2D63] p-7 text-white shadow-[0_20px_44px_-24px_rgba(26,45,99,0.6)] sm:p-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:gap-10 lg:p-10">
+        <div className="grid rounded-[20px] bg-[#1A2D63] p-7 text-white shadow-[0_20px_44px_-24px_rgba(26,45,99,0.6)] sm:p-8 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:items-center lg:gap-8 lg:px-10 lg:py-8">
           <div>
             <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-white/60">{OPLOSSING.label}</p>
             <h2 className="hp-display hp-display-sm mt-3 text-balance text-[1.6rem] font-semibold leading-[1.15] sm:text-[1.9rem] lg:text-[2.1rem]">{OPLOSSING.titel}</h2>
@@ -27,10 +27,8 @@ export function OplossingSectie() {
               ))}
             </div>
           </div>
-          {/* De tekening is gemaakt voor een lichte ondergrond: op de blauwe kaart staat ze op een wit vlak. */}
-          <div className="mx-auto mt-8 w-full max-w-[30rem] rounded-[16px] bg-white p-2 sm:p-3 lg:mt-0 lg:max-w-none">
-            <Image src="/home/aze4.png" alt={OPLOSSING.illustratieAria} width={1200} height={800} className="block h-auto w-full rounded-[10px]" />
-          </div>
+          {/* Witte lijnen op een transparante achtergrond: de tekening staat rechtstreeks op de blauwe kaart. */}
+          <Image src="/home/aze5.png" alt={OPLOSSING.illustratieAria} width={1131} height={819} className="mx-auto mt-6 block h-auto w-full max-w-[32rem] lg:mt-0 lg:max-w-none" />
         </div>
 
         <div className="mt-10 text-center">
