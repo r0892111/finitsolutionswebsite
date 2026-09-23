@@ -239,13 +239,15 @@ export type Stap = {
 // bij de oplossingen. Kop, intro, paneel 2 en paneel 3 zijn nieuw (review 13/09).
 // Sinds 15/09 heet stap 3 Gebruiken en is het een gebruikslicentie; sinds 16/09 is er in stap 2 één weg
 // (het AI-native traject is geschrapt) en komt het voorstel in het strategiegesprek. Alle software blijft van Finit.
+// 23/09 (Alex): de hele sectie herschreven in eenvoudiger zinnen, één idee per zin. "Hoe meer ze
+// overnemen, hoe hoger de opstartkost en de gebruikslicentie" is geschrapt: dat schrikt af.
 export const HOE = {
   h2: ["Hoe krijg jij jouw", "AI-werknemer?"],
   meer: "Meer over deze stap",
   minder: "Sluiten",
   // Onderaan het paneel: door naar de volgende stap, of terug.
   paneel: { vorige: "Vorige", volgende: "Volgende" },
-  intro: "In drie stappen, in deze volgorde. Jij legt eerst zelf je fundament, want dat inzicht heb jij, niet wij. Daarna doen wij het technische werk.",
+  intro: "Drie stappen, in deze volgorde. Eerst leg jij je fundament, daarna doen wij het technische werk.",
   slotVraag: "Vragen over de aanpak?",
   stappen: [
     {
@@ -253,14 +255,14 @@ export const HOE = {
       tijd: "2 tot 3 weken",
       wie: "Jij, met de AI",
       titel: "Opleiden",
-      intro: "De AI stelt jou vragen over je bedrijf. Jij praat, hij schrijft.",
+      intro: "De AI stelt je vragen over je bedrijf. Jij antwoordt, de AI schrijft alles op.",
       // Wat je eruit haalt (15/09): het fundament, de analyse met de kansen en ons advies, het strategiegesprek.
       // De kop erboven is van 20/09 (Alex): het paneel moet twee duidelijke blokken zijn, eerst wat je krijgt.
       puntenTitel: "Resultaat",
       punten: [
-        "Een inventaris van je bedrijf, in gewone taal, die altijd van jou blijft",
-        "Een analyse met de AI-werknemers die voor jou het meest opleveren, en wat wij aanraden",
-        "Een strategiegesprek van 90 minuten met Karel over de weg die bij je past",
+        "Een overzicht van hoe jouw bedrijf werkt, in gewone taal. Het blijft altijd van jou.",
+        "Een lijst van de AI-werknemers die jou het meeste werk uit handen nemen, met ons advies erbij",
+        "Een strategiegesprek van 90 minuten met Karel, waarin je samen kiest wat er eerst komt",
       ],
       prijsLabel: "Lesreeks",
       prijs: "€ 95",
@@ -273,7 +275,7 @@ export const HOE = {
       tijd: "2 tot 4 weken",
       wie: "Wij",
       titel: "Bouwen",
-      intro: "Op jouw fundament bouwen wij de AI-werknemers die je dagelijkse processen overnemen.",
+      intro: "Wij bouwen je AI-werknemers op basis van jouw fundament. Zij nemen je dagelijkse taken over.",
       prijsLabel: "Opstartkost",
       prijsPrefix: "vanaf",
       prijs: "€ 1.650",
@@ -283,7 +285,7 @@ export const HOE = {
       tijd: "24/7 actief",
       wie: "Je AI-werknemer",
       titel: "Gebruiken",
-      intro: "Het werk gebeurt op de achtergrond. Wij houden het systeem draaiend, veilig en up-to-date.",
+      intro: "Je AI-werknemers doen hun werk op de achtergrond. Wij zorgen dat alles blijft werken, veilig en up-to-date.",
       prijsLabel: "Gebruikslicentie",
       prijsPrefix: "vanaf",
       prijs: "€ 95",
@@ -299,11 +301,11 @@ export const HOE = {
   // van je fundament. De drie blokken hieronder zijn de inhoud van het paneel per stap
   // (stap-details.tsx); `kort` is de inleidende regel, `eerlijk` de kwalificatie eronder.
   fundament: {
-    h3: "Waarom jij het legt, en hoe het gaat",
-    kort: "Jij kent je bedrijf het best. Daarom leg jij het fundament, en bouwen wij daarop.",
-    tekst: "Een consultant kent je bedrijf na een week nog altijd minder dan jij. Daarom stelt de AI jou de vragen die wij vroeger ter plaatse stelden, gegroeid uit meer dan tien analysetrajecten bij KMO's: hoe je geld verdient, wie wat doet en wie beslist, je processen, je systemen en je prijzen. Jij praat, de AI schrijft, en legt onderweg vast waar AI bij jou het meeste oplevert.",
+    h3: "Waarom jij het fundament legt, en hoe dat gaat",
+    kort: "Jij kent je bedrijf het best. Daarom leg jij het fundament. Wij bouwen erop verder.",
+    tekst: "Een consultant kent je bedrijf na een week nog altijd minder dan jij. Daarom stelt de AI je de vragen die wij vroeger bij bedrijven ter plaatse stelden. Die vragen komen uit meer dan tien analyses bij KMO's. Hoe verdien je geld? Wie doet wat, en wie beslist? Hoe lopen je processen, welke systemen gebruik je en wat zijn je prijzen? Jij antwoordt, de AI schrijft alles op. Onderweg houdt de AI ook bij welk werk je het eerst kunt laten overnemen.",
     // Bewust een kwalificatie, geen geruststelling: wie een snelle fix zoekt, haakt hier af.
-    eerlijk: "Geen snelle fix. AI die echt in je processen zit, vraagt een paar avonden werk. Daarom blijft hij daarna werken.",
+    eerlijk: "Dit is geen snelle oplossing. Je steekt er een paar avonden in. Daardoor werkt je AI daarna ook echt, elke dag.",
     // De video van anderhalve minuut waarin Alex of Karel dit uitlegt. Komt later; leeg = niets tonen.
     video: null as null | { src: string; poster: string },
   },
@@ -312,16 +314,16 @@ export const HOE = {
   // gebruikslicentie per AI-werknemer) komt in het strategiegesprek van 90 minuten met Karel. Het
   // AI-native traject van 15/09 is op 16/09 geschrapt. Geen prijzen in het paneel (die staan op de kaart).
   bouw: {
-    h3: "Nu het technische werk",
+    h3: "Daarna doen wij het technische werk",
     // 20/09: "Goed gedaan, je hebt ons de analyse bespaard" klonk neerbuigend en alsof de klant
     // ons werk had gedaan. Het gaat om de overdracht: jouw analyse is af, nu nemen wij het technische deel.
-    kort: "Je analyse is klaar. Vanaf hier helpen wij je verder: dit is het deel waar technische expertise voor nodig is.",
-    intro: "Je stelt je pakket samen met ons, uit je fundament: van één eenvoudige AI-werknemer, zoals een die je mailbox sorteert en antwoorden klaarzet, tot meerdere die samenwerken. Hoe meer ze overnemen, hoe hoger de opstartkost en de gebruikslicentie.",
+    kort: "Je analyse is klaar. Vanaf nu nemen wij het over, want dit deel vraagt technische kennis.",
+    intro: "Samen kiezen we welke AI-werknemers je nodig hebt. Je kunt klein beginnen, met één AI-werknemer die je mailbox sorteert en antwoorden klaarzet. Of je kiest er meerdere die samenwerken.",
     volgorde: [
-      { titel: "Strategiegesprek van 90 minuten", tekst: "Met Karel, met je fundament en je analyse op tafel. Wij bereiden ons voor op je fundament en komen met een stappenplan en een voorstel. Inbegrepen in de lesreeks, vrijblijvend." },
-      { titel: "Je voorstel", tekst: "Je opstartkost en je gebruikslicentie, per AI-werknemer. Wat je niet nodig hebt, laat je weg." },
-      { titel: "Bouwen, koppelen, testen", tekst: "Wij ontwikkelen je AI-werknemers, koppelen ze aan de software die je al gebruikt en testen ze tot ze doen wat jij zou doen." },
-      { titel: "Veilig live", tekst: "Je gegevens blijven afgeschermd en één knop zet alles stil. Daarna 30 dagen nazorg." },
+      { titel: "Strategiegesprek van 90 minuten", tekst: "Je zit samen met Karel. Karel heeft je fundament en je analyse vooraf gelezen en komt met een stappenplan en een voorstel. Het gesprek zit in de prijs van de lesreeks, en je zit nergens aan vast." },
+      { titel: "Je voorstel", tekst: "Per AI-werknemer zie je wat het bouwen eenmalig kost, en wat het gebruik per maand kost. Wat je niet nodig hebt, laat je weg." },
+      { titel: "Bouwen, koppelen, testen", tekst: "Wij bouwen je AI-werknemers en koppelen ze aan de programma's die je al gebruikt. We testen ze tot ze het werk doen zoals jij het zou doen." },
+      { titel: "Veilig live", tekst: "Je AI-werknemers gaan aan de slag. Je gegevens blijven afgeschermd, en met één knop zet je alles stil. De eerste 30 dagen volgen we alles extra op." },
     ],
   },
   // Wat je vanaf nu hebt. Geen prijs in het paneel; geen cijfers over backup-frequentie of uptime.
@@ -330,13 +332,13 @@ export const HOE = {
   // bevestigd in het model. Het eigendom is zoals Alex het zei (15/09).
   onderhoud: {
     h3: "Wat je vanaf nu hebt",
-    kort: "Je AI-werknemers staan live en werken voor je. Wij houden ze draaiend.",
+    kort: "Je AI-werknemers werken nu voor je. Wij zorgen dat ze blijven werken.",
     punten: [
       { titel: "Live en aan het werk", body: "Je AI-werknemers draaien op onze servers. Jij hoeft niets te installeren of te beheren." },
-      { titel: "Bewaakt", body: "Wij zien het als er iets hapert, meestal voor jij het merkt. Bug? Gratis. Koppeling veranderd? Gratis." },
-      { titel: "Elke maand gecheckt en bijgewerkt", body: "Backups, beveiligingsupdates en nieuwe versies: nieuwe AI-ontwikkelingen die jij ook moet hebben, voeren wij door." },
-      { titel: "Voorrang bij vragen", body: "Loop je ergens tegenaan, dan sta je vooraan in de rij." },
-      { titel: "Elke maand een uur strategie", body: "Eén uur per maand zitten we samen over uitbreidingen en advies." }
+      { titel: "Bewaakt", body: "Loopt er iets mis, dan zien wij dat meestal voor jij het merkt. Een fout herstellen of een koppeling aanpassen kost je niets." },
+      { titel: "Elke maand gecheckt en bijgewerkt", body: "We maken backups en installeren beveiligingsupdates. Komt er een nieuwe AI-verbetering die jou helpt, dan voeren wij die door." },
+      { titel: "Voorrang bij vragen", body: "Heb je een vraag of loop je ergens tegenaan, dan helpen we jou eerst." },
+      { titel: "Elke maand een uur strategie", body: "Elke maand zitten we een uur samen. We bekijken wat je nog kunt laten overnemen, en je krijgt ons advies." }
     ],
   },
 };
