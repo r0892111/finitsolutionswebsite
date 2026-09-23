@@ -537,7 +537,6 @@ export const FOOTER = {
   ],
   links: [
     { label: "Privacybeleid", href: "/privacy" },
-    { label: "Algemene voorwaarden", href: "/algemene-voorwaarden" },
     { label: "Cookieverklaring", href: "/cookieverklaring" },
     { label: "Disclaimer", href: "/disclaimer" },
   ],

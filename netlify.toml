@@ -13,6 +13,12 @@
   NODE_VERSION = "18"
 
 # Shopify mandatory GDPR compliance webhooks → Netlify Functions
+# De algemene voorwaarden staan op de offertes, niet meer op de site (23/09/2026).
+[[redirects]]
+  from = "/algemene-voorwaarden/*"
+  to = "/"
+  status = 301
+
 [[redirects]]
   from = "/portal/webhooks/customers/data_request"
   to = "/.netlify/functions/shopify-webhook-customers-data-request"
