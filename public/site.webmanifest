@@ -1,7 +1,7 @@
 {
   "name": "Finit Solutions",
   "short_name": "Finit",
-  "description": "Leer een AI hoe jouw zaak werkt. Dan pas kan die werk van je overnemen.",
+  "description": "Leg het AI-fundament van jouw bedrijf. Daarna nemen AI-werknemers elke dag werk uit je handen.",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }

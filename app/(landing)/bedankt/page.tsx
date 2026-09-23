@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { ThankYouLanding } from '@/components/landing/thank-you-landing';
 
 export const metadata: Metadata = {
-  title: 'In orde! | Finit Solutions',
+  title: 'In orde!',
   description:
     'Bedankt voor je bericht. We nemen binnen 24 uur contact met je op.',
   openGraph: {

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { DirectBookingLanding } from '@/components/landing/direct-booking-landing';
 
 export const metadata: Metadata = {
-  title: 'Plan Je Gratis Gesprek | Finit Solutions - AI Automatisering',
+  title: 'Plan Je Gratis Gesprek',
   description:
     '30 minuten die je bedrijf kunnen veranderen. Plan een vrijblijvend gesprek en ontdek hoe AI-automatisering jouw processen kan transformeren.',
   openGraph: {

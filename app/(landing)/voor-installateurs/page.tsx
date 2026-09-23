@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { InstallateursLanding } from '@/components/landing/installateurs-landing';
 
 export const metadata: Metadata = {
-  title: 'Voor Installateurs | Finit Solutions - AI Automatisering',
+  title: 'Voor Installateurs',
   description:
     'Installateurs, loodgieters en elektriciens: stop met administratie na werkuren. AI-systemen die je offertes automatiseren, klanten laten inplannen en opvolging regelen.',
   openGraph: {

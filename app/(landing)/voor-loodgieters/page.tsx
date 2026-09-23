@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { LoodgietersLanding } from '@/components/landing/loodgieters-landing';
 
 export const metadata: Metadata = {
-  title: 'Voor Loodgieters | Finit Solutions - AI Automatisering',
+  title: 'Voor Loodgieters',
   description:
     'Loodgieters: stop met administratie na werkuren. AI-systemen die je offertes automatiseren, klanten laten inplannen en opvolging regelen.',
   openGraph: {

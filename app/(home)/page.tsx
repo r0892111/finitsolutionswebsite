@@ -3,14 +3,14 @@ import { Metadata } from "next";
 
 const TITLE = "Finit Solutions | Leg jouw AI-fundament";
 const DESCRIPTION =
-  "AI kan alleen maar wat je hem vertelt. Leg eerst een fundament: alle kennis over jouw bedrijf, zo opgeschreven dat een AI ermee kan werken. Daarna bouwen wij de systemen die het werk overnemen. Prijzen vooraf bekend.";
+  "Leg in onze lesreeks het AI-fundament van jouw bedrijf. Daarna bouwen wij AI-werknemers die elke dag werk uit je handen nemen. Voor Vlaamse KMO's.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   alternates: { canonical: "/" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/" },
-  twitter: { title: TITLE, description: DESCRIPTION },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/", siteName: "Finit Solutions", locale: "nl_BE", type: "website", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: ["/og-image.png"] },
 };
 
 export default function Home() {

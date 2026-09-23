@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { AwarenessLanding } from '@/components/landing/awareness-landing';
 
 export const metadata: Metadata = {
-  title: 'Herken Jij Dit? | Finit Solutions - AI Automatisering',
+  title: 'Herken Jij Dit?',
   description:
     'De gemiddelde KMO-ondernemer verliest 15 uur per week aan administratie. Ontdek hoe AI-automatisering jouw bedrijf tijd en geld bespaart.',
   openGraph: {

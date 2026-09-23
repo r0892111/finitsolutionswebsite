@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Disclaimer | Finit Solutions',
+  title: 'Disclaimer',
   description: 'Disclaimer van Finit Solutions. Lees onze voorwaarden over het gebruik van deze website en de aansprakelijkheid.',
 };
 

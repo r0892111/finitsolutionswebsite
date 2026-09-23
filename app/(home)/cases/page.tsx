@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   title: P.metaTitel,
   description: P.metaBeschrijving,
   alternates: { canonical: "/cases" },
-  openGraph: { title: `${P.metaTitel} | Finit Solutions`, description: P.metaBeschrijving, url: "/cases" },
-  twitter: { title: `${P.metaTitel} | Finit Solutions`, description: P.metaBeschrijving },
+  openGraph: { title: `${P.metaTitel} | Finit Solutions`, description: P.metaBeschrijving, url: "/cases", siteName: "Finit Solutions", locale: "nl_BE", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: `${P.metaTitel} | Finit Solutions`, description: P.metaBeschrijving },
 };
 
 export default function CasesPage() {

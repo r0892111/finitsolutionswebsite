@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Shield, Mail, Calendar, Lock, CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Finit Solutions - Google Integration Information',
+  title: 'Google-integratie',
   description: 'Learn about how Finit Solutions uses Google APIs to provide secure email and calendar integration for our customer portal.',
   robots: {
     index: true,

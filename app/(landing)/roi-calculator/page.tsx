@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { ROICalculatorLanding } from '@/components/landing/roi-calculator-landing';
 
 export const metadata: Metadata = {
-  title: 'ROI Calculator | Finit Solutions - Bereken Je Besparing',
+  title: 'ROI Calculator',
   description: 'Bereken hoeveel tijd en geld AI-automatisering jouw bedrijf bespaart. Interactieve ROI calculator voor KMO-ondernemers.',
   openGraph: {
     title: 'ROI Calculator | Finit Solutions',

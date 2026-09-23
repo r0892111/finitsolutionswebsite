@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Cookieverklaring | Finit Solutions',
+  title: 'Cookieverklaring',
   description: 'Lees hoe Finit Solutions cookies gebruikt om je ervaring te verbeteren. Overzicht van alle cookies, hun doel en hoe je je voorkeuren beheert.',
 };
 

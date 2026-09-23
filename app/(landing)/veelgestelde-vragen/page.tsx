@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { FAQLanding } from '@/components/landing/faq-landing';
 
 export const metadata: Metadata = {
-  title: 'Veelgestelde Vragen | Finit Solutions - AI Automatisering',
+  title: 'Veelgestelde Vragen',
   description:
     'Alles wat je wilt weten over AI-automatisering voor je bedrijf. Antwoorden over kosten, implementatie, privacy en meer.',
   openGraph: {

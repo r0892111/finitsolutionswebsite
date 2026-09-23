@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Privacybeleid | Finit Solutions',
+  title: 'Privacybeleid',
   description: 'Het privacybeleid van Finit Solutions. Hoe wij omgaan met jouw persoonsgegevens conform de AVG/GDPR-wetgeving.',
 };
 

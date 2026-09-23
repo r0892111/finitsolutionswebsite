@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { ConsiderationLanding } from '@/components/landing/consideration-landing';
 
 export const metadata: Metadata = {
-  title: 'Hoe Het Werkt | Finit Solutions - AI Automatisering',
+  title: 'Hoe Het Werkt',
   description: 'AI in je bedrijf betekent niet ChatGPT. Ontdek hoe virtuele medewerkers jouw administratie, offertes en opvolging automatiseren.',
   openGraph: {
     title: 'Hoe Het Werkt | Finit Solutions',

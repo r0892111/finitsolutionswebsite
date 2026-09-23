@@ -15,13 +15,13 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   
   if (!post) {
     return {
-      title: 'Post Not Found | Finit Solutions',
+      title: 'Artikel niet gevonden | Finit Solutions',
       description: 'The requested blog post could not be found.'
     };
   }
 
   return {
-    title: `${post.title} | Finit Solutions Blog`,
+    title: `${post.title} | Finit Solutions`,
     description: post.description,
     openGraph: {
       title: post.title,

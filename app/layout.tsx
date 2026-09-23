@@ -29,7 +29,7 @@ const generalSans = Inter({
 
 const SITE_TITLE = 'Finit Solutions | Leg jouw AI-fundament';
 const SITE_DESCRIPTION =
-  'AI kan alleen maar wat je hem vertelt. Leg eerst een fundament: alle kennis over jouw bedrijf, zo opgeschreven dat een AI ermee kan werken. Daarna bouwen wij de systemen die het werk overnemen. Prijzen vooraf bekend.';
+  "Leg in onze lesreeks het AI-fundament van jouw bedrijf. Daarna bouwen wij AI-werknemers die elke dag werk uit je handen nemen. Voor Vlaamse KMO's.";
 
 export const metadata: Metadata = {
   title: {
@@ -139,7 +139,7 @@ export default function RootLayout({
                 "@type": "Country",
                 "name": "Belgium"
               },
-              "serviceType": ["AI-opleiding voor zaakvoerders", "AI-automatisering", "Bedrijfsautomatisering"],
+              "serviceType": ["AI-lesreeks voor zaakvoerders", "AI-werknemers op maat", "AI-automatisering voor KMO's"],
               "sameAs": [
                 "https://www.linkedin.com/company/finitsolutions/",
                 "https://www.instagram.com/finitsolutions/"

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { ElektriciensLanding } from '@/components/landing/elektriciens-landing';
 
 export const metadata: Metadata = {
-  title: 'Voor Elektriciens | Finit Solutions - AI Automatisering',
+  title: 'Voor Elektriciens',
   description:
     'Elektriciens: stop met administratie na werkuren. AI-systemen die je offertes automatiseren, klanten laten inplannen en opvolging regelen.',
   openGraph: {
