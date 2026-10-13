@@ -6,7 +6,7 @@
  * en de uitleg die Alex geeft in de video's van de lesreeks (hoofdstuk 1 en 2):
  * waarom je eerst een fundament legt, wat je bouwt, wat het oplevert, en dat
  * het technische werk daarna nog door ons gebeurt. Prijzen volgens het model:
- * lesreeks € 95 (daarna € 295), met het strategiegesprek
+ * lesreeks € 295 (sinds 13 oktober 2026; daarvoor € 95 voor de eerste 20), met het strategiegesprek
  * van 90 minuten erbij; daarna het bouwpakket (vanaf € 1.650 opstart,
  * gebruikslicentie vanaf € 95 per maand, per jaar). Sinds 15 september 2026;
  * de "vanaf"-prijzen sinds 16 september (yap3.md, Karel en Alex): het echte
@@ -186,7 +186,7 @@ export const SKOOL = {
   titel: "Leg je AI-fundament",
   body: "Tijdens de lesreeks helpen we je in het opleiden van je AI-brein: je processen, je klanten, je prijzen, je manier van werken. Daarna weet AI wat jij weet.",
   knop: "Start zelf met je AI-fundament",
-  noot: "Online, in het Nederlands, op eigen tempo. € 95 voor de eerste 20 deelnemers.",
+  noot: "Online, in het Nederlands, op eigen tempo.",
   coverAlt: "De cover van de lesreeks op Skool: een whiteboard met de negen stappen naar je AI-fundament.",
 };
 
@@ -265,8 +265,7 @@ export const HOE = {
         "Een strategiegesprek van 90 minuten met Karel, waarin je samen kiest wat er eerst komt",
       ],
       prijsLabel: "Lesreeks",
-      prijs: "€ 95",
-      prijsOud: "€ 295",
+      prijs: "€ 295",
       cta: CTA_LESREEKS,
       ctaNoot: "Online, in het Nederlands, op eigen tempo.",
     },
@@ -412,12 +411,12 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
       a: [
         { t: "p", tekst: "Je kent elke prijs op voorhand. Geen verrassingen achteraf." },
         { t: "list", items: [
-          "De lesreeks: € 95 voor de eerste 20 deelnemers, daarna € 295. Eenmalig, met het strategiegesprek inbegrepen. Plus je eigen abonnement van Claude of ChatGPT, ± € 20 per maand.",
+          "De lesreeks: € 295. Eenmalig, met het strategiegesprek inbegrepen. Plus je eigen abonnement van Claude of ChatGPT, ± € 20 per maand.",
           "Het bouwpakket: vanaf € 1.650 opstart, inclusief 30 dagen nazorg. Daarna een gebruikslicentie vanaf € 95 per maand voor hosting, bewaking, backups en updates, per jaar. Elke AI-werknemer heeft zijn eigen opstartkost en gebruikslicentie: hoe meer hij overneemt en hoe meer systemen hij gebruikt, hoe hoger.",
           "Maatwerk, zoals een koppeling aan een webshop, CRM of website die er nog niet is: aan ons dagtarief van € 750, met een indicatie en een plafond vooraf. De gebruikslicentie daarvoor staat in de offerte.",
         ] },
         { t: "p", tekst: "Je exacte prijs krijg je na de lesreeks in het strategiegesprek, in een voorstel dat je zelf mee samenstelt. Wat je niet nodig hebt, laat je weg. Het minste wat je daarna kunt laten bouwen, is iets eenvoudigs als een AI-werknemer op je mailbox, voor € 1.650." },
-        { t: "p", tekst: "Te klein om te starten? Begin met de lesreeks. Voor € 95 weet je waar AI in jouw bedrijf loont, voor je één euro aan ontwikkeling uitgeeft. Daarna bouwen we gefaseerd: start met de grootste tijdvreter, breid later uit als je de waarde ziet." },
+        { t: "p", tekst: "Te klein om te starten? Begin met de lesreeks. Voor € 295 weet je waar AI in jouw bedrijf loont, voor je één euro aan ontwikkeling uitgeeft. Daarna bouwen we gefaseerd: start met de grootste tijdvreter, breid later uit als je de waarde ziet." },
         { t: "p", tekst: "Alle prijzen excl. btw." },
       ],
     },
@@ -520,7 +519,7 @@ export const BEDANKT = {
   nu: {
     titel: "Je hoeft niet op ons te wachten",
     body: "Stap 02 kan je vandaag al starten. Hoe verder je fundament staat wanneer we bellen, hoe concreter het gesprek.",
-    noot: "Online, in het Nederlands, op eigen tempo. € 95 voor de eerste 20 deelnemers.",
+    noot: "Online, in het Nederlands, op eigen tempo.",
   },
   vragenTitel: "Vragen in de tussentijd?",
   belLabel: "Bel gerust op",
