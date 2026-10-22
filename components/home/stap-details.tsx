@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * De inhoud van de drie stappen in detail: waarom je het fundament zelf legt,
- * wat er gebeurt als wij bouwen, en wat je vanaf dan hebt. Staat in het
+ * De inhoud van de drie stappen in detail: hoe de vier weken van de setup
+ * verlopen, wat er gebeurt als wij bouwen, en wat je vanaf dan hebt. Staat in het
  * paneel bij de stappen op de homepage (home-page.tsx): rechts van de kaarten
  * op desktop, in de kaart op een telefoon. Bewust kort, geen prijzen (die
  * staan op de kaarten) en geen voorbeelden (die staan bij de oplossingen).
@@ -17,24 +17,26 @@ import { HOE } from "./copy";
 import { Vinkje } from "./ui";
 
 /**
- * Stap 1: één doorlopende uitleg, geen tussenkopjes en geen kaartje ernaast
- * (20/09). Eén boodschap: jij kent je bedrijf, de AI stelt de vragen. Wat er
- * in je fundament komt, zit in de zin zelf; alleen de kwalificatie eronder
- * blijft apart staan.
+ * Stap 1: de vier weken van de Company Brain Setup (22/10), als genummerde lijst,
+ * met eronder wat het brein na de setup wel en niet is.
  */
-export function FundamentDetail() {
-  const F = HOE.fundament;
+export function SetupDetail() {
+  const S = HOE.setup;
   return (
-    <div className="max-w-[46rem] space-y-5">
-      {/* De video van anderhalve minuut komt hier, zodra hij er is. */}
-      {F.video && (
-        <video controls preload="none" poster={F.video.poster} className="w-full rounded-[16px] bg-[#F5F7FB]">
-          <source src={F.video.src} />
-        </video>
-      )}
-      <p className="text-[0.9375rem] leading-[1.7] text-[#3D4766]">{F.tekst}</p>
-      {/* De kwalificatie: wie een snelle fix zoekt, haakt hier af. */}
-      <p className="border-l-2 border-[#1A2D63] pl-4 text-[0.875rem] font-medium leading-[1.55] text-[#1A2D63]">{F.eerlijk}</p>
+    <div className="max-w-[46rem]">
+      <ol>
+        {S.weken.map((w, i) => (
+          <li key={w.titel} className="relative flex gap-4 pb-5 last:pb-0">
+            {i < S.weken.length - 1 && <span className="absolute bottom-0 left-[15.5px] top-9 w-px bg-[#1A2D63]/15" aria-hidden="true" />}
+            <span className="hp-display relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[0.875rem] font-bold text-white">{i + 1}</span>
+            <div className="pt-1">
+              <p className="text-[1rem] font-semibold leading-[1.35] text-[#1A2D63]">{w.titel}</p>
+              <p className="mt-1 text-[0.9375rem] leading-[1.6] text-[#3D4766]">{w.tekst}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <p className="mt-5 border-l-2 border-[#1A2D63] pl-4 text-[0.875rem] font-medium leading-[1.55] text-[#1A2D63]">{S.eerlijk}</p>
     </div>
   );
 }
@@ -90,7 +92,7 @@ export function OnderhoudDetail() {
 
 /** Eén blok per stap, in de volgorde van HOE.stappen. */
 export const STAP_DETAILS = [
-  { h3: HOE.fundament.h3, kort: HOE.fundament.kort, Inhoud: FundamentDetail },
+  { h3: HOE.setup.h3, kort: HOE.setup.kort, Inhoud: SetupDetail },
   { h3: HOE.bouw.h3, kort: HOE.bouw.kort, Inhoud: BouwDetail },
   { h3: HOE.onderhoud.h3, kort: HOE.onderhoud.kort, Inhoud: OnderhoudDetail },
 ];

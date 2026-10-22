@@ -10,8 +10,7 @@
 
 import { ArrowRight, Mail } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
-import { SKOOL_URL } from "@/lib/finit-links";
-import { CTA_CONTACT, CTA_LESREEKS } from "./copy";
+import { CTA_CONTACT, CTA_START } from "./copy";
 
 export const CONTAINER = "mx-auto w-full max-w-[74rem] px-5 sm:px-8";
 export const H2 =
@@ -23,7 +22,7 @@ export const LEAD =
 /** Gecentreerde sectiekop met intro. */
 export const KOP = "mx-auto max-w-[44rem] text-center";
 
-/** De accentkleur van de site: alleen voor de hoofd-CTA (de lesreeks) en wat er rechtstreeks bij hoort. */
+/** De accentkleur van de site: alleen voor de hoofd-CTA (het startgesprek) en wat er rechtstreeks bij hoort. */
 export const ACCENT = "#E9A13B";
 
 /**
@@ -54,15 +53,19 @@ export function Vinkje({ donker = false, wit = false, groot = false, groen = fal
   );
 }
 
-export const trackLesreeks = (location: string) =>
-  pushEvent("cta_click", { cta_label: "lesreeks", location });
+export const trackStart = (location: string) =>
+  pushEvent("cta_click", { cta_label: "startgesprek", location });
+
+/** Waar de hoofd-CTA naartoe gaat: het formulier op de contactpagina. */
+export const START_HREF = "/contact#start";
 
 /**
- * De hoofd-CTA van de site: de lesreeks. Standaard in de accentkleur, overal: dat is
- * de ene knop die eruit moet springen. Gaat naar Skool (SKOOL_URL). De andere
- * varianten blijven voor uitzonderingen.
+ * De hoofd-CTA van de site: een startgesprek plannen voor de Company Brain Setup
+ * (sinds 22 oktober 2026; daarvoor was dit de lesreeks op Skool). Standaard in de
+ * accentkleur, overal: dat is de ene knop die eruit moet springen. Gaat naar het
+ * formulier op /contact. De andere varianten blijven voor uitzonderingen.
  */
-export function LesreeksKnop({
+export function StartKnop({
   location,
   size = "lg",
   className = "",
@@ -75,20 +78,18 @@ export function LesreeksKnop({
 }) {
   return (
     <a
-      href={SKOOL_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={() => trackLesreeks(location)}
+      href={START_HREF}
+      onClick={() => trackStart(location)}
       className={`hp-btn hp-btn--${variant} hp-btn--${size} ${className}`}
     >
-      {CTA_LESREEKS}
+      {CTA_START}
       <ArrowRight className="h-4 w-4" aria-hidden="true" />
     </a>
   );
 }
 
 /**
- * De tweede knop: naar de contactpagina. Omlijnd, zodat de lesreeks de ene knop blijft
+ * De tweede knop: naar de contactpagina. Omlijnd, zodat het startgesprek de ene knop blijft
  * die eruit springt. Geen popup meer: wie een vraag heeft, krijgt een pagina met het
  * formulier en het telefoonnummer.
  */

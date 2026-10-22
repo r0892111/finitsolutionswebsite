@@ -1,5 +1,8 @@
 # Homepage-rework: branch `rework/homepage-lesreeks`
 
+> **Update 22 oktober 2026 (Alex, branch `copy/brain-setup`).** De lesreeks is weg. De hoofdknop is "Plan een startgesprek" (naar het formulier op `/contact#start`). Stap 1 is de Company Brain Setup: wij bouwen in vier weken het brein van je bedrijf, € 3.000 excl. btw. Daarna is Finit de IT-partner (AI-werknemers, koppelingen, software op maat, websites). Geen prijzen voor wat na de setup komt, Finit OS staat niet op de site. Waar hieronder de lesreeks, Skool of de oude prijzen staan, is dat achterhaald.
+
+
 > **Update 7 september 2026, namiddag.** Alex heeft op basis van deze branch een tweede ronde gedaan op `copy/homepage-optimalisatie` (zie [§ Tweede ronde](#tweede-ronde-copy-optimalisaties-van-alex) onderaan). Tag `homepage-rework-v1` bevriest de oplevering hieronder; `rework/homepage-lesreeks` zelf is niet aangeraakt.
 
 Overdracht voor Karel. Dit is de herwerkte homepage voor het lesreeks-model, gebouwd op 7 september 2026 op een aparte branch. **Niet gemerged naar `main`.** Alex beslist wanneer en of dat gebeurt. Werk verder op deze branch, of maak er een nieuwe branch van.

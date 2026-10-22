@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ChevronDown, ChevronRight, Mail, Menu, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown, ChevronRight, Globe, Link2, Mail, Menu, Users, Wrench, X, Zap, type LucideIcon } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
-import { CONTACT_EMAIL, SKOOL_URL } from "@/lib/finit-links";
+import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { Brein3D } from "./brein-3d";
 import { Getuigenis, OplossingCatalogus } from "./case-kaart";
 import { ContactKaart } from "./contact-kaart";
@@ -12,12 +12,12 @@ import { HerkenSectie } from "./herken-sectie";
 import { OplossingSectie } from "./oplossing-sectie";
 import { SiteFooter } from "./site-footer";
 import { STAP_DETAILS } from "./stap-details";
-import { CONTAINER, ContactKnop, H2, H3, KOP, LEAD, LesreeksKnop, Onder, Vinkje, trackLesreeks } from "./ui";
+import { CONTAINER, ContactKnop, H2, H3, KOP, LEAD, START_HREF, StartKnop, Onder, Vinkje, trackStart } from "./ui";
 import {
   AANPAK_FOTO,
   CASES,
   CTA_CONTACT,
-  CTA_LESREEKS,
+  CTA_START,
   FOOTER,
   HERO,
   HOE,
@@ -25,19 +25,30 @@ import {
   NAV_DESKTOP,
   NAV_MOBIEL,
   PRODUCTEN,
-  SKOOL,
+  PARTNER,
   VRAGEN,
   type FaqBlok,
+  type PartnerIcoon,
 } from "./copy";
+
+/** Een icoon per bouwsteen in het IT-partnerblok. */
+const PARTNER_ICOON: Record<PartnerIcoon, LucideIcon> = {
+  koppeling: Link2,
+  automatisatie: Zap,
+  maatwerk: Wrench,
+  website: Globe,
+  agent: Users,
+};
 
 /**
  * De homepage: hero → de teamfoto met één statement → herken jij dit (drie
  * punten met een tekening) → de oplossing (met de tool-logo's) → hoe krijg jij
- * jouw AI-werknemer (drie stappen + prijzen) → de lesreeks → de oplossingen die
- * we het vaakst bouwen → vragen naast de contactkaart. Alle tekst staat in
+ * we samen (drie stappen, prijs alleen bij de setup) → Finit als IT-partner → de
+ * oplossingen die we het vaakst bouwen → vragen naast de contactkaart. Alle tekst staat in
  * ./copy.ts, de oplossingen in ./cases.ts.
  *
- * Eén hoofd-CTA: de lesreeks, in de accentkleur (LesreeksKnop). De tweede
+ * Eén hoofd-CTA: een startgesprek plannen, in de accentkleur (StartKnop, naar
+ * het formulier op /contact; tot 22/10 was dit de lesreeks op Skool). De tweede
  * knop is "Neem contact met ons op" en gaat naar /contact (ContactKnop); er
  * wordt geen kennismaking meer ingepland vanaf de homepage. De drie stappen
  * zijn een lijst kaarten met rechts het paneel van de gekozen stap
@@ -46,8 +57,7 @@ import {
  * klapt het paneel open in de kaart zelf.
  *
  * Navigatie en mobiel menu: dezelfde opbouw en tekst als de vorige homepage.
- * De lesreeks-knop gaat rechtstreeks naar Skool. Het vraagformulier op de
- * contactkaart (contact-kaart.tsx) gaat naar de Netlify Function.
+ * Het formulier op de contactkaart (contact-kaart.tsx) gaat naar de Netlify Function.
  */
 
 function FaqAntwoord({ blokken }: { blokken: FaqBlok[] }) {
@@ -148,7 +158,7 @@ function StapPaneel({ i, naarStap, kop = false }: { i: number; naarStap: (i: num
           <Inhoud />
         </div>
       </div>
-      {/* Door naar de volgende stap, zonder terug te scrollen naar de kaarten. Na stap 3: de lesreeks. */}
+      {/* Door naar de volgende stap, zonder terug te scrollen naar de kaarten. Na stap 3: het startgesprek. */}
       <div className="mt-6 flex flex-col gap-3 border-t border-[#E3E7EF] pt-5 sm:flex-row sm:items-center sm:justify-between">
         {vorige ? (
           <button type="button" onClick={() => naarStap(i - 1)} className="hp-btn hp-btn--secondary hp-btn--md w-full sm:w-auto">
@@ -164,7 +174,7 @@ function StapPaneel({ i, naarStap, kop = false }: { i: number; naarStap: (i: num
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </button>
         ) : (
-          <LesreeksKnop location="stappen_paneel" size="md" className="w-full sm:w-auto" />
+          <StartKnop location="stappen_paneel" size="md" className="w-full sm:w-auto" />
         )}
       </div>
     </div>
@@ -304,26 +314,24 @@ export function HomePage() {
             ))}
           </div>
 
-          {/* Desktop rechts: de lesreeks als de ene knop, contact als tekst (pas als er plaats is). */}
+          {/* Desktop rechts: het startgesprek als de ene knop, contact als tekst (pas als er plaats is). */}
           <div className="hidden items-center gap-5 whitespace-nowrap lg:flex">
             <a href="/contact" onClick={() => pushEvent("cta_click", { cta_label: "contact", location: "nav" })} className="hidden text-[0.9375rem] font-medium text-[#1A2D63]/80 transition-colors hover:text-[#1A2D63] 2xl:block">
               {CTA_CONTACT}
             </a>
-            <LesreeksKnop location="nav" size="md" />
+            <StartKnop location="nav" size="md" />
           </div>
 
           {/* Mobiel: knop verschijnt bij het scrollen + hamburger */}
           <div className="flex items-center gap-2 lg:hidden">
             <a
-              href={SKOOL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackLesreeks("mobile_nav")}
+              href={START_HREF}
+              onClick={() => trackStart("mobile_nav")}
               className="hp-btn hp-btn--accent hp-btn--sm transition-opacity duration-300"
               style={{ opacity: mobileMenuOpen ? 0 : navScrollProgress, pointerEvents: !mobileMenuOpen && navScrollProgress > 0.5 ? "auto" : "none" }}
               tabIndex={!mobileMenuOpen && navScrollProgress > 0.5 ? 0 : -1}
             >
-              {CTA_LESREEKS}
+              {CTA_START}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </a>
             <button
@@ -345,7 +353,7 @@ export function HomePage() {
           <div className="absolute inset-0 bg-white/95 backdrop-blur-xl" onClick={() => setMobileMenuOpen(false)} />
           <div className="relative z-10 flex h-full flex-col overflow-y-auto overscroll-contain px-6 pb-8 pt-24">
             <div className="mb-8 flex flex-col gap-3">
-              <LesreeksKnop location="mobile_menu" className="w-full" />
+              <StartKnop location="mobile_menu" className="w-full" />
               <ContactKnop location="mobile_nav" className="w-full" />
               <div className="hp-card mt-1 flex flex-col items-center gap-2 px-6 py-5 text-center">
                 <p className="text-xs uppercase tracking-widest text-[#6C7590]">{MENU.belTitel}</p>
@@ -408,8 +416,11 @@ export function HomePage() {
               <p className={`mt-5 max-w-[36rem] ${LEAD} lg:text-[1.1875rem]`}>{HERO.sub}</p>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <LesreeksKnop location="hero" className="w-full sm:w-auto" />
-                <ContactKnop location="hero" className="w-full sm:w-auto" />
+                <StartKnop location="hero" className="w-full sm:w-auto" />
+                <a href="#aanpak" onClick={(e) => { e.preventDefault(); navigateToSection("aanpak"); }} className="hp-btn hp-btn--secondary hp-btn--lg w-full sm:w-auto">
+                  {HERO.tweedeKnop}
+                  <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                </a>
               </div>
 
               <ul className="mt-6 space-y-2.5">
@@ -516,8 +527,8 @@ export function HomePage() {
                         </span>
                         <span className={`mt-3 block ${H3} text-[1.35rem]`}>{stap.titel}</span>
                         <span className="mt-1 block text-[0.9375rem] leading-[1.5] text-[#3D4766]">{stap.intro}</span>
-                        <span className="mt-3.5 flex flex-wrap items-end justify-between gap-3 border-t border-[#E3E7EF] pt-3.5">
-                          <span>
+                        <span className={`mt-3.5 flex flex-wrap items-end gap-3 border-t border-[#E3E7EF] pt-3.5 ${stap.prijs ? "justify-between" : "justify-end"}`}>
+                          {stap.prijs && <span>
                             <span className="block text-[0.75rem] font-medium uppercase tracking-wide text-[#6C7590]">{stap.prijsLabel}</span>
                             <span className="mt-1 flex flex-wrap items-baseline gap-x-2">
                               {/* "vanaf": het echte voorstel komt in het strategiegesprek. */}
@@ -530,7 +541,7 @@ export function HomePage() {
                                 </s>
                               )}
                             </span>
-                          </span>
+                          </span>}
                           <span className="hp-stap-meer flex shrink-0 items-center gap-1.5 pb-0.5 text-[0.85rem] font-medium text-[#1A2D63]">
                             <span className="lg:hidden">{open ? HOE.minder : HOE.meer}</span>
                             <span className="hidden lg:inline">{HOE.meer}</span>
@@ -541,7 +552,7 @@ export function HomePage() {
                       </button>
                       {stap.cta && (
                         <div className="px-4 pb-4 sm:px-5 sm:pb-5">
-                          <LesreeksKnop location="stappen" size="md" className="w-full" />
+                          <StartKnop location="stappen" size="md" className="w-full" />
                           {stap.ctaNoot && <p className="mt-2 text-center text-[0.8125rem] text-[#6C7590]">{stap.ctaNoot}</p>}
                         </div>
                       )}
@@ -581,40 +592,40 @@ export function HomePage() {
         </section>
 
         {/* -------------------------------------------------------------- */}
-        {/* 3b. De lesreeks, op de naad tussen de stappen en de oplossingen */}
+        {/* 3b. Finit als IT-partner, op de naad tussen stappen en oplossingen */}
         {/* -------------------------------------------------------------- */}
         {/* De achtergrond breekt precies in het midden: wit boven, marineblauw
-            onder. Daardoor ligt de kaart exact op de middenschijding van de
-            twee secties: de deur naar de lesreeks, nadat je de drie stappen kent. */}
+            onder. Daardoor ligt de kaart exact op de middenscheiding van de
+            twee secties: wat we bouwen nadat het brein er staat (22/10, was de lesreeks). */}
         <div className="bg-[linear-gradient(to_bottom,#FFFFFF_0,#FFFFFF_50%,#1A2D63_50%,#1A2D63_100%)]">
           <div className={CONTAINER}>
-            {/* De deur naar de lesreeks: knop, Skool-woordmerk en de cover van de community. */}
-            <a
-              href={SKOOL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackLesreeks("breedte")}
-              className="hp-card group grid overflow-hidden text-left transition-shadow hover:shadow-[0_24px_48px_-24px_rgba(26,45,99,0.45)] max-md:border-0 md:grid-cols-[minmax(0,5fr)_minmax(0,4fr)]"
-            >
-              <span className="flex flex-col justify-center p-6 sm:p-7 lg:p-9">
-                <span className="flex items-center gap-2 text-[0.875rem] font-medium uppercase tracking-wide text-[#6C7590]">
-                  <span>{SKOOL.label}</span>
-                  <Image src="/skool-wordmark.svg" alt="Skool" width={62} height={20} className="h-[1.15rem] w-auto -translate-y-[2px]" />
-                </span>
-                <span className={`mt-3 block ${H3} text-[1.65rem] lg:text-[1.9rem]`}>{SKOOL.titel}</span>
-                <span className="mt-2 block text-[1rem] leading-[1.6] text-[#3D4766] lg:text-[1.0625rem]">{SKOOL.body}</span>
-                <span className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
-                  <span className="hp-btn hp-btn--accent hp-btn--lg">
-                    {SKOOL.knop}
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                  </span>
-                  <span className="text-[0.875rem] leading-[1.5] text-[#6C7590]">{SKOOL.noot}</span>
-                </span>
-              </span>
-              <span className="relative aspect-[720/402] bg-[#F5F7FB] md:aspect-auto">
-                <Image src="/skool-cover.webp" alt={SKOOL.coverAlt} fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
-              </span>
-            </a>
+            <div className="hp-card grid gap-8 p-6 sm:p-7 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-10 lg:p-9">
+              <div className="flex flex-col justify-center">
+                <span className="text-[0.875rem] font-medium uppercase tracking-wide text-[#6C7590]">{PARTNER.label}</span>
+                <h2 className={`mt-3 ${H3} text-[1.65rem] lg:text-[1.9rem]`}>{PARTNER.titel}</h2>
+                <p className="mt-2 text-[1rem] leading-[1.6] text-[#3D4766] lg:text-[1.0625rem]">{PARTNER.body}</p>
+                <div className="mt-5">
+                  <StartKnop location="partner" size="md" className="w-full sm:w-auto" />
+                </div>
+                <p className="mt-2.5 text-[0.8125rem] leading-[1.5] text-[#6C7590]">{PARTNER.noot}</p>
+              </div>
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {PARTNER.items.map((item) => {
+                  const Icoon = PARTNER_ICOON[item.icoon];
+                  return (
+                    <li key={item.titel} className="flex items-start gap-3.5 rounded-[16px] bg-[#F5F7FB] p-4">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#E9A13B]">
+                        <Icoon className="h-5 w-5" aria-hidden="true" />
+                      </span>
+                      <span>
+                        <span className="block text-[1rem] font-semibold leading-[1.35] text-[#1A2D63]">{item.titel}</span>
+                        <span className="mt-0.5 block text-[0.9375rem] leading-[1.5] text-[#3D4766]">{item.tekst}</span>
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
         </div>
 

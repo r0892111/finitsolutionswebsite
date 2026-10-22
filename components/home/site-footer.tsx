@@ -13,7 +13,7 @@ import { pushEvent } from "@/lib/analytics";
 import { useConsent } from "@/contexts/consent-context";
 import { CONTACT_EMAIL, INSTAGRAM_URL, LINKEDIN_URL, VAT_NUMBER } from "@/lib/finit-links";
 import { FOOTER } from "./copy";
-import { CONTAINER, LesreeksKnop } from "./ui";
+import { CONTAINER, StartKnop } from "./ui";
 
 export function SiteFooter() {
   const { openSettings } = useConsent();
@@ -26,7 +26,7 @@ export function SiteFooter() {
             <h2 className="hp-display text-balance text-[1.75rem] font-bold leading-[1.1] text-white sm:text-[2.1rem]">{FOOTER.slotTitel}</h2>
             <p className="mt-3 max-w-[32rem] text-[1rem] leading-[1.65] text-white/70">{FOOTER.slotTekst}</p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <LesreeksKnop location="footer_cta" className="w-full sm:w-auto" />
+              <StartKnop location="footer_cta" className="w-full sm:w-auto" />
               <a href={`mailto:${CONTACT_EMAIL}`} onClick={() => pushEvent("contact_click", { method: "email", location: "footer_cta" })} className="inline-flex items-center gap-2 text-[0.9375rem] text-white/80 transition-colors hover:text-white">
                 <Mail className="h-4 w-4" aria-hidden="true" />
                 {CONTACT_EMAIL}
