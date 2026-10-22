@@ -1,5 +1,8 @@
 # Homepage (rework 2026-09)
 
+> **Update 22 oktober 2026 (Alex, branch `copy/brain-setup`).** De lesreeks is weg. De hoofdknop is "Plan een startgesprek" (naar het formulier op `/contact#start`). Stap 1 is de Company Brain Setup: wij bouwen in vier weken het brein van je bedrijf, € 3.000 excl. btw. Daarna is Finit de IT-partner (AI-werknemers, koppelingen, software op maat, websites). Geen prijzen voor wat na de setup komt, Finit OS staat niet op de site. Waar hieronder de lesreeks, Skool of de oude prijzen staan, is dat achterhaald.
+
+
 Overdracht, beslissingen, stijlregels en open punten: `HOMEPAGE_REWORK.md` in de root van het repo. De review van Karel en Alex van 13 september 2026 staat als transcript in `yap.md`.
 
 Eén idee: **de pagina volgt de schrijfstijl van de vorige homepage en de landingspagina's, en de uitleg die Alex in de lesreeks-video's geeft (hoofdstuk 1 en 2, transcripten in `~/Skool`).** Sinds de review van 13 september volgt de pagina één lijn: probleem → oplossing → hoe → knop.
@@ -18,7 +21,7 @@ Eén idee: **de pagina volgt de schrijfstijl van de vorige homepage en de landin
 | `cases-overzicht.tsx` | De pagina `/cases`: alle oplossingen volledig uitgeschreven onder elkaar. |
 | `contact-kaart.tsx` | De contactkaart naast de FAQ en op `/contact`: de lesreeks, het vraagformulier (met telefoonnummer) en het telefoonnummer, zonder foto. Op de homepage even lang als de FAQ. |
 | `contact-pagina.tsx` | De pagina `/contact`, waar "Neem contact met ons op" naartoe gaat. |
-| `ui.tsx` | Maatvoering, koppen, de accentkleur (`ACCENT`, `#E9A13B`) en de knoppen. `LesreeksKnop` is de hoofd-CTA en staat standaard in de accentkleur; `ContactKnop` is de tweede knop en linkt naar `/contact`. |
+| `ui.tsx` | Maatvoering, koppen, de accentkleur (`ACCENT`, `#E9A13B`) en de knoppen. `StartKnop` is de hoofd-CTA en staat standaard in de accentkleur; `ContactKnop` is de tweede knop en linkt naar `/contact`. |
 | `site-header.tsx`, `site-footer.tsx` | Kop en footer voor de pagina's buiten de homepage (`/bedankt`, `/cases`, `/contact`, de juridische pagina's). Het logo linkt naar de homepage; het btw-nummer komt uit `lib/finit-links.ts`. |
 | `vraag-formulier.tsx` | Het korte vraagformulier (naam, e-mail, telefoonnummer, website van het bedrijf, vraag), alles verplicht. Gaat naar de Netlify Function `/api/contact-submit` met de velden `bericht` en `bedrijfswebsite` (`website` is de honeypot). |
 

@@ -17,7 +17,7 @@ import { pushEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL, PHONE_LINK, PHONE_NUMBER } from "@/lib/finit-links";
 import { BEDANKT, MENU } from "@/components/home/copy";
 import { SiteFooter } from "@/components/home/site-footer";
-import { CONTAINER, H2, H3, KOP, LEAD, LesreeksKnop, Onder } from "@/components/home/ui";
+import { CONTAINER, H2, H3, KOP, LEAD, Onder } from "@/components/home/ui";
 
 /** Het vinkje dat zich intekent zodra de pagina laadt. */
 function Vinkje() {
@@ -107,10 +107,6 @@ export function ThankYouLanding() {
             <div className="hp-card flex flex-col justify-center p-7 sm:p-9">
               <h2 className={`${H3} text-[1.5rem]`}>{BEDANKT.nu.titel}</h2>
               <p className="mt-3 text-[0.9375rem] leading-[1.65] text-[#3D4766]">{BEDANKT.nu.body}</p>
-              <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
-                <LesreeksKnop location="bedankt" size="md" />
-                <span className="text-[0.8125rem] leading-[1.5] text-[#6C7590]">{BEDANKT.nu.noot}</span>
-              </div>
             </div>
 
             <div className="hp-card flex flex-col justify-center p-7 sm:p-9">

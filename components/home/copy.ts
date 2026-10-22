@@ -2,20 +2,19 @@
  * Alle tekst van de homepage staat hier, los van de opmaak.
  *
  * Basis: de opbouw en schrijfstijl van de vorige homepage en de landingspagina's
- * (duidelijk, rechtstreeks, simpel voor niet-technische mensen, resultaatgericht),
- * en de uitleg die Alex geeft in de video's van de lesreeks (hoofdstuk 1 en 2):
- * waarom je eerst een fundament legt, wat je bouwt, wat het oplevert, en dat
- * het technische werk daarna nog door ons gebeurt. Prijzen volgens het model:
- * lesreeks € 295 (sinds 13 oktober 2026; daarvoor € 95 voor de eerste 20), met het strategiegesprek
- * van 90 minuten erbij; daarna het bouwpakket (vanaf € 1.650 opstart,
- * gebruikslicentie vanaf € 95 per maand, per jaar). Sinds 15 september 2026;
- * de "vanaf"-prijzen sinds 16 september (yap3.md, Karel en Alex): het echte
- * voorstel, per AI-werknemer een opstartkost en een gebruikslicentie, komt in
- * het strategiegesprek. Het AI-native traject (15/09) is op 16/09 geschrapt.
- * Het heet nooit onderhoud, altijd gebruikslicentie.
- * Stap 1 heet de lesreeks, geen cursus. Van 15 tot 18 september heette ze even
- * "de onboarding op Finit OS" (yap1536.md); dat is op 18/09 teruggedraaid en
- * Finit OS staat niet meer op de site. Het fundament heet ook je AI-brein.
+ * (duidelijk, rechtstreeks, simpel voor niet-technische mensen, resultaatgericht).
+ *
+ * Model sinds 22 oktober 2026 (Alex): de lesreeks is weg. Stap 1 is de Company
+ * Brain Setup: wij bouwen in vier weken het brein van je bedrijf (vertellen,
+ * koppelen, analyseren, plannen), voor € 3.000 excl. btw. Je krijgt het brein,
+ * de knelpunten met een score, een roadmap, het A-Z-rapport, een strategiegesprek
+ * van 60 minuten en een offerte. Het brein is daarna de basis waarop wij bouwen;
+ * de klant werkt er zelf mee zodra we de eerste toepassing bouwen. Finit is de
+ * IT-partner: AI-werknemers, koppelingen, software op maat en websites.
+ * Geen prijzen voor wat na de setup komt (dat staat in de offerte), Finit OS
+ * staat niet op de site, alles draait op onze eigen AI (geen abonnement nodig).
+ * Het heet nooit onderhoud, altijd gebruikslicentie. Het brein heet ook je
+ * AI-fundament.
  *
  * Review van 13 september 2026 (Karel en Alex, transcript in yap.md): één lijn
  * probleem → oplossing → hoe → knop. Drie herkenpunten met een tekening, dan
@@ -62,9 +61,9 @@ export const MENU = {
   openen: "Menu openen",
 };
 
-// De hoofdknop; gaat naar Skool.
-export const CTA_LESREEKS = "Start de lesreeks";
-// De tweede knop. Geen kennismaking meer inplannen: de lesreeks is de weg, de contactpagina is voor vragen.
+// De hoofdknop; gaat naar het formulier op /contact (22/10: was de lesreeks op Skool).
+export const CTA_START = "Plan een startgesprek";
+// De tweede knop: de contactpagina, voor wie eerst een vraag heeft.
 export const CTA_CONTACT = "Neem contact met ons op";
 
 // De lichte kop op de juridische pagina's en de cases.
@@ -72,16 +71,17 @@ export const HEADER = {
   terug: "Terug naar de homepage",
 };
 
-// 1. Hero. Titel van Alex; de sub is een belofte, geen disclaimer: wat jij legt, wat wij daarop bouwen.
+// 1. Hero (22/10): de belofte van de pitch. Eerst het brein, daarna wat je nodig hebt.
 export const HERO = {
-  h1: ["Leg jouw", "AI-fundament"],
-  sub: "In de lesreeks leg je zelf je AI-fundament: alle kennis over jouw bedrijf, zo gestrucureerd dat AI ermee kan werken. Jij geeft inzicht, onze AI verwerkt. Daaruit vloeien AI-werknemers die elke dag werk uit je handen nemen.",
+  h1: ["Jouw bedrijf,", "klaar voor AI"],
+  sub: "In vier weken bouwen wij het brein van je bedrijf: alle kennis over hoe je werkt, zo gestructureerd dat AI ermee kan werken. Daarop bouwen we wat je nodig hebt: AI-werknemers, koppelingen, software en websites.",
   punten: [
-    "Geen programmeerkennis nodig. We tonen stap voor stap hoe je alles installeert.",
-    "Je eindigt met een lijst van wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
-    // Nieuw (15/09): de lesreeks geeft een indicatie, het strategiegesprek het advies.
-    "Daarna krijg je in een strategiegesprek van 90 minuten ons advies en een voorstel op maat.",
+    "Jij vertelt, wij doen het werk. Geen technische kennis nodig.",
+    "Je weet daarna wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
+    "In een strategiegesprek van 60 minuten krijg je ons advies en een offerte op maat.",
   ],
+  // De tweede knop in de hero: naar de drie stappen.
+  tweedeKnop: "Zo werkt het",
   ondersteund: "Ondersteund door",
 };
 
@@ -172,22 +172,28 @@ export const OPLOSSING = {
   pitch: [
     "Stel je een medewerker voor die je bedrijf even goed kent als jij: je klanten, je prijzen, je manier van werken, tot in detail.",
     "Hij zit in je mailbox, je agenda en je boekhouding, en doet de computertaken die jij vandaag zelf doet, precies zoals jij ze doet.",
-    "Dat is je AI-werknemer. In de lesreeks leid je hem op, daarna bouwen wij hem.",
+    "Dat is je AI-werknemer. Eerst bouwen wij het brein van je bedrijf, daarna bouwen we hem.",
   ],
   illustratieAria: "Eén AI-werknemer, gevoed door je fundament, verbonden met je mailbox, je agenda, je boekhouding en je andere systemen.",
   koppelingen: "We integreren met al je tools",
   koppelingenPlus: "zowat alles wat je al gebruikt",
 };
 
-// Het blok na de stappen: de deur naar de lesreeks, met de cover van de community op Skool.
-// Bewust de cover en niet een screenshot met ledental.
-export const SKOOL = {
-  label: "De lesreeks op",
-  titel: "Leg je AI-fundament",
-  body: "Tijdens de lesreeks helpen we je in het opleiden van je AI-brein: je processen, je klanten, je prijzen, je manier van werken. Daarna weet AI wat jij weet.",
-  knop: "Start zelf met je AI-fundament",
-  noot: "Online, in het Nederlands, op eigen tempo.",
-  coverAlt: "De cover van de lesreeks op Skool: een whiteboard met de negen stappen naar je AI-fundament.",
+// Het blok na de stappen (22/10, was de lesreeks op Skool): Finit als IT-partner.
+// Wat we bouwen nadat het brein er staat. Geen prijzen.
+export type PartnerIcoon = "koppeling" | "automatisatie" | "maatwerk" | "website" | "agent";
+export const PARTNER = {
+  label: "Na de setup",
+  titel: "Eén partner voor al je IT",
+  body: "Omdat wij je bedrijf via het brein al kennen, hoef je niets twee keer uit te leggen. Eén aanspreekpunt in plaats van vijf leveranciers.",
+  noot: "Wat we bouwen en wat het kost, staat in je offerte. Je zit nergens aan vast.",
+  items: [
+    { icoon: "koppeling", titel: "Integraties", tekst: "Je boekhouding, CRM, ERP en mail aan elkaar en aan het brein." },
+    { icoon: "automatisatie", titel: "Kleine koppelingen", tekst: "Het klik- en overtypwerk dat elke dag terugkomt, weg." },
+    { icoon: "maatwerk", titel: "Systemen op maat", tekst: "Een eigen portaal, planningstool of app als niets bestaands past." },
+    { icoon: "website", titel: "Websites", tekst: "Een site die klanten binnenhaalt en meteen aan je systemen hangt." },
+    { icoon: "agent", titel: "AI-werknemers", tekst: "Ze nemen zelfstandig taken van je team over." },
+  ] as { icoon: PartnerIcoon; titel: string; tekst: string }[],
 };
 
 export type Logo = { naam: string; src: string; woordmerk?: boolean };
@@ -222,10 +228,10 @@ export type Stap = {
   puntenTitel?: string;
   /** Wat je eruit haalt, als vinkjes bovenaan het paneel. Alleen bij stap 1. */
   punten?: string[];
-  prijsLabel: string;
+  prijsLabel?: string;
   /** Klein woordje voor het bedrag, bv. "vanaf": het echte voorstel komt in het strategiegesprek. */
   prijsPrefix?: string;
-  prijs: string;
+  prijs?: string;
   /** Klein woordje na het bedrag, bv. "per maand". */
   prijsSub?: string;
   /** Doorstreepte prijs naast de actieprijs, bv. de prijs na de eerste 20 deelnemers. */
@@ -234,95 +240,75 @@ export type Stap = {
   ctaNoot?: string;
 };
 
-// 4. Hoe krijg jij jouw AI-werknemer: de drie stappen van het model, in volgorde.
-// De prijzen staan op de kaarten en nergens in de panelen. Geen voorbeelden hier: die staan
-// bij de oplossingen. Kop, intro, paneel 2 en paneel 3 zijn nieuw (review 13/09).
-// Sinds 15/09 heet stap 3 Gebruiken en is het een gebruikslicentie; sinds 16/09 is er in stap 2 één weg
-// (het AI-native traject is geschrapt) en komt het voorstel in het strategiegesprek. Alle software blijft van Finit.
-// 23/09 (Alex): de hele sectie herschreven in eenvoudiger zinnen, één idee per zin. "Hoe meer ze
-// overnemen, hoe hoger de opstartkost en de gebruikslicentie" is geschrapt: dat schrikt af.
+// 4. Hoe werken we samen: de drie stappen van het model, in volgorde (22/10).
+// Stap 1 is de Company Brain Setup (€ 3.000, vier weken, door ons). Stap 2 en 3 hebben geen prijs:
+// wat we bouwen en wat het kost, staat in de offerte na de setup (beslissing Alex, 22/10).
+// Geen voorbeelden hier: die staan bij de oplossingen. Alle software blijft van Finit.
 export const HOE = {
-  h2: ["Hoe krijg jij jouw", "AI-werknemer?"],
+  h2: ["Hoe werken we", "samen?"],
   meer: "Meer over deze stap",
   minder: "Sluiten",
   // Onderaan het paneel: door naar de volgende stap, of terug.
   paneel: { vorige: "Vorige", volgende: "Volgende" },
-  intro: "Drie stappen, in deze volgorde. Eerst leg jij je fundament, daarna doen wij het technische werk.",
+  intro: "Drie stappen, in deze volgorde. Eerst bouwen wij het brein van je bedrijf, daarna alles wat je nodig hebt.",
   slotVraag: "Vragen over de aanpak?",
   stappen: [
     {
       stapLabel: "Stap 1",
-      tijd: "2 tot 3 weken",
-      wie: "Jij, met de AI",
-      titel: "Opleiden",
-      intro: "De AI stelt je vragen over je bedrijf. Jij antwoordt, de AI schrijft alles op.",
-      // Wat je eruit haalt (15/09): het fundament, de analyse met de kansen en ons advies, het strategiegesprek.
-      // De kop erboven is van 20/09 (Alex): het paneel moet twee duidelijke blokken zijn, eerst wat je krijgt.
-      puntenTitel: "Resultaat",
+      tijd: "4 weken",
+      wie: "Wij, met jou",
+      titel: "Het brein bouwen",
+      intro: "Jij vertelt hoe je bedrijf draait. Wij leggen alles vast en zoeken waar je tijd verliest.",
+      puntenTitel: "Wat je krijgt",
       punten: [
-        "Een overzicht van hoe jouw bedrijf werkt, in gewone taal. Het blijft altijd van jou.",
-        "Een lijst van de AI-werknemers die jou het meeste werk uit handen nemen, met ons advies erbij",
-        "Een strategiegesprek van 90 minuten met Karel, waarin je samen kiest wat er eerst komt",
+        "Het brein van je bedrijf, de basis voor alles wat we daarna bouwen",
+        "Je knelpunten met een score, en een roadmap: wat eerst, wat later, wat niet",
+        "Een strategiegesprek van 60 minuten met Karel, en een offerte voor wat volgt",
       ],
-      prijsLabel: "Lesreeks",
-      prijs: "€ 295",
-      cta: CTA_LESREEKS,
-      ctaNoot: "Online, in het Nederlands, op eigen tempo.",
+      prijsLabel: "Company Brain Setup",
+      prijs: "€ 3.000",
+      prijsSub: "excl. btw",
+      cta: CTA_START,
+      ctaNoot: "Een halfuur, vrijblijvend.",
     },
     {
       stapLabel: "Stap 2",
-      tijd: "2 tot 4 weken",
+      tijd: "volgens je roadmap",
       wie: "Wij",
       titel: "Bouwen",
-      intro: "Wij bouwen je AI-werknemers op basis van jouw fundament. Zij nemen je dagelijkse taken over.",
-      prijsLabel: "Opstartkost",
-      prijsPrefix: "vanaf",
-      prijs: "€ 1.650",
+      intro: "Wij bouwen wat jij kiest: AI-werknemers, koppelingen, software op maat of een website.",
     },
     {
       stapLabel: "Stap 3",
       tijd: "24/7 actief",
       wie: "Je AI-werknemer",
       titel: "Gebruiken",
-      intro: "Je AI-werknemers doen hun werk op de achtergrond. Wij zorgen dat alles blijft werken, veilig en up-to-date.",
-      prijsLabel: "Gebruikslicentie",
-      prijsPrefix: "vanaf",
-      prijs: "€ 95",
-      prijsSub: "per maand",
+      intro: "Alles draait op de achtergrond. Wij zorgen dat het blijft werken, veilig en up-to-date.",
     },
   ] as Stap[],
-  // Waarom je het fundament zelf legt. Uit les 1.1, 1.2 en 1.3, ingekort tot wat je in één blik leest.
-  // Ingekort op 20/09 (Alex), in twee rondes. Eerst drie alinea's naar twee, daarna naar één
-  // doorlopende tekst: de tussenkopjes hakten één boodschap in stukjes, en het blauwe kaartje
-  // "In je fundament komt:" ernaast was een derde blok voor dezelfde stap. Wat erin komt staat nu
-  // in de zin zelf (hoe je geld verdient, wie wat doet, je processen, systemen en prijzen).
-  // "Wat AI eerst kan overnemen" is geschrapt: dat is het resultaat van de analyse, niet de inhoud
-  // van je fundament. De drie blokken hieronder zijn de inhoud van het paneel per stap
-  // (stap-details.tsx); `kort` is de inleidende regel, `eerlijk` de kwalificatie eronder.
-  fundament: {
-    h3: "Waarom jij het fundament legt, en hoe dat gaat",
-    kort: "Jij kent je bedrijf het best. Daarom leg jij het fundament. Wij bouwen erop verder.",
-    tekst: "Een consultant kent je bedrijf na een week nog altijd minder dan jij. Daarom stelt de AI je de vragen die wij vroeger bij bedrijven ter plaatse stelden. Die vragen komen uit meer dan tien analyses bij KMO's. Hoe verdien je geld? Wie doet wat, en wie beslist? Hoe lopen je processen, welke systemen gebruik je en wat zijn je prijzen? Jij antwoordt, de AI schrijft alles op. Onderweg houdt de AI ook bij welk werk je het eerst kunt laten overnemen.",
-    // Bewust een kwalificatie, geen geruststelling: wie een snelle fix zoekt, haakt hier af.
-    eerlijk: "Dit is geen snelle oplossing. Je steekt er een paar avonden in. Daardoor werkt je AI daarna ook echt, elke dag.",
-    // De video van anderhalve minuut waarin Alex of Karel dit uitlegt. Komt later; leeg = niets tonen.
-    video: null as null | { src: string; poster: string },
+  // Stap 1: de vier weken van de setup, zoals in de pitch (Company Brain Pitch, 22/10).
+  // `eerlijk` zegt wat het brein na de setup wel en niet is.
+  setup: {
+    h3: "Zo verlopen de vier weken",
+    kort: "Jij vertelt, wij doen het werk. Je team hoeft niets te installeren.",
+    weken: [
+      { titel: "Week 1: vertellen", tekst: "Gesprekken met jou en de mensen die het werk doen: hoe je geld verdient, wie wat doet, en waar het knelt." },
+      { titel: "Week 2: koppelen", tekst: "Je documenten, mail, agenda en systemen gaan in het brein. Wat ontbreekt, vragen we gericht na." },
+      { titel: "Week 3: analyseren", tekst: "We geven elk knelpunt een score op tijd, geld en ergernis, en zoeken per knelpunt de beste oplossing." },
+      { titel: "Week 4: plannen", tekst: "Je krijgt het A-Z-rapport, door een mens nagelezen. In het strategiegesprek overlopen we het samen, met je offerte." },
+    ],
+    eerlijk: "Het brein is de basis waarop wij bouwen. Zelf werk je ermee zodra we je eerste toepassing bouwen.",
   },
-  // Stap 2: het technische werk, in volgorde. Sinds 16/09 (yap3.md) één weg: het bouwpakket schaalt van
-  // één eenvoudige AI-werknemer tot meerdere die samenwerken, en het voorstel (opstartkost en
-  // gebruikslicentie per AI-werknemer) komt in het strategiegesprek van 90 minuten met Karel. Het
-  // AI-native traject van 15/09 is op 16/09 geschrapt. Geen prijzen in het paneel (die staan op de kaart).
+  // Stap 2: het technische werk, in volgorde. Geen prijzen (die staan in de offerte).
   bouw: {
-    h3: "Daarna doen wij het technische werk",
-    // 20/09: "Goed gedaan, je hebt ons de analyse bespaard" klonk neerbuigend en alsof de klant
-    // ons werk had gedaan. Het gaat om de overdracht: jouw analyse is af, nu nemen wij het technische deel.
-    kort: "Je analyse is klaar. Vanaf nu nemen wij het over, want dit deel vraagt technische kennis.",
-    intro: "Samen kiezen we welke AI-werknemers je nodig hebt. Je kunt klein beginnen, met één AI-werknemer die je mailbox sorteert en antwoorden klaarzet. Of je kiest er meerdere die samenwerken.",
+    h3: "Daarna bouwen wij wat jij kiest",
+    kort: "Je weet nu wat eerst komt. Vanaf hier nemen wij het technische werk over.",
+    intro: "Je kunt klein beginnen, met één AI-werknemer die je mailbox sorteert en antwoorden klaarzet. Of groter: koppelingen tussen je systemen, een klantenportaal op maat of een nieuwe website. Alles vertrekt van hetzelfde brein.",
     volgorde: [
-      { titel: "Strategiegesprek van 90 minuten", tekst: "Je zit samen met Karel. Karel heeft je fundament en je analyse vooraf gelezen en komt met een stappenplan en een voorstel. Het gesprek zit in de prijs van de lesreeks, en je zit nergens aan vast." },
-      { titel: "Je voorstel", tekst: "Per AI-werknemer zie je wat het bouwen eenmalig kost, en wat het gebruik per maand kost. Wat je niet nodig hebt, laat je weg." },
-      { titel: "Bouwen, koppelen, testen", tekst: "Wij bouwen je AI-werknemers en koppelen ze aan de programma's die je al gebruikt. We testen ze tot ze het werk doen zoals jij het zou doen." },
-      { titel: "Veilig live", tekst: "Je AI-werknemers gaan aan de slag. Je gegevens blijven afgeschermd, en met één knop zet je alles stil. De eerste 30 dagen volgen we alles extra op." },
+      { titel: "Strategiegesprek van 60 minuten", tekst: "Je zit samen met Karel. Hij heeft je A-Z-rapport vooraf gelezen en komt met een stappenplan en een voorstel. Het gesprek zit in de setup, en je zit nergens aan vast." },
+      { titel: "Je offerte", tekst: "Per onderdeel zie je wat het bouwen eenmalig kost, en wat het gebruik per maand kost. Wat je niet nodig hebt, laat je weg." },
+      { titel: "Bouwen, koppelen, testen", tekst: "Wij bouwen en koppelen alles aan de programma's die je al gebruikt. We testen tot het werk gebeurt zoals jij het zou doen." },
+      { titel: "Veilig live", tekst: "Alles gaat aan de slag. Je gegevens blijven afgeschermd, en met één knop zet je alles stil. De eerste 30 dagen volgen we alles extra op." },
     ],
   },
   // Wat je vanaf nu hebt. Geen prijs in het paneel; geen cijfers over backup-frequentie of uptime.
@@ -383,24 +369,24 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
   h2: "Veelgestelde vragen",
   items: [
     {
-      q: "Wat is een AI-fundament precies?",
+      q: "Wat is het brein van je bedrijf precies?",
       a: [
-        { t: "p", tekst: "Een map met tekstbestanden over jouw bedrijf, in gewone taal. Elk bestand is één stuk correcte informatie: je processen, welke systemen je gebruikt, wie Dirk is en wat hij doet, wat je aanrekent, je huistaal. Samen vormen ze een zorgvuldig opgebouwde inventaris van je hele bedrijf. In de lesreeks noemen we het je AI-brein." },
+        { t: "p", tekst: "Een map met tekstbestanden over jouw bedrijf, in gewone taal. Elk bestand is één stuk correcte informatie: je processen, welke systemen je gebruikt, wie Dirk is en wat hij doet, wat je aanrekent, je huistaal. Samen vormen ze een zorgvuldig opgebouwde inventaris van je hele bedrijf. We noemen het ook je AI-fundament." },
         { t: "p", tekst: "Waarom zo? Stop je alles in één chat, dan raakt het geheugen van de AI vol en begint hij dingen te vergeten of te verzinnen. Met een fundament zoekt hij, net als in Wikipedia, alleen de pagina op die hij nodig heeft. Zo geeft hij het juiste antwoord, ook als een klant straks vraagt wat een warmtepomp kost." },
       ],
     },
     {
-      q: "Waarom leg ik het fundament zelf, en moet ik daar technisch voor zijn?",
+      q: "Wat moet ik zelf doen, en moet ik daar technisch voor zijn?",
       a: [
-        { t: "p", tekst: "Omdat jij je bedrijf het allerbeste kent en zelf weet waar je grootste frustraties en tijdvreters zitten. Andere bureaus sturen daar een dure consultant voor. Die kent na een week nog altijd minder van jouw bedrijf dan jij. Daarom stelt de AI jou nu dezelfde vragen die wij vroeger ter plaatse stelden, en schrijft hij alles op." },
-        { t: "p", tekst: "Technisch hoef je niet te zijn. Je praat met je computer en de AI schrijft. Je hebt een betalend abonnement van Claude of ChatGPT nodig (± € 20 per maand); de rest hebben wij voor je klaargezet. We tonen stap voor stap, op Mac en Windows, hoe je alles installeert." },
-        { t: "p", tekst: "Reken op een tiental uur, verspreid over een paar avonden of namiddagen. Hoe meer je vertelt, hoe beter het resultaat. En je doet het één keer: elke automatisering die we daarna bouwen, vertrekt van hetzelfde fundament." },
+        { t: "p", tekst: "Vooral vertellen. Jij kent je bedrijf het allerbeste en weet waar je grootste frustraties en tijdvreters zitten. In de eerste week spreken we met jou en met de mensen die het werk doen. Daarna vragen we alleen nog gericht na wat ontbreekt." },
+        { t: "p", tekst: "Technisch hoef je niet te zijn. Je documenten, mail, agenda en systemen koppelen wij. Je hebt geen abonnement van ChatGPT of Claude nodig: alles draait op onze eigen AI." },
+        { t: "p", tekst: "En je doet het één keer: alles wat we daarna bouwen, vertrekt van hetzelfde brein." },
       ],
     },
     {
       q: "Wat kunnen jullie automatiseren, en werkt dat met onze software?",
       a: [
-        { t: "p", tekst: "De vuistregel: doet je team het nu handmatig, en volgt het vaste stappen? Dan kunnen wij het overnemen. Nieuwe software met een scherm dat er nog niet is, zoals een website of een klantenportaal, valt buiten het bouwpakket: dat is maatwerk aan dagtarief." },
+        { t: "p", tekst: "De vuistregel: doet je team het nu handmatig, en volgt het vaste stappen? Dan kunnen wij het overnemen. Bestaat de software nog niet, zoals een klantenportaal, een planningstool of een nieuwe website, dan bouwen we ze op maat. Zo heb je één partner voor al je IT." },
         { t: "link", tekst: "Bekijk de oplossingen die we het vaakst bouwen", href: "/cases" },
         { t: "p", tekst: "Als je software een API heeft (vrijwel alle moderne systemen sinds 2015), kunnen we het koppelen. Geen API? Dan zoeken we een workaround via e-mail, geëxporteerde bestanden of webhooks. In 95% van de gevallen vinden we een oplossing. Heeft je sectorpakket geen koppeling en geen export, dan zeggen we dat vooraf, voor er een prijs op staat." },
         { t: "p", tekst: "Je hoeft geen nieuwe software aan te schaffen. We werken met wat je al hebt en laten die systemen samenwerken. Onzeker of jullie tools compatibel zijn? Stuur ons de lijst, dan checken we het vooraf, gratis en zonder verplichtingen." },
@@ -410,28 +396,23 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
       q: "Wat kost dit voor mijn bedrijf?",
       a: [
         { t: "p", tekst: "Je kent elke prijs op voorhand. Geen verrassingen achteraf." },
-        { t: "list", items: [
-          "De lesreeks: € 295. Eenmalig, met het strategiegesprek inbegrepen. Plus je eigen abonnement van Claude of ChatGPT, ± € 20 per maand.",
-          "Het bouwpakket: vanaf € 1.650 opstart, inclusief 30 dagen nazorg. Daarna een gebruikslicentie vanaf € 95 per maand voor hosting, bewaking, backups en updates, per jaar. Elke AI-werknemer heeft zijn eigen opstartkost en gebruikslicentie: hoe meer hij overneemt en hoe meer systemen hij gebruikt, hoe hoger.",
-          "Maatwerk, zoals een koppeling aan een webshop, CRM of website die er nog niet is: aan ons dagtarief van € 750, met een indicatie en een plafond vooraf. De gebruikslicentie daarvoor staat in de offerte.",
-        ] },
-        { t: "p", tekst: "Je exacte prijs krijg je na de lesreeks in het strategiegesprek, in een voorstel dat je zelf mee samenstelt. Wat je niet nodig hebt, laat je weg. Het minste wat je daarna kunt laten bouwen, is iets eenvoudigs als een AI-werknemer op je mailbox, voor € 1.650." },
-        { t: "p", tekst: "Te klein om te starten? Begin met de lesreeks. Voor € 295 weet je waar AI in jouw bedrijf loont, voor je één euro aan ontwikkeling uitgeeft. Daarna bouwen we gefaseerd: start met de grootste tijdvreter, breid later uit als je de waarde ziet." },
+        { t: "p", tekst: "De Company Brain Setup kost € 3.000, eenmalig. Daarvoor krijg je in vier weken het brein van je bedrijf, je knelpunten met een score, een roadmap, het A-Z-rapport, een strategiegesprek van 60 minuten en een offerte voor wat we daarna bouwen." },
+        { t: "p", tekst: "Wat je daarna laat bouwen, kost wat je kiest. Per onderdeel zie je in je offerte een eenmalige opstartkost en een gebruikslicentie per maand. Wat je niet nodig hebt, laat je weg, en je zit nergens aan vast. Start met de grootste tijdvreter en breid later uit als je de waarde ziet." },
         { t: "p", tekst: "Alle prijzen excl. btw." },
       ],
     },
     {
       q: "Hoe lang duurt het voor de automatisering live staat?",
       a: [
-        { t: "p", tekst: "Reken op 4 tot 7 weken van de eerste les tot een automatisering die live staat, afhankelijk van de complexiteit en je eigen tempo in de lesreeks. Daarna volgen 30 dagen nazorg." },
+        { t: "p", tekst: "De setup duurt vier weken. Daarna hangt het af van wat je kiest: een eerste AI-werknemer staat meestal binnen 2 tot 4 weken live, een systeem op maat of een website duurt langer. De planning staat in je offerte. Na elke oplevering volgen 30 dagen nazorg." },
         { t: "p", tekst: "Minimale onboarding, geen intensieve training. Jouw team hoeft geen technische kennis te hebben. Wat ze wél moeten weten: wat de automatisering doet, wat er automatisch gebeurt (zodat ze geen dubbel werk doen) en waar ze de output zien, bijvoorbeeld een offerte die klaarstaat." },
       ],
     },
     {
       q: "Wat gebeurt er met de gegevens van mijn bedrijf, en wat als er iets misloopt?",
       a: [
-        { t: "p", tekst: "Je fundament staat op je eigen computer en is van jou. Ruwe exports van je mailbox of agenda blijven daar staan; alleen wat de AI eruit leert, komt in je fundament. Wat je aan de AI vertelt, gaat net als bij ChatGPT langs de servers van de maker. In de lesreeks tonen we welke privacy-instelling je daar aanzet voor je iets deelt." },
-        { t: "p", tekst: "Na oplevering laten we je niet in de steek. Elke oplossing bevat ingebouwde monitoring: wij worden onmiddellijk verwittigd als er iets hapert. Bug? Gratis. API veranderd? Gratis. Onze verantwoordelijkheid, niet de jouwe. Hosting, bewaking, backups en updates zitten in je gebruikslicentie (vanaf € 95 per maand); je betaalt alleen extra voor uitbreidingen die je later laat bouwen." },
+        { t: "p", tekst: "Het brein van je bedrijf staat afgeschermd per klant en draait op onze eigen AI, niet via een publieke chatbot. Alleen wat nodig is om je bedrijf te begrijpen, komt erin." },
+        { t: "p", tekst: "Na oplevering laten we je niet in de steek. Elke oplossing bevat ingebouwde monitoring: wij worden onmiddellijk verwittigd als er iets hapert. Bug? Gratis. API veranderd? Gratis. Onze verantwoordelijkheid, niet de jouwe. Hosting, bewaking, backups en updates zitten in je gebruikslicentie; je betaalt alleen extra voor uitbreidingen die je later laat bouwen." },
       ],
     },
     {
@@ -439,17 +420,18 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
       a: [
         { t: "p", tekst: "Uitbreiden is makkelijk, en dat adviseren we vaak bewust. Start met één proces dat veel oplevert, breid uit zodra dat draait. Kleiner risico per stap, je team went geleidelijk, en je ziet de winst tussen elke fase." },
         { t: "p", tekst: "Technisch bouwen we modulair op je fundament: een nieuwe automatisering sluit aan op de bestaande. Geen grote herbouw nodig. En omdat je fundament er al ligt, hoeft niemand je bedrijf opnieuw te analyseren." },
-        { t: "p", tekst: "Een extra AI-werknemer krijgt zijn eigen opstartkost en zijn eigen gebruikslicentie, volgens dezelfde prijslijst als in het strategiegesprek. Maatwerk, zoals een koppeling aan een webshop, CRM of website die er nog niet is, bouwen we aan ons dagtarief van € 750, met een indicatie en een plafond vooraf; we starten met de AI-werknemers en denken mee over wat erna komt." },
+        { t: "p", tekst: "Elke uitbreiding krijgt haar eigen offerte: een eenmalige opstartkost en een gebruikslicentie per maand. Dat geldt voor een extra AI-werknemer, maar ook voor een koppeling, een systeem op maat of een website. Zo weet je altijd vooraf wat het kost." },
       ],
     },
   ],
 };
 
-// 8. De contactkaart naast de FAQ en op /contact: eerst de lesreeks, dan het vraagformulier,
+// 8. De contactkaart naast de FAQ en op /contact (22/10): het startgesprek als formulier,
 // dan het telefoonnummer. Geen kennismaking meer inplannen. Nieuw (review 13/09); de foto van
 // Karel is weg sinds 14/09.
 export const SLOT = {
-  lesreeksTitel: "Start vandaag met de lesreeks",
+  startTitel: "Plan je startgesprek",
+  startTekst: "Een halfuur, vrijblijvend. We bekijken hoe je bedrijf vandaag werkt, met wie we spreken en welke systemen we koppelen.",
   bel: "Even sparren over AI in jouw bedrijf? Bel gerust.",
   mailLabel: "Of mail naar",
 };
@@ -458,18 +440,18 @@ export const SLOT = {
 // met het veld `bericht` erbij, en op de contactkaart ook een telefoonnummer. Alle velden zijn
 // verplicht (14/09).
 export const VRAAG = {
-  titel: "Liever eerst een vraag stellen?",
-  sub: "Stel ze hier. Je krijgt een persoonlijk antwoord, meestal binnen 24 uur.",
+  titel: "Laat je gegevens achter",
+  sub: "We bellen je om een moment te kiezen. Heb je eerst een vraag? Stel ze hier, je krijgt een persoonlijk antwoord.",
   naam: "Naam",
   email: "E-mailadres",
   telefoon: "Telefoonnummer",
   website: "Website van je bedrijf",
   websiteHint: "jouwbedrijf.be",
-  bericht: "Je vraag",
-  berichtHint: "Bijvoorbeeld: werkt dit met ons boekhoudpakket?",
-  knop: "Verstuur je vraag",
+  bericht: "Waar verlies je tijd, of wat wil je vragen?",
+  berichtHint: "Bijvoorbeeld: we verliezen veel tijd aan offertes en werken met Teamleader.",
+  knop: "Verstuur",
   bezig: "Versturen…",
-  bedankt: "Bedankt, je vraag is aangekomen.",
+  bedankt: "Bedankt, je bericht is aangekomen.",
   bedanktSub: "Je krijgt meestal binnen 24 uur antwoord.",
   fout: "Het versturen lukte niet. Probeer het opnieuw of mail ons op {email}.",
   privacy: "We gebruiken je gegevens alleen om te antwoorden.",
@@ -478,16 +460,14 @@ export const VRAAG = {
 // De pagina /contact: waar "Neem contact met ons op" naartoe gaat. Nieuw (review 13/09).
 export const CONTACT = {
   metaTitel: "Contact",
-  metaBeschrijving: "Vragen over de lesreeks, de bouw of je eigen situatie? Bel, mail of stuur je vraag.",
+  metaBeschrijving: "Plan een startgesprek voor de Company Brain Setup, of stel je vraag over wat we bouwen. Bel, mail of laat je gegevens achter.",
   kruimel: "Contact",
   h1: ["Neem contact", "met ons op"],
-  intro: "Vragen over de lesreeks, de bouw of je eigen situatie? Bel, mail of stuur je vraag hieronder. Je krijgt meestal binnen 24 uur antwoord.",
+  intro: "Plan een startgesprek voor de Company Brain Setup, of stel je vraag over wat we bouwen. Bel, mail of laat hieronder je gegevens achter. Je krijgt meestal binnen 24 uur antwoord.",
 };
 
-// De /bedankt-pagina na het formulier. De drie stappen volgen het nieuwe model
-// (kennismaking → jij legt je fundament in de lesreeks → wij bouwen), zodat de
-// pagina hetzelfde verhaal vertelt als de homepage in plaats van het oude
-// "wij komen langs met een voorstel".
+// De /bedankt-pagina na het formulier. De drie stappen volgen het model van 22/10:
+// kennismaking → wij bouwen het brein (Company Brain Setup) → wij bouwen wat je kiest.
 export const BEDANKT = {
   h1: ["Bedankt voor je", "aanvraag"],
   sub: "Je gegevens zijn goed aangekomen. We nemen zo snel mogelijk contact met je op, meestal binnen 24 uur.",
@@ -502,24 +482,23 @@ export const BEDANKT = {
     },
     {
       nummer: "02",
-      wie: "Jij, met de AI",
-      tijd: "2 tot 3 weken",
-      titel: "Je legt je fundament",
-      body: "In de lesreeks stelt de AI jou vragen over je processen, je klanten en je prijzen. Jij praat, hij schrijft. Je eindigt met een lijst van wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
+      wie: "Wij, met jou",
+      tijd: "4 weken",
+      titel: "We bouwen het brein van je bedrijf",
+      body: "In vier weken spreken we met jou en je team, koppelen we je documenten, mail en systemen, en geven we elk knelpunt een score. Je eindigt met een roadmap: wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
     },
     {
       nummer: "03",
       wie: "Wij",
       tijd: "na het strategiegesprek",
-      titel: "Wij bouwen wat op die lijst staat",
-      body: "In het strategiegesprek krijg je ons voorstel: wat we bouwen, je opstartkost en je gebruikslicentie. Gekoppeld aan de software die je al gebruikt, en getest voor het live gaat.",
+      titel: "Wij bouwen wat jij kiest",
+      body: "In het strategiegesprek van 60 minuten krijg je ons advies en je offerte. Alles wordt gekoppeld aan de software die je al gebruikt, en getest voor het live gaat.",
     },
   ],
-  // De lesreeks is de stap die de bezoeker vandaag al zelf kan zetten.
+  // Wat de bezoeker al kan doen terwijl hij wacht (22/10: was de lesreeks starten).
   nu: {
-    titel: "Je hoeft niet op ons te wachten",
-    body: "Stap 02 kan je vandaag al starten. Hoe verder je fundament staat wanneer we bellen, hoe concreter het gesprek.",
-    noot: "Online, in het Nederlands, op eigen tempo.",
+    titel: "Alvast voorbereiden?",
+    body: "Maak een lijstje van de programma's die je elke dag gebruikt, en van de taken die het meeste tijd kosten. Dan wordt het eerste gesprek meteen concreet.",
   },
   vragenTitel: "Vragen in de tussentijd?",
   belLabel: "Bel gerust op",
@@ -529,7 +508,7 @@ export const BEDANKT = {
 // Footer (vorige homepage, zonder plaatsnaam). Eén telefoonnummer (Karel), zoals in het mobiele menu.
 export const FOOTER = {
   slotTitel: "Klaar om je bedrijf te automatiseren?",
-  slotTekst: "Leg eerst je fundament in de lesreeks. Vragen vooraf? Mail ons gerust.",
+  slotTekst: "Begin met het brein van je bedrijf. Vragen vooraf? Mail of bel ons gerust.",
   contactTitel: "Contact",
   telefoons: [
     { nummer: "+32 495 70 23 14", link: "tel:+32495702314" },

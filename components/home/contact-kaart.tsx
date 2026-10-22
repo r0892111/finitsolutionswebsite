@@ -2,8 +2,8 @@
 
 /**
  * De contactkaart: naast de FAQ op de homepage en op /contact. Van boven naar
- * onder: de lesreeks (de weg die we voorstellen), het vraagformulier voor wie
- * eerst iets wil vragen, en het telefoonnummer. Geen kennismaking meer inplannen
+ * onder: het startgesprek (de weg die we voorstellen, 22/10) met het formulier,
+ * en het telefoonnummer. De hoofdknop van de site linkt naar #start. Geen kennismaking meer inplannen
  * (review van 13 september 2026), geen foto (14 september).
  * Tekst in copy.ts (SLOT, VRAAG, MENU, FOOTER).
  */
@@ -11,17 +11,16 @@
 import { Mail } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
-import { FOOTER, MENU, SKOOL, SLOT } from "./copy";
-import { H3, LesreeksKnop } from "./ui";
+import { FOOTER, MENU, SLOT } from "./copy";
+import { H3 } from "./ui";
 import { VraagFormulier } from "./vraag-formulier";
 
 export function ContactKaart({ location, bron, className = "" }: { location: string; bron: string; className?: string }) {
   const tel = FOOTER.telefoons[0];
   return (
-    <div className={`hp-card p-6 sm:p-8 ${className}`}>
-      <h2 className={`${H3} text-[1.4rem] sm:text-[1.55rem]`}>{SLOT.lesreeksTitel}</h2>
-      <LesreeksKnop location={`${location}_lesreeks`} size="md" className="mt-4 w-full" />
-      <p className="mt-2.5 text-center text-[0.8125rem] leading-[1.5] text-[#6C7590]">{SKOOL.noot}</p>
+    <div id="start" className={`hp-card scroll-mt-24 p-6 sm:p-8 ${className}`}>
+      <h2 className={`${H3} text-[1.4rem] sm:text-[1.55rem]`}>{SLOT.startTitel}</h2>
+      <p className="mt-2 text-[0.9375rem] leading-[1.55] text-[#3D4766]">{SLOT.startTekst}</p>
 
       <div className="relative mt-7 border-t border-[#E3E7EF] pt-7">
         <VraagFormulier metTelefoon bron={bron} location={location} />

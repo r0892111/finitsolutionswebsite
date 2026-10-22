@@ -13,7 +13,7 @@
 
 import Image from "next/image";
 import { HERKEN, type HerkenBeeld } from "./copy";
-import { CONTAINER, H2, KOP, LEAD, LesreeksKnop, Onder } from "./ui";
+import { CONTAINER, H2, KOP, LEAD, StartKnop, Onder } from "./ui";
 
 const BEELDEN: Record<HerkenBeeld, string> = {
   flessenhals: "/home/aze1.png",
@@ -52,7 +52,7 @@ export function HerkenSectie() {
         {/* De vraag en de knop */}
         <div className="mt-10 flex flex-col items-center gap-4 text-center">
           <p className="hp-display text-[1.6rem] font-semibold leading-tight text-[#1A2D63] sm:text-[1.9rem]">{HERKEN.overgang}</p>
-          <LesreeksKnop location="recognition" className="w-full sm:w-auto" />
+          <StartKnop location="recognition" className="w-full sm:w-auto" />
         </div>
       </div>
     </section>

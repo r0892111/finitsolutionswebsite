@@ -4,7 +4,7 @@
  * /cases: alle oplossingen volledig uitgeschreven onder elkaar, elk met een
  * anker (/cases#<slug>) waar de kaarten op de homepage naartoe linken. Per
  * oplossing: hoe het vandaag gaat, wat de AI-werknemer doet, wat jij nog doet.
- * Onderaan de quote van Bas en de lesreeks. De data staat in cases.ts.
+ * Onderaan de quote van Bas en de knop voor het startgesprek. De data staat in cases.ts.
  */
 
 import Image from "next/image";
@@ -14,7 +14,7 @@ import { OPLOSSING_LIJST, logoVoor } from "./cases";
 import { Getuigenis } from "./case-kaart";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
-import { CONTAINER, H2, H3, LEAD, LesreeksKnop, Onder } from "./ui";
+import { CONTAINER, H2, H3, LEAD, StartKnop, Onder } from "./ui";
 
 const LABEL = "text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-[#6C7590]";
 
@@ -94,7 +94,7 @@ export function CasesOverzicht() {
         <section className="bg-[#1A2D63]">
           <div className={`${CONTAINER} flex flex-col gap-10 py-14 sm:py-16 lg:flex-row lg:items-center lg:justify-between`}>
             <Getuigenis className="lg:max-w-[46rem]" />
-            <LesreeksKnop location="cases_overzicht" className="w-full shrink-0 sm:w-auto" />
+            <StartKnop location="cases_overzicht" className="w-full shrink-0 sm:w-auto" />
           </div>
         </section>
       </main>

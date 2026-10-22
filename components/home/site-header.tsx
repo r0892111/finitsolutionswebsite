@@ -8,7 +8,7 @@
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { HEADER } from "./copy";
-import { CONTAINER, LesreeksKnop } from "./ui";
+import { CONTAINER, StartKnop } from "./ui";
 
 export function SiteHeader({ location }: { location: string }) {
   return (
@@ -22,7 +22,7 @@ export function SiteHeader({ location }: { location: string }) {
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             <span>{HEADER.terug}</span>
           </a>
-          <LesreeksKnop location={`header_${location}`} size="md" />
+          <StartKnop location={`header_${location}`} size="md" />
         </div>
       </div>
     </header>
