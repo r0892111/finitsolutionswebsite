@@ -42,7 +42,7 @@ De popup `components/contact-form-popup.tsx` (naar `netlify/functions/contact-su
 2. **De foto** op de naad onder de hero: de linkerhelft vervaagd, met het statement en het citaat van Y Combinator.
 3. **Herken jij dit?** (`#recognition`): drie punten met een tekening, "Herkenbaar?" met de knop.
 4. **De oplossing** (`#oplossing`): de pitch op een marineblauwe kaart, daaronder de tool-logo's.
-5. **Hoe krijg jij jouw AI-werknemer?** (`#aanpak`): Stap 1 Opleiden (lesreeks € 95 met € 295 doorstreept, met het strategiegesprek van 90 minuten erbij), Stap 2 Bouwen (opstartkost vanaf € 1.650), Stap 3 Gebruiken (gebruikslicentie vanaf € 95 per maand); het exacte voorstel komt in het strategiegesprek, het paneel van de gekozen stap rechts.
+5. **Hoe krijg jij jouw AI-werknemer?** (`#aanpak`): Stap 1 Opleiden (lesreeks € 295, met het strategiegesprek van 90 minuten erbij), Stap 2 Bouwen (opstartkost vanaf € 1.650), Stap 3 Gebruiken (gebruikslicentie vanaf € 95 per maand); het exacte voorstel komt in het strategiegesprek, het paneel van de gekozen stap rechts.
 6. **De lesreeks** op de naad: het Skool-blok.
 7. **Wat we het vaakst bouwen** (`#cases`): de oplossingen op marineblauw, "Bekijk alle oplossingen", de quote van Bas.
 8. **Vragen en contact** (`#faq`, `#contact`): links de zeven veelgestelde vragen, rechts de contactkaart, allebei even lang.
