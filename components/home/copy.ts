@@ -4,15 +4,21 @@
  * Basis: de opbouw en schrijfstijl van de vorige homepage en de landingspagina's
  * (duidelijk, rechtstreeks, simpel voor niet-technische mensen, resultaatgericht).
  *
- * Model sinds 22 oktober 2026 (Alex): de lesreeks is weg. Stap 1 is de Company
- * Brain Setup: wij bouwen in vier weken het brein van je bedrijf (vertellen,
- * koppelen, analyseren, plannen), voor € 3.000 excl. btw. Je krijgt het brein,
- * de knelpunten met een score, een roadmap, het A-Z-rapport, een strategiegesprek
- * van 60 minuten en een offerte. Het brein is daarna de basis waarop wij bouwen;
- * de klant werkt er zelf mee zodra we de eerste toepassing bouwen. Finit is de
+ * Model sinds 22 oktober 2026 (Alex), bijgesteld na de teammeeting van 26 oktober
+ * 2026: de lesreeks is weg. Stap 1 is de Company Brain Setup: wij analyseren in
+ * vier weken je bedrijf (week 1 twee uur met de zaakvoerder op locatie, week 2
+ * een interviewdag met de medewerkers op locatie, week 3 verwerken en doorvragen,
+ * week 4 adviesrapport, roadmap, offerte en eindpresentatie), voor € 3.000 excl.
+ * btw. We zeggen "wij analyseren je bedrijf", niet "wij bouwen je brein". De klant
+ * krijgt toegang tot het brein via Finit OS (raadplegen en beheren), niet de map
+ * zelf. Het rapport met prijzen zit een week voor de eindpresentatie (op locatie,
+ * een tot anderhalf uur) in zijn mailbox; de offerte ligt klaar om te tekenen.
+ * Mailbox en agenda zijn optioneel; koppelingen zijn projectwerk na de analyse.
+ * Nazorg: per opgeleverde oplossing twee weken feedback, daarna twee weken voor het
+ * geheel. In de licentie: om de drie maanden een strategiegesprek. Finit is de
  * IT-partner: AI-werknemers, koppelingen, software op maat en websites.
- * Geen prijzen voor wat na de setup komt (dat staat in de offerte), Finit OS
- * staat niet op de site, alles draait op onze eigen AI (geen abonnement nodig).
+ * Geen prijzen voor wat na de setup komt (dat staat in de offerte), alles draait
+ * op onze eigen AI (geen abonnement nodig).
  * Het heet nooit onderhoud, altijd gebruikslicentie. Het brein heet ook je
  * AI-fundament.
  *
@@ -74,11 +80,11 @@ export const HEADER = {
 // 1. Hero (22/10): de belofte van de pitch. Eerst het brein, daarna wat je nodig hebt.
 export const HERO = {
   h1: ["Jouw bedrijf,", "klaar voor AI"],
-  sub: "In vier weken bouwen wij het brein van je bedrijf: alle kennis over hoe je werkt, zo gestructureerd dat AI ermee kan werken. Daarop bouwen we wat je nodig hebt: AI-werknemers, koppelingen, software en websites.",
+  sub: "In vier weken analyseren wij je bedrijf en leggen we alles vast in een brein: alle kennis over hoe je werkt, zo gestructureerd dat AI ermee kan werken. Daarop bouwen we wat je nodig hebt: AI-werknemers, koppelingen, software en websites.",
   punten: [
     "Jij vertelt, wij doen het werk. Geen technische kennis nodig.",
     "Je weet daarna wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
-    "In een strategiegesprek van 60 minuten krijg je ons advies en een offerte op maat.",
+    "Je eindigt met een adviesrapport, een roadmap en een offerte op maat, gepresenteerd bij jou op locatie.",
   ],
   // De tweede knop in de hero: naar de drie stappen.
   tweedeKnop: "Zo werkt het",
@@ -172,7 +178,7 @@ export const OPLOSSING = {
   pitch: [
     "Stel je een medewerker voor die je bedrijf even goed kent als jij: je klanten, je prijzen, je manier van werken, tot in detail.",
     "Hij zit in je mailbox, je agenda en je boekhouding, en doet de computertaken die jij vandaag zelf doet, precies zoals jij ze doet.",
-    "Dat is je AI-werknemer. Eerst bouwen wij het brein van je bedrijf, daarna bouwen we hem.",
+    "Dat is je AI-werknemer. Eerst analyseren wij je bedrijf en leggen we alles vast in het brein, daarna bouwen we hem.",
   ],
   illustratieAria: "Eén AI-werknemer, gevoed door je fundament, verbonden met je mailbox, je agenda, je boekhouding en je andere systemen.",
   koppelingen: "We integreren met al je tools",
@@ -250,20 +256,20 @@ export const HOE = {
   minder: "Sluiten",
   // Onderaan het paneel: door naar de volgende stap, of terug.
   paneel: { vorige: "Vorige", volgende: "Volgende" },
-  intro: "Drie stappen, in deze volgorde. Eerst bouwen wij het brein van je bedrijf, daarna alles wat je nodig hebt.",
+  intro: "Drie stappen, in deze volgorde. Eerst analyseren wij je bedrijf, daarna bouwen we alles wat je nodig hebt.",
   slotVraag: "Vragen over de aanpak?",
   stappen: [
     {
       stapLabel: "Stap 1",
       tijd: "4 weken",
       wie: "Wij, met jou",
-      titel: "Het brein bouwen",
+      titel: "Je bedrijf analyseren",
       intro: "Jij vertelt hoe je bedrijf draait. Wij leggen alles vast en zoeken waar je tijd verliest.",
       puntenTitel: "Wat je krijgt",
       punten: [
-        "Het brein van je bedrijf, de basis voor alles wat we daarna bouwen",
+        "Toegang tot het brein van je bedrijf via Finit OS, de basis voor alles wat we daarna bouwen",
         "Je knelpunten met een score, en een roadmap: wat eerst, wat later, wat niet",
-        "Een strategiegesprek van 60 minuten met Karel, en een offerte voor wat volgt",
+        "Een adviesrapport met prijzen, een eindpresentatie bij jou op locatie en een offerte voor wat volgt",
       ],
       prijsLabel: "Company Brain Setup",
       prijs: "€ 3.000",
@@ -292,12 +298,12 @@ export const HOE = {
     h3: "Zo verlopen de vier weken",
     kort: "Jij vertelt, wij doen het werk. Je team hoeft niets te installeren.",
     weken: [
-      { titel: "Week 1: vertellen", tekst: "Gesprekken met jou en de mensen die het werk doen: hoe je geld verdient, wie wat doet, en waar het knelt." },
-      { titel: "Week 2: koppelen", tekst: "Je documenten, mail, agenda en systemen gaan in het brein. Wat ontbreekt, vragen we gericht na." },
-      { titel: "Week 3: analyseren", tekst: "We geven elk knelpunt een score op tijd, geld en ergernis, en zoeken per knelpunt de beste oplossing." },
-      { titel: "Week 4: plannen", tekst: "Je krijgt het A-Z-rapport, door een mens nagelezen. In het strategiegesprek overlopen we het samen, met je offerte." },
+      { titel: "Week 1: vertellen", tekst: "Eén gesprek van twee uur met jou als zaakvoerder, bij jou op locatie: hoe je geld verdient, wie wat doet, en waar het knelt." },
+      { titel: "Week 2: je team", tekst: "Een interviewdag bij jou op locatie met de mensen die het werk doen: wat ze doen, hoe ze het doen, en waar ze tijd verliezen." },
+      { titel: "Week 3: verwerken", tekst: "We verwerken alles wat we hoorden en vragen gericht na wat ontbreekt. Elk knelpunt krijgt een score op tijd, geld en ergernis, en per knelpunt zoeken we de beste oplossing." },
+      { titel: "Week 4: plannen", tekst: "Je krijgt het adviesrapport met roadmap en prijzen een week vooraf in je mailbox. Daarna presenteren we het bij jou op locatie, in een tot anderhalf uur, met de offerte klaar om te tekenen." },
     ],
-    eerlijk: "Het brein is de basis waarop wij bouwen. Zelf werk je ermee zodra we je eerste toepassing bouwen.",
+    eerlijk: "Het brein is de basis waarop wij bouwen. Jij raadpleegt en beheert het via Finit OS, een omgeving rond je brein.",
   },
   // Stap 2: het technische werk, in volgorde. Geen prijzen (die staan in de offerte).
   bouw: {
@@ -305,16 +311,16 @@ export const HOE = {
     kort: "Je weet nu wat eerst komt. Vanaf hier nemen wij het technische werk over.",
     intro: "Je kunt klein beginnen, met één AI-werknemer die je mailbox sorteert en antwoorden klaarzet. Of groter: koppelingen tussen je systemen, een klantenportaal op maat of een nieuwe website. Alles vertrekt van hetzelfde brein.",
     volgorde: [
-      { titel: "Strategiegesprek van 60 minuten", tekst: "Je zit samen met Karel. Hij heeft je A-Z-rapport vooraf gelezen en komt met een stappenplan en een voorstel. Het gesprek zit in de setup, en je zit nergens aan vast." },
+      { titel: "Eindpresentatie op locatie", tekst: "Een week vooraf zit het adviesrapport met prijzen in je mailbox. Dan komen we een tot anderhalf uur bij jou langs, overlopen we de roadmap en ligt de offerte klaar om te tekenen. De presentatie zit in de setup, en je zit nergens aan vast." },
       { titel: "Je offerte", tekst: "Per onderdeel zie je wat het bouwen eenmalig kost, en wat het gebruik per maand kost. Wat je niet nodig hebt, laat je weg." },
       { titel: "Bouwen, koppelen, testen", tekst: "Wij bouwen en koppelen alles aan de programma's die je al gebruikt. We testen tot het werk gebeurt zoals jij het zou doen." },
-      { titel: "Veilig live", tekst: "Alles gaat aan de slag. Je gegevens blijven afgeschermd, en met één knop zet je alles stil. De eerste 30 dagen volgen we alles extra op." },
+      { titel: "Veilig live", tekst: "Alles gaat aan de slag. Je gegevens blijven afgeschermd, en met één knop zet je alles stil. Per opgeleverde oplossing heb je twee weken om feedback te geven, daarna nog twee weken voor het geheel." },
     ],
   },
   // Wat je vanaf nu hebt. Geen prijs in het paneel; geen cijfers over backup-frequentie of uptime.
   // Finit OS (15/09) is op 18/09 van de site gehaald; "Voorrang bij vragen" (13/09) staat er daarom
-  // terug. "Voorrang bij vragen" en "Elke maand een uur strategie" (13/09, Karel) zijn nog niet
-  // bevestigd in het model. Het eigendom is zoals Alex het zei (15/09).
+  // terug. "Voorrang bij vragen" (13/09, Karel) is nog niet bevestigd in het model; het
+  // strategiegesprek is sinds de teammeeting van 26/10 om de drie maanden. Het eigendom is zoals Alex het zei (15/09).
   onderhoud: {
     h3: "Wat je vanaf nu hebt",
     kort: "Je AI-werknemers werken nu voor je. Wij zorgen dat ze blijven werken.",
@@ -323,7 +329,7 @@ export const HOE = {
       { titel: "Bewaakt", body: "Loopt er iets mis, dan zien wij dat meestal voor jij het merkt. Een fout herstellen of een koppeling aanpassen kost je niets." },
       { titel: "Elke maand gecheckt en bijgewerkt", body: "We maken backups en installeren beveiligingsupdates. Komt er een nieuwe AI-verbetering die jou helpt, dan voeren wij die door." },
       { titel: "Voorrang bij vragen", body: "Heb je een vraag of loop je ergens tegenaan, dan helpen we jou eerst." },
-      { titel: "Elke maand een uur strategie", body: "Elke maand zitten we een uur samen. We bekijken wat je nog kunt laten overnemen, en je krijgt ons advies." }
+      { titel: "Om de drie maanden een strategiegesprek", body: "Om de drie maanden zitten we samen. We bekijken wat je nog kunt laten overnemen, en je krijgt ons advies." }
     ],
   },
 };
@@ -378,8 +384,8 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
     {
       q: "Wat moet ik zelf doen, en moet ik daar technisch voor zijn?",
       a: [
-        { t: "p", tekst: "Vooral vertellen. Jij kent je bedrijf het allerbeste en weet waar je grootste frustraties en tijdvreters zitten. In de eerste week spreken we met jou en met de mensen die het werk doen. Daarna vragen we alleen nog gericht na wat ontbreekt." },
-        { t: "p", tekst: "Technisch hoef je niet te zijn. Je documenten, mail, agenda en systemen koppelen wij. Je hebt geen abonnement van ChatGPT of Claude nodig: alles draait op onze eigen AI." },
+        { t: "p", tekst: "Vooral vertellen. Jij kent je bedrijf het allerbeste en weet waar je grootste frustraties en tijdvreters zitten. In de eerste week spreken we twee uur met jou, in de tweede week een dag met de mensen die het werk doen. Daarna vragen we alleen nog gericht na wat ontbreekt." },
+        { t: "p", tekst: "Technisch hoef je niet te zijn. Documenten vragen we gericht op, je mailbox en agenda delen is optioneel, en koppelingen met je systemen maken wij pas als we bouwen. Je hebt geen abonnement van ChatGPT of Claude nodig: alles draait op onze eigen AI." },
         { t: "p", tekst: "En je doet het één keer: alles wat we daarna bouwen, vertrekt van hetzelfde brein." },
       ],
     },
@@ -396,7 +402,7 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
       q: "Wat kost dit voor mijn bedrijf?",
       a: [
         { t: "p", tekst: "Je kent elke prijs op voorhand. Geen verrassingen achteraf." },
-        { t: "p", tekst: "De Company Brain Setup kost € 3.000, eenmalig. Daarvoor krijg je in vier weken het brein van je bedrijf, je knelpunten met een score, een roadmap, het A-Z-rapport, een strategiegesprek van 60 minuten en een offerte voor wat we daarna bouwen." },
+        { t: "p", tekst: "De Company Brain Setup kost € 3.000, eenmalig. Daarvoor analyseren we in vier weken je bedrijf. Je krijgt toegang tot het brein van je bedrijf via Finit OS, je knelpunten met een score, een roadmap, het adviesrapport met prijzen, een eindpresentatie bij jou op locatie en een offerte voor wat we daarna bouwen." },
         { t: "p", tekst: "Wat je daarna laat bouwen, kost wat je kiest. Per onderdeel zie je in je offerte een eenmalige opstartkost en een gebruikslicentie per maand. Wat je niet nodig hebt, laat je weg, en je zit nergens aan vast. Start met de grootste tijdvreter en breid later uit als je de waarde ziet." },
         { t: "p", tekst: "Alle prijzen excl. btw." },
       ],
@@ -404,7 +410,7 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
     {
       q: "Hoe lang duurt het voor de automatisering live staat?",
       a: [
-        { t: "p", tekst: "De setup duurt vier weken. Daarna hangt het af van wat je kiest: een eerste AI-werknemer staat meestal binnen 2 tot 4 weken live, een systeem op maat of een website duurt langer. De planning staat in je offerte. Na elke oplevering volgen 30 dagen nazorg." },
+        { t: "p", tekst: "De setup duurt vier weken. Daarna hangt het af van wat je kiest: een eerste AI-werknemer staat meestal binnen 2 tot 4 weken live, een systeem op maat of een website duurt langer. De planning staat in je offerte. Na elke oplevering heb je twee weken om feedback te geven, en daarna nog twee weken voor het geheel." },
         { t: "p", tekst: "Minimale onboarding, geen intensieve training. Jouw team hoeft geen technische kennis te hebben. Wat ze wél moeten weten: wat de automatisering doet, wat er automatisch gebeurt (zodat ze geen dubbel werk doen) en waar ze de output zien, bijvoorbeeld een offerte die klaarstaat." },
       ],
     },
@@ -431,7 +437,7 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
 // Karel is weg sinds 14/09.
 export const SLOT = {
   startTitel: "Plan je startgesprek",
-  startTekst: "Een halfuur, vrijblijvend. We bekijken hoe je bedrijf vandaag werkt, met wie we spreken en welke systemen we koppelen.",
+  startTekst: "Een halfuur, vrijblijvend. We bekijken hoe je bedrijf vandaag werkt, met wie we spreken en welke systemen je gebruikt.",
   bel: "Even sparren over AI in jouw bedrijf? Bel gerust.",
   mailLabel: "Of mail naar",
 };
@@ -467,7 +473,7 @@ export const CONTACT = {
 };
 
 // De /bedankt-pagina na het formulier. De drie stappen volgen het model van 22/10:
-// kennismaking → wij bouwen het brein (Company Brain Setup) → wij bouwen wat je kiest.
+// kennismaking → wij analyseren je bedrijf (Company Brain Setup) → wij bouwen wat je kiest.
 export const BEDANKT = {
   h1: ["Bedankt voor je", "aanvraag"],
   sub: "Je gegevens zijn goed aangekomen. We nemen zo snel mogelijk contact met je op, meestal binnen 24 uur.",
@@ -484,15 +490,15 @@ export const BEDANKT = {
       nummer: "02",
       wie: "Wij, met jou",
       tijd: "4 weken",
-      titel: "We bouwen het brein van je bedrijf",
-      body: "In vier weken spreken we met jou en je team, koppelen we je documenten, mail en systemen, en geven we elk knelpunt een score. Je eindigt met een roadmap: wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
+      titel: "We analyseren je bedrijf",
+      body: "In vier weken spreken we met jou en je team, leggen we alles vast in het brein van je bedrijf, en geven we elk knelpunt een score. Je eindigt met een roadmap: wat AI eerst kan overnemen, op volgorde van wat het meeste oplevert.",
     },
     {
       nummer: "03",
       wie: "Wij",
-      tijd: "na het strategiegesprek",
+      tijd: "na de eindpresentatie",
       titel: "Wij bouwen wat jij kiest",
-      body: "In het strategiegesprek van 60 minuten krijg je ons advies en je offerte. Alles wordt gekoppeld aan de software die je al gebruikt, en getest voor het live gaat.",
+      body: "Bij de eindpresentatie krijg je ons advies en je offerte. Alles wordt gekoppeld aan de software die je al gebruikt, en getest voor het live gaat.",
     },
   ],
   // Wat de bezoeker al kan doen terwijl hij wacht (22/10: was de lesreeks starten).
@@ -508,7 +514,7 @@ export const BEDANKT = {
 // Footer (vorige homepage, zonder plaatsnaam). Eén telefoonnummer (Karel), zoals in het mobiele menu.
 export const FOOTER = {
   slotTitel: "Klaar om je bedrijf te automatiseren?",
-  slotTekst: "Begin met het brein van je bedrijf. Vragen vooraf? Mail of bel ons gerust.",
+  slotTekst: "Begin met de analyse van je bedrijf. Vragen vooraf? Mail of bel ons gerust.",
   contactTitel: "Contact",
   telefoons: [
     { nummer: "+32 495 70 23 14", link: "tel:+32495702314" },

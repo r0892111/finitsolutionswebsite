@@ -1,6 +1,8 @@
 # Homepage (rework 2026-09)
 
 > **Update 22 oktober 2026 (Alex, branch `copy/brain-setup`).** De lesreeks is weg. De hoofdknop is "Plan een startgesprek" (naar het formulier op `/contact#start`). Stap 1 is de Company Brain Setup: wij bouwen in vier weken het brein van je bedrijf, € 3.000 excl. btw. Daarna is Finit de IT-partner (AI-werknemers, koppelingen, software op maat, websites). Geen prijzen voor wat na de setup komt, Finit OS staat niet op de site. Waar hieronder de lesreeks, Skool of de oude prijzen staan, is dat achterhaald.
+>
+> **Update 27 oktober 2026 (teammeeting 26/10).** We zeggen "wij analyseren je bedrijf", niet "wij bouwen je brein"; de klant krijgt toegang tot het brein via Finit OS. Week 1 is twee uur met de zaakvoerder op locatie, week 2 een interviewdag met het team op locatie, week 3 verwerken en doorvragen, week 4 adviesrapport (een week vooraf in de mailbox, met prijzen), roadmap, offerte en eindpresentatie op locatie van een tot anderhalf uur. Nazorg is twee weken feedback per oplossing plus twee weken voor het geheel; het strategiegesprek in de licentie is om de drie maanden. Mailbox en agenda zijn optioneel, koppelingen zijn projectwerk na de analyse.
 
 
 Overdracht, beslissingen, stijlregels en open punten: `HOMEPAGE_REWORK.md` in de root van het repo. De review van Karel en Alex van 13 september 2026 staat als transcript in `yap.md`.
