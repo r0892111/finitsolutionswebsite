@@ -24,8 +24,9 @@ export const HUB = {
     { doel: "laten", titel: "Ik wil professionele hulp om AI in mijn bedrijf te brengen", tekst: "Plan een call met Karel" },
   ],
 
-  videoTitel: ["Nieuw hier? Bekijk eerst deze", "video"],
-  videoIntro: "Zes minuten. Daarna weet je waarom AI je bedrijf moet kennen, en welke keuze bij jou past.",
+  videoTitel: ["Wat is een Company Brain en waarom heeft elk bedrijf het", "nodig?"],
+  // Het middelste stuk is een link naar de twee keuzes eronder.
+  videoIntro: ["Bekijk deze video om een", "keuze", "te kunnen maken."],
   vslTitel: "Video: waarom AI je bedrijf moet kennen",
   vslAfspelen: "Speel de video af",
 
@@ -42,6 +43,7 @@ export const HUB = {
     ],
     tekst: "Je krijgt korte lessen en onze startmap. Je AI stelt de vragen, jij vertelt. Reken op een paar avonden.",
     knop: "Start met de lesreeks",
+    beeldAlt: "Alex naast een whiteboard met de stappen van de lesreeks: Leg jouw AI-fundament",
   },
   laten: {
     titel: "Laat het ons doen",
