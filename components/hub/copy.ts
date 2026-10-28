@@ -25,7 +25,8 @@ export const HUB = {
   ],
 
   videoTitel: ["Wat is een Company Brain en waarom heeft elk bedrijf het", "nodig?"],
-  videoIntro: "Zes minuten. Daarna weet je waarom AI je bedrijf moet kennen, en welke keuze bij jou past.",
+  // Het middelste stuk is een link naar de twee keuzes eronder.
+  videoIntro: ["Bekijk deze video om een", "keuze", "te kunnen maken."],
   vslTitel: "Video: waarom AI je bedrijf moet kennen",
   vslAfspelen: "Speel de video af",
 

@@ -185,7 +185,21 @@ export function HubPagina() {
           <h2 className={KOP}>
             {HUB.videoTitel[0]} <Onder>{HUB.videoTitel[1]}</Onder>
           </h2>
-          <p className={INTRO}>{HUB.videoIntro}</p>
+          <p className="mx-auto mt-4 max-w-[36rem] text-center text-[1.25rem] leading-[1.5] text-[#3D4766] sm:text-[1.375rem]">
+            {HUB.videoIntro[0]}{" "}
+            <a
+              href="#keuze"
+              onClick={(e) => {
+                e.preventDefault();
+                springNaar("keuze");
+                pushEvent("hub_menu", metHerkomst(herkomst, { doel: "keuze" }));
+              }}
+              className="font-semibold text-[#1A2D63] underline decoration-[#1A2D63]/35 decoration-2 underline-offset-4 transition-colors hover:decoration-[#1A2D63]"
+            >
+              {HUB.videoIntro[1]}
+            </a>{" "}
+            {HUB.videoIntro[2]}
+          </p>
           <div className="mt-8">
             <Vsl onPlay={() => pushEvent("hub_vsl_play", metHerkomst(herkomst))} />
           </div>
