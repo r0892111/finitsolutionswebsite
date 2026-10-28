@@ -43,6 +43,7 @@ export const HUB = {
     ],
     tekst: "Je krijgt korte lessen en onze startmap. Je AI stelt de vragen, jij vertelt. Reken op een paar avonden.",
     knop: "Start met de lesreeks",
+    beeldAlt: "Alex naast een whiteboard met de stappen van de lesreeks: Leg jouw AI-fundament",
   },
   laten: {
     titel: "Laat het ons doen",

@@ -221,6 +221,17 @@ export function HubPagina() {
               sub={HUB.zelf.sub}
               voorWie={HUB.zelf.voorWie}
               tekst={HUB.zelf.tekst}
+              beeld={
+                <a
+                  href={skoolHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => pushEvent("hub_klik", metHerkomst(herkomst, { keuze: "lesreeks", via: "banner" }))}
+                  className="mb-6 block overflow-hidden rounded-2xl border border-[#E3E7EF] transition-opacity hover:opacity-90"
+                >
+                  <Image src="/hub/lesreeks-banner.jpg" alt={HUB.zelf.beeldAlt} width={1400} height={781} sizes="(min-width: 768px) 420px, 100vw" className="h-auto w-full" />
+                </a>
+              }
             >
               <a
                 href={skoolHref}
@@ -341,6 +352,7 @@ function Keuzekaart({
   sub,
   voorWie,
   tekst,
+  beeld,
   children,
 }: {
   id: string;
@@ -349,6 +361,8 @@ function Keuzekaart({
   sub: string;
   voorWie: string[];
   tekst: string;
+  /** Optioneel beeld bovenaan, zoals de banner van de lesreeks. */
+  beeld?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
@@ -360,6 +374,7 @@ function Keuzekaart({
           : "border-2 border-[#1A2D63]/15 bg-white text-[#3D4766]"
       }`}
     >
+      {beeld}
       <h3 className={`hp-display text-[2rem] font-bold leading-[1.05] sm:text-[2.25rem] ${donker ? "text-white" : "text-[#1A2D63]"}`}>{titel}</h3>
       <p className={`mt-2 text-[1.0625rem] font-medium ${donker ? "text-white/90" : "text-[#1A2D63]"}`}>{sub}</p>
 
