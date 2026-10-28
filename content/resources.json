@@ -1,0 +1,34 @@
+[
+  {
+    "id": "startpakket-ai",
+    "titel": "Het startpakket: haal meer uit je AI",
+    "beschrijving": "Eén bestand dat je in Claude of ChatGPT sleept. De AI interviewt je en zet je profiel, een eerlijke assistent en je prompts voor je op.",
+    "url": "/startpakket/",
+    "soort": "pakket",
+    "datum": "2026-10-27"
+  },
+  {
+    "id": "prompt-interieurplanner",
+    "titel": "Bouw je eigen interieurplanner met 3D-renders",
+    "beschrijving": "Eén prompt voor Claude: je ruimte op schaal, meubels verschuiven en alles bekijken in 3D.",
+    "url": "https://disco-spice-302.notion.site/3ff25d2d3536812e81dfc6fd704d8d12",
+    "soort": "prompt",
+    "datum": "2026-10-20"
+  },
+  {
+    "id": "prompt-video-studio",
+    "titel": "Jouw eigen video-studio in Claude",
+    "beschrijving": "Eén prompt. Claude interviewt je over je stijl en bouwt een editor die ondertitels, graphics en muziek op je video's zet.",
+    "url": "/gratis/video-studio-prompt.pdf",
+    "soort": "prompt",
+    "datum": "2026-10-12"
+  },
+  {
+    "id": "gids-wat-ai-vandaag-kan",
+    "titel": "Wat AI vandaag kan in je bedrijf",
+    "beschrijving": "Twaalf domeinen, voorbeelden uit de praktijk, en eerlijk advies over wat we je zouden afraden.",
+    "url": "/gratis/wat-ai-vandaag-kan-in-je-bedrijf.pdf",
+    "soort": "gids",
+    "datum": "2026-10-06"
+  }
+]
