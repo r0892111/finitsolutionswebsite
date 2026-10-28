@@ -168,7 +168,7 @@ export function HubPagina() {
                     <Icoon className="h-6 w-6" aria-hidden="true" />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="hp-display hp-display-sm block text-[1.1875rem] font-semibold leading-[1.2] text-[#1A2D63]">{m.titel}</span>
+                    <span className="hp-display hp-display-sm block text-[1.375rem] font-semibold leading-[1.2] text-[#1A2D63]">{m.titel}</span>
                     <span className="mt-1 block text-[0.9375rem] text-[#3D4766]">{m.tekst}</span>
                   </span>
                   <ArrowDown className="h-5 w-5 flex-none text-[#1A2D63] transition-transform group-hover:translate-y-0.5 sm:hidden" aria-hidden="true" />

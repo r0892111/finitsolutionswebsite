@@ -19,9 +19,9 @@ export const HUB = {
   titel: ["Waar ben je naar op", "zoek?"],
   intro: "Tik op wat bij jou past.",
   menu: [
-    { doel: "resources", titel: "Ik zoek een gratis gids of prompt", tekst: "Alles uit mijn video's" },
-    { doel: "zelf", titel: "Ik wil het zelf bouwen", tekst: "Met onze lesreeks" },
-    { doel: "laten", titel: "Ik wil dat jullie het doen", tekst: "Plan een call met Karel" },
+    { doel: "resources", titel: "Gratis gidsen of prompts", tekst: "Alles uit mijn video's" },
+    { doel: "zelf", titel: "Ik wil zelf een Company Brain bouwen", tekst: "Met onze lesreeks" },
+    { doel: "laten", titel: "Ik wil professionele hulp om AI in mijn bedrijf te brengen", tekst: "Plan een call met Karel" },
   ],
 
   videoTitel: ["Nieuw hier? Bekijk eerst deze", "video"],
