@@ -102,6 +102,19 @@ const LABELS: Record<string, string> = {
   video: "Video",
 };
 
+const MEERVOUD: Record<string, string> = {
+  gids: "Gidsen",
+  prompt: "Prompts",
+  pakket: "Pakketten",
+  template: "Templates",
+  video: "Video's",
+};
+
 export function soortLabel(soort: string): string {
   return LABELS[soort] ?? soort.charAt(0).toUpperCase() + soort.slice(1);
+}
+
+/** Voor de filterknoppen: "Gidsen", "Prompts", … */
+export function soortMeervoud(soort: string): string {
+  return MEERVOUD[soort] ?? soortLabel(soort);
 }

@@ -1,10 +1,13 @@
 /**
  * Alle tekst van de resource hub (de link in bio op alle socials, beslissing
- * van Alex op 28/10/2026). Van boven naar onder: de VSL, de keuze tussen zelf
- * bouwen en het laten doen, en de gratis resources.
+ * van Alex op 28/10/2026). Tweede versie, zelfde dag: Alex wou bovenaan
+ * duidelijke knoppen ("zoek je gidsen of prompts?"), tekst bijna in
+ * kindertaal, en "Zelf bouwen" / "Laat het ons doen" als grote titels met
+ * erbij voor wie het is.
  *
- * De prijs van de analyse staat hier bewust niet: Karel noemt die in de call
- * (nog te bevestigen door Karel). De resources zelf staan in content/resources.json.
+ * Volgorde: de vraag met drie knoppen, de video, de twee keuzes, de gratis
+ * resources. De prijs van de analyse staat hier bewust niet: Karel noemt die
+ * in de call. De resources zelf staan in content/resources.json.
  */
 
 export const HUB = {
@@ -12,36 +15,56 @@ export const HUB = {
   metaBeschrijving:
     "Alle gidsen en prompts uit de video's van Alex van Finit op één plek. Bouw het brein van je bedrijf zelf met de lesreeks, of laat het ons doen.",
 
-  bovenschrift: "Alex van Finit",
-  titel: "Leg het AI-fundament van je bedrijf",
-  intro: "Bekijk eerst deze video van zes minuten. Daarna kies je: zelf bouwen, of het ons laten doen.",
-  naarResources: "Kom je voor een gids of prompt? Ze staan onderaan",
+  // Bovenaan: de vraag en drie knoppen die naar de juiste plek springen.
+  titel: ["Waar ben je naar op", "zoek?"],
+  intro: "Tik op wat bij jou past.",
+  menu: [
+    { doel: "resources", titel: "Ik zoek een gratis gids of prompt", tekst: "Alles uit mijn video's" },
+    { doel: "zelf", titel: "Ik wil het zelf bouwen", tekst: "Met onze lesreeks" },
+    { doel: "laten", titel: "Ik wil dat jullie het doen", tekst: "Plan een call met Karel" },
+  ],
 
-  keuzeTitel: "Hoe wil je verder?",
+  videoTitel: ["Nieuw hier? Bekijk eerst deze", "video"],
+  videoIntro: "Zes minuten. Daarna weet je waarom AI je bedrijf moet kennen, en welke keuze bij jou past.",
+  vslTitel: "Video: waarom AI je bedrijf moet kennen",
+  vslAfspelen: "Speel de video af",
+
+  keuzeTitel: ["Zelf doen of laten", "doen?"],
+  keuzeIntro: "Allebei brengen ze je naar hetzelfde doel: een AI die je bedrijf echt kent.",
+  kiesDitAls: "Kies dit als",
   zelf: {
-    label: "Zelf bouwen",
-    titel: "De lesreeks",
-    tekst: "Je bouwt het brein van je bedrijf zelf, met lessen in mensentaal en onze startmap. Op je eigen tempo, in onze community op Skool.",
-    knop: "Bekijk de lesreeks",
+    titel: "Zelf bouwen",
+    sub: "Met onze lesreeks op Skool",
+    voorWie: [
+      "je al een beetje technisch bent",
+      "je al werkt met Claude Code of Codex",
+      "je het brein van je bedrijf zelf wil bouwen",
+    ],
+    tekst: "Je krijgt korte lessen en onze startmap. Je AI stelt de vragen, jij vertelt. Reken op een paar avonden.",
+    knop: "Start met de lesreeks",
   },
   laten: {
-    label: "Laat het ons doen",
-    titel: "Een gesprek met Karel",
-    tekst: "Wij analyseren hoe je bedrijf werkt en leggen je een plan voor: wat AI kan overnemen, in welke volgorde, en wat het kost. Daarna bouwen we het ook.",
+    titel: "Laat het ons doen",
+    sub: "Met een analyse van je bedrijf",
+    voorWie: [
+      "je geen tijd hebt om het zelf te leren",
+      "je alles uit handen wil geven",
+      "je wil weten wat AI in jouw bedrijf kan doen",
+    ],
+    tekst: "Wij bekijken hoe je bedrijf werkt en geven je een plan: wat AI kan overnemen, en in welke volgorde. Daarna bouwen we het voor je. Je begint met een call van een halfuur met Karel, vrijblijvend.",
     knop: "Plan een call met Karel",
-    sluit: "Toch niet",
+    sluit: "Sluit het formulier",
   },
 
-  resourcesTitel: "Gratis gidsen en prompts",
-  resourcesIntro: "Alles wat ik in mijn video's beloof, op één plek. De nieuwste staat bovenaan.",
+  resourcesTitel: ["Gratis gidsen en", "prompts"],
+  resourcesIntro: "Alles wat ik in mijn video's beloof. Tik op een kaartje om het te openen. De nieuwste staat bovenaan.",
   resourcesLeeg: "Hier komen binnenkort de gidsen en prompts uit mijn video's.",
+  filterLabel: "Toon",
+  filterAlles: "Alles",
   openKnop: {
     gids: "Open de gids",
     prompt: "Open de prompt",
     pakket: "Open het pakket",
     standaard: "Bekijken",
   } as Record<string, string>,
-
-  vslTitel: "Video: wat is de lesreeks?",
-  vslAfspelen: "Speel de video af",
 };
