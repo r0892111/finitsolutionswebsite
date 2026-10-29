@@ -29,7 +29,7 @@ export const VAC = {
       ],
       pastBijJou: [
         "je graag werkt in een start-up waar veel beweegt",
-        "je cinematic video's mooi vindt en ervaring hebt met filmmaking",
+        "je graag video's maakt met een hoge productiekwaliteit en ervaring hebt met filmmaking",
         "je graag meedenkt over nieuwe videoformats. Dat vinden we het belangrijkst.",
       ],
     },
