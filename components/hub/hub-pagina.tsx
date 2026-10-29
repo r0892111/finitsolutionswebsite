@@ -176,6 +176,18 @@ export function HubPagina() {
               );
             })}
           </nav>
+
+          <p className="mt-6 text-[1rem] text-white/80 sm:mt-8 sm:text-center">
+            {HUB.vacatures.tekst}{" "}
+            <a
+              href={`/vacatures/?bron=${herkomst.bron}&via=hub`}
+              onClick={() => pushEvent("hub_menu", metHerkomst(herkomst, { doel: "vacatures" }))}
+              className="inline-flex items-center gap-1 font-semibold text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white"
+            >
+              {HUB.vacatures.link}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </a>
+          </p>
         </div>
       </header>
 
