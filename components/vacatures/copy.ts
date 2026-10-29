@@ -21,11 +21,18 @@ export const VAC = {
   pastBijJou: "Dit past bij jou als",
   solliciteer: "Solliciteer",
 
+  // Uitgebreid op 29/10 op vraag van Alex. Wat een project inhoudt komt uit de processen in
+  // finit-brein (analyse, bouw) en het bedrijfsoverzicht van 28/10. Teamleden zonder naam,
+  // behalve Alex: hij staat zelf in de video's.
   vacatures: {
     content: {
+      pitch:
+        "We laten op sociale media zien wat AI doet voor gewone bedrijven. Jij helpt die verhalen in beeld brengen, met video's waar mensen voor blijven kijken.",
       watJeDoet: [
-        "Je denkt mee over hoe we ons laten zien op sociale media en over onze marketing.",
-        "Je werkt mee aan socialmediacampagnes en korte video's.",
+        "Je werkt mee aan onze korte video's voor TikTok, Instagram, YouTube en LinkedIn.",
+        "Je denkt mee over nieuwe videoformats en over hoe we ons laten zien op sociale media.",
+        "Je werkt mee aan campagnes rond onze gratis gidsen en prompts en onze lesreeks.",
+        "Je werkt rechtstreeks samen met Alex, die onze marketing doet en zelf in de video's staat.",
       ],
       pastBijJou: [
         "je graag werkt in een start-up waar veel beweegt",
@@ -34,9 +41,14 @@ export const VAC = {
       ],
     },
     projectmanagement: {
+      pitch:
+        "Je ziet van dichtbij hoe een bedrijf zijn eigen AI-brein krijgt: van het eerste gesprek bij de klant tot de oplossing die er elke dag draait.",
       watJeDoet: [
-        "Je loopt stage in een start-up.",
         "Je werkt mee aan echte IT-projecten voor klanten, vooral rond AI. De grootste focus ligt op Company Brains.",
+        "Je helpt bij de analyse van een bedrijf: gesprekken met de zaakvoerder en interviews met het team, bij de klant zelf.",
+        "Je helpt het advies uitwerken: welke taken AI kan overnemen, in welke volgorde, en wat dat oplevert.",
+        "Tijdens de bouw zet je de taken voor de ontwikkelaar klaar en test je elke oplossing alsof je zelf de klant bent.",
+        "Je werkt samen met onze projectmanager, die de klanten begeleidt, en met onze CTO, die de oplossingen bouwt.",
       ],
       pastBijJou: [
         "je je stage wil doen in een start-up",
@@ -44,16 +56,20 @@ export const VAC = {
       ],
     },
     software: {
+      pitch:
+        "Jij bouwt mee wat onze klanten elke dag gebruiken: AI die mails sorteert, offertes voorbereidt of vragen van klanten beantwoordt.",
       watJeDoet: [
         "Je doet het eigenlijke bouwwerk van onze projecten: jij zet de software in elkaar.",
-        "Je werkt aan projecten rond AI, vooral Company Brains.",
+        "Je bouwt agents en workflows bovenop het Company Brain van een klant.",
+        "Je werkt met Claude Code en de API van Anthropic, net als de rest van het team. Elke klant krijgt een eigen server.",
+        "Je werkt samen met onze CTO, die de technische kant leidt.",
       ],
       pastBijJou: [
         "je stagiair of jobstudent bent",
         "je graag software bouwt",
       ],
     },
-  } as Record<string, { watJeDoet: string[]; pastBijJou: string[] }>,
+  } as Record<string, { pitch: string; watJeDoet: string[]; pastBijJou: string[] }>,
 
   form: {
     titel: ["Stuur je", "sollicitatie"],

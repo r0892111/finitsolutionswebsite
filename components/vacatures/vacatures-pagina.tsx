@@ -103,6 +103,7 @@ export function VacaturesPagina() {
                     <Icoon className="h-6 w-6" aria-hidden="true" />
                   </span>
                   <h2 className="hp-display mt-5 text-balance text-[1.75rem] font-bold leading-[1.1] text-[#1A2D63]">{v.titel}</h2>
+                  <p className="mt-3 text-[1.0625rem] leading-[1.6] text-[#3D4766]">{tekst.pitch}</p>
 
                   <p className="mt-4 text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-[#6C7590]">{VAC.voorWie}</p>
                   <ul className="mt-2 flex flex-wrap gap-2">
@@ -114,7 +115,10 @@ export function VacaturesPagina() {
                   <p className="mt-6 text-[1rem] font-semibold text-[#1A2D63]">{VAC.watJeDoet}</p>
                   <ul className="mt-2 space-y-2">
                     {tekst.watJeDoet.map((t) => (
-                      <li key={t} className="text-[1rem] leading-[1.65] text-[#3D4766]">{t}</li>
+                      <li key={t} className="flex gap-3 text-[1rem] leading-[1.6] text-[#3D4766]">
+                        <span className="mt-[0.6em] h-1.5 w-1.5 flex-none rounded-full bg-[#1A2D63]/40" aria-hidden="true" />
+                        <span>{t}</span>
+                      </li>
                     ))}
                   </ul>
 
