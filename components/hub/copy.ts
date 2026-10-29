@@ -23,6 +23,8 @@ export const HUB = {
     { doel: "zelf", titel: "Ik wil zelf een Company Brain bouwen", tekst: "Met onze lesreeks" },
     { doel: "laten", titel: "Ik wil professionele hulp om AI in mijn bedrijf te brengen", tekst: "Plan een call met Karel" },
   ],
+  // Kleine regel onder de drie knoppen, voor wie via de vacaturevideo komt.
+  vacatures: { tekst: "We zoeken mensen.", link: "Bekijk de vacatures" },
 
   videoTitel: ["Wat is een Company Brain en waarom heeft elk bedrijf het", "nodig?"],
   // Het middelste stuk is een link naar de twee keuzes eronder.

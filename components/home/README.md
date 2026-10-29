@@ -48,6 +48,7 @@ De popup `components/contact-form-popup.tsx` (naar `netlify/functions/contact-su
 6. **De lesreeks** op de naad: het Skool-blok.
 7. **Wat we het vaakst bouwen** (`#cases`): de oplossingen op marineblauw, "Bekijk alle oplossingen", de quote van Bas.
 8. **Vragen en contact** (`#faq`, `#contact`): links de zeven veelgestelde vragen, rechts de contactkaart, allebei even lang.
+9. **We zoeken mensen** (`#vacatures`, sinds 29/10): een rustige witte band boven de footer met een knop naar `/vacatures`. "Vacatures" staat ook in de navigatie (desktop en mobiel menu) en in de footer. De pagina zelf: `components/vacatures/`, de lijst in `lib/vacatures.ts`.
 
 ## Regels voor de copy
 

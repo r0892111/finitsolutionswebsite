@@ -42,6 +42,9 @@ export const NAV_DESKTOP = [
   { label: "Contact", id: "contact" },
 ];
 
+// Naar de pagina /vacatures (geen sectie op de homepage, dus een gewone link). Nieuw 29/10.
+export const NAV_VACATURES = { label: "Vacatures", href: "/vacatures" };
+
 export const NAV_MOBIEL = [
   { label: "Home", id: "hero" },
   { label: "Herken jij dit?", id: "recognition" },
@@ -463,6 +466,13 @@ export const VRAAG = {
   privacy: "We gebruiken je gegevens alleen om te antwoorden.",
 };
 
+// De band onderaan de homepage, boven de footer, naar /vacatures. Nieuw 29/10 (Alex).
+export const VACATURES_BLOK = {
+  h2: ["We zoeken", "mensen"],
+  tekst: "Werk mee aan content en social media, IT-projectmanagement of software development. Voor stagiairs, jobstudenten, freelancers en agencies.",
+  knop: "Bekijk de vacatures",
+};
+
 // De pagina /contact: waar "Neem contact met ons op" naartoe gaat. Nieuw (review 13/09).
 export const CONTACT = {
   metaTitel: "Contact",
@@ -520,6 +530,7 @@ export const FOOTER = {
     { nummer: "+32 495 70 23 14", link: "tel:+32495702314" },
   ],
   links: [
+    { label: "Vacatures", href: "/vacatures" },
     { label: "Privacybeleid", href: "/privacy" },
     { label: "Cookieverklaring", href: "/cookieverklaring" },
     { label: "Disclaimer", href: "/disclaimer" },

@@ -24,8 +24,10 @@ import {
   MENU,
   NAV_DESKTOP,
   NAV_MOBIEL,
+  NAV_VACATURES,
   PRODUCTEN,
   PARTNER,
+  VACATURES_BLOK,
   VRAGEN,
   type FaqBlok,
   type PartnerIcoon,
@@ -312,6 +314,9 @@ export function HomePage() {
                 {item.label}
               </button>
             ))}
+            <a href={NAV_VACATURES.href} onClick={() => pushEvent("nav_click", { doel: "vacatures", location: "nav" })} className="text-[0.9375rem] font-medium text-[#1A2D63]/70 transition-colors hover:text-[#1A2D63]">
+              {NAV_VACATURES.label}
+            </a>
           </div>
 
           {/* Desktop rechts: het startgesprek als de ene knop, contact als tekst (pas als er plaats is). */}
@@ -381,6 +386,14 @@ export function HomePage() {
                     <ChevronRight className="h-5 w-5 text-[#1A2D63]/30" aria-hidden="true" />
                   </button>
                 ))}
+                <a
+                  href={NAV_VACATURES.href}
+                  onClick={() => pushEvent("nav_click", { doel: "vacatures", location: "mobile_menu" })}
+                  className="flex w-full items-center justify-between border-b border-[#1A2D63]/10 py-4 text-[#1A2D63] transition-colors hover:text-[#475D8F]"
+                >
+                  <span className="text-lg font-medium">{NAV_VACATURES.label}</span>
+                  <ChevronRight className="h-5 w-5 text-[#1A2D63]/30" aria-hidden="true" />
+                </a>
                 <a
                   href={PRODUCTEN.voicelink.url}
                   target="_blank"
@@ -683,6 +696,24 @@ export function HomePage() {
 
               <ContactKaart location="contact" bron="https://finitsolutions.be/#contact" />
             </div>
+          </div>
+        </section>
+
+        {/* -------------------------------------------------------------- */}
+        {/* 6. We zoeken mensen: een rustige band naar /vacatures           */}
+        {/* -------------------------------------------------------------- */}
+        <section id="vacatures" className="bg-white">
+          <div className={`${CONTAINER} flex flex-col gap-6 py-12 sm:py-14 lg:flex-row lg:items-center lg:justify-between lg:gap-12`}>
+            <div className="max-w-[40rem]">
+              <h2 className={H2}>
+                {VACATURES_BLOK.h2[0]} <Onder>{VACATURES_BLOK.h2[1]}</Onder>
+              </h2>
+              <p className={`mt-3 ${LEAD}`}>{VACATURES_BLOK.tekst}</p>
+            </div>
+            <a href={NAV_VACATURES.href} onClick={() => pushEvent("cta_click", { cta_label: "vacatures", location: "home_vacatures" })} className="hp-btn hp-btn--primary hp-btn--lg w-full shrink-0 sm:w-auto">
+              {VACATURES_BLOK.knop}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </a>
           </div>
         </section>
       </main>

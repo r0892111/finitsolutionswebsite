@@ -69,6 +69,13 @@
   status = 200
   force = true
 
+# Het sollicitatieformulier op /vacatures: zelfde mailpad als het contactformulier.
+[[redirects]]
+  from = "/api/sollicitatie-submit"
+  to = "/.netlify/functions/sollicitatie-submit"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/api/lead-magnet/start"
   to = "/.netlify/functions/lead-magnet-start"
