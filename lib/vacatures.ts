@@ -34,6 +34,22 @@ export function vindVacature(id: string): Vacature | undefined {
   return VACATURES.find((v) => v.id === id);
 }
 
+/**
+ * Bestanden bij een sollicitatie gaan als bijlage mee in de mail. Netlify aanvaardt
+ * maximaal 6 MB per verzoek, en base64 maakt bestanden een derde groter: vandaar 4 MB.
+ * Alleen soorten die Brevo als bijlage aanvaardt; grote video's gaan via een link.
+ */
+export const BIJLAGEN = {
+  maxBestanden: 5,
+  maxBytes: 4 * 1024 * 1024,
+  extensies: ["pdf", "doc", "docx", "ppt", "pptx", "odt", "txt", "jpg", "jpeg", "png", "gif", "mp4", "mov", "m4v"],
+};
+
+export function extensie(naam: string): string {
+  const i = naam.lastIndexOf(".");
+  return i >= 0 ? naam.slice(i + 1).toLowerCase() : "";
+}
+
 /** Aan stagiairs en jobstudenten vragen we ook de studierichting en het studiejaar. */
 export function isStudent(profiel: string): boolean {
   return profiel === "stagiair" || profiel === "jobstudent";

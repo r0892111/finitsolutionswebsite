@@ -7,7 +7,9 @@
  * sollicitatie is geen lead.
  *
  * De lijst met vacatures en wie ervoor mag solliciteren komt uit
- * lib/vacatures.ts, dezelfde lijst als op de pagina.
+ * lib/vacatures.ts, dezelfde lijst als op de pagina. Bestanden (portfolio, cv)
+ * komen als base64 binnen en gaan als bijlage mee in de mail; ze worden nergens
+ * anders bewaard. Grenzen in BIJLAGEN (lib/vacatures.ts).
  *
  * Env-variabelen in Netlify (dezelfde als het contactformulier):
  *   BREVO_API_KEY         (verplicht)
@@ -16,7 +18,7 @@
  *   CONTACT_FROM_EMAIL    (optioneel) — afzender, moet een geverifieerde Brevo-sender zijn
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
-import { isStudent, PROFIELEN, vindVacature, type Profiel } from "../../lib/vacatures";
+import { BIJLAGEN, extensie, isStudent, PROFIELEN, vindVacature, type Profiel } from "../../lib/vacatures";
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
@@ -32,6 +34,46 @@ function json(statusCode: number, body: unknown) {
 
 function pickStr(v: unknown, max = 200): string {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
+}
+
+const BASE64_RE = /^[A-Za-z0-9+/]+={0,2}$/;
+
+interface Bijlage {
+  name: string;
+  content: string;
+}
+
+/** Controleert de bestanden: aantal, soort en grootte. Geeft null terug als iets niet klopt. */
+function leesBijlagen(v: unknown): Bijlage[] | null {
+  if (v === undefined || v === null) return [];
+  if (!Array.isArray(v) || v.length > BIJLAGEN.maxBestanden) return null;
+  let totaal = 0;
+  const uit: Bijlage[] = [];
+  for (const item of v) {
+    const b = item as Record<string, unknown>;
+    // Alleen een veilige bestandsnaam: geen mappen, geen vreemde tekens.
+    const naam = pickStr(b?.naam, 120).replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_");
+    const inhoud = typeof b?.inhoud === "string" ? b.inhoud : "";
+    if (!naam || !inhoud || !BIJLAGEN.extensies.includes(extensie(naam)) || !BASE64_RE.test(inhoud)) return null;
+    totaal += Math.floor((inhoud.length * 3) / 4);
+    if (totaal > BIJLAGEN.maxBytes) return null;
+    const ext = extensie(naam);
+    uit.push({ name: `${naam.slice(0, -ext.length)}${ext}`, content: inhoud });
+  }
+  return uit;
+}
+
+/** Een link naar werk: alleen http(s), en zonder https:// ervoor zetten we het er zelf voor. */
+function leesLink(v: unknown): string {
+  const s = pickStr(v, 500);
+  if (!s) return "";
+  const metSchema = /^https?:\/\//i.test(s) ? s : `https://${s}`;
+  try {
+    const u = new URL(metSchema);
+    return u.protocol === "https:" || u.protocol === "http:" ? u.toString() : "";
+  } catch {
+    return "";
+  }
 }
 
 // Alles wat de bezoeker intypt komt in de mail; escapen houdt de HTML heel.
@@ -59,7 +101,9 @@ export const handler: Handler = async (event: HandlerEvent) => {
   const telefoon = pickStr(body.telefoon, 40);
   const studierichting = pickStr(body.studierichting, 150);
   const studiejaar = pickStr(body.studiejaar, 60);
-  const motivatie = pickStr(body.motivatie, 4000);
+  const motivatie = pickStr(body.motivatie, 6000);
+  const link = leesLink(body.link);
+  const bijlagen = leesBijlagen(body.bijlagen);
   const bron = pickStr(body.bron, 300) || "onbekend";
 
   if (!vacature) return json(400, { error: "invalid_vacature" });
@@ -70,6 +114,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
   if (!motivatie) return json(400, { error: "missing_motivatie" });
   if (isStudent(profiel) && (!studierichting || !studiejaar)) return json(400, { error: "missing_studie" });
   if (body.toestemming !== true) return json(400, { error: "missing_toestemming" });
+  if (bijlagen === null) return json(400, { error: "invalid_bijlagen" });
 
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) {
@@ -90,6 +135,8 @@ export const handler: Handler = async (event: HandlerEvent) => {
           ["Studiejaar", studiejaar],
         ] as Array<[string, string]>)
       : []),
+    ["Link naar werk", link || "—"],
+    ["Bijlagen", bijlagen.length ? bijlagen.map((b) => b.name).join(", ") : "geen"],
     ["Pagina", bron],
     ["Privacy", `toestemming gegeven op ${nu}`],
   ];
@@ -98,9 +145,14 @@ export const handler: Handler = async (event: HandlerEvent) => {
     <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#1A2D63">
       <h2 style="margin:0 0 16px">Nieuwe sollicitatie via de website</h2>
       <table cellpadding="6" style="border-collapse:collapse;font-size:15px">
-        ${rijen.map(([k, v]) => `<tr><td style="color:#6C7590">${k}</td><td><strong>${esc(v)}</strong></td></tr>`).join("")}
+        ${rijen
+          .map(([k, v]) => {
+            const waarde = k === "Link naar werk" && link ? `<a href="${esc(link)}" style="color:#1A2D63">${esc(link)}</a>` : esc(v);
+            return `<tr><td style="color:#6C7590">${k}</td><td><strong>${waarde}</strong></td></tr>`;
+          })
+          .join("")}
       </table>
-      <p style="margin:20px 0 6px;color:#6C7590">Motivatie</p>
+      <p style="margin:20px 0 6px;color:#6C7590">Over zichzelf</p>
       <p style="margin:0;white-space:pre-wrap;font-size:15px">${esc(motivatie)}</p>
     </div>`;
 
@@ -115,6 +167,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
         replyTo: { email, name: naam },
         subject: `Sollicitatie: ${vacature.titel} – ${naam}`,
         htmlContent: html,
+        ...(bijlagen.length ? { attachment: bijlagen } : {}),
       }),
     });
     if (!res.ok) {
