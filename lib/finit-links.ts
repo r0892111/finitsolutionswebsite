@@ -4,6 +4,9 @@
  */
 
 export const INSTAGRAM_URL = "https://www.instagram.com/finitsolutions/";
+// Alex' eigen kanalen, waar de reels staan (vacature content en social media).
+export const ALEX_INSTAGRAM_URL = "https://www.instagram.com/alexvanfinit/";
+export const ALEX_TIKTOK_URL = "https://www.tiktok.com/@alexvanfinit";
 export const LINKEDIN_URL = "https://www.linkedin.com/company/finitsolutions/";
 
 export const CONTACT_EMAIL = "contact@finitsolutions.be";

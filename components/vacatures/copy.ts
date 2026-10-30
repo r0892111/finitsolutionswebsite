@@ -83,8 +83,42 @@ export const VAC = {
     studierichtingHint: "Bijvoorbeeld: Toegepaste informatica",
     studiejaar: "In welk jaar zit je?",
     studiejaarHint: "Bijvoorbeeld: 2de bachelor",
-    motivatie: "Waarom wil je bij ons werken?",
-    motivatieHint: "Een paar zinnen is genoeg. Heb je eerder werk, zoals video's of een portfolio? Zet de link er gerust bij.",
+    // Vervangt "Waarom wil je bij ons werken?" (Alex, 30/10): wat we willen horen om iemand
+    // uit te nodigen voor de eerste interviewronde. {instagram} en {tiktok} worden links.
+    vertel: {
+      titel: "Vertel ons over jezelf",
+      intro: "Om in aanmerking te komen voor de eerste interviewronde, horen we graag:",
+      ervaring: "wat je ervaring is: je opleiding, jobs, projecten of dingen die je zelf maakte",
+      perVacature: {
+        content: [
+          "wat je vindt van onze huidige video's op {instagram} en {tiktok}. Wat zou jij veranderen of toevoegen? Heb je ideeën voor nieuwe formats?",
+        ],
+        projectmanagement: [
+          "iets dat jij organiseerde of in goede banen leidde, op school, in een job of in een vereniging, en hoe je dat aanpakte",
+          "wat je tijdens je stage wil leren",
+        ],
+        software: [
+          "wat je al bouwde, en met welke talen of tools",
+          "of je al met AI werkte, bijvoorbeeld met Claude, ChatGPT of een API, en wat je ermee deed",
+        ],
+      } as Record<string, string[]>,
+      portfolio: "of je een portfolio of eerder werk hebt om te tonen. Sleep het in het vak hieronder of plak een link.",
+      start: "wanneer je kan starten en hoeveel tijd je per week hebt",
+      kiesEerst: "Kies hierboven een vacature, dan zie je wat we voor die job graag horen.",
+      hint: "Neem gerust de tijd. Hoe meer we over je weten, hoe beter we je kunnen inschatten.",
+    },
+    bestanden: {
+      titel: "Portfolio of eerder werk",
+      nietVerplicht: "niet verplicht",
+      vak: "Sleep je bestanden hierheen of klik om ze te kiezen",
+      regels: "Pdf, Word, PowerPoint, afbeeldingen of korte video's. Samen maximaal 4 MB.",
+      verwijder: "Verwijder",
+      teGroot: "Samen mag het maximaal 4 MB zijn. Zet grote video's op YouTube, Google Drive of WeTransfer en plak de link hieronder.",
+      teVeel: "Je kan maximaal 5 bestanden toevoegen.",
+      verkeerdType: "Dit soort bestand kunnen we niet ontvangen: {naam}",
+      link: "Of plak een link naar je werk",
+      linkHint: "Bijvoorbeeld Instagram, YouTube, GitHub, Google Drive of WeTransfer",
+    },
     toestemming: "Ik ga akkoord dat Finit Solutions mijn gegevens gebruikt om mijn sollicitatie te bekijken. Lees meer in de",
     privacyLink: "privacyverklaring",
     kiesEerst: "Kies eerst voor welke vacature je solliciteert en wat je bent.",
