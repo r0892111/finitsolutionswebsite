@@ -55,6 +55,7 @@ const SOORT_KLEUR: Record<string, string> = {
   gids: "bg-[#E6ECF9] text-[#1A2D63]",
   prompt: "bg-[#FBE286] text-[#1A2D63]",
   pakket: "bg-[#E4F3EA] text-[#12784A]",
+  bronnen: "border border-[#1A2D63]/25 bg-white text-[#1A2D63]",
 };
 
 const FILTER_VOLGORDE = ["gids", "prompt", "pakket", "template", "video"];
