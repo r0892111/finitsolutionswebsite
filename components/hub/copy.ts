@@ -25,6 +25,8 @@ export const HUB = {
   ],
   // Kleine regel onder de drie knoppen, voor wie via de vacaturevideo komt.
   vacatures: { tekst: "We zoeken mensen.", link: "Bekijk de vacatures" },
+  // Bovenaan (en op het kaartje) als iemand via ?reel=C03 komt en er een resource bij die post hoort.
+  uitPost: "Uit de post die je net zag",
 
   videoTitel: ["Wat is een Company Brain en waarom heeft elk bedrijf het", "nodig?"],
   // Het middelste stuk is een link naar de twee keuzes eronder.

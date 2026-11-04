@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, Download, ExternalLink } from 'lucide-react';
 
 import { KopieerBestandKnop } from '@/components/startpakket/kopieer-bestand-knop';
+import { PROMPT_PAGINAS } from '@/lib/prompts';
 
 const BESTAND = '/startpakket-ai.md';
 
@@ -57,6 +58,25 @@ export function StartpakketPagina() {
       </header>
 
       <div className="mx-auto max-w-[720px] px-4 py-10 sm:px-8">
+        {/* Voor wie van een post komt: de prompts staan ook los, per onderwerp. */}
+        <section className="mb-12 rounded-2xl bg-[#E6ECF9] p-5 sm:p-6">
+          <h2 className="font-semibold text-[#1A2D63]">Zoek je losse prompts?</h2>
+          <p className="mt-1 text-[15px] leading-relaxed">Ze staan per onderwerp klaar om te kopiëren, zonder bestand.</p>
+          <ul className="mt-4 space-y-2">
+            {PROMPT_PAGINAS.map((p) => (
+              <li key={p.slug}>
+                <Link
+                  href={`/prompts/${p.slug}/`}
+                  className="inline-flex items-start gap-1.5 text-[15px] font-semibold text-[#1A2D63] underline decoration-[#1A2D63]/30 underline-offset-4 hover:decoration-[#1A2D63]"
+                >
+                  <ArrowRight className="mt-1 h-4 w-4 flex-none" aria-hidden />
+                  {p.titel}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section className="mb-12">
           <h2 className="hp-display mb-6 text-[28px] font-semibold leading-tight text-[#1A2D63]">Zo werkt het</h2>
           <ol className="space-y-5">

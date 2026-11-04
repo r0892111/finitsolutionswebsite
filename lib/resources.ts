@@ -25,6 +25,8 @@ export interface Resource {
   datum: string;
   /** Optioneel: de video waar hij bij hoort, bv. "R001". */
   reel?: string;
+  /** Optioneel: cover of beeld van die post, bv. "/hub/posts/C03.jpg", zodat je hem herkent. */
+  thumbnail?: string;
   verborgen?: boolean;
 }
 
@@ -47,6 +49,7 @@ function leesItem(v: unknown): Resource | null {
   // Alleen https of een eigen pad: geen javascript:- of http-links op de site.
   if (!url.startsWith("https://") && !(url.startsWith("/") && !url.startsWith("//"))) return null;
   const datum = tekst(o.datum, 10);
+  const thumbnail = tekst(o.thumbnail, 300);
   return {
     id,
     titel,
@@ -55,6 +58,8 @@ function leesItem(v: unknown): Resource | null {
     soort: tekst(o.soort, 30).toLowerCase() || "gids",
     datum: DATUM.test(datum) ? datum : "1970-01-01",
     reel: tekst(o.reel, 12) || undefined,
+    // Zelfde regel als de url: alleen https of een eigen pad.
+    thumbnail: thumbnail.startsWith("https://") || (thumbnail.startsWith("/") && !thumbnail.startsWith("//")) ? thumbnail : undefined,
     verborgen: o.verborgen === true,
   };
 }

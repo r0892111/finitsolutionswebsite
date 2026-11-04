@@ -10,9 +10,69 @@
     "thumbnail": "/hub/posts/R001.jpg"
   },
   {
+    "id": "prompts-werk-dat-blijft-liggen",
+    "titel": "Zo doet AI je mails, verslagen, kasticketjes en facturen",
+    "beschrijving": "5 prompts om te kopiëren: vergeten mails, kasticketjes, verslagen, facturen en \"kan AI dit?\".",
+    "url": "/prompts/werk-dat-blijft-liggen/",
+    "soort": "prompt",
+    "datum": "2026-11-04",
+    "reel": "C02",
+    "thumbnail": "/hub/posts/C02.jpg"
+  },
+  {
+    "id": "prompts-verkoopgesprek",
+    "titel": "Laat AI je verkoopgesprek voorbereiden en je offerte invullen",
+    "beschrijving": "3 prompts: je klant opzoeken, het gesprek oefenen met AI als klant, en je offerte invullen.",
+    "url": "/prompts/verkoopgesprek/",
+    "soort": "prompt",
+    "datum": "2026-11-04",
+    "reel": "C03",
+    "thumbnail": "/hub/posts/C03.jpg"
+  },
+  {
+    "id": "prompts-marketing",
+    "titel": "4 prompts waarmee AI je posts en je presentatie maakt",
+    "beschrijving": "4 prompts: een post die klinkt als jij, van foto naar post, een presentatie en wat je concurrenten beter doen.",
+    "url": "/prompts/marketing/",
+    "soort": "prompt",
+    "datum": "2026-11-04",
+    "reel": "C04",
+    "thumbnail": "/hub/posts/C04.jpg"
+  },
+  {
+    "id": "prompts-cijfers",
+    "titel": "Je cijfers in gewone taal, met ChatGPT",
+    "beschrijving": "Eén prompt in 4 stappen: hoe het gaat, waar geld weglekt, je cashflow, en vragen voor je boekhouder.",
+    "url": "/prompts/cijfers/",
+    "soort": "prompt",
+    "datum": "2026-11-04",
+    "reel": "C06",
+    "thumbnail": "/hub/posts/C06.jpg"
+  },
+  {
+    "id": "prompts-eerlijk-advies",
+    "titel": "Zo krijg je eerlijk advies van ChatGPT",
+    "beschrijving": "3 prompts en 6 vaste werkafspraken, zodat AI eerst doorvraagt en je durft tegen te spreken.",
+    "url": "/prompts/eerlijk-advies/",
+    "soort": "prompt",
+    "datum": "2026-11-04",
+    "reel": "C10",
+    "thumbnail": "/hub/posts/C10.jpg"
+  },
+  {
+    "id": "prompts-bedrijven-zoeken",
+    "titel": "Zo vind je met AI 200 bedrijven binnen 50 km",
+    "beschrijving": "2 prompts: een lijst met bedrijven in je buurt, gerangschikt op wie het best bij je past.",
+    "url": "/prompts/bedrijven-zoeken/",
+    "soort": "prompt",
+    "datum": "2026-11-04",
+    "reel": "C11",
+    "thumbnail": "/hub/posts/C11.jpg"
+  },
+  {
     "id": "startpakket-ai",
-    "titel": "Het startpakket: haal meer uit je AI",
-    "beschrijving": "Eén bestand dat je in Claude of ChatGPT sleept. De AI interviewt je en zet je profiel, een eerlijke assistent en je prompts voor je op.",
+    "titel": "Laat je AI je eerst leren kennen",
+    "beschrijving": "Het startpakket van onze workshop. Eén bestand dat je in Claude of ChatGPT sleept: de AI interviewt je en zet je profiel, je assistent en je routines op.",
     "url": "/startpakket/",
     "soort": "pakket",
     "datum": "2026-10-27"
@@ -23,7 +83,9 @@
     "beschrijving": "Eén prompt voor Claude: je ruimte op schaal, meubels verschuiven en alles bekijken in 3D.",
     "url": "https://disco-spice-302.notion.site/3ff25d2d3536812e81dfc6fd704d8d12",
     "soort": "prompt",
-    "datum": "2026-10-20"
+    "datum": "2026-10-20",
+    "thumbnail": "/hub/posts/R018.jpg",
+    "reel": "R018"
   },
   {
     "id": "prompt-video-studio",
@@ -31,7 +93,9 @@
     "beschrijving": "Eén prompt. Claude interviewt je over je stijl en bouwt een editor die ondertitels, graphics en muziek op je video's zet.",
     "url": "/gratis/video-studio-prompt.pdf",
     "soort": "prompt",
-    "datum": "2026-10-12"
+    "datum": "2026-10-12",
+    "thumbnail": "/hub/posts/R010.jpg",
+    "reel": "R010"
   },
   {
     "id": "gids-wat-ai-vandaag-kan",
