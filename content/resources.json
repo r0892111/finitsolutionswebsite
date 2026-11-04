@@ -5,7 +5,9 @@
     "beschrijving": "Y Combinator, Google, Microsoft en de cijfers erachter. Met een link naar elke bron.",
     "url": "/bronnen/",
     "soort": "bronnen",
-    "datum": "2026-11-04"
+    "datum": "2026-11-04",
+    "reel": "R001",
+    "thumbnail": "/hub/posts/R001.jpg"
   },
   {
     "id": "startpakket-ai",
