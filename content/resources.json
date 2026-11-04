@@ -1,5 +1,13 @@
 [
   {
+    "id": "bronnen-company-brain",
+    "titel": "Wie zegt dat elk bedrijf een company brain nodig heeft?",
+    "beschrijving": "Y Combinator, Google, Microsoft en de cijfers erachter. Met een link naar elke bron.",
+    "url": "/bronnen/",
+    "soort": "bronnen",
+    "datum": "2026-11-04"
+  },
+  {
     "id": "startpakket-ai",
     "titel": "Het startpakket: haal meer uit je AI",
     "beschrijving": "Eén bestand dat je in Claude of ChatGPT sleept. De AI interviewt je en zet je profiel, een eerlijke assistent en je prompts voor je op.",
