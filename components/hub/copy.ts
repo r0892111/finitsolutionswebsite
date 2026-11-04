@@ -71,6 +71,7 @@ export const HUB = {
     gids: "Open de gids",
     prompt: "Open de prompt",
     pakket: "Open het pakket",
+    bronnen: "Bekijk de bronnen",
     standaard: "Bekijken",
   } as Record<string, string>,
 };
