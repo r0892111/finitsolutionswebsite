@@ -6,7 +6,8 @@
     "url": "/prompts/werk-dat-blijft-liggen/",
     "soort": "prompt",
     "datum": "2026-11-04",
-    "reel": "C02"
+    "reel": "C02",
+    "thumbnail": "/hub/posts/C02.jpg"
   },
   {
     "id": "prompts-verkoopgesprek",
@@ -15,7 +16,8 @@
     "url": "/prompts/verkoopgesprek/",
     "soort": "prompt",
     "datum": "2026-11-04",
-    "reel": "C03"
+    "reel": "C03",
+    "thumbnail": "/hub/posts/C03.jpg"
   },
   {
     "id": "prompts-marketing",
@@ -24,7 +26,8 @@
     "url": "/prompts/marketing/",
     "soort": "prompt",
     "datum": "2026-11-04",
-    "reel": "C04"
+    "reel": "C04",
+    "thumbnail": "/hub/posts/C04.jpg"
   },
   {
     "id": "prompts-cijfers",
@@ -33,7 +36,8 @@
     "url": "/prompts/cijfers/",
     "soort": "prompt",
     "datum": "2026-11-04",
-    "reel": "C06"
+    "reel": "C06",
+    "thumbnail": "/hub/posts/C06.jpg"
   },
   {
     "id": "prompts-eerlijk-advies",
@@ -42,7 +46,8 @@
     "url": "/prompts/eerlijk-advies/",
     "soort": "prompt",
     "datum": "2026-11-04",
-    "reel": "C10"
+    "reel": "C10",
+    "thumbnail": "/hub/posts/C10.jpg"
   },
   {
     "id": "prompts-bedrijven-zoeken",
@@ -51,7 +56,8 @@
     "url": "/prompts/bedrijven-zoeken/",
     "soort": "prompt",
     "datum": "2026-11-04",
-    "reel": "C11"
+    "reel": "C11",
+    "thumbnail": "/hub/posts/C11.jpg"
   },
   {
     "id": "startpakket-ai",
@@ -67,7 +73,9 @@
     "beschrijving": "Eén prompt voor Claude: je ruimte op schaal, meubels verschuiven en alles bekijken in 3D.",
     "url": "https://disco-spice-302.notion.site/3ff25d2d3536812e81dfc6fd704d8d12",
     "soort": "prompt",
-    "datum": "2026-10-20"
+    "datum": "2026-10-20",
+    "thumbnail": "/hub/posts/R018.jpg",
+    "reel": "R018"
   },
   {
     "id": "prompt-video-studio",
@@ -75,7 +83,9 @@
     "beschrijving": "Eén prompt. Claude interviewt je over je stijl en bouwt een editor die ondertitels, graphics en muziek op je video's zet.",
     "url": "/gratis/video-studio-prompt.pdf",
     "soort": "prompt",
-    "datum": "2026-10-12"
+    "datum": "2026-10-12",
+    "thumbnail": "/hub/posts/R010.jpg",
+    "reel": "R010"
   },
   {
     "id": "gids-wat-ai-vandaag-kan",
