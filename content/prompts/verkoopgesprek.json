@@ -17,8 +17,8 @@
     },
     {
       "titel": "Een contract invullen vanuit je template",
-      "uitleg": "Voeg je eigen template toe als bijlage. Werkt als je AI toegang heeft tot je mailbox, bijvoorbeeld Claude met Gmail gekoppeld.",
-      "tekst": "Hier is onze template [NDA / verwerkersovereenkomst / offerte]. Vul hem in voor [bedrijfsnaam]. Zoek hun officiële gegevens (adres, ondernemingsnummer) op in de KBO. Het contract is voor [doel]. Zet het daarna als bijlage in een conceptmail naar [persoon]. Verstuur niets."
+      "uitleg": "Voeg je eigen template toe als bijlage. Voor de conceptmail moet je mailbox gekoppeld zijn, bijvoorbeeld Claude met Gmail of Outlook.",
+      "tekst": "Hier is onze template [NDA / verwerkersovereenkomst / offerte]. Vul hem in voor [bedrijfsnaam]. Zoek hun officiële gegevens (adres, ondernemingsnummer) op in de KBO. Het contract is voor [doel]. Zet daarna een conceptmail naar [persoon] klaar. Het contract voeg ik zelf toe als bijlage. Verstuur niets."
     }
   ]
 }

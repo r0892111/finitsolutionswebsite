@@ -7,7 +7,7 @@
   "prompts": [
     {
       "titel": "Glipt er iets tussen de mazen?",
-      "uitleg": "Werkt als je AI toegang heeft tot je mailbox, bijvoorbeeld Claude met Gmail gekoppeld.",
+      "uitleg": "Werkt als je mailbox gekoppeld is, bijvoorbeeld Claude met Gmail of Outlook. Bij Outlook moeten de schrijfrechten aan staan om een concept te maken.",
       "tekst": "Scan mijn mailbox van de laatste twee weken. Zijn er mails waar ik nog niet op antwoordde, of beloftes die ik nog niet nakwam? Vraag me per mail of het in orde is, en zet waar nodig een concept klaar."
     },
     {
@@ -17,13 +17,13 @@
     },
     {
       "titel": "Van meeting naar follow-up",
-      "uitleg": "Plak het transcript van je gesprek mee, bijvoorbeeld uit je opname-app.",
+      "uitleg": "Plak het transcript van je gesprek mee, bijvoorbeeld uit Teams, Google Meet, Zoom of je opname-app.",
       "tekst": "Hier is het transcript van mijn gesprek met [persoon/bedrijf].\nMaak een samenvatting van maximaal tien lijnen. Welke dingen heb ik beloofd? Wat staat er nog open? Stel me vragen over wat ontbreekt, en zet daarna een follow-up mail klaar in mijn stijl."
     },
     {
       "titel": "Facturen voor je boekhouder",
-      "uitleg": "Werkt als je AI toegang heeft tot je mailbox, bijvoorbeeld Claude met Gmail gekoppeld.",
-      "tekst": "Scan mijn mailbox van [het derde kwartaal]. Haal alle facturen (PDF-bijlagen) eruit en zet ze in de map [Documenten/Facturen Q3], met als bestandsnaam datum_leverancier_bedrag. Zet daarna een mail naar mijn boekhouder klaar als concept. Verstuur niets."
+      "uitleg": "Werkt als je mailbox gekoppeld is (Gmail of Outlook). AI kan de pdf's in je mails niet openen: hij maakt de lijst, de bijlagen voeg je zelf toe.",
+      "tekst": "Scan mijn mailbox van [het derde kwartaal]. Maak een lijst van alle mails met een factuur als bijlage: datum, leverancier en bedrag. Zet daarna een mail naar mijn boekhouder klaar als concept, met die lijst. De pdf's voeg ik zelf toe. Verstuur niets."
     },
     {
       "titel": "Weet je niet of iets kan?",

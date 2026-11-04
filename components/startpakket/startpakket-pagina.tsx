@@ -13,8 +13,8 @@ const STAPPEN = [
     tekst: 'Of kopieer de volledige tekst als je op je gsm zit.',
   },
   {
-    titel: 'Sleep het in Claude en zeg: "Volg dit."',
-    tekst: 'Liefst in Claude Code (bij ChatGPT heet dat Codex). De gewone chat werkt ook.',
+    titel: 'Sleep het in Claude of ChatGPT en zeg: "Volg dit."',
+    tekst: 'Liefst in Claude Cowork of Claude Code (betaald abonnement), of in Codex bij ChatGPT. De gewone chat werkt ook, ook gratis.',
   },
   {
     titel: 'Laat je interviewen',
@@ -26,13 +26,13 @@ const INHOUD = [
   'Je profiel: de AI leert jou en je bedrijf één keer kennen',
   'Een eerlijke assistent die doorvraagt en je tegenspreekt',
   'Je schrijfstijl, zodat alles klinkt als jij',
-  'Elke ochtend een opgeruimde inbox met antwoorden klaar',
+  'Elke ochtend je inbox op een rij, met antwoorden klaar als concept (Gmail of Outlook gekoppeld)',
   'Je bestanden opruimen, je brainstormmap, je eerste skill',
   'Alle prompts van de workshop, klaar om te kopiëren',
 ];
 
 const TOOLS = [
-  { naam: 'Wispr Flow', url: 'https://wisprflow.ai', tekst: 'Betalend, wat wij gebruiken. Mac, Windows, iPhone, Android.' },
+  { naam: 'Wispr Flow', url: 'https://wisprflow.ai', tekst: 'Wat wij gebruiken. Gratis met een woordlimiet per week, onbeperkt is betalend. Mac, Windows, iPhone, Android.' },
   { naam: 'Handy', url: 'https://handy.computer', tekst: 'Gratis en open source. Draait volledig op je eigen computer.' },
   { naam: 'OpenWhispr', url: 'https://openwhispr.com', tekst: 'Gratis en open source.' },
 ];
@@ -109,7 +109,11 @@ export function StartpakketPagina() {
 
         <section className="mb-12">
           <h2 className="hp-display mb-2 text-[28px] font-semibold leading-tight text-[#1A2D63]">Praten in plaats van typen</h2>
-          <p className="mb-6 text-[16px] leading-relaxed">Je praat drie keer sneller dan je typt, en je geeft vanzelf meer context.</p>
+          <p className="mb-3 text-[16px] leading-relaxed">Praten gaat tot drie keer sneller dan typen op je gsm, en je geeft vanzelf meer context.</p>
+          <p className="mb-6 text-[16px] leading-relaxed">
+            Gratis en al ingebouwd: de microfoon op het toetsenbord van je gsm, Windows-toets + H op Windows, en op een Mac
+            de microfoontoets (of twee keer Fn). Wil je meer, dan zijn er deze apps:
+          </p>
           <ul className="space-y-3">
             {TOOLS.map((tool) => (
               <li key={tool.naam} className="hp-card p-4">
