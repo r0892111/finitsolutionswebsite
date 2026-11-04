@@ -12,7 +12,7 @@ Reken op 20 à 30 minuten voor het basisdeel. De rest kies je zelf, nu of later.
 
 ## Praten in plaats van typen
 
-- **Wispr Flow** (betalend, wat wij gebruiken): [wisprflow.ai](https://wisprflow.ai). Mac, Windows, iPhone, Android.
+- **Wispr Flow** (wat wij gebruiken; gratis met een woordlimiet per week, onbeperkt is betalend): [wisprflow.ai](https://wisprflow.ai). Mac, Windows, iPhone, Android.
 - **Handy** (gratis, open source, draait volledig op je eigen computer): [handy.computer](https://handy.computer)
 - **OpenWhispr** (gratis, open source): [openwhispr.com](https://openwhispr.com)
 
@@ -82,8 +82,8 @@ Een goede skill is geen instructie van drie regels. Schrijf een volledig skill-b
 Voer de skill uit op een echt voorbeeld van de gebruiker. Toon het resultaat en stel twee à drie gerichte vragen ("Is de toon juist? Mis je iets? Is het te lang?"). Verbeter daarna **het skill-bestand zelf**, niet alleen dit ene resultaat, zodat het de volgende keer meteen goed is. Doe minstens één verbeterronde, en herhaal tot de gebruiker tevreden is.
 
 **6. Bewaar het en leg uit hoe het werkt.**
-- **Claude Code of Cowork**: bewaar het als `~/.claude/skills/<naam>/SKILL.md`, met bovenaan `name:` en een `description:` die duidelijk zegt wanneer de skill moet starten. Zo werkt hij in elk gesprek.
-- **Claude-app**: maak er een skill van via de ingebouwde skillfunctie (Instellingen, Capabilities, Skills), of zet de tekst in een Project.
+- **Claude Code**: bewaar het als `~/.claude/skills/<naam>/SKILL.md`, met bovenaan `name:` en een `description:` die duidelijk zegt wanneer de skill moet starten. Zo werkt hij in elk gesprek.
+- **Cowork of de Claude-app**: voeg de skill toe via Customize, Skills (het maken van bestanden moet aan staan bij Instellingen, Capabilities), of zet de tekst in een Project.
 - **ChatGPT**: zet het in een Project of een eigen GPT, met de volledige tekst als instructies.
 Sluit af met: hoe de gebruiker hem oproept (het exacte woord of de zin), wat hij moet meegeven, en waar het bestand staat om het later aan te passen.
 
@@ -136,7 +136,7 @@ Vraag, één per één, naar:
 Vraag door als een antwoord vaag is ("Kan je een voorbeeld geven?"). Vat daarna alles samen in een profiel met kopjes, toon het, en vraag: "Klopt dit? Wat ontbreekt of moet anders?" Pas aan tot de gebruiker tevreden is.
 
 **Bewaren:**
-- Cowork of Code: sla op als `Mijn AI/profiel.md`. Voeg in `CLAUDE.md` in die map een verwijzing toe, zodat je het profiel bij elk gesprek in die map leest.
+- Cowork of Code: sla op als `Mijn AI/profiel.md`. Zet in `CLAUDE.md` in die map de regel `@profiel.md`, zodat je het profiel bij elk gesprek in die map leest.
 - Claude-chat of ChatGPT: sla de kern op in je geheugen ("onthoud dit") en toon waar de gebruiker het geheugen kan nakijken in de instellingen.
 
 ---
@@ -161,7 +161,7 @@ Werkafspraken voor elk gesprek:
 
 **Vastzetten:**
 - Cowork of Code: zet de tekst in `Mijn AI/CLAUDE.md`. Leg uit: "Dit bestand lees ik automatisch bij elk gesprek in deze map."
-- Claude-chat: toon de gebruiker waar de persoonlijke voorkeuren staan in de instellingen (Instellingen, Algemeen of Profiel, het veld voor instructies) en laat hem de tekst daar plakken.
+- Claude-chat: toon de gebruiker waar de persoonlijke voorkeuren staan in de instellingen (Instellingen, Your Claude, het veld Instructions) en laat hem de tekst daar plakken.
 - ChatGPT: Instellingen, Personalisatie, Aangepaste instructies.
 
 Test het meteen: vraag de gebruiker iets vaags te vragen (bijvoorbeeld "Schrijf een LinkedIn-post") en toon dat je nu eerst vragen stelt.
@@ -193,7 +193,7 @@ Schrijf daarna per soort mail een testmail in zijn stijl. Vraag door: schrijft h
 
 **Doel:** elke werkdag een overzicht van de mailbox, met antwoorden klaar als concept.
 
-Voorwaarde: de mailkoppeling staat aan. Zo niet, leg uit waar de gebruiker ze aanzet (Instellingen, Connectors of Koppelingen) en wacht. Doe C eerst, anders klinken de concepten niet als de gebruiker.
+Voorwaarde: de mailkoppeling staat aan. Zo niet, leg uit waar de gebruiker ze aanzet (in Claude: Customize, Connectors; in ChatGPT: Instellingen, Apps) en wacht. Doe C eerst, anders klinken de concepten niet als de gebruiker.
 
 Volg de bouwmethode. Bekijk eerst (alleen lezen, na akkoord) de mails van de laatste twee weken, zodat je vragen gaan over zijn echte mailbox en niet over een mailbox in het algemeen. Vraag daarna minstens, één per één:
 1. Welke soorten mails krijg je vooral? Stel op basis daarvan 4 à 6 labels voor (bijvoorbeeld: Klant, Offerte, Factuur, Intern, Nieuwsbrief, Actie nodig).
@@ -234,7 +234,7 @@ Maak uitnodigingen altijd eerst als voorstel. Pas na akkoord zet je ze in de age
 
 ### F. Je bestanden opruimen
 
-Alleen in Cowork of Code (of met een Drive- of SharePoint-koppeling).
+Alleen in Cowork of Code (of met de Google Drive-koppeling; bij OneDrive of SharePoint moet je beheerder eerst de schrijfrechten aanzetten).
 
 1. Vraag welke map het rommeligst is (meestal Downloads of Bureaublad). Begin klein: één map.
 2. Bekijk de inhoud. **Alleen lezen.**
@@ -344,7 +344,7 @@ Zoek [soort bedrijven, bv. HVAC-installateurs] binnen [50] km van [gemeente]. Ma
 
 **Bedrijven kwalificeren**
 ```
-Hier is een lijst met bedrijfsnamen. Zoek per bedrijf de website en het ondernemingsnummer, en haal de belangrijkste cijfers uit de KBO of de jaarrekening. Rangschik ze volgens [mijn criteria] en zeg waarom.
+Hier is een lijst met bedrijfsnamen. Zoek per bedrijf de website en het ondernemingsnummer, en haal de belangrijkste cijfers uit hun jaarrekening bij de Nationale Bank. Vind je iets niet, laat het dan leeg in plaats van te gokken. Rangschik ze volgens [mijn criteria] en zeg waarom.
 ```
 
 **Van foto naar post**
@@ -354,7 +354,7 @@ Hier is een foto van [klus, bv. een geplaatste keuken in Gent]. Zet mijn logo al
 
 **Leer van je concurrenten**
 ```
-Dit zijn drie concurrenten: [namen + websites]. Bekijk hun website, LinkedIn, sociale media en Google-reviews.
+Dit zijn drie concurrenten: [namen + websites]. Bekijk hun website en hun Google-reviews. Hieronder plak ik een paar van hun posts (LinkedIn kan AI niet openen).
 Welke onderwerpen, captions en oproepen gebruiken ze? Wat slaat aan? Waar klagen hun klanten over? Maak een SWOT van hen en van mij, en geef me een rapport. Daarna werken we samen een contentplan voor drie maanden uit: stel me vragen en zeg welke foto's ik moet voorzien.
 ```
 
@@ -363,7 +363,7 @@ Welke onderwerpen, captions en oproepen gebruiken ze? Wat slaat aan? Waar klagen
 In bijlage [mijn resultatenrekening / financieel model / bankuittreksels].
 Stap 1: vat in vijf zinnen samen hoe het gaat, in gewone taal.
 Stap 2: waar lekt er geld weg?
-Stap 3: maak een extra tabblad met grafieken van de cashflow per maand, vergeleken met vorig jaar.
+Stap 3: maak een Excel met een grafiek van de cashflow per maand. Zitten er cijfers van vorig jaar bij, vergelijk dan met vorig jaar.
 Stap 4: geef drie vragen die ik aan mijn boekhouder kan stellen.
 Doe de stappen na elkaar en wacht na elke stap op mijn "ok".
 ```
@@ -380,12 +380,12 @@ Scan mijn mailbox van de laatste twee weken. Zijn er mails waar ik nog niet op a
 
 **Facturen voor je boekhouder**
 ```
-Scan mijn mailbox van [het derde kwartaal]. Haal alle facturen (PDF-bijlagen) eruit en zet ze in de map [Documenten/Facturen Q3], met als bestandsnaam datum_leverancier_bedrag. Zet daarna een mail naar mijn boekhouder klaar als concept. Verstuur niets.
+Scan mijn mailbox van [het derde kwartaal]. Maak een lijst van alle mails met een factuur als bijlage: datum, leverancier en bedrag. Zet daarna een mail naar mijn boekhouder klaar als concept, met die lijst. De pdf's voeg ik zelf toe. Verstuur niets.
 ```
 
 **Een contract invullen vanuit je template**
 ```
-Hier is onze template [NDA / verwerkersovereenkomst / offerte]. Vul hem in voor [bedrijfsnaam]. Zoek hun officiële gegevens (adres, ondernemingsnummer) op in de KBO. Het contract is voor [doel]. Zet het daarna als bijlage in een conceptmail naar [persoon]. Verstuur niets.
+Hier is onze template [NDA / verwerkersovereenkomst / offerte]. Vul hem in voor [bedrijfsnaam]. Zoek hun officiële gegevens (adres, ondernemingsnummer) op in de KBO. Het contract is voor [doel]. Zet daarna een conceptmail naar [persoon] klaar. Het contract voeg ik zelf toe als bijlage. Verstuur niets.
 ```
 
 **Offertes vragen en vergelijken**
@@ -394,7 +394,7 @@ Ik zoek [dienst, bv. een dakwerker voor 200 m² plat dak] in [regio], budget [be
 Later: Hier zijn de offertes die binnenkwamen. Zet ze in een vergelijkings-Excel (prijs, startdatum, garantie, voorwaarden) en zeg welke jij zou kiezen en waarom.
 ```
 
-**Op eender welke website (met de Claude-extensie voor Chrome)**
+**Op de meeste websites (met Claude in Chrome, vanaf een betaald abonnement)**
 ```
 Ga door [deze lijst / deze pagina]. Zet alle [soort bedrijven] uit [regio] in een lijst met naam, website en gemeente, en geef me een Excel.
 ```
@@ -406,12 +406,12 @@ Ik ben niet technisch. Ik zou graag [wat je wil] doen. Kan jij dat? Wat is er no
 
 **Een brainstorm structureren**
 ```
-Hier is de opname van onze brainstorm. Denk niet mee en voeg geen eigen ideeën toe. Structureer alles in een overzichtelijk schema: thema's, beslissingen, open vragen, wie doet wat. Stel me vragen waar iets onduidelijk is.
+Hier is de transcriptie van onze brainstorm. Denk niet mee en voeg geen eigen ideeën toe. Structureer alles in een overzichtelijk schema: thema's, beslissingen, open vragen, wie doet wat. Stel me vragen waar iets onduidelijk is.
 ```
 
 **Een probleem oplossen**
 ```
-Ik twijfel over [probleem]. Mijn einddoel is [doel]. Doe grondige research en raadpleeg minstens 50 bronnen. Geef me de mogelijke oplossingen met voor- en nadelen, en zeg welke jij zou kiezen.
+Ik twijfel over [probleem]. Mijn einddoel is [doel]. Doe grondige research met zoveel mogelijk betrouwbare bronnen, en zet bij elke bron de link. Geef me de mogelijke oplossingen met voor- en nadelen, en zeg welke jij zou kiezen.
 ```
 
 **Een presentatie maken**

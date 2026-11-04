@@ -11,8 +11,8 @@
     },
     {
       "titel": "Van foto naar post",
-      "uitleg": "Voeg je foto en je logo toe als bijlage.",
-      "tekst": "Hier is een foto van [klus, bv. een geplaatste keuken in Gent]. Zet mijn logo als watermerk rechtsonder. Schrijf er een korte post bij in mijn stijl: wat we deden, voor wie, en één oproep. Geef 2 versies."
+      "uitleg": "Voeg je foto en je logo toe als bijlage. Lukt het logo niet mooi, zet het er dan zelf op, bijvoorbeeld in Canva.",
+      "tekst": "Hier is een foto van [klus, bv. een geplaatste keuken in Gent]. Zet mijn logo rechtsonder op de foto, zonder de foto zelf te veranderen. Schrijf er een korte post bij in mijn stijl: wat we deden, voor wie, en één oproep. Geef 2 versies."
     },
     {
       "titel": "Een presentatie maken",
@@ -21,7 +21,8 @@
     },
     {
       "titel": "Leer van je concurrenten",
-      "tekst": "Dit zijn drie concurrenten: [namen + websites]. Bekijk hun website, LinkedIn, sociale media en Google-reviews.\nWelke onderwerpen, captions en oproepen gebruiken ze? Wat slaat aan? Waar klagen hun klanten over? Maak een SWOT van hen en van mij, en geef me een rapport. Daarna werken we samen een contentplan voor drie maanden uit: stel me vragen en zeg welke foto's ik moet voorzien."
+      "tekst": "Dit zijn drie concurrenten: [namen + websites]. Bekijk hun website en hun Google-reviews. Hieronder plak ik een paar van hun posts.\nWelke onderwerpen, captions en oproepen gebruiken ze? Wat slaat aan? Waar klagen hun klanten over? Maak een SWOT van hen en van mij, en geef me een rapport. Daarna werken we samen een contentplan voor drie maanden uit: stel me vragen en zeg welke foto's ik moet voorzien.",
+      "uitleg": "Zet eerst Deep research aan (ChatGPT) of Research (Claude). AI kan LinkedIn niet openen en ziet weinig achter een login: plak dus zelf een paar van hun posts onder de prompt."
     }
   ]
 }

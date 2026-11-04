@@ -15,11 +15,12 @@
     },
     {
       "titel": "Een probleem oplossen",
-      "tekst": "Ik twijfel over [probleem]. Mijn einddoel is [doel]. Doe grondige research en raadpleeg minstens 50 bronnen. Geef me de mogelijke oplossingen met voor- en nadelen, en zeg welke jij zou kiezen."
+      "tekst": "Ik twijfel over [probleem]. Mijn einddoel is [doel]. Doe grondige research met zoveel mogelijk betrouwbare bronnen, en zet bij elke bron de link. Geef me de mogelijke oplossingen met voor- en nadelen, en zeg welke jij zou kiezen.",
+      "uitleg": "Zet eerst Deep research aan (ChatGPT) of Research (Claude)."
     },
     {
       "titel": "6 werkafspraken voor elk gesprek",
-      "uitleg": "Zet deze tekst één keer vast, dan gelden de afspraken bij elke vraag. In ChatGPT: Instellingen, Personalisatie, Aangepaste instructies. In Claude: bij je instellingen, in het veld voor instructies. Test het meteen: vraag iets vaags, zoals \"Schrijf een LinkedIn-post\". Stelt hij eerst vragen? Dan werkt het.",
+      "uitleg": "Zet deze tekst één keer vast, dan gelden de afspraken bij elke vraag. In ChatGPT: Instellingen, Personalisatie, Aangepaste instructies. In Claude: Instellingen, Your Claude, Instructions. Test het meteen in een nieuw gesprek: vraag iets vaags, zoals \"Schrijf een LinkedIn-post\". Stelt hij eerst vragen? Dan werkt het.",
       "tekst": "Werkafspraken voor elk gesprek:\n1. Is mijn vraag onduidelijk of mis je informatie? Stel dan eerst je vragen, één per één, voor je begint.\n2. Bij een grote opdracht: geef eerst een kort plan en wacht op mijn akkoord.\n3. Geef me niet zomaar gelijk. Zie je een fout, een risico of een beter idee, zeg het dan direct, met argumenten.\n4. Zeg het eerlijk als je iets niet zeker weet, en zeg welke delen ik moet nakijken (cijfers, namen, bronnen, prijzen).\n5. Schrijf zoals een mens: kort, concreet, in gewone taal. Geen holle zinnen, geen overdreven opsommingen, geen gedachtestreepjes, geen emoji's tenzij ik erom vraag.\n6. Verwijder of verstuur nooit iets zonder mijn uitdrukkelijke akkoord."
     }
   ]

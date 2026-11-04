@@ -7,13 +7,13 @@
   "prompts": [
     {
       "titel": "Een leadlijst",
-      "uitleg": "Stap 1: vraag AI om de lijst.",
+      "uitleg": "Stap 1: zet eerst Deep research aan (ChatGPT) of Research (Claude) en vraag AI om de lijst. Kijk telefoonnummers en e-mailadressen na voor je belt of mailt.",
       "tekst": "Zoek [soort bedrijven, bv. HVAC-installateurs] binnen [50] km van [gemeente]. Maak een Excel met naam, website, telefoon, algemeen e-mailadres en gemeente. Zet een vraagteken waar je twijfelt."
     },
     {
       "titel": "Bedrijven kwalificeren",
       "uitleg": "Stap 2 en 3: schrijf op welke klant bij je past (sector, grootte, regio) en vul dat in bij [mijn criteria]. Plak daarna de lijst uit stap 1.",
-      "tekst": "Hier is een lijst met bedrijfsnamen. Zoek per bedrijf de website en het ondernemingsnummer, en haal de belangrijkste cijfers uit de KBO of de jaarrekening. Rangschik ze volgens [mijn criteria] en zeg waarom."
+      "tekst": "Hier is een lijst met bedrijfsnamen. Zoek per bedrijf de website en het ondernemingsnummer, en haal de belangrijkste cijfers uit hun jaarrekening bij de Nationale Bank. Vind je iets niet, laat het dan leeg in plaats van te gokken. Rangschik ze volgens [mijn criteria] en zeg waarom."
     }
   ]
 }

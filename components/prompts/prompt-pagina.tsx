@@ -7,7 +7,7 @@ import type { PromptPagina as Pagina } from '@/lib/prompts';
 import { KopieerKnop } from './kopieer-knop';
 
 const TIP_ALGEMEEN =
-  'Vul in wat tussen [haakjes] staat. Eindig een prompt met "Stel me eerst je vragen." Dan vraagt de AI eerst wat hij nog moet weten.';
+  'Ze werken in ChatGPT en Claude, en ook in Gemini of Copilot. Vul in wat tussen [haakjes] staat. Eindig een prompt met "Stel me eerst je vragen." Dan vraagt de AI eerst wat hij nog moet weten.';
 
 /** Toont de prompt zoals hij gekopieerd wordt, met wat je zelf invult ([…]) in het geel. */
 function PromptTekst({ tekst }: { tekst: string }) {

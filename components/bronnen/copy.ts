@@ -67,7 +67,7 @@ export const BRONNEN = {
       wie: "Google Cloud",
       tekst:
         "Werkt aan een open formaat om kennis op te slaan, zodat zowel mensen als AI-agents ze kunnen lezen: gewoon een map met tekstbestanden.",
-      url: "https://github.com/GoogleCloudPlatform/knowledge-catalog",
+      url: "https://github.com/GoogleCloudPlatform/open-knowledge-format",
       site: "GitHub",
     },
     {
@@ -108,8 +108,8 @@ export const BRONNEN = {
     {
       cijfer: "72%",
       tekst:
-        "72% van de techbeslissers vindt dat hun AI-projecten tekortschieten. De oorzaak ligt volgens hen bijna altijd bij een slechte basis van data.",
-      bron: "Enquête van The Harris Poll voor Collibra, bij 306 managers in de VS (2026)",
+        "72% van de techbeslissers zegt: als hun AI-projecten tekortschieten, ligt dat bijna altijd aan een slechte basis van data.",
+      bron: "Enquête van The Harris Poll voor Collibra, bij 306 beslissers (directeur of hoger) in de VS (2026)",
       url: "https://www.collibra.com/company/newsroom/press-releases/new-survey-from-collibra-by-the-harris-poll-finds-72-of-tech-decision-makers-feel-ai-initiatives",
       site: "Collibra",
     },
