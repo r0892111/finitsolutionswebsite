@@ -135,7 +135,10 @@ export function HubPagina() {
     };
     return Array.from(new Set(resources.map((r) => r.soort))).sort((a, b) => plek(a) - plek(b));
   }, [resources]);
-  const zichtbaar = filter ? resources.filter((r) => r.soort === filter) : resources;
+  // Komt iemand van een post (?reel=C03) en hoort er een resource bij, dan staat die bovenaan.
+  const uitPost = herkomst.reel ? resources.find((r) => r.reel?.toUpperCase() === herkomst.reel) : undefined;
+  const gefilterd = filter ? resources.filter((r) => r.soort === filter) : resources;
+  const zichtbaar = uitPost && gefilterd.includes(uitPost) ? [uitPost, ...gefilterd.filter((r) => r !== uitPost)] : gefilterd;
 
   return (
     <main className="min-h-screen bg-white text-[#3D4766]">
@@ -149,6 +152,20 @@ export function HubPagina() {
             {HUB.titel[0]} <Onder wit>{HUB.titel[1]}</Onder>
           </h1>
           <p className="mt-3 text-[1.125rem] text-white/90 sm:text-center">{HUB.intro}</p>
+
+          {uitPost && (
+            <a
+              href={uitPost.url}
+              onClick={() => pushEvent("hub_klik", metHerkomst(herkomst, { keuze: "uit_post", resource: uitPost.id }))}
+              className="group mt-8 flex items-center gap-4 rounded-2xl bg-[#FBE286] p-4 text-[#1A2D63] shadow-[0_10px_30px_-12px_rgba(0,0,0,0.45)] transition-transform hover:-translate-y-0.5 sm:mx-auto sm:max-w-[36rem] sm:p-5"
+            >
+              <span className="min-w-0 flex-1">
+                <span className="block text-[0.8125rem] font-semibold uppercase tracking-[0.12em]">{HUB.uitPost}</span>
+                <span className="hp-display hp-display-sm mt-1 block text-[1.375rem] font-semibold leading-[1.2]">{uitPost.titel}</span>
+              </span>
+              <ArrowRight className="h-5 w-5 flex-none transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+            </a>
+          )}
 
           <nav aria-label="Kies wat je zoekt" className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4">
             {HUB.menu.map((m) => {
@@ -338,6 +355,7 @@ export function HubPagina() {
                 <li key={r.id}>
                   <ResourceKaart
                     resource={r}
+                    uitPost={r === uitPost}
                     onKlik={() => pushEvent("hub_klik", metHerkomst(herkomst, { keuze: "resource", resource: r.id }))}
                   />
                 </li>
@@ -406,7 +424,7 @@ function Keuzekaart({
   );
 }
 
-function ResourceKaart({ resource: r, onKlik }: { resource: Resource; onKlik: () => void }) {
+function ResourceKaart({ resource: r, uitPost = false, onKlik }: { resource: Resource; uitPost?: boolean; onKlik: () => void }) {
   // Pdf's en externe pagina's in een nieuw tabblad, zodat de hub open blijft.
   const nieuwTab = r.url.startsWith("https://") || r.url.toLowerCase().endsWith(".pdf");
   const knop = HUB.openKnop[r.soort] ?? HUB.openKnop.standaard;
@@ -416,10 +434,15 @@ function ResourceKaart({ resource: r, onKlik }: { resource: Resource; onKlik: ()
       href={r.url}
       onClick={onKlik}
       {...(nieuwTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="group flex h-full flex-col rounded-2xl border border-[#D5DCEA] bg-white p-5 transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-[#1A2D63]/50 hover:shadow-[0_16px_36px_-20px_rgba(26,45,99,0.35)] sm:p-6"
+      className={`group flex h-full flex-col rounded-2xl border bg-white p-5 transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-[#1A2D63]/50 hover:shadow-[0_16px_36px_-20px_rgba(26,45,99,0.35)] sm:p-6 ${
+        uitPost ? "border-2 border-[#1A2D63]" : "border-[#D5DCEA]"
+      }`}
     >
-      <span className={`self-start rounded-full px-3 py-1 text-[0.8125rem] font-semibold ${SOORT_KLEUR[r.soort] ?? SOORT_KLEUR.gids}`}>
-        {soortLabel(r.soort)}
+      <span className="flex flex-wrap items-center gap-2">
+        <span className={`rounded-full px-3 py-1 text-[0.8125rem] font-semibold ${SOORT_KLEUR[r.soort] ?? SOORT_KLEUR.gids}`}>
+          {soortLabel(r.soort)}
+        </span>
+        {uitPost && <span className="text-[0.8125rem] font-semibold text-[#1A2D63]">{HUB.uitPost}</span>}
       </span>
       <span className="hp-display hp-display-sm mt-3 text-[1.3125rem] font-semibold leading-[1.2] text-[#1A2D63]">{r.titel}</span>
       {r.beschrijving && <span className="mt-2 flex-1 text-[1rem] leading-[1.6]">{r.beschrijving}</span>}

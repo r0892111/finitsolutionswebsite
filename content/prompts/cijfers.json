@@ -1,0 +1,14 @@
+{
+  "slug": "cijfers",
+  "reel": "C06",
+  "kicker": "1 prompt · in 4 stappen",
+  "titel": "Je cijfers in gewone taal, met ChatGPT",
+  "intro": "Eén prompt die je cijfers uitlegt in gewone taal: hoe het gaat, waar er geld weglekt, je cashflow per maand en drie vragen voor je boekhouder.",
+  "tip": "Zet eerst in de instellingen van ChatGPT of Claude uit dat je gesprekken gebruikt worden om de AI te trainen. Sleep daarna je Excel of pdf in het gesprek.",
+  "prompts": [
+    {
+      "titel": "Je cijfers begrijpen",
+      "tekst": "In bijlage [mijn resultatenrekening / financieel model / bankuittreksels].\nStap 1: vat in vijf zinnen samen hoe het gaat, in gewone taal.\nStap 2: waar lekt er geld weg?\nStap 3: maak een extra tabblad met grafieken van de cashflow per maand, vergeleken met vorig jaar.\nStap 4: geef drie vragen die ik aan mijn boekhouder kan stellen.\nDoe de stappen na elkaar en wacht na elke stap op mijn \"ok\"."
+    }
+  ]
+}

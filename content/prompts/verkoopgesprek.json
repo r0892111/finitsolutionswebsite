@@ -1,0 +1,24 @@
+{
+  "slug": "verkoopgesprek",
+  "reel": "C03",
+  "kicker": "3 prompts · verkoop",
+  "titel": "Laat AI je verkoopgesprek voorbereiden en je offerte invullen",
+  "intro": "Drie prompts voor je volgende verkoopgesprek: ervoor, tijdens het oefenen, en erna.",
+  "prompts": [
+    {
+      "titel": "Voorbereiding van een verkoopgesprek",
+      "uitleg": "Voeg je pitch deck of je aanbod toe als bijlage.",
+      "tekst": "Ik heb [datum] een gesprek met [bedrijf], ondernemingsnummer [nummer], website [url]. In bijlage mijn pitch deck of aanbod.\nZoek de firma op: wat doen ze, hoe groot zijn ze, wat speelt er (nieuws, vacatures, cijfers)? Zeg waar mijn aanbod aansluit en waar niet. Stel me vijf vragen om me voor te bereiden, en maak een versie van mijn pitch deck die op deze klant is afgestemd."
+    },
+    {
+      "titel": "Oefen een moeilijk gesprek",
+      "uitleg": "Typ \"stop\" als je feedback wil.",
+      "tekst": "We oefenen een verkoopgesprek. Jij speelt [klant, bv. de zaakvoerder van een bakkerij] die mijn offerte van [bedrag] te duur vindt. Blijf in je rol en geef me niet te snel gelijk. Als ik \"stop\" zeg, geef je me feedback: wat deed ik goed, wat kon beter, welke zin had ik beter anders gezegd?"
+    },
+    {
+      "titel": "Een contract invullen vanuit je template",
+      "uitleg": "Voeg je eigen template toe als bijlage. Werkt als je AI toegang heeft tot je mailbox, bijvoorbeeld Claude met Gmail gekoppeld.",
+      "tekst": "Hier is onze template [NDA / verwerkersovereenkomst / offerte]. Vul hem in voor [bedrijfsnaam]. Zoek hun officiële gegevens (adres, ondernemingsnummer) op in de KBO. Het contract is voor [doel]. Zet het daarna als bijlage in een conceptmail naar [persoon]. Verstuur niets."
+    }
+  ]
+}

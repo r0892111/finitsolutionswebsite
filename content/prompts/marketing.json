@@ -1,0 +1,27 @@
+{
+  "slug": "marketing",
+  "reel": "C04",
+  "kicker": "4 prompts · marketing",
+  "titel": "4 prompts waarmee AI je posts en je presentatie maakt",
+  "intro": "Marketing zonder marketeer: een post die klinkt als jij, een post bij je foto, een presentatie en wat je concurrenten beter doen.",
+  "prompts": [
+    {
+      "titel": "Een post die klinkt als jij",
+      "tekst": "Je bent een ervaren marketeer voor kleine Vlaamse bedrijven.\nContext: [bedrijf] doet [wat] voor [klanten] in [regio]. Met deze post willen we [doel].\nZo klinken we: [plak een post die je goed vindt].\nGeef 3 versies van maximaal 120 woorden. Spreektaal, geen emoji-regen, eindig met één duidelijke oproep.\nStel me eerst je vragen."
+    },
+    {
+      "titel": "Van foto naar post",
+      "uitleg": "Voeg je foto en je logo toe als bijlage.",
+      "tekst": "Hier is een foto van [klus, bv. een geplaatste keuken in Gent]. Zet mijn logo als watermerk rechtsonder. Schrijf er een korte post bij in mijn stijl: wat we deden, voor wie, en één oproep. Geef 2 versies."
+    },
+    {
+      "titel": "Een presentatie maken",
+      "uitleg": "Typen hoeft niet: spreek je idee in en plak de tekst onderaan.",
+      "tekst": "Maak een presentatie van [aantal] slides voor [publiek] over [onderwerp]. Hieronder staat wat ik erover ingesproken heb. Eén idee per slide, weinig tekst, en sprekersnotities per slide.\n[plak je ingesproken tekst]"
+    },
+    {
+      "titel": "Leer van je concurrenten",
+      "tekst": "Dit zijn drie concurrenten: [namen + websites]. Bekijk hun website, LinkedIn, sociale media en Google-reviews.\nWelke onderwerpen, captions en oproepen gebruiken ze? Wat slaat aan? Waar klagen hun klanten over? Maak een SWOT van hen en van mij, en geef me een rapport. Daarna werken we samen een contentplan voor drie maanden uit: stel me vragen en zeg welke foto's ik moet voorzien."
+    }
+  ]
+}
