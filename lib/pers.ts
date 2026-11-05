@@ -22,6 +22,11 @@ export interface PersArtikel {
   citaat: string;
   citaatVan: string;
   foto?: { src: string; alt: string; credit: string };
+  /**
+   * De foto in het persblok op de homepage, als die anders is dan `foto`. `watermerkBoven`
+   * zet de naam van de fotograaf rechtsboven, als er rechtsonder iets lichts of iemand staat.
+   */
+  blokFoto?: { src: string; alt: string; credit: string; watermerkBoven?: boolean };
 }
 
 export const PERS: PersArtikel[] = [
@@ -41,6 +46,14 @@ export const PERS: PersArtikel[] = [
       src: "/pers/hln-vleeshalle-800.jpg",
       alt: "Het team van Finit Solutions op een balkon in de Vleeshalle, met een Finit-vlag.",
       credit: "© David Legreve",
+    },
+    // De tweede foto uit het artikel: de drie vennoten in het kantoor naast de vlag (Alex 5/11).
+    // Rechtsonder ligt de witte vlag, dus het watermerk staat rechtsboven tegen het plafond.
+    blokFoto: {
+      src: "/pers/hln-vennoten.jpg",
+      alt: "Karel Van Ransbeeck, Alex Otten en Jord Goossens, de vennoten van Finit, in hun kantoor in De Vleeshalle naast de Finit-vlag.",
+      credit: "© David Legreve",
+      watermerkBoven: true,
     },
   },
 ];

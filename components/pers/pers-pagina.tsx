@@ -10,7 +10,7 @@ import Image from "next/image";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
 import { SiteFooter } from "@/components/home/site-footer";
 import { SiteHeader } from "@/components/home/site-header";
-import { CONTAINER, H2, LEAD, Onder } from "@/components/home/ui";
+import { CONTAINER, H2, LEAD, Onder, Watermerk } from "@/components/home/ui";
 import { pushEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { PERS, datumNL } from "@/lib/pers";
@@ -43,7 +43,7 @@ export function PersPagina() {
                     {a.foto && (
                       <div className="relative aspect-[3/2] md:aspect-auto md:min-h-[16rem]">
                         <Image src={a.foto.src} alt={a.foto.alt} fill sizes="(min-width: 768px) 28rem, 100vw" className="object-cover" />
-                        <span className="pointer-events-none absolute bottom-2 right-3 select-none text-[0.6875rem] font-medium tracking-wide text-white/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.7)] sm:bottom-3 sm:right-4 sm:text-[0.75rem]">{a.foto.credit}</span>
+                        <Watermerk>{a.foto.credit}</Watermerk>
                       </div>
                     )}
                     <div className="flex flex-col p-6 sm:p-8">

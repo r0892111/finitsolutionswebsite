@@ -115,3 +115,18 @@ export function ContactKnop({
     </a>
   );
 }
+
+/**
+ * De naam van de fotograaf als klein watermerk op een foto ("© naam", Alex 5/11). Staat in de
+ * hoek waar niemand staat: standaard rechtsonder, met `boven` rechtsboven. De foto eromheen
+ * moet `relative` zijn.
+ */
+export function Watermerk({ children, boven = false }: { children: React.ReactNode; boven?: boolean }) {
+  return (
+    <span
+      className={`pointer-events-none absolute right-3 select-none text-[0.6875rem] font-medium tracking-wide text-white/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.7)] sm:right-4 sm:text-[0.75rem] ${boven ? "top-2 sm:top-3" : "bottom-2 sm:bottom-3"}`}
+    >
+      {children}
+    </span>
+  );
+}

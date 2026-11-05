@@ -13,7 +13,7 @@ import { OplossingSectie } from "./oplossing-sectie";
 import { PersBlok } from "./pers-blok";
 import { SiteFooter } from "./site-footer";
 import { STAP_DETAILS } from "./stap-details";
-import { CONTAINER, ContactKnop, H2, H3, KOP, LEAD, START_HREF, StartKnop, Onder, Vinkje, trackStart } from "./ui";
+import { CONTAINER, ContactKnop, H2, H3, KOP, LEAD, START_HREF, StartKnop, Onder, Vinkje, Watermerk, trackStart } from "./ui";
 import {
   AANPAK_FOTO,
   CASES,
@@ -505,7 +505,7 @@ export function HomePage() {
                   className="object-cover"
                   style={{ objectPosition: "center 30%" }}
                 />
-                <span className="pointer-events-none absolute bottom-2 right-3 select-none text-[0.6875rem] font-medium tracking-wide text-white/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.7)] sm:bottom-3 sm:right-4 sm:text-[0.75rem]">{AANPAK_FOTO.fotoCredit}</span>
+                <Watermerk>{AANPAK_FOTO.fotoCredit}</Watermerk>
               </div>
               <div className="grid gap-5 px-5 pb-6 pt-6 sm:pt-7 lg:pt-9 sm:px-7 sm:pb-7 lg:grid-cols-[minmax(0,1fr)_23rem] lg:items-center lg:gap-10 lg:px-9 lg:pb-9">
                 <p className="hp-display text-balance text-[clamp(1.6rem,6vw,2.5rem)] font-bold leading-[1.08] text-[#1A2D63]">
