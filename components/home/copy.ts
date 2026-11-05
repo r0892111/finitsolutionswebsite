@@ -44,6 +44,8 @@ export const NAV_DESKTOP = [
 
 // Naar de pagina /vacatures (geen sectie op de homepage, dus een gewone link). Nieuw 29/10.
 export const NAV_VACATURES = { label: "Vacatures", href: "/vacatures" };
+// Naar de pagina /pers, met de persartikels uit lib/pers.ts. Nieuw 5/11.
+export const NAV_PERS = { label: "Pers", href: "/pers" };
 
 export const NAV_MOBIEL = [
   { label: "Home", id: "hero" },
@@ -127,8 +129,10 @@ export const BREIN_INFO: Record<string, BreinPagina> = {
 };
 
 // De teamfoto op de naad onder de hero. Geen sectiekop en geen "over ons": één statement
-// van hooguit acht woorden op de vervaagde linkerhelft, en het citaat van Y Combinator
-// over het "company brain" als steun. Nieuw (review 13/09), Karel koos het statement.
+// van hooguit acht woorden en het citaat van Y Combinator over het "company brain" als
+// steun, allebei onder de foto. Nieuw (review 13/09), Karel koos het statement.
+// Sinds 5/11 de foto uit het HLN-artikel, zonder waas of verloop: iedereen moet zichtbaar
+// zijn. De credit staat onder de foto. Toestemming van HLN of de fotograaf nog vragen.
 //
 // Andere kandidaten voor het statement:
 //   Straks werkt elk bedrijf met AI. Jij eerst.
@@ -152,8 +156,9 @@ export const AANPAK_FOTO = {
     logo: "/yc-logo.svg",
     logoNaam: "Y Combinator",
   },
-  foto: "/team-start-it-kbc.jpg",
-  fotoAlt: "Karel en Jort van Finit Solutions achter hun stand op een beurs.",
+  foto: "/pers/hln-vleeshalle.jpg",
+  fotoAlt: "Het team van Finit Solutions op een balkon in de Vleeshalle, met een Finit-vlag.",
+  fotoCredit: "Foto: David Legreve / HLN",
 };
 
 export type HerkenBeeld = "flessenhals" | "chatgpt" | "beginnen";
@@ -345,6 +350,7 @@ export const CASES = {
   h2: ["Wat we het vaakst", "bouwen"],
   lees: "Lees hoe het werkt",
   allesBekijken: "Bekijk alle oplossingen",
+  // De quote van Bas staat nog op /cases. Op de homepage staat sinds 5/11 het persblok (PERS_BLOK).
   quote: "Snelle oplevering, sympathieke gasten. Ik wist niet dat AI vandaag al zoveel werk kon overnemen!",
   naam: "Bas, PRS Rotselaar",
   foto: "/papa foto.jpg",
@@ -362,6 +368,13 @@ export const CASES = {
     jij: "Wat jij nog doet",
     gekoppeld: "Gekoppeld aan",
   },
+};
+
+// Het persblok onder de oplossingen: het nieuwste artikel uit lib/pers.ts. Nieuw 5/11.
+export const PERS_BLOK = {
+  label: "In de pers",
+  lees: "Lees het artikel",
+  alles: "Alle persartikels",
 };
 
 export type FaqBlok =
