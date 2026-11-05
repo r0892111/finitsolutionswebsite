@@ -48,7 +48,11 @@ export function PersPagina() {
                     )}
                     <div className="flex flex-col p-6 sm:p-8">
                       <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.875rem] text-[#6C7590]">
-                        <span className="rounded-[4px] bg-[#1A2D63] px-2 py-0.5 text-[0.8125rem] font-bold text-white">{a.medium}</span>
+                        {a.logo ? (
+                          <Image src={a.logo} alt={a.medium} width={32} height={32} className="h-8 w-8" />
+                        ) : (
+                          <span className="rounded-[4px] bg-[#1A2D63] px-2 py-0.5 text-[0.8125rem] font-bold text-white">{a.medium}</span>
+                        )}
                         <time dateTime={a.datum}>{datumNL(a.datum)}</time>
                         {a.auteur && <span>{PERS_PAGINA.door} {a.auteur}</span>}
                       </p>
