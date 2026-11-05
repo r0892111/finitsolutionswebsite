@@ -6,17 +6,17 @@ import { ArrowLeft, ArrowRight, ChevronDown, ChevronRight, Globe, Link2, Mail, M
 import { pushEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { Brein3D } from "./brein-3d";
-import { Getuigenis, OplossingCatalogus } from "./case-kaart";
+import { OplossingCatalogus } from "./case-kaart";
 import { ContactKaart } from "./contact-kaart";
 import { HerkenSectie } from "./herken-sectie";
 import { OplossingSectie } from "./oplossing-sectie";
+import { PersBlok } from "./pers-blok";
 import { SiteFooter } from "./site-footer";
 import { STAP_DETAILS } from "./stap-details";
-import { CONTAINER, ContactKnop, H2, H3, KOP, LEAD, START_HREF, StartKnop, Onder, Vinkje, trackStart } from "./ui";
+import { CONTAINER, ContactKnop, H2, H3, KOP, LEAD, START_HREF, StartKnop, Onder, Vinkje, Watermerk, trackStart } from "./ui";
 import {
   AANPAK_FOTO,
   CASES,
-  CTA_CONTACT,
   CTA_START,
   FOOTER,
   HERO,
@@ -24,6 +24,7 @@ import {
   MENU,
   NAV_DESKTOP,
   NAV_MOBIEL,
+  NAV_PERS,
   NAV_VACATURES,
   PRODUCTEN,
   PARTNER,
@@ -234,7 +235,7 @@ export function HomePage() {
   useEffect(() => {
     if (!mobileMenuOpen) return;
     document.body.style.overflow = "hidden";
-    const onResize = () => { if (window.innerWidth >= 1024) setMobileMenuOpen(false); };
+    const onResize = () => { if (window.innerWidth >= 1280) setMobileMenuOpen(false); };
     window.addEventListener("resize", onResize);
     return () => { document.body.style.overflow = ""; window.removeEventListener("resize", onResize); };
   }, [mobileMenuOpen]);
@@ -247,6 +248,8 @@ export function HomePage() {
     });
   }, []);
 
+  // De knop in de balk op mobiel: pas als het logo (bijna) zijn kleine maat heeft.
+  const toonMobieleKnop = !mobileMenuOpen && navScrollProgress > 0.8;
   const navBg = navScrollProgress > 0 ? `rgba(255,255,255,${0.86 * navScrollProgress})` : "transparent";
 
   return (
@@ -265,23 +268,25 @@ export function HomePage() {
         }}
       >
         <div
-          className="relative mx-auto flex max-w-[93.33rem] items-center justify-between px-4 sm:px-6"
+          className="relative mx-auto flex max-w-[93.33rem] items-center justify-between gap-3 px-4 sm:px-6 xl:grid xl:gap-6 xl:grid-cols-[1fr_auto_1fr]"
           style={{ paddingTop: `${12 + (1 - navScrollProgress) * 10}px`, paddingBottom: `${12 + (1 - navScrollProgress) * 10}px`, transition: "padding 0.3s" }}
         >
-          <button type="button" onClick={() => navigateToSection("hero")} className="flex shrink-0 items-center" aria-label="Finit Solutions, naar boven">
+          <button type="button" onClick={() => navigateToSection("hero")} className="flex min-w-0 items-center justify-self-start" aria-label="Finit Solutions, naar boven">
             <Image
               src="/Finit Logo Blue@4x.png"
               alt="Finit Logo"
               width={1698}
               height={480}
               priority
-              className="w-auto object-contain"
+              className="w-auto max-w-full object-contain object-left"
               style={{ height: `${28 + (1 - navScrollProgress) * 10}px`, transition: "height 0.3s" }}
             />
           </button>
 
-          {/* Desktop: Producten + secties */}
-          <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 whitespace-nowrap lg:flex xl:gap-7">
+          {/* Desktop: Producten + secties. Staat in het midden van een raster van drie kolommen (logo,
+              menu, knop) en niet meer los erboven: zo kan het menu nooit over de knop schuiven. Pas
+              vanaf 1280 px; smaller krijg je het hamburgermenu (5/11, er overlapte van alles). */}
+          <div className="hidden items-center gap-5 whitespace-nowrap xl:flex 2xl:gap-7">
             <div className="group relative">
               <button type="button" className="flex items-center gap-1 text-[0.9375rem] font-medium text-[#1A2D63]/80 transition-colors hover:text-[#1A2D63]">
                 {PRODUCTEN.label}
@@ -317,28 +322,36 @@ export function HomePage() {
             <a href={NAV_VACATURES.href} onClick={() => pushEvent("nav_click", { doel: "vacatures", location: "nav" })} className="text-[0.9375rem] font-medium text-[#1A2D63]/70 transition-colors hover:text-[#1A2D63]">
               {NAV_VACATURES.label}
             </a>
+            <a href={NAV_PERS.href} onClick={() => pushEvent("nav_click", { doel: "pers", location: "nav" })} className="text-[0.9375rem] font-medium text-[#1A2D63]/70 transition-colors hover:text-[#1A2D63]">
+              {NAV_PERS.label}
+            </a>
           </div>
 
-          {/* Desktop rechts: het startgesprek als de ene knop, contact als tekst (pas als er plaats is). */}
-          <div className="hidden items-center gap-5 whitespace-nowrap lg:flex">
-            <a href="/contact" onClick={() => pushEvent("cta_click", { cta_label: "contact", location: "nav" })} className="hidden text-[0.9375rem] font-medium text-[#1A2D63]/80 transition-colors hover:text-[#1A2D63] 2xl:block">
-              {CTA_CONTACT}
-            </a>
+          {/* Desktop rechts: het startgesprek als de ene knop. De tekstlink "Neem contact met ons op"
+              is weg (5/11): de tab Contact in het menu doet hetzelfde. */}
+          <div className="hidden items-center justify-self-end whitespace-nowrap xl:flex">
             <StartKnop location="nav" size="md" />
           </div>
 
-          {/* Mobiel: knop verschijnt bij het scrollen + hamburger */}
-          <div className="flex items-center gap-2 lg:hidden">
-            <a
-              href={START_HREF}
-              onClick={() => trackStart("mobile_nav")}
-              className="hp-btn hp-btn--accent hp-btn--sm transition-opacity duration-300"
-              style={{ opacity: mobileMenuOpen ? 0 : navScrollProgress, pointerEvents: !mobileMenuOpen && navScrollProgress > 0.5 ? "auto" : "none" }}
-              tabIndex={!mobileMenuOpen && navScrollProgress > 0.5 ? 0 : -1}
-            >
-              {CTA_START}
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </a>
+          {/* Mobiel: knop verschijnt bij het scrollen + hamburger. De knop neemt pas plaats in als hij
+              verschijnt (kolom van 0 naar volle breedte), zodat hij het hamburgermenu nooit uit beeld
+              duwt; het logo mag een fractie krimpen als het op een smal scherm krap wordt (5/11). */}
+          <div className="flex shrink-0 items-center gap-2 xl:hidden">
+            <div className="grid transition-[grid-template-columns] duration-300" style={{ gridTemplateColumns: toonMobieleKnop ? "1fr" : "0fr" }}>
+              <div className="min-w-0 overflow-hidden">
+                <a
+                  href={START_HREF}
+                  onClick={() => trackStart("mobile_nav")}
+                  className="hp-btn hp-btn--accent hp-btn--sm whitespace-nowrap transition-opacity duration-300"
+                  style={{ opacity: toonMobieleKnop ? 1 : 0, pointerEvents: toonMobieleKnop ? "auto" : "none" }}
+                  tabIndex={toonMobieleKnop ? 0 : -1}
+                  aria-hidden={!toonMobieleKnop}
+                >
+                  {CTA_START}
+                  <ArrowRight className="h-4 w-4 max-[399px]:hidden" aria-hidden="true" />
+                </a>
+              </div>
+            </div>
             <button
               type="button"
               onClick={() => setMobileMenuOpen((v) => !v)}
@@ -354,7 +367,7 @@ export function HomePage() {
 
       {/* Mobiel menu, schermvullend (opbouw van de vorige homepage) */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-30 lg:hidden">
+        <div className="fixed inset-0 z-30 xl:hidden">
           <div className="absolute inset-0 bg-white/95 backdrop-blur-xl" onClick={() => setMobileMenuOpen(false)} />
           <div className="relative z-10 flex h-full flex-col overflow-y-auto overscroll-contain px-6 pb-8 pt-24">
             <div className="mb-8 flex flex-col gap-3">
@@ -392,6 +405,14 @@ export function HomePage() {
                   className="flex w-full items-center justify-between border-b border-[#1A2D63]/10 py-4 text-[#1A2D63] transition-colors hover:text-[#475D8F]"
                 >
                   <span className="text-lg font-medium">{NAV_VACATURES.label}</span>
+                  <ChevronRight className="h-5 w-5 text-[#1A2D63]/30" aria-hidden="true" />
+                </a>
+                <a
+                  href={NAV_PERS.href}
+                  onClick={() => pushEvent("nav_click", { doel: "pers", location: "mobile_menu" })}
+                  className="flex w-full items-center justify-between border-b border-[#1A2D63]/10 py-4 text-[#1A2D63] transition-colors hover:text-[#475D8F]"
+                >
+                  <span className="text-lg font-medium">{NAV_PERS.label}</span>
                   <ChevronRight className="h-5 w-5 text-[#1A2D63]/30" aria-hidden="true" />
                 </a>
                 <a
@@ -466,37 +487,33 @@ export function HomePage() {
         {/* -------------------------------------------------------------- */}
         {/* 1b. De teamfoto op de naad onder de hero, met één statement    */}
         {/* -------------------------------------------------------------- */}
-        {/* Wit boven, grijs onder: de foto ligt op de overgang naar "Herken jij dit?". De
-            linkerhelft is vervaagd, zodat het statement er rechtstreeks op staat. Het citaat van
-            Y Combinator hangt als kaartje over de rechteronderhoek: half in de foto, half eronder
-            (op een smaller scherm staat het onder de foto). De foto knipt zichzelf af, het kaartje
-            staat erbuiten, zodat het niet mee afgeknipt wordt. */}
+        {/* Wit boven, grijs onder: de foto ligt op de overgang naar "Herken jij dit?". Sinds 5/11 de
+            foto uit het HLN-artikel, zonder waas, verloop of kaartje erover: iedereen moet goed
+            zichtbaar zijn. Het statement en het citaat van Y Combinator staan onder de foto. De naam
+            van de fotograaf staat als klein watermerk rechtsonder, waar niemand staat (Alex 5/11). Op
+            een telefoon toont de foto zijn volle breedte
+            (3:2); breder knipt hij alleen wat lucht boven en balkon onder weg. */}
         <div className="bg-[linear-gradient(to_bottom,#FFFFFF_0,#FFFFFF_50%,#F5F7FB_50%,#F5F7FB_100%)]">
-          <div className={`${CONTAINER} relative`}>
-            <Citaat className="hp-card absolute bottom-0 right-8 z-10 hidden w-[23rem] translate-y-1/2 p-5 lg:block xl:right-0" />
-            <div className="hp-card relative overflow-hidden">
-              <div className="relative aspect-[4/5] sm:aspect-[16/9] lg:aspect-[21/8]">
+          <div className={CONTAINER}>
+            <figure className="hp-card overflow-hidden">
+              <div className="relative aspect-[3/2] lg:aspect-[2/1]">
                 <Image
                   src={AANPAK_FOTO.foto}
                   alt={AANPAK_FOTO.fotoAlt}
                   fill
                   sizes="(min-width: 1184px) 74rem, 100vw"
-                  className="object-cover [filter:brightness(1.3)_contrast(1.03)]"
-                  style={{ objectPosition: "center 42%" }}
+                  className="object-cover"
+                  style={{ objectPosition: "center 30%" }}
                 />
-                <div className="hp-foto-waas pointer-events-none absolute inset-y-0 left-0 hidden w-[60%] sm:block" aria-hidden="true" />
-                <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-[#1A2D63]/75 via-[#1A2D63]/35 to-transparent sm:block" aria-hidden="true" />
-                {/* Het statement. Op een telefoon staat het bovenaan, in een waas die even hoog is als de tekst:
-                    zo stopt de waas op elk scherm net onder de laatste regel. */}
-                <div className="absolute inset-x-0 top-0 sm:inset-y-0 sm:left-7 sm:right-auto sm:flex sm:items-center lg:left-9">
-                  <div className="hp-foto-waas-boven pointer-events-none absolute inset-0 sm:hidden" aria-hidden="true" />
-                  <p className="hp-display relative text-balance px-5 pb-9 pt-5 text-[clamp(1.75rem,8vw,2.75rem)] font-bold leading-[1.08] text-white sm:max-w-[26rem] sm:p-0 sm:text-[2.1rem] lg:max-w-[30rem] lg:text-[2.5rem]">
-                    {AANPAK_FOTO.statement}
-                  </p>
-                </div>
+                <Watermerk>{AANPAK_FOTO.fotoCredit}</Watermerk>
               </div>
-              <Citaat className="p-5 lg:hidden" />
-            </div>
+              <div className="grid gap-5 px-5 pb-6 pt-6 sm:pt-7 lg:pt-9 sm:px-7 sm:pb-7 lg:grid-cols-[minmax(0,1fr)_23rem] lg:items-center lg:gap-10 lg:px-9 lg:pb-9">
+                <p className="hp-display text-balance text-[clamp(1.6rem,6vw,2.5rem)] font-bold leading-[1.08] text-[#1A2D63]">
+                  {AANPAK_FOTO.statement}
+                </p>
+                <Citaat className="border-t border-[#E3E7EF] pt-5 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0" />
+              </div>
+            </figure>
           </div>
         </div>
 
@@ -662,7 +679,7 @@ export function HomePage() {
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
             </div>
-            <Getuigenis className="mt-12 border-t border-white/10 pt-10" />
+            <PersBlok className="mt-12 border-t border-white/10 pt-10" />
           </div>
         </section>
 
