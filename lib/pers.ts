@@ -34,8 +34,9 @@ export const PERS: PersArtikel[] = [
     url: "https://www.hln.be/mechelen/jonge-it-ondernemers-nemen-intrek-in-vleeshalle-bouwen-ai-breinen-voor-bedrijven~a59b8b6b2/",
     citaat:
       "AI kan heel veel repetitief werk overnemen, maar het probleem is dat bedrijfskennis verspreid zit in de hoofden van werknemers en zaakvoerders. Wij analyseren eerst grondig de werking om vervolgens een bedrijfsbrein te bouwen.",
-    // HLN zegt "de oprichters"; Jord noemen we ook als oprichter (Alex 5/11).
-    citaatVan: "Karel Van Ransbeeck, Alex Otten en Jord Goossens, oprichters",
+    // HLN zegt "de oprichters". Karel en Alex begonnen eerst met een maatschap; de BV is
+    // opgericht met Jord erbij als vennoot. Daarom: alle drie "vennoten van Finit" (Alex 5/11).
+    citaatVan: "Karel Van Ransbeeck, Alex Otten en Jord Goossens, vennoten van Finit",
     foto: {
       src: "/pers/hln-vleeshalle-800.jpg",
       alt: "Het team van Finit Solutions op een balkon in de Vleeshalle, met een Finit-vlag.",
