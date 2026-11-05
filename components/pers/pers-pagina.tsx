@@ -41,12 +41,10 @@ export function PersPagina() {
                 <li key={a.url}>
                   <article className="hp-card grid overflow-hidden md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
                     {a.foto && (
-                      <figure className="flex flex-col bg-white">
-                        <div className="relative aspect-[3/2] md:aspect-auto md:min-h-[16rem] md:flex-1">
-                          <Image src={a.foto.src} alt={a.foto.alt} fill sizes="(min-width: 768px) 28rem, 100vw" className="object-cover" />
-                        </div>
-                        <figcaption className="px-5 pt-2 text-[0.75rem] text-[#6C7590] md:pb-3">{a.foto.credit}</figcaption>
-                      </figure>
+                      <div className="relative aspect-[3/2] md:aspect-auto md:min-h-[16rem]">
+                        <Image src={a.foto.src} alt={a.foto.alt} fill sizes="(min-width: 768px) 28rem, 100vw" className="object-cover" />
+                        <span className="pointer-events-none absolute bottom-2 right-3 select-none text-[0.6875rem] font-medium tracking-wide text-white/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.7)] sm:bottom-3 sm:right-4 sm:text-[0.75rem]">{a.foto.credit}</span>
+                      </div>
                     )}
                     <div className="flex flex-col p-6 sm:p-8">
                       <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.875rem] text-[#6C7590]">

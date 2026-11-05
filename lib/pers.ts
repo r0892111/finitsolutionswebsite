@@ -4,7 +4,8 @@
  * passen zich vanzelf aan.
  *
  * Auteursrecht: neem nooit het artikel over. Citeer hooguit twee zinnen letterlijk
- * en link altijd naar het origineel. Een foto uit een artikel alleen met de credit
+ * en link altijd naar het origineel. Een foto uit een artikel alleen met de naam van de
+ * fotograaf als watermerk ("© naam", rechtsonder op de foto)
  * erbij, en pas na toestemming van het medium of de fotograaf.
  */
 
@@ -34,7 +35,7 @@ export const PERS: PersArtikel[] = [
     foto: {
       src: "/pers/hln-vleeshalle-800.jpg",
       alt: "Het team van Finit Solutions op een balkon in de Vleeshalle, met een Finit-vlag.",
-      credit: "Foto: David Legreve / HLN",
+      credit: "© David Legreve",
     },
   },
 ];

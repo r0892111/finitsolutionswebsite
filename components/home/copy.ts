@@ -132,7 +132,8 @@ export const BREIN_INFO: Record<string, BreinPagina> = {
 // van hooguit acht woorden en het citaat van Y Combinator over het "company brain" als
 // steun, allebei onder de foto. Nieuw (review 13/09), Karel koos het statement.
 // Sinds 5/11 de foto uit het HLN-artikel, zonder waas of verloop: iedereen moet zichtbaar
-// zijn. De credit staat onder de foto. Toestemming van HLN of de fotograaf nog vragen.
+// zijn. De naam van de fotograaf staat als klein watermerk rechtsonder op de foto (Alex 5/11).
+// Toestemming van HLN of de fotograaf nog vragen.
 //
 // Andere kandidaten voor het statement:
 //   Straks werkt elk bedrijf met AI. Jij eerst.
@@ -158,7 +159,7 @@ export const AANPAK_FOTO = {
   },
   foto: "/pers/hln-vleeshalle.jpg",
   fotoAlt: "Het team van Finit Solutions op een balkon in de Vleeshalle, met een Finit-vlag.",
-  fotoCredit: "Foto: David Legreve / HLN",
+  fotoCredit: "© David Legreve",
 };
 
 export type HerkenBeeld = "flessenhals" | "chatgpt" | "beginnen";
