@@ -1,0 +1,43 @@
+{
+  "slug": "ochtendmail",
+  "reel": "C13",
+  "kicker": "1 prompt · je eerste AI-routine",
+  "titel": "Elke ochtend je mail samengevat",
+  "intro": "Eén prompt voor Claude of ChatGPT. Elke werkdag een overzicht van je mailbox, met antwoorden klaar als concept. Hij verstuurt en verwijdert nooit iets.",
+  "voor": [
+    {
+      "titel": "Wat je nodig hebt",
+      "punten": [
+        "Een betaald abonnement op Claude (Pro of hoger) of ChatGPT.",
+        "Je mail gekoppeld. Claude: **Customize › Connectors**, kies Gmail (of Microsoft 365 voor Outlook: enkel met een werk- of schoolaccount). ChatGPT: koppel Gmail of Outlook in de **instellingen**.",
+        "Liefst eerst je schrijfstijlprofiel (zie [de schrijfstijl-prompt](/prompts/schrijfstijl/)), anders klinken de concepten niet als jij.",
+        "15 à 30 minuten om het samen af te stemmen."
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "titel": "De ochtendmail-routine",
+      "uitleg": "Vul het uur in dat jou past.",
+      "tekst": "Ik wil elke werkdag om [7:30] een overzicht van mijn mailbox, met antwoorden klaar als concept.\n\nBekijk eerst mijn mails van de laatste twee weken. Alleen lezen. Zo gaan je vragen over mijn echte mailbox en niet over een mailbox in het algemeen.\n\nStel me daarna je vragen, één per één:\n1. Welke soorten mails krijg ik vooral? Stel 4 à 6 labels voor (bijvoorbeeld: Klant, Offerte, Factuur, Intern, Nieuwsbrief, Actie nodig).\n2. Op welke mails wil ik een conceptantwoord?\n3. Na hoeveel werkdagen zonder antwoord wil ik een herinnering? (standaard 5)\n4. Hoe laat wil ik het overzicht? (standaard 7:30)\n5. Welke mails mag je nooit beantwoorden of aanraken (bijvoorbeeld van de bank, van een advocaat, van bepaalde klanten)?\n6. Wat is voor mij \"dringend\"? Van wie of over wat?\n\nElke werkdag doe je dan:\n- Nieuwe mails sinds gisteren lezen en labels geven.\n- Een overzicht maken: wat dringend is, wat kan wachten, wat al afgehandeld lijkt.\n- Antwoorden in mijn schrijfstijl als concept in mijn mailbox zetten (lukt dat niet, dan in het overzicht). Nooit versturen.\n- Verzonden mails zonder antwoord na het afgesproken aantal dagen: een vriendelijke herinnering klaarzetten als concept, zoals hierboven.\n- Bij twijfel een korte vraag stellen: \"Is dit in orde, of moet ik hier iets mee?\"\n\nRegels, zonder uitzondering: verwijder nooit iets, verstuur nooit iets, en vraag mijn akkoord voor elke wijziging.\n\nStel eerst een plan voor in maximaal tien regels en wacht op mijn \"ja\".\nPlan het daarna in voor elke werkdag op het gekozen uur. Gebruik daarbij geen bestanden op mijn computer, zodat het ook loopt als mijn computer uit staat. Kan je hier geen taken inplannen, maak er dan een skill \"ochtendmail\" van, die ik elke ochtend oproep.\nDoe daarna meteen een eerste ronde samen met mij op mijn echte mailbox."
+    }
+  ],
+  "na": [
+    {
+      "titel": "Inplannen",
+      "punten": [
+        "**Claude** (Cowork of de desktop-app): zeg in het gesprek hoe vaak het moet lopen, of ga naar **Scheduled › New task**. Geplande taken bestaan op alle betaalde abonnementen. Ze lopen ook als je computer slaapt, zolang de taak geen bestanden op je computer nodig heeft.",
+        "**ChatGPT:** vraag het gewoon in het gesprek; je vindt je taken terug onder **Scheduled**. Een vast uur (zoals 7:30) vraagt een betaald abonnement.",
+        "**Kan het niet?** Zeg dan elke ochtend gewoon \"ochtendmail\".",
+        "**Extra veilig in Claude:** ga naar **Customize › Connectors**, open Gmail en zet versturen en verwijderen op **Blocked**. Dan kan hij het ook technisch niet."
+      ]
+    },
+    {
+      "titel": "De eerste ronde",
+      "alineas": [
+        "Overloop de labels en de concepten samen. Welk label klopt niet? Welk concept zou jij anders schrijven? Laat hem **de routine zelf** verbeteren, niet enkel deze ene ronde.",
+        "Deze routine komt uit ons gratis [startpakket](/startpakket/) (module D). Daar staan ook de schrijfstijl en alle andere prompts."
+      ]
+    }
+  ]
+}
