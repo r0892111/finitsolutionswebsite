@@ -1,0 +1,38 @@
+{
+  "slug": "schrijfstijl",
+  "reel": "C05",
+  "kicker": "1 prompt · voor Claude of ChatGPT",
+  "titel": "Laat AI schrijven zoals jij",
+  "intro": "Eén prompt voor Claude of ChatGPT. De AI leest je eigen mails, beschrijft hoe jij schrijft en test het tot elke mail klinkt als jij.",
+  "voor": [
+    {
+      "titel": "Wat je nodig hebt",
+      "alineas": [
+        "Claude of ChatGPT, met je mail gekoppeld: Gmail of Outlook. In Claude klik je op **+ › Connectors** (Outlook heet daar Microsoft 365). In ChatGPT ga je naar **Instellingen › Plugins**. Dan leest hij zelf je verzonden mails.",
+        "Staat je mail niet bij Google of Microsoft? Kopieer dan 10 à 15 mails die je zelf schreef: naar klanten, collega's en leveranciers, kort en lang.",
+        "**Reken op een halfuur:** hij analyseert, schrijft testmails en jij keurt ze."
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "titel": "De schrijfstijl-prompt",
+      "tekst": "Ik wil dat alles wat je voor mij schrijft, echt klinkt als ik. Niet \"vriendelijk en professioneel\", maar zo precies dat een collega niet zou merken dat ik het niet zelf schreef.\n\nLees mijn laatste 100 verzonden mails. Alleen lezen, wijzig niets.\n(Staat mijn mail niet bij Google of Microsoft? Dan plak ik hieronder 10 à 15 mails die ik zelf schreef.)\n\nAnalyseer grondig hoe ik schrijf. Beschrijf alles met letterlijke voorbeelden uit mijn eigen mails:\n1. Aanspreking en afsluiting: je of u, voornaam of niet, \"Dag\", \"Hallo\" of \"Beste\", hoe ik onderteken, en wanneer ik wat gebruik.\n2. Lengte en opbouw: hoe lang mijn mails zijn, of ik met de kern begin, hoe ik alinea's en opsommingen gebruik.\n3. Zinnen en woorden: korte of lange zinnen, typische woorden en uitdrukkingen, Vlaamse of Nederlandse woordkeuze, spreektaal, en welke woorden ik nooit gebruik.\n4. Toon per situatie: een offerte, een klacht, een herinnering, slecht nieuws, een bedankje, een interne vraag.\n5. Verschil per ontvanger: klanten, collega's, leveranciers, en tussen talen.\n6. Gewoontes: hoe snel ik to the point kom, of ik afsluit met een vraag of een actie, hoe ik omga met bijlagen en afspraken.\n7. Wat ik nooit doe: formuleringen, emoji's, uitroeptekens, clichés.\n8. Een voorbeeldbibliotheek: per soort mail één echte mail van mij die typisch is, zonder gevoelige gegevens.\n\nNeem de ruimte die nodig is (drie à vijf pagina's). Schrijf daarna per soort mail een testmail in mijn stijl en vraag me telkens: \"Zou jij dit zo sturen? Welk woord of welke zin klinkt niet als jou?\" Pas de analyse aan tot ik bij elke testmail ja zeg.\n\nBewaar de volledige analyse als schrijfstijl.md en lees ze voor je ooit iets schrijft namens mij.\nStel me eerst je vragen."
+    }
+  ],
+  "na": [
+    {
+      "titel": "Waar bewaar je het profiel?",
+      "punten": [
+        "**Claude Code of Cowork** (de desktop-app): als schrijfstijl.md in je map, met een verwijzing in CLAUDE.md, zodat hij het bij elk gesprek leest.",
+        "**ChatGPT of de gewone Claude-chat:** zet het in een **Project**. Het geheugen is te klein voor een grondige analyse."
+      ]
+    },
+    {
+      "titel": "Daarna",
+      "alineas": [
+        "Typ gewoon één zin, bv. \"Mail Jan dat de laadpaal een week later komt. Woensdag kan.\" Klinkt een woord nog niet als jou, zeg het, en laat hem het profiel zelf aanpassen, niet enkel die ene mail."
+      ]
+    }
+  ]
+}

@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { SKOOL_URL } from '@/lib/finit-links';
-import type { PromptPagina as Pagina } from '@/lib/prompts';
+import type { Blok as BlokData, PromptPagina as Pagina } from '@/lib/prompts';
 import { KopieerKnop } from './kopieer-knop';
 
-const TIP_ALGEMEEN =
-  'Vul in wat tussen [haakjes] staat. Eindig een prompt met "Stel me eerst je vragen." Dan vraagt de AI eerst wat hij nog moet weten.';
+const TIP_HAAKJES = 'Vul in wat tussen [haakjes] staat.';
+const TIP_VRAGEN = 'Eindig een prompt met "Stel me eerst je vragen." Dan vraagt de AI eerst wat hij nog moet weten.';
 
 /** Toont de prompt zoals hij gekopieerd wordt, met wat je zelf invult ([…]) in het geel. */
 function PromptTekst({ tekst }: { tekst: string }) {
@@ -27,8 +27,64 @@ function PromptTekst({ tekst }: { tekst: string }) {
   );
 }
 
+/** Tekst in een blokje: **vet** en [een link](/pad/). Links naar buiten openen in een nieuw tabblad. */
+function Opmaak({ tekst }: { tekst: string }) {
+  const delen = tekst.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
+  return (
+    <>
+      {delen.map((deel, i) => {
+        if (deel.startsWith('**') && deel.endsWith('**')) {
+          return (
+            <strong key={i} className="font-semibold text-[#1A2D63]">
+              {deel.slice(2, -2)}
+            </strong>
+          );
+        }
+        const link = deel.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+        if (link) {
+          const extern = link[2].startsWith('http');
+          return extern ? (
+            <a key={i} href={link[2]} target="_blank" rel="noopener noreferrer" className="hp-link">
+              {link[1]}
+            </a>
+          ) : (
+            <Link key={i} href={link[2]} className="hp-link">
+              {link[1]}
+            </Link>
+          );
+        }
+        return <React.Fragment key={i}>{deel}</React.Fragment>;
+      })}
+    </>
+  );
+}
+
+/** Een blokje uitleg vóór of na de prompts, zoals "Wat je nodig hebt" of "Daarna". */
+function Blok({ blok }: { blok: BlokData }) {
+  return (
+    <section className="hp-card p-5 sm:p-6">
+      <h2 className="hp-display hp-display-sm text-[21px] font-semibold leading-tight text-[#1A2D63]">{blok.titel}</h2>
+      {blok.alineas?.map((a, i) => (
+        <p key={i} className="mt-2 text-[16px] leading-relaxed">
+          <Opmaak tekst={a} />
+        </p>
+      ))}
+      {blok.punten && (
+        <ul className="mt-3 list-disc space-y-2 pl-5 text-[16px] leading-relaxed marker:text-[#1A2D63]">
+          {blok.punten.map((punt, i) => (
+            <li key={i}>
+              <Opmaak tekst={punt} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
 export function PromptPagina({ pagina }: { pagina: Pagina }) {
   const herkomst = `bron=prompts&reel=${pagina.reel}`;
+  const heeftHaakjes = pagina.prompts.some((p) => /\[[^\]]+\]/.test(p.tekst));
 
   return (
     <main className="min-h-screen bg-white text-[#3D4766]">
@@ -44,9 +100,17 @@ export function PromptPagina({ pagina }: { pagina: Pagina }) {
       </header>
 
       <div className="mx-auto max-w-[720px] px-4 py-10 sm:px-8">
+        {pagina.voor && (
+          <div className="mb-6 space-y-6">
+            {pagina.voor.map((b) => (
+              <Blok key={b.titel} blok={b} />
+            ))}
+          </div>
+        )}
+
         <div className="mb-10 space-y-2 rounded-2xl bg-[#E6ECF9] p-5 text-[16px] leading-relaxed text-[#1A2D63]">
           {pagina.tip && <p className="font-semibold">{pagina.tip}</p>}
-          <p>{TIP_ALGEMEEN}</p>
+          <p>{heeftHaakjes ? `${TIP_HAAKJES} ${TIP_VRAGEN}` : TIP_VRAGEN}</p>
         </div>
 
         <ol className="mb-12 space-y-6">
@@ -70,6 +134,14 @@ export function PromptPagina({ pagina }: { pagina: Pagina }) {
             </li>
           ))}
         </ol>
+
+        {pagina.na && (
+          <div className="mb-12 space-y-6">
+            {pagina.na.map((b) => (
+              <Blok key={b.titel} blok={b} />
+            ))}
+          </div>
+        )}
 
         <section className="rounded-3xl bg-[#1A2D63] p-6 text-white sm:p-8">
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#FBE286]">Een stap verder?</p>

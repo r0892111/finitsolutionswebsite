@@ -1,5 +1,45 @@
 [
   {
+    "id": "prompt-ai-leert-je-bedrijf-kennen",
+    "titel": "Laat AI je bedrijf leren kennen: de interview-prompt",
+    "beschrijving": "Eén prompt voor Claude of ChatGPT. De AI interviewt je, onderwerp per onderwerp, en schrijft alles netjes weg in één map.",
+    "url": "/prompts/bedrijf-leren-kennen/",
+    "soort": "prompt",
+    "datum": "2026-11-03",
+    "reel": "C01",
+    "thumbnail": "/hub/posts/C01.jpg"
+  },
+  {
+    "id": "prompt-ai-schrijft-zoals-jij",
+    "titel": "Laat AI schrijven zoals jij: de schrijfstijl-prompt",
+    "beschrijving": "Eén prompt voor Claude of ChatGPT. De AI leest je eigen mails, beschrijft hoe jij schrijft en test het tot elke mail klinkt als jij.",
+    "url": "/prompts/schrijfstijl/",
+    "soort": "prompt",
+    "datum": "2026-11-03",
+    "reel": "C05",
+    "thumbnail": "/hub/posts/C05.jpg"
+  },
+  {
+    "id": "gids-veilig-werken-met-chatgpt-en-claude",
+    "titel": "Is je data veilig bij ChatGPT? De checklist met alle knoppen",
+    "beschrijving": "Zes dingen die je vandaag goed zet in ChatGPT en Claude, met het menupad erbij. Plus wat er met je data gebeurt.",
+    "url": "/gratis/checklist-veilig-werken-met-ai.pdf",
+    "soort": "gids",
+    "datum": "2026-11-03",
+    "reel": "C08",
+    "thumbnail": "/hub/posts/C08.jpg"
+  },
+  {
+    "id": "prompt-ochtendmail-routine",
+    "titel": "Je eerste AI-routine: elke ochtend je mail samengevat",
+    "beschrijving": "Eén prompt voor Claude of ChatGPT. Elke werkdag een overzicht van je mailbox, met antwoorden klaar als concept. Hij verstuurt en verwijdert nooit iets.",
+    "url": "/prompts/ochtendmail/",
+    "soort": "prompt",
+    "datum": "2026-11-03",
+    "reel": "C13",
+    "thumbnail": "/hub/posts/C13.jpg"
+  },
+  {
     "id": "bronnen-company-brain",
     "titel": "Wie zegt dat elk bedrijf een company brain nodig heeft?",
     "beschrijving": "Y Combinator, Google, Microsoft en de cijfers erachter. Met een link naar elke bron.",
