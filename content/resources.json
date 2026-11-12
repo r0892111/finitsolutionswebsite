@@ -1,5 +1,35 @@
 [
   {
+    "id": "prompt-ai-leert-je-bedrijf-kennen",
+    "titel": "Zo antwoordt ChatGPT of Claude met jouw prijzen",
+    "beschrijving": "Eén prompt voor Claude of ChatGPT. De AI interviewt je, onderwerp per onderwerp, en schrijft alles netjes weg in één map.",
+    "url": "/prompts/bedrijf-leren-kennen/",
+    "soort": "prompt",
+    "datum": "2026-11-12",
+    "reel": "C01",
+    "thumbnail": "/hub/posts/C01.jpg"
+  },
+  {
+    "id": "gids-veilig-werken-met-chatgpt-en-claude",
+    "titel": "Zo blijven je gegevens veilig in ChatGPT",
+    "beschrijving": "Zes dingen die je vandaag goed zet in ChatGPT en Claude, met het menupad erbij. Plus wat er met je data gebeurt.",
+    "url": "/prompts/veilig-werken-met-ai/",
+    "soort": "gids",
+    "datum": "2026-11-12",
+    "reel": "C08",
+    "thumbnail": "/hub/posts/C08.jpg"
+  },
+  {
+    "id": "prompt-ochtendmail-routine",
+    "titel": "Je mails beantwoord voor je op kantoor aankomt",
+    "beschrijving": "Eén prompt voor Claude of ChatGPT. Elke werkdag een overzicht van je mailbox, met antwoorden klaar als concept. Hij verstuurt en verwijdert nooit iets.",
+    "url": "/prompts/ochtendmail/",
+    "soort": "prompt",
+    "datum": "2026-11-12",
+    "reel": "C13",
+    "thumbnail": "/hub/posts/C13.jpg"
+  },
+  {
     "id": "bronnen-company-brain",
     "titel": "Wie zegt dat elk bedrijf een company brain nodig heeft?",
     "beschrijving": "Y Combinator, Google, Microsoft en de cijfers erachter. Met een link naar elke bron.",
@@ -12,7 +42,7 @@
   {
     "id": "prompts-werk-dat-blijft-liggen",
     "titel": "Zo doet AI je mails, verslagen, kasticketjes en facturen",
-    "beschrijving": "5 prompts om te kopiëren: vergeten mails, kasticketjes, verslagen, facturen en \"kan AI dit?\".",
+    "beschrijving": "5 prompts om te kopiëren: vergeten mails, kasticketjes, \"kan AI dit?\", verslagen en facturen.",
     "url": "/prompts/werk-dat-blijft-liggen/",
     "soort": "prompt",
     "datum": "2026-11-04",
@@ -62,7 +92,7 @@
   {
     "id": "prompts-bedrijven-zoeken",
     "titel": "Zo vind je met AI 200 bedrijven binnen 50 km",
-    "beschrijving": "2 prompts: een lijst met bedrijven in je buurt, gerangschikt op wie het best bij je past.",
+    "beschrijving": "3 prompts: een lijst met bedrijven in je buurt, gerangschikt op wie het best bij je past, en een lijst van eender welke website.",
     "url": "/prompts/bedrijven-zoeken/",
     "soort": "prompt",
     "datum": "2026-11-04",

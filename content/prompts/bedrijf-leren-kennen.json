@@ -1,0 +1,20 @@
+{
+  "slug": "bedrijf-leren-kennen",
+  "reel": "C01",
+  "kicker": "Gratis prompt · 5 stappen",
+  "titel": "Zo antwoordt ChatGPT of Claude met jouw prijzen",
+  "intro": "Eén prompt laat ChatGPT of Claude jou interviewen over je bedrijf. Daarna antwoordt hij met jouw prijs, niet met een gok.",
+  "tip": "Wat je nodig hebt: een betaald abonnement op Claude of ChatGPT en de desktop-app. Maak op je computer één lege map, bv. mijn-bedrijf, en open die in de app. In Claude: klik op Code, kies Local en dan je map. In ChatGPT: kies Codex en open je map.",
+  "prompts": [
+    {
+      "titel": "Plak deze prompt",
+      "uitleg": "Hij stelt de vragen, jij vertelt. Antwoord met je stem: in ChatGPT klik je op de microfoonknop. De microfoonknop van Claude zelf verstaat officieel nog geen Nederlands; gebruik daar Wispr Flow (gratis tot 2.000 woorden per week, Mac en Windows) of Handy (open source, werkt zonder internet). Neem blokjes van 10 à 15 minuten. Haperen en dialect mogen.",
+      "tekst": "Je bent mijn nieuwe collega en je neemt morgen mijn job over. Om dat goed te kunnen, interview je me over mijn bedrijf. Alles wat je leert, schrijf je weg in deze map.\n\nZo werk je:\n1. Stel één vraag tegelijk en wacht op mijn antwoord.\n2. Ga onderwerp per onderwerp, in deze volgorde:\n   1. Wie we zijn en hoe we geld verdienen.\n   2. Onze prijzen: hoe ze opgebouwd zijn, waar de marge zit, wanneer we afwijken en wanneer nooit.\n   3. Wat een uur van mij en van mijn mensen waard is (een schatting volstaat).\n   4. Hoe we aan werk komen, en wat er de eerste tien minuten gebeurt.\n   5. De volledige klantreis, van eerste contact tot betaling, en erna.\n   6. Onze mensen: wie doet wat, en wat weet iemand dat nergens opgeschreven staat?\n   7. Al onze systemen, ook die ene Excel waar alles van afhangt.\n   8. Onze vaste processen van elke week, en met wie we samenwerken.\n   9. Ons vakjargon en onze huistaal.\n3. Vraag door als iets vaag is: vraag naar een voorbeeld, naar de uitzonderingen en naar wie beslist.\n4. Ik antwoord vaak met spraak. Reken op haperingen en dialect; haal eruit wat ik bedoel.\n5. Na elk onderwerp schrijf je één bestand in deze map, bv. prijzen.md, in gewone taal. Schrijf enkel wat ik zei. Verzin niets. Weet je iets niet zeker, schrijf dan \"nog te bevestigen\".\n6. Hou een bestand index.md bij: per bestand één regel over wat erin staat.\n7. Staat iets al in een bestand en zeg ik nu iets anders, vraag dan welke versie klopt. Er mag nooit twee keer dezelfde regel met een ander antwoord in de map staan.\n8. Maak in deze map ook CLAUDE.md en AGENTS.md, allebei met deze zin: \"Lees eerst index.md en het bestand dat bij de vraag hoort, voor je antwoordt.\"\n\nBegin met onderwerp 1."
+    },
+    {
+      "titel": "Lees na en test met een klantvraag",
+      "uitleg": "Open een nieuw gesprek in dezelfde map en stel een vraag die een klant zou stellen. Klopt het antwoord, dan zit het goed. Weet hij iets niet of klopt het niet, vertel dan wat ontbreekt, en laat het bestand aanpassen.",
+      "tekst": "Hoeveel kost een warmtepomp?"
+    }
+  ]
+}

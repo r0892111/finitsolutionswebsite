@@ -15,6 +15,9 @@ import marketing from '@/content/prompts/marketing.json';
 import cijfers from '@/content/prompts/cijfers.json';
 import eerlijk from '@/content/prompts/eerlijk-advies.json';
 import bedrijven from '@/content/prompts/bedrijven-zoeken.json';
+import bedrijf from '@/content/prompts/bedrijf-leren-kennen.json';
+import veilig from '@/content/prompts/veilig-werken-met-ai.json';
+import ochtendmail from '@/content/prompts/ochtendmail.json';
 
 export interface Prompt {
   titel: string;
@@ -37,7 +40,17 @@ export interface PromptPagina {
   prompts: Prompt[];
 }
 
-export const PROMPT_PAGINAS: PromptPagina[] = [werk, verkoop, marketing, cijfers, eerlijk, bedrijven];
+export const PROMPT_PAGINAS: PromptPagina[] = [
+  werk,
+  verkoop,
+  marketing,
+  cijfers,
+  eerlijk,
+  bedrijven,
+  bedrijf,
+  veilig,
+  ochtendmail,
+];
 
 export function vindPromptPagina(slug: string): PromptPagina | undefined {
   return PROMPT_PAGINAS.find((p) => p.slug === slug);

@@ -1,0 +1,43 @@
+{
+  "slug": "veilig-werken-met-ai",
+  "reel": "C08",
+  "kicker": "Checklist · 6 checks",
+  "titel": "Zo blijven je gegevens veilig in ChatGPT",
+  "intro": "Zes knoppen en afspraken, ook voor Claude. Met het menupad erbij, en wat er met je data gebeurt.",
+  "tip": "Nagekeken op 5 november 2026. Menu's veranderen soms: vind je een knop niet meer, zoek dan in de instellingen op het woord tussen aanhalingstekens.",
+  "prompts": [
+    {
+      "titel": "Zet de trainingsknop uit",
+      "uitleg": "Bij ChatGPT staat hij standaard aan. Claude heeft dezelfde knop. Zet hem bij allebei uit, dan trainen ze niet met je nieuwe gesprekken.",
+      "tekst": "- ChatGPT: Instellingen › Gegevensbeheer › \"Improve the model for everyone\" (Nederlands: \"Het model voor iedereen verbeteren\") uit.\n- Claude: Settings › Privacy › \"Help improve our AI models\" uit. Bij Claude kies je dit zelf bij het aanmaken van je account; bij ChatGPT Free, Plus en Pro staat het standaard aan.\n- Met ChatGPT Business of Claude Team traint men standaard niet op je gegevens.\n- Let op in ChatGPT: geef je een duim omhoog of omlaag, dan kan dat hele gesprek toch gebruikt worden om te trainen."
+    },
+    {
+      "titel": "Beveilig je login",
+      "uitleg": "Een sterk, uniek wachtwoord, plus een code op je gsm.",
+      "tekst": "- ChatGPT: Instellingen › Beveiliging en inloggen › Multifactorauthenticatie (MFA). Daar kan je ook uitloggen op alle apparaten, handig na een gestolen laptop.\n- Claude logt in via een link in je mail of via Google. Zet tweestapsverificatie dus aan op je mailbox of je Google-account."
+    },
+    {
+      "titel": "Deel geen gesprekken via een openbare link",
+      "uitleg": "Wie de link heeft, kan het gesprek lezen. Bij een persoonlijk account is dat iedereen; bij ChatGPT Business en Claude Team enkel je collega's.",
+      "tekst": "- Opruimen in ChatGPT: Instellingen › Gegevensbeheer › Gedeelde links › Beheren.\n- Opruimen in Claude: Settings › Privacy › \"Shared chats\". Je kan een link ook uitzetten via de knop Share in het gesprek."
+    },
+    {
+      "titel": "Iemand vertrokken? Haal hem uit je AI",
+      "uitleg": "Geef iedereen een eigen account in plaats van één gedeeld wachtwoord. Dan zet je iemand er zo uit:",
+      "tekst": "- ChatGPT Business: Werkruimte-instellingen › Leden.\n- Claude Team: Organization settings › Members › \"Remove from team\"."
+    },
+    {
+      "titel": "Dit plakt niemand in een chat",
+      "uitleg": "Jij niet, en je collega's ook niet.",
+      "tekst": "- Wachtwoorden, toegangscodes en sleutels.\n- Medische gegevens, van je klanten of van jezelf."
+    },
+    {
+      "titel": "Leer het je team",
+      "tekst": "Overloop deze lijst met iedereen die ChatGPT of Claude gebruikt voor het werk."
+    },
+    {
+      "titel": "Goed om te weten: wat er met je data gebeurt",
+      "tekst": "- Waar het naartoe gaat. Wat je naar ChatGPT of Claude stuurt, gaat naar een datacenter, meestal in Amerika. OpenAI bewaart het \"in de VS en elders in de wereld\", Anthropic in de VS. Bedrijven met ChatGPT Enterprise of Edu kunnen kiezen voor opslag in Europa; bij ChatGPT Business wordt dat geleidelijk uitgerold.\n- Onderweg en opgeslagen is het versleuteld. OpenAI: versleuteld op de schijf (AES-256) en onderweg. Anthropic: versleuteld onderweg en opgeslagen.\n- Gewist is binnen 30 dagen weg. Verwijder je een gesprek, dan verdwijnt het meteen uit je lijst en binnen 30 dagen uit hun systemen, tenzij de wet of een veiligheidsonderzoek iets anders vraagt.\n- Medewerkers lezen niet zomaar mee. Bij OpenAI kan een beperkt aantal mensen erbij voor misbruik, support of juridische zaken, en om hun AI te verbeteren als je de trainingsknop aan laat. Bij Anthropic kunnen medewerkers standaard niet aan je gesprekken, tenzij je zelf feedback stuurt of een gesprek wordt nagekeken op misbruik.\n- Het grootste risico ben je vaak zelf. Een zwak wachtwoord, geen tweestapsverificatie, een gestolen laptop, een gedeeld gesprek, een ex-medewerker die nog kan inloggen."
+    }
+  ]
+}

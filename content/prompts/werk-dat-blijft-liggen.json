@@ -6,28 +6,29 @@
   "intro": "Vijf prompts voor het werk dat altijd blijft liggen. Kopieer ze, vul in wat tussen [haakjes] staat, en plak ze in je AI.",
   "prompts": [
     {
-      "titel": "Glipt er iets tussen de mazen?",
-      "uitleg": "Werkt als je AI toegang heeft tot je mailbox, bijvoorbeeld Claude met Gmail gekoppeld.",
-      "tekst": "Scan mijn mailbox van de laatste twee weken. Zijn er mails waar ik nog niet op antwoordde, of beloftes die ik nog niet nakwam? Vraag me per mail of het in orde is, en zet waar nodig een concept klaar."
+      "titel": "Laat AI je vergeten mails zoeken",
+      "uitleg": "Koppel eerst je mail: Gmail of Outlook. In Claude klik je op + en dan Connectors; staat hij er nog niet, kies Add connector (Outlook heet daar Microsoft 365). In ChatGPT: Instellingen › Plugins.",
+      "tekst": "Scan mijn mailbox van de laatste twee weken. Zijn er mails waar ik nog niet op antwoordde? Zet waar nodig een antwoord klaar."
     },
     {
-      "titel": "Kasticketjes naar Excel",
-      "uitleg": "Sleep je foto's van de kasticketjes mee in het gesprek.",
-      "tekst": "Op de foto's staan kasticketjes. Maak een tabel met: datum, leverancier, omschrijving, bedrag excl. btw, btw-percentage, btw-bedrag, totaal. Zet onderaan de totalen. Twijfel je over een cijfer, zet er een vraagteken bij. Geef het resultaat als Excel-bestand."
+      "titel": "Kasticketjes in Excel",
+      "uitleg": "Voeg de foto's toe met +.",
+      "tekst": "Op de foto's staan kasticketjes. Zet ze in een Excel: datum, leverancier, bedrag zonder btw, btw en totaal. Zet een vraagteken waar je twijfelt. Stel me eerst je vragen."
     },
     {
-      "titel": "Van meeting naar follow-up",
-      "uitleg": "Plak het transcript van je gesprek mee, bijvoorbeeld uit je opname-app.",
-      "tekst": "Hier is het transcript van mijn gesprek met [persoon/bedrijf].\nMaak een samenvatting van maximaal tien lijnen. Welke dingen heb ik beloofd? Wat staat er nog open? Stel me vragen over wat ontbreekt, en zet daarna een follow-up mail klaar in mijn stijl."
-    },
-    {
-      "titel": "Facturen voor je boekhouder",
-      "uitleg": "Werkt als je AI toegang heeft tot je mailbox, bijvoorbeeld Claude met Gmail gekoppeld.",
-      "tekst": "Scan mijn mailbox van [het derde kwartaal]. Haal alle facturen (PDF-bijlagen) eruit en zet ze in de map [Documenten/Facturen Q3], met als bestandsnaam datum_leverancier_bedrag. Zet daarna een mail naar mijn boekhouder klaar als concept. Verstuur niets."
-    },
-    {
-      "titel": "Weet je niet of iets kan?",
+      "titel": "Twijfel je of AI iets kan? Vraag het zo",
+      "uitleg": "Werkt voor elke klus die hier niet tussen staat.",
       "tekst": "Ik ben niet technisch. Ik zou graag [wat je wil] doen. Kan jij dat? Wat is er nodig, en wat moet ik zelf doen?"
+    },
+    {
+      "titel": "Na een gesprek schrijft AI het verslag",
+      "uitleg": "Voeg de tekst van je gesprek toe met +.",
+      "tekst": "Hier is het transcript van mijn gesprek met [klant]. Maak een korte samenvatting. Wat heb ik beloofd? Wat staat er nog open? Zet daarna een follow-up mail klaar."
+    },
+    {
+      "titel": "Je facturen op een rij voor je boekhouder",
+      "uitleg": "Voor facturen die niet via Peppol komen. Koppel eerst je mail, zoals bij prompt 1.",
+      "tekst": "Zoek in mijn mailbox alle facturen van [het derde kwartaal]. Maak een lijst: datum, leverancier en in welke mail ze zitten. Schrijf daarna een mail naar mijn boekhouder. Verstuur niets."
     }
   ]
 }
