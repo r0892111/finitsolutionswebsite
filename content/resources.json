@@ -1,5 +1,15 @@
 [
   {
+    "id": "prompts-klussen-die-ai-overneemt",
+    "titel": "Deze 6 klussen doet AI al. Jij nog met de hand?",
+    "beschrijving": "Van werkbon tot factuur: zes klussen die AI vandaag al doet, met per klus een vraag die je zo in ChatGPT of Claude plakt.",
+    "url": "/prompts/klussen-die-ai-overneemt/",
+    "soort": "prompt",
+    "datum": "2026-11-16",
+    "reel": "C07",
+    "thumbnail": "/hub/posts/C07.jpg"
+  },
+  {
     "id": "prompt-ai-leert-je-bedrijf-kennen",
     "titel": "Zo antwoordt ChatGPT of Claude met jouw prijzen",
     "beschrijving": "Eén prompt voor Claude of ChatGPT. De AI interviewt je, onderwerp per onderwerp, en schrijft alles netjes weg in één map.",
@@ -16,7 +26,7 @@
     "url": "/prompts/veilig-werken-met-ai/",
     "soort": "gids",
     "datum": "2026-11-12",
-    "reel": "C08",
+    "reel": "C04",
     "thumbnail": "/hub/posts/C08.jpg"
   },
   {
@@ -26,7 +36,7 @@
     "url": "/prompts/ochtendmail/",
     "soort": "prompt",
     "datum": "2026-11-12",
-    "reel": "C13",
+    "reel": "C06",
     "thumbnail": "/hub/posts/C13.jpg"
   },
   {
@@ -66,7 +76,6 @@
     "url": "/prompts/marketing/",
     "soort": "prompt",
     "datum": "2026-11-04",
-    "reel": "C04",
     "thumbnail": "/hub/posts/C04.jpg"
   },
   {
@@ -76,7 +85,6 @@
     "url": "/prompts/cijfers/",
     "soort": "prompt",
     "datum": "2026-11-04",
-    "reel": "C06",
     "thumbnail": "/hub/posts/C06.jpg"
   },
   {
@@ -86,7 +94,6 @@
     "url": "/prompts/eerlijk-advies/",
     "soort": "prompt",
     "datum": "2026-11-04",
-    "reel": "C10",
     "thumbnail": "/hub/posts/C10.jpg"
   },
   {
@@ -96,7 +103,7 @@
     "url": "/prompts/bedrijven-zoeken/",
     "soort": "prompt",
     "datum": "2026-11-04",
-    "reel": "C11",
+    "reel": "C05",
     "thumbnail": "/hub/posts/C11.jpg"
   },
   {
