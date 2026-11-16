@@ -18,6 +18,7 @@ import bedrijven from '@/content/prompts/bedrijven-zoeken.json';
 import bedrijf from '@/content/prompts/bedrijf-leren-kennen.json';
 import veilig from '@/content/prompts/veilig-werken-met-ai.json';
 import ochtendmail from '@/content/prompts/ochtendmail.json';
+import klussen from '@/content/prompts/klussen-die-ai-overneemt.json';
 
 export interface Prompt {
   titel: string;
@@ -50,6 +51,7 @@ export const PROMPT_PAGINAS: PromptPagina[] = [
   bedrijf,
   veilig,
   ochtendmail,
+  klussen,
 ];
 
 export function vindPromptPagina(slug: string): PromptPagina | undefined {

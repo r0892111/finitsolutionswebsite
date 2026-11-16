@@ -1,0 +1,40 @@
+{
+  "slug": "klussen-die-ai-overneemt",
+  "reel": "C07",
+  "kicker": "6 voorbeelden · van werkbon tot factuur",
+  "titel": "Deze 6 klussen doet AI al. Jij nog met de hand?",
+  "intro": "De zes klussen uit de post, met wat AI telkens maakt. Bij elke klus staat een vraag die je zo in ChatGPT of Claude plakt: hij zegt of het kan, wat er nodig is en wat je zelf moet doen.",
+  "tip": "Begin met wat elke week terugkomt. AI koppel je daarvoor aan je eigen programma's, zoals je mail en je boekhouding: dat is telkens een koppeling, geen knop in ChatGPT of Claude.",
+  "prompts": [
+    {
+      "titel": "Een foto van je werkbon wordt een factuur",
+      "uitleg": "AI zet de factuur klaar in je facturatieprogramma, zoals Teamleader of Odoo. Jij kijkt ze na en verstuurt ze.",
+      "tekst": "Ik ben niet technisch. Ik zou graag van een foto van mijn werkbon een conceptfactuur maken in [Teamleader / Odoo / mijn facturatieprogramma]. Kan jij dat? Wat is er nodig, en wat moet ik zelf doen?"
+    },
+    {
+      "titel": "AI antwoordt je klant en plant de afspraak",
+      "uitleg": "Op WhatsApp, per mail of op je website. Voor WhatsApp beslist Meta per geval welke AI-hulp mag.",
+      "tekst": "Ik ben niet technisch. Ik zou graag hebben dat klantvragen via [mail / mijn website / WhatsApp] meteen een antwoord krijgen, en dat een afspraak vanzelf in mijn agenda komt. Kan jij dat? Wat is er nodig, en wat moet ik zelf doen?"
+    },
+    {
+      "titel": "Inspreken in de auto, de mail staat klaar",
+      "uitleg": "Na een klantbezoek spreek je één bericht in. AI zet de mail klaar in Gmail of Outlook en een verslag in je klantenbestand.",
+      "tekst": "Ik ben niet technisch. Ik zou graag na een klantbezoek één bericht inspreken, en dan een opvolgmail klaar hebben in [Gmail / Outlook] en een verslag in [mijn klantenbestand]. Kan jij dat? Wat is er nodig, en wat moet ik zelf doen?"
+    },
+    {
+      "titel": "AI legt de route voor je techniekers",
+      "uitleg": "Volgens de uren die je klanten opgaven. Vaak puzzelt iemand dat met de hand in Google Maps.",
+      "tekst": "Ik ben niet technisch. Ik zou graag elke dag de route voor mijn [aantal] techniekers laten maken, volgens de uren die mijn klanten opgaven. Kan jij dat? Wat is er nodig, en wat moet ik zelf doen?"
+    },
+    {
+      "titel": "Buitenlandse facturen vanzelf in je boekhouding",
+      "uitleg": "Belgische facturen komen al via Peppol. De rest haalt AI uit je mailbox. Kijk de bedragen na: een boekhoudprogramma leest van een PDF vaak enkel de totalen.",
+      "tekst": "Ik ben niet technisch. Ik zou graag de aankoopfacturen die niet via Peppol komen uit mijn mailbox laten halen en in [Billit / mijn boekhoudprogramma] laten zetten. Kan jij dat? Wat is er nodig, en wat moet ik zelf doen?"
+    },
+    {
+      "titel": "AI verwittigt je voor iets misloopt",
+      "uitleg": "Een attest dat vervalt, een contract zonder handtekening of voorraad die op raakt.",
+      "tekst": "Ik ben niet technisch. Ik zou graag een seintje krijgen voor [een attest vervalt / een contract nog niet getekend is / mijn voorraad op raakt]. Kan jij dat? Wat is er nodig, en wat moet ik zelf doen?"
+    }
+  ]
+}
