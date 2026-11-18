@@ -3,7 +3,8 @@
 /**
  * /cases: alle oplossingen volledig uitgeschreven onder elkaar, elk met een
  * anker (/cases#<slug>) waar de kaarten op de homepage naartoe linken. Per
- * oplossing: hoe het vandaag gaat, wat de AI-werknemer doet, wat jij nog doet.
+ * oplossing: de module, hoe het vandaag gaat, wat de AI-werknemer doet (met een
+ * kleine demo ernaast, case-demo.tsx), wat jij nog doet.
  * Onderaan de quote van Bas en de knop voor het startgesprek. De data staat in cases.ts.
  */
 
@@ -11,6 +12,7 @@ import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { CASES } from "./copy";
 import { OPLOSSING_LIJST, logoVoor } from "./cases";
+import { CaseDemo } from "./case-demo";
 import { Getuigenis } from "./case-kaart";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
@@ -48,6 +50,7 @@ export function CasesOverzicht() {
                 });
                 return (
                   <li key={o.slug} id={o.slug} className="hp-card scroll-mt-24 p-6 sm:p-8">
+                    <p className={`${LABEL} mb-2`}>{o.module === "Maatwerk" ? o.module : `${D.module}: ${o.module}`}</p>
                     <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
                       <h2 className={`${H3} max-w-[30rem] text-[1.5rem] sm:text-[1.7rem]`}>{o.titel}</h2>
                       <span className="flex flex-wrap gap-2" aria-label={D.gekoppeld}>
@@ -61,13 +64,12 @@ export function CasesOverzicht() {
                     </div>
                     <p className="mt-2 text-[1.0625rem] leading-[1.6] text-[#3D4766]">{o.kort}</p>
 
-                    <div className="mt-6 grid gap-6 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:gap-8">
+                    {/* Links de uitleg, rechts de demo van de module (18/11). */}
+                    <div className="mt-6 grid gap-6 md:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] md:gap-8">
                       <div>
                         <p className={LABEL}>{D.vandaag}</p>
                         <p className="mt-2 text-[0.9375rem] leading-[1.65] text-[#3D4766]">{o.vandaag}</p>
-                      </div>
-                      <div>
-                        <p className={LABEL}>{D.metAI}</p>
+                        <p className={`mt-6 ${LABEL}`}>{D.metAI}</p>
                         <ol className="mt-2">
                           {o.metAI.map((st, i) => (
                             <li key={st} className="relative flex gap-3 pb-3 last:pb-0">
@@ -77,6 +79,9 @@ export function CasesOverzicht() {
                             </li>
                           ))}
                         </ol>
+                      </div>
+                      <div className="md:pt-1">
+                        <CaseDemo demo={o.demo} />
                       </div>
                     </div>
 

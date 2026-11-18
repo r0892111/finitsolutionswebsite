@@ -3,7 +3,7 @@ import { Metadata } from "next";
 
 const TITLE = "Finit Solutions | Jouw bedrijf, klaar voor AI";
 const DESCRIPTION =
-  "In vier weken analyseren wij je bedrijf en leggen we alles vast in een brein. Daarna bouwen we AI-werknemers, koppelingen, software en websites die elke dag werk uit je handen nemen. Voor Vlaamse KMO's.";
+  "In één week analyseren wij je bedrijf en leggen we alles vast in een brein. Daarop bouwen we modules die elke dag werk uit je handen nemen: je mailbox, je offertes, je documenten, je administratie en je kennis. Voor Vlaamse KMO's.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },

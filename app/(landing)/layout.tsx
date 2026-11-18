@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-// Oude landingspagina's met het vorige aanbod: bereikbaar via link (advertenties), maar niet in Google.
+// Alleen nog /bedankt (na het contactformulier): niet in Google. De oude landingspagina's zijn weg (18/11).
 export const metadata: Metadata = {
   robots: {
     index: false,

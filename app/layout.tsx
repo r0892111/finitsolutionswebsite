@@ -29,7 +29,7 @@ const generalSans = Inter({
 
 const SITE_TITLE = 'Finit Solutions | Jouw bedrijf, klaar voor AI';
 const SITE_DESCRIPTION =
-  "In vier weken analyseren wij je bedrijf en leggen we alles vast in een brein. Daarna bouwen we AI-werknemers, koppelingen, software en websites die elke dag werk uit je handen nemen. Voor Vlaamse KMO's.";
+  "In één week analyseren wij je bedrijf en leggen we alles vast in een brein. Daarop bouwen we modules die elke dag werk uit je handen nemen: je mailbox, je offertes, je documenten, je administratie en je kennis. Voor Vlaamse KMO's.";
 
 export const metadata: Metadata = {
   title: {
@@ -139,7 +139,7 @@ export default function RootLayout({
                 "@type": "Country",
                 "name": "Belgium"
               },
-              "serviceType": ["Company Brain Setup", "AI-werknemers op maat", "AI-automatisering voor KMO's", "Software en websites op maat"],
+              "serviceType": ["Company Brain", "AI-modules voor KMO's", "AI-automatisering op maat"],
               "sameAs": [
                 "https://www.linkedin.com/company/finitsolutions/",
                 "https://www.instagram.com/finitsolutions/"

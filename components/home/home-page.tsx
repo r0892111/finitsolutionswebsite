@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ChevronDown, ChevronRight, Globe, Link2, Mail, Menu, Users, Wrench, X, Zap, type LucideIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronRight, FileText, FolderOpen, Mail, Menu, RefreshCw, Wrench, X, type LucideIcon } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { Brein3D } from "./brein-3d";
@@ -24,26 +24,26 @@ import {
   MENU,
   NAV_DESKTOP,
   NAV_MOBIEL,
-  PRODUCTEN,
   PARTNER,
   VRAGEN,
   type FaqBlok,
   type PartnerIcoon,
 } from "./copy";
 
-/** Een icoon per bouwsteen in het IT-partnerblok. */
+/** Een icoon per module in het blok met de modules. */
 const PARTNER_ICOON: Record<PartnerIcoon, LucideIcon> = {
-  koppeling: Link2,
-  automatisatie: Zap,
+  mailbox: Mail,
+  offertes: FileText,
+  documentatie: FolderOpen,
+  administratie: RefreshCw,
+  kennis: BookOpen,
   maatwerk: Wrench,
-  website: Globe,
-  agent: Users,
 };
 
 /**
  * De homepage: hero → de teamfoto met één statement → herken jij dit (drie
  * punten met een tekening) → de oplossing (met de tool-logo's) → hoe krijg jij
- * we samen (drie stappen, prijs alleen bij de setup) → Finit als IT-partner → de
+ * we samen (drie stappen, prijs alleen bij de Company Brain) → de modules en maatwerk → de
  * oplossingen die we het vaakst bouwen → vragen naast de contactkaart. Alle tekst staat in
  * ./copy.ts, de oplossingen in ./cases.ts.
  *
@@ -278,30 +278,8 @@ export function HomePage() {
             />
           </button>
 
-          {/* Desktop: Producten + secties */}
+          {/* Desktop: de secties */}
           <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 whitespace-nowrap lg:flex xl:gap-7">
-            <div className="group relative">
-              <button type="button" className="flex items-center gap-1 text-[0.9375rem] font-medium text-[#1A2D63]/80 transition-colors hover:text-[#1A2D63]">
-                {PRODUCTEN.label}
-                <ChevronDown className="mt-0.5 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" aria-hidden="true" />
-              </button>
-              <div className="invisible absolute left-0 top-full translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                <div className="hp-card w-[32rem] whitespace-normal p-5">
-                  <a href={PRODUCTEN.voicelink.url} target="_blank" rel="noopener noreferrer" className="group/item flex items-center gap-5">
-                    <div className="h-36 w-24 shrink-0 overflow-hidden rounded-xl border border-[#E3E7EF] bg-[#F5F7FB]">
-                      <Image src="/phone-mock-menu.webp" alt="VoiceLink WhatsApp-mockup" width={240} height={298} className="h-full w-full object-cover" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="mb-1.5 flex items-center gap-2">
-                        <span className="hp-display hp-display-sm text-[1.25rem] font-semibold text-[#1A2D63]">{PRODUCTEN.voicelink.naam}</span>
-                        <ArrowRight className="h-4 w-4 text-[#1A2D63]/40 transition-all group-hover/item:translate-x-1 group-hover/item:text-[#1A2D63]" aria-hidden="true" />
-                      </div>
-                      <p className="text-[0.9375rem] leading-relaxed text-[#3D4766]">{PRODUCTEN.voicelink.tekst}</p>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
             {NAV_DESKTOP.map((item) => (
               <button
                 key={item.id}
@@ -381,16 +359,6 @@ export function HomePage() {
                     <ChevronRight className="h-5 w-5 text-[#1A2D63]/30" aria-hidden="true" />
                   </button>
                 ))}
-                <a
-                  href={PRODUCTEN.voicelink.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex w-full items-center justify-between border-b border-[#1A2D63]/10 py-4 text-[#1A2D63] transition-colors hover:text-[#475D8F]"
-                >
-                  <span className="text-lg font-medium">{PRODUCTEN.voicelink.naam}</span>
-                  <ChevronRight className="h-5 w-5 text-[#1A2D63]/30" aria-hidden="true" />
-                </a>
               </div>
             </div>
 
@@ -592,11 +560,11 @@ export function HomePage() {
         </section>
 
         {/* -------------------------------------------------------------- */}
-        {/* 3b. Finit als IT-partner, op de naad tussen stappen en oplossingen */}
+        {/* 3b. De modules en maatwerk, op de naad tussen stappen en oplossingen */}
         {/* -------------------------------------------------------------- */}
         {/* De achtergrond breekt precies in het midden: wit boven, marineblauw
             onder. Daardoor ligt de kaart exact op de middenscheiding van de
-            twee secties: wat we bouwen nadat het brein er staat (22/10, was de lesreeks). */}
+            twee secties: wat we op het brein bouwen (17/11, was Finit als IT-partner). */}
         <div className="bg-[linear-gradient(to_bottom,#FFFFFF_0,#FFFFFF_50%,#1A2D63_50%,#1A2D63_100%)]">
           <div className={CONTAINER}>
             <div className="hp-card grid gap-8 p-6 sm:p-7 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-10 lg:p-9">

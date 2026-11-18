@@ -82,6 +82,63 @@
   to = "/cases/"
   status = 301
 
+# De oude landingspagina's met het vorige aanbod en VoiceLink (stopgezet) zijn weg
+# sinds 18/11/2026. Links uit oude advertenties komen op de homepage uit.
+[[redirects]]
+  from = "/ai-readiness-scan/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/herken-jij-dit/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/hoe-het-werkt/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/plan-gesprek/*"
+  to = "/contact/"
+  status = 301
+
+[[redirects]]
+  from = "/roi-calculator/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/succesverhalen/*"
+  to = "/cases/"
+  status = 301
+
+[[redirects]]
+  from = "/veelgestelde-vragen/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/voor-elektriciens/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/voor-installateurs/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/voor-loodgieters/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/voice-to-crm/*"
+  to = "/"
+  status = 301
+
 # Redirect rules for Next.js App Router with trailing slashes
 [[redirects]]
   from = "/*"
