@@ -27,6 +27,7 @@ import Image from "next/image";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import lokaleLijst from "@/content/resources.json";
 import { Onder } from "@/components/home/ui";
+import { TwijfelsLijst } from "./twijfels-lijst";
 import { pushEvent } from "@/lib/analytics";
 import { leesLijst } from "@/lib/resources";
 import { HUB } from "./copy";
@@ -192,21 +193,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
           </h2>
           <p className={INTRO}>{HUB.twijfels.intro}</p>
 
-          <div className="hub-faq-lijst">
-            {HUB.twijfels.lijst.map((t) => (
-              <details key={t.vraag} className="hp-details hub-faq border border-[#E3E7EF] bg-white shadow-[0_1px_2px_rgba(26,45,99,0.04)]">
-                <summary className="hub-faq-vraag flex items-start justify-between font-semibold text-[#1A2D63]">
-                  <span>{t.vraag}</span>
-                  <span className="hp-plus hub-faq-plus flex shrink-0 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" aria-hidden="true">
-                    <svg width="12" height="12" viewBox="0 0 12 12">
-                      <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                    </svg>
-                  </span>
-                </summary>
-                <p className="hub-faq-antwoord text-[#3D4766]">{t.antwoord}</p>
-              </details>
-            ))}
-          </div>
+          <TwijfelsLijst lijst={HUB.twijfels.lijst} />
 
           <div className="hub-slot-cta text-center">
             <button type="button" onClick={() => naarFormulier("na_twijfels")} className="hp-btn hp-btn--primary hub-knop hub-knop--slot">

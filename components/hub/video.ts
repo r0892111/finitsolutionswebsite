@@ -7,11 +7,12 @@
  * gewone mp4 werken allebei. Past de tijdlijn van de video niet meer bij de
  * ondertitels, maak ze dan opnieuw met `node scripts/hub/ondertitels.mjs`.
  *
- * Nu staat er een voorlopige video van 7:44 met een klok in beeld, zodat je de
- * voortgangsbalk naast de echte tijd ziet lopen.
+ * Voor lokaal testen zonder Bunny staat er nog een voorlopige video met een klok
+ * in beeld: NEXT_PUBLIC_HUB_VSL_BRON=/hub/vsl/voorlopig/master.m3u8.
  */
 export const VSL = {
-  bron: process.env.NEXT_PUBLIC_HUB_VSL_BRON || "/hub/vsl/voorlopig/master.m3u8",
+  // VSL v3 (7:43,8; 480p tot 4K) op Bunny Stream, bibliotheek finit-vsl. Opgeladen 20/11/2026.
+  bron: process.env.NEXT_PUBLIC_HUB_VSL_BRON || "https://vz-a3aedf8d-709.b-cdn.net/05b3b526-5950-4fc8-8f2b-a9728a8965ed/playlist.m3u8",
   /**
    * Token-authenticatie bij Bunny (tegen anderen die onze link gebruiken): zet in
    * Netlify NEXT_PUBLIC_HUB_VSL_TOKEN=1 en BUNNY_TOKEN_SLEUTEL. De speler vraagt dan

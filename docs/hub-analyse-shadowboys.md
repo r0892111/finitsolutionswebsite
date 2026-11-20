@@ -168,14 +168,14 @@ Kijkers moeten de video echt in 4K kunnen zien. Wat daarvoor nodig is:
 
 **Bij Bunny Stream** (bij het opzetten; er is nog niets aangemaakt): in de videobibliotheek › Encoding › Enabled resolutions **2160p aanvinken**, samen met 1080p, 720p en 480p (zie de stappen hieronder). Bunny codeert gratis tot 1080p; 1440p en 2160p vragen premium encoding, eenmalig ±$1,20 voor deze video. Best aanzetten vóór het opladen, anders moet de video opnieuw gecodeerd worden.
 
-**Wat een kijkbeurt kost aan verkeer.** Bunny streamt 2160p aan ±25 Mbit/s en 1080p aan ±5 Mbit/s. Verkeer in Europa kost $0,01 per GB.
+**Wat een kijkbeurt kost aan verkeer.** Gemeten op de echte VSL v3 bij Bunny (20/11): 2160p gemiddeld 12,4 Mbit/s (pieken tot 20), 1080p 3,1, 720p 1,8, 480p 1,1. Verkeer in Europa kost $0,01 per GB.
 
 | Eén volledige kijkbeurt (7:44) | Data | Kost |
 |---|---|---|
-| 4K (2160p) | ±1,45 GB | ±$0,015 |
-| 1080p | ±0,29 GB | ±$0,003 |
+| 4K (2160p) | ±0,72 GB | ±$0,007 |
+| 1080p | ±0,18 GB | ±$0,002 |
 
-Dus 1.000 volledige kijkbeurten in 4K kosten ±$14,50 (op Bunny's goedkopere Volume-netwerk ongeveer de helft). Eén 4K-kijker kost zoveel als vijf 1080p-kijkers. De maandbedragen in de tabel hierboven gaan uit van gemengd 720p/1080p; kijken veel mensen in 4K, dan stijgen ze mee. Alleen wie een groot scherm én een snelle verbinding heeft, krijgt 4K: op een gsm blijft het 720p of 1080p, en niet iedereen kijkt tot het einde.
+Dus 1.000 volledige kijkbeurten in 4K kosten ±$7 (op Bunny's goedkopere Volume-netwerk ongeveer de helft). Eén 4K-kijker kost zoveel als vier 1080p-kijkers. De maandbedragen in de tabel hierboven gaan uit van gemengd 720p/1080p; kijken veel mensen in 4K, dan stijgen ze mee. Alleen wie een groot scherm én een snelle verbinding heeft, krijgt 4K: op een gsm blijft het 720p of 1080p, en niet iedereen kijkt tot het einde.
 
 **In de speler:**
 - Geen plafond op de kwaliteit. hls.js mag tot de hoogste kwaliteit gaan, ook als de speler op het scherm kleiner is dan 4K (`capLevelToPlayerSize` staat uit).
@@ -218,7 +218,7 @@ Wat het dan hooguit kost:
 
 **3. Maandplafond op het verkeer (de harde grens)**
 1. Stream › bibliotheek › API › Pull Zone › Manage › Limits › **Monthly bandwidth limit: 500** (GB).
-2. 500 GB is ±345 volledige kijkbeurten in 4K, ±1.700 in 1080p, of ±6.000 kijkers die gemiddeld 3 minuten kijken.
+2. 500 GB is ±690 volledige kijkbeurten in 4K of ±2.700 in 1080p; het ingestelde plafond van 1 TB het dubbele.
 3. Let op: is het plafond vol, dan speelt de video niet meer tot de volgende maand; de speler toont dan "De video laadt niet". Kijk de eerste weken naar het verbruik (Stream › Statistics) en trek het plafond op als de hub goed loopt (1.000 GB ≈ $10).
 
 **4. Alleen onze site (tegen leeching)**
