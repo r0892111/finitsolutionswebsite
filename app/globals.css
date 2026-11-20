@@ -938,6 +938,12 @@ html {
 
 /* De ondertitels schalen mee met de breedte van de speler, niet van het scherm */
 .vsl-frame { container-type: inline-size; }
+/* Volledig scherm (Android, desktop): het kader vult het scherm en het beeld past erin,
+   met zwarte randen. Twee regels: een selector die de browser niet kent, schrapt de hele regel. */
+.vsl-frame:fullscreen { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; box-shadow: none; background: #000; }
+.vsl-frame:-webkit-full-screen { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; box-shadow: none; background: #000; }
+.vsl-frame:fullscreen video { object-fit: contain; }
+.vsl-frame:-webkit-full-screen video { object-fit: contain; }
 /* Ondertitels zoals bij reels: geen vak, witte vette letters met een dunne donkere
    rand en een zachte schaduw, zodat ze op elk beeld leesbaar blijven. */
 .vsl-ondertitel {

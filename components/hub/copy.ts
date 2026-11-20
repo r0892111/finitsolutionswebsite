@@ -52,6 +52,8 @@ export const HUB = {
     kwaliteitAuto: "Auto",
     ondertitelsAan: "Ondertitels aanzetten",
     ondertitelsUit: "Ondertitels uitzetten",
+    volScherm: "Volledig scherm",
+    volSchermUit: "Volledig scherm sluiten",
   },
 
   // Het formulier, vraag per vraag. Verzendt via het bestaande contactformulier

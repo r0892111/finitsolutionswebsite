@@ -24,7 +24,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Pause, Play, RotateCcw, Subtitles } from "lucide-react";
+import { Maximize, Minimize, Pause, Play, RotateCcw, Subtitles } from "lucide-react";
 import type HlsType from "hls.js";
 import { pushEvent } from "@/lib/analytics";
 import { meetTijd, startKijkbeurt, stuurKijkbeurt } from "./kijkmeting";
@@ -39,6 +39,18 @@ type Regel = [number, number, Woord[]];
 const SLEUTEL = `finit_hub_vsl_positie:${VSL.bron}`;
 const IS_HLS = /\.m3u8(\?|$)/i.test(VSL.bron);
 const T = HUB.speler;
+
+// Volledig scherm: de standaard-API, de oude Safari-variant, en op de iPhone Apples eigen videospeler.
+type KaderMetWebkit = HTMLDivElement & { webkitRequestFullscreen?: () => Promise<void> | void };
+type DocMetWebkit = Document & { webkitFullscreenElement?: Element | null; webkitExitFullscreen?: () => Promise<void> | void };
+type VideoMetIos = HTMLVideoElement & { webkitEnterFullscreen?: () => void; webkitExitFullscreen?: () => void; webkitDisplayingFullscreen?: boolean };
+type Draaien = ScreenOrientation & { lock?: (stand: string) => Promise<void>; unlock?: () => void };
+const VERBERG_NA_MS = 3000;
+
+function volSchermElement(): Element | null {
+  const d = document as DocMetWebkit;
+  return d.fullscreenElement ?? d.webkitFullscreenElement ?? null;
+}
 
 function leesPositie(): number {
   try {
@@ -133,6 +145,8 @@ export function VslSpeler({
   onNaarFormulier?: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const kaderRef = useRef<HTMLDivElement>(null);
+  const verbergTimer = useRef<number | undefined>(undefined);
   const hlsRef = useRef<HlsType | null>(null);
   const bronKlaar = useRef<Promise<void> | null>(null);
   const bronFout = useRef(false);
@@ -157,6 +171,9 @@ export function VslSpeler({
   const [keuze, setKeuze] = useState(-1);
   const [speeltNiveau, setSpeeltNiveau] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [volScherm, setVolScherm] = useState(false);
+  // Op volledig scherm verdwijnen de knoppen na 3 s spelen; een tik toont ze weer.
+  const [bediening, setBediening] = useState(true);
 
   // Ondertitels: standaard uit, tenzij de kijker ze eerder aanzette.
   useEffect(() => setCc(leesOndertitelsAan()), []);
@@ -315,6 +332,82 @@ export function VslSpeler({
     if (v) void v.play().catch(() => undefined);
   }, []);
 
+  const verlaatVolScherm = useCallback(() => {
+    const d = document as DocMetWebkit;
+    const v = videoRef.current as VideoMetIos | null;
+    if (volSchermElement()) void Promise.resolve((d.exitFullscreen ?? d.webkitExitFullscreen)?.call(d)).catch(() => undefined);
+    else if (v?.webkitDisplayingFullscreen) v.webkitExitFullscreen?.();
+  }, []);
+
+  /**
+   * Android en desktop: het hele kader op volledig scherm (onze knoppen, ondertitels
+   * en balk blijven), en op een gsm liggend beeld vragen. iPhone: daar kan alleen
+   * Apples eigen videospeler op volledig scherm; spoelen blijft ook daar geblokkeerd
+   * (de seeking-wacht hieronder zet elke sprong terug).
+   */
+  const wisselVolScherm = useCallback(() => {
+    const k = kaderRef.current as KaderMetWebkit | null;
+    const v = videoRef.current as VideoMetIos | null;
+    if (!k || !v) return;
+    if (volSchermElement() || v.webkitDisplayingFullscreen) {
+      verlaatVolScherm();
+      return;
+    }
+    const vraag = k.requestFullscreen ?? k.webkitRequestFullscreen;
+    if (vraag) {
+      void Promise.resolve(vraag.call(k))
+        .then(() => (screen.orientation as Draaien | undefined)?.lock?.("landscape"))
+        .catch(() => undefined); // desktop en sommige gsm's laten het draaien niet toe: dan gewoon zo
+    } else if (v.webkitEnterFullscreen) {
+      v.webkitEnterFullscreen();
+    } else return;
+    pushEvent("vsl_volledig_scherm", { ...metaRef.current });
+  }, [verlaatVolScherm]);
+
+  const toonBediening = useCallback(() => {
+    setBediening(true);
+    window.clearTimeout(verbergTimer.current);
+    verbergTimer.current = window.setTimeout(() => setBediening(false), VERBERG_NA_MS);
+  }, []);
+
+  // Op en af volledig scherm: de knop wisselt, en bij het verlaten mag de gsm weer vrij draaien.
+  useEffect(() => {
+    const v = videoRef.current;
+    const opWissel = () => {
+      const aan = !!kaderRef.current && volSchermElement() === kaderRef.current;
+      setVolScherm(aan);
+      if (!aan) {
+        try {
+          (screen.orientation as Draaien | undefined)?.unlock?.();
+        } catch {
+          /* niet overal beschikbaar */
+        }
+      }
+    };
+    const iosAan = () => setVolScherm(true);
+    const iosUit = () => setVolScherm(false);
+    document.addEventListener("fullscreenchange", opWissel);
+    document.addEventListener("webkitfullscreenchange", opWissel);
+    v?.addEventListener("webkitbeginfullscreen", iosAan);
+    v?.addEventListener("webkitendfullscreen", iosUit);
+    return () => {
+      document.removeEventListener("fullscreenchange", opWissel);
+      document.removeEventListener("webkitfullscreenchange", opWissel);
+      v?.removeEventListener("webkitbeginfullscreen", iosAan);
+      v?.removeEventListener("webkitendfullscreen", iosUit);
+    };
+  }, []);
+
+  // Alleen op volledig scherm en tijdens het spelen verbergen; daarbuiten blijven de knoppen staan.
+  useEffect(() => {
+    if (volScherm && fase === "speelt") toonBediening();
+    else {
+      window.clearTimeout(verbergTimer.current);
+      setBediening(true);
+    }
+    return () => window.clearTimeout(verbergTimer.current);
+  }, [volScherm, fase, toonBediening]);
+
   // Alle gebeurtenissen van de video.
   useEffect(() => {
     const v = videoRef.current;
@@ -356,6 +449,8 @@ export function VslSpeler({
       setFase((f) => (f === "speelt" ? "pauze" : f));
     };
     const opEinde = () => {
+      // Het slot (door naar het formulier) werkt alleen buiten volledig scherm.
+      verlaatVolScherm();
       meetTijd(v.duration, v.duration, kwaliteitRef.current);
       stuurKijkbeurt();
       wisPositie();
@@ -406,7 +501,7 @@ export function VslSpeler({
       v.removeEventListener("error", opFout);
       window.removeEventListener("pagehide", opWeg);
     };
-  }, []);
+  }, [verlaatVolScherm]);
 
   // De ondertitels pas ophalen als ze aan staan en de video gestart is.
   useEffect(() => {
@@ -445,6 +540,8 @@ export function VslSpeler({
 
   return (
     <div
+      ref={kaderRef}
+      onPointerMove={volScherm && fase === "speelt" ? (e) => e.pointerType === "mouse" && toonBediening() : undefined}
       className="vsl-frame relative aspect-video w-full select-none overflow-hidden rounded-[18px] bg-[#0F1D47] shadow-[0_30px_70px_-30px_rgba(26,45,99,0.7)] sm:rounded-[28px]"
       role="region"
       aria-label={T.label}
@@ -469,14 +566,20 @@ export function VslSpeler({
         </div>
       )}
 
-      {/* Tijdens het spelen: klik op het beeld = pauze, plus een kleine knop linksonder. */}
+      {/* Tijdens het spelen: klik op het beeld = pauze (op volledig scherm met verborgen knoppen: eerst de knoppen tonen), plus een kleine knop linksonder. */}
       {fase === "speelt" && (
         <>
-          <button type="button" onClick={pauzeer} className="absolute inset-0 z-10 h-full w-full cursor-pointer" aria-label={T.pauze} tabIndex={-1} />
+          <button
+            type="button"
+            onClick={() => (volScherm && !bediening ? toonBediening() : pauzeer())}
+            className={`absolute inset-0 z-10 h-full w-full ${volScherm && !bediening ? "cursor-none" : "cursor-pointer"}`}
+            aria-label={T.pauze}
+            tabIndex={-1}
+          />
           <button
             type="button"
             onClick={pauzeer}
-            className="absolute bottom-4 left-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-[#0F1D47]/70 text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:bottom-6 sm:left-6 sm:h-12 sm:w-12"
+            className={`absolute bottom-4 left-4 z-20 flex h-11 w-11 items-center ${bediening ? "opacity-100" : "pointer-events-none opacity-0"} justify-center rounded-full bg-[#0F1D47]/70 text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:bottom-6 sm:left-6 sm:h-12 sm:w-12`}
             aria-label={T.pauze}
           >
             <Pause className="h-4 w-4 fill-current sm:h-5 sm:w-5" aria-hidden="true" />
@@ -544,9 +647,13 @@ export function VslSpeler({
         </Laag>
       )}
 
-      {/* Rechtsonder: ondertitels aan/uit en de kwaliteit (alleen met hls.js en minstens twee keuzes). */}
+      {/* Rechtsonder: ondertitels aan/uit, de kwaliteit (alleen met hls.js en minstens twee keuzes) en volledig scherm. */}
       {(fase === "speelt" || fase === "pauze") && (
-        <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2 sm:bottom-6 sm:right-6">
+        <div
+          className={`absolute bottom-4 right-4 z-30 flex items-center gap-2 transition-opacity duration-300 sm:bottom-6 sm:right-6 ${
+            bediening ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+        >
           {VSL.ondertitels && (
             <button
               type="button"
@@ -554,7 +661,7 @@ export function VslSpeler({
               aria-pressed={cc}
               aria-label={cc ? T.ondertitelsUit : T.ondertitelsAan}
               title={cc ? T.ondertitelsUit : T.ondertitelsAan}
-              className={`flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12 ${
+              className={`flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12 ${
                 cc ? "bg-white text-[#1A2D63] hover:bg-white/90" : "bg-[#0F1D47]/70 text-white hover:bg-[#0F1D47]/90"
               }`}
             >
@@ -587,7 +694,7 @@ export function VslSpeler({
               aria-haspopup="menu"
               aria-expanded={menuOpen}
               aria-label={T.kwaliteit}
-              className="flex h-10 items-center gap-1.5 rounded-full bg-[#0F1D47]/70 px-3.5 text-[0.8125rem] font-semibold text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:px-4 sm:text-[0.875rem]"
+              className="flex h-11 items-center gap-1.5 rounded-full bg-[#0F1D47]/70 px-3.5 text-[0.8125rem] font-semibold text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:px-4 sm:text-[0.875rem]"
             >
               {keuze === -1
                 ? `${T.kwaliteitAuto}${speeltNiveau >= 0 && hlsRef.current?.levels[speeltNiveau] ? ` · ${kwaliteitLabel(hlsRef.current.levels[speeltNiveau].height)}` : ""}`
@@ -595,6 +702,15 @@ export function VslSpeler({
             </button>
             </div>
           )}
+          <button
+            type="button"
+            onClick={wisselVolScherm}
+            aria-label={volScherm ? T.volSchermUit : T.volScherm}
+            title={volScherm ? T.volSchermUit : T.volScherm}
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0F1D47]/70 text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12"
+          >
+            {volScherm ? <Minimize className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" /> : <Maximize className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />}
+          </button>
         </div>
       )}
 
