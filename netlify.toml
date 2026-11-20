@@ -76,6 +76,32 @@
   status = 200
   force = true
 
+# Het e-mailslot op de resources van de hub: bewaart het adres in Brevo.
+[[redirects]]
+  from = "/api/hub-toegang"
+  to = "/.netlify/functions/hub-toegang"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/vsl-bron"
+  to = "/.netlify/functions/vsl-bron"
+  status = 200
+  force = true
+
+# Anonieme kijkmeting van de VSL op de hub, en de cijfers voor /hub/cijfers/.
+[[redirects]]
+  from = "/api/vsl-meting"
+  to = "/.netlify/functions/vsl-meting"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/vsl-cijfers"
+  to = "/.netlify/functions/vsl-cijfers"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/api/lead-magnet/start"
   to = "/.netlify/functions/lead-magnet-start"
