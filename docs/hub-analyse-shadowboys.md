@@ -90,6 +90,10 @@ Inhoudskolom: max 1244 px met 24 px zijmarge (gsm 14 px, onder 380 px 10 px), zo
 
 **Eigen keuzes waar Shadowboys niets heeft:** de antwoorden in de twijfels op ±0,8 × de vraag (29 px desktop, 16 px gsm), de uitleg onder een sectietitel even groot als de subzin. De tekst in het formulier zelf blijft: die is al iets groter dan bij hen (hun vraag 20 px, de onze ±22 px). Het logo en de resourcekaarten zijn ongewijzigd.
 
+**Uitzondering, de gespreksknop (Alex, 20/11 namiddag):** op Shadowboys-maat was hij te groot en te opdringerig. Hij is nu een maat kleiner en rustiger: 28 px (1024 px breed: 26 px, gsm 16 tot 19 px), 80 px hoog (gsm 56 px), en zo breed als de tekst in plaats van de hele kolom. Het gewicht is 500, net als alle andere knoppen op de site (het lettertype was al het standaardlettertype, Schibsted Grotesk; het vette gewicht 600 maakte het verschil). De knop onder de video en die na de twijfels zijn nu even groot. De tabel hierboven geldt dus nog voor alles behalve deze knop.
+
+**Formulier, wat je te wachten staat:** bovenaan de kaart staat nu zichtbaar "Plan een vrijblijvend gesprek" met de uitleg "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter, en dan plannen we samen een moment in." De teller "Vraag X van 5" is vetter en marineblauw, en de laatste knop heet "Vraag het gesprek aan" (was "Verstuur"). De noot onder de knop zegt nu "Eerst vijf korte vragen, daarna plannen we samen een moment." Bewust níet "kies zelf een moment": er is geen agenda, wij nemen contact op. Voorlopige tekst, Amina mag hem herschrijven (`components/hub/copy.ts`).
+
 ## De videospeler
 
 Ze hadden eerst **Vturb** (een betaalde VSL-speler, `converteai.net`). In november 2026 vervangen door een eigen speler. De code staat leesbaar in de pagina:
