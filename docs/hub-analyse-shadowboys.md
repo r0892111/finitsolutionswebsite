@@ -152,6 +152,8 @@ Voorwaarde van Alex: nooit een onverwacht hoge kost. Eerst eerlijk hoe Bunny rek
 - Zonder automatisch bijladen haalt Bunny nooit zelf geld van je kaart.
 - Daarom is het **maandplafond op het verkeer** (stap 3) de echte harde grens.
 
+**Zo staat het nu (20/11, ingesteld door de hoofdchat):** bibliotheek `finit-vsl`; toegelaten sites finitsolutions.be, www.finitsolutions.be, `*.netlify.app` en localhost; "block direct URL file access" uit; maandplafond **1 TB** (dus hooguit ±$10 verkeer per maand); prepaid zonder automatisch bijladen. **Token-authenticatie staat bewust uit.** De code ervoor staat klaar maar doet niets zolang `NEXT_PUBLIC_HUB_VSL_TOKEN` niet op `1` staat; aanzetten kan later met stap 4 hieronder.
+
 Wat het dan hooguit kost:
 
 | | Kost |
@@ -216,7 +218,7 @@ Bronnen: bunny.net/pricing/stream, bunny.net/docs/stream/premium-encoding, bunny
 | De pagina | `components/hub/hub-pagina.tsx`, `app/hub/page.tsx`, `app/hub/resources/page.tsx` |
 | Ondertitels opnieuw maken | `node scripts/hub/ondertitels.mjs <transcript.json>` |
 
-**De echte video inpluggen:** in `components/hub/video.ts` de regel `bron` vervangen door de HLS-link (bv. `https://vz-….b-cdn.net/<id>/playlist.m3u8`), of in Netlify de variabele `NEXT_PUBLIC_HUB_VSL_BRON` zetten. Daarna de ondertitels opnieuw maken met het transcript van de nieuwe versie (de huidige zijn van de lange versie van 9:28). Nu staat er een voorlopige video van 7:44 met een klok in beeld.
+**De echte video inpluggen:** in `components/hub/video.ts` de regel `bron` vervangen door de HLS-link (bv. `https://vz-….b-cdn.net/<id>/playlist.m3u8`), of in Netlify de variabele `NEXT_PUBLIC_HUB_VSL_BRON` zetten. Ondertitels en affiche zijn al van v3 (7:43,8; transcript uit de motion-studio). Verandert de montage nog, maak de ondertitels dan opnieuw. Tot de link er staat, speelt een voorlopige video van 7:44 met een klok in beeld.
 
 **De speler:** alleen pauze en verder (knop linksonder of klikken op het beeld), spoelen wordt teruggezet, balk `1 − (1 − p)²` zoals Shadowboys, positie om de 5 s in localStorage, "Wil je verder kijken?" vanaf 15 s, op het einde "Herken je je bedrijf hierin?" met een knop naar het formulier. Ondertitels woord voor woord met het actieve woord gemarkeerd. Kwaliteitsmenu rechtsonder (Auto / 4K / 1080p / 720p, zie "4K" hierboven). Events in Google Tag Manager: `vsl_start`, `vsl_verder`, `vsl_voortgang` (25/50/75/100 %, echte voortgang), `vsl_kwaliteit`.
 
