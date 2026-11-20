@@ -153,10 +153,10 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
     <div ref={kader} className="hp-card scroll-mt-6 overflow-hidden">
       {/* Wat je te wachten staat: eerst de vragen, pas bij de laatste je gegevens. */}
       <div className="px-5 pt-6 sm:px-8 sm:pt-8">
-        <h2 id={kopId} className="hp-display hp-display-sm text-[1.45rem] font-semibold leading-[1.2] text-[#1A2D63] sm:text-[1.75rem]">
+        <h2 id={kopId} className="hp-display hp-display-sm text-[1.45rem] font-semibold leading-[1.2] text-[#1A2D63] sm:text-[1.875rem]">
           {F.titel}
         </h2>
-        <p className="mt-1.5 text-[1rem] leading-[1.5] text-[#3D4766] sm:text-[1.0625rem]">{F.uitleg}</p>
+        <p className="mt-1.5 text-[1rem] leading-[1.5] text-[#3D4766] sm:mt-2 sm:text-[1.1875rem]">{F.uitleg}</p>
       </div>
 
       {/* Streepjes: één per vraag, de huidige en de vorige gekleurd. */}
