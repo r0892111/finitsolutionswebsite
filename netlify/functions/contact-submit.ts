@@ -22,22 +22,55 @@
  * mail toch, met de melding dat de lead manueel moet worden toegevoegd. De
  * mail blijft dus het vangnet.
  *
+ * Aanvragen van het hubformulier (/hub/) gaan daarnaast als item naar Tuesday,
+ * bord Leads › Socials, met het kanaal, de reel en hoe ver de VSL bekeken werd
+ * (veld `hub` in de aanvraag). Mislukt Tuesday, dan vertrekken mail en monday
+ * gewoon; de fout wordt gelogd zonder persoonsgegevens en zonder sleutel. Ook
+ * krijgt de kijkbeurt van de VSL-meting dan "formulier verstuurd".
+ *
  * Nodige env-variabelen in Netlify:
  *   BREVO_API_KEY      (verplicht) — Brevo → SMTP & API → API Keys
  *   CONTACT_TO_EMAIL   (optioneel) — ontvanger,  standaard contact@finitsolutions.be
  *   CONTACT_FROM_EMAIL (optioneel) — afzender,   moet een geverifieerde Brevo-sender zijn
  *   MONDAY_API_TOKEN, MONDAY_BOARD_ID (optioneel, samen) — monday.com
  *   MONDAY_GROUP_ID, MONDAY_COL_*, MONDAY_STATUS_LABEL (optioneel) — zie lib/monday/create-item.ts
+ *   CRM_SOCIALS_TOKEN  (optioneel) — sleutel voor Tuesday, enkel het bord Socials. Nooit loggen.
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
 import { createMondayItem, mondayConfigFromEnv } from "../../lib/monday/create-item";
 import { EMAIL_RE, telefoonOk } from "../../lib/contact-velden";
+import { markeerFormulier } from "../../lib/vsl-meting-opslag";
 
 // monday mag de bezoeker niet laten wachten: de browser wacht maximaal 10 s,
 // en na monday moet de mail nog vertrekken.
 const MONDAY_TIMEOUT_MS = 5000;
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
+
+// Tuesday (crm.finitsolutions.be), bord Leads › Socials. Ook max 5 s: de browser wacht er 10.
+const TUESDAY_URL = "https://crm.finitsolutions.be/api/boards/90000000549/items";
+const TUESDAY_TIMEOUT_MS = 5000;
+
+// ?bron= uit de link naar het label van de keuzelijst "bron" in Tuesday.
+const KANALEN: Record<string, string> = {
+  tiktok: "TikTok",
+  instagram: "Instagram",
+  ig: "Instagram",
+  youtube: "YouTube",
+  yt: "YouTube",
+  linkedin: "LinkedIn",
+  facebook: "Facebook",
+  fb: "Facebook",
+  x: "X",
+  twitter: "X",
+  threads: "Threads",
+};
+
+// Een gratis mailadres zegt niets over het bedrijf: dan heet het item naar de persoon.
+const GRATIS_MAIL = new Set([
+  "gmail.com", "googlemail.com", "hotmail.com", "hotmail.be", "outlook.com", "outlook.be", "live.com", "live.be",
+  "msn.com", "icloud.com", "me.com", "yahoo.com", "telenet.be", "skynet.be", "proximus.be", "scarlet.be",
+]);
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
 
 // contact@ is een gedeeld adres, zodat alle vennoten de aanvragen binnenkrijgen
@@ -51,6 +84,76 @@ function json(statusCode: number, body: unknown) {
 
 function pickStr(v: unknown, max = 200): string {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
+}
+
+function kanaalLabel(slug: string): string {
+  if (!slug || slug === "direct") return "Website";
+  return KANALEN[slug] ?? "Other";
+}
+
+/** "https://www.jouwbedrijf.be/x" → "jouwbedrijf.be"; ongeldig → "". */
+function domein(url: string): string {
+  try {
+    return new URL(/^https?:\/\//i.test(url) ? url : `https://${url}`).hostname.replace(/^www\./i, "").toLowerCase();
+  } catch {
+    return "";
+  }
+}
+
+interface HubVelden {
+  kanaal: string;
+  reel: string;
+  vslProcent: number;
+  rol: string;
+  grootte: string;
+  meesteTijd: string;
+  eerst: string;
+  pagina: string;
+  kijkbeurt: { id: string; dag: string } | null;
+}
+
+function leesHub(v: unknown): HubVelden | null {
+  if (!v || typeof v !== "object") return null;
+  const h = v as Record<string, unknown>;
+  const slug = (x: unknown, max: number) => (typeof x === "string" ? x.toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, max) : "");
+  const procent = typeof h.vsl_procent === "number" && Number.isFinite(h.vsl_procent) ? Math.round(Math.min(100, Math.max(0, h.vsl_procent))) : 0;
+  const pagina = pickStr(h.pagina, 500);
+  const k = h.kijkbeurt as Record<string, unknown> | null | undefined;
+  return {
+    kanaal: slug(h.kanaal, 40),
+    reel: slug(h.reel, 12).toUpperCase(),
+    vslProcent: procent,
+    rol: pickStr(h.rol, 120),
+    grootte: pickStr(h.grootte, 120),
+    meesteTijd: pickStr(h.meeste_tijd, 120),
+    eerst: pickStr(h.eerst, 3000),
+    pagina: /^https?:\/\//i.test(pagina) ? pagina : "",
+    kijkbeurt: k && typeof k.id === "string" && typeof k.dag === "string" ? { id: k.id, dag: k.dag } : null,
+  };
+}
+
+/** Eén item op het bord Socials. Geeft "ok" of "failed"; logt nooit inhoud of sleutel. */
+async function maakTuesdayItem(token: string, item: unknown): Promise<"ok" | "failed"> {
+  const timer = new AbortController();
+  const timeout = setTimeout(() => timer.abort(), TUESDAY_TIMEOUT_MS);
+  try {
+    const res = await fetch(TUESDAY_URL, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+      signal: timer.signal,
+    });
+    if (!res.ok) {
+      console.error("contact-submit: Tuesday gaf status", res.status);
+      return "failed";
+    }
+    return "ok";
+  } catch (err) {
+    console.error("contact-submit: Tuesday niet bereikt", err instanceof Error ? err.name : "onbekende fout");
+    return "failed";
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 // Alles wat de bezoeker intypt komt in de mail terecht; escapen houdt de
@@ -100,6 +203,34 @@ export const handler: Handler = async (event: HandlerEvent) => {
     return json(500, { error: "mail_not_configured" });
   }
 
+  // Hubformulier: Tuesday en de kijkbeurt lopen parallel met monday.
+  const hub = isHub ? leesHub(body.hub) : null;
+  const tuesdayToken = process.env.CRM_SOCIALS_TOKEN;
+  let tuesdayBelofte: Promise<"off" | "ok" | "failed"> = Promise.resolve("off");
+  if (hub && tuesdayToken) {
+    const mailDomein = email.split("@")[1]?.toLowerCase() ?? "";
+    const naamItem = domein(bedrijfswebsite) || (mailDomein && !GRATIS_MAIL.has(mailDomein) ? mailDomein : "") || naam;
+    const values: Record<string, string | number> = {
+      status: "New lead 0%",
+      bron: kanaalLabel(hub.kanaal),
+      vsl_procent: hub.vslProcent,
+      contact_name: naam,
+      email,
+      phone: telefoon,
+    };
+    if (hub.reel) values.reel = hub.reel;
+    if (hub.rol) values.contact_role = hub.rol;
+    if (bedrijfswebsite) values.website = /^https?:\/\//i.test(bedrijfswebsite) ? bedrijfswebsite : `https://${bedrijfswebsite}`;
+    if (hub.grootte) values.grootte = hub.grootte;
+    if (hub.meesteTijd) values.meeste_tijd = hub.meesteTijd;
+    if (hub.eerst) values.message = hub.eerst;
+    if (hub.pagina) values.pagina = hub.pagina;
+    tuesdayBelofte = maakTuesdayItem(tuesdayToken, { name: naamItem, values });
+  }
+  const kijkBelofte = hub?.kijkbeurt
+    ? markeerFormulier(event, hub.kijkbeurt.id, hub.kijkbeurt.dag).catch(() => console.error("contact-submit: kijkbeurt niet bijgewerkt"))
+    : Promise.resolve();
+
   // Eerst monday, zodat de mail kan zeggen of de lead er staat.
   let mondayStatus: "off" | "ok" | "failed" = "off";
   let mondayRegel = "";
@@ -123,6 +254,15 @@ export const handler: Handler = async (event: HandlerEvent) => {
       clearTimeout(mondayTimeout);
     }
   }
+
+  const tuesdayStatus = await tuesdayBelofte;
+  await kijkBelofte;
+  const tuesdayRegel =
+    tuesdayStatus === "ok"
+      ? `<p style="margin:8px 0 0;font-size:14px;color:#6C7590">Tuesday: item op het bord Socials.</p>`
+      : tuesdayStatus === "failed"
+        ? `<p style="margin:8px 0 0;font-size:14px;color:#b45309">Tuesday: item aanmaken mislukt, voeg deze manueel toe op het bord Socials.</p>`
+        : "";
 
   const rijen: Array<[string, string]> = [
     ["Naam", naam],
@@ -154,6 +294,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
           : ""
       }
       ${mondayRegel}
+      ${tuesdayRegel}
     </div>`;
 
   try {
@@ -184,5 +325,5 @@ export const handler: Handler = async (event: HandlerEvent) => {
     return json(502, { error: "mail_failed" });
   }
 
-  return json(200, { ok: true, monday: mondayStatus });
+  return json(200, { ok: true, monday: mondayStatus, tuesday: tuesdayStatus });
 };

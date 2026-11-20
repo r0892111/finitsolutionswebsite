@@ -253,7 +253,8 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                 maakt de pagina een willekeurig nummer dat niet in uw browser bewaard wordt, en we noteren alleen de verste
                 seconde, de lengte van de video, het soort toestel (gsm of computer), via welk kanaal u kwam en of daarna het
                 formulier verstuurd werd. We bewaren daarbij geen IP-adres en niets dat naar u als persoon leidt. Verstuurt u
-                het formulier op de hub, dan sturen we samen met uw aanvraag mee tot hoever u de video in dat bezoek bekeek.
+                het formulier op de hub, dan sturen we samen met uw aanvraag mee tot hoever u de video in dat bezoek bekeek
+                en via welk kanaal u kwam. Dat kanaal onthoudt de pagina alleen zolang uw tabblad open is.
               </p>
 
               {/* 8. Leadinfo */}

@@ -5,7 +5,7 @@
  * de pagina gaat er een hartslag naar /api/vsl-meting.
  *
  * Het formulier leest hier hoe ver de kijker kwam ("VSL bekeken tot 63 %") en
- * meldt na het versturen dat deze kijkbeurt tot een aanvraag leidde.
+ * stuurt het id mee; contact-submit zet dan "formulier verstuurd" op de kijkbeurt.
  */
 import { VSL } from "./video";
 
@@ -14,6 +14,8 @@ const ELKE_MS = 5000;
 
 interface Kijkbeurt {
   id: string;
+  /** Dag waarop de kijkbeurt begon (UTC), deel van de sleutel in de opslag. */
+  dag: string;
   start: number;
   verste: number;
   duur: number | null;
@@ -27,6 +29,8 @@ interface Kijkbeurt {
 }
 
 let huidige: Kijkbeurt | null = null;
+// Verste plek in procent over het hele bezoek (ook als iemand opnieuw begon).
+let bezoekProcent: number | null = null;
 let luistert = false;
 
 function nieuwId(): string {
@@ -48,8 +52,8 @@ function stuur(viaBaken = false) {
   k.laatstVerstuurd = Date.now();
   k.verstuurdTot = k.verste;
   const body = JSON.stringify({
-    t: "hartslag",
     id: k.id,
+    dag: k.dag,
     video: VSL.id,
     start: k.start,
     verste: k.verste,
@@ -80,6 +84,7 @@ export function startKijkbeurt(o: { start: number; hervat: boolean; bron: string
   if (huidige && huidige.verste > huidige.verstuurdTot) stuur();
   huidige = {
     id: nieuwId(),
+    dag: new Date().toISOString().slice(0, 10),
     start: Math.max(0, o.start),
     verste: Math.max(0, o.start),
     duur: null,
@@ -106,6 +111,7 @@ export function meetTijd(seconde: number, duur: number, kwaliteit: string) {
   k.duur = Math.round(duur * 10) / 10;
   k.verste = Math.min(k.duur, Math.max(k.verste, Math.round(seconde * 10) / 10));
   k.kwaliteit = kwaliteit;
+  bezoekProcent = Math.max(bezoekProcent ?? 0, Math.min(100, Math.round((100 * k.verste) / k.duur)));
   if (Date.now() - k.laatstVerstuurd >= ELKE_MS) stuur();
 }
 
@@ -116,24 +122,13 @@ export function stuurKijkbeurt() {
 
 /** Hoe ver deze kijker kwam in dit bezoek, in procent (null = niet gekeken). */
 export function kijkProcent(): number | null {
-  const k = huidige;
-  if (!k || !k.duur) return null;
-  return Math.min(100, Math.round((100 * k.verste) / k.duur));
+  return bezoekProcent;
 }
 
-/** Na een verstuurd formulier: deze kijkbeurt leidde tot een aanvraag. */
-export function meldFormulier() {
+/** Wat het formulier meestuurt: welke kijkbeurt, en hoe ver (null = niet gekeken). */
+export function kijkbeurtVoorFormulier(): { id: string; dag: string; procent: number } | null {
   const k = huidige;
-  if (!k) return;
+  if (!k) return null;
   stuurKijkbeurt();
-  try {
-    void fetch(URL_METING, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ t: "formulier", id: k.id }),
-      keepalive: true,
-    }).catch(() => undefined);
-  } catch {
-    /* idem */
-  }
+  return { id: k.id, dag: k.dag, procent: kijkProcent() ?? 0 };
 }

@@ -46,6 +46,10 @@ interface Herkomst {
   pad: string;
 }
 
+// De eerste bron en reel van dit bezoek, zolang het tabblad open is: wie eerst rondklikt
+// en dan zonder ?bron= terugkomt, blijft aan het juiste kanaal gekoppeld (o.a. voor Tuesday).
+const HERKOMST_OPSLAG = "finit_hub_herkomst";
+
 /** Alleen kleine letters, cijfers, - en _: zo kan er niets vreemds in een link of mail belanden. */
 function schoon(v: string | null, max: number): string {
   return (v ?? "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, max);
@@ -57,9 +61,21 @@ export function HubPagina({ start }: { start?: "resources" }) {
   // Herkomst uit de URL, één keer bij het openen. Op /hub/resources/ meteen naar de resources.
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
+    const uitUrl = { bron: schoon(p.get("bron"), 40), reel: schoon(p.get("reel"), 12).toUpperCase() };
+    let eerste: { bron: string; reel: string } | null = null;
+    try {
+      const bewaard = JSON.parse(sessionStorage.getItem(HERKOMST_OPSLAG) ?? "null") as { bron?: unknown; reel?: unknown } | null;
+      if (bewaard) eerste = { bron: schoon(String(bewaard.bron ?? ""), 40), reel: schoon(String(bewaard.reel ?? ""), 12).toUpperCase() };
+      if (!eerste && (uitUrl.bron || uitUrl.reel)) {
+        eerste = uitUrl;
+        sessionStorage.setItem(HERKOMST_OPSLAG, JSON.stringify(uitUrl));
+      }
+    } catch {
+      /* geen opslag: dan geldt gewoon de link */
+    }
     const h: Herkomst = {
-      bron: schoon(p.get("bron"), 40) || "direct",
-      reel: schoon(p.get("reel"), 12).toUpperCase(),
+      bron: eerste?.bron || uitUrl.bron || "direct",
+      reel: eerste?.reel || uitUrl.reel,
       pad: window.location.pathname,
     };
     setHerkomst(h);

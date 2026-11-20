@@ -23,7 +23,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { EMAIL_RE, telefoonOk } from "@/lib/contact-velden";
-import { kijkProcent, meldFormulier } from "./kijkmeting";
+import { kijkProcent, kijkbeurtVoorFormulier } from "./kijkmeting";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { HUB, vetStukken } from "./copy";
 
@@ -132,6 +132,9 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
 
   const fouten = geprobeerd ? controleer(naam, email, telefoon) : {};
 
+  // Geen dubbele aanvragen bij een dubbelklik: de knop staat uit, en dit vangt de klik ervoor.
+  const bezigRef = useRef(false);
+
   const verstuur = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!laatste) {
@@ -147,7 +150,22 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
       veld?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
+    if (bezigRef.current) return;
+    bezigRef.current = true;
     setStatus("bezig");
+    const kijk = kijkbeurtVoorFormulier();
+    // Gestructureerd voor Tuesday (bord Leads › Socials); mail en monday krijgen het bericht zoals voorheen.
+    const hub = {
+      kanaal: meta.bron ?? "direct",
+      reel: meta.reel ?? "",
+      vsl_procent: kijkProcent() ?? 0,
+      rol: antwoorden.rol ?? "",
+      grootte: antwoorden.grootte ?? "",
+      meeste_tijd: antwoorden.tijd ?? "",
+      eerst: (antwoorden.bericht ?? "").trim(),
+      pagina: window.location.href,
+      kijkbeurt: kijk ? { id: kijk.id, dag: kijk.dag } : null,
+    };
     pushEvent("form_submit", { ...meta, location: "hub" });
     const timer = new AbortController();
     const timeout = setTimeout(() => timer.abort(), TIMEOUT_MS);
@@ -156,16 +174,16 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: timer.signal,
-        body: JSON.stringify({ naam: naam.trim(), email: email.trim(), telefoonnummer: telefoon.trim(), bedrijfswebsite: website.trim(), bericht: bericht(), website: honing, bron }),
+        body: JSON.stringify({ naam: naam.trim(), email: email.trim(), telefoonnummer: telefoon.trim(), bedrijfswebsite: website.trim(), bericht: bericht(), website: honing, bron, hub }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
       setStatus("klaar");
-      meldFormulier();
       pushEvent("form_submitted", { ...meta, location: "hub" });
     } catch {
       setStatus("fout");
     } finally {
       clearTimeout(timeout);
+      bezigRef.current = false;
     }
   };
 

@@ -116,12 +116,21 @@ Nagemeten op de preview (1440 en 360 px): alle afstanden vallen exact op deze wa
 
 ## Eigen kijkmeting (Alex, 20/11)
 
-Zonder cookies en zonder toestemming nodig: per kijkbeurt een willekeurig id in het geheugen van de pagina (`components/hub/kijkmeting.ts`). Om de 5 s, bij pauze, op het einde en bij het verlaten van de pagina gaat een hartslag naar `/api/vsl-meting` (`netlify/functions/vsl-meting.ts`): id, video, start- en verste seconde, duur, bron, reel, gsm/desktop, kwaliteit, hervat. Geen IP-adres, geen user-agent.
+Zonder cookies en zonder toestemming nodig: per kijkbeurt een willekeurig id in het geheugen van de pagina (`components/hub/kijkmeting.ts`). Om de 5 s, bij pauze, op het einde en bij het verlaten van de pagina gaat een hartslag naar `/api/vsl-meting` (`netlify/functions/vsl-meting.ts`): id, dag, video, start- en verste seconde, duur, bron, reel, gsm/desktop, kwaliteit, hervat. Geen IP-adres, geen user-agent.
 
-- **Opslag:** tabel `hub_vsl_kijkbeurten` (migratie `supabase/migrations/020_hub_vsl_kijkbeurten.sql`, RLS aan zonder policies, functie `hub_vsl_hartslag` die de verste seconde alleen laat stijgen). **Nog niet toegepast:** welk Supabase-project dit wordt, beslist Alex. Daarna in Netlify `HUB_METING_SUPABASE_URL` en `HUB_METING_SUPABASE_KEY` (service role) zetten; tot dan antwoordt de functie 202 en bewaart niets.
-- **Cijfers:** `/hub/cijfers/?sleutel=…` (noindex, niet in de sitemap), sleutel in Netlify `HUB_CIJFERS_SLEUTEL`. Retentie per seconde, kijkbeurten, gemiddelde kijktijd, % tot het einde, de vijf vensters van 10 s met de meeste afhakers (met wat Alex daar zegt), formulieren; filters per bron, apparaat en video. `?demo=1` toont verzonnen voorbeelddata.
-- **Formulier:** "VSL bekeken tot X %" (of "niet bekeken in dit bezoek") gaat mee in het bericht naar contact@ en monday; de kijkbeurt krijgt "formulier verstuurd".
+- **Opslag:** Netlify Blobs, store `hub-vsl-kijkbeurten` (`lib/vsl-meting-opslag.ts`), één sleutel per kijkbeurt `JJJJ-MM-DD/<id>` met `max_s` (alleen omhoog), `duur_s`, `start_s`, `bron`, `reel`, `apparaat`, `kwaliteit`, `hervat`, `formulier`, `start`, `laatst`. Hoort bij de site zelf: geen extra account, gratis, weg te halen door de store te wissen. Geen Supabase (keuze hoofdchat/Alex: geen enkel bestaand project hoort bij de website).
+- **Cijfers:** `/hub/cijfers/` (noindex, niet in de sitemap). De sleutel (Netlify `HUB_CIJFERS_SLEUTEL`) typ je in of zet je na het hekje: `/hub/cijfers/#sleutel=…`. Zo komt hij nooit in een link die gelogd wordt; de pagina stuurt hem in de header `x-hub-sleutel` en onthoudt hem alleen in dat tabblad. Periode 7/30/90/365 dagen, resultaat 5 min in cache. Retentie per seconde, kijkbeurten, gemiddelde kijktijd, % tot het einde, de vijf vensters van 10 s met de meeste afhakers (met wat Alex daar zegt), formulieren; filters per bron, apparaat en video. `?demo=1` toont verzonnen voorbeelddata.
+- **Formulier:** "VSL bekeken tot X %" (verste plek van het hele bezoek) gaat mee in het bericht naar contact@ en monday, en als `vsl_procent` naar Tuesday. Het kijkbeurt-id gaat mee; contact-submit zet `formulier: true` op die kijkbeurt.
 - **Privacy:** een alinea in de privacyverklaring (sectie 7).
+
+## Tuesday: hubformulier naar het bord Leads › Socials (Alex, 20/11)
+
+`contact-submit` maakt voor aanvragen van /hub/ ook een item op Tuesday (`POST https://crm.finitsolutions.be/api/boards/90000000549/items`, sleutel `CRM_SOCIALS_TOKEN` in Netlify, enkel dat bord). Naam van het item: het websitedomein zonder www, anders het maildomein (niet bij gmail, hotmail, telenet en co), anders de naam. Velden: status "New lead 0%", bron (TikTok, Instagram, YouTube, LinkedIn, Facebook, X, Threads; geen bron = Website; onbekend = Other), reel, vsl_procent, contact_name, contact_role, email, phone, website (met https://, alleen als ingevuld), grootte, meeste_tijd, message (wat ze eerst willen oplossen), pagina (de volledige URL).
+
+- De eerste bron en reel van het bezoek blijven in sessionStorage (`finit_hub_herkomst`), zodat ze niet verloren gaan als iemand eerst rondklikt.
+- Tuesday loopt parallel met monday, max 5 s. Mislukt het, dan vertrekken mail en monday gewoon, de bezoeker ziet "gelukt", de mail meldt "Tuesday: item aanmaken mislukt", en de log bevat alleen de status (geen persoonsgegevens, geen sleutel). Monday blijft parallel lopen tot de overstap.
+- Geen dubbele items: de knop staat uit tijdens het versturen, en een tweede klik in dezelfde milliseconden wordt genegeerd.
+- Zonder `CRM_SOCIALS_TOKEN` slaat de functie Tuesday over (`tuesday: "off"` in het antwoord).
 
 ## Cookiebanner (Alex, 20/11)
 
