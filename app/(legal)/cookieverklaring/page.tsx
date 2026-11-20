@@ -129,6 +129,34 @@ export default function CookieVerklaringPage() {
                       <td className="p-3 align-top">Houdt een logboek bij van wijzigingen in je cookie-voorkeuren (voor auditdoeleinden).</td>
                       <td className="p-3 align-top">6 maanden</td>
                     </tr>
+                    <tr className="border-t">
+                      <td className="p-3 align-top font-mono text-xs">finit_hub_toegang</td>
+                      <td className="p-3 align-top">Cookie en local storage</td>
+                      <td className="p-3 align-top">finitsolutions.be</td>
+                      <td className="p-3 align-top">Onthoudt dat je de prompts en gidsen op de hub al opende, zodat we het niet opnieuw vragen.</td>
+                      <td className="p-3 align-top">1 jaar</td>
+                    </tr>
+                    <tr className="border-t">
+                      <td className="p-3 align-top font-mono text-xs">finit_hub_vsl_positie</td>
+                      <td className="p-3 align-top">Local storage</td>
+                      <td className="p-3 align-top">finitsolutions.be</td>
+                      <td className="p-3 align-top">Onthoudt waar je stopte in de video op de hub, zodat je verder kan kijken.</td>
+                      <td className="p-3 align-top">Tot je het wist</td>
+                    </tr>
+                    <tr className="border-t">
+                      <td className="p-3 align-top font-mono text-xs">finit_hub_vsl_ondertitels</td>
+                      <td className="p-3 align-top">Local storage</td>
+                      <td className="p-3 align-top">finitsolutions.be</td>
+                      <td className="p-3 align-top">Onthoudt of je de ondertitels van de video aan of uit zette.</td>
+                      <td className="p-3 align-top">Tot je het wist</td>
+                    </tr>
+                    <tr className="border-t">
+                      <td className="p-3 align-top font-mono text-xs">finit_hub_herkomst</td>
+                      <td className="p-3 align-top">Session storage</td>
+                      <td className="p-3 align-top">finitsolutions.be</td>
+                      <td className="p-3 align-top">Onthoudt via welk kanaal en welke post je op de hub kwam, voor het formulier.</td>
+                      <td className="p-3 align-top">Tot je het tabblad sluit</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>

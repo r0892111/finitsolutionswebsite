@@ -204,6 +204,24 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                       </td>
                     </tr>
                     <tr className="border-t">
+                      <td className="p-3 align-top">E-mailadres</td>
+                      <td className="p-3 align-top">
+                        Om de gratis prompts en gidsen op finitsolutions.be/hub voor u te openen. Zonder uw toestemming
+                        sturen we u geen mails.
+                      </td>
+                      <td className="p-3 align-top">Uitvoering van uw vraag.</td>
+                      <td className="p-3 align-top">Tot u vraagt het te wissen.</td>
+                    </tr>
+                    <tr className="border-t">
+                      <td className="p-3 align-top">E-mailadres, als u het vakje aanvinkt</td>
+                      <td className="p-3 align-top">
+                        Om u af en toe (hooguit twee keer per maand) te mailen met AI-nieuwtjes en tips waar uw bedrijf iets
+                        aan heeft. Afmelden kan altijd via de link onderaan elke mail.
+                      </td>
+                      <td className="p-3 align-top">Toestemming.</td>
+                      <td className="p-3 align-top">Tot u zich afmeldt.</td>
+                    </tr>
+                    <tr className="border-t">
                       <td className="p-3 align-top">
                         Identificatiegegevens; Voorzijde identiteitskaart (met uitzondering van rijksregisternummer en foto)
                       </td>
@@ -254,7 +272,8 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                 seconde, de lengte van de video, het soort toestel (gsm of computer), via welk kanaal u kwam en of daarna het
                 formulier verstuurd werd. We bewaren daarbij geen IP-adres en niets dat naar u als persoon leidt. Verstuurt u
                 het formulier op de hub, dan sturen we samen met uw aanvraag mee tot hoever u de video in dat bezoek bekeek
-                en via welk kanaal u kwam. Dat kanaal onthoudt de pagina alleen zolang uw tabblad open is.
+                en via welk kanaal u kwam. Dat kanaal onthoudt de pagina alleen zolang uw tabblad open is. Uw aanvraag
+                komt terecht in onze mailbox en in ons eigen klantenbeheersysteem, waar we ze opvolgen.
               </p>
 
               {/* 8. Leadinfo */}
