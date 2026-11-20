@@ -10,6 +10,10 @@
  * in de header x-hub-sleutel meestuurt (niet in de link: die komt in logs). Zonder
  * die variabele is de functie dicht.
  *
+ * DELETE met dezelfde sleutel wist alles in de store: kijkbeurten, formuliermerkjes en
+ * cache (knop "Alle kijkcijfers wissen" op de pagina, Alex 20/11). Geeft het aantal
+ * gewiste kijkbeurten terug.
+ *
  * Nieuwe functievorm (export default), zodat het verse lezen (consistency "strong") werkt.
  */
 import { timingSafeEqual } from "node:crypto";
@@ -31,12 +35,28 @@ function zelfde(a: string, b: string): boolean {
 }
 
 export default async (req: Request) => {
-  if (req.method !== "GET") return json(405, { error: "method_not_allowed" });
+  if (req.method !== "GET" && req.method !== "DELETE") return json(405, { error: "method_not_allowed" });
 
   const geheim = process.env.HUB_CIJFERS_SLEUTEL;
   if (!geheim) return json(503, { error: "niet_ingesteld" });
   const gegeven = req.headers.get("x-hub-sleutel") ?? "";
   if (!gegeven || !zelfde(gegeven, geheim)) return json(401, { error: "verkeerde_sleutel" });
+
+  if (req.method === "DELETE") {
+    try {
+      const store = kijkStore();
+      // Eerst alle sleutels, dan wissen: niet wissen terwijl we nog door de lijst bladeren.
+      const sleutels: string[] = [];
+      for await (const pagina of store.list({ paginate: true })) pagina.blobs.forEach((b) => sleutels.push(b.key));
+      for (let i = 0; i < sleutels.length; i += TEGELIJK) await Promise.all(sleutels.slice(i, i + TEGELIJK).map((k) => store.delete(k)));
+      const gewist = sleutels.filter((k) => DAG.test(k.slice(0, 10)) && k[10] === "/").length;
+      console.log("vsl-cijfers: store gewist", gewist, "kijkbeurten,", sleutels.length, "sleutels");
+      return json(200, { gewist, sleutels: sleutels.length });
+    } catch (e) {
+      console.error("vsl-cijfers: wissen mislukt", e instanceof Error ? e.name : "");
+      return json(502, { error: "opslag" });
+    }
+  }
 
   const q = new URL(req.url).searchParams;
   const dagen = PERIODES.includes(Number(q.get("dagen"))) ? Number(q.get("dagen")) : 30;
