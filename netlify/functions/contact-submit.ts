@@ -22,11 +22,13 @@
  * mail toch, met de melding dat de lead manueel moet worden toegevoegd. De
  * mail blijft dus het vangnet.
  *
- * Aanvragen van het hubformulier (/hub/) gaan daarnaast als item naar Tuesday,
- * bord Leads › Socials, met het kanaal, de reel en hoe ver de VSL bekeken werd
- * (veld `hub` in de aanvraag). Mislukt Tuesday, dan vertrekken mail en monday
- * gewoon; de fout wordt gelogd zonder persoonsgegevens en zonder sleutel. Ook
- * krijgt de kijkbeurt van de VSL-meting dan "formulier verstuurd".
+ * Elke aanvraag gaat daarnaast naar Tuesday (lib/tuesday.ts). Die van het
+ * hubformulier (/hub/, met het veld `hub`) als item op het bord Leads › Socials,
+ * met het kanaal, de reel en hoe ver de VSL bekeken werd; de kijkbeurt van de
+ * VSL-meting krijgt dan "formulier verstuurd". Alle andere (popup, vraagformulier)
+ * via Jords route /api/intake/website-lead naar het bord Content. Mislukt Tuesday,
+ * dan vertrekken mail en monday gewoon; de fout wordt gelogd zonder
+ * persoonsgegevens en zonder sleutel.
  *
  * Nodige env-variabelen in Netlify:
  *   BREVO_API_KEY      (verplicht) — Brevo → SMTP & API → API Keys
@@ -34,22 +36,19 @@
  *   CONTACT_FROM_EMAIL (optioneel) — afzender,   moet een geverifieerde Brevo-sender zijn
  *   MONDAY_API_TOKEN, MONDAY_BOARD_ID (optioneel, samen) — monday.com
  *   MONDAY_GROUP_ID, MONDAY_COL_*, MONDAY_STATUS_LABEL (optioneel) — zie lib/monday/create-item.ts
- *   CRM_SOCIALS_TOKEN  (optioneel) — sleutel voor Tuesday, enkel het bord Socials. Nooit loggen.
+ *   CRM_API_TOKEN of CRM_SOCIALS_TOKEN (optioneel) — sleutel voor Tuesday. Nooit loggen.
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
 import { createMondayItem, mondayConfigFromEnv } from "../../lib/monday/create-item";
 import { EMAIL_RE, telefoonOk } from "../../lib/contact-velden";
 import { markeerFormulier } from "../../lib/vsl-meting-opslag";
+import { naarTuesday, TUESDAY, type TuesdayStatus } from "../../lib/tuesday";
 
 // monday mag de bezoeker niet laten wachten: de browser wacht maximaal 10 s,
 // en na monday moet de mail nog vertrekken.
 const MONDAY_TIMEOUT_MS = 5000;
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
-
-// Tuesday (crm.finitsolutions.be), bord Leads › Socials. Ook max 5 s: de browser wacht er 10.
-const TUESDAY_URL = "https://crm.finitsolutions.be/api/boards/90000000549/items";
-const TUESDAY_TIMEOUT_MS = 5000;
 
 // ?bron= uit de link naar het label van de keuzelijst "bron" in Tuesday.
 const KANALEN: Record<string, string> = {
@@ -132,30 +131,6 @@ function leesHub(v: unknown): HubVelden | null {
   };
 }
 
-/** Eén item op het bord Socials. Geeft "ok" of "failed"; logt nooit inhoud of sleutel. */
-async function maakTuesdayItem(token: string, item: unknown): Promise<"ok" | "failed"> {
-  const timer = new AbortController();
-  const timeout = setTimeout(() => timer.abort(), TUESDAY_TIMEOUT_MS);
-  try {
-    const res = await fetch(TUESDAY_URL, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify(item),
-      signal: timer.signal,
-    });
-    if (!res.ok) {
-      console.error("contact-submit: Tuesday gaf status", res.status);
-      return "failed";
-    }
-    return "ok";
-  } catch (err) {
-    console.error("contact-submit: Tuesday niet bereikt", err instanceof Error ? err.name : "onbekende fout");
-    return "failed";
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
 // Alles wat de bezoeker intypt komt in de mail terecht; escapen houdt de
 // HTML heel en voorkomt injectie in onze eigen inbox.
 function esc(s: string): string {
@@ -188,6 +163,9 @@ export const handler: Handler = async (event: HandlerEvent) => {
   const bedrijfswebsite = pickStr(body.bedrijfswebsite, 200);
   const bericht = pickStr(body.bericht, 3000);
   const bron = pickStr(body.bron, 300) || "onbekend";
+  // De volledige adresbalk (met ?bron=…) voor Tuesday; de mail en monday houden `bron`.
+  const paginaVeld = pickStr(body.pagina, 500);
+  const pagina = /^https?:\/\//i.test(paginaVeld) ? paginaVeld : bron;
 
   if (!naam) return json(400, { error: "missing_naam" });
   if (!EMAIL_RE.test(email)) return json(400, { error: "invalid_email" });
@@ -203,11 +181,12 @@ export const handler: Handler = async (event: HandlerEvent) => {
     return json(500, { error: "mail_not_configured" });
   }
 
-  // Hubformulier: Tuesday en de kijkbeurt lopen parallel met monday.
-  const hub = isHub ? leesHub(body.hub) : null;
-  const tuesdayToken = process.env.CRM_SOCIALS_TOKEN;
-  let tuesdayBelofte: Promise<"off" | "ok" | "failed"> = Promise.resolve("off");
-  if (hub && tuesdayToken) {
+  // Tuesday en de kijkbeurt lopen parallel met monday. Het hubformulier (vlag: het
+  // veld `hub`, of een /hub/-pagina) gaat alleen naar Socials, de rest naar Content.
+  const vanHub = isHub || (typeof body.hub === "object" && body.hub !== null);
+  const hub = vanHub ? leesHub(body.hub) : null;
+  let tuesdayBelofte: Promise<TuesdayStatus> = Promise.resolve("off");
+  if (hub) {
     const mailDomein = email.split("@")[1]?.toLowerCase() ?? "";
     const naamItem = domein(bedrijfswebsite) || (mailDomein && !GRATIS_MAIL.has(mailDomein) ? mailDomein : "") || naam;
     const values: Record<string, string | number> = {
@@ -225,7 +204,18 @@ export const handler: Handler = async (event: HandlerEvent) => {
     if (hub.meesteTijd) values.meeste_tijd = hub.meesteTijd;
     if (hub.eerst) values.message = hub.eerst;
     if (hub.pagina) values.pagina = hub.pagina;
-    tuesdayBelofte = maakTuesdayItem(tuesdayToken, { name: naamItem, values });
+    tuesdayBelofte = naarTuesday(TUESDAY.socials, { name: naamItem, values }, "contact-submit");
+  } else if (!vanHub) {
+    // Jords route vraagt name, email en message; de popup heeft geen bericht.
+    const lead: Record<string, string> = {
+      name: naam,
+      email,
+      message: bericht || "Wil een kennismaking plannen (popup op de website).",
+      page: pagina,
+    };
+    if (telefoon) lead.phone = telefoon;
+    if (bedrijfswebsite) lead.website = bedrijfswebsite;
+    tuesdayBelofte = naarTuesday(TUESDAY.websiteLead, lead, "contact-submit");
   }
   const kijkBelofte = hub?.kijkbeurt
     ? markeerFormulier(event, hub.kijkbeurt.id, hub.kijkbeurt.dag).catch(() => console.error("contact-submit: kijkbeurt niet bijgewerkt"))
@@ -257,11 +247,12 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
   const tuesdayStatus = await tuesdayBelofte;
   await kijkBelofte;
+  const bord = hub ? "Socials" : "Content";
   const tuesdayRegel =
     tuesdayStatus === "ok"
-      ? `<p style="margin:8px 0 0;font-size:14px;color:#6C7590">Tuesday: item op het bord Socials.</p>`
+      ? `<p style="margin:8px 0 0;font-size:14px;color:#6C7590">Tuesday: item op het bord ${bord}.</p>`
       : tuesdayStatus === "failed"
-        ? `<p style="margin:8px 0 0;font-size:14px;color:#b45309">Tuesday: item aanmaken mislukt, voeg deze manueel toe op het bord Socials.</p>`
+        ? `<p style="margin:8px 0 0;font-size:14px;color:#b45309">Tuesday: item aanmaken mislukt, voeg deze manueel toe op het bord ${bord}.</p>`
         : "";
 
   const rijen: Array<[string, string]> = [
