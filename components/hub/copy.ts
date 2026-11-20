@@ -131,6 +131,9 @@ export const HUB = {
     bedanktSub: "Kunnen we je niet helpen, dan zeggen we dat ook eerlijk.",
     // Kop boven de antwoorden in de mail en op monday.
     berichtKop: "Antwoorden uit het formulier op de hub:",
+    // Gaat mee in het bericht naar contact@, monday en Tuesday (uit de kijkmeting van dit bezoek).
+    vslGekeken: "VSL bekeken tot {procent} %",
+    vslNiet: "VSL niet bekeken in dit bezoek",
   },
 
   // De twijfels die Alex in de video beantwoordt. Ze gaan uit de video en staan hier.

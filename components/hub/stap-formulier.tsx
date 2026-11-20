@@ -23,6 +23,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { EMAIL_RE, telefoonOk } from "@/lib/contact-velden";
+import { kijkProcent, meldFormulier } from "./kijkmeting";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { HUB, vetStukken } from "./copy";
 
@@ -124,7 +125,9 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
   const bericht = () => {
     const regels = VRAGEN.filter((v) => v.soort === "keuze" && antwoorden[v.id]).map((v) => `${v.label}: ${antwoorden[v.id]}`);
     const vrij = (antwoorden.bericht ?? "").trim();
-    return [vrij, "", F.berichtKop, ...regels].join("\n").trim();
+    const procent = kijkProcent();
+    const vsl = procent === null ? F.vslNiet : F.vslGekeken.replace("{procent}", String(procent));
+    return [vrij, "", F.berichtKop, ...regels, vsl].join("\n").trim();
   };
 
   const fouten = geprobeerd ? controleer(naam, email, telefoon) : {};
@@ -157,6 +160,7 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
       setStatus("klaar");
+      meldFormulier();
       pushEvent("form_submitted", { ...meta, location: "hub" });
     } catch {
       setStatus("fout");

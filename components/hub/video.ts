@@ -11,6 +11,8 @@
  * in beeld: NEXT_PUBLIC_HUB_VSL_BRON=/hub/vsl/voorlopig/master.m3u8.
  */
 export const VSL = {
+  /** Korte naam van deze versie voor de kijkmeting; verander hem als er een nieuwe video komt. */
+  id: "v3",
   // VSL v3 (7:43,8; 480p tot 4K) op Bunny Stream, bibliotheek finit-vsl. Opgeladen 20/11/2026.
   bron: process.env.NEXT_PUBLIC_HUB_VSL_BRON || "https://vz-a3aedf8d-709.b-cdn.net/05b3b526-5950-4fc8-8f2b-a9728a8965ed/playlist.m3u8",
   /**

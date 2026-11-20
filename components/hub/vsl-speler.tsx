@@ -19,12 +19,15 @@
  *   20/11). De kijker zet ze aan met de knop rechtsonder; die keuze onthouden we.
  *   Stijl zoals reels: korte stukjes witte vette tekst met een zachte schaduw,
  *   zonder vak en zonder markering per woord.
+ * - Eigen, anonieme kijkmeting (./kijkmeting.ts): per kijkbeurt een willekeurig id
+ *   in het geheugen, de verste seconde gaat om de ±5 s naar /api/vsl-meting.
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Pause, Play, RotateCcw, Subtitles } from "lucide-react";
 import type HlsType from "hls.js";
 import { pushEvent } from "@/lib/analytics";
+import { meetTijd, startKijkbeurt, stuurKijkbeurt } from "./kijkmeting";
 import { HUB } from "./copy";
 import { VSL } from "./video";
 
@@ -140,6 +143,8 @@ export function VslSpeler({
   const kwartGemeld = useRef(0);
   const metaRef = useRef(meta);
   metaRef.current = meta;
+  // Gekozen kwaliteit voor de kijkmeting ("auto", "4k", "1080p", …).
+  const kwaliteitRef = useRef("auto");
 
   const [fase, setFase] = useState<Fase>("start");
   const [laadt, setLaadt] = useState(false);
@@ -277,6 +282,13 @@ export function VslSpeler({
       try {
         await v.play();
         pushEvent(vanaf > 0 ? "vsl_verder" : "vsl_start", { ...metaRef.current, vanaf: String(Math.floor(vanaf)) });
+        startKijkbeurt({
+          start: vanaf,
+          hervat: vanaf > 0,
+          bron: metaRef.current.bron ?? "direct",
+          reel: metaRef.current.reel ?? "",
+          kwaliteit: kwaliteitRef.current,
+        });
       } catch {
         // De browser weigerde (bv. energiebesparing): terug naar de afspeelknop.
         setLaadt(false);
@@ -294,6 +306,7 @@ export function VslSpeler({
     setMenuOpen(false);
     if (!hls) return;
     hls.currentLevel = i;
+    kwaliteitRef.current = i === -1 ? "auto" : kwaliteitLabel(hls.levels[i]?.height ?? 0).toLowerCase();
     pushEvent("vsl_kwaliteit", { ...metaRef.current, kwaliteit: i === -1 ? "auto" : kwaliteitLabel(hls.levels[i]?.height ?? 0) });
   }, []);
 
@@ -315,6 +328,7 @@ export function VslSpeler({
       if (!v.seeking && !eigenSprong.current) laatsteTijd.current = v.currentTime;
       const echt = v.currentTime / d;
       setBalk(getoondeVoortgang(echt));
+      if (!eigenSprong.current) meetTijd(v.currentTime, d, kwaliteitRef.current);
       if (Math.abs(v.currentTime - laatstBewaard.current) >= VSL.bewaarElke) {
         laatstBewaard.current = v.currentTime;
         bewaarPositie(v.currentTime);
@@ -338,9 +352,12 @@ export function VslSpeler({
     const opPauze = () => {
       if (v.ended) return;
       bewaarPositie(v.currentTime);
+      stuurKijkbeurt();
       setFase((f) => (f === "speelt" ? "pauze" : f));
     };
     const opEinde = () => {
+      meetTijd(v.duration, v.duration, kwaliteitRef.current);
+      stuurKijkbeurt();
       wisPositie();
       setBalk(1);
       setFase("einde");

@@ -248,6 +248,13 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                 meer specifieke informatie over de cookies die we gebruiken, kunt u onze cookieverklaring raadplegen:{" "}
                 <a href="/cookieverklaring" className="underline">Cookieverklaring</a>.
               </p>
+              <p className="mt-4">
+                Op onze hub (finitsolutions.be/hub) meten we zonder cookies hoe ver de video bekeken wordt. Per kijkbeurt
+                maakt de pagina een willekeurig nummer dat niet in uw browser bewaard wordt, en we noteren alleen de verste
+                seconde, de lengte van de video, het soort toestel (gsm of computer), via welk kanaal u kwam en of daarna het
+                formulier verstuurd werd. We bewaren daarbij geen IP-adres en niets dat naar u als persoon leidt. Verstuurt u
+                het formulier op de hub, dan sturen we samen met uw aanvraag mee tot hoever u de video in dat bezoek bekeek.
+              </p>
 
               {/* 8. Leadinfo */}
               <h2 className="text-2xl font-semibold mt-8 mb-4" id="leadinfo">
