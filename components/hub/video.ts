@@ -11,10 +11,15 @@
  * in beeld: NEXT_PUBLIC_HUB_VSL_BRON=/hub/vsl/voorlopig/master.m3u8.
  */
 export const VSL = {
-  /** Korte naam van deze versie voor de kijkmeting; verander hem als er een nieuwe video komt. */
-  id: "v3",
-  // VSL v3 (7:43,8; 480p tot 4K) op Bunny Stream, bibliotheek finit-vsl. Opgeladen 20/11/2026.
-  bron: process.env.NEXT_PUBLIC_HUB_VSL_BRON || "https://vz-a3aedf8d-709.b-cdn.net/05b3b526-5950-4fc8-8f2b-a9728a8965ed/playlist.m3u8",
+  /**
+   * Korte naam van deze versie voor de kijkmeting; verander hem als er een nieuwe video komt.
+   * De cijferpagina toont elke versie apart. Bewaar dan de ondertitels van de vorige versie als
+   * public/hub/vsl/ondertitels-<oude id>.json, zodat de afhaakpunten van die versie de juiste zin citeren.
+   */
+  id: "v4",
+  // VSL v4 (7:36,8; 480p tot 4K) op Bunny Stream, bibliotheek finit-vsl: v3 zonder de zin over "hoeveel één uur van
+  // jouw tijd kost … berekening" (Alex 20/11). v3 (05b3b526-5950-4fc8-8f2b-a9728a8965ed) blijft voorlopig op Bunny staan.
+  bron: process.env.NEXT_PUBLIC_HUB_VSL_BRON || "https://vz-a3aedf8d-709.b-cdn.net/445824f4-9986-46d6-847b-54209fac0324/playlist.m3u8",
   /**
    * Token-authenticatie bij Bunny (tegen anderen die onze link gebruiken): zet in
    * Netlify NEXT_PUBLIC_HUB_VSL_TOKEN=1 en BUNNY_TOKEN_SLEUTEL. De speler vraagt dan

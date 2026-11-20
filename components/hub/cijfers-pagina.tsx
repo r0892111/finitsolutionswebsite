@@ -11,13 +11,15 @@
  * - retentie per seconde (alleen kijkbeurten die vooraan begonnen; hervattingen apart);
  * - kijkbeurten, gemiddelde kijktijd, % tot het einde, verstuurde formulieren;
  * - de vijf vensters van 10 s waar de meeste kijkers afhaken, met wat Alex daar zegt;
- * - filters per periode, bron, apparaat en video.
+ * - filters per periode, bron, apparaat en video. Elke versie van de video (VSL.id: v3, v4 …) heeft
+ *   een eigen tijdlijn, dus de cijfers tonen altijd één versie tegelijk, standaard die nu op de hub staat.
  *
  * ?demo=1 toont verzonnen voorbeelddata, zonder sleutel en zonder database.
  */
 
 import { useEffect, useMemo, useState } from "react";
 import type { Kijkrij } from "@/lib/vsl-meting-opslag";
+import { VSL } from "./video";
 
 type Regel = [number, number, Array<[string, number, number]>];
 type Staat = { soort: "laden" } | { soort: "sleutel" } | { soort: "fout"; tekst: string } | { soort: "klaar"; rijen: Kijkrij[]; demo: boolean };
@@ -39,7 +41,7 @@ function pct(n: number, d: number): string {
 function voorbeeld(): Kijkrij[] {
   let zaad = 7;
   const rnd = () => ((zaad = (zaad * 16807) % 2147483647) - 1) / 2147483646;
-  const duur = 463.8;
+  const duur = 456.8;
   const bronnen = ["tiktok", "instagram", "instagram", "linkedin", "youtube", "direct"];
   const rijen: Kijkrij[] = [];
   for (let i = 0; i < 420; i++) {
@@ -58,7 +60,7 @@ function voorbeeld(): Kijkrij[] {
     const moment = new Date(Date.now() - rnd() * 14 * 864e5).toISOString();
     rijen.push({
       dag: moment.slice(0, 10),
-      video: "v3",
+      video: VSL.id,
       start_s: Math.round(start * 10) / 10,
       max_s: Math.round(verste * 10) / 10,
       duur_s: duur,
@@ -86,12 +88,8 @@ export function CijfersPagina() {
   const [dagen, setDagen] = useState("30");
   const [wissen, setWissen] = useState<"" | "bezig" | "mislukt">("");
 
-  // Ondertitels (voor de afhaakpunten) en de sleutel: uit het hekje van de link of uit dit tabblad.
+  // De sleutel: uit het hekje van de link of uit dit tabblad.
   useEffect(() => {
-    fetch("/hub/vsl/ondertitels.json")
-      .then((r) => (r.ok ? r.json() : []))
-      .then((d) => Array.isArray(d) && setRegels(d as Regel[]))
-      .catch(() => undefined);
     if (new URLSearchParams(window.location.search).get("demo") === "1") {
       setStaat({ soort: "klaar", rijen: voorbeeld(), demo: true });
       return;
@@ -152,7 +150,17 @@ export function CijfersPagina() {
 
   const alleRijen = staat.soort === "klaar" ? staat.rijen : [];
   const videos = useMemo(() => Array.from(new Set(alleRijen.map((r) => r.video))), [alleRijen]);
-  const huidigeVideo = video || videos[0] || "";
+  // Standaard de versie die nu op de hub staat; is die er (nog) niet, de nieuwste in de data.
+  const huidigeVideo = video || (videos.includes(VSL.id) ? VSL.id : videos[videos.length - 1]) || "";
+  // Ondertitels van die versie, voor "wat Alex daar zegt" bij de afhaakpunten.
+  useEffect(() => {
+    if (!huidigeVideo) return;
+    setRegels([]);
+    fetch(huidigeVideo === VSL.id ? "/hub/vsl/ondertitels.json" : `/hub/vsl/ondertitels-${huidigeVideo}.json`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((d) => Array.isArray(d) && setRegels(d as Regel[]))
+      .catch(() => undefined);
+  }, [huidigeVideo]);
   const bronnen = useMemo(() => Array.from(new Set(alleRijen.map((r) => r.bron))).sort(), [alleRijen]);
 
   const rijen = useMemo(
@@ -237,7 +245,7 @@ export function CijfersPagina() {
             <div className="mt-6 flex flex-wrap gap-3 text-[0.9375rem]">
               {!staat.demo && <Keuze label="Periode" waarde={dagen} zet={setDagen} opties={PERIODES} />}
               {videos.length > 1 && (
-                <Keuze label="Video" waarde={huidigeVideo} zet={setVideo} opties={videos.map((v) => [v, v])} />
+                <Keuze label="Video" waarde={huidigeVideo} zet={setVideo} opties={videos.map((v) => [v, v === VSL.id ? `${v} (nu op de hub)` : v])} />
               )}
               <Keuze label="Bron" waarde={bron} zet={setBron} opties={[["alle", "Alle bronnen"], ...bronnen.map((b) => [b, b] as [string, string])]} />
               <Keuze label="Apparaat" waarde={apparaat} zet={setApparaat} opties={[["alle", "Gsm en desktop"], ["gsm", "Gsm"], ["desktop", "Desktop"]]} />
