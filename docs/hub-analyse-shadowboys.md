@@ -138,7 +138,7 @@ Dus 1.000 volledige kijkbeurten in 4K kosten ±$14,50 (op Bunny's goedkopere Vol
 
 **In de speler:**
 - Geen plafond op de kwaliteit. hls.js mag tot de hoogste kwaliteit gaan, ook als de speler op het scherm kleiner is dan 4K (`capLevelToPlayerSize` staat uit).
-- Op een groot scherm (vanaf ±2560 pixels, retina meegerekend) met een snelle verbinding start de speler meteen hoog en kiest hij 4K. Daarna meet hls.js de echte snelheid en zakt hij alleen als het zou haperen.
+- Op een groot scherm (vanaf ±2560 pixels, retina meegerekend) met een snelle verbinding begint de speler meteen in 4K: hij slaat de snelheidstest van hls.js over (die laadt eerst een stukje in de laagste kwaliteit). Daarna meet hls.js de echte snelheid en zakt hij alleen als het zou haperen. Op kleinere schermen doet hls.js wel eerst die test.
 - Een klein kwaliteitsmenu rechtsonder in de video: Auto / 4K / 1080p / 720p, alleen zichtbaar tijdens het afspelen of op pauze. **Spoelen blijft onmogelijk:** het menu wisselt alleen de kwaliteit, de video loopt verder vanaf dezelfde seconde.
 - Chrome, Edge, Firefox, Safari op de Mac en Android gebruiken hls.js. iPhone en iPad spelen HLS zelf af en kiezen zelf de kwaliteit; daar staat geen menu.
 - De voorlopige video heeft nu vier kwaliteiten (360p, 720p, 1080p, 4K) en toont in beeld welke er speelt ("Kwaliteit: 4K (2160p)").

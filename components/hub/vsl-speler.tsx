@@ -166,12 +166,15 @@ export function VslSpeler({
         return;
       }
       // Geen plafond op de kwaliteit (geen capLevelToPlayerSize): 4K moet kunnen. Op een groot
-      // scherm met snelle verbinding gaan we uit van 40 Mbit/s, zodat hij meteen hoog begint;
-      // anders van 5 Mbit/s. Daarna meet hls.js zelf en past hij aan.
-      const schatting = grootEnSnel() ? 40_000_000 : 5_000_000;
+      // scherm met snelle verbinding gaan we uit van 40 Mbit/s en slaan we de snelheidstest over
+      // (die laadt eerst een stukje in de laagste kwaliteit), zodat hij meteen in 4K begint.
+      // Anders: test + 5 Mbit/s. Daarna meet hls.js zelf en schakelt hij terug als het hapert.
+      const groot = grootEnSnel();
+      const schatting = groot ? 40_000_000 : 5_000_000;
       const hls = new Hls({
         autoStartLoad: false,
         startLevel: -1,
+        testBandwidth: !groot,
         capLevelToPlayerSize: false,
         abrEwmaDefaultEstimate: schatting,
         abrEwmaDefaultEstimateMax: schatting,
