@@ -92,6 +92,12 @@ Inhoudskolom: max 1244 px met 24 px zijmarge (gsm 14 px, onder 380 px 10 px), zo
 
 **Uitzondering, de gespreksknop (Alex, 20/11 namiddag):** op Shadowboys-maat was hij te groot en te opdringerig. Hij is nu een maat kleiner en rustiger: 28 px (1024 px breed: 26 px, gsm 16 tot 19 px), 80 px hoog (gsm 56 px), en zo breed als de tekst in plaats van de hele kolom. Het gewicht is 500, net als alle andere knoppen op de site (het lettertype was al het standaardlettertype, Schibsted Grotesk; het vette gewicht 600 maakte het verschil). De knop onder de video en die na de twijfels zijn nu even groot. De tabel hierboven geldt dus nog voor alles behalve deze knop.
 
+**Uitzondering, kop → subzin (Alex, 20/11):** Shadowboys laat op desktop maar 6 px tussen kop en subzin (0,09 × hun kop van 70 px); op gsm 17 px (±0,4 × hun kop). Bij ons kwam daar nog de streep onder "jouw bedrijf werkt" bij, waardoor het nog krapper oogde. Nu overal ±0,4 × de kopgrootte: 28 px op desktop, 19 tot 26 px tot 1100 px breed, 20 px op gsm.
+
+**Badge:** "Voor zaakvoerders/management van kmo's" (tekst van Alex, was "Voor zaakvoerders van Vlaamse kmo's"). Ook in de metabeschrijving (Google, delen op sociale media).
+
+**Achtergrond met stippen (Alex, 20/11):** het stippenpatroon dat al in de case-kaarten op de homepage zit (`.hp-stippen`: marineblauw op 10 %, 1 px om de 14 px) ligt nu over de hele hubpagina en over de grijsblauwe twijfelband. De lichtblauwe gloed bovenaan loopt uit in transparant, zodat de stippen eronder zichtbaar worden. Het formulier en de kaarten blijven effen wit.
+
 **Formulier, wat je te wachten staat:** bovenaan de kaart staat nu zichtbaar "Plan een vrijblijvend gesprek" met de uitleg "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter, en dan plannen we samen een moment in." De teller "Vraag X van 5" is vetter en marineblauw, en de laatste knop heet "Vraag het gesprek aan" (was "Verstuur"). De noot onder de knop zegt nu "Eerst vijf korte vragen, daarna plannen we samen een moment." Bewust níet "kies zelf een moment": er is geen agenda, wij nemen contact op. Voorlopige tekst, Amina mag hem herschrijven (`components/hub/copy.ts`).
 
 ## De videospeler
