@@ -124,7 +124,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
 
   // Stippen over de hele pagina: hetzelfde patroon als in de case-kaarten op de homepage (wens Alex 20/11).
   return (
-    <main className="hp-stippen min-h-screen bg-white text-[#3D4766]">
+    <main className="hub-ritme hp-stippen min-h-screen bg-white text-[#3D4766]">
       {/* 1. De strook naar de gratis resources */}
       <a
         href="/hub/resources/"
@@ -187,14 +187,14 @@ export function HubPagina({ start }: { start?: "resources" }) {
       </section>
 
       {/* 3. Het formulier, meteen onder de video */}
-      <section id="gesprek" className="scroll-mt-4 pb-14 sm:pb-20" aria-labelledby="gesprek-titel">
+      <section id="gesprek" className="scroll-mt-4 pb-[var(--hub-r6)]" aria-labelledby="gesprek-titel">
         <div className="hub-form-wrap">
           <StapFormulier bron={formBron} meta={meta} kopId="gesprek-titel" />
         </div>
       </section>
 
       {/* 4. De twijfels uit de video */}
-      <section id="twijfels" className="hp-stippen scroll-mt-4 bg-[#F5F7FB] py-14 sm:py-20">
+      <section id="twijfels" className="hp-stippen scroll-mt-4 bg-[#F5F7FB] py-[var(--hub-r6)]">
         <div className="hub-faq-wrap">
           <h2 className={KOP}>
             {HUB.twijfels.titel.voor} <Onder>{HUB.twijfels.titel.accent}</Onder>
@@ -213,7 +213,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
       </section>
 
       {/* 5. De gratis resources, achter een e-mailslot */}
-      <section id="resources" className="scroll-mt-4 py-14 sm:py-20">
+      <section id="resources" className="scroll-mt-4 py-[var(--hub-r6)]">
         <div className="mx-auto w-full max-w-[56rem] px-4 sm:px-8">
           <h2 className={KOP}>
             {HUB.resources.titel.voor} <Onder>{HUB.resources.titel.accent}</Onder>
@@ -223,7 +223,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
         </div>
       </section>
 
-      <footer className="border-t border-[#E3E7EF] px-4 py-8 text-center text-[0.875rem] text-[#6C7590] sm:px-8">
+      <footer className="border-t border-[#E3E7EF] px-4 py-[var(--hub-r4)] text-center text-[0.875rem] text-[#6C7590] sm:px-8">
         Finit Solutions · <a href="/" className="hp-link">finitsolutions.be</a> ·{" "}
         <a href="/privacy/" className="hp-link">{HUB.footer.privacy}</a> ·{" "}
         <a href={`/vacatures/${zoek}&via=hub`} className="hp-link">

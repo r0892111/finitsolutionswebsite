@@ -74,9 +74,9 @@ export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<stri
   return (
     <>
       {open === false && (
-        <div className="relative mt-8">
+        <div className="relative mt-[var(--hub-r4)]">
           {/* Wat je krijgt: echt, maar vervaagd en niet klikbaar. */}
-          <ul className="hp-slot-voorbeeld pointer-events-none grid max-h-[26rem] gap-4 overflow-hidden sm:grid-cols-2" aria-hidden="true">
+          <ul className="hp-slot-voorbeeld pointer-events-none grid max-h-[26rem] gap-[var(--hub-r3)] overflow-hidden sm:grid-cols-2" aria-hidden="true">
             {zichtbaar.slice(0, 4).map((r) => (
               <li key={r.id}>
                 <ResourceKaart resource={r} uitPost={r === uitPost} voorbeeld />
@@ -99,7 +99,7 @@ export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<stri
       {open === true && (
         <>
           {soorten.length > 1 && (
-            <div role="group" aria-label={R.filterLabel} className="mt-8 flex flex-wrap justify-center gap-2">
+            <div role="group" aria-label={R.filterLabel} className="mt-[var(--hub-r4)] flex flex-wrap justify-center gap-2">
               {["", ...soorten].map((s) => {
                 const actief = filter === s;
                 return (
@@ -120,9 +120,9 @@ export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<stri
           )}
 
           {zichtbaar.length === 0 ? (
-            <p className="mt-8 text-center text-[1rem] text-[#6C7590]">{R.leeg}</p>
+            <p className="mt-[var(--hub-r3)] text-center text-[1rem] text-[#6C7590]">{R.leeg}</p>
           ) : (
-            <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+            <ul className="mt-[var(--hub-r3)] grid gap-[var(--hub-r3)] sm:grid-cols-2">
               {zichtbaar.map((r) => (
                 <li key={r.id}>
                   <ResourceKaart
@@ -137,7 +137,7 @@ export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<stri
         </>
       )}
 
-      {open === null && <div className="mt-8 min-h-[26rem]" aria-hidden="true" />}
+      {open === null && <div className="mt-[var(--hub-r4)] min-h-[26rem]" aria-hidden="true" />}
     </>
   );
 }

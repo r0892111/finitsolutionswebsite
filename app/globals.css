@@ -967,28 +967,39 @@ html {
    vanaf 767 px. In px, want de rem van de site schaalt zelf al mee.
    Kleuren en lettertypes blijven van Finit.
    --------------------------------------------------------------------- */
+/* Ritme (Alex 20/11): één vaste schaal voor alle verticale ruimte op de hub.
+   r2 = hoort bij elkaar (noot bij knop, intro bij titel)
+   r3 = binnen een blok (logo, badge, kop, subzin; pillen naar knop; kaarten in een lijst)
+   r4 = tussen groepen in een blok (tekst naar video, video naar pillen, intro naar lijst)
+   r5 = een los blok (de noot naar het formulier)
+   r6 = tussen secties
+   Desktop 8-16-24-40-64-96, op gsm een stap kleiner. */
+.hub-ritme { --hub-r1: 8px; --hub-r2: 16px; --hub-r3: 24px; --hub-r4: 40px; --hub-r5: 64px; --hub-r6: 96px; }
+@media (max-width: 767px) {
+  .hub-ritme { --hub-r2: 12px; --hub-r3: 20px; --hub-r4: 28px; --hub-r5: 40px; --hub-r6: 64px; }
+}
 .hub-wrap { width: min(calc(100% - 48px), 1244px); margin-inline: auto; }
-.hub-hero { padding: 48px 0 39px; }
-.hub-logo { margin-bottom: 27px; }
+.hub-hero { padding: var(--hub-r4) 0 var(--hub-r5); }
+.hub-logo { margin-bottom: var(--hub-r3); }
 /* Doelgroepregel: een maat kleiner dan bij Shadowboys (Alex 20/11), ±0,31 × de kop, zoals hun en onze gsm-maat. */
-.hub-badge { font-size: 22px; line-height: 1.1; min-height: 44px; padding: 7px 22px; margin-bottom: 25px; }
+.hub-badge { font-size: 22px; line-height: 1.1; min-height: 44px; padding: 7px 22px; margin-bottom: var(--hub-r3); }
 .hub-titel { font-size: 70px; line-height: 1.1; max-width: 1209px; }
 /* Kop → subzin: ruimer dan bij Shadowboys (6 px = 0,09 × de kop), op wens van Alex 20/11.
    Nu ±0,4 × de kopgrootte, de verhouding die Shadowboys zelf op gsm gebruikt. */
-.hub-sub { font-size: 30px; line-height: 1.267; max-width: 979px; margin: 28px auto 47px; }
+.hub-sub { font-size: 30px; line-height: 1.267; max-width: 979px; margin: var(--hub-r3) auto var(--hub-r4); }
 .hub-video { max-width: 1192px; }
-.hub-pillen { margin: 99px auto 53px; gap: clamp(10px, 3.72vw, 46px); }
+.hub-pillen { margin: var(--hub-r4) auto var(--hub-r3); gap: clamp(10px, 3.72vw, 46px); }
 .hub-pil { font-size: 30px; line-height: 1.026; min-height: 54px; padding: 8px 24px; }
 /* De gespreksknop: een maat kleiner en rustiger dan bij Shadowboys (Alex 20/11), in het
    gewone knopgewicht van de site. Breed genoeg om op te vallen, niet over de hele kolom. */
 .hp-btn.hub-knop { font-size: 28px; line-height: 1.15; min-height: 80px; padding: 16px 44px; max-width: 100%; gap: 0.45em; }
 .hub-knop svg { width: 0.9em; height: 0.9em; }
-.hub-noot { font-size: 30px; line-height: 1.267; margin-top: 8px; }
+.hub-noot { font-size: 30px; line-height: 1.267; margin-top: var(--hub-r2); }
 .hub-form-wrap { width: min(calc(100% - 48px), 1011px); margin-inline: auto; }
 .hub-faq-wrap { width: min(calc(100% - 48px), 1022px); margin-inline: auto; }
 .hub-sectietitel { font-size: 50px; line-height: 1.1; }
-.hub-intro { font-size: 30px; line-height: 1.267; max-width: 979px; margin-top: 12px; }
-.hub-faq-lijst { display: grid; gap: 28px; margin-top: 40px; }
+.hub-intro { font-size: 30px; line-height: 1.267; max-width: 979px; margin-top: var(--hub-r2); }
+.hub-faq-lijst { display: grid; gap: var(--hub-r3); margin-top: var(--hub-r4); }
 .hub-faq { border-radius: 27px; padding-inline: 28px; }
 .hub-faq-vraag { font-size: 36px; line-height: 1.18; padding-block: 28px; gap: 28px; }
 .hub-faq-plus { width: 1em; height: 1em; margin-top: 0.09em; }
@@ -1007,7 +1018,7 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .hub-faq-paneel, .hub-faq-paneel .hub-faq-antwoord, .hub-faq-plus { transition: none; }
 }
-.hub-slot-cta { margin-top: 91px; }
+.hub-slot-cta { margin-top: var(--hub-r4); }
 /* Formulier, volgende vraag. Eerst stond hier hp-wissel (van onzichtbaar naar zichtbaar,
    360 ms): bij elke klik verdween de inhoud onder de stappenbalk even helemaal en kwam
    ze terug, wat Alex als flikkering zag (20/11). Nu blijft de tekst zichtbaar en zakt
@@ -1021,7 +1032,6 @@ html {
   .hub-badge { font-size: clamp(15px, 1.95vw, 21px); min-height: 42px; }
   .hub-titel { font-size: clamp(48px, 6.2vw, 66px); }
   .hub-sub, .hub-intro { font-size: clamp(21px, 2.7vw, 28px); }
-  .hub-sub { margin-top: clamp(19px, 2.5vw, 26px); }
   .hub-pil { font-size: clamp(19px, 2.5vw, 28px); }
   .hp-btn.hub-knop { font-size: clamp(20px, 2.5vw, 26px); min-height: 72px; }
   .hub-noot { font-size: 22px; }
@@ -1030,23 +1040,19 @@ html {
 }
 @media (max-width: 767px) {
   .hub-wrap, .hub-form-wrap, .hub-faq-wrap { width: calc(100% - 28px); }
-  .hub-hero { padding: 24px 0 58px; }
-  .hub-logo { margin-bottom: 20px; }
-  .hub-badge { font-size: 13px; min-height: 40px; padding: 8px 17px; margin-bottom: 20px; }
+  .hub-badge { font-size: 13px; min-height: 40px; padding: 8px 17px; }
   .hub-titel { font-size: clamp(36px, 10.7vw, 52px); line-height: 1.03; }
-  .hub-sub { font-size: 17px; line-height: 1.4; margin: 20px auto 30px; }
+  .hub-sub { font-size: 17px; line-height: 1.4; }
   .hub-intro { font-size: 17px; line-height: 1.4; }
-  .hub-pillen { margin: 58px auto 26px; gap: 10px; }
+  .hub-pillen { gap: 10px; }
   .hub-pil { font-size: 13px; min-height: 40px; padding: 7px 8px; }
   .hp-btn.hub-knop { font-size: clamp(16px, 4.6vw, 19px); min-height: 56px; padding: 14px 18px; width: 100%; }
-  .hub-noot { font-size: 13px; margin-top: 7px; }
+  .hub-noot { font-size: 13px; }
   .hub-sectietitel { font-size: clamp(30px, 9vw, 42px); }
-  .hub-faq-lijst { gap: 14px; margin-top: 24px; }
   .hub-faq { border-radius: 17px; padding-inline: 15px; }
   .hub-faq-vraag { font-size: clamp(15px, 4.3vw, 18px); padding-block: 17px; gap: 14px; }
   .hub-faq-plus { width: 22px; height: 22px; margin-top: 0; }
   .hub-faq-antwoord { font-size: 16px; padding-bottom: 17px; margin-top: -4px; }
-  .hub-slot-cta { margin-top: 54px; }
 }
 @media (max-width: 380px) {
   .hub-wrap, .hub-form-wrap, .hub-faq-wrap { width: calc(100% - 20px); }
