@@ -63,7 +63,10 @@ export function HubPagina({ start }: { start?: "resources" }) {
     };
     setHerkomst(h);
     pushEvent("hub_view", { bron: h.bron, ...(h.reel ? { reel: h.reel } : {}) });
-    const doel = start === "resources" || window.location.hash === "#resources" ? "resources" : window.location.hash === "#gesprek" ? "gesprek" : "";
+    // Oude ankers van vóór 20/11 (#karel, #laten, #keuze) gaan naar het formulier.
+    const hash = window.location.hash;
+    const doel =
+      start === "resources" || hash === "#resources" ? "resources" : ["#gesprek", "#karel", "#laten", "#keuze"].includes(hash) ? "gesprek" : "";
     if (!doel) return;
     // De browser zet de pagina na het laden terug op de oude plek (scroll restoration).
     // Daarom: dat uitzetten, meteen springen (niet zacht) en het een paar keer nakijken.

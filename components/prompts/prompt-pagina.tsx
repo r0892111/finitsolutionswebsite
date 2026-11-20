@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { SKOOL_URL } from '@/lib/finit-links';
 import type { PromptPagina as Pagina } from '@/lib/prompts';
 import { KopieerKnop } from './kopieer-knop';
+import { PromptSlot } from './prompt-slot';
 
 const TIP_ALGEMEEN =
   'Vul in wat tussen [haakjes] staat. Eindig een prompt met "Stel me eerst je vragen." Dan vraagt de AI eerst wat hij nog moet weten.';
@@ -44,32 +45,35 @@ export function PromptPagina({ pagina }: { pagina: Pagina }) {
       </header>
 
       <div className="mx-auto max-w-[720px] px-4 py-10 sm:px-8">
-        <div className="mb-10 space-y-2 rounded-2xl bg-[#E6ECF9] p-5 text-[16px] leading-relaxed text-[#1A2D63]">
-          {pagina.tip && <p className="font-semibold">{pagina.tip}</p>}
-          <p>{TIP_ALGEMEEN}</p>
-        </div>
+        {/* De prompts achter het e-mailslot van de hub; de kop en de knoppen onderaan blijven vrij. */}
+        <PromptSlot reel={pagina.reel}>
+          <div className="mb-10 space-y-2 rounded-2xl bg-[#E6ECF9] p-5 text-[16px] leading-relaxed text-[#1A2D63]">
+            {pagina.tip && <p className="font-semibold">{pagina.tip}</p>}
+            <p>{TIP_ALGEMEEN}</p>
+          </div>
 
-        <ol className="mb-12 space-y-6">
-          {pagina.prompts.map((p, i) => (
-            <li key={p.titel} className="hp-card p-5 sm:p-6">
-              <div className="flex items-start gap-3">
-                <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-[#FBE286] text-[15px] font-semibold text-[#1A2D63]">
-                  {i + 1}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <h2 className="hp-display hp-display-sm text-[21px] font-semibold leading-tight text-[#1A2D63]">{p.titel}</h2>
-                  {p.uitleg && <p className="mt-1.5 text-[15px] leading-relaxed">{p.uitleg}</p>}
+          <ol className="mb-12 space-y-6">
+            {pagina.prompts.map((p, i) => (
+              <li key={p.titel} className="hp-card p-5 sm:p-6">
+                <div className="flex items-start gap-3">
+                  <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-[#FBE286] text-[15px] font-semibold text-[#1A2D63]">
+                    {i + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h2 className="hp-display hp-display-sm text-[21px] font-semibold leading-tight text-[#1A2D63]">{p.titel}</h2>
+                    {p.uitleg && <p className="mt-1.5 text-[15px] leading-relaxed">{p.uitleg}</p>}
+                  </div>
                 </div>
-              </div>
-              <div className="mt-4">
-                <PromptTekst tekst={p.tekst} />
-              </div>
-              <div className="mt-4">
-                <KopieerKnop tekst={p.tekst} id={`${pagina.reel}-${i + 1}`} />
-              </div>
-            </li>
-          ))}
-        </ol>
+                <div className="mt-4">
+                  <PromptTekst tekst={p.tekst} />
+                </div>
+                <div className="mt-4">
+                  <KopieerKnop tekst={p.tekst} id={`${pagina.reel}-${i + 1}`} />
+                </div>
+              </li>
+            ))}
+          </ol>
+        </PromptSlot>
 
         <section className="rounded-3xl bg-[#1A2D63] p-6 text-white sm:p-8">
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#FBE286]">Een stap verder?</p>
@@ -85,7 +89,7 @@ export function PromptPagina({ pagina }: { pagina: Pagina }) {
             >
               Start met de lesreeks <ArrowRight className="h-4 w-4" aria-hidden />
             </a>
-            <Link href={`/hub/?${herkomst}#karel`} className="hp-btn hp-btn--lg !border-white/50 text-white hover:bg-white/10">
+            <Link href={`/hub/?${herkomst}#gesprek`} className="hp-btn hp-btn--lg !border-white/50 text-white hover:bg-white/10">
               Plan een call met Karel
             </Link>
           </div>

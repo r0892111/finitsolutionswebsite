@@ -135,7 +135,8 @@ Bronnen: bunny.net/pricing/stream, bunny.net/docs/stream/premium-encoding, mux.c
 | De video: bron, affiche, ondertitels, sterkte van de balk | `components/hub/video.ts` |
 | De speler | `components/hub/vsl-speler.tsx` |
 | Formulier vraag per vraag | `components/hub/stap-formulier.tsx` |
-| Resources + e-mailslot | `components/hub/resource-sectie.tsx`, `lib/hub-toegang.ts` |
+| Resources + e-mailslot | `components/hub/resource-sectie.tsx`, `components/hub/slot-formulier.tsx`, `lib/hub-toegang.ts` |
+| Slot op de promptpagina's | `components/prompts/prompt-slot.tsx` |
 | Adres bewaren in Brevo | `netlify/functions/hub-toegang.ts` (`/api/hub-toegang`) |
 | De pagina | `components/hub/hub-pagina.tsx`, `app/hub/page.tsx`, `app/hub/resources/page.tsx` |
 | Ondertitels opnieuw maken | `node scripts/hub/ondertitels.mjs <transcript.json>` |
@@ -148,11 +149,48 @@ Bronnen: bunny.net/pricing/stream, bunny.net/docs/stream/premium-encoding, mux.c
 
 **Het e-mailslot:** het adres gaat als contact naar Brevo (UTM_SOURCE = kanaal, UTM_MEDIUM = hub, UTM_CONTENT = post, OPT_IN = vinkje). Een bestaand contact wordt niet overschreven. Mails krijgt alleen wie het vinkje aanzet (standaard uit). Toegang blijft open via localStorage + een functioneel cookie van een jaar: na herladen, na een omweg langs een andere pagina van de site en bij een volgend bezoek. Op een ander toestel vraagt hij het één keer opnieuw (zonder login kan dat niet anders); hetzelfde adres opnieuw ingeven maakt in Brevo geen dubbel contact. Lukt Brevo even niet, dan gaat het slot toch open en sturen we het adres bij het volgende bezoek opnieuw.
 
-## Open punten voor Alex
+## Beslissingen van Alex (20/11, tweede ronde) en wat er veranderde
+
+| Punt | Beslissing | Wat er nu staat |
+|---|---|---|
+| Losse promptpagina's (`/prompts/…`) | Ook achter het slot | De prompts zitten achter hetzelfde slot (`components/prompts/prompt-slot.tsx`). Titel en uitleg van de pagina blijven zichtbaar. Wie het slot al opende (hub of andere promptpagina) ziet ze meteen; wie via een rechtstreekse link komt, ziet eerst het slot en na invullen meteen de prompts van díe pagina. Een zacht slot: de site is statisch, dus wie de broncode leest, vindt de tekst. |
+| Doel van de mails | Af en toe AI-nieuwtjes en dingen waar je iets aan hebt | Tekst bij het vinkje: **"Ja, hou me op de hoogte.** Af en toe een mail met AI-nieuwtjes en tips waar je bedrijf echt iets aan heeft. Hooguit twee per maand. Afmelden kan altijd, met één klik." |
+| Het vinkje | Optioneel, voorlopig standaard **uit** | Ongewijzigd uit: een vooraf aangevinkt vakje is geen geldige toestemming (AVG, arrest Planet49, WER art. XII.13). Het vinkje staat nu in een eigen kadertje, zodat het opvalt. |
+| Zonder vinkje | Adres dient alleen om het slot te openen | Onder het formulier: "Zonder vinkje gebruiken we je adres alleen om de prompts en gidsen voor je te openen: je krijgt dan geen mails. We geven je adres aan niemand door." In Brevo: OPT_IN = nee, op geen enkele lijst. |
+| Brevo-lijst | Komt van Alex | Zet het nummer in Netlify als `BREVO_HUB_LIJST_ID`; wie aanvinkt, komt er dan vanzelf op. |
+| Tuesday | Later automatisch, nu nog niet bouwen | Voorstel hieronder. |
+
+Ook aangepast: de knop "Plan een call met Karel" onderaan de promptpagina's ging naar `/hub/#karel`, dat bestaat niet meer. Die gaat nu naar `#gesprek` (het formulier), en de hub stuurt de oude ankers `#karel`, `#laten` en `#keuze` ook naar het formulier, voor oude links in DM's en posts.
+
+**Let op: "hooguit twee per maand"** is een belofte die ik zelf invulde, omdat de tekst concreet moest zijn. Klopt dat ritme niet, pas het dan aan in `components/hub/copy.ts` (en in de privacytekst hieronder).
+
+### Voorgestelde privacytekst (voor de privacyverklaring)
+
+In de tabel "waarvoor gebruiken we uw gegevens", twee regels:
+
+1. *E-mailadres. Om de gratis prompts en gidsen op finitsolutions.be/hub voor u te openen. Rechtsgrond: uitvoering van uw vraag. Bewaard tot u vraagt het te wissen. Zonder uw toestemming sturen we u geen mails.*
+2. *E-mailadres, als u het vakje aanvinkt. Om u af en toe (hooguit twee keer per maand) te mailen met AI-nieuwtjes en tips waar uw bedrijf iets aan heeft. Rechtsgrond: toestemming. Afmelden kan altijd via de link onderaan elke mail. Bewaard tot u zich afmeldt.*
+
+En in de cookieverklaring: *`finit_hub_toegang`, functioneel, 1 jaar: onthoudt dat u de prompts en gidsen al opende, zodat we het niet opnieuw vragen.*
+
+## Nog open voor Alex
 
 1. **Hosting:** ja of nee voor Bunny Stream (zie hierboven).
-2. **Het vinkje voor de mails:** nu optioneel en standaard uit, het veiligste onder de GDPR. Wil je dat iedereen die de resources opent ook mails krijgt ("je adres = je toegang + onze mails")? Dat is gebruikelijk, maar juridisch grijzer: toestemming moet vrij gegeven zijn. Laat het eventueel nakijken.
-3. **Privacyverklaring:** vermeldt nog niets over de resources en de mails. Voorstel om toe te voegen aan de tabel "waarvoor gebruiken we uw gegevens": *E-mailadres; om u toegang te geven tot de gratis prompts en gidsen op /hub en, als u dat aanvinkt, om u nieuwe prompts en gidsen te mailen; toestemming; tot u zich afmeldt.* En in de cookieverklaring het functionele cookie `finit_hub_toegang` (1 jaar).
-4. **Brevo-lijst:** wie mails wil, staat nu alleen met OPT_IN = ja in Brevo. Maak in Brevo een lijst (bv. "Hub · nieuwe prompts") en zet het nummer in Netlify als `BREVO_HUB_LIJST_ID`, dan komen ze er vanzelf op. Dubbele opt-in (bevestigingsmail) is nog niet ingesteld; dat kan later in Brevo.
-5. **De losse promptpagina's** (`/prompts/…`) zijn via een rechtstreekse link nog vrij te openen. Het slot zit op de hub. Moeten die pagina's ook achter het slot?
-6. **De lesreeks/Skool en de vacatures:** Skool is van de hub (zoals gevraagd). De vacatures staan nog als kleine link in de footer.
+2. **Privacy- en cookieverklaring:** de teksten hierboven toevoegen (of laten nakijken). Het slot staat online vanaf de merge, dus best samen.
+3. **Brevo-lijst:** het nummer van de lijst (`BREVO_HUB_LIJST_ID`).
+4. **De lesreeks/Skool en de vacatures:** Skool is van de hub (zoals gevraagd), maar staat nog onderaan elke promptpagina. De vacatures staan als kleine link in de footer van de hub.
+
+## Voorstel: hubformulier en aanmeldingen naar Tuesday (finit-crm)
+
+Bekeken op `origin/main` van Finit-Solutions-BV/finit-crm (20/11), niets gebouwd.
+
+**Wat Tuesday al heeft:** een route voor websiteleads, `POST https://crm.finitsolutions.be/api/intake/website-lead` (ticket T-33, staat op main).
+- Je meldt je aan met een API-sleutel van een aparte gebruiker die alleen het bord Leads › Content mag zien. Die sleutel staat op de server, nooit in de browser.
+- Body: `{ name, email, phone?, website?, page?, message }`; `name`, `email` en `message` zijn verplicht.
+- Het item komt op Leads › Content met status `New lead 0%`. De itemnaam is de website zonder `www.` (anders het maildomein, anders de naam). Hetzelfde adres binnen 10 minuten maakt geen tweede item.
+- Voor aanmeldingen zonder vraag (het e-mailslot) is er nog niets.
+
+**Voorstel, in twee stappen:**
+1. **Het contactformulier (ook dat van de hub)** → Tuesday. In `netlify/functions/contact-submit.ts`, naast (later in plaats van) monday: dezelfde velden posten naar de route hierboven. Velden: `naam`→`name`, `telefoonnummer`→`phone`, `bedrijfswebsite`→`website`, `bron`→`page`, `bericht`→`message` (met de antwoorden van de keuzevragen erin). Twee Netlify-variabelen: `TUESDAY_URL` en `TUESDAY_TOKEN`. Ongeveer 20 regels, zelfde vangnet als monday: mislukt Tuesday, dan vertrekt de mail toch met een melding. Een tijd monday én Tuesday laten lopen, daarna monday uitzetten.
+   - Nodig: Jord maakt in Tuesday de gebruiker met alleen toegang tot Content en een sleutel (`POST /api/users/:id/tokens`). Daarna Alex' ja om de code te wijzigen, want dat raakt de verzendkant van het formulier.
+2. **Aanmeldingen via het e-mailslot** horen niet op het leadsbord: dat zijn geen aanvragen, en het zouden er veel worden. Brevo blijft de bron voor wie mails wil (daar zit ook het afmelden). Wil Alex ze toch in Tuesday, dan vraagt dat Jord om een eigen route (bv. `POST /api/intake/website-signup` naar een bord "Hub-aanmeldingen" met e-mail, bron, post en vinkje ja/nee). Onze functie `hub-toegang` stuurt ze dan door, op dezelfde manier als stap 1.

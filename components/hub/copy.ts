@@ -175,19 +175,25 @@ export const HUB = {
   },
 
   // Het slot op de resources. Eerlijk zeggen wat je krijgt en wat we met je adres doen.
+  // Ook op elke promptpagina (/prompts/…): daar met titelPrompt en tekstPrompt.
   slot: {
     titel: "Laat je e-mailadres achter en open alles",
     tekst: "Je krijgt meteen toegang tot alle {aantal} prompts en gidsen hieronder. Op dit toestel blijven ze daarna open.",
+    titelPrompt: "Laat je e-mailadres achter en open de prompts",
+    tekstPrompt:
+      "Je krijgt meteen de prompts van deze pagina, plus alle andere prompts en gidsen op de hub. Op dit toestel blijven ze daarna open.",
     email: "E-mailadres",
     emailHint: "naam@bedrijf.be",
-    mails: "Mail me als er nieuwe prompts en gidsen bijkomen. Afmelden kan altijd, met één klik.",
+    // Het vinkje (standaard uit, beslissing 20/11: een vooraf aangevinkt vakje is geen geldige toestemming).
+    // "Hooguit twee per maand" is een belofte: pas aan als het ritme anders wordt.
+    mailsKop: "Ja, hou me op de hoogte.",
+    mails: "Af en toe een mail met AI-nieuwtjes en tips waar je bedrijf echt iets aan heeft. Hooguit twee per maand. Afmelden kan altijd, met één klik.",
     knop: "Open de prompts en gidsen",
     bezig: "Even geduld…",
     privacy:
-      "We gebruiken je adres alleen om je toegang te geven en, als je het aanvinkt, om je nieuwe prompts en gidsen te mailen. We geven het aan niemand door.",
+      "Zonder vinkje gebruiken we je adres alleen om de prompts en gidsen voor je te openen: je krijgt dan geen mails. We geven je adres aan niemand door.",
     privacyLink: "Privacyverklaring",
     fout: "Dat e-mailadres lijkt niet te kloppen. Kijk het even na.",
-    open: "Je hebt toegang. Alles hieronder staat open.",
   },
 
   footer: { vacatures: "Vacatures", privacy: "Privacy" },

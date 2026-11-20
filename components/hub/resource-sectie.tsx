@@ -12,14 +12,15 @@
  * lijst via NEXT_PUBLIC_RESOURCES_URL), zoals voorheen.
  */
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { ArrowRight, Lock } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import lokaleLijst from "@/content/resources.json";
 import { pushEvent } from "@/lib/analytics";
-import { bijBezoek, heeftToegang, vraagToegang } from "@/lib/hub-toegang";
+import { bijBezoek, heeftToegang } from "@/lib/hub-toegang";
 import { haalExterneLijst, leesLijst, RESOURCES_URL, soortLabel, soortMeervoud, voegSamen, type Resource } from "@/lib/resources";
 import { HUB } from "./copy";
+import { SlotFormulier } from "./slot-formulier";
 
 const LOKAAL = leesLijst(lokaleLijst);
 const R = HUB.resources;
@@ -35,16 +36,10 @@ const SOORT_KLEUR: Record<string, string> = {
 };
 
 export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<string, string> }) {
-  const id = useId();
   const [resources, setResources] = useState<Resource[]>(() => voegSamen(LOKAAL));
   const [filter, setFilter] = useState("");
   // null = nog niet gekeken (eerste render op de server): dan niets tonen dat flitst.
   const [open, setOpen] = useState<boolean | null>(null);
-  const [email, setEmail] = useState("");
-  const [mails, setMails] = useState(false);
-  const [honing, setHoning] = useState("");
-  const [bezig, setBezig] = useState(false);
-  const [fout, setFout] = useState(false);
 
   useEffect(() => {
     const toegang = heeftToegang();
@@ -76,20 +71,6 @@ export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<stri
   const gefilterd = filter ? resources.filter((r) => r.soort === filter) : resources;
   const zichtbaar = uitPost && gefilterd.includes(uitPost) ? [uitPost, ...gefilterd.filter((r) => r !== uitPost)] : gefilterd;
 
-  const verstuur = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setBezig(true);
-    setFout(false);
-    const uitkomst = await vraagToegang({ email: email.trim(), mails, bron: meta.bron ?? "direct", reel, website: honing });
-    setBezig(false);
-    if (uitkomst === "ongeldig") {
-      setFout(true);
-      return;
-    }
-    pushEvent("hub_toegang", { ...meta, mails: mails ? "ja" : "nee" });
-    setOpen(true);
-  };
-
   return (
     <>
       {open === false && (
@@ -103,62 +84,15 @@ export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<stri
             ))}
           </ul>
 
-          <form
-            onSubmit={verstuur}
-            className="hp-card relative z-10 mx-auto -mt-40 max-w-[34rem] p-6 sm:-mt-48 sm:p-8"
-            aria-labelledby={`${id}-titel`}
-          >
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" aria-hidden="true">
-              <Lock className="h-5 w-5" />
-            </span>
-            <h3 id={`${id}-titel`} className="hp-display hp-display-sm mt-4 text-[1.4rem] font-semibold leading-[1.2] text-[#1A2D63] sm:text-[1.6rem]">
-              {S.titel}
-            </h3>
-            <p className="mt-2 text-[1rem] leading-[1.6] text-[#3D4766]">{S.tekst.replace("{aantal}", String(resources.length))}</p>
-
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-              <label htmlFor={`${id}-email`} className="sr-only">{S.email}</label>
-              <input
-                id={`${id}-email`}
-                type="email"
-                required
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={S.emailHint}
-                aria-invalid={fout}
-                aria-describedby={fout ? `${id}-fout` : undefined}
-                className="min-h-[3.25rem] w-full flex-1 rounded-full border border-[#1A2D63]/20 bg-white px-5 text-[1rem] text-[#1A2D63] placeholder:text-[#6C7590]/60 focus:border-[#1A2D63]/45 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/15"
-              />
-              <button type="submit" disabled={bezig} className="hp-btn hp-btn--primary hp-btn--lg w-full sm:w-auto">
-                {bezig ? S.bezig : S.knop}
-              </button>
-            </div>
-            {fout && (
-              <p id={`${id}-fout`} role="alert" className="mt-2 text-[0.875rem] text-red-700">{S.fout}</p>
-            )}
-
-            <label className="mt-4 flex cursor-pointer items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#3D4766]">
-              <input
-                type="checkbox"
-                checked={mails}
-                onChange={(e) => setMails(e.target.checked)}
-                className="mt-[0.2rem] h-[1.1rem] w-[1.1rem] flex-none rounded border-[#1A2D63]/30 accent-[#1A2D63]"
-              />
-              {S.mails}
-            </label>
-
-            {/* Honeypot */}
-            <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
-              <label htmlFor={`${id}-honing`}>Website</label>
-              <input id={`${id}-honing`} type="text" tabIndex={-1} autoComplete="off" value={honing} onChange={(e) => setHoning(e.target.value)} />
-            </div>
-
-            <p className="mt-4 text-[0.8125rem] leading-[1.55] text-[#6C7590]">
-              {S.privacy}{" "}
-              <a href="/privacy/" className="hp-link">{S.privacyLink}</a>
-            </p>
-          </form>
+          <SlotFormulier
+            titel={S.titel}
+            tekst={S.tekst.replace("{aantal}", String(resources.length))}
+            bron={meta.bron ?? "direct"}
+            reel={reel}
+            meta={{ ...meta, plek: "hub" }}
+            onOpen={() => setOpen(true)}
+            className="z-10 mx-auto -mt-40 max-w-[34rem] sm:-mt-48"
+          />
         </div>
       )}
 

@@ -22,7 +22,8 @@ const JSON_HEADERS = { "Content-Type": "application/json" };
 const BREVO = "https://api.brevo.com/v3/contacts";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Welke tekst stond er bij het vinkje: zo weten we later waarvoor iemand toestemming gaf.
-const TEKSTVERSIE = "hub-slot-2026-11-20";
+// 2026-11-20b: doel van de mails = af en toe AI-nieuwtjes en tips, hooguit twee per maand.
+const TEKSTVERSIE = "hub-slot-2026-11-20b";
 
 function json(statusCode: number, body: unknown) {
   return { statusCode, headers: JSON_HEADERS, body: JSON.stringify(body) };
