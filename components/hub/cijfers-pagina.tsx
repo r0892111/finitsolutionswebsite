@@ -2,25 +2,29 @@
 
 /**
  * /hub/cijfers/: de eigen kijkmeting van de VSL (zie ./kijkmeting.ts en
- * netlify/functions/vsl-cijfers.ts). Intern, achter ?sleutel=… (Netlify-variabele
- * HUB_CIJFERS_SLEUTEL). Spoelen kan niet in de speler, dus de verste seconde van
- * een kijkbeurt is meteen hoe lang die kijker bleef.
+ * netlify/functions/vsl-cijfers.ts). Intern, achter een geheime sleutel (Netlify-
+ * variabele HUB_CIJFERS_SLEUTEL): intypen, of /hub/cijfers/#sleutel=… (na het hekje,
+ * dus nooit naar een server of in een log). Hij gaat in een header naar de functie
+ * en blijft alleen in dit tabblad bewaard (sessionStorage). Spoelen kan niet in de
+ * speler, dus de verste seconde van een kijkbeurt is meteen hoe lang die kijker bleef.
  *
  * - retentie per seconde (alleen kijkbeurten die vooraan begonnen; hervattingen apart);
  * - kijkbeurten, gemiddelde kijktijd, % tot het einde, verstuurde formulieren;
  * - de vijf vensters van 10 s waar de meeste kijkers afhaken, met wat Alex daar zegt;
- * - filters per bron, apparaat en video.
+ * - filters per periode, bron, apparaat en video.
  *
  * ?demo=1 toont verzonnen voorbeelddata, zonder sleutel en zonder database.
  */
 
 import { useEffect, useMemo, useState } from "react";
-import type { Kijkrij } from "@/lib/vsl-meting-db";
+import type { Kijkrij } from "@/lib/vsl-meting-opslag";
 
 type Regel = [number, number, Array<[string, number, number]>];
 type Staat = { soort: "laden" } | { soort: "sleutel" } | { soort: "fout"; tekst: string } | { soort: "klaar"; rijen: Kijkrij[]; demo: boolean };
 
 const VENSTER = 10;
+const SLEUTEL_OPSLAG = "finit_hub_cijfers_sleutel";
+const PERIODES: Array<[string, string]> = [["7", "7 dagen"], ["30", "30 dagen"], ["90", "90 dagen"], ["365", "Een jaar"]];
 
 function mmss(s: number): string {
   const t = Math.max(0, Math.round(s));
@@ -51,18 +55,21 @@ function voorbeeld(): Kijkrij[] {
     const hervat = rnd() < 0.05;
     const start = hervat ? Math.min(verste, 30 + rnd() * 150) : 0;
     const einde = verste >= duur - 1;
+    const moment = new Date(Date.now() - rnd() * 14 * 864e5).toISOString();
     rijen.push({
-      gestart_op: new Date(Date.now() - rnd() * 14 * 864e5).toISOString(),
+      dag: moment.slice(0, 10),
       video: "v3",
-      start_seconde: Math.round(start * 10) / 10,
-      verste_seconde: Math.round(verste * 10) / 10,
-      duur,
+      start_s: Math.round(start * 10) / 10,
+      max_s: Math.round(verste * 10) / 10,
+      duur_s: duur,
       bron: bronnen[Math.floor(rnd() * bronnen.length)],
       reel: null,
       apparaat: rnd() < 0.7 ? "gsm" : "desktop",
       kwaliteit: "auto",
       hervat,
-      formulier_verstuurd: einde ? rnd() < 0.18 : rnd() < 0.01,
+      formulier: einde ? rnd() < 0.18 : rnd() < 0.01,
+      start: moment,
+      laatst: moment,
     });
   }
   return rijen;
@@ -75,30 +82,58 @@ export function CijfersPagina() {
   const [apparaat, setApparaat] = useState("alle");
   const [video, setVideo] = useState("");
   const [invoer, setInvoer] = useState("");
+  const [sleutel, setSleutel] = useState("");
+  const [dagen, setDagen] = useState("30");
 
+  // Ondertitels (voor de afhaakpunten) en de sleutel: uit het hekje van de link of uit dit tabblad.
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
     fetch("/hub/vsl/ondertitels.json")
       .then((r) => (r.ok ? r.json() : []))
       .then((d) => Array.isArray(d) && setRegels(d as Regel[]))
       .catch(() => undefined);
-    if (p.get("demo") === "1") {
+    if (new URLSearchParams(window.location.search).get("demo") === "1") {
       setStaat({ soort: "klaar", rijen: voorbeeld(), demo: true });
       return;
     }
-    const sleutel = p.get("sleutel");
-    if (!sleutel) {
-      setStaat({ soort: "sleutel" });
-      return;
+    const uitHekje = new URLSearchParams(window.location.hash.slice(1)).get("sleutel");
+    if (uitHekje) history.replaceState(null, "", window.location.pathname + window.location.search);
+    let bewaard = "";
+    try {
+      bewaard = sessionStorage.getItem(SLEUTEL_OPSLAG) ?? "";
+    } catch {
+      /* geen opslag: dan telkens intypen */
     }
-    fetch(`/api/vsl-cijfers?sleutel=${encodeURIComponent(sleutel)}`, { cache: "no-store" })
+    const s = uitHekje || bewaard;
+    if (s) setSleutel(s);
+    else setStaat({ soort: "sleutel" });
+  }, []);
+
+  // De kijkbeurten van de gekozen periode ophalen (de sleutel in een header, nooit in de link).
+  useEffect(() => {
+    if (!sleutel) return;
+    setStaat({ soort: "laden" });
+    fetch(`/api/vsl-cijfers?dagen=${dagen}`, { cache: "no-store", headers: { "x-hub-sleutel": sleutel } })
       .then(async (r) => {
         const j = (await r.json().catch(() => ({}))) as { rijen?: Kijkrij[]; error?: string };
-        if (r.ok && j.rijen) setStaat({ soort: "klaar", rijen: j.rijen, demo: false });
-        else setStaat({ soort: "fout", tekst: j.error === "verkeerde_sleutel" ? "Die sleutel klopt niet." : `De cijfers laden niet (${j.error ?? r.status}).` });
+        if (r.ok && j.rijen) {
+          try {
+            sessionStorage.setItem(SLEUTEL_OPSLAG, sleutel);
+          } catch {
+            /* idem */
+          }
+          setStaat({ soort: "klaar", rijen: j.rijen, demo: false });
+        } else if (j.error === "verkeerde_sleutel") {
+          try {
+            sessionStorage.removeItem(SLEUTEL_OPSLAG);
+          } catch {
+            /* idem */
+          }
+          setSleutel("");
+          setStaat({ soort: "fout", tekst: "Die sleutel klopt niet." });
+        } else setStaat({ soort: "fout", tekst: `De cijfers laden niet (${j.error ?? r.status}).` });
       })
       .catch(() => setStaat({ soort: "fout", tekst: "De cijfers laden niet (netwerk)." }));
-  }, []);
+  }, [sleutel, dagen]);
 
   const alleRijen = staat.soort === "klaar" ? staat.rijen : [];
   const videos = useMemo(() => Array.from(new Set(alleRijen.map((r) => r.video))), [alleRijen]);
@@ -111,14 +146,14 @@ export function CijfersPagina() {
   );
 
   const cijfers = useMemo(() => {
-    const duur = Math.max(0, ...rijen.map((r) => r.duur ?? 0)) || Math.max(1, ...rijen.map((r) => r.verste_seconde));
+    const duur = Math.max(0, ...rijen.map((r) => r.duur_s ?? 0)) || Math.max(1, ...rijen.map((r) => r.max_s));
     const sec = Math.ceil(duur);
-    const vers = rijen.filter((r) => !r.hervat && r.start_seconde < 1);
+    const vers = rijen.filter((r) => !r.hervat && r.start_s < 1);
     // Retentie: hoeveel van de vooraan gestarte kijkbeurten zitten op seconde s nog te kijken.
     const verschil = new Array(sec + 2).fill(0);
     vers.forEach((r) => {
       verschil[0] += 1;
-      verschil[Math.min(sec + 1, Math.floor(r.verste_seconde) + 1)] -= 1;
+      verschil[Math.min(sec + 1, Math.floor(r.max_s) + 1)] -= 1;
     });
     const retentie: number[] = [];
     let lopend = 0;
@@ -135,9 +170,9 @@ export function CijfersPagina() {
       if (afhaak.length >= 5 || v.daling <= 0) break;
       if (afhaak.every((a) => v.tot <= a.van || v.van >= a.tot)) afhaak.push(v);
     }
-    const kijktijd = rijen.length ? rijen.reduce((t, r) => t + Math.max(0, r.verste_seconde - r.start_seconde), 0) / rijen.length : 0;
-    const totEinde = rijen.filter((r) => r.duur && r.verste_seconde >= r.duur - 3).length;
-    const formulier = rijen.filter((r) => r.formulier_verstuurd).length;
+    const kijktijd = rijen.length ? rijen.reduce((t, r) => t + Math.max(0, r.max_s - r.start_s), 0) / rijen.length : 0;
+    const totEinde = rijen.filter((r) => r.duur_s && r.max_s >= r.duur_s - 3).length;
+    const formulier = rijen.filter((r) => r.formulier).length;
     return { duur, retentie, afhaak, kijktijd, totEinde, formulier, vers: vers.length, hervat: rijen.length - vers.length };
   }, [rijen]);
 
@@ -162,12 +197,12 @@ export function CijfersPagina() {
 
         {staat.soort === "laden" && <p className="mt-8">Laden…</p>}
         {staat.soort === "fout" && <p className="mt-8 rounded-xl bg-red-50 px-4 py-3 text-red-700">{staat.tekst}</p>}
-        {staat.soort === "sleutel" && (
+        {(staat.soort === "sleutel" || (staat.soort === "fout" && !sleutel)) && (
           <form
             className="mt-8 flex max-w-[28rem] gap-2"
             onSubmit={(e) => {
               e.preventDefault();
-              if (invoer.trim()) window.location.search = `?sleutel=${encodeURIComponent(invoer.trim())}`;
+              if (invoer.trim()) setSleutel(invoer.trim());
             }}
           >
             <label htmlFor="sleutel" className="sr-only">Sleutel</label>
@@ -185,6 +220,7 @@ export function CijfersPagina() {
             )}
 
             <div className="mt-6 flex flex-wrap gap-3 text-[0.9375rem]">
+              {!staat.demo && <Keuze label="Periode" waarde={dagen} zet={setDagen} opties={PERIODES} />}
               {videos.length > 1 && (
                 <Keuze label="Video" waarde={huidigeVideo} zet={setVideo} opties={videos.map((v) => [v, v])} />
               )}
