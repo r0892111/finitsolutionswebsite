@@ -100,6 +100,33 @@ Inhoudskolom: max 1244 px met 24 px zijmarge (gsm 14 px, onder 380 px 10 px), zo
 
 **Formulier, wat je te wachten staat:** bovenaan de kaart staat nu zichtbaar "Plan een vrijblijvend gesprek" met de uitleg "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter, en dan plannen we samen een moment in." De teller "Vraag X van 5" is vetter en marineblauw, en de laatste knop heet "Vraag het gesprek aan" (was "Verstuur"). De noot onder de knop zegt nu "Vul dit formulier in om een gesprek in te plannen. Duurt 60 seconden." (woorden van Alex, voorlopig). Een klik op de knop scrolt zacht tot het formulier midden in beeld staat; is het hoger dan het scherm (gsm), dan staat de bovenkant in beeld met 24 px ruimte erboven. Laatste stap (Alex, 20/11): naam, e-mailadres en telefoonnummer verplicht, "Website van je bedrijf (optioneel)". Geen browserballonnen maar een eigen melding onder het veld (rode rand); de knop blijft klikbaar en springt naar het eerste foute veld. Telefoon: 9 tot 15 cijfers, +32, spaties, punten en streepjes mogen. Dezelfde regels staan in `lib/contact-velden.ts` en gelden ook op de server (`contact-submit`), alleen voor inzendingen van /hub/: de popup en het vraagformulier elders op de site houden hun eigen regels. Flikkering onder de stappenbalk (Alex, 20/11): elke nieuwe vraag kwam binnen met `hp-wissel` (van onzichtbaar naar zichtbaar in 360 ms), zodat de inhoud onder de balk bij elke klik even helemaal wegviel. Nu `hub-stap-in`: de tekst blijft zichtbaar en zakt enkel 4 px op haar plaats (180 ms). De voortgangsbalk van de video flikkerde in Chrome niet (desktop en 390 px breed nagekeken) Bewust níet "kies zelf een moment": er is geen agenda, wij nemen contact op. Voorlopige tekst, Amina mag hem herschrijven (`components/hub/copy.ts`).
 
+## Ritme: één schaal voor alle verticale ruimte (Alex, 20/11)
+
+De maten van Shadowboys gaven willekeurige gaten (99 px onder de video, 8 px onder de knop, 91 px boven de laatste knop). Nu één schaal, als tokens op `.hub-ritme` in `app/globals.css`:
+
+| Token | Desktop | Gsm | Waarvoor |
+|---|---|---|---|
+| `--hub-r2` | 16 | 12 | hoort bij elkaar: noot bij de knop, intro bij de sectietitel |
+| `--hub-r3` | 24 | 20 | binnen een blok: logo, badge, kop, subzin; pillen naar knop; kaarten in een lijst |
+| `--hub-r4` | 40 | 28 | tussen groepen in een blok: tekst naar video, video naar pillen, intro naar lijst, lijst naar knop |
+| `--hub-r5` | 64 | 40 | een los blok: de noot naar het formulier |
+| `--hub-r6` | 96 | 64 | tussen secties (boven- en onderkant van elke sectie) |
+
+Nagemeten op de preview (1440 en 360 px): alle afstanden vallen exact op deze waarden. Nieuwe blokken op de hub gebruiken deze tokens (`mt-[var(--hub-r4)]` enz.), geen losse pixels.
+
+## Eigen kijkmeting (Alex, 20/11)
+
+Zonder cookies en zonder toestemming nodig: per kijkbeurt een willekeurig id in het geheugen van de pagina (`components/hub/kijkmeting.ts`). Om de 5 s, bij pauze, op het einde en bij het verlaten van de pagina gaat een hartslag naar `/api/vsl-meting` (`netlify/functions/vsl-meting.ts`): id, video, start- en verste seconde, duur, bron, reel, gsm/desktop, kwaliteit, hervat. Geen IP-adres, geen user-agent.
+
+- **Opslag:** tabel `hub_vsl_kijkbeurten` (migratie `supabase/migrations/020_hub_vsl_kijkbeurten.sql`, RLS aan zonder policies, functie `hub_vsl_hartslag` die de verste seconde alleen laat stijgen). **Nog niet toegepast:** welk Supabase-project dit wordt, beslist Alex. Daarna in Netlify `HUB_METING_SUPABASE_URL` en `HUB_METING_SUPABASE_KEY` (service role) zetten; tot dan antwoordt de functie 202 en bewaart niets.
+- **Cijfers:** `/hub/cijfers/?sleutel=…` (noindex, niet in de sitemap), sleutel in Netlify `HUB_CIJFERS_SLEUTEL`. Retentie per seconde, kijkbeurten, gemiddelde kijktijd, % tot het einde, de vijf vensters van 10 s met de meeste afhakers (met wat Alex daar zegt), formulieren; filters per bron, apparaat en video. `?demo=1` toont verzonnen voorbeelddata.
+- **Formulier:** "VSL bekeken tot X %" (of "niet bekeken in dit bezoek") gaat mee in het bericht naar contact@ en monday; de kijkbeurt krijgt "formulier verstuurd".
+- **Privacy:** een alinea in de privacyverklaring (sectie 7).
+
+## Cookiebanner (Alex, 20/11)
+
+Google Tag Manager (en dus GA4 en pixels) laadt pas na "Accepteren" of een eerder bewaarde ja (`applyConsentMode` in `lib/consent.ts`). Daarvoor: geen script, geen aanvraag naar Google, geen "advanced consent mode" meer. De banner is een smalle balk onderaan die pas verschijnt na de eerste scroll of na 10 s; Weigeren en Accepteren zijn even groot; Instellingen opent de bestaande instellingen. Intrekken herlaadt de pagina zodat GTM en Leadinfo stoppen. Dit geldt voor de hele site.
+
 ## De videospeler
 
 Ze hadden eerst **Vturb** (een betaalde VSL-speler, `converteai.net`). In november 2026 vervangen door een eigen speler. De code staat leesbaar in de pagina:
