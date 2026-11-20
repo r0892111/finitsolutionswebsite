@@ -19,7 +19,8 @@ Eén idee: **de pagina volgt de schrijfstijl van de vorige homepage en de landin
 | `oplossing-sectie.tsx` | De oplossing, meteen onder de herkenning: de pitch in drie zinnen op een marineblauwe kaart met een tekening, daaronder de tool-logo's. |
 | `illustraties.tsx` | De tekeningen bij de herkenning en de oplossing: vier scènes als inline SVG (3 op 2) met in elke tekening dezelfde zaakvoerder, zodat de hele zin in beeld staat. Eén amber accent per tekening, geen gezichten, geen tekst, geen beweging. Gemaakt voor een lichte ondergrond: bij de herkenning zonder kader op de lichte band, op de blauwe kaart van de oplossing op een wit vlak. |
 | `stap-details.tsx` | De drie stappen (Opleiden, Bouwen, Gebruiken) in detail. Stap 2 begint met het strategiegesprek van 90 minuten en eindigt met je voorstel per AI-werknemer (sinds 16/09 één weg; het AI-native traject is geschrapt). Op desktop in het paneel rechts van de kaarten (de kaarten blijven staan terwijl je scrolt, onderaan klik je door naar de volgende stap); op een telefoon klapt het open in de kaart zelf. Sinds 20/09 heeft het paneel van stap 1 twee blokken met een kop ("Wat je krijgt" boven de vinkjes, "Waarom jij het legt, en hoe het gaat" eronder), is de uitleg eronder één doorlopende alinea zonder tussenkopjes en zonder het blauwe kaartje ernaast, en is stap 3 een lijst met groene vinkjes in plaats van zes kaartjes. Geen prijzen in de panelen, geen voorbeelden. |
-| `case-kaart.tsx` | Een oplossing als kaart, de catalogus, en de quote van Bas. |
+| `case-kaart.tsx` | Een oplossing als kaart, de catalogus, en de quote van Bas (alleen nog op /cases). |
+| `pers-blok.tsx` | Het persblok onder de oplossingen: het nieuwste artikel uit `lib/pers.ts`, met de foto van de drie vennoten (watermerk rechtsboven) en het logo van het medium. |
 | `cases-overzicht.tsx` | De pagina `/cases`: alle oplossingen volledig uitgeschreven onder elkaar. |
 | `contact-kaart.tsx` | De contactkaart naast de FAQ en op `/contact`: de lesreeks, het vraagformulier (met telefoonnummer) en het telefoonnummer, zonder foto. Op de homepage even lang als de FAQ. |
 | `contact-pagina.tsx` | De pagina `/contact`, waar "Neem contact met ons op" naartoe gaat. |
@@ -41,12 +42,12 @@ De popup `components/contact-form-popup.tsx` (naar `netlify/functions/contact-su
 ## De volgorde
 
 1. **Hero** (`#hero`): "Leg jouw AI-fundament", twee knoppen (lesreeks, contact), drie vinkjes, "Ondersteund door", het brein.
-2. **De foto** op de naad onder de hero: de linkerhelft vervaagd, met het statement en het citaat van Y Combinator.
+2. **De foto** op de naad onder de hero: de foto uit het HLN-artikel (5/11), zonder waas of verloop erover; het statement en het citaat van Y Combinator staan eronder. Rechtsonder op de foto staat "© David Legreve" als klein watermerk.
 3. **Herken jij dit?** (`#recognition`): drie punten met een tekening, "Herkenbaar?" met de knop.
 4. **De oplossing** (`#oplossing`): de pitch op een marineblauwe kaart, daaronder de tool-logo's.
 5. **Hoe krijg jij jouw AI-werknemer?** (`#aanpak`): Stap 1 Opleiden (lesreeks € 295, met het strategiegesprek van 90 minuten erbij), Stap 2 Bouwen (opstartkost vanaf € 1.650), Stap 3 Gebruiken (gebruikslicentie vanaf € 95 per maand); het exacte voorstel komt in het strategiegesprek, het paneel van de gekozen stap rechts.
 6. **De lesreeks** op de naad: het Skool-blok.
-7. **Wat we het vaakst bouwen** (`#cases`): de oplossingen op marineblauw, "Bekijk alle oplossingen", de quote van Bas.
+7. **Wat we het vaakst bouwen** (`#cases`): de oplossingen op marineblauw, "Bekijk alle oplossingen", en het persblok (sinds 5/11, in de plaats van de quote van Bas). "Pers" staat ook in de navigatie; de pagina zelf: `components/pers/`, de artikels in `lib/pers.ts`.
 8. **Vragen en contact** (`#faq`, `#contact`): links de zeven veelgestelde vragen, rechts de contactkaart, allebei even lang.
 9. **We zoeken mensen** (`#vacatures`, sinds 29/10): een rustige witte band boven de footer met een knop naar `/vacatures`. "Vacatures" staat ook in de navigatie (desktop en mobiel menu) en in de footer. De pagina zelf: `components/vacatures/`, de lijst in `lib/vacatures.ts`.
 
