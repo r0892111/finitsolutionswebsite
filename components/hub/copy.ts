@@ -33,7 +33,7 @@ export const HUB = {
   // Twee pillen onder de video: de twee bezwaren die het vaakst terugkomen.
   pillen: ["Geen technische kennis nodig", "Enkele uren van jouw tijd"],
   knop: "Plan een vrijblijvend gesprek",
-  knopNoot: "Vijf korte vragen. Daarna nemen wij contact op.",
+  knopNoot: "Eerst vijf korte vragen, daarna plannen we samen een moment.",
 
   // De speler.
   speler: {
@@ -56,6 +56,9 @@ export const HUB = {
   // (/api/contact-submit); de antwoorden op de keuzevragen gaan mee in het bericht.
   formulier: {
     titel: "Plan een vrijblijvend gesprek",
+    // Boven de eerste vraag: wat er gebeurt. Je kiest zelf geen moment in een agenda;
+    // na de laatste vraag nemen wij contact op om er samen een te kiezen.
+    uitleg: "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter, en dan plannen we samen een moment in.",
     terug: "Terug",
     volgende: "Volgende",
     stapVan: "Vraag {nu} van {totaal}",
@@ -108,7 +111,7 @@ export const HUB = {
       website: "Website van je bedrijf",
       websiteHint: "jouwbedrijf.be",
     },
-    verstuur: "Verstuur",
+    verstuur: "Vraag het gesprek aan",
     bezig: "Versturen…",
     privacy: "We gebruiken je gegevens alleen om je te contacteren.",
     privacyLink: "Privacyverklaring",

@@ -44,7 +44,7 @@ function Vraag({ zin, id }: { zin: string; id?: string }) {
   );
 }
 
-export function StapFormulier({ bron, meta = {} }: { bron: string; meta?: Record<string, string> }) {
+export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?: Record<string, string>; kopId?: string }) {
   const id = useId();
   const [stap, setStap] = useState(0);
   const [antwoorden, setAntwoorden] = useState<Record<string, string>>({});
@@ -151,8 +151,16 @@ export function StapFormulier({ bron, meta = {} }: { bron: string; meta?: Record
 
   return (
     <div ref={kader} className="hp-card scroll-mt-6 overflow-hidden">
+      {/* Wat je te wachten staat: eerst de vragen, pas bij de laatste je gegevens. */}
+      <div className="px-5 pt-6 sm:px-8 sm:pt-8">
+        <h2 id={kopId} className="hp-display hp-display-sm text-[1.45rem] font-semibold leading-[1.2] text-[#1A2D63] sm:text-[1.75rem]">
+          {F.titel}
+        </h2>
+        <p className="mt-1.5 text-[1rem] leading-[1.5] text-[#3D4766] sm:text-[1.0625rem]">{F.uitleg}</p>
+      </div>
+
       {/* Streepjes: één per vraag, de huidige en de vorige gekleurd. */}
-      <div className="flex gap-1.5 px-5 pt-5 sm:px-8 sm:pt-7" aria-hidden="true">
+      <div className="flex gap-1.5 px-5 pt-5 sm:px-8 sm:pt-6" aria-hidden="true">
         {VRAGEN.map((v, i) => (
           <span key={v.id} className="h-1.5 flex-1 overflow-hidden rounded-full bg-[#E3E7EF]">
             <span className={`block h-full rounded-full bg-[#1A2D63] transition-transform duration-300 ease-out origin-left ${i <= stap ? "scale-x-100" : "scale-x-0"}`} />
@@ -174,7 +182,7 @@ export function StapFormulier({ bron, meta = {} }: { bron: string; meta?: Record
           ) : (
             <span />
           )}
-          <span>{F.stapVan.replace("{nu}", String(stap + 1)).replace("{totaal}", String(VRAGEN.length))}</span>
+          <span className="font-semibold text-[#1A2D63]">{F.stapVan.replace("{nu}", String(stap + 1)).replace("{totaal}", String(VRAGEN.length))}</span>
         </div>
 
         <div key={stap} className="hp-wissel mt-3">

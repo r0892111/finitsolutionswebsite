@@ -178,10 +178,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
       {/* 3. Het formulier, meteen onder de video */}
       <section id="gesprek" className="scroll-mt-4 pb-14 sm:pb-20" aria-labelledby="gesprek-titel">
         <div className="hub-form-wrap">
-          <h2 id="gesprek-titel" className="sr-only">
-            {HUB.formulier.titel}
-          </h2>
-          <StapFormulier bron={formBron} meta={meta} />
+          <StapFormulier bron={formBron} meta={meta} kopId="gesprek-titel" />
         </div>
       </section>
 
@@ -196,7 +193,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
           <TwijfelsLijst lijst={HUB.twijfels.lijst} />
 
           <div className="hub-slot-cta text-center">
-            <button type="button" onClick={() => naarFormulier("na_twijfels")} className="hp-btn hp-btn--primary hub-knop hub-knop--slot">
+            <button type="button" onClick={() => naarFormulier("na_twijfels")} className="hp-btn hp-btn--primary hub-knop">
               {HUB.knop}
               <ArrowRight aria-hidden="true" />
             </button>

@@ -965,8 +965,9 @@ html {
 .hub-video { max-width: 1192px; }
 .hub-pillen { margin: 99px auto 53px; gap: clamp(10px, 3.72vw, 46px); }
 .hub-pil { font-size: 30px; line-height: 1.026; min-height: 54px; padding: 8px 24px; }
-.hp-btn.hub-knop { font-size: clamp(30px, 3.3vw, 47.5px); font-weight: 600; line-height: 1.15; min-height: 100px; padding: 20px 32px; width: min(100%, 887px); gap: 0.4em; }
-.hp-btn.hub-knop--slot { font-size: clamp(32px, 3.73vw, 53.7px); min-height: 108px; width: min(100%, 1002px); }
+/* De gespreksknop: een maat kleiner en rustiger dan bij Shadowboys (Alex 20/11), in het
+   gewone knopgewicht van de site. Breed genoeg om op te vallen, niet over de hele kolom. */
+.hp-btn.hub-knop { font-size: 28px; line-height: 1.15; min-height: 80px; padding: 16px 44px; max-width: 100%; gap: 0.45em; }
 .hub-knop svg { width: 0.9em; height: 0.9em; }
 .hub-noot { font-size: 30px; line-height: 1.267; margin-top: 8px; }
 .hub-form-wrap { width: min(calc(100% - 48px), 1011px); margin-inline: auto; }
@@ -999,7 +1000,7 @@ html {
   .hub-titel { font-size: clamp(48px, 6.2vw, 66px); }
   .hub-sub, .hub-intro { font-size: clamp(21px, 2.7vw, 28px); }
   .hub-pil { font-size: clamp(19px, 2.5vw, 28px); }
-  .hp-btn.hub-knop { min-height: 96px; }
+  .hp-btn.hub-knop { font-size: clamp(20px, 2.5vw, 26px); min-height: 72px; }
   .hub-noot { font-size: 22px; }
   .hub-faq-vraag { font-size: clamp(25px, 3.1vw, 34px); }
   .hub-faq-antwoord { font-size: clamp(20px, 2.5vw, 27px); }
@@ -1014,8 +1015,7 @@ html {
   .hub-intro { font-size: 17px; line-height: 1.4; }
   .hub-pillen { margin: 58px auto 26px; gap: 10px; }
   .hub-pil { font-size: 13px; min-height: 40px; padding: 7px 8px; }
-  .hp-btn.hub-knop, .hp-btn.hub-knop--slot { font-size: clamp(17px, 5.2vw, 22px); min-height: 58px; padding: 14px 18px; width: 100%; }
-  .hp-btn.hub-knop--slot { min-height: 60px; }
+  .hp-btn.hub-knop { font-size: clamp(16px, 4.6vw, 19px); min-height: 56px; padding: 14px 18px; width: 100%; }
   .hub-noot { font-size: 13px; margin-top: 7px; }
   .hub-sectietitel { font-size: clamp(30px, 9vw, 42px); }
   .hub-faq-lijst { gap: 14px; margin-top: 24px; }
