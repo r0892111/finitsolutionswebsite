@@ -938,7 +938,18 @@ html {
 
 /* De ondertitels schalen mee met de breedte van de speler, niet van het scherm */
 .vsl-frame { container-type: inline-size; }
-.vsl-ondertitel { font-size: clamp(0.8rem, 3.1cqw, 1.75rem); text-shadow: 0 1px 2px rgba(15, 29, 71, 0.6); }
+/* Ondertitels zoals bij reels: geen vak, witte vette letters met een dunne donkere
+   rand en een zachte schaduw, zodat ze op elk beeld leesbaar blijven. */
+.vsl-ondertitel {
+  font-family: var(--font-schibsted), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(15px, 3cqw, 38px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: #fff;
+  text-wrap: balance;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.5), 0 2px 16px rgba(0, 0, 0, 0.35);
+}
 
 /* Keuzes in het formulier: letter ervoor, zoals A/B/C */
 .hp-keuze { transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease; }

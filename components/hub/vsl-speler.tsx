@@ -15,12 +15,14 @@
  *   4K kan. Op een groot scherm met snelle verbinding begint hij hoog. Een klein
  *   menu (Auto, 4K, 1080p, …) om zelf te kiezen. iPhone en iPad spelen HLS zelf.
  *   Een gewone mp4 als bron werkt ook.
- * - Ondertitels woord voor woord uit public/hub/vsl/ondertitels.json, het
- *   woord dat Alex nu zegt is gemarkeerd.
+ * - Ondertitels uit public/hub/vsl/ondertitels.json, standaard uit (wens Alex
+ *   20/11). De kijker zet ze aan met de knop rechtsonder; die keuze onthouden we.
+ *   Stijl zoals reels: korte stukjes witte vette tekst met een zachte schaduw,
+ *   zonder vak en zonder markering per woord.
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Pause, Play, RotateCcw } from "lucide-react";
+import { Pause, Play, RotateCcw, Subtitles } from "lucide-react";
 import type HlsType from "hls.js";
 import { pushEvent } from "@/lib/analytics";
 import { HUB } from "./copy";
@@ -48,6 +50,22 @@ function bewaarPositie(sec: number) {
     window.localStorage.setItem(SLEUTEL, String(Math.floor(sec)));
   } catch {
     /* privévenster of opslag geblokkeerd: dan vragen we gewoon niet */
+  }
+}
+// Ondertitels aan of uit: de keuze van de kijker, los van de video.
+const CC_SLEUTEL = "finit_hub_vsl_ondertitels";
+function leesOndertitelsAan(): boolean {
+  try {
+    return window.localStorage.getItem(CC_SLEUTEL) === "1";
+  } catch {
+    return false;
+  }
+}
+function bewaarOndertitelsAan(aan: boolean) {
+  try {
+    window.localStorage.setItem(CC_SLEUTEL, aan ? "1" : "0");
+  } catch {
+    /* geblokkeerd: dan geldt de keuze alleen voor dit bezoek */
   }
 }
 function wisPositie() {
@@ -127,12 +145,16 @@ export function VslSpeler({
   const [laadt, setLaadt] = useState(false);
   const [balk, setBalk] = useState(0);
   const [regels, setRegels] = useState<Regel[] | null>(null);
-  const [nu, setNu] = useState<{ r: number; w: number }>({ r: -1, w: -1 });
+  const [nu, setNu] = useState(-1);
+  const [cc, setCc] = useState(false);
   // Kwaliteitsmenu (alleen met hls.js): de niveaus, de keuze (-1 = automatisch) en wat er nu speelt.
   const [niveaus, setNiveaus] = useState<Array<{ i: number; h: number }>>([]);
   const [keuze, setKeuze] = useState(-1);
   const [speeltNiveau, setSpeeltNiveau] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Ondertitels: standaard uit, tenzij de kijker ze eerder aanzette.
+  useEffect(() => setCc(leesOndertitelsAan()), []);
 
   // Terugkomer? Dan de vraag in plaats van de afspeelknop.
   useEffect(() => {
@@ -234,7 +256,6 @@ export function VslSpeler({
       const v = videoRef.current;
       if (!v) return;
       setLaadt(true);
-      laadOndertitels();
       await zetBronKlaar();
       if (bronFout.current) {
         setLaadt(false);
@@ -262,7 +283,7 @@ export function VslSpeler({
         setFase(vanaf > 0 ? "verder" : "start");
       }
     },
-    [laadOndertitels, zetBronKlaar]
+    [zetBronKlaar]
   );
 
   const pauzeer = useCallback(() => videoRef.current?.pause(), []);
@@ -370,10 +391,22 @@ export function VslSpeler({
     };
   }, []);
 
-  // Ondertitels: het woord dat nu gezegd wordt, per beeldje bijgewerkt.
+  // De ondertitels pas ophalen als ze aan staan en de video gestart is.
+  useEffect(() => {
+    if (cc && fase !== "start") laadOndertitels();
+  }, [cc, fase, laadOndertitels]);
+
+  const wisselOndertitels = useCallback(() => {
+    const aan = !cc;
+    setCc(aan);
+    bewaarOndertitelsAan(aan);
+    pushEvent("vsl_ondertitels", { ...metaRef.current, stand: aan ? "aan" : "uit" });
+  }, [cc]);
+
+  // Ondertitels: de regel die nu gezegd wordt, per beeldje bijgewerkt.
   useEffect(() => {
     const v = videoRef.current;
-    if (!v || !regels || fase !== "speelt") return;
+    if (!v || !regels || !cc || fase !== "speelt") return;
     let id = 0;
     const tik = () => {
       const t = v.currentTime;
@@ -384,16 +417,14 @@ export function VslSpeler({
         const volgende = regels[i + 1]?.[0] ?? Infinity;
         if (t < Math.min(volgende, regels[i][1] + 0.5)) r = i;
       }
-      let w = -1;
-      if (r >= 0) regels[r][2].forEach(([, s], j) => s <= t && (w = j));
-      setNu((oud) => (oud.r === r && oud.w === w ? oud : { r, w }));
+      setNu(r);
       id = requestAnimationFrame(tik);
     };
     id = requestAnimationFrame(tik);
     return () => cancelAnimationFrame(id);
-  }, [regels, fase]);
+  }, [regels, cc, fase]);
 
-  const regel = regels && nu.r >= 0 && (fase === "speelt" || fase === "pauze") ? regels[nu.r] : null;
+  const regel = cc && regels && nu >= 0 && (fase === "speelt" || fase === "pauze") ? regels[nu] : null;
 
   return (
     <div
@@ -416,15 +447,8 @@ export function VslSpeler({
 
       {/* Ondertitels */}
       {regel && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-[11%] z-10 flex justify-center px-[6%]">
-          <p className="vsl-ondertitel rounded-xl bg-[#0F1D47]/60 px-[0.6em] py-[0.3em] text-center font-bold leading-[1.35] text-white">
-            {regel[2].map(([tekst], j) => (
-              <span key={j}>
-                {j > 0 && " "}
-                <span className={j === nu.w ? "rounded-[0.3em] bg-[#E6ECF9] px-[0.12em] text-[#1A2D63]" : "px-[0.12em]"}>{tekst}</span>
-              </span>
-            ))}
-          </p>
+        <div className="pointer-events-none absolute inset-x-0 bottom-[14%] z-10 flex justify-center px-[10%]">
+          <p className="vsl-ondertitel text-center">{regel[2].map(([tekst]) => tekst).join(" ")}</p>
         </div>
       )}
 
@@ -503,39 +527,57 @@ export function VslSpeler({
         </Laag>
       )}
 
-      {/* Kwaliteit (alleen met hls.js en minstens twee keuzes): Auto, 4K, 1440p, 1080p, 720p. */}
-      {niveaus.length > 1 && (fase === "speelt" || fase === "pauze") && (
-        <div className="absolute bottom-4 right-4 z-30 sm:bottom-6 sm:right-6">
-          {menuOpen && (
-            <ul role="menu" aria-label={T.kwaliteit} className="absolute bottom-full right-0 mb-2 min-w-[8.5rem] overflow-hidden rounded-xl bg-[#0F1D47]/95 py-1 text-[0.875rem] text-white shadow-[0_12px_30px_-10px_rgba(0,0,0,0.6)] backdrop-blur-sm">
-              {[{ i: -1, h: 0 }, ...niveaus].map((n) => (
-                <li key={n.i} role="none">
-                  <button
-                    type="button"
-                    role="menuitemradio"
-                    aria-checked={keuze === n.i}
-                    onClick={() => kiesKwaliteit(n.i)}
-                    className={`flex w-full items-center justify-between gap-3 px-3.5 py-2 text-left transition-colors hover:bg-white/10 ${keuze === n.i ? "font-semibold" : ""}`}
-                  >
-                    {n.i === -1 ? T.kwaliteitAuto : kwaliteitLabel(n.h)}
-                    {keuze === n.i && <span aria-hidden="true">✓</span>}
-                  </button>
-                </li>
-              ))}
-            </ul>
+      {/* Rechtsonder: ondertitels aan/uit en de kwaliteit (alleen met hls.js en minstens twee keuzes). */}
+      {(fase === "speelt" || fase === "pauze") && (
+        <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2 sm:bottom-6 sm:right-6">
+          {VSL.ondertitels && (
+            <button
+              type="button"
+              onClick={wisselOndertitels}
+              aria-pressed={cc}
+              aria-label={cc ? T.ondertitelsUit : T.ondertitelsAan}
+              title={cc ? T.ondertitelsUit : T.ondertitelsAan}
+              className={`flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12 ${
+                cc ? "bg-white text-[#1A2D63] hover:bg-white/90" : "bg-[#0F1D47]/70 text-white hover:bg-[#0F1D47]/90"
+              }`}
+            >
+              <Subtitles className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
+            </button>
           )}
-          <button
-            type="button"
-            onClick={() => setMenuOpen((o) => !o)}
-            aria-haspopup="menu"
-            aria-expanded={menuOpen}
-            aria-label={T.kwaliteit}
-            className="flex h-10 items-center gap-1.5 rounded-full bg-[#0F1D47]/70 px-3.5 text-[0.8125rem] font-semibold text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:px-4 sm:text-[0.875rem]"
-          >
-            {keuze === -1
-              ? `${T.kwaliteitAuto}${speeltNiveau >= 0 && hlsRef.current?.levels[speeltNiveau] ? ` · ${kwaliteitLabel(hlsRef.current.levels[speeltNiveau].height)}` : ""}`
-              : kwaliteitLabel(hlsRef.current?.levels[keuze]?.height ?? 0)}
-          </button>
+          {niveaus.length > 1 && (
+            <div className="relative">
+            {menuOpen && (
+              <ul role="menu" aria-label={T.kwaliteit} className="absolute bottom-full right-0 mb-2 min-w-[8.5rem] overflow-hidden rounded-xl bg-[#0F1D47]/95 py-1 text-[0.875rem] text-white shadow-[0_12px_30px_-10px_rgba(0,0,0,0.6)] backdrop-blur-sm">
+                {[{ i: -1, h: 0 }, ...niveaus].map((n) => (
+                  <li key={n.i} role="none">
+                    <button
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={keuze === n.i}
+                      onClick={() => kiesKwaliteit(n.i)}
+                      className={`flex w-full items-center justify-between gap-3 px-3.5 py-2 text-left transition-colors hover:bg-white/10 ${keuze === n.i ? "font-semibold" : ""}`}
+                    >
+                      {n.i === -1 ? T.kwaliteitAuto : kwaliteitLabel(n.h)}
+                      {keuze === n.i && <span aria-hidden="true">✓</span>}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <button
+              type="button"
+              onClick={() => setMenuOpen((o) => !o)}
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+              aria-label={T.kwaliteit}
+              className="flex h-10 items-center gap-1.5 rounded-full bg-[#0F1D47]/70 px-3.5 text-[0.8125rem] font-semibold text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:px-4 sm:text-[0.875rem]"
+            >
+              {keuze === -1
+                ? `${T.kwaliteitAuto}${speeltNiveau >= 0 && hlsRef.current?.levels[speeltNiveau] ? ` · ${kwaliteitLabel(hlsRef.current.levels[speeltNiveau].height)}` : ""}`
+                : kwaliteitLabel(hlsRef.current?.levels[keuze]?.height ?? 0)}
+            </button>
+            </div>
+          )}
         </div>
       )}
 

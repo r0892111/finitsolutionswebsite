@@ -50,6 +50,8 @@ export const HUB = {
     fout: "De video laadt niet. Herlaad de pagina of probeer het later opnieuw.",
     kwaliteit: "Kwaliteit van de video",
     kwaliteitAuto: "Auto",
+    ondertitelsAan: "Ondertitels aanzetten",
+    ondertitelsUit: "Ondertitels uitzetten",
   },
 
   // Het formulier, vraag per vraag. Verzendt via het bestaande contactformulier
