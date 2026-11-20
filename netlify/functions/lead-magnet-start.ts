@@ -8,11 +8,16 @@
  * personalization_json. Returns the redirect URL `/intake?t=<token>`.
  *
  * Spec: [intake-flow.md §Architecture overview — public-form path].
+ *
+ * Daarnaast (Alex, 20/11): de lead gaat ook naar Tuesday, via Jords route
+ * /api/intake/website-lead (bord Content), parallel met de Supabase-stap, max 5 s.
+ * Mislukt Tuesday, dan merkt de bezoeker niets (zie lib/tuesday.ts).
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
 import { mintToken } from "../../lib/intake/token-mint";
 import { insertLeadMagnetRow } from "../../lib/intake/supabase-intake";
 import type { IntakePersonalization, Language } from "../../lib/intake/types";
+import { naarTuesday, TUESDAY } from "../../lib/tuesday";
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 
@@ -102,6 +107,23 @@ export const handler: Handler = async (event: HandlerEvent) => {
     minted_by_operator: "public-form",
   };
 
+  // Tuesday vraagt name, email en message. De rest staat in het bericht.
+  const extra = [
+    role && `Rol: ${role}`,
+    sector && `Sector: ${sector}`,
+    companyName && `Bedrijf: ${companyName}`,
+    `Taal: ${language}`,
+  ].filter(Boolean);
+  const lead: Record<string, string> = {
+    name: [firstName, lastName].filter(Boolean).join(" ") || companyName || email,
+    email,
+    message: ["Gratis analyse via de intake gestart", ...extra].join("\n"),
+    page: "https://finitsolutions.be/intake",
+  };
+  if (phone) lead.phone = phone;
+  if (companyWebsite) lead.website = companyWebsite;
+  const tuesday = naarTuesday(TUESDAY.websiteLead, lead, "lead-magnet-start");
+
   const token = mintToken();
   try {
     await insertLeadMagnetRow({
@@ -118,12 +140,14 @@ export const handler: Handler = async (event: HandlerEvent) => {
       personalization_json: personalization,
     });
   } catch (err) {
+    await tuesday;
     return json(500, {
       error: "insert_failed",
       message: err instanceof Error ? err.message : "unknown",
     });
   }
 
+  await tuesday;
   return json(200, {
     ok: true,
     redirect_url: `/intake?t=${token}`,
