@@ -113,7 +113,7 @@ Prijzen van de officiële prijspagina's op 20/11/2026, in dollar, zonder btw. Re
 | 500 kijkers/maand | **$1** (minimum) | **$0** | $6,50 | $25 |
 | 3.000 kijkers/maand | **±$2,40** | **$0** | $14 | $25 |
 | 20.000 kijkers/maand | **±$16** | **$0** (gratis tot 100.000 minuten) | $65 | ±$64 |
-| 4K | ja, eenmalig ±$1,20 (premium encoding) | ja, ±$0,07/maand opslag; op het gratis plan niet bevestigd | **nee, max 1080p** | ja, maar zelf coderen |
+| 4K | ja: 2160p aanvinken, premium encoding eenmalig ±$1,20 | ja, ±$0,07/maand opslag; op het gratis plan niet bevestigd | **nee, max 1080p** | ja, maar zelf coderen |
 | Eigen speler (hls.js) | ja, gewone .m3u8-link | ja, gewone .m3u8-link | ja | ja (zelf gemaakt) |
 | Snelheid in België | servers in o.a. Brussel en Amsterdam | meerdere CDN's | servers in Brussel en Amsterdam | Cloudflare-CDN |
 | Bedrijf / GDPR | **EU (Slovenië), opslag in Frankfurt** | VS (verwerkersovereenkomst tekenen) | VS | VS (EU-regio kiesbaar) |
@@ -121,9 +121,31 @@ Prijzen van de officiële prijspagina's op 20/11/2026, in dollar, zonder btw. Re
 
 **Aanbeveling: Bunny Stream.** Tussen ±$1 en ±$16 per maand, Europees bedrijf (eenvoudigste GDPR-verhaal), echte 4K voor ±$1,20 eenmalig, en een gewone HLS-link die we met één regel in de speler zetten. **Mux** is een goede tweede: gratis tot 100.000 bekeken minuten per maand en goede kijkcijfers (waar haken mensen af), maar Amerikaans, en 4K op het gratis plan is niet bevestigd. Cloudflare stopt bij 1080p; Supabase is het meeste werk en het duurst.
 
-Nodig van Alex: een ja om een Bunny-account te maken (14 dagen gratis, daarna betalen met kaart, minimum $1/maand) en de video daar op te laden. Ik maak niets aan en upload niets zonder dat ja.
+## 4K (wens van Alex, 20/11)
 
-Bronnen: bunny.net/pricing/stream, bunny.net/docs/stream/premium-encoding, mux.com/pricing, mux.com/docs/guides/stream-videos-in-4k, developers.cloudflare.com/stream/pricing, supabase.com/pricing.
+Kijkers moeten de video echt in 4K kunnen zien. Wat daarvoor nodig is:
+
+**Bij Bunny Stream** (bij het opzetten; er is nog niets aangemaakt): in de videobibliotheek › Encoding › Enabled resolutions **2160p aanvinken**, en ook 1440p (voor schermen tussen 1080p en 4K). Bunny codeert gratis tot 1080p; 1440p en 2160p vragen premium encoding, eenmalig ±$1,20 voor deze video. Best aanzetten vóór het opladen, anders moet de video opnieuw gecodeerd worden.
+
+**Wat een kijkbeurt kost aan verkeer.** Bunny streamt 2160p aan ±25 Mbit/s en 1080p aan ±5 Mbit/s. Verkeer in Europa kost $0,01 per GB.
+
+| Eén volledige kijkbeurt (7:44) | Data | Kost |
+|---|---|---|
+| 4K (2160p) | ±1,45 GB | ±$0,015 |
+| 1080p | ±0,29 GB | ±$0,003 |
+
+Dus 1.000 volledige kijkbeurten in 4K kosten ±$14,50 (op Bunny's goedkopere Volume-netwerk ongeveer de helft). Eén 4K-kijker kost zoveel als vijf 1080p-kijkers. De maandbedragen in de tabel hierboven gaan uit van gemengd 720p/1080p; kijken veel mensen in 4K, dan stijgen ze mee. Alleen wie een groot scherm én een snelle verbinding heeft, krijgt 4K: op een gsm blijft het 720p of 1080p, en niet iedereen kijkt tot het einde.
+
+**In de speler:**
+- Geen plafond op de kwaliteit. hls.js mag tot de hoogste kwaliteit gaan, ook als de speler op het scherm kleiner is dan 4K (`capLevelToPlayerSize` staat uit).
+- Op een groot scherm (vanaf ±2560 pixels, retina meegerekend) met een snelle verbinding start de speler meteen hoog en kiest hij 4K. Daarna meet hls.js de echte snelheid en zakt hij alleen als het zou haperen.
+- Een klein kwaliteitsmenu rechtsonder in de video: Auto / 4K / 1080p / 720p, alleen zichtbaar tijdens het afspelen of op pauze. **Spoelen blijft onmogelijk:** het menu wisselt alleen de kwaliteit, de video loopt verder vanaf dezelfde seconde.
+- Chrome, Edge, Firefox, Safari op de Mac en Android gebruiken hls.js. iPhone en iPad spelen HLS zelf af en kiezen zelf de kwaliteit; daar staat geen menu.
+- De voorlopige video heeft nu vier kwaliteiten (360p, 720p, 1080p, 4K) en toont in beeld welke er speelt ("Kwaliteit: 4K (2160p)").
+
+Nodig van Alex: een ja om een Bunny-account te maken (14 dagen gratis, daarna betalen met kaart, minimum $1/maand) en de video daar op te laden, met 2160p aangevinkt. Ik maak niets aan en upload niets zonder dat ja.
+
+Bronnen: bunny.net/pricing/stream, bunny.net/docs/stream/premium-encoding, docs.bunny.net (encoding-resoluties en bitrates), mux.com/pricing, mux.com/docs/guides/stream-videos-in-4k, developers.cloudflare.com/stream/pricing, supabase.com/pricing.
 
 ---
 
@@ -143,7 +165,7 @@ Bronnen: bunny.net/pricing/stream, bunny.net/docs/stream/premium-encoding, mux.c
 
 **De echte video inpluggen:** in `components/hub/video.ts` de regel `bron` vervangen door de HLS-link (bv. `https://vz-….b-cdn.net/<id>/playlist.m3u8`), of in Netlify de variabele `NEXT_PUBLIC_HUB_VSL_BRON` zetten. Daarna de ondertitels opnieuw maken met het transcript van de nieuwe versie (de huidige zijn van de lange versie van 9:28). Nu staat er een voorlopige video van 7:44 met een klok in beeld.
 
-**De speler:** alleen pauze en verder (knop linksonder of klikken op het beeld), spoelen wordt teruggezet, balk `1 − (1 − p)²` zoals Shadowboys, positie om de 5 s in localStorage, "Wil je verder kijken?" vanaf 15 s, op het einde "Herken je je bedrijf hierin?" met een knop naar het formulier. Ondertitels woord voor woord met het actieve woord gemarkeerd. Events in Google Tag Manager: `vsl_start`, `vsl_verder`, `vsl_voortgang` (25/50/75/100 %, echte voortgang).
+**De speler:** alleen pauze en verder (knop linksonder of klikken op het beeld), spoelen wordt teruggezet, balk `1 − (1 − p)²` zoals Shadowboys, positie om de 5 s in localStorage, "Wil je verder kijken?" vanaf 15 s, op het einde "Herken je je bedrijf hierin?" met een knop naar het formulier. Ondertitels woord voor woord met het actieve woord gemarkeerd. Kwaliteitsmenu rechtsonder (Auto / 4K / 1080p / 720p, zie "4K" hierboven). Events in Google Tag Manager: `vsl_start`, `vsl_verder`, `vsl_voortgang` (25/50/75/100 %, echte voortgang), `vsl_kwaliteit`.
 
 **Het formulier:** rol, aantal mensen, waar de tijd naartoe gaat (A/B/C, ook met het toetsenbord), wat je eerst wil oplossen, dan naam, e-mail, telefoon en website. Verstuurt via het bestaande `/api/contact-submit`: de antwoorden staan bovenaan het bericht in de mail en op monday. **Aan de verzendkant is niets veranderd.**
 
@@ -175,7 +197,7 @@ En in de cookieverklaring: *`finit_hub_toegang`, functioneel, 1 jaar: onthoudt d
 
 ## Nog open voor Alex
 
-1. **Hosting:** ja of nee voor Bunny Stream (zie hierboven).
+1. **Hosting:** ja of nee voor Bunny Stream (zie hierboven), met 2160p aangevinkt voor 4K.
 2. **Privacy- en cookieverklaring:** de teksten hierboven toevoegen (of laten nakijken). Het slot staat online vanaf de merge, dus best samen.
 3. **Brevo-lijst:** het nummer van de lijst (`BREVO_HUB_LIJST_ID`).
 4. **De lesreeks/Skool en de vacatures:** Skool is van de hub (zoals gevraagd), maar staat nog onderaan elke promptpagina. De vacatures staan als kleine link in de footer van de hub.

@@ -5,13 +5,15 @@
  * docs/hub-analyse-shadowboys.md), met één verschil: je kan pauzeren.
  *
  * - Klik op play: de video speelt met geluid. De enige bediening is pauze en
- *   verder (de knop linksonder, of klikken op het beeld). Geen tijdlijn, geen
+ *   verder (de knop linksonder, of klikken op het beeld), plus de kwaliteit. Geen tijdlijn, geen
  *   vooruitspoelen, geen snelheid, geen native bediening.
  * - De voortgangsbalk "liegt": 1 − (1 − echt)^sterkte (zie video.ts). In het
  *   begin loopt hij snel, op het einde traag, zodat de video korter lijkt.
  * - De positie gaat om de paar seconden naar localStorage. Kom je terug, dan
  *   vraagt de speler "Wil je verder kijken?".
- * - HLS via hls.js (Chrome, Firefox, Android); Safari en iPhone spelen HLS zelf.
+ * - HLS via hls.js (Chrome, Firefox, Safari op de Mac, Android), zonder plafond:
+ *   4K kan. Op een groot scherm met snelle verbinding begint hij hoog. Een klein
+ *   menu (Auto, 4K, 1080p, …) om zelf te kiezen. iPhone en iPad spelen HLS zelf.
  *   Een gewone mp4 als bron werkt ook.
  * - Ondertitels woord voor woord uit public/hub/vsl/ondertitels.json, het
  *   woord dat Alex nu zegt is gemarkeerd.
@@ -56,6 +58,29 @@ function wisPositie() {
   }
 }
 
+/** iPhone en iPad: daar speelt de eigen speler van Apple HLS af (hls.js via ManagedMediaSource is daar minder zeker). */
+function isIos(): boolean {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+/**
+ * Groot scherm (minstens 2560 echte pixels breed, bv. een 4K-scherm of een
+ * Retina-laptop) en geen teken van een trage of zuinige verbinding: dan mikt
+ * de speler meteen op de hoogste kwaliteit. Valt de verbinding tegen, dan
+ * schakelt hls.js vanzelf terug.
+ */
+function grootEnSnel(): boolean {
+  const pixels = Math.max(window.screen.width, window.screen.height) * (window.devicePixelRatio || 1);
+  const c = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string; downlink?: number } }).connection;
+  const traag = !!c && (c.saveData === true || (c.effectiveType !== undefined && c.effectiveType !== "4g") || (c.downlink !== undefined && c.downlink < 10));
+  return pixels >= 2560 && !traag;
+}
+
+/** "4K" voor 2160p, anders "1080p" enzovoort. */
+export function kwaliteitLabel(hoogte: number): string {
+  return hoogte >= 2160 ? "4K" : `${hoogte}p`;
+}
+
 /** De getoonde voortgang: eerst snel, dan traag. */
 export function getoondeVoortgang(echt: number, sterkte = VSL.balkSterkte): number {
   const p = Math.min(1, Math.max(0, echt));
@@ -87,6 +112,11 @@ export function VslSpeler({
   const [balk, setBalk] = useState(0);
   const [regels, setRegels] = useState<Regel[] | null>(null);
   const [nu, setNu] = useState<{ r: number; w: number }>({ r: -1, w: -1 });
+  // Kwaliteitsmenu (alleen met hls.js): de niveaus, de keuze (-1 = automatisch) en wat er nu speelt.
+  const [niveaus, setNiveaus] = useState<Array<{ i: number; h: number }>>([]);
+  const [keuze, setKeuze] = useState(-1);
+  const [speeltNiveau, setSpeeltNiveau] = useState(-1);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Terugkomer? Dan de vraag in plaats van de afspeelknop.
   useEffect(() => {
@@ -103,7 +133,9 @@ export function VslSpeler({
     const v = videoRef.current;
     if (!v) return Promise.resolve();
     bronKlaar.current = (async () => {
-      if (!IS_HLS || v.canPlayType("application/vnd.apple.mpegurl")) {
+      // hls.js overal waar het kan, zodat wij de kwaliteit kiezen (ook 4K). Op iPhone en iPad
+      // de eigen speler van Apple; een mp4 als bron speelt gewoon.
+      if (!IS_HLS || isIos()) {
         v.src = VSL.bron;
         return;
       }
@@ -112,14 +144,33 @@ export function VslSpeler({
         v.src = VSL.bron;
         return;
       }
-      // capLevelToPlayerSize: een gsm laadt geen 4K.
-      const hls = new Hls({ autoStartLoad: false, capLevelToPlayerSize: true, startLevel: -1 });
+      // Geen plafond op de kwaliteit (geen capLevelToPlayerSize): 4K moet kunnen. Op een groot
+      // scherm met snelle verbinding gaan we uit van 40 Mbit/s, zodat hij meteen hoog begint;
+      // anders van 5 Mbit/s. Daarna meet hls.js zelf en past hij aan.
+      const schatting = grootEnSnel() ? 40_000_000 : 5_000_000;
+      const hls = new Hls({
+        autoStartLoad: false,
+        startLevel: -1,
+        capLevelToPlayerSize: false,
+        abrEwmaDefaultEstimate: schatting,
+        abrEwmaDefaultEstimateMax: schatting,
+      });
       hls.on(Hls.Events.ERROR, (_e, data) => {
         if (!data.fatal) return;
         if (data.type === Hls.ErrorTypes.NETWORK_ERROR) hls.startLoad();
         else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) hls.recoverMediaError();
         else setFase("fout");
       });
+      hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
+        // Eén keuze per hoogte, de hoogste eerst; onder 720p heeft het menu geen zin.
+        const gezien = new Set<number>();
+        const lijst = data.levels
+          .map((l, i) => ({ i, h: l.height }))
+          .filter((l) => l.h >= 720 && !gezien.has(l.h) && (gezien.add(l.h), true))
+          .sort((x, y) => y.h - x.h);
+        setNiveaus(lijst);
+      });
+      hls.on(Hls.Events.LEVEL_SWITCHED, (_e, data) => setSpeeltNiveau(data.level));
       hls.loadSource(VSL.bron);
       hls.attachMedia(v);
       hlsRef.current = hls;
@@ -177,6 +228,16 @@ export function VslSpeler({
   );
 
   const pauzeer = useCallback(() => videoRef.current?.pause(), []);
+  /** Kwaliteit kiezen: -1 = automatisch. Wisselt meteen; spoelen kan nog altijd niet. */
+  const kiesKwaliteit = useCallback((i: number) => {
+    const hls = hlsRef.current;
+    setKeuze(i);
+    setMenuOpen(false);
+    if (!hls) return;
+    hls.currentLevel = i;
+    pushEvent("vsl_kwaliteit", { ...metaRef.current, kwaliteit: i === -1 ? "auto" : kwaliteitLabel(hls.levels[i]?.height ?? 0) });
+  }, []);
+
   const speelVerder = useCallback(() => {
     const v = videoRef.current;
     if (v) void v.play().catch(() => undefined);
@@ -402,6 +463,42 @@ export function VslSpeler({
         <Laag>
           <p className="max-w-[28rem] text-[0.95rem] leading-[1.5] sm:text-[1.05rem]">{T.fout}</p>
         </Laag>
+      )}
+
+      {/* Kwaliteit (alleen met hls.js en minstens twee keuzes): Auto, 4K, 1440p, 1080p, 720p. */}
+      {niveaus.length > 1 && (fase === "speelt" || fase === "pauze") && (
+        <div className="absolute bottom-4 right-4 z-30 sm:bottom-6 sm:right-6">
+          {menuOpen && (
+            <ul role="menu" aria-label={T.kwaliteit} className="absolute bottom-full right-0 mb-2 min-w-[8.5rem] overflow-hidden rounded-xl bg-[#0F1D47]/95 py-1 text-[0.875rem] text-white shadow-[0_12px_30px_-10px_rgba(0,0,0,0.6)] backdrop-blur-sm">
+              {[{ i: -1, h: 0 }, ...niveaus].map((n) => (
+                <li key={n.i} role="none">
+                  <button
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={keuze === n.i}
+                    onClick={() => kiesKwaliteit(n.i)}
+                    className={`flex w-full items-center justify-between gap-3 px-3.5 py-2 text-left transition-colors hover:bg-white/10 ${keuze === n.i ? "font-semibold" : ""}`}
+                  >
+                    {n.i === -1 ? T.kwaliteitAuto : kwaliteitLabel(n.h)}
+                    {keuze === n.i && <span aria-hidden="true">✓</span>}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <button
+            type="button"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            aria-label={T.kwaliteit}
+            className="flex h-10 items-center gap-1.5 rounded-full bg-[#0F1D47]/70 px-3.5 text-[0.8125rem] font-semibold text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:px-4 sm:text-[0.875rem]"
+          >
+            {keuze === -1
+              ? `${T.kwaliteitAuto}${speeltNiveau >= 0 && hlsRef.current?.levels[speeltNiveau] ? ` · ${kwaliteitLabel(hlsRef.current.levels[speeltNiveau].height)}` : ""}`
+              : kwaliteitLabel(hlsRef.current?.levels[keuze]?.height ?? 0)}
+          </button>
+        </div>
       )}
 
       {/* De voortgangsbalk: niet klikbaar, niet te verslepen. */}

@@ -48,6 +48,8 @@ export const HUB = {
     eindeKnop: "Plan een vrijblijvend gesprek",
     eindeOpnieuw: "Bekijk opnieuw",
     fout: "De video laadt niet. Herlaad de pagina of probeer het later opnieuw.",
+    kwaliteit: "Kwaliteit van de video",
+    kwaliteitAuto: "Auto",
   },
 
   // Het formulier, vraag per vraag. Verzendt via het bestaande contactformulier
