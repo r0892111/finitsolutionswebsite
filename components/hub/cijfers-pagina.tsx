@@ -84,6 +84,7 @@ export function CijfersPagina() {
   const [invoer, setInvoer] = useState("");
   const [sleutel, setSleutel] = useState("");
   const [dagen, setDagen] = useState("30");
+  const [wissen, setWissen] = useState<"" | "bezig" | "mislukt">("");
 
   // Ondertitels (voor de afhaakpunten) en de sleutel: uit het hekje van de link of uit dit tabblad.
   useEffect(() => {
@@ -134,6 +135,20 @@ export function CijfersPagina() {
       })
       .catch(() => setStaat({ soort: "fout", tekst: "De cijfers laden niet (netwerk)." }));
   }, [sleutel, dagen]);
+
+  // Alles wissen (bv. testdata): zelfde sleutel, DELETE op dezelfde functie.
+  const wisAlles = async () => {
+    if (!window.confirm("Alle kijkcijfers wissen? Dat kan niet ongedaan gemaakt worden.")) return;
+    setWissen("bezig");
+    try {
+      const r = await fetch("/api/vsl-cijfers", { method: "DELETE", headers: { "x-hub-sleutel": sleutel } });
+      if (!r.ok) throw new Error(String(r.status));
+      setWissen("");
+      setStaat({ soort: "klaar", rijen: [], demo: false });
+    } catch {
+      setWissen("mislukt");
+    }
+  };
 
   const alleRijen = staat.soort === "klaar" ? staat.rijen : [];
   const videos = useMemo(() => Array.from(new Set(alleRijen.map((r) => r.video))), [alleRijen]);
@@ -259,6 +274,22 @@ export function CijfersPagina() {
                 </ol>
               )}
             </section>
+
+            {!staat.demo && (
+              <div className="mt-8 flex flex-wrap items-center gap-3 text-[0.875rem]">
+                <button
+                  type="button"
+                  onClick={wisAlles}
+                  disabled={wissen === "bezig"}
+                  className="rounded-xl border border-[#1A2D63]/20 bg-white px-4 py-2 font-semibold text-[#1A2D63] hover:bg-[#E6ECF9] disabled:opacity-50"
+                >
+                  {wissen === "bezig" ? "Bezig met wissen…" : "Alle kijkcijfers wissen"}
+                </button>
+                <span className="text-[#6C7590]">
+                  {wissen === "mislukt" ? "Wissen lukte niet. Probeer opnieuw." : "Bijvoorbeeld na testen. Kan niet ongedaan gemaakt worden."}
+                </span>
+              </div>
+            )}
           </>
         )}
       </div>
