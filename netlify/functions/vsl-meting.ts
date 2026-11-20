@@ -9,13 +9,15 @@
  *
  * Anoniem: het id is willekeurig en leeft alleen in het geheugen van de pagina.
  * Geen IP-adres, geen user-agent, en we loggen de inhoud niet. Of het formulier
- * daarna verstuurd werd, zet contact-submit zelf op de kijkbeurt.
+ * daarna verstuurd werd, zet contact-submit als apart merkje.
+ *
+ * Nieuwe functievorm (export default): alleen daar werkt het verse lezen
+ * (consistency "strong") dat we voor het samenvoegen nodig hebben.
  */
-import type { Handler, HandlerEvent } from "@netlify/functions";
 import { DAG, UUID, dagMagNieuw, kijkStore, type Kijkbeurt } from "../../lib/vsl-meting-opslag";
 
-function leeg(statusCode: number) {
-  return { statusCode, body: "" };
+function leeg(status: number) {
+  return new Response(null, { status });
 }
 
 function schoon(v: unknown, max: number): string {
@@ -27,13 +29,12 @@ function getal(v: unknown, max: number): number | null {
   return Number.isFinite(n) && n >= 0 && n <= max ? Math.round(n * 10) / 10 : null;
 }
 
-export const handler: Handler = async (event: HandlerEvent) => {
-  if (event.httpMethod !== "POST") return leeg(405);
+export default async (req: Request) => {
+  if (req.method !== "POST") return leeg(405);
 
   let body: Record<string, unknown>;
   try {
-    const tekst = event.isBase64Encoded ? Buffer.from(event.body ?? "", "base64").toString("utf8") : event.body ?? "{}";
-    body = JSON.parse(tekst) as Record<string, unknown>;
+    body = JSON.parse((await req.text()) || "{}") as Record<string, unknown>;
   } catch {
     return leeg(400);
   }
@@ -50,7 +51,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
   if (duur !== null && verste > duur + 2) return leeg(400);
 
   try {
-    const store = kijkStore(event);
+    const store = kijkStore();
     const sleutel = `${dag}/${id}`;
     const oud = (await store.get(sleutel, { type: "json" })) as Kijkbeurt | null;
     if (!oud && !dagMagNieuw(dag)) return leeg(400);
@@ -65,14 +66,13 @@ export const handler: Handler = async (event: HandlerEvent) => {
       apparaat: oud?.apparaat ?? apparaat,
       kwaliteit: schoon(body.kwaliteit, 10) || oud?.kwaliteit || null,
       hervat: oud?.hervat ?? body.hervat === true,
-      formulier: oud?.formulier ?? false,
       start: oud?.start ?? nu,
       laatst: nu,
     };
     await store.setJSON(sleutel, nieuw);
     return leeg(204);
-  } catch {
-    console.error("vsl-meting: opslaan mislukt");
+  } catch (e) {
+    console.error("vsl-meting: opslaan mislukt", e instanceof Error ? e.name : "");
     return leeg(502);
   }
 };

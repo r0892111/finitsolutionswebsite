@@ -5,7 +5,13 @@
  *
  * Store "hub-vsl-kijkbeurten", één sleutel per kijkbeurt: "JJJJ-MM-DD/<id>"
  * (de dag waarop de kijkbeurt begon, in UTC), zodat we per periode kunnen lijsten.
- * De cijferpagina bewaart haar samengetelde resultaat even onder "cache/…".
+ * Een verstuurd formulier krijgt een eigen merkje "formulier/JJJJ-MM-DD/<id>"
+ * (zo kan een late hartslag het nooit overschrijven). De cijferpagina bewaart haar
+ * samengetelde resultaat even onder "cache/…".
+ *
+ * Let op: "strong consistency" (altijd de verse waarde lezen) werkt alleen in
+ * functies in de nieuwe vorm (export default). In Lambda-stijl (export const
+ * handler, zoals contact-submit) ontbreekt daarvoor het adres; daar alleen schrijven.
  */
 import { connectLambda, getStore } from "@netlify/blobs";
 
@@ -24,18 +30,16 @@ export interface Kijkbeurt {
   apparaat: "gsm" | "desktop";
   kwaliteit: string | null;
   hervat: boolean;
-  formulier: boolean;
   /** Tijdstip van de eerste en de laatste hartslag (ISO). */
   start: string;
   laatst: string;
 }
 
-/** Wat de cijferpagina krijgt: de kijkbeurt plus de dag, zonder id. */
-export type Kijkrij = Kijkbeurt & { dag: string };
+/** Wat de cijferpagina krijgt: de kijkbeurt plus de dag en of er een formulier volgde, zonder id. */
+export type Kijkrij = Kijkbeurt & { dag: string; formulier: boolean };
 
-/** De store, in een functie in Lambda-stijl (export const handler). */
-export function kijkStore(event: unknown) {
-  connectLambda(event as Parameters<typeof connectLambda>[0]);
+/** De store, in een functie in de nieuwe vorm (export default). */
+export function kijkStore() {
   return getStore({ name: STORE, consistency: "strong" });
 }
 
@@ -47,12 +51,12 @@ export function dagMagNieuw(dag: string): boolean {
   return dag === vandaag.toISOString().slice(0, 10) || dag === gisteren.toISOString().slice(0, 10);
 }
 
-/** Na een verstuurd formulier: die kijkbeurt leidde tot een aanvraag. Stil als ze niet bestaat. */
+/**
+ * Na een verstuurd formulier (vanuit contact-submit, Lambda-stijl): zet het merkje
+ * voor die kijkbeurt. Alleen schrijven, niets lezen.
+ */
 export async function markeerFormulier(event: unknown, id: string, dag: string): Promise<void> {
-  if (!UUID.test(id) || !DAG.test(dag)) return;
-  const store = kijkStore(event);
-  const sleutel = `${dag}/${id.toLowerCase()}`;
-  const oud = (await store.get(sleutel, { type: "json" })) as Kijkbeurt | null;
-  if (!oud) return;
-  await store.setJSON(sleutel, { ...oud, formulier: true, laatst: new Date().toISOString() });
+  if (!UUID.test(id) || !dagMagNieuw(dag)) return;
+  connectLambda(event as Parameters<typeof connectLambda>[0]);
+  await getStore({ name: STORE }).set(`formulier/${dag}/${id.toLowerCase()}`, new Date().toISOString());
 }
