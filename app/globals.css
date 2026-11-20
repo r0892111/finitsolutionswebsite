@@ -961,7 +961,9 @@ html {
 .hub-logo { margin-bottom: 27px; }
 .hub-badge { font-size: 30px; line-height: 1.026; min-height: 54px; padding: 9px 28px; margin-bottom: 25px; }
 .hub-titel { font-size: 70px; line-height: 1.1; max-width: 1209px; }
-.hub-sub { font-size: 30px; line-height: 1.267; max-width: 979px; margin: 6px auto 47px; }
+/* Kop → subzin: ruimer dan bij Shadowboys (6 px = 0,09 × de kop), op wens van Alex 20/11.
+   Nu ±0,4 × de kopgrootte, de verhouding die Shadowboys zelf op gsm gebruikt. */
+.hub-sub { font-size: 30px; line-height: 1.267; max-width: 979px; margin: 28px auto 47px; }
 .hub-video { max-width: 1192px; }
 .hub-pillen { margin: 99px auto 53px; gap: clamp(10px, 3.72vw, 46px); }
 .hub-pil { font-size: 30px; line-height: 1.026; min-height: 54px; padding: 8px 24px; }
@@ -999,6 +1001,7 @@ html {
   .hub-badge { font-size: clamp(18px, 2.7vw, 28px); }
   .hub-titel { font-size: clamp(48px, 6.2vw, 66px); }
   .hub-sub, .hub-intro { font-size: clamp(21px, 2.7vw, 28px); }
+  .hub-sub { margin-top: clamp(19px, 2.5vw, 26px); }
   .hub-pil { font-size: clamp(19px, 2.5vw, 28px); }
   .hp-btn.hub-knop { font-size: clamp(20px, 2.5vw, 26px); min-height: 72px; }
   .hub-noot { font-size: 22px; }
@@ -1011,7 +1014,7 @@ html {
   .hub-logo { margin-bottom: 20px; }
   .hub-badge { font-size: 13px; min-height: 40px; padding: 8px 17px; margin-bottom: 20px; }
   .hub-titel { font-size: clamp(36px, 10.7vw, 52px); line-height: 1.03; }
-  .hub-sub { font-size: 17px; line-height: 1.4; margin: 17px auto 30px; }
+  .hub-sub { font-size: 17px; line-height: 1.4; margin: 20px auto 30px; }
   .hub-intro { font-size: 17px; line-height: 1.4; }
   .hub-pillen { margin: 58px auto 26px; gap: 10px; }
   .hub-pil { font-size: 13px; min-height: 40px; padding: 7px 8px; }

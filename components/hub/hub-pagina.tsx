@@ -112,8 +112,9 @@ export function HubPagina({ start }: { start?: "resources" }) {
     [meta]
   );
 
+  // Stippen over de hele pagina: hetzelfde patroon als in de case-kaarten op de homepage (wens Alex 20/11).
   return (
-    <main className="min-h-screen bg-white text-[#3D4766]">
+    <main className="hp-stippen min-h-screen bg-white text-[#3D4766]">
       {/* 1. De strook naar de gratis resources */}
       <a
         href="/hub/resources/"
@@ -130,7 +131,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
       </a>
 
       {/* 2. Badge, kop, subzin, video, knop */}
-      <section className="hub-hero bg-[radial-gradient(60%_45%_at_50%_0%,#EEF2FB_0%,#FFFFFF_70%)]">
+      <section className="hub-hero bg-[radial-gradient(60%_45%_at_50%_0%,#EEF2FB_0%,rgba(238,242,251,0)_70%)]">
         <div className="hub-wrap text-center">
           <a href="/" className="hub-logo mx-auto flex w-fit" aria-label="Finit Solutions, naar de homepage">
             <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto sm:h-7" priority />
@@ -183,7 +184,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
       </section>
 
       {/* 4. De twijfels uit de video */}
-      <section id="twijfels" className="scroll-mt-4 bg-[#F5F7FB] py-14 sm:py-20">
+      <section id="twijfels" className="hp-stippen scroll-mt-4 bg-[#F5F7FB] py-14 sm:py-20">
         <div className="hub-faq-wrap">
           <h2 className={KOP}>
             {HUB.twijfels.titel.voor} <Onder>{HUB.twijfels.titel.accent}</Onder>

@@ -15,7 +15,7 @@
 export const HUB = {
   metaTitel: "Laat AI werken zoals jouw bedrijf werkt",
   metaBeschrijving:
-    "Voor zaakvoerders van Vlaamse kmo's. Bekijk de video van Alex van Finit en plan een vrijblijvend gesprek. Plus gratis prompts en gidsen uit onze video's.",
+    "Voor zaakvoerders/management van kmo's. Bekijk de video van Alex van Finit en plan een vrijblijvend gesprek. Plus gratis prompts en gidsen uit onze video's.",
   metaTitelResources: "Gratis prompts en gidsen",
   metaBeschrijvingResources:
     "Alle prompts en gidsen uit de video's en posts van Finit op één plek. Laat je e-mailadres achter en open ze meteen.",
@@ -26,7 +26,7 @@ export const HUB = {
   strookUitPost: { tekst: "De prompts uit de post?", link: "Hier vind je ze" },
 
   // Hero: badge (voor wie), kop met één woordgroep in accentkleur, subzin.
-  badge: "Voor zaakvoerders van Vlaamse kmo's",
+  badge: "Voor zaakvoerders/management van kmo's",
   kop: { voor: "Laat AI werken zoals", accent: "jouw bedrijf werkt" },
   sub: "In één week schrijven we uit hoe jouw bedrijf draait. Daarna neemt AI het manuele werk over. Gebaseerd op meer dan 25 analysetrajecten.",
 
