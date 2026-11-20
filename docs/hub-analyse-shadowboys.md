@@ -125,7 +125,7 @@ Prijzen van de officiële prijspagina's op 20/11/2026, in dollar, zonder btw. Re
 
 Kijkers moeten de video echt in 4K kunnen zien. Wat daarvoor nodig is:
 
-**Bij Bunny Stream** (bij het opzetten; er is nog niets aangemaakt): in de videobibliotheek › Encoding › Enabled resolutions **2160p aanvinken**, en ook 1440p (voor schermen tussen 1080p en 4K). Bunny codeert gratis tot 1080p; 1440p en 2160p vragen premium encoding, eenmalig ±$1,20 voor deze video. Best aanzetten vóór het opladen, anders moet de video opnieuw gecodeerd worden.
+**Bij Bunny Stream** (bij het opzetten; er is nog niets aangemaakt): in de videobibliotheek › Encoding › Enabled resolutions **2160p aanvinken**, samen met 1080p, 720p en 480p (zie de stappen hieronder). Bunny codeert gratis tot 1080p; 1440p en 2160p vragen premium encoding, eenmalig ±$1,20 voor deze video. Best aanzetten vóór het opladen, anders moet de video opnieuw gecodeerd worden.
 
 **Wat een kijkbeurt kost aan verkeer.** Bunny streamt 2160p aan ±25 Mbit/s en 1080p aan ±5 Mbit/s. Verkeer in Europa kost $0,01 per GB.
 
@@ -143,9 +143,61 @@ Dus 1.000 volledige kijkbeurten in 4K kosten ±$14,50 (op Bunny's goedkopere Vol
 - Chrome, Edge, Firefox, Safari op de Mac en Android gebruiken hls.js. iPhone en iPad spelen HLS zelf af en kiezen zelf de kwaliteit; daar staat geen menu.
 - De voorlopige video heeft nu vier kwaliteiten (360p, 720p, 1080p, 4K) en toont in beeld welke er speelt ("Kwaliteit: 4K (2160p)").
 
-Nodig van Alex: een ja om een Bunny-account te maken (14 dagen gratis, daarna betalen met kaart, minimum $1/maand) en de video daar op te laden, met 2160p aangevinkt. Ik maak niets aan en upload niets zonder dat ja.
+## Bunny opzetten zonder verrassingen (Bunny goedgekeurd door Alex, 20/11)
 
-Bronnen: bunny.net/pricing/stream, bunny.net/docs/stream/premium-encoding, docs.bunny.net (encoding-resoluties en bitrates), mux.com/pricing, mux.com/docs/guides/stream-videos-in-4k, developers.cloudflare.com/stream/pricing, supabase.com/pricing.
+Voorwaarde van Alex: nooit een onverwacht hoge kost. Eerst eerlijk hoe Bunny rekent:
+
+- Je laadt vooraf tegoed op, en het verbruik gaat er telkens af.
+- **Bunny stopt niet hard bij $0.** Het verbruik wordt achteraf in korte stappen afgerekend, dus het saldo kan negatief gaan; dat bedrag blijf je verschuldigd. Bunny mailt dan elke dag en zet het account binnen 4 dagen uit (bij een nieuw account of een groot bedrag sneller).
+- Zonder automatisch bijladen haalt Bunny nooit zelf geld van je kaart.
+- Daarom is het **maandplafond op het verkeer** (stap 3) de echte harde grens.
+
+Wat het dan hooguit kost:
+
+| | Kost |
+|---|---|
+| Verkeer | hooguit ±$5 per maand (plafond 500 GB × $0,01 per GB) |
+| Opslag van de video (alle kwaliteiten + het origineel) | enkele tientallen cent per maand |
+| 4K-codering (premium encoding, alleen x264) | eenmalig ±$1,16 (7:44 × $0,15 per minuut) |
+| Minimum | $1 per maand, ook als je minder verbruikt |
+
+**1. Account en tegoed**
+1. Account maken op bunny.net en tweestapsverificatie aanzetten.
+2. Billing › Recharge Account › **$10** (het kleinste vaste bedrag), met kaart of PayPal. Dat dekt minstens twee maanden, ook als het plafond vol raakt.
+3. **Auto-Recharge niet aanzetten.** Het staat standaard uit; Bunny haalt alleen automatisch geld van je kaart als je dat zelf aanzet.
+4. Account Settings › Notification settings › **Notification emails aan**. Dat zijn de mails over je saldo: als het laag staat, en elke dag zolang het negatief is. Een eigen drempel kiezen kan niet.
+
+**2. Videobibliotheek (alles vóór het opladen: de instellingen gelden alleen voor video's die je daarna oplaadt)**
+1. Stream › Add Video Library. Opslag in Europa (Frankfurt), geen extra replicatieregio's.
+2. Encoding › Enabled resolutions: **2160p, 1080p, 720p en 480p** aan, de rest uit.
+3. Premium encoding aan (nodig voor 2160p), met als enige codec **x264**: elke extra codec kost opnieuw.
+4. MP4 fallback uit (niet nodig). Keep original files mag aan blijven: dat kost enkele cent per maand, en zonder origineel kan Bunny de video later niet opnieuw coderen.
+
+**3. Maandplafond op het verkeer (de harde grens)**
+1. Stream › bibliotheek › API › Pull Zone › Manage › Limits › **Monthly bandwidth limit: 500** (GB).
+2. 500 GB is ±345 volledige kijkbeurten in 4K, ±1.700 in 1080p, of ±6.000 kijkers die gemiddeld 3 minuten kijken.
+3. Let op: is het plafond vol, dan speelt de video niet meer tot de volgende maand; de speler toont dan "De video laadt niet". Kijk de eerste weken naar het verbruik (Stream › Statistics) en trek het plafond op als de hub goed loopt (1.000 GB ≈ $10).
+
+**4. Alleen onze site (tegen leeching)**
+1. Stream › bibliotheek › Security › **Allowed domains**: `finitsolutions.be`, `www.finitsolutions.be` en, zolang we op de previews testen, `*.netlify.app` (na de livegang weghalen).
+2. "Block direct URL file access" **niet** aanzetten. Sommige toestellen en apps melden niet altijd van welke site een video-aanvraag komt, en dan speelt de video daar niet. Het token hieronder houdt directe links toch al tegen.
+3. **Token-authenticatie** (de sterkste bescherming): in de pull zone van de bibliotheek (Stream › bibliotheek › API › Pull Zone › Manage) › Security › Token Authentication aan, en de **URL Token Authentication Key** kopiëren. Elke kijker krijgt dan een link die 12 uur geldig is en alleen voor deze video werkt. Wie de link kopieert, heeft er na 12 uur niets meer aan.
+4. In Netlify (Site configuration › Environment variables), daarna opnieuw deployen:
+   - `NEXT_PUBLIC_HUB_VSL_BRON` = de HLS-link van de video (`https://vz-….b-cdn.net/<video-id>/playlist.m3u8`)
+   - `NEXT_PUBLIC_HUB_VSL_TOKEN` = `1`
+   - `BUNNY_TOKEN_SLEUTEL` = de sleutel uit stap 3 (geheim: alleen in Netlify, nooit in de code of in een chat)
+
+   Doe dit vóór de hub live gaat: tussen het aanzetten bij Bunny en de nieuwe deploy speelt de video even niet.
+
+**5. Opladen en testen (pas na Alex' ja)**
+1. De video opladen, wachten tot alle kwaliteiten klaar zijn, en de HLS-link kopiëren (bij de video: "HLS Playlist URL").
+2. Op de preview: de video speelt en het menu toont Auto / 4K / 1080p / 720p.
+3. De HLS-link rechtstreeks in een nieuw tabblad openen: dat moet een fout geven (403). Dan werkt de bescherming.
+4. Na een dag: Stream › Statistics toont het verkeer, Billing wat er van het tegoed afging.
+
+**Wat er in de code klaarstaat:** `netlify/functions/vsl-bron.ts` (`/api/vsl-bron`) maakt de tijdelijke link met dezelfde berekening als Bunny's eigen voorbeeld (gecontroleerd tegen hun testwaarde) en ondertekent alleen Bunny-videolinks. Zonder `NEXT_PUBLIC_HUB_VSL_TOKEN=1` werkt de speler zoals voorheen. Lukt het ondertekenen niet, of weigert Bunny de video (plafond vol, token verlopen), dan toont de speler "De video laadt niet" in plaats van eindeloos te laden.
+
+Bronnen: bunny.net/pricing/stream, bunny.net/docs/stream/premium-encoding, bunny.net/docs (stream/encoding, billing/negative-balance, billing/auto-recharge, cdn/performance/network-limits, stream/security-options, cdn/security/token-authentication/advanced), mux.com/pricing, mux.com/docs/guides/stream-videos-in-4k, developers.cloudflare.com/stream/pricing, supabase.com/pricing.
 
 ---
 
@@ -160,6 +212,7 @@ Bronnen: bunny.net/pricing/stream, bunny.net/docs/stream/premium-encoding, docs.
 | Resources + e-mailslot | `components/hub/resource-sectie.tsx`, `components/hub/slot-formulier.tsx`, `lib/hub-toegang.ts` |
 | Slot op de promptpagina's | `components/prompts/prompt-slot.tsx` |
 | Adres bewaren in Brevo | `netlify/functions/hub-toegang.ts` (`/api/hub-toegang`) |
+| Tijdelijke videolink (token-authenticatie bij Bunny) | `netlify/functions/vsl-bron.ts` (`/api/vsl-bron`) |
 | De pagina | `components/hub/hub-pagina.tsx`, `app/hub/page.tsx`, `app/hub/resources/page.tsx` |
 | Ondertitels opnieuw maken | `node scripts/hub/ondertitels.mjs <transcript.json>` |
 
@@ -197,7 +250,7 @@ En in de cookieverklaring: *`finit_hub_toegang`, functioneel, 1 jaar: onthoudt d
 
 ## Nog open voor Alex
 
-1. **Hosting:** ja of nee voor Bunny Stream (zie hierboven), met 2160p aangevinkt voor 4K.
+1. **Hosting:** Bunny Stream is goedgekeurd (20/11). Account en tegoed maakt Alex zelf (of een sessie in zijn browser), volgens "Bunny opzetten zonder verrassingen" hierboven. De video opladen pas na zijn ja.
 2. **Privacy- en cookieverklaring:** de teksten hierboven toevoegen (of laten nakijken). Het slot staat online vanaf de merge, dus best samen.
 3. **Brevo-lijst:** het nummer van de lijst (`BREVO_HUB_LIJST_ID`).
 4. **De lesreeks/Skool en de vacatures:** Skool is van de hub (zoals gevraagd), maar staat nog onderaan elke promptpagina. De vacatures staan als kleine link in de footer van de hub.

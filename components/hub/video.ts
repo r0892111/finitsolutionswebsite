@@ -12,6 +12,12 @@
  */
 export const VSL = {
   bron: process.env.NEXT_PUBLIC_HUB_VSL_BRON || "/hub/vsl/voorlopig/master.m3u8",
+  /**
+   * Token-authenticatie bij Bunny (tegen anderen die onze link gebruiken): zet in
+   * Netlify NEXT_PUBLIC_HUB_VSL_TOKEN=1 en BUNNY_TOKEN_SLEUTEL. De speler vraagt dan
+   * eerst een tijdelijke, ondertekende link aan /api/vsl-bron.
+   */
+  ondertekenen: process.env.NEXT_PUBLIC_HUB_VSL_TOKEN === "1",
   /** Stilstaand beeld voor je op play drukt (1920 × 1080). */
   affiche: "/hub/vsl/affiche.jpg",
   /** Woord voor woord, met tijden. `null` = geen ondertitels. */

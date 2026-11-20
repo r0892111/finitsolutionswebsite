@@ -84,6 +84,12 @@
   force = true
 
 [[redirects]]
+  from = "/api/vsl-bron"
+  to = "/.netlify/functions/vsl-bron"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/api/lead-magnet/start"
   to = "/.netlify/functions/lead-magnet-start"
   status = 200

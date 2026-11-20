@@ -76,6 +76,21 @@ function grootEnSnel(): boolean {
   return pixels >= 2560 && !traag;
 }
 
+/**
+ * De link die de speler laadt. Met token-authenticatie bij Bunny eerst een
+ * tijdelijke, ondertekende link vragen aan /api/vsl-bron; `null` als dat mislukt.
+ */
+async function haalBron(): Promise<string | null> {
+  if (!VSL.ondertekenen) return VSL.bron;
+  try {
+    const r = await fetch(`/api/vsl-bron?bron=${encodeURIComponent(VSL.bron)}`, { cache: "no-store" });
+    const j = (await r.json()) as { bron?: string };
+    return r.ok && j.bron ? j.bron : null;
+  } catch {
+    return null;
+  }
+}
+
 /** "4K" voor 2160p, anders "1080p" enzovoort. */
 export function kwaliteitLabel(hoogte: number): string {
   return hoogte >= 2160 ? "4K" : `${hoogte}p`;
@@ -99,6 +114,7 @@ export function VslSpeler({
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<HlsType | null>(null);
   const bronKlaar = useRef<Promise<void> | null>(null);
+  const bronFout = useRef(false);
   const hervatOp = useRef(0);
   const laatsteTijd = useRef(0);
   const eigenSprong = useRef(false);
@@ -133,15 +149,20 @@ export function VslSpeler({
     const v = videoRef.current;
     if (!v) return Promise.resolve();
     bronKlaar.current = (async () => {
+      const bron = await haalBron();
+      if (!bron) {
+        bronFout.current = true;
+        return;
+      }
       // hls.js overal waar het kan, zodat wij de kwaliteit kiezen (ook 4K). Op iPhone en iPad
       // de eigen speler van Apple; een mp4 als bron speelt gewoon.
       if (!IS_HLS || isIos()) {
-        v.src = VSL.bron;
+        v.src = bron;
         return;
       }
       const { default: Hls } = await import("hls.js");
       if (!Hls.isSupported()) {
-        v.src = VSL.bron;
+        v.src = bron;
         return;
       }
       // Geen plafond op de kwaliteit (geen capLevelToPlayerSize): 4K moet kunnen. Op een groot
@@ -155,11 +176,20 @@ export function VslSpeler({
         abrEwmaDefaultEstimate: schatting,
         abrEwmaDefaultEstimateMax: schatting,
       });
+      // Netwerkfout: één keer opnieuw proberen. Weigert de server de video (bv. het maandplafond
+      // bij Bunny is bereikt of het token is verlopen), dan de foutmelding in plaats van eeuwig laden.
+      let herkansing = false;
       hls.on(Hls.Events.ERROR, (_e, data) => {
         if (!data.fatal) return;
-        if (data.type === Hls.ErrorTypes.NETWORK_ERROR) hls.startLoad();
-        else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) hls.recoverMediaError();
-        else setFase("fout");
+        const playlistFout = data.details.startsWith("manifest");
+        if (data.type === Hls.ErrorTypes.NETWORK_ERROR && !playlistFout && !herkansing) {
+          herkansing = true;
+          hls.startLoad();
+        } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) hls.recoverMediaError();
+        else {
+          setLaadt(false);
+          setFase("fout");
+        }
       });
       hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
         // Eén keuze per hoogte, de hoogste eerst; onder 720p heeft het menu geen zin.
@@ -171,7 +201,7 @@ export function VslSpeler({
         setNiveaus(lijst);
       });
       hls.on(Hls.Events.LEVEL_SWITCHED, (_e, data) => setSpeeltNiveau(data.level));
-      hls.loadSource(VSL.bron);
+      hls.loadSource(bron);
       hls.attachMedia(v);
       hlsRef.current = hls;
     })();
@@ -203,6 +233,11 @@ export function VslSpeler({
       setLaadt(true);
       laadOndertitels();
       await zetBronKlaar();
+      if (bronFout.current) {
+        setLaadt(false);
+        setFase("fout");
+        return;
+      }
       eigenSprong.current = true;
       laatsteTijd.current = vanaf;
       kwartGemeld.current = 0;
