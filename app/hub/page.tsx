@@ -1,12 +1,8 @@
-import type { Metadata } from 'next';
-
 import { HubPagina } from '@/components/hub/hub-pagina';
-import { HUB } from '@/components/hub/copy';
 
-export const metadata: Metadata = {
-  title: HUB.metaTitel,
-  description: HUB.metaBeschrijving,
-};
+import { HUB_META } from './metadata';
+
+export const metadata = HUB_META.hub;
 
 export default function Hub() {
   return <HubPagina />;

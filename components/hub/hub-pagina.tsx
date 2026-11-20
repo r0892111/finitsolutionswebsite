@@ -1,64 +1,43 @@
 "use client";
 
 /**
- * De resource hub: de enige link op alle socials (beslissing Alex, 28/10/2026).
- * Van boven naar onder: de vraag "Waar ben je naar op zoek?" met drie knoppen
- * die naar de juiste plek springen, de video, de twee keuzes (zelf bouwen =
- * lesreeks op Skool, laten doen = formulier voor een call met Karel) en de
- * gratis resources met een filter per soort.
+ * De hub (finitsolutions.be/hub/): de enige link op al onze reels en posts.
+ * Sinds 20/11/2026 naar het model van de applypagina van Shadowboys
+ * (docs/hub-analyse-shadowboys.md), in onze eigen huisstijl. Eén keuze: de
+ * video bekijken en het formulier invullen. Van boven naar onder:
  *
- * Herkomst: ?bron=tiktok (kanaal) en ?reel=R031 (video) gaan mee naar Skool
- * als utm-parameters, naar het formulier als "Pagina" in de mail en op monday,
- * en naar Google Tag Manager als events (hub_view, hub_menu, hub_klik,
- * hub_vsl_play).
+ * 1. een smalle strook naar de gratis resources onderaan;
+ * 2. badge (voor wie), kop, subzin, de video, twee pillen, de knop;
+ * 3. het formulier, vraag per vraag (vlak onder de video, zoals bij hen);
+ * 4. de twijfels uit de video als korte FAQ;
+ * 5. de gratis prompts en gidsen, achter een e-mailslot.
  *
- * Ankers voor links van buitenaf: #zelf, #laten, #karel (opent meteen het
- * formulier) en #resources. #keuze blijft werken voor de twee keuzes samen.
+ * /hub/resources/ toont dezelfde pagina en springt meteen naar 5.
+ *
+ * Herkomst: ?bron=tiktok (kanaal) en ?reel=C03 (post) gaan mee naar het
+ * formulier ("Pagina" in de mail en op monday), naar Brevo bij het e-mailslot
+ * en naar Google Tag Manager als events (hub_view, hub_menu, vsl_*, hub_form_stap,
+ * form_submit, hub_toegang, hub_klik).
+ *
+ * Alle tekst staat in ./copy.ts, de video in ./video.ts.
  */
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { ArrowDown, ArrowRight, FileText, PhoneCall, Wrench, X } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import lokaleLijst from "@/content/resources.json";
-import { Onder, Vinkje } from "@/components/home/ui";
-import { VraagFormulier } from "@/components/home/vraag-formulier";
+import { Onder } from "@/components/home/ui";
 import { pushEvent } from "@/lib/analytics";
-import { SKOOL_URL } from "@/lib/finit-links";
-import {
-  haalExterneLijst,
-  leesLijst,
-  RESOURCES_URL,
-  soortLabel,
-  soortMeervoud,
-  voegSamen,
-  type Resource,
-} from "@/lib/resources";
+import { leesLijst } from "@/lib/resources";
 import { HUB } from "./copy";
-import { Vsl } from "./vsl";
+import { ResourceSectie } from "./resource-sectie";
+import { StapFormulier } from "./stap-formulier";
+import { VslSpeler } from "./vsl-speler";
 
-const LOKAAL = leesLijst(lokaleLijst);
-const SKOOL_ABOUT = `${SKOOL_URL}/about`;
-
-const BREED = "mx-auto w-full max-w-[56rem] px-4 sm:px-8";
+const REELS = new Set(leesLijst(lokaleLijst).map((r) => r.reel?.toUpperCase()).filter(Boolean));
+const ACCENT = "text-[#2F55C4]";
 const KOP = "hp-display text-balance text-center text-[2rem] font-bold leading-[1.08] text-[#1A2D63] sm:text-[2.5rem]";
-const INTRO = "mx-auto mt-3 max-w-[36rem] text-center text-[1.0625rem] leading-[1.65] text-[#3D4766]";
-
-const MENU_ICOON = { resources: FileText, zelf: Wrench, laten: PhoneCall } as const;
-const MENU_KLEUR = {
-  resources: "bg-[#FBE286] text-[#1A2D63]",
-  zelf: "bg-[#E6ECF9] text-[#1A2D63]",
-  laten: "bg-[#1A2D63] text-white",
-} as const;
-
-// Elke soort zijn eigen kleur, zodat je gidsen en prompts in één oogopslag uit elkaar houdt.
-const SOORT_KLEUR: Record<string, string> = {
-  gids: "bg-[#E6ECF9] text-[#1A2D63]",
-  prompt: "bg-[#FBE286] text-[#1A2D63]",
-  pakket: "bg-[#E4F3EA] text-[#12784A]",
-  bronnen: "border border-[#1A2D63]/25 bg-white text-[#1A2D63]",
-};
-
-const FILTER_VOLGORDE = ["gids", "prompt", "pakket", "template", "video"];
+const INTRO = "mx-auto mt-3 max-w-[36rem] text-balance text-center text-[1.0625rem] leading-[1.6] text-[#3D4766] sm:text-[1.125rem]";
 
 interface Herkomst {
   bron: string;
@@ -71,24 +50,10 @@ function schoon(v: string | null, max: number): string {
   return (v ?? "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, max);
 }
 
-function metHerkomst(h: Herkomst, extra: Record<string, string> = {}): Record<string, string> {
-  return { bron: h.bron, ...(h.reel ? { reel: h.reel } : {}), ...extra };
-}
+export function HubPagina({ start }: { start?: "resources" }) {
+  const [herkomst, setHerkomst] = useState<Herkomst>({ bron: "direct", reel: "", pad: "/hub/" });
 
-/** Zacht naar een anker scrollen, en het anker in de adresbalk zetten. */
-function springNaar(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  history.replaceState(null, "", `${window.location.pathname}${window.location.search}#${id}`);
-}
-
-export function HubPagina() {
-  const [herkomst, setHerkomst] = useState<Herkomst>({ bron: "direct", reel: "", pad: "/" });
-  const [resources, setResources] = useState<Resource[]>(() => voegSamen(LOKAAL));
-  const [filter, setFilter] = useState<string>("");
-  const [formOpen, setFormOpen] = useState(false);
-  const formRef = useRef<HTMLDivElement>(null);
-
-  // Herkomst uit de URL, één keer bij het openen.
+  // Herkomst uit de URL, één keer bij het openen. Op /hub/resources/ meteen naar de resources.
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
     const h: Herkomst = {
@@ -97,370 +62,174 @@ export function HubPagina() {
       pad: window.location.pathname,
     };
     setHerkomst(h);
-    pushEvent("hub_view", metHerkomst(h));
-    if (window.location.hash === "#karel") setFormOpen(true);
-  }, []);
-
-  // De externe lijst (later uit de reel-pipeline), als die ingesteld is.
-  useEffect(() => {
-    if (!RESOURCES_URL) return;
-    let actief = true;
-    haalExterneLijst(RESOURCES_URL).then((extern) => {
-      if (actief && extern.length > 0) setResources(voegSamen(LOKAAL, extern));
-    });
-    return () => {
-      actief = false;
+    pushEvent("hub_view", { bron: h.bron, ...(h.reel ? { reel: h.reel } : {}) });
+    const doel = start === "resources" || window.location.hash === "#resources" ? "resources" : window.location.hash === "#gesprek" ? "gesprek" : "";
+    if (!doel) return;
+    // De browser zet de pagina na het laden terug op de oude plek (scroll restoration).
+    // Daarom: dat uitzetten, meteen springen (niet zacht) en het een paar keer nakijken.
+    try {
+      history.scrollRestoration = "manual";
+    } catch {
+      /* oudere browser */
+    }
+    const timers: number[] = [];
+    const spring = (poging: number) => {
+      const el = document.getElementById(doel);
+      if (!el) return;
+      if (Math.abs(el.getBoundingClientRect().top) > 24) el.scrollIntoView({ behavior: "instant" as ScrollBehavior, block: "start" });
+      if (poging < 5) timers.push(window.setTimeout(() => spring(poging + 1), 150 * poging));
     };
-  }, []);
+    timers.push(window.setTimeout(() => spring(1), 0));
+    return () => timers.forEach((t) => window.clearTimeout(t));
+  }, [start]);
 
-  useEffect(() => {
-    if (formOpen) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [formOpen]);
+  const meta = useMemo(() => ({ bron: herkomst.bron, ...(herkomst.reel ? { reel: herkomst.reel } : {}) }), [herkomst]);
+  const zoek = `?bron=${herkomst.bron}${herkomst.reel ? `&reel=${herkomst.reel}` : ""}`;
+  // Komt als "Pagina" in de mail en op monday, zodat we zien waar de lead vandaan komt.
+  const formBron = `https://finitsolutions.be${herkomst.pad}${zoek}`;
+  const strook = herkomst.reel && REELS.has(herkomst.reel) ? HUB.strookUitPost : HUB.strook;
 
-  const skoolHref = useMemo(() => {
-    const u = new URL(SKOOL_ABOUT);
-    u.searchParams.set("utm_source", herkomst.bron);
-    u.searchParams.set("utm_medium", "hub");
-    if (herkomst.reel) u.searchParams.set("utm_content", herkomst.reel);
-    return u.toString();
-  }, [herkomst]);
+  const naarResources = useCallback(
+    (e: React.MouseEvent) => {
+      // Alleen scrollen. De adresbalk aanpassen (history.replaceState) laat Next.js
+      // het scrollen onderbreken; /hub/resources/ is er voor links van buitenaf.
+      e.preventDefault();
+      document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      pushEvent("hub_menu", { ...meta, doel: "resources" });
+    },
+    [meta]
+  );
 
-  // Komt als "Pagina" in de mail en op monday, zodat Karel ziet waar de lead vandaan komt.
-  const formBron = `https://finitsolutions.be${herkomst.pad}?bron=${herkomst.bron}${herkomst.reel ? `&reel=${herkomst.reel}` : ""}`;
-
-  // Vaste volgorde voor de filter: gidsen en prompts eerst, onbekende soorten achteraan.
-  const soorten = useMemo(() => {
-    const plek = (s: string) => {
-      const i = FILTER_VOLGORDE.indexOf(s);
-      return i === -1 ? FILTER_VOLGORDE.length : i;
-    };
-    return Array.from(new Set(resources.map((r) => r.soort))).sort((a, b) => plek(a) - plek(b));
-  }, [resources]);
-  // Komt iemand van een post (?reel=C03) en hoort er een resource bij, dan staat die bovenaan.
-  const uitPost = herkomst.reel ? resources.find((r) => r.reel?.toUpperCase() === herkomst.reel) : undefined;
-  const gefilterd = filter ? resources.filter((r) => r.soort === filter) : resources;
-  const zichtbaar = uitPost && gefilterd.includes(uitPost) ? [uitPost, ...gefilterd.filter((r) => r !== uitPost)] : gefilterd;
+  const naarFormulier = useCallback(
+    (via: string) => {
+      document.getElementById("gesprek")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      pushEvent("hub_menu", { ...meta, doel: "gesprek", via });
+    },
+    [meta]
+  );
 
   return (
     <main className="min-h-screen bg-white text-[#3D4766]">
-      {/* 1. De vraag, met drie knoppen die naar de juiste plek springen */}
-      <header className="bg-[#1A2D63] pb-12 pt-6 text-white sm:pb-16 sm:pt-8">
-        <div className={BREED}>
+      {/* 1. De strook naar de gratis resources */}
+      <a
+        href="/hub/resources/"
+        onClick={naarResources}
+        className="group flex items-center justify-center gap-x-1.5 bg-[#1A2D63] px-4 py-2.5 text-center text-[0.875rem] leading-[1.4] text-white/90 sm:text-[0.9375rem]"
+      >
+        <span>
+          {strook.tekst}{" "}
+          <span className="whitespace-nowrap font-semibold text-white underline decoration-white/40 underline-offset-4 transition group-hover:decoration-white">
+            {strook.link}
+            <ArrowDown className="ml-1 inline h-3.5 w-3.5 align-[-0.125em] transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
+          </span>
+        </span>
+      </a>
+
+      {/* 2. Badge, kop, subzin, video, knop */}
+      <section className="bg-[radial-gradient(60%_45%_at_50%_0%,#EEF2FB_0%,#FFFFFF_70%)] pb-10 pt-7 sm:pb-14 sm:pt-10">
+        <div className="mx-auto w-full max-w-[80rem] px-4 text-center sm:px-8">
           <a href="/" className="inline-flex" aria-label="Finit Solutions, naar de homepage">
-            <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="h-7 w-auto brightness-0 invert" priority />
+            <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto sm:h-7" priority />
           </a>
-          <h1 className="hp-display mt-10 text-balance text-[2.4rem] font-bold leading-[1.04] sm:mt-14 sm:text-center sm:text-[3.4rem]">
-            {HUB.titel[0]} <Onder wit>{HUB.titel[1]}</Onder>
-          </h1>
-          <p className="mt-3 text-[1.125rem] text-white/90 sm:text-center">{HUB.intro}</p>
 
-          {uitPost && (
-            <a
-              href={uitPost.url}
-              onClick={() => pushEvent("hub_klik", metHerkomst(herkomst, { keuze: "uit_post", resource: uitPost.id }))}
-              className="group mt-8 flex items-center gap-4 rounded-2xl bg-[#FBE286] p-4 text-[#1A2D63] shadow-[0_10px_30px_-12px_rgba(0,0,0,0.45)] transition-transform hover:-translate-y-0.5 sm:mx-auto sm:max-w-[36rem] sm:p-5"
-            >
-              <span className="min-w-0 flex-1">
-                <span className="block text-[0.8125rem] font-semibold uppercase tracking-[0.12em]">{HUB.uitPost}</span>
-                <span className="hp-display hp-display-sm mt-1 block text-[1.375rem] font-semibold leading-[1.2]">{uitPost.titel}</span>
-              </span>
-              <ArrowRight className="h-5 w-5 flex-none transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-            </a>
-          )}
-
-          <nav aria-label="Kies wat je zoekt" className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4">
-            {HUB.menu.map((m) => {
-              const Icoon = MENU_ICOON[m.doel as keyof typeof MENU_ICOON];
-              return (
-                <a
-                  key={m.doel}
-                  href={`#${m.doel}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    springNaar(m.doel);
-                    pushEvent("hub_menu", metHerkomst(herkomst, { doel: m.doel }));
-                  }}
-                  className="group flex items-center gap-4 rounded-2xl bg-white p-4 text-left shadow-[0_10px_30px_-12px_rgba(0,0,0,0.45)] transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:flex-col sm:items-start sm:p-5"
-                >
-                  <span className={`flex h-12 w-12 flex-none items-center justify-center rounded-full ${MENU_KLEUR[m.doel as keyof typeof MENU_KLEUR]}`}>
-                    <Icoon className="h-6 w-6" aria-hidden="true" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="hp-display hp-display-sm block text-[1.375rem] font-semibold leading-[1.2] text-[#1A2D63]">{m.titel}</span>
-                    <span className="mt-1 block text-[0.9375rem] text-[#3D4766]">{m.tekst}</span>
-                  </span>
-                  <ArrowDown className="h-5 w-5 flex-none text-[#1A2D63] transition-transform group-hover:translate-y-0.5 sm:hidden" aria-hidden="true" />
-                </a>
-              );
-            })}
-          </nav>
-
-          <p className="mt-6 text-[1rem] text-white/80 sm:mt-8 sm:text-center">
-            {HUB.vacatures.tekst}{" "}
-            <a
-              href={`/vacatures/?bron=${herkomst.bron}&via=hub`}
-              onClick={() => pushEvent("hub_menu", metHerkomst(herkomst, { doel: "vacatures" }))}
-              className="inline-flex items-center gap-1 font-semibold text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white"
-            >
-              {HUB.vacatures.link}
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </a>
+          <p className="mx-auto mt-6 flex w-fit max-w-full items-center rounded-full border border-[#1A2D63]/15 bg-white px-4 py-1.5 text-[0.8125rem] font-semibold text-[#1A2D63] shadow-[0_6px_18px_-12px_rgba(26,45,99,0.5)] sm:mt-8 sm:px-5 sm:py-2 sm:text-[1rem]">
+            {HUB.badge}
           </p>
-        </div>
-      </header>
 
-      {/* 2. De video */}
-      <section id="video" className="scroll-mt-4 py-14 sm:py-16">
+          <h1 className="hp-display mx-auto mt-4 max-w-[58rem] text-balance text-[2.35rem] font-bold leading-[1.04] text-[#1A2D63] min-[400px]:text-[2.6rem] sm:mt-5 sm:text-[3.4rem] lg:text-[4.3rem]">
+            {HUB.kop.voor}{" "}
+            <span className={ACCENT}>
+              <Onder>{HUB.kop.accent}</Onder>
+            </span>
+          </h1>
+
+          <p className="mx-auto mt-4 max-w-[48rem] text-balance text-[1.0625rem] leading-[1.5] text-[#6C7590] sm:mt-5 sm:text-[1.25rem] lg:text-[1.4375rem]">{HUB.sub}</p>
+
+          <div className="mx-auto mt-7 max-w-[74rem] sm:mt-10">
+            <VslSpeler meta={meta} onNaarFormulier={() => naarFormulier("einde_video")} />
+          </div>
+
+          <ul className="mt-6 flex flex-wrap justify-center gap-2 sm:mt-8 sm:gap-3">
+            {HUB.pillen.map((p) => (
+              <li key={p} className="rounded-full border border-[#1A2D63]/20 bg-white px-3.5 py-1.5 text-[0.8125rem] font-semibold text-[#1A2D63] sm:px-5 sm:py-2 sm:text-[1rem]">
+                {p}
+              </li>
+            ))}
+          </ul>
+
+          <button
+            type="button"
+            onClick={() => naarFormulier("knop_onder_video")}
+            className="hp-btn hp-btn--primary mt-6 min-h-[3.5rem] w-full px-8 text-[1.0625rem] sm:mt-8 sm:min-h-[4rem] sm:w-auto sm:min-w-[24rem] sm:text-[1.1875rem]"
+          >
+            {HUB.knop}
+            <ArrowRight className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <p className="mt-2.5 text-[0.875rem] text-[#6C7590] sm:text-[0.9375rem]">{HUB.knopNoot}</p>
+        </div>
+      </section>
+
+      {/* 3. Het formulier, meteen onder de video */}
+      <section id="gesprek" className="scroll-mt-4 pb-14 sm:pb-20" aria-labelledby="gesprek-titel">
+        <div className="mx-auto w-full max-w-[44rem] px-4 sm:px-8">
+          <h2 id="gesprek-titel" className="sr-only">
+            {HUB.formulier.titel}
+          </h2>
+          <StapFormulier bron={formBron} meta={meta} />
+        </div>
+      </section>
+
+      {/* 4. De twijfels uit de video */}
+      <section id="twijfels" className="scroll-mt-4 bg-[#F5F7FB] py-14 sm:py-20">
         <div className="mx-auto w-full max-w-[48rem] px-4 sm:px-8">
           <h2 className={KOP}>
-            {HUB.videoTitel[0]} <Onder>{HUB.videoTitel[1]}</Onder>
+            {HUB.twijfels.titel.voor} <Onder>{HUB.twijfels.titel.accent}</Onder>
           </h2>
-          <p className="mx-auto mt-4 max-w-[36rem] text-center text-[1.25rem] leading-[1.5] text-[#3D4766] sm:text-[1.375rem]">
-            {HUB.videoIntro[0]}{" "}
-            <a
-              href="#keuze"
-              onClick={(e) => {
-                e.preventDefault();
-                springNaar("keuze");
-                pushEvent("hub_menu", metHerkomst(herkomst, { doel: "keuze" }));
-              }}
-              className="font-semibold text-[#1A2D63] underline decoration-[#1A2D63]/35 decoration-2 underline-offset-4 transition-colors hover:decoration-[#1A2D63]"
-            >
-              {HUB.videoIntro[1]}
-            </a>{" "}
-            {HUB.videoIntro[2]}
-          </p>
-          <div className="mt-8">
-            <Vsl onPlay={() => pushEvent("hub_vsl_play", metHerkomst(herkomst))} />
+          <p className={INTRO}>{HUB.twijfels.intro}</p>
+
+          <div className="mt-8 space-y-3 sm:mt-10">
+            {HUB.twijfels.lijst.map((t) => (
+              <details key={t.vraag} className="hp-details rounded-2xl border border-[#E3E7EF] bg-white px-5 shadow-[0_1px_2px_rgba(26,45,99,0.04)] sm:px-6">
+                <summary className="flex items-start justify-between gap-5 py-4 text-[1.0625rem] font-semibold leading-snug text-[#1A2D63] sm:py-5 sm:text-[1.125rem]">
+                  <span>{t.vraag}</span>
+                  <span className="hp-plus mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                      <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                  </span>
+                </summary>
+                <p className="-mt-1 pb-5 text-[1rem] leading-[1.65] text-[#3D4766] sm:pb-6">{t.antwoord}</p>
+              </details>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <button type="button" onClick={() => naarFormulier("na_twijfels")} className="hp-btn hp-btn--primary hp-btn--lg w-full sm:w-auto">
+              {HUB.knop}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* 3. Zelf doen of laten doen */}
-      <section id="keuze" className="scroll-mt-4 bg-[#F5F7FB] py-14 sm:py-16">
-        <div className={BREED}>
+      {/* 5. De gratis resources, achter een e-mailslot */}
+      <section id="resources" className="scroll-mt-4 py-14 sm:py-20">
+        <div className="mx-auto w-full max-w-[56rem] px-4 sm:px-8">
           <h2 className={KOP}>
-            {HUB.keuzeTitel[0]} <Onder>{HUB.keuzeTitel[1]}</Onder>
+            {HUB.resources.titel.voor} <Onder>{HUB.resources.titel.accent}</Onder>
           </h2>
-          <p className={INTRO}>{HUB.keuzeIntro}</p>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-2">
-            <Keuzekaart
-              id="zelf"
-              titel={HUB.zelf.titel}
-              sub={HUB.zelf.sub}
-              voorWie={HUB.zelf.voorWie}
-              tekst={HUB.zelf.tekst}
-              beeld={
-                <a
-                  href={skoolHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => pushEvent("hub_klik", metHerkomst(herkomst, { keuze: "lesreeks", via: "banner" }))}
-                  className="mb-6 block overflow-hidden rounded-2xl border border-[#E3E7EF] transition-opacity hover:opacity-90"
-                >
-                  <Image src="/hub/lesreeks-banner.jpg" alt={HUB.zelf.beeldAlt} width={1400} height={781} sizes="(min-width: 768px) 420px, 100vw" className="h-auto w-full" />
-                </a>
-              }
-            >
-              <a
-                href={skoolHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => pushEvent("hub_klik", metHerkomst(herkomst, { keuze: "lesreeks" }))}
-                className="hp-btn hp-btn--primary hp-btn--lg w-full"
-              >
-                {HUB.zelf.knop}
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </a>
-            </Keuzekaart>
-
-            <Keuzekaart
-              id="laten"
-              donker
-              titel={HUB.laten.titel}
-              sub={HUB.laten.sub}
-              voorWie={HUB.laten.voorWie}
-              tekst={HUB.laten.tekst}
-            >
-              <button
-                type="button"
-                onClick={() => {
-                  setFormOpen(true);
-                  pushEvent("hub_klik", metHerkomst(herkomst, { keuze: "karel" }));
-                }}
-                className="hp-btn hp-btn--accent hp-btn--lg w-full"
-                aria-expanded={formOpen}
-                aria-controls="karel"
-              >
-                {HUB.laten.knop}
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </button>
-            </Keuzekaart>
-          </div>
-
-          <div id="karel" ref={formRef} className="scroll-mt-4">
-            {formOpen && (
-              <div className="hp-card relative mx-auto mt-5 max-w-[40rem] p-6 sm:p-8">
-                <button
-                  type="button"
-                  onClick={() => setFormOpen(false)}
-                  className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-[#6C7590] transition-colors hover:bg-[#F5F7FB] hover:text-[#1A2D63]"
-                  aria-label={HUB.laten.sluit}
-                >
-                  <X className="h-5 w-5" aria-hidden="true" />
-                </button>
-                <VraagFormulier metTelefoon bron={formBron} location="hub" />
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. De gratis resources */}
-      <section id="resources" className="scroll-mt-4 py-14 sm:py-16">
-        <div className={BREED}>
-          <h2 className={KOP}>
-            {HUB.resourcesTitel[0]} <Onder>{HUB.resourcesTitel[1]}</Onder>
-          </h2>
-          <p className={INTRO}>{HUB.resourcesIntro}</p>
-
-          {soorten.length > 1 && (
-            <div role="group" aria-label={HUB.filterLabel} className="mt-8 flex flex-wrap justify-center gap-2">
-              {["", ...soorten].map((s) => {
-                const actief = filter === s;
-                return (
-                  <button
-                    key={s || "alles"}
-                    type="button"
-                    onClick={() => setFilter(s)}
-                    aria-pressed={actief}
-                    className={`min-h-[2.75rem] rounded-full border px-5 text-[0.9375rem] font-medium transition-colors ${
-                      actief
-                        ? "border-[#1A2D63] bg-[#1A2D63] text-white"
-                        : "border-[#1A2D63]/20 bg-white text-[#1A2D63] hover:border-[#1A2D63]/45"
-                    }`}
-                  >
-                    {s ? soortMeervoud(s) : HUB.filterAlles}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {zichtbaar.length === 0 ? (
-            <p className="mt-8 text-center text-[1rem] text-[#6C7590]">{HUB.resourcesLeeg}</p>
-          ) : (
-            <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-              {zichtbaar.map((r) => (
-                <li key={r.id}>
-                  <ResourceKaart
-                    resource={r}
-                    uitPost={r === uitPost}
-                    onKlik={() => pushEvent("hub_klik", metHerkomst(herkomst, { keuze: "resource", resource: r.id }))}
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
+          <p className={INTRO}>{HUB.resources.intro}</p>
+          <ResourceSectie reel={herkomst.reel} meta={meta} />
         </div>
       </section>
 
       <footer className="border-t border-[#E3E7EF] px-4 py-8 text-center text-[0.875rem] text-[#6C7590] sm:px-8">
-        Finit Solutions ·{" "}
-        <a href="/" className="hp-link">finitsolutions.be</a> ·{" "}
-        <a href="/privacy/" className="hp-link">Privacy</a>
+        Finit Solutions · <a href="/" className="hp-link">finitsolutions.be</a> ·{" "}
+        <a href="/privacy/" className="hp-link">{HUB.footer.privacy}</a> ·{" "}
+        <a href={`/vacatures/${zoek}&via=hub`} className="hp-link">
+          {HUB.footer.vacatures}
+        </a>
       </footer>
     </main>
-  );
-}
-
-/** Eén van de twee wegen. De donkere ("laten doen") draagt de hoofdknop. */
-function Keuzekaart({
-  id,
-  donker = false,
-  titel,
-  sub,
-  voorWie,
-  tekst,
-  beeld,
-  children,
-}: {
-  id: string;
-  donker?: boolean;
-  titel: string;
-  sub: string;
-  voorWie: string[];
-  tekst: string;
-  /** Optioneel beeld bovenaan, zoals de banner van de lesreeks. */
-  beeld?: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      id={id}
-      className={`flex scroll-mt-4 flex-col rounded-3xl p-6 sm:p-8 ${
-        donker
-          ? "bg-[#1A2D63] text-white shadow-[0_24px_50px_-24px_rgba(26,45,99,0.7)]"
-          : "border-2 border-[#1A2D63]/15 bg-white text-[#3D4766]"
-      }`}
-    >
-      {beeld}
-      <h3 className={`hp-display text-[2rem] font-bold leading-[1.05] sm:text-[2.25rem] ${donker ? "text-white" : "text-[#1A2D63]"}`}>{titel}</h3>
-      <p className={`mt-2 text-[1.0625rem] font-medium ${donker ? "text-white/90" : "text-[#1A2D63]"}`}>{sub}</p>
-
-      <p className={`mt-6 text-[0.9375rem] font-semibold ${donker ? "text-white" : "text-[#1A2D63]"}`}>{HUB.kiesDitAls}</p>
-      <ul className="mt-3 space-y-2.5">
-        {voorWie.map((zin) => (
-          <li key={zin} className={`flex gap-3 text-[1rem] leading-[1.5] ${donker ? "text-white/90" : ""}`}>
-            <Vinkje donker={donker} />
-            {zin}
-          </li>
-        ))}
-      </ul>
-
-      <p className={`mt-6 flex-1 text-[1rem] leading-[1.65] ${donker ? "text-white/90" : ""}`}>{tekst}</p>
-      <div className="mt-7">{children}</div>
-    </div>
-  );
-}
-
-function ResourceKaart({ resource: r, uitPost = false, onKlik }: { resource: Resource; uitPost?: boolean; onKlik: () => void }) {
-  // Pdf's en externe pagina's in een nieuw tabblad, zodat de hub open blijft.
-  const nieuwTab = r.url.startsWith("https://") || r.url.toLowerCase().endsWith(".pdf");
-  const knop = HUB.openKnop[r.soort] ?? HUB.openKnop.standaard;
-
-  return (
-    <a
-      href={r.url}
-      onClick={onKlik}
-      {...(nieuwTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className={`group flex h-full flex-col rounded-2xl border bg-white p-5 transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-[#1A2D63]/50 hover:shadow-[0_16px_36px_-20px_rgba(26,45,99,0.35)] sm:p-6 ${
-        uitPost ? "border-2 border-[#1A2D63]" : "border-[#D5DCEA]"
-      }`}
-    >
-      <span className="flex flex-1 gap-4">
-        {/* De cover van de post of video, zodat wie via de link in bio komt hem herkent. */}
-        {r.thumbnail && (
-          <span className="relative aspect-[4/5] w-24 flex-none self-start overflow-hidden rounded-xl bg-[#E6ECF9] sm:w-28">
-            <Image src={r.thumbnail} alt="" fill sizes="112px" className="object-cover object-top" />
-          </span>
-        )}
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="flex flex-wrap items-center gap-2">
-            <span className={`rounded-full px-3 py-1 text-[0.8125rem] font-semibold ${SOORT_KLEUR[r.soort] ?? SOORT_KLEUR.gids}`}>
-              {soortLabel(r.soort)}
-            </span>
-            {uitPost && <span className="text-[0.8125rem] font-semibold text-[#1A2D63]">{HUB.uitPost}</span>}
-          </span>
-          <span className="hp-display hp-display-sm mt-3 text-[1.3125rem] font-semibold leading-[1.2] text-[#1A2D63]">{r.titel}</span>
-          {r.beschrijving && <span className="mt-2 flex-1 text-[1rem] leading-[1.6]">{r.beschrijving}</span>}
-        </span>
-      </span>
-      <span className="mt-5 inline-flex items-center gap-1.5 text-[1rem] font-semibold text-[#1A2D63]">
-        {knop}
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-      </span>
-    </a>
   );
 }

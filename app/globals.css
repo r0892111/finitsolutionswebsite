@@ -927,3 +927,24 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .hp *, .hp *::before, .hp *::after { transition-duration: 0ms !important; animation: none !important; }
 }
+
+/* =====================================================================
+   Hub met de VSL (20/11/2026): de speler, de ondertitels, het slot.
+   Alleen marineblauw. Zie components/hub/.
+   ===================================================================== */
+/* Wit omrande knop op een donkere laag (de speler) */
+.hp-btn--wit-rand { color: #fff; background: transparent; border-color: rgba(255, 255, 255, 0.6); }
+.hp-btn--wit-rand:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); border-color: #fff; }
+
+/* De ondertitels schalen mee met de breedte van de speler, niet van het scherm */
+.vsl-frame { container-type: inline-size; }
+.vsl-ondertitel { font-size: clamp(0.8rem, 3.1cqw, 1.75rem); text-shadow: 0 1px 2px rgba(15, 29, 71, 0.6); }
+
+/* Keuzes in het formulier: letter ervoor, zoals A/B/C */
+.hp-keuze { transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease; }
+.hp-keuze:hover { border-color: rgba(26, 45, 99, 0.5); }
+.hp-keuze[aria-pressed="true"] { border-color: #1A2D63; background: #E6ECF9; }
+.hp-keuze:focus-visible { outline: 2px solid #1A2D63; outline-offset: 2px; }
+
+/* Vergrendelde resources: zichtbaar wat je krijgt, maar vervaagd naar onder */
+.hp-slot-voorbeeld { -webkit-mask-image: linear-gradient(to bottom, #000 25%, transparent 92%); mask-image: linear-gradient(to bottom, #000 25%, transparent 92%); }

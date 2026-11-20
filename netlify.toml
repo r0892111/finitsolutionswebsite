@@ -76,6 +76,13 @@
   status = 200
   force = true
 
+# Het e-mailslot op de resources van de hub: bewaart het adres in Brevo.
+[[redirects]]
+  from = "/api/hub-toegang"
+  to = "/.netlify/functions/hub-toegang"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/api/lead-magnet/start"
   to = "/.netlify/functions/lead-magnet-start"
