@@ -25,6 +25,9 @@ interface ConsentContextType {
 
 const ConsentContext = createContext<ConsentContextType | undefined>(undefined);
 
+// The banner never shows on load: only after the first scroll or 10 seconds.
+const BANNER_DELAY_MS = 10_000;
+
 export function useConsent() {
   const context = useContext(ConsentContext);
   if (context === undefined) {
@@ -40,25 +43,32 @@ interface ConsentProviderProps {
 export function ConsentProvider({ children }: ConsentProviderProps) {
   const [choices, setChoices] = useState<ConsentChoices>(defaultChoices);
   const [hasConsent, setHasConsent] = useState(false);
-  const [showBanner, setShowBanner] = useState(false);
+  const [bannerDue, setBannerDue] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const showBanner = bannerDue && !hasConsent && !showSettings;
 
   useEffect(() => {
-    // Consent defaults are already set by the inline script in layout.tsx
-    // (runs before GTM loads). Stored consent is also restored by an inline
-    // script so GTM starts with the correct consent state immediately.
-    // Here we just sync React state with what's in localStorage.
+    // Nothing tracking-related is in layout.tsx. A stored choice is applied
+    // here; applyConsentMode only loads GTM when that choice allows it.
     const storedConsent = getStoredConsent();
 
     if (storedConsent) {
       setChoices(storedConsent.choices);
       setHasConsent(true);
-      // Re-apply consent mode to ensure React and GTM are in sync
       applyConsentMode(storedConsent.choices);
       pushDataLayerEvent('consent_loaded', storedConsent.choices, storedConsent.source);
-    } else {
-      setShowBanner(true);
+      return;
     }
+
+    // No choice yet: show the banner on the first scroll (any scroll
+    // container, hence capture) or after BANNER_DELAY_MS, whichever is first.
+    const reveal = () => setBannerDue(true);
+    const timer = window.setTimeout(reveal, BANNER_DELAY_MS);
+    document.addEventListener('scroll', reveal, { capture: true, passive: true, once: true });
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener('scroll', reveal, { capture: true });
+    };
   }, []);
 
   // Conditionally load Leadinfo when analytics consent is granted
@@ -68,15 +78,23 @@ export function ConsentProvider({ children }: ConsentProviderProps) {
     }
   }, [hasConsent, choices.statistics]);
 
+  // Scripts that already run (GTM, Leadinfo) can't be unloaded. After a
+  // withdrawal we reload, so the page starts again with only what is allowed.
+  const reloadIfWithdrawn = (next: ConsentChoices) => {
+    if ((choices.statistics && !next.statistics) || (choices.marketing && !next.marketing)) {
+      window.location.reload();
+    }
+  };
+
   const updateChoices = (newChoices: ConsentChoices, source: 'banner' | 'settings') => {
     setChoices(newChoices);
     setHasConsent(true);
-    setShowBanner(false);
     setShowSettings(false);
 
     saveConsent(newChoices, source);
     applyConsentMode(newChoices);
     pushDataLayerEvent('consent_update', newChoices, source);
+    reloadIfWithdrawn(newChoices);
   };
 
   const acceptAll = () => {
@@ -89,7 +107,6 @@ export function ConsentProvider({ children }: ConsentProviderProps) {
 
     setChoices(allAccepted);
     setHasConsent(true);
-    setShowBanner(false);
     setShowSettings(false);
     saveConsent(allAccepted, 'banner');
     applyConsentMode(allAccepted);
@@ -99,27 +116,25 @@ export function ConsentProvider({ children }: ConsentProviderProps) {
   const rejectAll = () => {
     setChoices(defaultChoices);
     setHasConsent(true);
-    setShowBanner(false);
     setShowSettings(false);
     saveConsent(defaultChoices, 'banner');
     applyConsentMode(defaultChoices);
     pushDataLayerEvent('consent_reject_all', defaultChoices, 'banner');
+    reloadIfWithdrawn(defaultChoices);
   };
 
+  // The banner hides itself while the settings modal is open (see showBanner)
+  // and comes back after closing it as long as no choice was made.
   const openSettings = () => {
     setShowSettings(true);
-    setShowBanner(false);
   };
 
   const closeSettings = () => {
     setShowSettings(false);
-    if (!hasConsent) {
-      setShowBanner(true);
-    }
   };
 
   const closeBanner = () => {
-    setShowBanner(false);
+    setBannerDue(false);
   };
 
   return (

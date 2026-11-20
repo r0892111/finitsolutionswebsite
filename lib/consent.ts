@@ -113,10 +113,29 @@ export function logConsentChange(choices: ConsentChoices, action: 'accept_all' |
   }
 }
 
-export function applyConsentMode(choices: ConsentChoices): void {
-  if (typeof window === 'undefined' || !(window as any).gtag) return;
+const GTM_ID = 'GTM-MQNHSC66';
+const GTM_SCRIPT_ID = 'gtm-script';
 
-  (window as any).gtag('consent', 'update', {
+type Gtag = (...args: unknown[]) => void;
+type GoogleWindow = Window & { dataLayer?: unknown[]; gtag?: Gtag };
+
+/**
+ * The only place a cookie choice reaches Google.
+ * Without consent for statistics or marketing nothing happens: no gtag, no
+ * Google Tag Manager, no request to Google. With consent we first push the
+ * Consent Mode signals (so GTM tags see the right categories) and only then
+ * inject GTM. If GTM is already loaded (choice changed during the visit), we
+ * only send the update; a withdrawal takes full effect on the next page load.
+ */
+export function applyConsentMode(choices: ConsentChoices): void {
+  if (typeof window === 'undefined') return;
+
+  const w = window as GoogleWindow;
+  const allowsGtm = choices.statistics || choices.marketing;
+  if (!w.gtag && !allowsGtm) return;
+
+  const gtag = ensureGtag(w);
+  gtag('consent', 'update', {
     'analytics_storage': choices.statistics ? 'granted' : 'denied',
     'ad_storage': choices.marketing ? 'granted' : 'denied',
     'ad_user_data': choices.marketing ? 'granted' : 'denied',
@@ -124,6 +143,43 @@ export function applyConsentMode(choices: ConsentChoices): void {
     'personalization_storage': choices.social ? 'granted' : 'denied',
     'functionality_storage': choices.social ? 'granted' : 'denied',
   });
+
+  if (allowsGtm) loadGtm(w);
+}
+
+/** Sets up dataLayer and gtag with everything denied by default. Loads nothing. */
+function ensureGtag(w: GoogleWindow): Gtag {
+  if (w.gtag) return w.gtag;
+
+  const dataLayer = (w.dataLayer = w.dataLayer || []);
+  const gtag: Gtag = function () {
+    // GTM only reads gtag commands as an arguments object, not as an array.
+    dataLayer.push(arguments);
+  };
+  w.gtag = gtag;
+
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'analytics_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'personalization_storage': 'denied',
+    'functionality_storage': 'denied',
+  });
+  gtag('set', 'ads_data_redaction', true);
+  return gtag;
+}
+
+/** Injects the GTM script once. */
+function loadGtm(w: GoogleWindow): void {
+  if (document.getElementById(GTM_SCRIPT_ID)) return;
+
+  w.dataLayer?.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+  const script = document.createElement('script');
+  script.id = GTM_SCRIPT_ID;
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
+  document.head.appendChild(script);
 }
 
 export function pushDataLayerEvent(event: string, choices: ConsentChoices, source?: string): void {

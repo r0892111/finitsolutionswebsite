@@ -5,7 +5,6 @@ import { Inter, Montserrat } from 'next/font/google';
 import { bricolage, schibsted } from '@/lib/fonts';
 
 import { Toaster } from '@/components/ui/toaster';
-import Script from 'next/script';
 import { ConsentProvider } from '@/contexts/consent-context';
 import { CookieBanner } from '@/components/cookie-banner';
 import { CookieSettingsModal } from '@/components/cookie-settings-modal';
@@ -164,86 +163,10 @@ export default function RootLayout({
           }}
         />
 
-        {/* Google Tag Manager */}
-        <Script
-          id="google-tag-manager"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-              })(window,document,'script','dataLayer','GTM-MQNHSC66');
-            `,
-          }}
-        />
-        
-        {/* Initialize Consent Mode before GTM */}
-        <Script
-          id="consent-mode-init"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('consent', 'default', {
-                'ad_storage': 'denied',
-                'analytics_storage': 'denied',
-                'ad_user_data': 'denied',
-                'ad_personalization': 'denied',
-                'personalization_storage': 'denied',
-                'functionality_storage': 'denied',
-                'wait_for_update': 500
-              });
-              gtag('set', 'url_passthrough', true);
-              gtag('set', 'ads_data_redaction', true);
-            `,
-          }}
-        />
-
-        {/* Restore stored consent BEFORE GTM loads - prevents race condition
-            where returning visitors are tracked with denied consent while
-            React is still hydrating. Content is static trusted strings only. */}
-        <Script
-          id="consent-restore"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(){
-                try {
-                  var s = localStorage.getItem('fs_cookie_consent_v1');
-                  if (!s) return;
-                  var d = JSON.parse(s);
-                  if (new Date() > new Date(d.expiry)) return;
-                  var c = d.choices;
-                  gtag('consent', 'update', {
-                    'analytics_storage': c.statistics ? 'granted' : 'denied',
-                    'ad_storage': c.marketing ? 'granted' : 'denied',
-                    'ad_user_data': c.marketing ? 'granted' : 'denied',
-                    'ad_personalization': c.marketing ? 'granted' : 'denied',
-                    'personalization_storage': c.social ? 'granted' : 'denied',
-                    'functionality_storage': c.social ? 'granted' : 'denied'
-                  });
-                } catch(e){}
-              })();
-            `,
-          }}
-        />
-        
-        {/* Leadinfo is loaded conditionally by ConsentProvider when analytics consent is granted */}
+        {/* Google Tag Manager en Leadinfo laden pas na toestemming: zie applyConsentMode in lib/consent.ts
+            en ConsentProvider in contexts/consent-context.tsx. Hier staat bewust niets van tracking. */}
       </head>
       <body className={`${inter.className} ${montserrat.variable} ${generalSans.variable} ${schibsted.variable} ${bricolage.variable}`}>
-        {/* Google Tag Manager (noscript) */}
-        <noscript>
-          <iframe 
-            src="https://www.googletagmanager.com/ns.html?id=GTM-MQNHSC66"
-            height="0" 
-            width="0" 
-            style={{ display: 'none', visibility: 'hidden' }}
-          />
-        </noscript>
-        
         <LanguageProvider>
           <AuthProvider>
             <ConsentProvider>
