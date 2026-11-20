@@ -579,7 +579,7 @@ export function VslSpeler({
           <button
             type="button"
             onClick={pauzeer}
-            className={`absolute bottom-4 left-4 z-20 flex h-11 w-11 items-center ${bediening ? "opacity-100" : "pointer-events-none opacity-0"} justify-center rounded-full bg-[#0F1D47]/70 text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:bottom-6 sm:left-6 sm:h-12 sm:w-12`}
+            className={`absolute bottom-4 left-4 z-20 flex h-[44px] w-[44px] items-center ${bediening ? "opacity-100" : "pointer-events-none opacity-0"} justify-center rounded-full bg-[#0F1D47]/70 text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:bottom-6 sm:left-6 sm:h-12 sm:w-12`}
             aria-label={T.pauze}
           >
             <Pause className="h-4 w-4 fill-current sm:h-5 sm:w-5" aria-hidden="true" />
@@ -661,7 +661,7 @@ export function VslSpeler({
               aria-pressed={cc}
               aria-label={cc ? T.ondertitelsUit : T.ondertitelsAan}
               title={cc ? T.ondertitelsUit : T.ondertitelsAan}
-              className={`flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12 ${
+              className={`flex h-[44px] w-[44px] items-center justify-center rounded-full backdrop-blur-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12 ${
                 cc ? "bg-white text-[#1A2D63] hover:bg-white/90" : "bg-[#0F1D47]/70 text-white hover:bg-[#0F1D47]/90"
               }`}
             >
@@ -694,7 +694,7 @@ export function VslSpeler({
               aria-haspopup="menu"
               aria-expanded={menuOpen}
               aria-label={T.kwaliteit}
-              className="flex h-11 items-center gap-1.5 rounded-full bg-[#0F1D47]/70 px-3.5 text-[0.8125rem] font-semibold text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:px-4 sm:text-[0.875rem]"
+              className="flex h-[44px] items-center gap-1.5 rounded-full bg-[#0F1D47]/70 px-3.5 text-[0.8125rem] font-semibold text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:px-4 sm:text-[0.875rem]"
             >
               {keuze === -1
                 ? `${T.kwaliteitAuto}${speeltNiveau >= 0 && hlsRef.current?.levels[speeltNiveau] ? ` · ${kwaliteitLabel(hlsRef.current.levels[speeltNiveau].height)}` : ""}`
@@ -707,7 +707,7 @@ export function VslSpeler({
             onClick={wisselVolScherm}
             aria-label={volScherm ? T.volSchermUit : T.volScherm}
             title={volScherm ? T.volSchermUit : T.volScherm}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0F1D47]/70 text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12"
+            className="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-[#0F1D47]/70 text-white backdrop-blur-sm transition hover:bg-[#0F1D47]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12"
           >
             {volScherm ? <Minimize className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" /> : <Maximize className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />}
           </button>
