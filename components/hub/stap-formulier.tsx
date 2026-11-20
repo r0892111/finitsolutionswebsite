@@ -12,11 +12,17 @@
  * bedrijfswebsite, bericht, bron) en dezelfde honeypot. De antwoorden op de
  * keuzevragen gaan als tekst mee in `bericht`, dus aan de serverkant (monday
  * en de mail naar contact@) verandert niets.
+ *
+ * Laatste stap (Alex, 20/11): naam, e-mail en telefoon verplicht, de website
+ * optioneel. We controleren zelf (geen browserballonnen): bij versturen met een
+ * fout staat de melding onder het veld en springt de cursor naar het eerste
+ * foute veld. De server doet dezelfde controle (lib/contact-velden.ts).
  */
 
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
+import { EMAIL_RE, telefoonOk } from "@/lib/contact-velden";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { HUB, vetStukken } from "./copy";
 
@@ -29,8 +35,22 @@ const VRAGEN = F.vragen;
 const VELD =
   "w-full rounded-xl border border-[#1A2D63]/15 bg-white px-4 py-3 text-[1rem] text-[#1A2D63] placeholder:text-[#6C7590]/60 transition focus:border-[#1A2D63]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/15";
 const LABEL = "mb-1.5 block text-[0.875rem] font-medium text-[#1A2D63]";
+const VELD_FOUT = "border-red-400 focus:border-red-500 focus:ring-red-200";
 
 type Status = "bezig" | "klaar" | "fout" | null;
+type Veld = "naam" | "email" | "telefoon";
+
+/** De meldingen voor de verplichte velden; leeg = alles in orde. */
+function controleer(naam: string, email: string, telefoon: string): Partial<Record<Veld, string>> {
+  const m = F.meldingen;
+  const fouten: Partial<Record<Veld, string>> = {};
+  if (naam.trim().length < 2) fouten.naam = m.naam;
+  if (!email.trim()) fouten.email = m.emailLeeg;
+  else if (!EMAIL_RE.test(email.trim())) fouten.email = m.email;
+  if (!telefoon.trim()) fouten.telefoon = m.telefoonLeeg;
+  else if (!telefoonOk(telefoon)) fouten.telefoon = m.telefoon;
+  return fouten;
+}
 
 function Vraag({ zin, id }: { zin: string; id?: string }) {
   return (
@@ -54,6 +74,8 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
   const [website, setWebsite] = useState("");
   const [honing, setHoning] = useState(""); // honeypot: blijft leeg bij mensen
   const [status, setStatus] = useState<Status>(null);
+  // Pas na de eerste poging tot versturen tonen we meldingen; daarna lopen ze mee met wat je typt.
+  const [geprobeerd, setGeprobeerd] = useState(false);
   const gemeld = useRef(false);
   const kader = useRef<HTMLDivElement>(null);
 
@@ -105,10 +127,21 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
     return [vrij, "", F.berichtKop, ...regels].join("\n").trim();
   };
 
+  const fouten = geprobeerd ? controleer(naam, email, telefoon) : {};
+
   const verstuur = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!laatste) {
       naarStap(stap + 1);
+      return;
+    }
+    const nuFout = controleer(naam, email, telefoon);
+    const eerste = (["naam", "email", "telefoon"] as const).find((v) => nuFout[v]);
+    if (eerste) {
+      setGeprobeerd(true);
+      const veld = document.getElementById(`${id}-${eerste}`);
+      veld?.focus({ preventScroll: true });
+      veld?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
     setStatus("bezig");
@@ -120,7 +153,7 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: timer.signal,
-        body: JSON.stringify({ naam, email, telefoonnummer: telefoon, bedrijfswebsite: website, bericht: bericht(), website: honing, bron }),
+        body: JSON.stringify({ naam: naam.trim(), email: email.trim(), telefoonnummer: telefoon.trim(), bedrijfswebsite: website.trim(), bericht: bericht(), website: honing, bron }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
       setStatus("klaar");
@@ -168,7 +201,8 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
         ))}
       </div>
 
-      <form onSubmit={verstuur} className="px-5 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6" aria-labelledby={`${id}-vraag`}>
+      {/* Op de gegevensstap controleren we zelf (noValidate), op de andere stappen doet de browser het. */}
+      <form onSubmit={verstuur} noValidate={vraag.soort === "gegevens"} className="px-5 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6" aria-labelledby={`${id}-vraag`}>
         <div className="flex min-h-[2.25rem] items-center justify-between gap-3 text-[0.875rem] text-[#6C7590]">
           {stap > 0 ? (
             <button
@@ -237,22 +271,15 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
             <>
               {vraag.sub && <p className="mt-2 text-[1rem] leading-[1.55] text-[#3D4766]">{vraag.sub}</p>}
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                <Invoer id={`${id}-naam`} label={F.velden.naam} type="text" autoComplete="name" waarde={naam} zet={setNaam} fout={fouten.naam} />
+                <Invoer id={`${id}-email`} label={F.velden.email} type="email" autoComplete="email" waarde={email} zet={setEmail} fout={fouten.email} />
+                <Invoer id={`${id}-telefoon`} label={F.velden.telefoon} type="tel" autoComplete="tel" waarde={telefoon} zet={setTelefoon} fout={fouten.telefoon} />
+                {/* Tekst in plaats van type="url": zo mag "jouwbedrijf.be" zonder https:// ervoor. Optioneel. */}
                 <div>
-                  <label htmlFor={`${id}-naam`} className={LABEL}>{F.velden.naam}</label>
-                  <input id={`${id}-naam`} type="text" required autoComplete="name" value={naam} onChange={(e) => setNaam(e.target.value)} className={VELD} />
-                </div>
-                <div>
-                  <label htmlFor={`${id}-email`} className={LABEL}>{F.velden.email}</label>
-                  <input id={`${id}-email`} type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className={VELD} />
-                </div>
-                <div>
-                  <label htmlFor={`${id}-telefoon`} className={LABEL}>{F.velden.telefoon}</label>
-                  <input id={`${id}-telefoon`} type="tel" required autoComplete="tel" value={telefoon} onChange={(e) => setTelefoon(e.target.value)} className={VELD} />
-                </div>
-                {/* Tekst in plaats van type="url": zo mag "jouwbedrijf.be" zonder https:// ervoor. */}
-                <div>
-                  <label htmlFor={`${id}-website`} className={LABEL}>{F.velden.website}</label>
-                  <input id={`${id}-website`} type="text" inputMode="url" required autoComplete="url" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder={F.velden.websiteHint} className={VELD} />
+                  <label htmlFor={`${id}-website`} className={LABEL}>
+                    {F.velden.website} <span className="font-normal text-[#6C7590]">{F.velden.optioneel}</span>
+                  </label>
+                  <input id={`${id}-website`} type="text" inputMode="url" autoComplete="url" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder={F.velden.websiteHint} className={VELD} />
                 </div>
               </div>
               {/* Honeypot: voor mensen onzichtbaar, bots vullen het in. */}
@@ -285,6 +312,49 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
           </div>
         )}
       </form>
+    </div>
+  );
+}
+
+/** Een verplicht veld met zijn melding eronder (alleen zichtbaar als er iets niet klopt). */
+function Invoer({
+  id,
+  label,
+  type,
+  autoComplete,
+  waarde,
+  zet,
+  fout,
+}: {
+  id: string;
+  label: string;
+  type: "text" | "email" | "tel";
+  autoComplete: string;
+  waarde: string;
+  zet: (v: string) => void;
+  fout?: string;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className={LABEL}>
+        {label}
+      </label>
+      <input
+        id={id}
+        type={type}
+        required
+        autoComplete={autoComplete}
+        value={waarde}
+        onChange={(e) => zet(e.target.value)}
+        aria-invalid={fout ? true : undefined}
+        aria-describedby={fout ? `${id}-fout` : undefined}
+        className={`${VELD} ${fout ? VELD_FOUT : ""}`}
+      />
+      {fout && (
+        <p id={`${id}-fout`} className="mt-1.5 text-[0.8125rem] leading-[1.4] text-red-700">
+          {fout}
+        </p>
+      )}
     </div>
   );
 }

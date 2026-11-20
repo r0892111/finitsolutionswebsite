@@ -31,6 +31,7 @@
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
 import { createMondayItem, mondayConfigFromEnv } from "../../lib/monday/create-item";
+import { EMAIL_RE, telefoonOk } from "../../lib/contact-velden";
 
 // monday mag de bezoeker niet laten wachten: de browser wacht maximaal 10 s,
 // en na monday moet de mail nog vertrekken.
@@ -38,7 +39,6 @@ const MONDAY_TIMEOUT_MS = 5000;
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // contact@ is een gedeeld adres, zodat alle vennoten de aanvragen binnenkrijgen
 // en een lead niet in één persoonlijke mailbox blijft hangen.
@@ -88,6 +88,11 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
   if (!naam) return json(400, { error: "missing_naam" });
   if (!EMAIL_RE.test(email)) return json(400, { error: "invalid_email" });
+  // Het hubformulier (/hub/) vraagt ook een telefoonnummer, verplicht (Alex, 20/11).
+  // De popup en het vraagformulier elders op de site houden hun eigen regels.
+  const isHub = /^https:\/\/finitsolutions\.be\/hub\//.test(bron);
+  if (isHub && naam.length < 2) return json(400, { error: "missing_naam" });
+  if (isHub && !telefoonOk(telefoon)) return json(400, { error: "invalid_telefoon" });
 
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) {
