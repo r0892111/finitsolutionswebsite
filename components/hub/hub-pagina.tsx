@@ -106,7 +106,17 @@ export function HubPagina({ start }: { start?: "resources" }) {
 
   const naarFormulier = useCallback(
     (via: string) => {
-      document.getElementById("gesprek")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Het formulier in het midden van het scherm (wens Alex 20/11). Is het hoger dan het
+      // scherm (gsm), dan de bovenkant in beeld met wat ruimte erboven.
+      const kaart = document.querySelector<HTMLElement>("#gesprek .hp-card") ?? document.getElementById("gesprek");
+      if (kaart) {
+        const r = kaart.getBoundingClientRect();
+        const ruimte = 24;
+        const past = r.height + 2 * ruimte <= window.innerHeight;
+        const top = window.scrollY + r.top - (past ? (window.innerHeight - r.height) / 2 : ruimte);
+        const zacht = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: Math.max(0, top), behavior: zacht ? "smooth" : "auto" });
+      }
       pushEvent("hub_menu", { ...meta, doel: "gesprek", via });
     },
     [meta]

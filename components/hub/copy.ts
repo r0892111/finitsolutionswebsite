@@ -33,7 +33,7 @@ export const HUB = {
   // Twee pillen onder de video: de twee bezwaren die het vaakst terugkomen.
   pillen: ["Geen technische kennis nodig", "Enkele uren van jouw tijd"],
   knop: "Plan een vrijblijvend gesprek",
-  knopNoot: "Eerst vijf korte vragen, daarna plannen we samen een moment.",
+  knopNoot: "Vul dit formulier in om een gesprek in te plannen. Duurt 60 seconden.",
 
   // De speler.
   speler: {
