@@ -47,7 +47,48 @@ Het formulier staat **meteen onder de video**, niet onderaan. Wie na de video wi
 - Koppen met `text-wrap: balance`, zodat er geen los woord op de laatste regel staat.
 - Op een gsm van 390 × 844 zie je zonder scrollen: badge, kop, subzin, de hele video, de twee pillen en de bovenkant van de knop.
 
-**Wat we overnemen:** dezelfde volgorde, dezelfde verhoudingen (kop ongeveer 2,3 × de subzin, subzin grijzer dan de kop), het formulier vlak onder de video, `text-wrap: balance`, alles in één kolom. **Wat we niet overnemen:** het zwarte scherm met gloed (wij blijven wit en marineblauw), de knop in hoofdletters (te schreeuwerig voor ons publiek), de kop van 70 px op desktop (wij gaan tot ±60 px, zoals de hero op de homepage).
+**Wat we overnemen:** dezelfde volgorde, dezelfde maten en witruimte (zie de tabel hieronder), het formulier vlak onder de video, `text-wrap: balance`, alles in één kolom. **Wat we niet overnemen:** het zwarte scherm met gloed (wij blijven wit en marineblauw), Poppins en de knop in hoofdletters (wij houden onze lettertypes).
+
+## Maten gelijkgetrokken (20/11, wens van Alex)
+
+Alex: de tekst en de knoppen moeten groter, met dezelfde verhoudingen als bij Shadowboys. Opnieuw gemeten in Chrome op 1440, 1024 en ±500 px (gsm-opmaak). Hun CSS gelezen: boven 1100 px vaste maten, daaronder schaalt alles mee met de schermbreedte, en vanaf 767 px de gsm-opmaak. Die formules staan nu ook in onze CSS (`.hub-…` in `app/globals.css`), in px, dus het klopt op elke breedte en niet alleen op deze drie.
+
+Lettergrootte in px; SB = Shadowboys, vóór = onze hub vóór deze ronde.
+
+| Element | 1440: SB / vóór / **nu** | 1024: SB / vóór / **nu** | 390: SB / vóór / **nu** |
+|---|---|---|---|
+| Badge | 30 / 14,4 / **30** (54 hoog) | 27,6 / 14 / **27,6** | 13 / 12,2 / **13** (40 hoog) |
+| Kop (h1) | 70 / 61,9 / **70**, twee regels | 63,5 / 60,2 / **63,5** | 41,7 / 35,3 / **41,7** |
+| Subzin | 30 / 20,7 / **30** | 27,6 / 20,1 / **27,6** | 17 / 15,9 / **17** |
+| Video, breedte | 1192 / 1066 / **1192** | 976 / 953 / **961**¹ | 362 / 360 / **362** |
+| Pillen | 30 / 14,4 / **30** (54 hoog) | 25,6 / 14 / **25,6** | 13 / 12,2 / **13** (40 hoog) |
+| Knop onder de video | 887×101, 47,5 / 346×58, 17,1 / **887×100, 47,5** | 887×96, 33,8 / 336×56, 16,6 / **887×96, 33,8** | 362×58, 20,3 / 360×53, 15,9 / **362×58, 20,3** |
+| Notitie onder de knop | 30 / 13,5 / **30** | 22 / 13,1 / **22** | 13 / 13,1 / **13** |
+| Formulierkaart, breedte | 1011 / 576 / **1011** | 976 / 560 / **961**¹ | 362 / 360 / **362** |
+| Sectietitels (twijfels, resources) ↔ hun "This is for you" | 50 / 36 / **50** | 50 / 35 / **50** | 35 / 30 / **35** |
+| Twijfelvraag ↔ hun ✅/❌-rijen | 36 / 16,2 / **36** | 31,7 / 15,8 / **31,7** | 16,8 / 15,9 / **16,8** |
+| Knop onder de twijfels ↔ hun tweede knop | 1002×108, 53,7 / 265×47, 14,4 / **1002×108, 53,7** | 38,2 / 14 / **38,2** | 362×60, 20,3 / 360×49, 15 / **362×60, 20,3** |
+| Afspeelknop in de video | 76 tot 124 / 86 / **76 tot 124** | | |
+| "Wil je verder kijken?" | 28 / 23 / **28** | | 15 / 15,8 / **15** |
+
+¹ Zelfde regel als bij hen (scherm min 48 px); onze meetbrowser trekt er nog een schuifbalk van 15 px af.
+
+Witruimte (desktop | gsm), gelijk aan Shadowboys:
+
+| Van → naar | SB | vóór | **nu** |
+|---|---|---|---|
+| logo → badge | 27 \| 20 | 34 \| 28 | **27 \| 20** |
+| badge → kop | 25 \| 20 | 18 \| 15 | **25 \| 20** |
+| kop → subzin | 6 \| 17 | 18 \| 15 | **6 \| 17** |
+| subzin → video | 47 \| 30 | 36 \| 26 | **47 \| 30** |
+| video → pillen | 99 \| 58 | 29 \| 22 | **99 \| 58** |
+| pillen → knop | 53 \| 26 | 28 \| 22 | **53 \| 26** |
+| knop → notitie | 8 \| 7 | 9 \| 9 | **8 \| 7** |
+| notitie → formulier | 39 \| 58 | 51 \| 37 | **39 \| 58** |
+
+Inhoudskolom: max 1244 px met 24 px zijmarge (gsm 14 px, onder 380 px 10 px), zoals bij hen. Video max 1192 px, formulier max 1011 px, twijfels max 1022 px breed.
+
+**Eigen keuzes waar Shadowboys niets heeft:** de antwoorden in de twijfels op ±0,8 × de vraag (29 px desktop, 16 px gsm), de uitleg onder een sectietitel even groot als de subzin. De tekst in het formulier zelf blijft: die is al iets groter dan bij hen (hun vraag 20 px, de onze ±22 px). Het logo en de resourcekaarten zijn ongewijzigd.
 
 ## De videospeler
 

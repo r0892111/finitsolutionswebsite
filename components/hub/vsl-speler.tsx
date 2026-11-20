@@ -456,8 +456,8 @@ export function VslSpeler({
           className="group absolute inset-0 z-20 flex h-full w-full items-center justify-center bg-gradient-to-t from-[#0F1D47]/45 via-[#0F1D47]/10 to-transparent"
           aria-label={fase === "start" ? T.afspelen : T.verder}
         >
-          <span className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full bg-white shadow-[0_0_0_10px_rgba(255,255,255,0.18),0_18px_40px_-10px_rgba(0,0,0,0.55)] transition-transform duration-200 group-hover:scale-105 group-focus-visible:outline group-focus-visible:outline-2 group-focus-visible:outline-offset-[14px] group-focus-visible:outline-white sm:h-24 sm:w-24">
-            <Play className="ml-1 h-7 w-7 fill-[#1A2D63] text-[#1A2D63] sm:h-9 sm:w-9" aria-hidden="true" />
+          <span className="flex h-[clamp(76px,8.6vw,124px)] w-[clamp(76px,8.6vw,124px)] items-center justify-center rounded-full bg-white shadow-[0_0_0_10px_rgba(255,255,255,0.18),0_18px_40px_-10px_rgba(0,0,0,0.55)] transition-transform duration-200 group-hover:scale-105 group-focus-visible:outline group-focus-visible:outline-2 group-focus-visible:outline-offset-[14px] group-focus-visible:outline-white">
+            <Play className="ml-[6%] h-[38%] w-[38%] fill-[#1A2D63] text-[#1A2D63]" aria-hidden="true" />
           </span>
         </button>
       )}
@@ -465,7 +465,7 @@ export function VslSpeler({
       {/* Terugkomer: verder kijken of opnieuw beginnen. */}
       {fase === "verder" && !laadt && (
         <Laag>
-          <p className="hp-display hp-display-sm text-[1.05rem] font-semibold leading-[1.25] sm:text-[1.6rem]">{T.verderVraag}</p>
+          <p className="hp-display hp-display-sm text-[15px] font-semibold leading-[1.25] sm:text-[clamp(18px,2.4vw,28px)]">{T.verderVraag}</p>
           <div className="mt-3 flex flex-wrap justify-center gap-2 sm:mt-5 sm:gap-3">
             <button type="button" onClick={() => void start(hervatOp.current)} className="hp-btn hp-btn--light hp-btn--md">
               <Play className="h-4 w-4 fill-current" aria-hidden="true" />

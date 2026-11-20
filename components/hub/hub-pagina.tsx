@@ -36,8 +36,8 @@ import { VslSpeler } from "./vsl-speler";
 
 const REELS = new Set(leesLijst(lokaleLijst).map((r) => r.reel?.toUpperCase()).filter(Boolean));
 const ACCENT = "text-[#2F55C4]";
-const KOP = "hp-display text-balance text-center text-[2rem] font-bold leading-[1.08] text-[#1A2D63] sm:text-[2.5rem]";
-const INTRO = "mx-auto mt-3 max-w-[36rem] text-balance text-center text-[1.0625rem] leading-[1.6] text-[#3D4766] sm:text-[1.125rem]";
+const KOP = "hp-display hub-sectietitel text-balance text-center font-bold text-[#1A2D63]";
+const INTRO = "hub-intro mx-auto text-balance text-center text-[#3D4766]";
 
 interface Herkomst {
   bron: string;
@@ -129,32 +129,34 @@ export function HubPagina({ start }: { start?: "resources" }) {
       </a>
 
       {/* 2. Badge, kop, subzin, video, knop */}
-      <section className="bg-[radial-gradient(60%_45%_at_50%_0%,#EEF2FB_0%,#FFFFFF_70%)] pb-10 pt-7 sm:pb-14 sm:pt-10">
-        <div className="mx-auto w-full max-w-[80rem] px-4 text-center sm:px-8">
-          <a href="/" className="inline-flex" aria-label="Finit Solutions, naar de homepage">
+      <section className="hub-hero bg-[radial-gradient(60%_45%_at_50%_0%,#EEF2FB_0%,#FFFFFF_70%)]">
+        <div className="hub-wrap text-center">
+          <a href="/" className="hub-logo mx-auto flex w-fit" aria-label="Finit Solutions, naar de homepage">
             <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto sm:h-7" priority />
           </a>
 
-          <p className="mx-auto mt-6 flex w-fit max-w-full items-center rounded-full border border-[#1A2D63]/15 bg-white px-4 py-1.5 text-[0.8125rem] font-semibold text-[#1A2D63] shadow-[0_6px_18px_-12px_rgba(26,45,99,0.5)] sm:mt-8 sm:px-5 sm:py-2 sm:text-[1rem]">
+          <p className="hub-badge mx-auto flex w-fit max-w-full items-center rounded-full border border-[#1A2D63]/15 bg-white font-semibold text-[#1A2D63] shadow-[0_6px_18px_-12px_rgba(26,45,99,0.5)]">
             {HUB.badge}
           </p>
 
-          <h1 className="hp-display mx-auto mt-4 max-w-[58rem] text-balance text-[2.35rem] font-bold leading-[1.04] text-[#1A2D63] min-[400px]:text-[2.6rem] sm:mt-5 sm:text-[3.4rem] lg:text-[4.3rem]">
+          <h1 className="hp-display hub-titel mx-auto text-balance font-bold text-[#1A2D63]">
             {HUB.kop.voor}{" "}
+            {/* Twee regels zoals bij Shadowboys: het accent op een eigen regel. */}
+            <br className="hidden sm:inline" />
             <span className={ACCENT}>
               <Onder>{HUB.kop.accent}</Onder>
             </span>
           </h1>
 
-          <p className="mx-auto mt-4 max-w-[48rem] text-balance text-[1.0625rem] leading-[1.5] text-[#6C7590] sm:mt-5 sm:text-[1.25rem] lg:text-[1.4375rem]">{HUB.sub}</p>
+          <p className="hub-sub text-balance text-[#6C7590]">{HUB.sub}</p>
 
-          <div className="mx-auto mt-7 max-w-[74rem] sm:mt-10">
+          <div className="hub-video mx-auto">
             <VslSpeler meta={meta} onNaarFormulier={() => naarFormulier("einde_video")} />
           </div>
 
-          <ul className="mt-6 flex flex-wrap justify-center gap-2 sm:mt-8 sm:gap-3">
+          <ul className="hub-pillen flex flex-wrap justify-center">
             {HUB.pillen.map((p) => (
-              <li key={p} className="rounded-full border border-[#1A2D63]/20 bg-white px-3.5 py-1.5 text-[0.8125rem] font-semibold text-[#1A2D63] sm:px-5 sm:py-2 sm:text-[1rem]">
+              <li key={p} className="hub-pil inline-flex items-center rounded-full border border-[#1A2D63]/20 bg-white font-semibold text-[#1A2D63]">
                 {p}
               </li>
             ))}
@@ -163,18 +165,18 @@ export function HubPagina({ start }: { start?: "resources" }) {
           <button
             type="button"
             onClick={() => naarFormulier("knop_onder_video")}
-            className="hp-btn hp-btn--primary mt-6 min-h-[3.5rem] w-full px-8 text-[1.0625rem] sm:mt-8 sm:min-h-[4rem] sm:w-auto sm:min-w-[24rem] sm:text-[1.1875rem]"
+            className="hp-btn hp-btn--primary hub-knop"
           >
             {HUB.knop}
-            <ArrowRight className="h-5 w-5" aria-hidden="true" />
+            <ArrowRight aria-hidden="true" />
           </button>
-          <p className="mt-2.5 text-[0.875rem] text-[#6C7590] sm:text-[0.9375rem]">{HUB.knopNoot}</p>
+          <p className="hub-noot text-[#6C7590]">{HUB.knopNoot}</p>
         </div>
       </section>
 
       {/* 3. Het formulier, meteen onder de video */}
       <section id="gesprek" className="scroll-mt-4 pb-14 sm:pb-20" aria-labelledby="gesprek-titel">
-        <div className="mx-auto w-full max-w-[44rem] px-4 sm:px-8">
+        <div className="hub-form-wrap">
           <h2 id="gesprek-titel" className="sr-only">
             {HUB.formulier.titel}
           </h2>
@@ -184,32 +186,32 @@ export function HubPagina({ start }: { start?: "resources" }) {
 
       {/* 4. De twijfels uit de video */}
       <section id="twijfels" className="scroll-mt-4 bg-[#F5F7FB] py-14 sm:py-20">
-        <div className="mx-auto w-full max-w-[48rem] px-4 sm:px-8">
+        <div className="hub-faq-wrap">
           <h2 className={KOP}>
             {HUB.twijfels.titel.voor} <Onder>{HUB.twijfels.titel.accent}</Onder>
           </h2>
           <p className={INTRO}>{HUB.twijfels.intro}</p>
 
-          <div className="mt-8 space-y-3 sm:mt-10">
+          <div className="hub-faq-lijst">
             {HUB.twijfels.lijst.map((t) => (
-              <details key={t.vraag} className="hp-details rounded-2xl border border-[#E3E7EF] bg-white px-5 shadow-[0_1px_2px_rgba(26,45,99,0.04)] sm:px-6">
-                <summary className="flex items-start justify-between gap-5 py-4 text-[1.0625rem] font-semibold leading-snug text-[#1A2D63] sm:py-5 sm:text-[1.125rem]">
+              <details key={t.vraag} className="hp-details hub-faq border border-[#E3E7EF] bg-white shadow-[0_1px_2px_rgba(26,45,99,0.04)]">
+                <summary className="hub-faq-vraag flex items-start justify-between font-semibold text-[#1A2D63]">
                   <span>{t.vraag}</span>
-                  <span className="hp-plus mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" aria-hidden="true">
+                  <span className="hp-plus hub-faq-plus flex shrink-0 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" aria-hidden="true">
                     <svg width="12" height="12" viewBox="0 0 12 12">
                       <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
                     </svg>
                   </span>
                 </summary>
-                <p className="-mt-1 pb-5 text-[1rem] leading-[1.65] text-[#3D4766] sm:pb-6">{t.antwoord}</p>
+                <p className="hub-faq-antwoord text-[#3D4766]">{t.antwoord}</p>
               </details>
             ))}
           </div>
 
-          <div className="mt-10 text-center">
-            <button type="button" onClick={() => naarFormulier("na_twijfels")} className="hp-btn hp-btn--primary hp-btn--lg w-full sm:w-auto">
+          <div className="hub-slot-cta text-center">
+            <button type="button" onClick={() => naarFormulier("na_twijfels")} className="hp-btn hp-btn--primary hub-knop hub-knop--slot">
               {HUB.knop}
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              <ArrowRight aria-hidden="true" />
             </button>
           </div>
         </div>
