@@ -89,6 +89,8 @@ function useFormSubmit() {
             telefoonnummer: formData.telefoonnummer,
             email: formData.email,
             bron: sourceUrl,
+            // De volledige adresbalk (met ?bron=…), voor Tuesday.
+            pagina: window.location.href,
           }),
         });
         if (!res.ok) throw new Error(`status ${res.status}`);

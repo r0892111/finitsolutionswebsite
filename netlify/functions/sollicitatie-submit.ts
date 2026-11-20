@@ -6,6 +6,11 @@
  * echte HTTP-status terug zodat een storing zichtbaar is. Geen monday: een
  * sollicitatie is geen lead.
  *
+ * Daarnaast (Alex, 20/11) een item in Tuesday, bord Applications, in de groep
+ * van de vacature (anders "Open application"). Parallel met de mail, max 5 s;
+ * mislukt Tuesday, dan merkt de kandidaat niets (zie lib/tuesday.ts). De
+ * bijlagen gaan niet mee naar Tuesday, alleen in de mail.
+ *
  * De lijst met vacatures en wie ervoor mag solliciteren komt uit
  * lib/vacatures.ts, dezelfde lijst als op de pagina. Bestanden (portfolio, cv)
  * komen als base64 binnen en gaan als bijlage mee in de mail; ze worden nergens
@@ -16,9 +21,18 @@
  *   SOLLICITATIE_TO_EMAIL (optioneel) — eigen ontvanger voor sollicitaties
  *   CONTACT_TO_EMAIL      (optioneel) — anders deze, standaard contact@finitsolutions.be
  *   CONTACT_FROM_EMAIL    (optioneel) — afzender, moet een geverifieerde Brevo-sender zijn
+ *   CRM_API_TOKEN of CRM_SOCIALS_TOKEN (optioneel) — sleutel voor Tuesday. Nooit loggen.
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
 import { BIJLAGEN, extensie, isStudent, PROFIELEN, vindVacature, type Profiel } from "../../lib/vacatures";
+import { naarTuesday, TUESDAY } from "../../lib/tuesday";
+
+// Vacature op de site → groep op het bord Applications. Geen match: "Open application".
+const TUESDAY_GROEPEN: Record<string, string> = {
+  content: "Content en social media",
+  projectmanagement: "Stagiair IT-projectmanagement",
+  software: "Software development",
+};
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
@@ -123,6 +137,22 @@ export const handler: Handler = async (event: HandlerEvent) => {
   }
 
   const nu = new Date().toLocaleString("nl-BE", { timeZone: "Europe/Brussels" });
+
+  // Tuesday loopt parallel met de mail.
+  const tuesdayWaarden: Record<string, string> = {
+    status: "New",
+    applied_on: new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Brussels" }), // JJJJ-MM-DD
+    email,
+    phone: telefoon,
+    motivation: motivatie,
+    m_dropdown_mm8q13cw: "Website",
+  };
+  if (link) tuesdayWaarden.portfolio = link;
+  const tuesday = naarTuesday(
+    TUESDAY.applications,
+    { name: naam, group_id: TUESDAY_GROEPEN[vacature.id] ?? "Open application", values: tuesdayWaarden },
+    "sollicitatie-submit"
+  );
   const rijen: Array<[string, string]> = [
     ["Vacature", vacature.titel],
     ["Ik ben een", PROFIELEN[profiel]],
@@ -173,12 +203,15 @@ export const handler: Handler = async (event: HandlerEvent) => {
     if (!res.ok) {
       const detail = await res.text();
       console.error("sollicitatie-submit: Brevo gaf", res.status, detail.slice(0, 500));
+      await tuesday;
       return json(502, { error: "mail_failed", status: res.status });
     }
   } catch (err) {
     console.error("sollicitatie-submit: netwerkfout", err);
+    await tuesday;
     return json(502, { error: "mail_failed" });
   }
 
-  return json(200, { ok: true });
+  const tuesdayStatus = await tuesday;
+  return json(200, { ok: true, tuesday: tuesdayStatus });
 };

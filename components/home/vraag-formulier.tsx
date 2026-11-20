@@ -59,7 +59,7 @@ export function VraagFormulier({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: timer.signal,
-        body: JSON.stringify({ naam, email, telefoonnummer: metTelefoon ? telefoonnummer : "", bedrijfswebsite, bericht, website, bron }),
+        body: JSON.stringify({ naam, email, telefoonnummer: metTelefoon ? telefoonnummer : "", bedrijfswebsite, bericht, website, bron, pagina: window.location.href }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
       setStatus("klaar");
