@@ -219,7 +219,8 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
           <span className="font-semibold text-[#1A2D63]">{F.stapVan.replace("{nu}", String(stap + 1)).replace("{totaal}", String(VRAGEN.length))}</span>
         </div>
 
-        <div key={stap} className="hp-wissel mt-3">
+        {/* Nieuwe vraag: zakt zacht op zijn plaats, zonder eerst te verdwijnen (geen flikkering onder de balk). */}
+        <div key={stap} className="hub-stap-in mt-3">
           <Vraag zin={vraag.vraag} id={`${id}-vraag`} />
 
           {vraag.soort === "keuze" && (

@@ -1008,6 +1008,14 @@ html {
   .hub-faq-paneel, .hub-faq-paneel .hub-faq-antwoord, .hub-faq-plus { transition: none; }
 }
 .hub-slot-cta { margin-top: 91px; }
+/* Formulier, volgende vraag. Eerst stond hier hp-wissel (van onzichtbaar naar zichtbaar,
+   360 ms): bij elke klik verdween de inhoud onder de stappenbalk even helemaal en kwam
+   ze terug, wat Alex als flikkering zag (20/11). Nu blijft de tekst zichtbaar en zakt
+   ze enkel 4 px op haar plaats. */
+@keyframes hub-stap-in { from { transform: translateY(4px); } to { transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .hub-stap-in { animation: hub-stap-in 180ms ease-out; }
+}
 
 @media (max-width: 1100px) {
   .hub-badge { font-size: clamp(15px, 1.95vw, 21px); min-height: 42px; }
