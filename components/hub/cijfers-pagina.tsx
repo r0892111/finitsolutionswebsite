@@ -41,7 +41,7 @@ function pct(n: number, d: number): string {
 function voorbeeld(): Kijkrij[] {
   let zaad = 7;
   const rnd = () => ((zaad = (zaad * 16807) % 2147483647) - 1) / 2147483646;
-  const duur = 456.8;
+  const duur = 455.4;
   const bronnen = ["tiktok", "instagram", "instagram", "linkedin", "youtube", "direct"];
   const rijen: Kijkrij[] = [];
   for (let i = 0; i < 420; i++) {

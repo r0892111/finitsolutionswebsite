@@ -17,8 +17,9 @@ export const VSL = {
    * public/hub/vsl/ondertitels-<oude id>.json, zodat de afhaakpunten van die versie de juiste zin citeren.
    */
   id: "v4",
-  // VSL v4 (7:36,8; 480p tot 4K) op Bunny Stream, bibliotheek finit-vsl: v3 zonder de zin over "hoeveel één uur van
-  // jouw tijd kost … berekening" (Alex 20/11). v3 (05b3b526-5950-4fc8-8f2b-a9728a8965ed) blijft voorlopig op Bunny staan.
+  // VSL v4 (7:35,4; 480p tot 4K) op Bunny Stream, bibliotheek finit-vsl: v3 zonder "En wij luisteren vooral. We stellen
+  // je … vragen over hoeveel één uur van jouw tijd kost … berekening te kunnen maken. Want" (Alex 20/11).
+  // v3 (05b3b526-5950-4fc8-8f2b-a9728a8965ed) blijft voorlopig op Bunny staan.
   bron: process.env.NEXT_PUBLIC_HUB_VSL_BRON || "https://vz-a3aedf8d-709.b-cdn.net/445824f4-9986-46d6-847b-54209fac0324/playlist.m3u8",
   /**
    * Token-authenticatie bij Bunny (tegen anderen die onze link gebruiken): zet in
