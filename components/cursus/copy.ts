@@ -49,8 +49,8 @@ export const CURSUS = {
     volSchermUit: "Volledig scherm sluiten",
   },
 
-  // Het formulier, vraag per vraag. Verzendt naar /api/cursus-aanvraag (Tuesday, groep
-  // "Cursus (Skool)" op het bord Leads › Socials, plus een mail naar contact@).
+  // Het formulier, vraag per vraag. Verzendt naar /api/cursus-aanvraag (Tuesday, de cursusgroep
+  // op het bord Leads › Socials, plus een mail naar contact@).
   formulier: {
     titel: "Inschrijven",
     uitleg: "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter.",

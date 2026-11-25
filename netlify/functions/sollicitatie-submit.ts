@@ -27,12 +27,15 @@ import type { Handler, HandlerEvent } from "@netlify/functions";
 import { BIJLAGEN, extensie, isStudent, PROFIELEN, vindVacature, type Profiel } from "../../lib/vacatures";
 import { naarTuesday, TUESDAY } from "../../lib/tuesday";
 
-// Vacature op de site → groep op het bord Applications. Geen match: "Open application".
+// Vacature op de site → groep op het bord Applications, op het vaste id van de groep (nooit de naam:
+// een groep mag vrij hernoemd worden, en een onbekende naam belandt zonder foutmelding in de eerste
+// groep). Geen match: de groep "Open application" (id `open`). Ids nagekeken op 25/11.
 const TUESDAY_GROEPEN: Record<string, string> = {
-  content: "Content en social media",
-  projectmanagement: "Stagiair IT-projectmanagement",
-  software: "Software development",
+  content: "content_en_social_media",
+  projectmanagement: "stagiair_it_projectmanagement",
+  software: "software_development",
 };
+const OPEN_SOLLICITATIE = "open";
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
@@ -150,7 +153,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
   if (link) tuesdayWaarden.portfolio = link;
   const tuesday = naarTuesday(
     TUESDAY.applications,
-    { name: naam, group_id: TUESDAY_GROEPEN[vacature.id] ?? "Open application", values: tuesdayWaarden },
+    { name: naam, group_id: TUESDAY_GROEPEN[vacature.id] ?? OPEN_SOLLICITATIE, values: tuesdayWaarden },
     "sollicitatie-submit"
   );
   const rijen: Array<[string, string]> = [

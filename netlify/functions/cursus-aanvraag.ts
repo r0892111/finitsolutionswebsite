@@ -5,7 +5,7 @@
  * cursus op Skool rond te maken. Werkt zoals het hubformulier in contact-submit.ts:
  *
  * 0. de wacht (lib/formulier-wacht.ts): Origin, honeypot, invultijd, Turnstile, dubbels, teller;
- * 1. een item in Tuesday op het bord Leads › Socials, in de groep "Cursus (Skool)",
+ * 1. een item in Tuesday op het bord Leads › Socials, in de cursusgroep (vast id, lib/cursus-aanvraag.ts),
  *    met dezelfde kolommen als de hubleads (zodat ook de automatische PAPI erop loopt);
  * 2. de kijkbeurt van de VSL krijgt "formulier verstuurd";
  * 3. staat de lead in Tuesday: meteen 200 voor de bezoeker. Daarna, op de achtergrond,
@@ -130,7 +130,8 @@ export default async (req: Request, context: Context): Promise<Response> => {
     : Promise.resolve();
   const [tuesday] = await Promise.all([tuesdayBelofte, kijkBelofte]);
 
-  const plek = `het bord Socials, groep ${CURSUS_GROEP}`;
+  // Geen groepsnaam in de mail: die mag in Tuesday vrij veranderen.
+  const plek = "het bord Socials, in de cursusgroep";
   const tuesdayRegel =
     tuesday === "ok"
       ? `<p style="margin:16px 0 0;font-size:14px;color:#6C7590">Tuesday: item op ${plek}.</p>`
