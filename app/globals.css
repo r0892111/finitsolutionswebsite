@@ -1000,6 +1000,12 @@ html {
    gewone knopgewicht van de site. Breed genoeg om op te vallen, niet over de hele kolom. */
 .hp-btn.hub-knop { font-size: 28px; line-height: 1.15; min-height: 80px; padding: 16px 44px; max-width: 100%; gap: 0.45em; }
 .hub-knop svg { width: 0.9em; height: 0.9em; }
+/* De gespreksknop met links ervan de tweede knop naar de homepage (25/11). In de code staat de
+   gespreksknop eerst (tabvolgorde, en bovenaan op gsm); op een breed scherm draait de rij om. */
+.hub-knoppen { display: flex; flex-direction: row-reverse; flex-wrap: wrap-reverse; align-items: stretch; justify-content: center; gap: var(--hub-r2) var(--hub-r3); }
+.hp-btn.hub-knop--tweede { flex-direction: column; gap: 0.18em; padding-block: 10px; padding-inline: 36px; }
+.hub-knop-vraag { font-size: 0.6em; line-height: 1.2; font-weight: 500; color: #6C7590; }
+.hub-knop-actie { display: inline-flex; align-items: center; gap: 0.4em; line-height: 1.15; }
 .hub-noot { font-size: 30px; line-height: 1.267; margin-top: var(--hub-r2); }
 .hub-form-wrap { width: min(calc(100% - 48px), 1011px); margin-inline: auto; }
 .hub-faq-wrap { width: min(calc(100% - 48px), 1022px); margin-inline: auto; }
@@ -1053,6 +1059,9 @@ html {
   .hub-pillen { gap: 10px; }
   .hub-pil { font-size: 13px; min-height: 40px; padding: 7px 8px; }
   .hp-btn.hub-knop { font-size: clamp(16px, 4.6vw, 19px); min-height: 56px; padding: 14px 18px; width: 100%; }
+  .hub-knoppen { flex-direction: column; flex-wrap: nowrap; gap: var(--hub-r2); }
+  .hp-btn.hub-knop--tweede { padding-block: 9px; }
+  .hub-knop-vraag { font-size: 0.74em; }
   .hub-noot { font-size: 13px; }
   .hub-sectietitel { font-size: clamp(30px, 9vw, 42px); }
   .hub-faq { border-radius: 17px; padding-inline: 15px; }

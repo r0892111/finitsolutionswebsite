@@ -44,6 +44,8 @@ interface Herkomst {
   bron: string;
   reel: string;
   pad: string;
+  /** Alleen voor de tweede knop (naar de homepage): ?lang=en toont ze in het Engels. */
+  taal: "nl" | "en";
 }
 
 // De eerste bron en reel van dit bezoek, zolang het tabblad open is: wie eerst rondklikt
@@ -56,7 +58,7 @@ function schoon(v: string | null, max: number): string {
 }
 
 export function HubPagina({ start }: { start?: "resources" }) {
-  const [herkomst, setHerkomst] = useState<Herkomst>({ bron: "direct", reel: "", pad: "/hub/" });
+  const [herkomst, setHerkomst] = useState<Herkomst>({ bron: "direct", reel: "", pad: "/hub/", taal: "nl" });
 
   // Herkomst uit de URL, één keer bij het openen. Op /hub/resources/ meteen naar de resources.
   useEffect(() => {
@@ -77,6 +79,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
       bron: eerste?.bron || uitUrl.bron || "direct",
       reel: eerste?.reel || uitUrl.reel,
       pad: window.location.pathname,
+      taal: p.get("lang") === "en" ? "en" : "nl",
     };
     setHerkomst(h);
     pushEvent("hub_view", { bron: h.bron, ...(h.reel ? { reel: h.reel } : {}) });
@@ -108,6 +111,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
   // Komt als "Pagina" in de mail en op monday, zodat we zien waar de lead vandaan komt.
   const formBron = `https://finitsolutions.be${herkomst.pad}${zoek}`;
   const strook = herkomst.reel && REELS.has(herkomst.reel) ? HUB.strookUitPost : HUB.strook;
+  const tweede = HUB.tweedeKnop[herkomst.taal];
 
   const naarResources = useCallback(
     (e: React.MouseEvent) => {
@@ -190,14 +194,29 @@ export function HubPagina({ start }: { start?: "resources" }) {
             ))}
           </ul>
 
-          <button
-            type="button"
-            onClick={() => naarFormulier("knop_onder_video")}
-            className="hp-btn hp-btn--primary hub-knop"
-          >
-            {HUB.knop}
-            <ArrowRight aria-hidden="true" />
-          </button>
+          {/* De gespreksknop blijft de hoofdknop (blauw, eerst in de tabvolgorde en bovenaan op gsm).
+              Links ervan op een breed scherm: de weg naar de homepage voor wie eerst het hele verhaal wil. */}
+          <div className="hub-knoppen">
+            <button
+              type="button"
+              onClick={() => naarFormulier("knop_onder_video")}
+              className="hp-btn hp-btn--primary hub-knop"
+            >
+              {HUB.knop}
+              <ArrowRight aria-hidden="true" />
+            </button>
+            <a
+              href={tweede.href}
+              onClick={() => pushEvent("hub_klik", { ...meta, doel: "homepage", via: "knop_onder_video" })}
+              className="hp-btn hp-btn--secondary hub-knop hub-knop--tweede"
+            >
+              <span className="hub-knop-vraag">{tweede.vraag}</span>
+              <span className="hub-knop-actie">
+                {tweede.actie}
+                <ArrowRight aria-hidden="true" />
+              </span>
+            </a>
+          </div>
           <p className="hub-noot text-[#6C7590]">{HUB.knopNoot}</p>
         </div>
       </section>

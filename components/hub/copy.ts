@@ -34,6 +34,13 @@ export const HUB = {
   pillen: ["Geen technische kennis nodig", "Enkele uren van jouw tijd"],
   knop: "Plan een vrijblijvend gesprek",
   knopNoot: "Vul dit formulier in om een gesprek in te plannen. Duurt 60 seconden.",
+  // De tweede knop, links van de gespreksknop (Alex en Amina, 24/11): wie eerst het hele verhaal
+  // wil, gaat naar de homepage. Twee regels: de vraag klein, de actie groot. De hub zelf is nog
+  // alleen Nederlands; met ?lang=en toont deze knop al de Engelse tekst en gaat ze naar /en/.
+  tweedeKnop: {
+    nl: { vraag: "Wil je eerst het volledige plaatje?", actie: "Bekijk hoe het werkt", href: "/" },
+    en: { vraag: "Want the full picture first?", actie: "See how it works", href: "/en/" },
+  },
 
   // De speler.
   speler: {
