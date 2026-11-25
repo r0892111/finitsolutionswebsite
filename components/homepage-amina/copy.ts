@@ -115,7 +115,6 @@ export interface Copy {
   };
   voorWie: {
     h2: string;
-    sub: string;
     niet: { titel: string; items: string[] };
     wel: { titel: string; items: string[] };
     slot: string;

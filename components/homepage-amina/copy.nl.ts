@@ -321,7 +321,6 @@ export const NL: Copy = {
   // 10. Voor wie is dit
   voorWie: {
     h2: "We zeggen je liever nee dan je tijd te verspillen.",
-    sub: "Dit is geen magische knop. Dit is voor wie het werkt, en voor wie niet.",
     niet: {
       titel: "Het is niets voor jou als:",
       items: [

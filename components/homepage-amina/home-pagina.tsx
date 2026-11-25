@@ -341,7 +341,6 @@ export function HomePagina({ taal }: { taal: Taal }) {
         <section id="voor-wie" className="nh-sectie">
           <div className="nh-wrap">
             <h2 className="nh-h2 max-w-[18em]">{t.voorWie.h2}</h2>
-            <p className="nh-sub mt-5">{t.voorWie.sub}</p>
             <div className="nh-twee mt-12">
               <div className="nh-kolom nh-kolom--niet">
                 <h3 className="nh-h3">{t.voorWie.niet.titel}</h3>

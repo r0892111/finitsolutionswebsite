@@ -319,7 +319,6 @@ export const EN: Copy = {
   // 10. Who this is for
   voorWie: {
     h2: "We'd rather tell you no than waste your time.",
-    sub: "This isn't a magic button. Here's who it works for, and who it doesn't.",
     niet: {
       titel: "It's not for you if:",
       items: [
