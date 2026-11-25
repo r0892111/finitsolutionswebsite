@@ -36,6 +36,7 @@ export const EN: Copy = {
   hero: {
     voorWie: "For business owners in Flanders who still do their own admin",
     h1: "You've been the company's secretary for years.",
+    h1Streep: "for years.",
     h1Vervolg: "We can write your business down in just one week. Then AI can start doing the work your way, instead of you.",
     sub: "ChatGPT is smart, but it knows nothing about your company. We start with a company brain: how you work, your prices, your rules, your exceptions, written down in plain text. Every AI we build reads it first.",
     knop: "Book a conversation",
@@ -49,7 +50,7 @@ export const EN: Copy = {
     gesproken: "We've spoken with more than a hundred Belgian SMEs.",
   },
 
-  // 2. Sound familiar?
+  // 2. Sound familiar? (shortened by Amina on 25/11, after Alex's comment)
   herken: {
     kicker: "Sound familiar?",
     h2: "You paid for AI, your team uses it daily, and you still end up rewriting everything yourself.",
@@ -57,19 +58,19 @@ export const EN: Copy = {
     punten: [
       {
         titel: "Everything still passes through you.",
-        tekst: "The quote, the email, the planning. Your team is good, but the last step is always yours. So the evenings are too.",
+        tekst: "The quote, the email, the planning. Your team is good, but the last step is always yours.",
       },
       {
         titel: "You rewrite what AI gives you.",
-        tekst: "Your people use ChatGPT every day. Then you fix the tone, the price and the exception it never knew about. You wonder who saved time, because it wasn't you.",
+        tekst: "Your people use ChatGPT daily, then you fix the tone, the price and the exception it never knew about.",
       },
       {
         titel: "The knowledge sits in one head.",
-        tekst: "Which supplier is always late. Which customer gets the exception. How to talk to the one who's already angry. Nobody wrote it down, and you hope that person never leaves.",
+        tekst: "Which customer gets the exception, which supplier is always late. Nobody wrote it down, and you hope that person never leaves.",
       },
       {
         titel: "You don't know where to start.",
-        tekst: "You've seen AI make things up, so you don't fully trust it. You hear other owners say it's changing everything, and you quietly wonder if you're falling behind.",
+        tekst: "You've seen AI make things up, and you quietly wonder if you're falling behind.",
       },
     ],
     slot: "Recognise even one of these? Then the problem probably isn't you. It isn't the AI either. It's something much simpler, and it's what we fix.",
@@ -77,56 +78,50 @@ export const EN: Copy = {
     kleineLink: "Or book a conversation",
   },
 
-  // 3. What is a company brain? (AI fundament)
+  // 3. What is a company brain? (AI fundament; shortened by Amina on 25/11)
   brein: {
     h2: "AI keeps guessing at your company. Here's what it can't see.",
     sub: "Everything you decide every day is sitting in your head. Imagine if your AI could read it.",
     alineas: [
-      "Think about what you do without thinking. A long-standing customer asks for a discount, and you know how far you can go. A job comes in on a Friday afternoon, and you know what can wait until Monday. A customer is already angry, and you know exactly how to talk to them.",
-      "None of that is written down anywhere. That's why AI can't do it, and why it feels like you're teaching a new person from scratch every morning.",
-      "At Finit Solutions, every project starts with this brain. It's a folder of plain text files about your business, and each file holds one piece of correct information: a process, a rule, an exception, the way you write to your customers. Every process is a series of steps, and every step is a series of small decisions. We write those decisions down, one by one, in plain language. We also call it your AI fundament.",
-      "Before an AI we build does anything, it reads the brain. So it works the way your company works.",
+      "A long-standing customer asks for a discount, and you know how far to go. An angry customer calls, and you know exactly what to say. None of it is written down, so AI can't do it.",
+      "At Finit Solutions, every project starts with a company brain: plain text files that hold your processes, your rules, your exceptions and your tone, down to the small decisions. Every AI we build reads it first.",
     ],
-    veranderTitel: "Two things change:",
     verander: [
       {
-        titel: "AI does the work your way.",
-        tekst: "Same tool, but the quote, the reply and the planning look like your company.",
+        titel: "AI works your way.",
+        tekst: "The quote, the reply and the planning look like your company.",
       },
       {
         titel: "Your knowledge stops depending on one person.",
-        tekst: "If someone is sick, or leaves, it doesn't leave with them.",
+        tekst: "If someone leaves, it stays.",
       },
     ],
     slot: "And it stays yours. It's plain text, so any AI model can read it, today or in the future.",
     knop: "Show me how it works",
   },
 
-  // 4. How we work
+  // 4. How we work (order corrected by Alex, 24/11: the conversations and the quote first,
+  // the brain only after signing, then the build). The first conversation takes an hour (Alex, 25/11).
   werkwijze: {
     h2: "No time for an AI project? Good, because this one doesn't need it.",
     sub: "You don't have to write a single page. You just have to talk.",
-    intro: "You're busy, and you don't have a week to spare for an AI project. So we do it differently: you talk, we do the work, and nobody installs a thing.",
+    stap: "Step",
     stappen: [
       {
-        titel: "A free conversation.",
-        tekst: "An hour, no obligation. You tell us how your company runs and where the time goes. We mostly listen.",
+        titel: "A free intro conversation",
+        tekst: "An hour. You tell us how your company runs and where the time goes. We mostly listen, and we tell you honestly whether we're a fit.",
       },
       {
-        titel: "The brain week.",
-        tekst: "In one week we map your business. We spend two hours with you as owner, then a day on site with the people who actually do the work, because they often know best how it really goes. We write it all down.",
+        titel: "A few more conversations, until we can give you a quote",
+        tekst: "We keep talking, online or at your place, until we know enough to put a clear plan and price on paper. You don't prepare anything. You explain how you work. Every call and consultation until now costs you nothing, and nothing starts until you've said yes.",
       },
       {
-        titel: "Your roadmap and quote.",
-        tekst: "You see what AI can take over first, in order of what pays back most, with a quote for each part. What you don't need, you leave out.",
+        titel: "We write your business down",
+        tekst: "Once you sign, we spend one week with you and your team, because the people who do the work often know best how it really goes. We write down how your company runs, down to the small decisions. That's your company brain, and it belongs to you.",
       },
       {
-        titel: "We build, one piece at a time.",
-        tekst: "Connected to the software you already use. Everything starts in review mode: the AI prepares, a person approves. You test each piece before we move on.",
-      },
-      {
-        titel: "It runs, and we stay.",
-        tekst: "We monitor it, fix it and update it. Every three months we sit down to see what else can be taken off your plate.",
+        titel: "Then we build",
+        tekst: "On top of the brain and connected to the software you already use. Everything starts in review mode: the AI prepares, a person approves. We stay on to keep it running.",
       },
     ],
     knop: "Book a conversation",
@@ -157,14 +152,10 @@ export const EN: Copy = {
   bouwen: {
     h2: "The emails, the quotes, the planning, the CRM input.",
     sub: "The work that fills your evenings is exactly what we build for.",
-    intro: "Everything Finit Solutions builds starts from the same brain.",
-    niveaus: [
-      "The simplest builds follow a fixed rule: when this happens, do that.",
-      "Next come workflows, where AI reads something and prepares the next step.",
-      "Then AI employees, which make decisions across your software, like a person who watches your mailbox and handles what comes in.",
-      "Above that, one agent can manage several of them.",
-      "And when nothing off the shelf fits, we build custom software around what you really need.",
-    ],
+    // First sentence: Amina. The second replaces her five levels (Alex's comment, 25/11: too much
+    // explaining; people only want to know we build what fits best, from a simple automation to a
+    // team of AI agents or fully custom software). His words.
+    intro: "Everything Finit Solutions builds starts from the same brain. We build what's best for you and most cost effective, whether that's a simple automation, a team of AI agents or fully custom software.",
     praktijk: "Here is what that looks like in practice. All examples are anonymised.",
     cases: [
       {

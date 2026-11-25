@@ -14,6 +14,7 @@
  */
 
 import { useId, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { EMAIL_RE, telefoonOk, websiteOk } from "@/lib/contact-velden";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
@@ -23,6 +24,11 @@ const SUBMIT_URL = "/api/contact-submit";
 const TIMEOUT_MS = 10000;
 
 type Status = "leeg" | "bezig" | "klaar" | "fout";
+
+// De velden van de live site (components/home/vraag-formulier.tsx).
+const VELD =
+  "w-full rounded-xl border border-[#1A2D63]/15 bg-white px-4 py-3 text-[1rem] text-[#1A2D63] placeholder:text-[#6C7590]/60 transition focus:border-[#1A2D63]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/15";
+const LABEL = "mb-1.5 block text-[0.8125rem] font-medium text-[#1A2D63]";
 
 const FOUTEN: Record<Taal, { naam: string; email: string; telefoon: string; website: string; optioneel: string }> = {
   nl: {
@@ -101,43 +107,48 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
 
   if (status === "klaar") {
     return (
-      <div role="status" className="nh-form">
-        <p className="nh-h3">{t.bedankt}</p>
-        <p className="mt-2">{t.bedanktSub}</p>
+      <div role="status" className="py-8 text-center">
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" aria-hidden="true">
+          <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none">
+            <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+        <p className="hp-display hp-display-sm mt-5 text-[1.3rem] font-semibold leading-[1.2] text-[#1A2D63]">{t.bedankt}</p>
+        <p className="mt-2 text-[1rem] leading-[1.6] text-[#3D4766]">{t.bedanktSub}</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={verstuur} noValidate className="nh-form">
+    <form onSubmit={verstuur} noValidate>
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor={`${id}-naam`} className="nh-label">{t.naam}</label>
-          <input id={`${id}-naam`} type="text" autoComplete="name" value={naam} onChange={(e) => setNaam(e.target.value)} className="nh-veld" aria-invalid={!!fouten.naam} aria-describedby={fouten.naam ? `${id}-naam-fout` : undefined} />
+          <label htmlFor={`${id}-naam`} className={LABEL}>{t.naam}</label>
+          <input id={`${id}-naam`} type="text" autoComplete="name" value={naam} onChange={(e) => setNaam(e.target.value)} className={VELD} aria-invalid={!!fouten.naam} aria-describedby={fouten.naam ? `${id}-naam-fout` : undefined} />
           {fouten.naam && <p id={`${id}-naam-fout`} className="nh-fout">{fouten.naam}</p>}
         </div>
         <div>
-          <label htmlFor={`${id}-email`} className="nh-label">{t.email}</label>
-          <input id={`${id}-email`} type="email" autoComplete="email" spellCheck={false} value={email} onChange={(e) => setEmail(e.target.value)} className="nh-veld" aria-invalid={!!fouten.email} aria-describedby={fouten.email ? `${id}-email-fout` : undefined} />
+          <label htmlFor={`${id}-email`} className={LABEL}>{t.email}</label>
+          <input id={`${id}-email`} type="email" autoComplete="email" spellCheck={false} value={email} onChange={(e) => setEmail(e.target.value)} className={VELD} aria-invalid={!!fouten.email} aria-describedby={fouten.email ? `${id}-email-fout` : undefined} />
           {fouten.email && <p id={`${id}-email-fout`} className="nh-fout">{fouten.email}</p>}
         </div>
         <div>
-          <label htmlFor={`${id}-telefoon`} className="nh-label">{t.telefoon}</label>
-          <input id={`${id}-telefoon`} type="tel" autoComplete="tel" value={telefoon} onChange={(e) => setTelefoon(e.target.value)} className="nh-veld" aria-invalid={!!fouten.telefoon} aria-describedby={fouten.telefoon ? `${id}-telefoon-fout` : undefined} />
+          <label htmlFor={`${id}-telefoon`} className={LABEL}>{t.telefoon}</label>
+          <input id={`${id}-telefoon`} type="tel" autoComplete="tel" value={telefoon} onChange={(e) => setTelefoon(e.target.value)} className={VELD} aria-invalid={!!fouten.telefoon} aria-describedby={fouten.telefoon ? `${id}-telefoon-fout` : undefined} />
           {fouten.telefoon && <p id={`${id}-telefoon-fout`} className="nh-fout">{fouten.telefoon}</p>}
         </div>
         <div>
-          <label htmlFor={`${id}-bedrijfswebsite`} className="nh-label">{t.website}</label>
+          <label htmlFor={`${id}-bedrijfswebsite`} className={LABEL}>{t.website}</label>
           {/* Tekst in plaats van type="url": zo mag "jouwbedrijf.be" zonder https:// ervoor. */}
-          <input id={`${id}-bedrijfswebsite`} type="text" inputMode="url" autoComplete="url" spellCheck={false} value={bedrijfswebsite} onChange={(e) => setBedrijfswebsite(e.target.value)} className="nh-veld" aria-invalid={!!fouten.bedrijfswebsite} aria-describedby={fouten.bedrijfswebsite ? `${id}-bedrijfswebsite-fout` : undefined} />
+          <input id={`${id}-bedrijfswebsite`} type="text" inputMode="url" autoComplete="url" spellCheck={false} value={bedrijfswebsite} onChange={(e) => setBedrijfswebsite(e.target.value)} className={VELD} aria-invalid={!!fouten.bedrijfswebsite} aria-describedby={fouten.bedrijfswebsite ? `${id}-bedrijfswebsite-fout` : undefined} />
           {fouten.bedrijfswebsite && <p id={`${id}-bedrijfswebsite-fout`} className="nh-fout">{fouten.bedrijfswebsite}</p>}
         </div>
       </div>
       <div className="mt-5">
-        <label htmlFor={`${id}-bericht`} className="nh-label">
-          {t.bericht} <span className="font-normal text-[var(--nh-grijs)]">({f.optioneel})</span>
+        <label htmlFor={`${id}-bericht`} className={LABEL}>
+          {t.bericht} <span className="font-normal text-[#6C7590]">({f.optioneel})</span>
         </label>
-        <textarea id={`${id}-bericht`} rows={3} value={bericht} onChange={(e) => setBericht(e.target.value)} className="nh-veld resize-y" />
+        <textarea id={`${id}-bericht`} rows={3} value={bericht} onChange={(e) => setBericht(e.target.value)} className={`${VELD} resize-y`} />
       </div>
 
       {/* Honeypot: voor mensen onzichtbaar en niet te bereiken, bots vullen het in. */}
@@ -147,14 +158,15 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
       </div>
 
       {status === "fout" && (
-        <p role="alert" className="nh-fout mt-5">
+        <p role="alert" className="mt-5 rounded-xl bg-red-50 px-4 py-3 text-[0.875rem] leading-[1.5] text-red-700">
           {t.fout.replace("{email}", CONTACT_EMAIL)}
         </p>
       )}
 
       <div className="mt-6">
-        <button type="submit" disabled={status === "bezig"} className="nh-knop nh-knop--breed">
+        <button type="submit" disabled={status === "bezig"} className="hp-btn hp-btn--accent hp-btn--lg w-full sm:w-auto">
           {status === "bezig" ? t.bezig : t.knop}
+          {status !== "bezig" && <ArrowRight className="h-4 w-4" aria-hidden="true" />}
         </button>
       </div>
     </form>

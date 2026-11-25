@@ -37,6 +37,7 @@ export const NL: Copy = {
   hero: {
     voorWie: "Voor zaakvoerders in Vlaanderen die hun administratie nog altijd zelf doen",
     h1: "Je bent al jaren het secretariaat van je eigen bedrijf.",
+    h1Streep: "eigen bedrijf.",
     h1Vervolg: "Wij schrijven in één week uit hoe je bedrijf werkt. Daarna doet AI het werk op jouw manier, in jouw plaats.",
     sub: "ChatGPT is slim, maar het weet niets over jouw bedrijf. Daarom beginnen we met een company brain: hierin staat hoe je werkt, je prijzen, je regels en je uitzonderingen, uitgeschreven in gewone tekst. Elke AI die we bouwen, leest dat eerst.",
     knop: "Boek een conversatie",
@@ -50,7 +51,7 @@ export const NL: Copy = {
     gesproken: "We spraken al met meer dan honderd Belgische kmo's.",
   },
 
-  // 2. Herkenbaar?
+  // 2. Herkenbaar? (door Amina ingekort op 25/11, na de comment van Alex)
   herken: {
     kicker: "Herkenbaar?",
     h2: "Je betaalt voor AI, je team gebruikt het elke dag, en toch herschrijf je uiteindelijk alles zelf.",
@@ -58,19 +59,19 @@ export const NL: Copy = {
     punten: [
       {
         titel: "Alles passeert nog altijd langs jou.",
-        tekst: "De offerte, de mail, de planning. Je team is goed, maar de laatste stap is altijd voor jou. Je avonden dus ook.",
+        tekst: "De offerte, de mail, de planning. Je team is goed, maar de laatste stap is altijd voor jou.",
       },
       {
         titel: "Je herschrijft wat AI je geeft.",
-        tekst: "Je mensen gebruiken ChatGPT elke dag. Daarna verbeter jij de toon, de prijs en die ene uitzondering waar het nooit van wist. Je vraagt je af wie er tijd gewonnen heeft, want jij was het niet.",
+        tekst: "Je mensen gebruiken ChatGPT elke dag. Daarna verbeter jij de toon, de prijs en die ene uitzondering waar het nooit van wist.",
       },
       {
         titel: "De kennis zit in één hoofd.",
-        tekst: "Welke leverancier altijd te laat is. Welke klant de uitzondering krijgt. Hoe je praat met de klant die al kwaad is. Niemand heeft het opgeschreven, en je hoopt dat die ene persoon nooit vertrekt.",
+        tekst: "Welke klant de uitzondering krijgt, welke leverancier altijd te laat is. Niemand heeft het opgeschreven, en je hoopt dat die ene persoon nooit vertrekt.",
       },
       {
         titel: "Je weet niet waar je moet beginnen.",
-        tekst: "Je hebt AI al dingen zien verzinnen, dus je vertrouwt het niet helemaal. Je hoort andere zaakvoerders zeggen dat het alles verandert, en stilletjes vraag je je af of je achterop raakt.",
+        tekst: "Je hebt AI al dingen zien verzinnen, en stilletjes vraag je je af of je achterop raakt.",
       },
     ],
     slot: "Herken je er ook maar één van? Dan ligt het probleem waarschijnlijk niet bij jou. En ook niet bij AI. Het is iets veel eenvoudigers, en net dat lossen wij op.",
@@ -78,56 +79,50 @@ export const NL: Copy = {
     kleineLink: "Of boek een conversatie",
   },
 
-  // 3. Wat is een company brain? (AI-fundament)
+  // 3. Wat is een company brain? (AI-fundament; door Amina ingekort op 25/11)
   brein: {
     h2: "AI blijft gokken naar hoe jouw bedrijf werkt. Dit is wat het niet kan zien.",
     sub: "Alles wat je elke dag beslist, zit in je hoofd. Stel je voor dat je AI dat kon lezen.",
     alineas: [
-      "Denk eens aan wat je doet zonder erbij na te denken. Een klant die al jaren bij je koopt vraagt korting, en jij weet hoe ver je kan gaan. Er komt op vrijdagnamiddag nog een opdracht binnen, en jij weet wat tot maandag kan wachten. Een klant is al kwaad, en jij weet precies hoe je met die klant moet praten.",
-      "Niets daarvan staat ergens opgeschreven. Daarom kan AI het niet, en daarom voelt het alsof je elke ochtend een nieuwe medewerker van nul moet opleiden.",
-      "Bij Finit Solutions begint elk project met dat brein. Het is eigenlijk gewoon een map met tekstbestanden over je bedrijf. In elk bestand staat één stuk juiste informatie: een proces, een regel, een uitzondering, de manier waarop je naar je klanten schrijft. Elk proces is een reeks stappen, en elke stap is een reeks kleine beslissingen. Die beslissingen schrijven wij uit, één voor één, in gewone taal. We noemen het ook je AI-fundament.",
-      "Elke AI die wij bouwen, leest eerst het brein voor hij iets doet. Zo werkt hij zoals jouw bedrijf werkt.",
+      "Een klant die al jaren bij je koopt vraagt korting, en jij weet hoe ver je kan gaan. Een kwade klant belt, en jij weet precies wat je moet zeggen. Niets daarvan staat opgeschreven, dus AI kan het niet.",
+      "Bij Finit Solutions begint elk project met een company brain: gewone tekstbestanden waarin je processen, je regels, je uitzonderingen en je toon staan, tot in de kleine beslissingen. Elke AI die we bouwen, leest dat eerst.",
     ],
-    veranderTitel: "Er veranderen twee dingen:",
     verander: [
       {
-        titel: "AI doet het werk op jouw manier.",
-        tekst: "Dezelfde tool, maar de offerte, het antwoord en de planning zien eruit zoals jouw bedrijf ze maakt.",
+        titel: "AI werkt op jouw manier.",
+        tekst: "De offerte, het antwoord en de planning zien eruit zoals jouw bedrijf ze maakt.",
       },
       {
         titel: "Je kennis hangt niet meer af van één persoon.",
-        tekst: "Is er iemand ziek, of vertrekt er iemand, dan vertrekt de kennis niet mee.",
+        tekst: "Vertrekt er iemand, dan blijft de kennis.",
       },
     ],
     slot: "En het blijft van jou. Het is gewone tekst, dus elk AI-model kan het lezen, vandaag en later.",
     knop: "Toon me hoe het werkt",
   },
 
-  // 4. Hoe we werken
+  // 4. Hoe we werken (volgorde rechtgezet door Alex, 24/11: eerst de gesprekken en de
+  // offerte, pas na het tekenen het brein, daarna bouwen). Het gesprek duurt een uur (Alex, 25/11).
   werkwijze: {
     h2: "Geen tijd voor een AI-project? Goed, want die heb je hiervoor niet nodig.",
     sub: "Je hoeft geen enkele pagina te schrijven. Je hoeft alleen te vertellen.",
-    intro: "Je hebt het druk, en je hebt geen week over voor een AI-project. Daarom doen wij het anders: jij vertelt, wij doen het werk, en niemand hoeft iets te installeren.",
+    stap: "Stap",
     stappen: [
       {
-        titel: "Een gratis conversatie.",
-        tekst: "Een uur, vrijblijvend. Jij vertelt hoe je bedrijf draait en waar de tijd naartoe gaat. Wij luisteren vooral.",
+        titel: "Een gratis eerste conversatie",
+        tekst: "Een uur. Jij vertelt hoe je bedrijf draait en waar de tijd naartoe gaat. Wij luisteren vooral, en we zeggen je eerlijk of we bij elkaar passen.",
       },
       {
-        titel: "De breinweek.",
-        tekst: "In één week brengen we je bedrijf in kaart. We zitten twee uur samen met jou als zaakvoerder. Daarna komen we een dag ter plaatse bij de mensen die het werk elke dag doen, want zij weten vaak het best hoe het er echt aan toegaat. Wij schrijven alles uit.",
+        titel: "Nog een paar gesprekken, tot we je een offerte kunnen geven",
+        tekst: "We praten verder, online of bij jou, tot we genoeg weten om een duidelijk plan en een prijs op papier te zetten. Je hoeft niets voor te bereiden. Je legt uit hoe je werkt. Elk gesprek tot dan kost je niets, en er start niets voor jij ja hebt gezegd.",
       },
       {
-        titel: "Je roadmap en je offerte.",
-        tekst: "Je ziet wat AI als eerste kan overnemen, in volgorde van wat het meest opbrengt, met een offerte per onderdeel. Wat je niet nodig hebt, laat je weg.",
+        titel: "We schrijven je bedrijf uit",
+        tekst: "Zodra je tekent, zitten we één week samen met jou en je team, want de mensen die het werk doen weten vaak het best hoe het er echt aan toegaat. We schrijven uit hoe je bedrijf draait, tot in de kleine beslissingen. Dat is je company brain, en het is van jou.",
       },
       {
-        titel: "We bouwen, stuk voor stuk.",
-        tekst: "Gekoppeld aan de software die je al gebruikt. Alles begint in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. Jij test elk stuk voor we verdergaan.",
-      },
-      {
-        titel: "Het draait, en wij blijven.",
-        tekst: "We houden het in de gaten, lossen problemen op en werken het bij. Om de drie maanden zitten we samen om te kijken wat er nog van je bord kan.",
+        titel: "Daarna bouwen we",
+        tekst: "Bovenop het brein, en gekoppeld aan de software die je al gebruikt. Alles begint in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. We blijven erbij om het draaiende te houden.",
       },
     ],
     knop: "Boek een conversatie",
@@ -158,14 +153,10 @@ export const NL: Copy = {
   bouwen: {
     h2: "De mails, de offertes, de planning, het invullen van het CRM.",
     sub: "Het werk dat je avonden vult, is precies waarvoor wij bouwen.",
-    intro: "Alles wat Finit Solutions bouwt, vertrekt van hetzelfde brein.",
-    niveaus: [
-      "Het eenvoudigste dat we bouwen volgt een vaste regel: als dit gebeurt, doe dan dat.",
-      "Daarna komen workflows, waarin AI iets leest en de volgende stap voorbereidt.",
-      "Dan AI-werknemers, die beslissingen nemen over je software heen, zoals een medewerker die je mailbox in de gaten houdt en afhandelt wat er binnenkomt.",
-      "Daarboven kan één AI-werknemer er meerdere aansturen.",
-      "En als geen enkel bestaand pakket past, bouwen we software op maat rond wat je echt nodig hebt.",
-    ],
+    // De eerste zin is van Amina. De tweede vervangt haar uitleg van de vijf soorten (comment van
+    // Alex, 25/11: te veel uitleg; men wil alleen weten dat we bouwen wat het best past, van een
+    // eenvoudige automatisering tot een team van AI-agents of software op maat). Zijn woorden.
+    intro: "Alles wat Finit Solutions bouwt, vertrekt van hetzelfde brein. We bouwen wat voor jou het best werkt en het minst kost: een eenvoudige automatisering, een team van AI-werknemers of software volledig op maat.",
     praktijk: "Zo ziet dat er in de praktijk uit. Alle voorbeelden zijn anoniem gemaakt.",
     cases: [
       {
@@ -318,26 +309,26 @@ export const NL: Copy = {
     knop: "Boek een conversatie",
   },
 
-  // 10. Voor wie is dit
+  // 10. Voor wie is dit. Elk punt maakt de zin af na "... als:" (dus "je een knop wil", niet "je wil een knop").
   voorWie: {
     h2: "We zeggen je liever nee dan je tijd te verspillen.",
     niet: {
       titel: "Het is niets voor jou als:",
       items: [
-        "Je wil een knop die alles vanzelf doet. Die bestaat niet.",
-        "Je wil een snelle oplossing zonder dat het jou of je team tijd kost.",
+        "Je een knop wil die alles vanzelf doet. Die bestaat niet.",
+        "Je een snelle oplossing wil zonder dat het jou of je team tijd kost.",
         "Je wil dat AI je mensen vervangt in plaats van hen te helpen.",
-        "Er is vandaag geen echte pijn. In dat geval zeggen we je dat eerlijk.",
+        "Er vandaag geen echte pijn is. In dat geval zeggen we je dat eerlijk.",
       ],
     },
     wel: {
       titel: "Finit Solutions werkt het best voor jou als:",
       items: [
-        "Je leidt een klein of middelgroot dienstenbedrijf.",
-        "Je team verliest tijd aan mails, offertes, planning en het invullen van het CRM.",
-        "Er hangt te veel af van jou of van één sleutelpersoon.",
+        "Je een klein of middelgroot dienstenbedrijf leidt.",
+        "Je team tijd verliest aan mails, offertes, planning en het invullen van het CRM.",
+        "Er te veel afhangt van jou of van één sleutelpersoon.",
         "Je wil beginnen delegeren, met een gerust hart.",
-        "Je bent bereid om een paar uur uit te leggen hoe je bedrijf echt werkt.",
+        "Je bereid bent om een paar uur uit te leggen hoe je bedrijf echt werkt.",
       ],
     },
     slot: "We gaan diep in op hoe je bedrijf werkt, en dat vraagt wat van je tijd. Net daarom werkt het daarna ook.",

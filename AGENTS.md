@@ -12,7 +12,7 @@ This document provides guidance for AI coding agents working on this Next.js 14 
 
 ## Homepage on branch `homepage-amina` (25/11/2026, read this first)
 
-The homepage (`/`, `/en/`) and "Over ons" (`/over-ons/`, `/en/about/`) were rebuilt on branch `homepage-amina` with Amina's copy and a new design. Everything lives in `components/homepage-amina/`: read `components/homepage-amina/DESIGN.md` before touching it (palette, type, rules, what is still open). All text is in `copy.nl.ts` and `copy.en.ts`, styles in `homepage.css` (prefix `nh-`). The older `components/home/` still serves `/cases`, `/contact`, `/vacatures` and `/bedankt`; the section below describes that older work. Never push this branch to `main` without Alex.
+The homepage (`/`, `/en/`) and "Over ons" (`/over-ons/`, `/en/about/`) were rebuilt on branch `homepage-amina` with Amina's copy, in the house style of the live site (the `hp-` block, no illustrations). Everything lives in `components/homepage-amina/`: read `components/homepage-amina/DESIGN.md` before touching it (palette, type, rules, what is still open). All text is in `copy.nl.ts` and `copy.en.ts`, the few extra styles in `homepage.css` (prefix `nh-`). The older `components/home/` still serves `/cases`, `/contact`, `/vacatures` and `/bedankt`; the section below describes that older work. Never push this branch to `main` without Alex.
 
 ## Homepage on branch `rework/homepage-lesreeks` (older)
 

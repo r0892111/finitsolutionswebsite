@@ -3,7 +3,8 @@
  *
  * De tekst zelf staat in ./copy.nl.ts (standaard, finitsolutions.be/) en
  * ./copy.en.ts (finitsolutions.be/en/). Bron: de tab "Hub copy" van Amina in de
- * Google Doc "Upwork scripts" (24/11/2026). Het Engels is haar tekst; het
+ * Google Doc "Upwork scripts" (stand 25/11/2026, na de comments van Alex: de secties
+ * 2, 3 en 4 zijn door Amina ingekort en de stappen staan in de juiste volgorde). Het Engels is haar tekst; het
  * Nederlands is de vertaling in de stem van Alex (stemprofiel §13).
  *
  * Regel (Alex, 25/11): alleen de copy van Amina, zoals zij ze bedoelde. Niets
@@ -37,6 +38,8 @@ export interface Copy {
   hero: {
     voorWie: string;
     h1: string;
+    /** De laatste woorden van de h1: die krijgen de amberkleurige streep van de huisstijl. */
+    h1Streep: string;
     h1Vervolg: string;
     sub: string;
     knop: string;
@@ -58,7 +61,6 @@ export interface Copy {
     h2: string;
     sub: string;
     alineas: string[];
-    veranderTitel: string;
     verander: { titel: string; tekst: string }[];
     slot: string;
     knop: string;
@@ -66,7 +68,8 @@ export interface Copy {
   werkwijze: {
     h2: string;
     sub: string;
-    intro: string;
+    /** Het woord voor het pilletje op elke kaart: "Stap 1", "Stap 2". */
+    stap: string;
     stappen: { titel: string; tekst: string }[];
     knop: string;
   };
@@ -80,8 +83,6 @@ export interface Copy {
     h2: string;
     sub: string;
     intro: string;
-    /** De vijf zinnen van Amina, van eenvoudig naar veel. Geen eigen tussenkopjes. */
-    niveaus: string[];
     praktijk: string;
     /** Wat we voor de klant doen. Geen stand van het project: dat hoort niet op een verkoopsite (Alex, 25/11). */
     cases: { sector: string; tekst: string }[];
