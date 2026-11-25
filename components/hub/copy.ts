@@ -126,7 +126,8 @@ export const HUB = {
     },
     verstuur: "Vraag het gesprek aan",
     bezig: "Versturen…",
-    privacy: "We gebruiken je gegevens alleen om je te contacteren.",
+    // Eerlijk over de PAPI (25/11): elke lead wordt voorbereid met openbare info en AI-tools.
+    privacy: "We gebruiken je gegevens om je te contacteren en om het gesprek voor te bereiden. Daarvoor bekijken we openbare info over je bedrijf, ook met AI-tools.",
     privacyLink: "Privacyverklaring",
     fout: "Het versturen lukte niet. Probeer het opnieuw of mail ons op {email}.",
     bedankt: "Bedankt{naam}. We nemen contact met je op om een eerste gesprek in te plannen.",
@@ -208,7 +209,8 @@ export const HUB = {
     // Het vinkje (standaard uit, beslissing 20/11: een vooraf aangevinkt vakje is geen geldige toestemming).
     // "Hooguit twee per maand" is een belofte: pas aan als het ritme anders wordt.
     mailsKop: "Ja, hou me op de hoogte.",
-    mails: "Af en toe een mail met AI-nieuwtjes en tips waar je bedrijf echt iets aan heeft. Hooguit twee per maand. Afmelden kan altijd, met één klik.",
+    // Dubbele bevestiging (25/11): pas na de klik in die mail staat iemand op de lijst.
+    mails: "Af en toe een mail met AI-nieuwtjes en tips waar je bedrijf echt iets aan heeft. Hooguit twee per maand. Je krijgt eerst een mail om te bevestigen. Afmelden kan altijd, met één klik.",
     knop: "Open de prompts en gidsen",
     bezig: "Even geduld…",
     privacy:

@@ -203,6 +203,27 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                         Voor de duur van behandeling van uw vraag of bericht en onze daaropvolgende samenwerking.
                       </td>
                     </tr>
+                    {/* Nieuw 25/11/2026: de automatische voorbereiding van een aanvraag (de PAPI). Te laten nalezen door de advocaat. */}
+                    <tr className="border-t">
+                      <td className="p-3 align-top">
+                        Identificatie- en contactgegevens en uw antwoorden uit een formulier op de website; Openbare
+                        gegevens over uw bedrijf
+                      </td>
+                      <td className="p-3 align-top">
+                        Om ons eerste contact met u voor te bereiden. Na uw aanvraag zoeken we automatisch openbare
+                        informatie op over uw bedrijf (de Kruispuntbank van Ondernemingen, de jaarrekeningen bij de
+                        Nationale Bank van België, uw website, vacatures en artikels) en vatten we die samen voor de
+                        medewerker die u contacteert. Daarvoor gebruiken we ook AI-tools. Ontvangers en doorgifte buiten
+                        de EER: zie punt 14 en 15.
+                      </td>
+                      <td className="p-3 align-top">
+                        Gerechtvaardigd belang van Finit Solutions om goed voorbereid met u in gesprek te gaan. U kan zich
+                        hiertegen altijd verzetten (zie het recht van bezwaar in punt 9).
+                      </td>
+                      <td className="p-3 align-top">
+                        Voor de duur van behandeling van uw aanvraag en onze eventuele samenwerking.
+                      </td>
+                    </tr>
                     <tr className="border-t">
                       <td className="p-3 align-top">E-mailadres</td>
                       <td className="p-3 align-top">
@@ -216,7 +237,8 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                       <td className="p-3 align-top">E-mailadres, als u het vakje aanvinkt</td>
                       <td className="p-3 align-top">
                         Om u af en toe (hooguit twee keer per maand) te mailen met AI-nieuwtjes en tips waar uw bedrijf iets
-                        aan heeft. Afmelden kan altijd via de link onderaan elke mail.
+                        aan heeft. U staat pas op de lijst nadat u dat bevestigt via de mail die we u eerst sturen. Afmelden kan
+                        altijd via de link onderaan elke mail.
                       </td>
                       <td className="p-3 align-top">Toestemming.</td>
                       <td className="p-3 align-top">Tot u zich afmeldt.</td>
@@ -433,6 +455,7 @@ Verder geven wij geen persoonsgegevens door aan derden, tenzij wij hiertoe verpl
 In het bijzonder identificeren we volgende categorieën van ontvangers:
 Overheden of regulerende instanties wanneer zij hierom verzoeken in het kader van de naleving van een vonnis of arrest, wetgeving, regulering, norm of juridische procedure;
 Externe (IT)-dienstverleners die ons ondersteunen bij het aanbieden van functionaliteiten op de website en het uitvoeren van onze bedrijfsactiviteiten;
+Aanbieders van automatiserings- en AI-diensten die ons helpen een aanvraag via de website voor te bereiden: GitHub (Microsoft) voert de automatische opzoeking uit, Anthropic (Claude) vat de informatie samen en Firecrawl haalt de openbare pagina's van uw website op;
 Externe juridische en financiële adviseurs en consultants in het kader van hun dienstverlening;
 Marketing- en communicatiepartners die ons bijstaan bij het opzetten en uitvoeren van campagnes, nieuwsbrieven en andere communicatie-initiatieven;
 Financiële instellingen en betalingsdienstverleners voor de afhandeling van transacties.
@@ -446,6 +469,12 @@ Financiële instellingen en betalingsdienstverleners voor de afhandeling van tra
                 We geven uw persoonsgegevens uitsluitend door aan verwerkers of verwerkingsverantwoordelijken in derde landen, voor zover we hiertoe wettelijk gerechtigd zijn of indien dit noodzakelijk is om een dossier te behandelen.
 Voor zover dergelijke doorgiften nodig zijn, nemen wij de nodige maatregelen om ervoor te zorgen dat uw persoonsgegevens in hoge mate worden beschermd en dat alle doorgiften van persoonsgegevens buiten de EER rechtmatig plaatsvinden.
 
+              </p>
+              <p>
+                Wanneer we een aanvraag via een formulier op de website voorbereiden (zie punt 5), worden uw gegevens ook
+                verwerkt door dienstverleners in de Verenigde Staten: GitHub (Microsoft), Anthropic en Firecrawl. Die
+                doorgifte gebeurt op basis van de passende waarborgen uit de AVG, zoals het EU-VS-gegevensprivacykader of de
+                standaardcontractbepalingen van de Europese Commissie.
               </p>
 
               {/* 16. Beveiliging */}
