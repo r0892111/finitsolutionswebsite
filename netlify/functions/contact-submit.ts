@@ -26,7 +26,8 @@
  * hubformulier (/hub/, met het veld `hub`) als item op het bord Leads › Socials,
  * met het kanaal, de reel en hoe ver de VSL bekeken werd; de kijkbeurt van de
  * VSL-meting krijgt dan "formulier verstuurd". Alle andere (popup, vraagformulier)
- * via Jords route /api/intake/website-lead naar het bord Content. Mislukt Tuesday,
+ * sinds 25/11 ook naar Socials, groep "Ads en content", met bron Website (het bord
+ * Content is weg). Mislukt Tuesday,
  * dan vertrekken mail en monday gewoon; de fout wordt gelogd zonder
  * persoonsgegevens en zonder sleutel.
  *
@@ -79,6 +80,9 @@ const KANALEN: Record<string, string> = {
 };
 
 // Een gratis mailadres zegt niets over het bedrijf: dan heet het item naar de persoon.
+/** Socials › "Ads en content": popup en vraagformulier (vast id, zodat een hernoemde groep niets breekt). */
+const SOCIALS_WEBSITE_GROEP = "groep_1";
+
 const GRATIS_MAIL = new Set([
   "gmail.com", "googlemail.com", "hotmail.com", "hotmail.be", "outlook.com", "outlook.be", "live.com", "live.be",
   "msn.com", "icloud.com", "me.com", "yahoo.com", "telenet.be", "skynet.be", "proximus.be", "scarlet.be",
@@ -188,8 +192,8 @@ export default async (req: Request, context: Context): Promise<Response> => {
   if (stop) return stop;
   const id = aanvraagId(body);
 
-  // Tuesday, monday en de kijkbeurt lopen parallel. Het hubformulier gaat alleen naar
-  // Socials, de rest naar Content.
+  // Tuesday, monday en de kijkbeurt lopen parallel. Alles gaat naar Socials: de hub naar de
+  // eerste groep, popup en vraagformulier naar "Ads en content" (vast id).
   const hub = vanHub ? leesHub(body.hub) : null;
   let tuesdayBelofte: Promise<TuesdayStatus> = Promise.resolve("off");
   if (hub) {
@@ -212,16 +216,23 @@ export default async (req: Request, context: Context): Promise<Response> => {
     if (hub.pagina) values.pagina = hub.pagina;
     tuesdayBelofte = naarTuesday(TUESDAY.socials, { name: naamItem, values }, "contact-submit");
   } else if (!vanHub) {
-    // Jords route vraagt name, email en message; de popup heeft geen bericht.
-    const lead: Record<string, string> = {
-      name: naam,
+    // Popup en vraagformulier: sinds Luka het bord Content op 25/11 weghaalde, ook naar Socials,
+    // groep "Ads en content" (vast id), met bron Website. De popup heeft geen bericht.
+    const mailDomein = email.split("@")[1]?.toLowerCase() ?? "";
+    const naamItem = domein(bedrijfswebsite) || (mailDomein && !GRATIS_MAIL.has(mailDomein) ? mailDomein : "") || naam;
+    const values: Record<string, string | number> = {
+      status: "New lead 0%",
+      bron: "Website",
+      contact_name: naam,
       email,
       message: bericht || "Wil een kennismaking plannen (popup op de website).",
-      page: pagina,
+      pagina,
     };
-    if (telefoon) lead.phone = telefoon;
-    if (bedrijfswebsite) lead.website = bedrijfswebsite;
-    tuesdayBelofte = naarTuesday(TUESDAY.websiteLead, lead, "contact-submit");
+    if (telefoon) values.phone = telefoon;
+    if (bedrijfswebsite && websiteOk(bedrijfswebsite)) {
+      values.website = /^https?:\/\//i.test(bedrijfswebsite) ? bedrijfswebsite : `https://${bedrijfswebsite}`;
+    }
+    tuesdayBelofte = naarTuesday(TUESDAY.socials, { name: naamItem, group_id: SOCIALS_WEBSITE_GROEP, values }, "contact-submit");
   }
   const kijkBelofte = hub?.kijkbeurt
     ? markeerFormulier(hub.kijkbeurt.id, hub.kijkbeurt.dag).catch(() => console.error("contact-submit: kijkbeurt niet bijgewerkt"))
@@ -250,7 +261,7 @@ export default async (req: Request, context: Context): Promise<Response> => {
 
   const tuesdayStatus = await tuesdayBelofte;
   await kijkBelofte;
-  const bord = hub ? "Socials" : "Content";
+  const bord = "Socials";
   const tuesdayRegel =
     tuesdayStatus === "ok"
       ? `<p style="margin:8px 0 0;font-size:14px;color:#6C7590">Tuesday: item op het bord ${bord}.</p>`
