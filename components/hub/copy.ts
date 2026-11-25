@@ -145,13 +145,23 @@ export const HUB = {
       telefoonLeeg: "Vul je telefoonnummer in.",
       telefoon: "Dit telefoonnummer klopt niet. Bijvoorbeeld 0470 12 34 56 of +32 470 12 34 56.",
     },
-    verstuur: "Vraag het gesprek aan",
+    verstuur: "Boek een conversatie",
     bezig: "Versturen…",
     privacy: "We gebruiken je gegevens alleen om je te contacteren.",
     privacyLink: "Privacyverklaring",
     fout: "Het versturen lukte niet. Probeer het opnieuw of mail ons op {email}.",
-    bedankt: "Bedankt{naam}. We nemen contact met je op om een eerste gesprek in te plannen.",
-    bedanktSub: "Kunnen we je niet helpen, dan zeggen we dat ook eerlijk.",
+    // Na het versturen (Amina en Alex 25/11): eerst een apart venster met een klein feestje,
+    // daarachter blijft deze korte bevestiging staan op de plaats van het formulier.
+    bedankt: "Bedankt{naam}. We nemen binnen de 24 uur contact met je op om je conversatie in te plannen.",
+    venster: {
+      titel: "Bedankt{naam}, je aanvraag is binnen.",
+      sub: "We nemen binnen de 24 uur contact met je op om je conversatie in te plannen.",
+      urgentie: "Nieuwe projecten plannen we maandelijks in. Hou je telefoon bij de hand: hoe sneller we spreken, hoe groter de kans dat je er volgende maand al bij bent.",
+      meer: "Lees hoe we te werk gaan",
+      meerHref: "/#aanpak",
+      terug: "Terug naar de pagina",
+      sluiten: "Sluiten",
+    },
     // Kop boven de antwoorden in de mail en op monday.
     berichtKop: "Antwoorden uit het formulier op de hub:",
     // Gaat mee in het bericht naar contact@, monday en Tuesday (uit de kijkmeting van dit bezoek).

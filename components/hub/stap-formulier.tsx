@@ -19,7 +19,7 @@
  * foute veld. De server doet dezelfde controle (lib/contact-velden.ts).
  */
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { EMAIL_RE, telefoonOk } from "@/lib/contact-velden";
@@ -27,6 +27,7 @@ import { kijkProcent, kijkbeurtVoorFormulier } from "./kijkmeting";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { HUB, vetStukken } from "./copy";
 import { useBescherming } from "@/components/formulier-bescherming";
+import { BedanktVenster } from "@/components/bedankt-venster";
 
 const SUBMIT_URL = "/api/contact-submit";
 const TIMEOUT_MS = 10000;
@@ -77,6 +78,8 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
   const [honing, setHoning] = useState(""); // honeypot: blijft leeg bij mensen
   const bescherming = useBescherming(); // aanvraag_id, invultijd, tweede honeypot, Turnstile
   const [status, setStatus] = useState<Status>(null);
+  const [venster, setVenster] = useState(false);
+  const sluitVenster = useCallback(() => setVenster(false), []);
   // Pas na de eerste poging tot versturen tonen we meldingen; daarna lopen ze mee met wat je typt.
   const [geprobeerd, setGeprobeerd] = useState(false);
   const gemeld = useRef(false);
@@ -181,6 +184,7 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
       if (!res.ok) throw new Error(`status ${res.status}`);
       bescherming.naVersturen(true);
       setStatus("klaar");
+      setVenster(true);
       pushEvent("form_submitted", { ...meta, location: "hub" });
     } catch {
       bescherming.naVersturen(false);
@@ -203,7 +207,13 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
         <p className="hp-display hp-display-sm mx-auto mt-5 max-w-[30rem] text-balance text-[1.4rem] font-semibold leading-[1.25] text-[#1A2D63]">
           {F.bedankt.replace("{naam}", voornaam ? `, ${voornaam}` : "")}
         </p>
-        <p className="mt-3 text-[1rem] text-[#3D4766]">{F.bedanktSub}</p>
+        {venster && (
+          <BedanktVenster
+            tekst={{ ...F.venster, titel: F.venster.titel.replace("{naam}", voornaam ? `, ${voornaam}` : "") }}
+            onSluit={sluitVenster}
+            onMeer={() => pushEvent("hub_klik", { ...meta, keuze: "bedankt_aanpak" })}
+          />
+        )}
       </div>
     );
   }
