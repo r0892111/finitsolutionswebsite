@@ -70,6 +70,8 @@
 
 /* Secties liggen op dezelfde grond: de witruimte en de kop scheiden ze, geen banden. */
 .nh-sectie { padding-block: 48px; scroll-margin-top: 72px; }
+/* Een tweede naam voor een sectie (oude links blijven werken): staat vlak voor de sectie, zonder hoogte. */
+.nh-anker { display: block; scroll-margin-top: 72px; }
 @media (min-width: 1024px) { .nh-sectie { padding-block: 72px; } }
 .nh-donker { background: var(--nh-inkt); color: var(--nh-op-inkt); }
 .nh-band { background: var(--nh-band); color: var(--nh-op-band); }

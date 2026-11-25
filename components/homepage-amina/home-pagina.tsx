@@ -183,6 +183,8 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* ---------------------------------------------------------- */}
         {/* 4. Hoe we werken                                           */}
         {/* ---------------------------------------------------------- */}
+        {/* De knop onder het formulier op /hub linkt naar /#aanpak (zo heette deze sectie op de vorige homepage). */}
+        <span id="aanpak" className="nh-anker" aria-hidden="true" />
         <section id="werkwijze" className="nh-sectie">
           <div className="nh-wrap nh-rail">
             <div className="nh-rail-vast">
