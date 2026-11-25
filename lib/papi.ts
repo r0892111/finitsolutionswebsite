@@ -1,5 +1,6 @@
 /**
- * Seintje aan de PAPI-automaat (GitHub Actions in Finit-Solutions-BV/papi-automaat):
+ * Seintje aan de PAPI-automaat: start de workflow papi.yml in Finit-Solutions-BV/papi-automaat
+ * (de sleutel mag alleen workflows starten, geen code wijzigen):
  * er staat een nieuwe lead in Tuesday. GitHub leest de lead zelf uit Tuesday, dus hier
  * gaat geen naam, mail of telefoon mee. Alleen sturen NA een geslaagde schrijfactie in Tuesday.
  *
@@ -12,7 +13,7 @@ export async function papiSeintje(wie: string): Promise<void> {
   const timer = new AbortController();
   const t = setTimeout(() => timer.abort(), 3000);
   try {
-    const res = await fetch("https://api.github.com/repos/Finit-Solutions-BV/papi-automaat/dispatches", {
+    const res = await fetch("https://api.github.com/repos/Finit-Solutions-BV/papi-automaat/actions/workflows/papi.yml/dispatches", {
       method: "POST",
       signal: timer.signal,
       headers: {
@@ -21,7 +22,7 @@ export async function papiSeintje(wie: string): Promise<void> {
         "X-GitHub-Api-Version": "2022-11-28",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ event_type: "nieuwe-lead" }),
+      body: JSON.stringify({ ref: "main" }),
     });
     if (res.status !== 204) console.error(`${wie}: PAPI-seintje gaf status`, res.status);
   } catch (err) {
