@@ -7,20 +7,22 @@
  * 1. een item in Tuesday op het bord Leads › Socials, in de groep "Cursus (Skool)",
  *    met dezelfde kolommen als de hubleads (zodat ook de automatische PAPI erop loopt);
  * 2. de kijkbeurt van de VSL krijgt "formulier verstuurd";
- * 3. een mail naar contact@ via Brevo, met een regel over Tuesday.
+ * 3. een mail naar contact@ via Brevo, met een regel over Tuesday;
+ * 4. staat de lead in Tuesday, een seintje aan de PAPI-automaat (lib/papi.ts), tegelijk met de mail.
  *
  * Mislukt Tuesday, dan vertrekt de mail toch, met de vraag het item manueel te maken.
  * Naam, e-mail, telefoon en website zijn verplicht (Alex, 25/11). Geen monday: de
  * cursusleads leven alleen in Tuesday.
  *
  * Env (dezelfde als contact-submit): BREVO_API_KEY, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL,
- * CRM_API_TOKEN of CRM_SOCIALS_TOKEN. Nooit loggen.
+ * CRM_API_TOKEN of CRM_SOCIALS_TOKEN, en PAPI_GITHUB_TOKEN (optioneel). Nooit loggen.
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
 import { EMAIL_RE, telefoonOk } from "../../lib/contact-velden";
 import { CURSUS_GROEP, domein, websiteOk } from "../../lib/cursus-aanvraag";
 import { markeerFormulier } from "../../lib/vsl-meting-opslag";
 import { naarTuesday, TUESDAY } from "../../lib/tuesday";
+import { papiSeintje } from "../../lib/papi";
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
@@ -124,6 +126,8 @@ export const handler: Handler = async (event: HandlerEvent) => {
     ? markeerFormulier(event, kijkbeurt.id, kijkbeurt.dag).catch(() => console.error("cursus-aanvraag: kijkbeurt niet bijgewerkt"))
     : Promise.resolve();
   const [tuesday] = await Promise.all([tuesdayBelofte, kijkBelofte]);
+  // Pas na "ok": anders vindt de automaat de lead nog niet. Loopt naast de mail, zodat de bezoeker niet langer wacht.
+  const papiBelofte = tuesday === "ok" ? papiSeintje("cursus-aanvraag") : Promise.resolve();
 
   const plek = `het bord Socials, groep ${CURSUS_GROEP}`;
   const tuesdayRegel =
@@ -169,12 +173,16 @@ export const handler: Handler = async (event: HandlerEvent) => {
     });
     if (!res.ok) {
       console.error("cursus-aanvraag: Brevo gaf", res.status);
+      await papiBelofte;
       return json(502, { error: "mail_failed", status: res.status });
     }
   } catch (err) {
     console.error("cursus-aanvraag: netwerkfout", err instanceof Error ? err.name : "");
+    await papiBelofte;
     return json(502, { error: "mail_failed" });
   }
+  // Een functie mag niet antwoorden voor het seintje weg is (daarna kan ze bevriezen).
+  await papiBelofte;
 
   return json(200, { ok: true, tuesday });
 };
