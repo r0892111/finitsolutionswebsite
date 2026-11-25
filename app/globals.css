@@ -1098,10 +1098,11 @@ html {
 .hub-steun-logo--elevenlabs { height: 24px; }
 @media (max-width: 767px) {
   .hub-steun-label { font-size: 11px; }
-  .hub-steun-logos { gap: 14px 22px; margin-top: 12px; }
-  .hub-steun-logo--vlaio { height: 24px; }
-  .hub-steun-logo--kbc { height: 19px; }
-  .hub-steun-logo--elevenlabs { height: 14px; }
+  /* Op één rij op een gsm van 375 px (±325 px breed samen). */
+  .hub-steun-logos { gap: 12px 18px; margin-top: 12px; }
+  .hub-steun-logo--vlaio { height: 22px; }
+  .hub-steun-logo--kbc { height: 17px; }
+  .hub-steun-logo--elevenlabs { height: 13px; }
 }
 
 /* Voor wie wel en niet (Alex 25/11, zoals de ✅/❌-rijen bij Shadowboys maar naast elkaar):
