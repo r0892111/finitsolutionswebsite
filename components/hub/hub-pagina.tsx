@@ -224,7 +224,11 @@ export function HubPagina({ start }: { start?: "resources" }) {
               onClick={() => pushEvent("hub_klik", { ...meta, keuze: "website_aanpak" })}
               className="hub-naar-website inline-flex items-center rounded-full border border-[#1A2D63]/20 bg-white font-semibold text-[#1A2D63] transition-colors hover:bg-[#F5F7FB]"
             >
-              {HUB.naarWebsite.tekst}
+              {/* Op gsm bewust twee regels: de vraag, dan de rest. */}
+              <span>
+                {HUB.naarWebsite.vraag} <br className="sm:hidden" />
+                {HUB.naarWebsite.tekst}
+              </span>
               <ArrowRight aria-hidden="true" />
             </a>
           </div>

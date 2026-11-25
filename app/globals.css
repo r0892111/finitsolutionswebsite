@@ -1143,6 +1143,7 @@ html {
   .hub-wie-icoon--klein { width: 24px; height: 24px; }
   .hub-wie-lijst li { font-size: 16px; gap: 10px; padding: 12px 0; }
   .hub-faq-meer, .hub-naar-website { font-size: 15px; min-height: 48px; padding: 10px 20px; }
+  .hub-naar-website { border-radius: 18px; line-height: 1.35; }
 }
 @media (max-width: 380px) {
   .hub-hero-vsl .hub-titel { font-size: 32px; }

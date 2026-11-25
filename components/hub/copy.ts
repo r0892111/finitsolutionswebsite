@@ -37,7 +37,7 @@ export const HUB = {
   // Onder het formulier (Alex 25/11): voor wie nog twijfelt, naar de aanpak op de homepage.
   // De nieuwe homepage (tak homepage-amina) noemt die sectie "werkwijze": pas het anker
   // aan zodra die live gaat.
-  naarWebsite: { tekst: "Twijfel je nog? Lees hier hoe we te werk gaan", href: "/#aanpak" },
+  naarWebsite: { vraag: "Twijfel je nog?", tekst: "Lees hier hoe we te werk gaan", href: "/#aanpak" },
 
   // Vlak onder de video (Alex 25/11): wie ons steunt, met hun logo's uit /public.
   steun: {
