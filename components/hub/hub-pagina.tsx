@@ -7,7 +7,7 @@
  * video bekijken en het formulier invullen. Van boven naar onder:
  *
  * 1. een smalle strook naar de gratis resources onderaan;
- * 2. badge (voor wie), kop, subzin, de video, twee pillen, de knop;
+ * 2. badge, kop, subzin, de video, één zin onder de video, de knop;
  * 3. het formulier, vraag per vraag (vlak onder de video, zoals bij hen);
  * 4. de twijfels uit de video als korte FAQ;
  * 5. de gratis prompts en gidsen, achter een e-mailslot.
@@ -182,13 +182,8 @@ export function HubPagina({ start }: { start?: "resources" }) {
             <VslSpeler meta={meta} onNaarFormulier={() => naarFormulier("einde_video")} />
           </div>
 
-          <ul className="hub-pillen flex flex-wrap justify-center">
-            {HUB.pillen.map((p) => (
-              <li key={p} className="hub-pil inline-flex items-center rounded-full border border-[#1A2D63]/20 bg-white font-semibold text-[#1A2D63]">
-                {p}
-              </li>
-            ))}
-          </ul>
+          {/* Lettergrootte van de subzin, witruimte van de vroegere pillen. */}
+          <p className="hub-sub hub-pillen text-balance font-semibold text-[#1A2D63]">{HUB.onderVideo}</p>
 
           <button
             type="button"

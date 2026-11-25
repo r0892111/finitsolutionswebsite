@@ -25,15 +25,16 @@ export const HUB = {
   // Dezelfde strook als iemand via ?reel=C03 komt en er een resource bij die post hoort.
   strookUitPost: { tekst: "De prompts uit de post?", link: "Hier vind je ze" },
 
-  // Hero: badge (voor wie), kop met één woordgroep in accentkleur, subzin.
-  badge: "Voor zaakvoerders/management van kmo's",
-  kop: { voor: "Laat AI werken zoals", accent: "jouw bedrijf werkt" },
-  sub: "In één week schrijven we uit hoe jouw bedrijf draait. Daarna neemt AI het manuele werk over. Gebaseerd op meer dan 25 analysetrajecten.",
+  // Hero: badge, kop met één woordgroep in accentkleur, subzin. Copy van Amina,
+  // tab "for VSL page" in de doc Upwork scripts, vertaald 25/11/2026 (Alex).
+  badge: "Finit Solutions, de grootste bouwer van company brains in België",
+  kop: { voor: "Deze video gaat niet echt over AI.", accent: "Hij gaat over wat er in je hoofd zit." },
+  sub: "Je prijzen, je uitzonderingen, hoe je omgaat met die ene moeilijke klant. We schrijven het allemaal uit in één week, en dat verandert wat AI voor je kan doen. Bekijk de video en beslis dan zelf of het iets voor jou is.",
 
-  // Twee pillen onder de video: de twee bezwaren die het vaakst terugkomen.
-  pillen: ["Geen technische kennis nodig", "Enkele uren van jouw tijd"],
-  knop: "Plan een vrijblijvend gesprek",
-  knopNoot: "Vul dit formulier in om een gesprek in te plannen. Duurt 60 seconden.",
+  // Eén zin onder de video, boven de knop.
+  onderVideo: "We plannen nieuwe projecten maand per maand in. Plan je startgesprek dus nu, dan kom je in aanmerking voor de volgende maand.",
+  knop: "Plan een gratis startgesprek",
+  knopNoot: "Een halfuur, gratis en vrijblijvend. We zeggen je eerlijk of we je kunnen helpen.",
 
   // De speler.
   speler: {
@@ -45,7 +46,7 @@ export const HUB = {
     verderKnop: "Verder kijken",
     opnieuwKnop: "Opnieuw beginnen",
     eindeVraag: "Herken je je bedrijf hierin?",
-    eindeKnop: "Plan een vrijblijvend gesprek",
+    eindeKnop: "Plan een gratis startgesprek",
     eindeOpnieuw: "Bekijk opnieuw",
     fout: "De video laadt niet. Herlaad de pagina of probeer het later opnieuw.",
     kwaliteit: "Kwaliteit van de video",
