@@ -30,7 +30,7 @@ import { Onder } from "@/components/home/ui";
 import { TwijfelsLijst } from "./twijfels-lijst";
 import { pushEvent } from "@/lib/analytics";
 import { leesLijst } from "@/lib/resources";
-import { HUB } from "./copy";
+import { HUB, vetStukken } from "./copy";
 import { ResourceSectie } from "./resource-sectie";
 import { StapFormulier } from "./stap-formulier";
 import { VslSpeler } from "./vsl-speler";
@@ -156,7 +156,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
         </span>
       </a>
 
-      {/* 2. Kop, haak, lopende tekst, video, knop */}
+      {/* 2. Kop, haak, lopende tekst, zin naar de video, video, knop */}
       <section className="hub-hero hub-hero-vsl bg-[radial-gradient(60%_45%_at_50%_0%,#EEF2FB_0%,rgba(238,242,251,0)_70%)]">
         <div className="hub-wrap text-center">
           <a href="/" className="hub-logo mx-auto flex w-fit" aria-label="Finit Solutions, naar de homepage">
@@ -165,19 +165,23 @@ export function HubPagina({ start }: { start?: "resources" }) {
 
           <h1 className="hp-display hub-titel mx-auto text-balance font-bold text-[#1A2D63]">
             {HUB.kop.voor}{" "}
-            {/* Twee regels zoals bij Shadowboys: het accent op een eigen regel. */}
-            <br className="hidden sm:inline" />
             <span className={ACCENT}>
               <Onder>{HUB.kop.accent}</Onder>
-            </span>
+            </span>{" "}
+            {HUB.kop.na}
           </h1>
 
-          <p className="hub-haak text-balance">
-            {HUB.haak[0]} <br className="hidden sm:inline" />
-            {HUB.haak[1]}
+          <p className="hub-haak text-balance">{HUB.haak}</p>
+
+          <p className="hub-lead text-balance">
+            {HUB.sub.map((regel, r) => (
+              <span key={r} className="block">
+                {vetStukken(regel).map((s, i) => (s.vet ? <strong key={i} className="font-semibold text-[#1A2D63]">{s.tekst}</strong> : <span key={i}>{s.tekst}</span>))}
+              </span>
+            ))}
           </p>
 
-          <p className="hub-lead text-balance">{HUB.sub}</p>
+          <p className="hub-naar-video text-balance">{HUB.naarVideo}</p>
 
           <div className="hub-video mx-auto">
             <VslSpeler meta={meta} onNaarFormulier={() => naarFormulier("einde_video")} />

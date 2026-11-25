@@ -25,18 +25,20 @@ export const HUB = {
   // Dezelfde strook als iemand via ?reel=C03 komt en er een resource bij die post hoort.
   strookUitPost: { tekst: "De prompts uit de post?", link: "Hier vind je ze" },
 
-  // Hero in vier treden: kop (met accent), haak, lopende tekst, video. Copy van Amina,
-  // tab "for VSL page" in de doc Upwork scripts, vertaald 25/11/2026. Geen badge meer:
-  // de grootste zin uit de doc is de kop (Alex 25/11), het logo erboven zegt Finit Solutions.
-  kop: { voor: "De grootste bouwer van", accent: "company\u00A0brains in België" }, // vaste spatie: "company brains" blijft samen op gsm
-  // De haak, twee zinnen; op een breed scherm elk op een eigen regel.
-  haak: ["Deze video gaat niet echt over AI.", "Hij gaat over wat er in je hoofd zit."],
-  sub: "Je prijzen, je uitzonderingen, hoe je omgaat met die ene moeilijke klant. We schrijven het allemaal uit in één week, en dat verandert wat AI voor je kan doen. Bekijk de video en beslis dan zelf of het iets voor jou is.",
+  // Hero (Alex 25/11, op basis van Amina's tab "for VSL page"): de grootste zin is de kop,
+  // met "company brain" als accent (vaste spatie: blijft samen op één regel). Daaronder de
+  // haak, de lopende tekst in twee regels en een losse zin die naar de video leidt.
+  kop: { voor: "De eerste", accent: "company\u00A0brain", na: "bouwers in België" },
+  haak: "Deze video gaat niet echt over AI, hij gaat over wat er in je hoofd zit.",
+  // Twee regels; een woord tussen ** ** wordt vet (Alex' klemtoon op "bedrijf").
+  sub: ["Je werkprocedures, regels, uitzonderingen, …", "En dat verandert wat AI voor je **bedrijf** kan doen."],
+  naarVideo: "Bekijk deze video om te weten of het iets voor jou is.",
 
   // Eén zin onder de video, boven de knop.
-  onderVideo: "We plannen nieuwe projecten maand per maand in. Plan je startgesprek dus nu, dan kom je in aanmerking voor de volgende maand.",
-  knop: "Plan een gratis startgesprek",
-  knopNoot: "Een halfuur, gratis en vrijblijvend. We zeggen je eerlijk of we je kunnen helpen.",
+  onderVideo: "We plannen nieuwe projecten per maand in. Wil je er volgende maand bij zijn? Boek dan nu een conversatie.",
+  // De knop voor een gesprek heet overal op de site zo (Alex 25/11).
+  knop: "Boek een conversatie",
+  knopNoot: "60 minuten, gratis. Erna zeggen we je eerlijk of we je kunnen helpen.",
 
   // De speler.
   speler: {

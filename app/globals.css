@@ -1060,30 +1060,35 @@ html {
   .hub-faq-plus { width: 22px; height: 22px; margin-top: 0; }
   .hub-faq-antwoord { font-size: 16px; padding-bottom: 17px; margin-top: -4px; }
 }
-/* Hero van de hub (Alex 25/11, copy van Amina): vier treden in één lijn.
-   Kop 70 → haak 38 (±0,55 × de kop, vet, marine) → lopende tekst 24 (grijs, ±65 tekens
-   per regel) → kleine lettertjes 18 onder de knop. De zin onder de video heeft de maat
-   van de lopende tekst maar is halfvet en marine, zodat hij naar de knop leidt.
-   Alleen op /hub (.hub-hero-vsl); /cursus/ houdt badge, subzin en pillen. */
+/* Hero van de hub (Alex 25/11): de grootste zin is de kop, daarna telkens een trede
+   kleiner. Kop 70 → haak 40 (vet, marine) → lopende tekst 28 (grijs, "bedrijf" vet) →
+   een losse zin naar de video 24 (halfvet, marine, met meer ruimte erboven want hij
+   hoort niet bij de alinea) → video → zin onder de video 28 (halfvet, marine) → knop →
+   kleine lettertjes 20. Op desktop brede tekstblokken (tot 1000 à 1100 px), zoals de
+   subzin bij Shadowboys. Alleen op /hub (.hub-hero-vsl); /cursus/ blijft zoals hij was. */
 .hub-hero-vsl .hub-titel { line-height: 1.05; }
-.hub-haak { font-size: 38px; line-height: 1.2; font-weight: 700; color: #1A2D63; max-width: 900px; margin: var(--hub-r3) auto 0; }
-.hub-lead { font-size: 24px; line-height: 1.5; color: #6C7590; max-width: 760px; margin: var(--hub-r2) auto var(--hub-r4); }
-.hub-onder-video { font-size: 24px; line-height: 1.4; font-weight: 600; color: #1A2D63; max-width: 760px; margin: var(--hub-r4) auto var(--hub-r3); }
-.hub-hero-vsl .hub-noot { font-size: 18px; line-height: 1.4; }
+.hub-haak { font-size: 40px; line-height: 1.2; font-weight: 700; color: #1A2D63; max-width: 1100px; margin: var(--hub-r3) auto 0; }
+.hub-lead { font-size: 28px; line-height: 1.45; color: #6C7590; max-width: 1000px; margin: var(--hub-r2) auto 0; }
+.hub-naar-video { font-size: 24px; line-height: 1.35; font-weight: 600; color: #1A2D63; max-width: 1000px; margin: var(--hub-r4) auto var(--hub-r3); }
+.hub-onder-video { font-size: 28px; line-height: 1.35; font-weight: 600; color: #1A2D63; max-width: 1000px; margin: var(--hub-r4) auto var(--hub-r3); }
+.hub-hero-vsl .hub-noot { font-size: 20px; line-height: 1.4; }
 @media (max-width: 1100px) {
-  .hub-haak { font-size: clamp(26px, 3.4vw, 36px); }
-  .hub-lead, .hub-onder-video { font-size: clamp(19px, 2.2vw, 23px); }
-  .hub-hero-vsl .hub-noot { font-size: 17px; }
+  .hub-haak { font-size: clamp(27px, 3.5vw, 38px); }
+  .hub-lead, .hub-onder-video { font-size: clamp(20px, 2.5vw, 26px); }
+  .hub-naar-video { font-size: clamp(18px, 2.1vw, 22px); }
+  .hub-hero-vsl .hub-noot { font-size: 18px; }
 }
 @media (max-width: 767px) {
-  /* Het accent ("company brains in België") mag op gsm over twee regels lopen. */
-  .hub-hero-vsl .hub-titel .hp-onder { white-space: normal; }
-  .hub-haak { font-size: 22px; line-height: 1.25; }
-  .hub-lead { font-size: 16px; }
+  /* Drie regels op gsm: "De eerste" / "company brain" / "bouwers in België". */
+  .hub-hero-vsl .hub-titel { font-size: clamp(32px, 9.6vw, 46px); }
+  .hub-haak { font-size: 21px; line-height: 1.25; }
+  .hub-lead { font-size: 17px; }
+  .hub-naar-video { font-size: 16px; }
   .hub-onder-video { font-size: 17px; }
-  .hub-hero-vsl .hub-noot { font-size: 13px; }
+  .hub-hero-vsl .hub-noot { font-size: 14px; }
 }
 @media (max-width: 380px) {
+  .hub-hero-vsl .hub-titel { font-size: 32px; }
   .hub-haak { font-size: 20px; }
 }
 @media (max-width: 380px) {
