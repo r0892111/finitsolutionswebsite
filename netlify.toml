@@ -69,6 +69,13 @@
   status = 200
   force = true
 
+# Het formulier op /cursus/: lead in Tuesday (Socials, groep Cursus (Skool)) en mail naar contact@.
+[[redirects]]
+  from = "/api/cursus-aanvraag"
+  to = "/.netlify/functions/cursus-aanvraag"
+  status = 200
+  force = true
+
 # Het sollicitatieformulier op /vacatures: zelfde mailpad als het contactformulier.
 [[redirects]]
   from = "/api/sollicitatie-submit"

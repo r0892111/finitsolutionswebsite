@@ -43,6 +43,7 @@ import { createMondayItem, mondayConfigFromEnv } from "../../lib/monday/create-i
 import { EMAIL_RE, telefoonOk } from "../../lib/contact-velden";
 import { markeerFormulier } from "../../lib/vsl-meting-opslag";
 import { naarTuesday, TUESDAY, type TuesdayStatus } from "../../lib/tuesday";
+import { papiSeintje } from "../../lib/papi";
 
 // monday mag de bezoeker niet laten wachten: de browser wacht maximaal 10 s,
 // en na monday moet de mail nog vertrekken.
@@ -246,6 +247,8 @@ export const handler: Handler = async (event: HandlerEvent) => {
   }
 
   const tuesdayStatus = await tuesdayBelofte;
+  // Seintje aan de PAPI-automaat (lib/papi.ts), pas na "ok"; loopt naast de mail zodat de bezoeker niet langer wacht.
+  const papiBelofte = tuesdayStatus === "ok" ? papiSeintje("contact-submit") : Promise.resolve();
   await kijkBelofte;
   const bord = hub ? "Socials" : "Content";
   const tuesdayRegel =
@@ -309,12 +312,15 @@ export const handler: Handler = async (event: HandlerEvent) => {
     if (!res.ok) {
       const detail = await res.text();
       console.error("contact-submit: Brevo gaf", res.status, detail.slice(0, 500));
+      await papiBelofte;
       return json(502, { error: "mail_failed", status: res.status });
     }
   } catch (err) {
     console.error("contact-submit: netwerkfout", err);
+    await papiBelofte;
     return json(502, { error: "mail_failed" });
   }
 
+  await papiBelofte;
   return json(200, { ok: true, monday: mondayStatus, tuesday: tuesdayStatus });
 };

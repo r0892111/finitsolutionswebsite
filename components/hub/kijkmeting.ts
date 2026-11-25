@@ -14,6 +14,8 @@ const ELKE_MS = 5000;
 
 interface Kijkbeurt {
   id: string;
+  /** Welke video (VSL.id van de hub, of die van /cursus/). */
+  video: string;
   /** Dag waarop de kijkbeurt begon (UTC), deel van de sleutel in de opslag. */
   dag: string;
   start: number;
@@ -54,7 +56,7 @@ function stuur(viaBaken = false) {
   const body = JSON.stringify({
     id: k.id,
     dag: k.dag,
-    video: VSL.id,
+    video: k.video,
     start: k.start,
     verste: k.verste,
     duur: k.duur,
@@ -80,10 +82,11 @@ function opWeg() {
 }
 
 /** Een nieuwe kijkbeurt: bij afspelen vanaf het begin, verder kijken of opnieuw beginnen. */
-export function startKijkbeurt(o: { start: number; hervat: boolean; bron: string; reel: string; kwaliteit: string }) {
+export function startKijkbeurt(o: { start: number; hervat: boolean; bron: string; reel: string; kwaliteit: string; video?: string }) {
   if (huidige && huidige.verste > huidige.verstuurdTot) stuur();
   huidige = {
     id: nieuwId(),
+    video: o.video ?? VSL.id,
     dag: new Date().toISOString().slice(0, 10),
     start: Math.max(0, o.start),
     verste: Math.max(0, o.start),
