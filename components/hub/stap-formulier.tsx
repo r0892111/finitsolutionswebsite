@@ -13,16 +13,19 @@
  * keuzevragen gaan als tekst mee in `bericht`, dus aan de serverkant (monday
  * en de mail naar contact@) verandert niets.
  *
- * Laatste stap (Alex, 20/11): naam, e-mail en telefoon verplicht, de website
- * optioneel. We controleren zelf (geen browserballonnen): bij versturen met een
+ * Laatste stap: naam, e-mail, telefoon en website verplicht (Alex, 20/11 en
+ * 25/11: vier verplichte velden op elk formulier, behalve dat van de gratis
+ * resources). We controleren zelf (geen browserballonnen): bij versturen met een
  * fout staat de melding onder het veld en springt de cursor naar het eerste
- * foute veld. De server doet dezelfde controle (lib/contact-velden.ts).
+ * foute veld. De server controleert naam, e-mail en telefoon opnieuw
+ * (lib/contact-velden.ts); de website bewust niet, zodat wie de pagina nog
+ * open had van voor 25/11 zijn aanvraag niet kwijtraakt.
  */
 
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
-import { EMAIL_RE, telefoonOk } from "@/lib/contact-velden";
+import { EMAIL_RE, telefoonOk, websiteOk } from "@/lib/contact-velden";
 import { kijkProcent, kijkbeurtVoorFormulier } from "./kijkmeting";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { HUB, vetStukken } from "./copy";
@@ -39,10 +42,11 @@ const LABEL = "mb-1.5 block text-[0.875rem] font-medium text-[#1A2D63]";
 const VELD_FOUT = "border-red-400 focus:border-red-500 focus:ring-red-200";
 
 type Status = "bezig" | "klaar" | "fout" | null;
-type Veld = "naam" | "email" | "telefoon";
+type Veld = "naam" | "email" | "telefoon" | "website";
+const VELDEN: readonly Veld[] = ["naam", "email", "telefoon", "website"];
 
 /** De meldingen voor de verplichte velden; leeg = alles in orde. */
-function controleer(naam: string, email: string, telefoon: string): Partial<Record<Veld, string>> {
+function controleer(naam: string, email: string, telefoon: string, website: string): Partial<Record<Veld, string>> {
   const m = F.meldingen;
   const fouten: Partial<Record<Veld, string>> = {};
   if (naam.trim().length < 2) fouten.naam = m.naam;
@@ -50,6 +54,8 @@ function controleer(naam: string, email: string, telefoon: string): Partial<Reco
   else if (!EMAIL_RE.test(email.trim())) fouten.email = m.email;
   if (!telefoon.trim()) fouten.telefoon = m.telefoonLeeg;
   else if (!telefoonOk(telefoon)) fouten.telefoon = m.telefoon;
+  if (!website.trim()) fouten.website = m.websiteLeeg;
+  else if (!websiteOk(website)) fouten.website = m.website;
   return fouten;
 }
 
@@ -130,7 +136,7 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
     return [vrij, "", F.berichtKop, ...regels, vsl].join("\n").trim();
   };
 
-  const fouten = geprobeerd ? controleer(naam, email, telefoon) : {};
+  const fouten = geprobeerd ? controleer(naam, email, telefoon, website) : {};
 
   // Geen dubbele aanvragen bij een dubbelklik: de knop staat uit, en dit vangt de klik ervoor.
   const bezigRef = useRef(false);
@@ -141,8 +147,8 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
       naarStap(stap + 1);
       return;
     }
-    const nuFout = controleer(naam, email, telefoon);
-    const eerste = (["naam", "email", "telefoon"] as const).find((v) => nuFout[v]);
+    const nuFout = controleer(naam, email, telefoon, website);
+    const eerste = VELDEN.find((v) => nuFout[v]);
     if (eerste) {
       setGeprobeerd(true);
       const veld = document.getElementById(`${id}-${eerste}`);
@@ -297,13 +303,8 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
                 <Invoer id={`${id}-naam`} label={F.velden.naam} type="text" autoComplete="name" waarde={naam} zet={setNaam} fout={fouten.naam} />
                 <Invoer id={`${id}-email`} label={F.velden.email} type="email" autoComplete="email" waarde={email} zet={setEmail} fout={fouten.email} />
                 <Invoer id={`${id}-telefoon`} label={F.velden.telefoon} type="tel" autoComplete="tel" waarde={telefoon} zet={setTelefoon} fout={fouten.telefoon} />
-                {/* Tekst in plaats van type="url": zo mag "jouwbedrijf.be" zonder https:// ervoor. Optioneel. */}
-                <div>
-                  <label htmlFor={`${id}-website`} className={LABEL}>
-                    {F.velden.website} <span className="font-normal text-[#6C7590]">{F.velden.optioneel}</span>
-                  </label>
-                  <input id={`${id}-website`} type="text" inputMode="url" autoComplete="url" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder={F.velden.websiteHint} className={VELD} />
-                </div>
+                {/* Tekst in plaats van type="url": zo mag "jouwbedrijf.be" zonder https:// ervoor. */}
+                <Invoer id={`${id}-website`} label={F.velden.website} type="text" inputMode="url" autoComplete="url" placeholder={F.velden.websiteHint} waarde={website} zet={setWebsite} fout={fouten.website} />
               </div>
               {/* Honeypot: voor mensen onzichtbaar, bots vullen het in. */}
               <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
@@ -345,6 +346,8 @@ function Invoer({
   label,
   type,
   autoComplete,
+  inputMode,
+  placeholder,
   waarde,
   zet,
   fout,
@@ -353,6 +356,8 @@ function Invoer({
   label: string;
   type: "text" | "email" | "tel";
   autoComplete: string;
+  inputMode?: "url";
+  placeholder?: string;
   waarde: string;
   zet: (v: string) => void;
   fout?: string;
@@ -367,6 +372,8 @@ function Invoer({
         type={type}
         required
         autoComplete={autoComplete}
+        inputMode={inputMode}
+        placeholder={placeholder}
         value={waarde}
         onChange={(e) => zet(e.target.value)}
         aria-invalid={fout ? true : undefined}

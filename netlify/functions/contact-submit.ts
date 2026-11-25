@@ -40,7 +40,7 @@
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
 import { createMondayItem, mondayConfigFromEnv } from "../../lib/monday/create-item";
-import { EMAIL_RE, telefoonOk } from "../../lib/contact-velden";
+import { EMAIL_RE, telefoonOk, websiteOk } from "../../lib/contact-velden";
 import { markeerFormulier } from "../../lib/vsl-meting-opslag";
 import { naarTuesday, TUESDAY, type TuesdayStatus } from "../../lib/tuesday";
 
@@ -174,6 +174,13 @@ export const handler: Handler = async (event: HandlerEvent) => {
   const isHub = /^https:\/\/finitsolutions\.be\/hub\//.test(bron);
   if (isHub && naam.length < 2) return json(400, { error: "missing_naam" });
   if (isHub && !telefoonOk(telefoon)) return json(400, { error: "invalid_telefoon" });
+  // Het formulier onderaan de homepage (/ en /en/, sinds 25/11): naam, e-mail, telefoon en
+  // website verplicht (Alex, 25/11). Op /hub/ controleert alleen de browser de website: wie
+  // de pagina nog open had van voor die wijziging, mag zijn aanvraag niet kwijtraken.
+  const isStart = /^https:\/\/finitsolutions\.be\/(en\/)?#startgesprek$/.test(bron);
+  if (isStart && naam.length < 2) return json(400, { error: "missing_naam" });
+  if (isStart && !telefoonOk(telefoon)) return json(400, { error: "invalid_telefoon" });
+  if (isStart && !websiteOk(bedrijfswebsite)) return json(400, { error: "invalid_website" });
 
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) {

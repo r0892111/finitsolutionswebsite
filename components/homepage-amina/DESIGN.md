@@ -12,7 +12,7 @@ De nieuwe homepage van finitsolutions.be, met de copy van Amina (Google Doc "Upw
 | `over-ons-pagina.tsx` | "Over ons" (`/over-ons/`, `/en/about/`): de oprichters en "Waarom Finit". Geen eigen tekst, hergebruikt sectie 7 en 5. |
 | `kader.tsx` | Wat beide pagina's delen: menu, footer, het blok met de oprichters, "Waarom Finit", de logo's. |
 | `brein.tsx` | Het brein als tekstbestand: één bestand in de hero, de map met vijf bestanden in sectie 3. |
-| `start-formulier.tsx` | Het formulier onderaan. Zelfde Netlify Function als de andere formulieren (`/api/contact-submit`). |
+| `start-formulier.tsx` | Het formulier onderaan. Naam, e-mail, telefoon en website zijn verplicht (Alex, 25/11), de vraag niet. Zelfde Netlify Function als de andere formulieren (`/api/contact-submit`). |
 | `homepage.css` | Alle opmaak, prefix `nh-`. Wordt geladen door de vier pagina's in `app/(home)/`. |
 
 ## Het idee

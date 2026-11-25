@@ -8,13 +8,14 @@
  * dezelfde velden als het vraagformulier op /contact. `website` is de honeypot
  * tegen bots; `bedrijfswebsite` is de echte website.
  *
- * Naam, e-mail en telefoon zijn verplicht (we bellen terug), de website en de
- * vraag niet: zo blijft de drempel laag.
+ * Naam, e-mail, telefoon en website zijn verplicht (Alex, 25/11: zo op elk
+ * formulier van de site, behalve dat van de gratis resources). Alleen de vraag
+ * is optioneel. De server controleert hetzelfde (lib/contact-velden.ts).
  */
 
 import { useId, useState } from "react";
 import { pushEvent } from "@/lib/analytics";
-import { EMAIL_RE, telefoonOk } from "@/lib/contact-velden";
+import { EMAIL_RE, telefoonOk, websiteOk } from "@/lib/contact-velden";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import type { Copy, Taal } from "./copy";
 
@@ -23,17 +24,19 @@ const TIMEOUT_MS = 10000;
 
 type Status = "leeg" | "bezig" | "klaar" | "fout";
 
-const FOUTEN: Record<Taal, { naam: string; email: string; telefoon: string; optioneel: string }> = {
+const FOUTEN: Record<Taal, { naam: string; email: string; telefoon: string; website: string; optioneel: string }> = {
   nl: {
     naam: "Vul je naam in.",
     email: "Vul een geldig e-mailadres in, bijvoorbeeld naam@jouwbedrijf.be.",
     telefoon: "Vul een telefoonnummer in waarop we je kunnen bereiken, bijvoorbeeld 0470 12 34 56.",
+    website: "Vul de website van je bedrijf in, bijvoorbeeld jouwbedrijf.be.",
     optioneel: "optioneel",
   },
   en: {
     naam: "Enter your name.",
     email: "Enter a valid email address, for example name@yourcompany.be.",
     telefoon: "Enter a phone number we can reach you on, for example 0470 12 34 56.",
+    website: "Enter your company website, for example yourcompany.be.",
     optioneel: "optional",
   },
 };
@@ -47,7 +50,7 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
   const [bedrijfswebsite, setBedrijfswebsite] = useState("");
   const [bericht, setBericht] = useState("");
   const [website, setWebsite] = useState(""); // honeypot: onzichtbaar, blijft leeg bij mensen
-  const [fouten, setFouten] = useState<{ naam?: string; email?: string; telefoon?: string }>({});
+  const [fouten, setFouten] = useState<{ naam?: string; email?: string; telefoon?: string; bedrijfswebsite?: string }>({});
   const [status, setStatus] = useState<Status>("leeg");
 
   const verstuur = async (e: React.FormEvent) => {
@@ -57,8 +60,9 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
     if (naam.trim().length < 2) nieuw.naam = f.naam;
     if (!EMAIL_RE.test(email.trim())) nieuw.email = f.email;
     if (!telefoonOk(telefoon)) nieuw.telefoon = f.telefoon;
+    if (!websiteOk(bedrijfswebsite)) nieuw.bedrijfswebsite = f.website;
     setFouten(nieuw);
-    const eerste = (["naam", "email", "telefoon"] as const).find((k) => nieuw[k]);
+    const eerste = (["naam", "email", "telefoon", "bedrijfswebsite"] as const).find((k) => nieuw[k]);
     if (eerste) {
       document.getElementById(`${id}-${eerste}`)?.focus();
       return;
@@ -123,11 +127,10 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
           {fouten.telefoon && <p id={`${id}-telefoon-fout`} className="nh-fout">{fouten.telefoon}</p>}
         </div>
         <div>
-          <label htmlFor={`${id}-bedrijfswebsite`} className="nh-label">
-            {t.website} <span className="font-normal text-[var(--nh-grijs)]">({f.optioneel})</span>
-          </label>
+          <label htmlFor={`${id}-bedrijfswebsite`} className="nh-label">{t.website}</label>
           {/* Tekst in plaats van type="url": zo mag "jouwbedrijf.be" zonder https:// ervoor. */}
-          <input id={`${id}-bedrijfswebsite`} type="text" inputMode="url" autoComplete="url" spellCheck={false} value={bedrijfswebsite} onChange={(e) => setBedrijfswebsite(e.target.value)} placeholder={t.websiteHint} className="nh-veld" />
+          <input id={`${id}-bedrijfswebsite`} type="text" inputMode="url" autoComplete="url" spellCheck={false} value={bedrijfswebsite} onChange={(e) => setBedrijfswebsite(e.target.value)} placeholder={t.websiteHint} className="nh-veld" aria-invalid={!!fouten.bedrijfswebsite} aria-describedby={fouten.bedrijfswebsite ? `${id}-bedrijfswebsite-fout` : undefined} />
+          {fouten.bedrijfswebsite && <p id={`${id}-bedrijfswebsite-fout`} className="nh-fout">{fouten.bedrijfswebsite}</p>}
         </div>
       </div>
       <div className="mt-5">

@@ -121,15 +121,16 @@ export const HUB = {
       telefoon: "Telefoonnummer",
       website: "Website van je bedrijf",
       websiteHint: "jouwbedrijf.be",
-      optioneel: "(optioneel)",
     },
-    // Meldingen bij de velden als er iets ontbreekt of niet klopt (naam, e-mail en telefoon zijn verplicht).
+    // Meldingen bij de velden als er iets ontbreekt of niet klopt. Alle vier zijn verplicht (Alex, 25/11).
     meldingen: {
       naam: "Vul je naam in.",
       emailLeeg: "Vul je e-mailadres in.",
       email: "Dit e-mailadres klopt niet. Kijk het even na.",
       telefoonLeeg: "Vul je telefoonnummer in.",
       telefoon: "Dit telefoonnummer klopt niet. Bijvoorbeeld 0470 12 34 56 of +32 470 12 34 56.",
+      websiteLeeg: "Vul de website van je bedrijf in.",
+      website: "Deze website klopt niet. Bijvoorbeeld jouwbedrijf.be.",
     },
     verstuur: "Vraag het gesprek aan",
     bezig: "Versturen…",
