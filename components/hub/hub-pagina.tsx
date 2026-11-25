@@ -7,12 +7,14 @@
  * video bekijken en het formulier invullen. Van boven naar onder:
  *
  * 1. een smalle strook naar de gratis resources onderaan;
- * 2. kop, haak, lopende tekst, de video, één zin onder de video, de knop;
+ * 2. kop, haak, lopende tekst, een zin naar de video, de video, één zin onder
+ *    de video, de knop;
  * 3. het formulier, vraag per vraag (vlak onder de video, zoals bij hen);
- * 4. de twijfels uit de video als korte FAQ;
- * 5. de gratis prompts en gidsen, achter een e-mailslot.
+ * 4. voor wie het wel en niet is, twee kaarten naast elkaar;
+ * 5. de veelgestelde vragen (eerst vijf, de rest na "Toon nog X vragen");
+ * 6. de gratis prompts en gidsen, achter een e-mailslot.
  *
- * /hub/resources/ toont dezelfde pagina en springt meteen naar 5.
+ * /hub/resources/ toont dezelfde pagina en springt meteen naar 6.
  *
  * Herkomst: ?bron=tiktok (kanaal) en ?reel=C03 (post) gaan mee naar het
  * formulier ("Pagina" in de mail en op monday), naar Brevo bij het e-mailslot
@@ -24,7 +26,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight, Check, X } from "lucide-react";
 import lokaleLijst from "@/content/resources.json";
 import { Onder } from "@/components/home/ui";
 import { TwijfelsLijst } from "./twijfels-lijst";
@@ -208,7 +210,46 @@ export function HubPagina({ start }: { start?: "resources" }) {
         </div>
       </section>
 
-      {/* 4. De twijfels uit de video */}
+      {/* 4. Voor wie wel en niet (Alex 25/11): twee kaarten naast elkaar, groen en rood. */}
+      <section id="voor-wie" className="scroll-mt-4 pb-[var(--hub-r6)]">
+        <div className="hub-wrap">
+          <h2 className={KOP}>
+            {HUB.voorWie.titel.voor} <Onder>{HUB.voorWie.titel.accent}</Onder>
+          </h2>
+          <p className={INTRO}>{HUB.voorWie.intro}</p>
+
+          <div className="hub-wie-raster">
+            {(["wel", "niet"] as const).map((soort) => {
+              const blok = HUB.voorWie[soort];
+              const Icoon = soort === "wel" ? Check : X;
+              return (
+                <div key={soort} className={`hub-wie-kaart hub-wie-kaart--${soort}`}>
+                  <h3 className="hub-wie-titel">
+                    <span className="hub-wie-icoon" aria-hidden="true">
+                      <Icoon strokeWidth={3} />
+                    </span>
+                    {blok.titel}
+                  </h3>
+                  <ul className="hub-wie-lijst">
+                    {blok.items.map((item) => (
+                      <li key={item}>
+                        <span className="hub-wie-icoon hub-wie-icoon--klein" aria-hidden="true">
+                          <Icoon strokeWidth={3} />
+                        </span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+
+          <p className="hub-wie-slot mx-auto text-balance text-center">{HUB.voorWie.slot}</p>
+        </div>
+      </section>
+
+      {/* 5. Veelgestelde vragen: eerst vijf, de rest na "Toon nog X vragen". */}
       <section id="twijfels" className="hp-stippen scroll-mt-4 bg-[#F5F7FB] py-[var(--hub-r6)]">
         <div className="hub-faq-wrap">
           <h2 className={KOP}>
@@ -216,7 +257,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
           </h2>
           <p className={INTRO}>{HUB.twijfels.intro}</p>
 
-          <TwijfelsLijst lijst={HUB.twijfels.lijst} />
+          <TwijfelsLijst lijst={HUB.twijfels.lijst} zichtbaar={HUB.twijfels.zichtbaar} meer={HUB.twijfels.meer} />
 
           <div className="hub-slot-cta text-center">
             <button type="button" onClick={() => naarFormulier("na_twijfels")} className="hp-btn hp-btn--primary hub-knop">
@@ -227,7 +268,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
         </div>
       </section>
 
-      {/* 5. De gratis resources, achter een e-mailslot */}
+      {/* 6. De gratis resources, achter een e-mailslot */}
       <section id="resources" className="scroll-mt-4 py-[var(--hub-r6)]">
         <div className="mx-auto w-full max-w-[56rem] px-4 sm:px-8">
           <h2 className={KOP}>

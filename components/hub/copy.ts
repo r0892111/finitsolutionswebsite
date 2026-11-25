@@ -144,43 +144,112 @@ export const HUB = {
   },
 
   // De twijfels die Alex in de video beantwoordt. Ze gaan uit de video en staan hier.
+  // De veelgestelde vragen van de nieuwe homepage (copy van Amina, branch homepage-amina),
+  // op de hub sinds 25/11 (Alex). De eerste `zichtbaar` staan er meteen; de rest komt na
+  // de knop "Toon nog X vragen". "Na een halfuur" werd "na een uur": het gesprek duurt 60 minuten.
   twijfels: {
-    titel: { voor: "Twijfels die we", accent: "vaak horen" },
-    intro: "Logisch dat je nog twijfelt. Dit zijn de vragen die we het vaakst krijgen.",
+    titel: { voor: "Voor je een conversatie boekt, wil je waarschijnlijk", accent: "eerlijke antwoorden." },
+    intro: "Je hebt AI al de mist zien ingaan. Stel dus gerust de moeilijke vragen.",
+    zichtbaar: 5,
+    meer: "Toon nog {aantal} vragen",
     lijst: [
       {
-        vraag: "Ik heb AI al dingen zien verzinnen.",
+        vraag: "Wat kost het?",
         antwoord:
-          "Een company brain helpt daar al veel bij. En we beginnen altijd met een controlestap: alles wat AI naar een klant stuurt, kijkt eerst een mens na. Stap voor stap krijgt AI meer vrijheid, naargelang jullie ermee comfortabel zijn.",
+          "Elk onderdeel krijgt een eigen offerte. Zo zie je de kost voor je beslist, en laat je weg wat je niet nodig hebt. We brengen eerst in kaart wat je huidige manier van werken je kost, en daarna wat wij zouden veranderen. Het eerste gesprek is gratis, en dat geldt voor elk gesprek tot je iets tekent.",
       },
       {
-        vraag: "Ik wil niet dat AI met mijn klanten praat.",
-        antwoord: "Helemaal oké, die keuze ligt bij jullie. Wij zetten alles klaar, jij verstuurt.",
-      },
-      {
-        vraag: "Ik heb al software en wil die houden.",
+        vraag: "Kan AI dit echt? Ik heb het al dingen zien verzinnen.",
         antwoord:
-          "Wij bouwen bovenop jouw software. We koppelen wat nodig is en laten het manuele werk erin grotendeels verdwijnen.",
+          "Wij ook. Daarom begint alles in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. Twijfelgevallen gaan naar een mens, en wat AI zelf mag doen, breiden we alleen stap voor stap uit. We tonen je eerst een demo, want het zelf zien is beter dan het geloven.",
       },
       {
-        vraag: "En wat met mijn gegevens?",
+        vraag: "We gebruiken ChatGPT al. Waarom hebben we dit dan nodig?",
         antwoord:
-          "Die staan afgeschermd. We volgen de globale standaarden voor cybersecurity en werken altijd met NDA's en verwerkersovereenkomsten.",
+          "Omdat het gebruiken en er iets uit halen twee verschillende dingen zijn. ChatGPT kent uit zichzelf je prijzen, je uitzonderingen en je stijl niet. Wij vragen altijd wat er vandaag echt automatisch loopt. Meestal is het antwoord: niets. Een brein geeft ChatGPT die kennis. Zo krijg je dezelfde tool, met een heel ander resultaat.",
       },
       {
-        vraag: "Wat als er een beter model uitkomt?",
+        vraag: "Is dit over twee maanden niet alweer verouderd?",
         antwoord:
-          "Dan heb je geluk. Een company brain is gewoon een map met tekstbestanden. Die steek je in eender welk model.",
+          "Het brein is gewone tekst, en het is van jou. Elk model kan het lezen, vandaag en later. Komt er een beter model uit, dan sluit je dat gewoon aan. Je zit niet vast aan één tool.",
       },
       {
-        vraag: "Mijn team heeft hier schrik van.",
-        antwoord: "Wij praten nooit over mensen ontslaan. Wel over groeien zonder extra mensen aan te werven.",
+        vraag: "Het is een drukke periode. Kan dit wachten?",
+        antwoord:
+          "Dat kan. Maar AI negeren kost je misschien meer dan er iets aan doen. Een drukke periode is meestal net het teken dat je het het hardst nodig hebt. Wij beginnen liever voor de druk nog groter wordt.",
       },
       {
-        vraag: "Ik ben niet technisch en heb geen tijd.",
-        antwoord: "Dat hoeft ook niet. We hebben enkele uren van jou nodig en één dag met je medewerkers.",
+        vraag: "Wat met mijn medewerkers?",
+        antwoord:
+          "Wij praten over groeien zonder dat je evenveel extra mensen moet aanwerven, nooit over mensen ontslaan. We interviewen je team tijdens de breinweek, zodat hun kennis mee in het brein zit, en we leiden hen ter plaatse op.",
+      },
+      {
+        vraag: "Wat met mijn gegevens?",
+        antwoord:
+          "Bij elk project horen een geheimhoudingsovereenkomst (NDA) en een verwerkersovereenkomst, en meestal komt er ook een serviceovereenkomst bij. Alles wordt in Europa gehost, en je gegevens blijven gescheiden van die van andere klanten. De AI-verwerking door Anthropic loopt via de Verenigde Staten, en daar kunnen we niet omheen. Daarom staat elke subverwerker in onze verwerkersovereenkomst.",
+      },
+      {
+        vraag: "Gaat AI met mijn klanten praten?",
+        antwoord:
+          "Alleen als jij dat wil. Standaard bereidt AI het werk voor en verstuur jij. Alleen kleine, standaard dingen vertrekken automatisch. Een belangrijke offerte mag nooit de deur uit zonder dat er een mens naar gekeken heeft.",
+      },
+      {
+        vraag: "We hebben al software die werkt. Moeten we die vervangen?",
+        antwoord:
+          "Nee. We bouwen bovenop wat je hebt en koppelen het aan elkaar. We stellen alleen voor om iets te vervangen als dat echt zinvol is, en dan leggen we uit waarom.",
+      },
+      {
+        vraag: "Ik ben niet technisch.",
+        antwoord:
+          "Dat hoeft ook niet. Je hoeft alleen over je bedrijf te vertellen.",
+      },
+      {
+        vraag: "We zijn hier te klein voor.",
+        antwoord:
+          "Misschien. Is er geen echte nood, dan zeggen we je dat eerlijk, in plaats van je iets te verkopen. Na een uur weet je het.",
+      },
+      {
+        vraag: "Ik heb hier geen tijd voor.",
+        antwoord:
+          "We vragen twee uur van jou en één dag met je team. De rest van de breinweek is voor ons.",
+      },
+      {
+        vraag: "Kan ik een bedrijf zoals jullie vertrouwen?",
+        antwoord:
+          "Je systemen draaien zelfstandig, en de overdracht staat in het contract. Vraag ons gerust naar referenties tijdens het gesprek.",
+      },
+      {
+        vraag: "Wat als Finit stopt?",
+        antwoord:
+          "Je systemen blijven draaien. Mochten we ooit stoppen, dan laten we je dat ruim op voorhand weten en starten we een overdracht: alle toegangen, de hosting en de abonnementen gaan naar jou of naar een IT-partner van jouw keuze, zonder kosten.",
       },
     ],
+  },
+
+  // Voor wie wel en niet (Alex 25/11), boven de vragen; tekst van de nieuwe homepage.
+  voorWie: {
+    titel: { voor: "We zeggen je liever nee dan", accent: "je tijd te verspillen." },
+    intro: "Dit is geen magische knop. Dit is voor wie het werkt, en voor wie niet.",
+    wel: {
+      titel: "Dit is voor jou als:",
+      items: [
+        "Je leidt een klein of middelgroot dienstenbedrijf.",
+        "Je team verliest tijd aan mails, offertes, planning en het invullen van het CRM.",
+        "Er hangt te veel af van jou of van één sleutelpersoon.",
+        "Je wil beginnen delegeren, met een gerust hart.",
+        "Je bent bereid om een paar uur uit te leggen hoe je bedrijf echt werkt.",
+      ],
+    },
+    niet: {
+      titel: "Dit is niet voor jou als:",
+      items: [
+        "Je wil een knop die alles vanzelf doet. Die bestaat niet.",
+        "Je wil een snelle oplossing zonder dat het jou of je team tijd kost.",
+        "Je wil dat AI je mensen vervangt in plaats van hen te helpen.",
+        "Er is vandaag geen echte pijn. In dat geval zeggen we je dat eerlijk.",
+      ],
+    },
+    slot: "We gaan diep in op hoe je bedrijf werkt, en dat vraagt wat van je tijd. Net daarom werkt het daarna ook.",
   },
 
   // De gratis resources onderaan, achter een e-mailadres.
