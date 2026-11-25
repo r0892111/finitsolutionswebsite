@@ -1069,7 +1069,8 @@ html {
 .hub-hero-vsl .hub-titel { line-height: 1.05; }
 .hub-haak { font-size: 40px; line-height: 1.2; font-weight: 700; color: #1A2D63; max-width: 1100px; margin: var(--hub-r3) auto 0; }
 /* Lopende tekst: breed (Alex 25/11, "lijkt zo op elkaar gepropt"), geen balans die de regels smal maakt. */
-.hub-lead { font-size: 28px; line-height: 1.45; color: #6C7590; max-width: 1200px; margin: var(--hub-r2) auto 0; text-wrap: pretty; }
+.hub-lead { font-size: 28px; line-height: 1.45; color: #6C7590; max-width: 1040px; margin: var(--hub-r2) auto 0; text-wrap: balance; }
+.hub-lead-deel { display: inline; }
 /* Ritme (Alex 25/11, "gewoon natuurlijk"): wat bij elkaar hoort staat dicht (kop, haak, tekst;
    knop en noot), tussen de groepen een grote stap (r5): tekst → zin naar de video,
    logo's → zin onder de video. */
@@ -1088,6 +1089,7 @@ html {
   .hub-haak { font-size: 24px; line-height: 1.25; }
   /* Mag op gsm iets buiten de kolom van de rest steken. */
   .hub-lead { font-size: 19px; line-height: 1.45; margin-left: -6px; margin-right: -6px; }
+  .hub-lead-deel { display: block; }
   .hub-naar-video { font-size: 17px; }
   .hub-onder-video { font-size: 18px; }
   .hub-hero-vsl .hub-noot { font-size: 15px; }

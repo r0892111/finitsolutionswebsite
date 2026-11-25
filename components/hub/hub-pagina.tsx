@@ -184,10 +184,12 @@ export function HubPagina({ start }: { start?: "resources" }) {
 
           <p className="hub-haak text-balance">{vast(HUB.haak)}</p>
 
+          {/* Desktop: één alinea, twee even lange regels. Gsm: elk stuk op een eigen regel. */}
           <p className="hub-lead">
-            {HUB.sub.map((regel, r) => (
-              <span key={r} className="block">
-                {vetStukken(vast(regel)).map((s, i) => (s.vet ? <strong key={i} className="font-semibold text-[#1A2D63]">{s.tekst}</strong> : <span key={i}>{s.tekst}</span>))}
+            {HUB.sub.map((deel, r) => (
+              <span key={r} className="hub-lead-deel">
+                {vetStukken(vast(deel)).map((s, i) => (s.vet ? <strong key={i} className="font-semibold text-[#1A2D63]">{s.tekst}</strong> : <span key={i}>{s.tekst}</span>))}
+                {r < HUB.sub.length - 1 ? " " : null}
               </span>
             ))}
           </p>

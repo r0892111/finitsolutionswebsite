@@ -30,8 +30,13 @@ export const HUB = {
   // haak, de lopende tekst in twee regels en een losse zin die naar de video leidt.
   kop: { voor: "De eerste", accent: "company\u00A0brain", na: "bouwers in België" },
   haak: "Deze video gaat niet echt over AI, hij gaat over wat er in je hoofd zit.",
-  // Twee regels; een woord tussen ** ** wordt vet (Alex' klemtoon op "bedrijf").
-  sub: ["Je werkprocedures, regels, uitzonderingen, …", "We schrijven het allemaal uit in één week, en dat verandert wat AI voor je **bedrijf** kan doen."],
+  // Drie stukken: op desktop één alinea in twee ongeveer even lange regels, op gsm elk stuk
+  // op een eigen regel (Alex 25/11). Een woord tussen ** ** wordt vet (klemtoon op "bedrijf").
+  sub: [
+    "Je werkprocedures, regels, uitzonderingen, …",
+    "We schrijven het allemaal uit in één week,",
+    "en dat verandert wat AI voor je **bedrijf** kan doen.",
+  ],
   naarVideo: "Bekijk deze video om te weten of het iets voor jou is.",
 
   // Onder het formulier (Alex 25/11): voor wie nog twijfelt, naar de aanpak op de homepage.
@@ -254,24 +259,25 @@ export const HUB = {
 
   // Voor wie wel en niet (Alex 25/11), boven de vragen; tekst van de nieuwe homepage, met
   // Alex' aanpassingen van 25/11 (geen intro en geen slotzin, twee punten herschreven).
+  // Elk punt maakt de zin "Dit is (niet) voor jou als …" af: dus "als je … bent".
   voorWie: {
     titel: { voor: "We zeggen je liever nee dan", accent: "je tijd te verspillen." },
     wel: {
       titel: "Dit is voor jou als:",
       items: [
-        "Je bent zaakvoerder of management van een kmo.",
+        "Je zaakvoerder bent of in het management van een kmo zit.",
         "Je wil groeien zonder extra mankracht te hoeven aanwerven.",
-        "Je team verliest tijd aan mails, offertes, planning en het invullen van het CRM.",
-        "Er hangt te veel af van jou of van één sleutelpersoon.",
+        "Je team tijd verliest aan mails, offertes, planning en het invullen van het CRM.",
+        "Er te veel afhangt van jou of van één sleutelpersoon.",
         "Je wil beginnen delegeren aan AI, met een gerust hart.",
       ],
     },
     niet: {
       titel: "Dit is niet voor jou als:",
       items: [
-        "Je wil een knop die alles vanzelf doet. Die bestaat niet.",
-        "Je wil een snelle oplossing zonder dat het jou of je team tijd kost.",
-        "Er is vandaag geen echte pijn. In dat geval zeggen we je dat eerlijk.",
+        "Je een knop wil die alles vanzelf doet. Die bestaat niet.",
+        "Je een snelle oplossing wil zonder dat het jou of je team tijd kost.",
+        "Er vandaag geen echte pijn is. In dat geval zeggen we je dat eerlijk.",
       ],
     },
   },
