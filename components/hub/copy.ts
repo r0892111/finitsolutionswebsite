@@ -20,6 +20,9 @@ export const HUB = {
   metaBeschrijvingResources:
     "Alle prompts en gidsen uit de video's en posts van Finit op één plek. Laat je e-mailadres achter en open ze meteen.",
 
+  // De taalknop rechtsboven (NL | EN, Alex 25/11) en het logo, voor schermlezers.
+  taal: { label: "Kies je taal", logo: "Finit Solutions, naar de homepage" },
+
   // De smalle strook helemaal bovenaan, naar de resources onderaan.
   strook: { tekst: "Gratis prompts en gidsen?", link: "Hier vind je ze" },
   // Dezelfde strook als iemand via ?reel=C03 komt en er een resource bij die post hoort.
@@ -30,13 +33,16 @@ export const HUB = {
   // haak, de lopende tekst in twee regels en een losse zin die naar de video leidt.
   kop: { voor: "De eerste", accent: "company\u00A0brain", na: "bouwers in België" },
   haak: "Deze video gaat niet echt over AI, hij gaat over wat er in je hoofd zit.",
-  // Drie stukken: op desktop één alinea in twee ongeveer even lange regels, op gsm elk stuk
-  // op een eigen regel (Alex 25/11). Een woord tussen ** ** wordt vet (klemtoon op "bedrijf").
+  // Elk stuk is één regel op gsm ("we schrijven het in één week / allemaal uit…", Alex 25/11);
+  // op desktop lopen ze door als één alinea in twee ongeveer even lange regels.
+  // Een woord tussen ** ** wordt vet (klemtoon op "bedrijf").
   sub: [
     "Je werkprocedures, regels, uitzonderingen, …",
-    "We schrijven het allemaal uit in één week,",
-    "en dat verandert wat AI voor je **bedrijf** kan doen.",
+    "We schrijven het in één week",
+    "allemaal uit, en dat verandert wat AI",
+    "voor je **bedrijf** kan doen.",
   ],
+  // Alleen op desktop: op gsm maakte die extra zin de hero te druk (Alex 25/11).
   naarVideo: "Bekijk deze video om te weten of het iets voor jou is.",
 
   // Onder het formulier (Alex 25/11): voor wie nog twijfelt, naar de aanpak op de homepage.
@@ -297,6 +303,9 @@ export const HUB = {
       bronnen: "Bekijk de bronnen",
       standaard: "Bekijken",
     } as Record<string, string>,
+    // Namen van de soorten (Gids, Prompts, …): leeg = die uit lib/resources.ts. De Engelse hub vult ze in.
+    soort: {} as Record<string, string>,
+    soortMeervoud: {} as Record<string, string>,
   },
 
   // Het slot op de resources. Eerlijk zeggen wat je krijgt en wat we met je adres doen.
@@ -324,7 +333,9 @@ export const HUB = {
   footer: { vacatures: "Vacatures", privacy: "Privacy" },
 };
 
-/** "Wat is je **rol**?" → stukken tekst met een vlag voor vet. */
+/** De vorm van alle hubteksten; de Engelse versie (./copy.en.ts) volgt die. */
+export type HubTekst = typeof HUB;
+
 /**
  * Geen los woordje op een nieuwe regel (Alex 25/11, "houd hier rekening mee, ook in de
  * toekomst"): in elke zin blijft het laatste woord met een vaste spatie aan het vorige
@@ -337,6 +348,7 @@ export function vast(tekst: string): string {
     .join(" ");
 }
 
+/** "Wat is je **rol**?" → stukken tekst met een vlag voor vet. */
 export function vetStukken(zin: string): Array<{ tekst: string; vet: boolean }> {
   return zin.split("**").map((tekst, i) => ({ tekst, vet: i % 2 === 1 })).filter((s) => s.tekst);
 }

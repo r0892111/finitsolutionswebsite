@@ -26,14 +26,13 @@ import { EMAIL_RE, telefoonOk } from "@/lib/contact-velden";
 import { kijkProcent, kijkbeurtVoorFormulier } from "./kijkmeting";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { HUB, vetStukken } from "./copy";
+import { useHub } from "./taal";
 import { useBescherming } from "@/components/formulier-bescherming";
 import { BedanktVenster } from "@/components/bedankt-venster";
 
 const SUBMIT_URL = "/api/contact-submit";
 const TIMEOUT_MS = 10000;
 const LETTERS = "ABCDEFGH";
-const F = HUB.formulier;
-const VRAGEN = F.vragen;
 
 const VELD =
   "w-full rounded-xl border border-[#1A2D63]/15 bg-white px-4 py-3 text-[1rem] text-[#1A2D63] placeholder:text-[#6C7590]/60 transition focus:border-[#1A2D63]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/15";
@@ -44,8 +43,7 @@ type Status = "bezig" | "klaar" | "fout" | null;
 type Veld = "naam" | "email" | "telefoon";
 
 /** De meldingen voor de verplichte velden; leeg = alles in orde. */
-function controleer(naam: string, email: string, telefoon: string): Partial<Record<Veld, string>> {
-  const m = F.meldingen;
+function controleer(m: typeof HUB.formulier.meldingen, naam: string, email: string, telefoon: string): Partial<Record<Veld, string>> {
   const fouten: Partial<Record<Veld, string>> = {};
   if (naam.trim().length < 2) fouten.naam = m.naam;
   if (!email.trim()) fouten.email = m.emailLeeg;
@@ -67,7 +65,19 @@ function Vraag({ zin, id }: { zin: string; id?: string }) {
   );
 }
 
+/**
+ * Een aangeklikte keuze in het Nederlands, voor de mail, monday en Tuesday: op /hub/en/ kiest
+ * de bezoeker in het Engels, Luka leest Nederlands. Dezelfde plaats in de lijst van ./copy.ts.
+ */
+function inHetNederlands(vragen: typeof HUB.formulier.vragen, vraagId: string, antwoord: string | undefined): string {
+  if (!antwoord) return "";
+  const i = vragen.find((v) => v.id === vraagId)?.opties?.indexOf(antwoord) ?? -1;
+  return (i >= 0 && HUB.formulier.vragen.find((v) => v.id === vraagId)?.opties?.[i]) || antwoord;
+}
+
 export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?: Record<string, string>; kopId?: string }) {
+  const F = useHub().formulier;
+  const VRAGEN = F.vragen;
   const id = useId();
   const [stap, setStap] = useState(0);
   const [antwoorden, setAntwoorden] = useState<Record<string, string>>({});
@@ -128,14 +138,14 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
   });
 
   const bericht = () => {
-    const regels = VRAGEN.filter((v) => v.soort === "keuze" && antwoorden[v.id]).map((v) => `${v.label}: ${antwoorden[v.id]}`);
+    const regels = VRAGEN.filter((v) => v.soort === "keuze" && antwoorden[v.id]).map((v) => `${v.label}: ${inHetNederlands(VRAGEN, v.id, antwoorden[v.id])}`);
     const vrij = (antwoorden.bericht ?? "").trim();
     const procent = kijkProcent();
     const vsl = procent === null ? F.vslNiet : F.vslGekeken.replace("{procent}", String(procent));
     return [vrij, "", F.berichtKop, ...regels, vsl].join("\n").trim();
   };
 
-  const fouten = geprobeerd ? controleer(naam, email, telefoon) : {};
+  const fouten = geprobeerd ? controleer(F.meldingen, naam, email, telefoon) : {};
 
   // Geen dubbele aanvragen bij een dubbelklik: de knop staat uit, en dit vangt de klik ervoor.
   const bezigRef = useRef(false);
@@ -146,7 +156,7 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
       naarStap(stap + 1);
       return;
     }
-    const nuFout = controleer(naam, email, telefoon);
+    const nuFout = controleer(F.meldingen, naam, email, telefoon);
     const eerste = (["naam", "email", "telefoon"] as const).find((v) => nuFout[v]);
     if (eerste) {
       setGeprobeerd(true);
@@ -164,9 +174,9 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
       kanaal: meta.bron ?? "direct",
       reel: meta.reel ?? "",
       vsl_procent: kijkProcent() ?? 0,
-      rol: antwoorden.rol ?? "",
-      grootte: antwoorden.grootte ?? "",
-      meeste_tijd: antwoorden.tijd ?? "",
+      rol: inHetNederlands(VRAGEN, "rol", antwoorden.rol),
+      grootte: inHetNederlands(VRAGEN, "grootte", antwoorden.grootte),
+      meeste_tijd: inHetNederlands(VRAGEN, "tijd", antwoorden.tijd),
       eerst: (antwoorden.bericht ?? "").trim(),
       pagina: window.location.href,
       kijkbeurt: kijk ? { id: kijk.id, dag: kijk.dag } : null,

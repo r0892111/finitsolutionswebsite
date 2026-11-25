@@ -21,7 +21,11 @@
  * en naar Google Tag Manager als events (hub_view, hub_menu, vsl_*, hub_form_stap,
  * form_submit, hub_toegang, hub_klik).
  *
- * Alle tekst staat in ./copy.ts, de video in ./video.ts.
+ * Alle tekst staat in ./copy.ts (Engels: ./copy.en.ts), de video in ./video.ts.
+ *
+ * Taal (Alex 25/11): /hub/ is Nederlands, /hub/en/ dezelfde pagina in het Engels, met
+ * Engelse ondertitels die meteen aan staan. Rechtsboven wisselt NL | EN, met ?bron= en
+ * ?reel= erbij, zodat de herkomst niet verloren gaat.
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -33,8 +37,11 @@ import { TwijfelsLijst } from "./twijfels-lijst";
 import { pushEvent } from "@/lib/analytics";
 import { leesLijst } from "@/lib/resources";
 import { HUB, vast, vetStukken } from "./copy";
+import { HUB_EN } from "./copy.en";
+import { HubTekstContext } from "./taal";
 import { ResourceSectie } from "./resource-sectie";
 import { StapFormulier } from "./stap-formulier";
+import { VSL, VSL_EN } from "./video";
 import { VslSpeler } from "./vsl-speler";
 
 const REELS = new Set(leesLijst(lokaleLijst).map((r) => r.reel?.toUpperCase()).filter(Boolean));
@@ -66,7 +73,37 @@ function schoon(v: string | null, max: number): string {
   return (v ?? "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, max);
 }
 
-export function HubPagina({ start }: { start?: "resources" }) {
+type Taal = "nl" | "en";
+const TALEN: ReadonlyArray<{ code: Taal; pad: string; kort: string }> = [
+  { code: "nl", pad: "/hub/", kort: "NL" },
+  { code: "en", pad: "/hub/en/", kort: "EN" },
+];
+
+/** NL | EN rechtsboven. De link neemt ?bron= en ?reel= mee. */
+function TaalKnop({ taal, label, meta }: { taal: Taal; label: string; meta: Record<string, string> }) {
+  const [zoek, setZoek] = useState("");
+  useEffect(() => setZoek(window.location.search), []);
+  return (
+    <nav className="hub-taal" aria-label={label}>
+      {TALEN.map((t) => (
+        <a
+          key={t.code}
+          href={`${t.pad}${zoek}`}
+          hrefLang={t.code}
+          lang={t.code}
+          aria-current={t.code === taal ? "page" : undefined}
+          onClick={() => t.code !== taal && pushEvent("hub_taal", { ...meta, naar: t.code })}
+          className="hub-taal-knop"
+        >
+          {t.kort}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: Taal }) {
+  const T = taal === "en" ? HUB_EN : HUB;
   const [herkomst, setHerkomst] = useState<Herkomst>({ bron: "direct", reel: "", pad: "/hub/" });
 
   // Herkomst uit de URL, één keer bij het openen. Op /hub/resources/ meteen naar de resources.
@@ -114,11 +151,14 @@ export function HubPagina({ start }: { start?: "resources" }) {
     return () => timers.forEach((t) => window.clearTimeout(t));
   }, [start]);
 
-  const meta = useMemo(() => ({ bron: herkomst.bron, ...(herkomst.reel ? { reel: herkomst.reel } : {}) }), [herkomst]);
+  const meta = useMemo(
+    () => ({ bron: herkomst.bron, ...(herkomst.reel ? { reel: herkomst.reel } : {}), ...(taal === "en" ? { taal } : {}) }),
+    [herkomst, taal]
+  );
   const zoek = `?bron=${herkomst.bron}${herkomst.reel ? `&reel=${herkomst.reel}` : ""}`;
   // Komt als "Pagina" in de mail en op monday, zodat we zien waar de lead vandaan komt.
   const formBron = `https://finitsolutions.be${herkomst.pad}${zoek}`;
-  const strook = herkomst.reel && REELS.has(herkomst.reel) ? HUB.strookUitPost : HUB.strook;
+  const strook = herkomst.reel && REELS.has(herkomst.reel) ? T.strookUitPost : T.strook;
 
   const naarResources = useCallback(
     (e: React.MouseEvent) => {
@@ -151,10 +191,11 @@ export function HubPagina({ start }: { start?: "resources" }) {
 
   // Stippen over de hele pagina: hetzelfde patroon als in de case-kaarten op de homepage (wens Alex 20/11).
   return (
-    <main className="hub-ritme hp-stippen min-h-screen bg-white text-[#3D4766]">
+    <HubTekstContext.Provider value={T}>
+    <main lang={taal} className="hub-ritme hp-stippen min-h-screen bg-white text-[#3D4766]">
       {/* 1. De strook naar de gratis resources */}
       <a
-        href="/hub/resources/"
+        href={taal === "en" ? "/hub/en/#resources" : "/hub/resources/"}
         onClick={naarResources}
         className="group flex items-center justify-center gap-x-1.5 bg-[#1A2D63] px-4 py-2.5 text-center text-[0.875rem] leading-[1.4] text-white/90 sm:text-[0.9375rem]"
       >
@@ -169,41 +210,42 @@ export function HubPagina({ start }: { start?: "resources" }) {
 
       {/* 2. Kop, haak, lopende tekst, zin naar de video, video, knop */}
       <section className="hub-hero hub-hero-vsl">
+        <TaalKnop taal={taal} label={T.taal.label} meta={meta} />
         <div className="hub-wrap text-center">
-          <a href="/" className="hub-logo mx-auto flex w-fit" aria-label="Finit Solutions, naar de homepage">
+          <a href="/" className="hub-logo mx-auto flex w-fit" aria-label={T.taal.logo}>
             <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto sm:h-7" priority />
           </a>
 
           <h1 className="hp-display hub-titel mx-auto text-balance font-bold text-[#1A2D63]">
-            {HUB.kop.voor}{" "}
+            {T.kop.voor}{" "}
             <span className={ACCENT}>
-              <Onder>{HUB.kop.accent}</Onder>
+              <Onder>{T.kop.accent}</Onder>
             </span>{" "}
-            {HUB.kop.na}
+            {T.kop.na}
           </h1>
 
-          <p className="hub-haak text-balance">{vast(HUB.haak)}</p>
+          <p className="hub-haak text-balance">{vast(T.haak)}</p>
 
           {/* Desktop: één alinea, twee even lange regels. Gsm: elk stuk op een eigen regel. */}
           <p className="hub-lead">
-            {HUB.sub.map((deel, r) => (
+            {T.sub.map((deel, r) => (
               <span key={r} className="hub-lead-deel">
                 {vetStukken(vast(deel)).map((s, i) => (s.vet ? <strong key={i} className="font-semibold text-[#1A2D63]">{s.tekst}</strong> : <span key={i}>{s.tekst}</span>))}
-                {r < HUB.sub.length - 1 ? " " : null}
+                {r < T.sub.length - 1 ? " " : null}
               </span>
             ))}
           </p>
 
-          <p className="hub-naar-video text-balance">{vast(HUB.naarVideo)}</p>
+          <p className="hub-naar-video text-balance">{vast(T.naarVideo)}</p>
 
           <div className="hub-video mx-auto">
-            <VslSpeler meta={meta} onNaarFormulier={() => naarFormulier("einde_video")} />
+            <VslSpeler meta={meta} video={taal === "en" ? VSL_EN : VSL} tekst={T.speler} onNaarFormulier={() => naarFormulier("einde_video")} />
           </div>
 
           <div className="hub-steun">
-            <p className="hub-steun-label">{HUB.steun.label}</p>
+            <p className="hub-steun-label">{T.steun.label}</p>
             <ul className="hub-steun-logos">
-              {HUB.steun.logos.map((l) => (
+              {T.steun.logos.map((l) => (
                 <li key={l.id}>
                   <Image src={l.src} alt={l.alt} width={l.breed} height={l.hoog} className={`hub-steun-logo hub-steun-logo--${l.id}`} />
                 </li>
@@ -212,7 +254,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
           </div>
 
           <p className="hub-onder-video">
-            {HUB.onderVideo.map((zin) => (
+            {T.onderVideo.map((zin) => (
               <span key={zin} className="block">
                 {vast(zin)}
               </span>
@@ -224,10 +266,10 @@ export function HubPagina({ start }: { start?: "resources" }) {
             onClick={() => naarFormulier("knop_onder_video")}
             className="hp-btn hp-btn--primary hub-knop"
           >
-            {HUB.knop}
+            {T.knop}
             <ArrowRight aria-hidden="true" />
           </button>
-          <p className="hub-noot text-[#6C7590]">{vast(HUB.knopNoot)}</p>
+          <p className="hub-noot text-[#6C7590]">{vast(T.knopNoot)}</p>
         </div>
       </section>
 
@@ -237,14 +279,14 @@ export function HubPagina({ start }: { start?: "resources" }) {
           <StapFormulier bron={formBron} meta={meta} kopId="gesprek-titel" />
           <div className="hub-naar-website-wrap text-center">
             <a
-              href={HUB.naarWebsite.href}
+              href={T.naarWebsite.href}
               onClick={() => pushEvent("hub_klik", { ...meta, keuze: "website_aanpak" })}
               className="hub-naar-website inline-flex items-center rounded-full border border-[#1A2D63]/20 bg-white font-semibold text-[#1A2D63] transition-colors hover:bg-[#F5F7FB]"
             >
               {/* Op gsm bewust twee regels: de vraag, dan de rest. */}
               <span>
-                {HUB.naarWebsite.vraag} <br className="sm:hidden" />
-                {HUB.naarWebsite.tekst}
+                {T.naarWebsite.vraag} <br className="sm:hidden" />
+                {T.naarWebsite.tekst}
               </span>
               <ArrowRight aria-hidden="true" />
             </a>
@@ -256,12 +298,12 @@ export function HubPagina({ start }: { start?: "resources" }) {
       <section id="voor-wie" className="scroll-mt-4 pb-[var(--hub-r5)]">
         <div className="hub-wrap">
           <h2 className={KOP}>
-            {HUB.voorWie.titel.voor} <Onder>{HUB.voorWie.titel.accent}</Onder>
+            {T.voorWie.titel.voor} <Onder>{T.voorWie.titel.accent}</Onder>
           </h2>
 
           <div className="hub-wie-raster">
             {(["wel", "niet"] as const).map((soort) => {
-              const blok = HUB.voorWie[soort];
+              const blok = T.voorWie[soort];
               const Icoon = soort === "wel" ? Check : X;
               return (
                 <div key={soort} className={`hub-wie-kaart hub-wie-kaart--${soort}`}>
@@ -292,15 +334,15 @@ export function HubPagina({ start }: { start?: "resources" }) {
       <section id="twijfels" className="hp-stippen scroll-mt-4 bg-[#F5F7FB] py-[var(--hub-r5)]">
         <div className="hub-faq-wrap">
           <h2 className={KOP}>
-            {HUB.twijfels.titel.voor} <Onder>{HUB.twijfels.titel.accent}</Onder>
+            {T.twijfels.titel.voor} <Onder>{T.twijfels.titel.accent}</Onder>
           </h2>
-          <p className={INTRO}>{zinnen(HUB.twijfels.intro)}</p>
+          <p className={INTRO}>{zinnen(T.twijfels.intro)}</p>
 
-          <TwijfelsLijst lijst={HUB.twijfels.lijst} zichtbaar={HUB.twijfels.zichtbaar} meer={HUB.twijfels.meer} />
+          <TwijfelsLijst lijst={T.twijfels.lijst} zichtbaar={T.twijfels.zichtbaar} meer={T.twijfels.meer} />
 
           <div className="hub-slot-cta text-center">
             <button type="button" onClick={() => naarFormulier("na_twijfels")} className="hp-btn hp-btn--primary hub-knop">
-              {HUB.knop}
+              {T.knop}
               <ArrowRight aria-hidden="true" />
             </button>
           </div>
@@ -311,20 +353,21 @@ export function HubPagina({ start }: { start?: "resources" }) {
       <section id="resources" className="scroll-mt-4 py-[var(--hub-r5)]">
         <div className="mx-auto w-full max-w-[56rem] px-4 sm:px-8">
           <h2 className={KOP}>
-            {HUB.resources.titel.voor} <Onder>{HUB.resources.titel.accent}</Onder>
+            {T.resources.titel.voor} <Onder>{T.resources.titel.accent}</Onder>
           </h2>
-          <p className={INTRO}>{zinnen(HUB.resources.intro)}</p>
+          <p className={INTRO}>{zinnen(T.resources.intro)}</p>
           <ResourceSectie reel={herkomst.reel} meta={meta} />
         </div>
       </section>
 
       <footer className="border-t border-[#E3E7EF] px-4 py-[var(--hub-r4)] text-center text-[0.875rem] text-[#6C7590] sm:px-8">
         Finit Solutions · <a href="/" className="hp-link">finitsolutions.be</a> ·{" "}
-        <a href="/privacy/" className="hp-link">{HUB.footer.privacy}</a> ·{" "}
+        <a href="/privacy/" className="hp-link">{T.footer.privacy}</a> ·{" "}
         <a href={`/vacatures/${zoek}&via=hub`} className="hp-link">
-          {HUB.footer.vacatures}
+          {T.footer.vacatures}
         </a>
       </footer>
     </main>
+    </HubTekstContext.Provider>
   );
 }
