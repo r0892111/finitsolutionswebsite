@@ -229,24 +229,25 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
 
       {/* Op de gegevensstap controleren we zelf (noValidate), op de andere stappen doet de browser het. */}
       <form onSubmit={verstuur} noValidate={vraag.soort === "gegevens"} className="px-5 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6" aria-labelledby={`${id}-vraag`}>
-        <div className="flex min-h-[2.25rem] items-center justify-between gap-3 text-[0.875rem] text-[#6C7590]">
-          {stap > 0 ? (
+        {/* "Vraag 2 van 5" groot, links, vlak boven de vraag (Alex 25/11); terug staat rechts. */}
+        <div className="flex min-h-[2.25rem] items-center justify-between gap-3">
+          <span className="text-[1.0625rem] font-semibold text-[#2F55C4] sm:text-[1.25rem]">
+            {F.stapVan.replace("{nu}", String(stap + 1)).replace("{totaal}", String(VRAGEN.length))}
+          </span>
+          {stap > 0 && (
             <button
               type="button"
               onClick={() => naarStap(stap - 1)}
-              className="-ml-2 inline-flex min-h-[2.25rem] items-center gap-1.5 rounded-full px-2 font-medium text-[#1A2D63] transition-colors hover:bg-[#F5F7FB]"
+              className="-mr-2 inline-flex min-h-[2.25rem] items-center gap-1.5 rounded-full px-2 text-[0.875rem] font-medium text-[#1A2D63] transition-colors hover:bg-[#F5F7FB]"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
               {F.terug}
             </button>
-          ) : (
-            <span />
           )}
-          <span className="font-semibold text-[#1A2D63]">{F.stapVan.replace("{nu}", String(stap + 1)).replace("{totaal}", String(VRAGEN.length))}</span>
         </div>
 
         {/* Nieuwe vraag: zakt zacht op zijn plaats, zonder eerst te verdwijnen (geen flikkering onder de balk). */}
-        <div key={stap} className="hub-stap-in mt-3">
+        <div key={stap} className="hub-stap-in mt-2">
           <Vraag zin={vraag.vraag} id={`${id}-vraag`} />
 
           {vraag.soort === "keuze" && (

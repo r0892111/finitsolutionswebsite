@@ -67,7 +67,7 @@ export const HUB = {
     titel: "Boek een conversatie",
     // Boven de eerste vraag: wat er gebeurt. Je kiest zelf geen moment in een agenda;
     // na de laatste vraag nemen wij contact op om er samen een te kiezen.
-    uitleg: "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter, en dan plannen we samen een moment in.",
+    uitleg: "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter, en dan nemen we binnen de 24 uur contact met je op.",
     terug: "Terug",
     volgende: "Volgende",
     stapVan: "Vraag {nu} van {totaal}",
