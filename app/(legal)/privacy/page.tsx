@@ -237,8 +237,7 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                       <td className="p-3 align-top">E-mailadres, als u het vakje aanvinkt</td>
                       <td className="p-3 align-top">
                         Om u af en toe (hooguit twee keer per maand) te mailen met AI-nieuwtjes en tips waar uw bedrijf iets
-                        aan heeft. U staat pas op de lijst nadat u dat bevestigt via de mail die we u eerst sturen. Afmelden kan
-                        altijd via de link onderaan elke mail.
+                        aan heeft. Afmelden kan altijd via de link onderaan elke mail.
                       </td>
                       <td className="p-3 align-top">Toestemming.</td>
                       <td className="p-3 align-top">Tot u zich afmeldt.</td>

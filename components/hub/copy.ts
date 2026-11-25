@@ -209,8 +209,7 @@ export const HUB = {
     // Het vinkje (standaard uit, beslissing 20/11: een vooraf aangevinkt vakje is geen geldige toestemming).
     // "Hooguit twee per maand" is een belofte: pas aan als het ritme anders wordt.
     mailsKop: "Ja, hou me op de hoogte.",
-    // Dubbele bevestiging (25/11): pas na de klik in die mail staat iemand op de lijst.
-    mails: "Af en toe een mail met AI-nieuwtjes en tips waar je bedrijf echt iets aan heeft. Hooguit twee per maand. Je krijgt eerst een mail om te bevestigen. Afmelden kan altijd, met één klik.",
+    mails: "Af en toe een mail met AI-nieuwtjes en tips waar je bedrijf echt iets aan heeft. Hooguit twee per maand. Afmelden kan altijd, met één klik.",
     knop: "Open de prompts en gidsen",
     bezig: "Even geduld…",
     privacy:
