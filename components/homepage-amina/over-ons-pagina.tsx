@@ -27,7 +27,7 @@ export function OverOnsPagina({ taal }: { taal: Taal }) {
           </div>
         </section>
 
-        <section className="nh-sectie nh-vel">
+        <section className="nh-sectie">
           <div className="nh-wrap">
             <WaaromBlok taal={taal} />
           </div>
@@ -44,13 +44,13 @@ export function OverOnsPagina({ taal }: { taal: Taal }) {
               </div>
               <div>
                 <Steun label={t.hero.ondersteund} />
-                <p className="mt-6 max-w-[24em] font-medium text-[var(--nh-inkt)]">{t.hero.gesproken}</p>
+                <p className="nh-feit mt-6">{t.hero.gesproken}</p>
               </div>
             </div>
           </div>
         </section>
       </main>
-      <Voet taal={taal} />
+      <Voet taal={taal} los />
     </div>
   );
 }

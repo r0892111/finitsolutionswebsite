@@ -6,6 +6,12 @@
  * Google Doc "Upwork scripts" (24/11/2026). Het Engels is haar tekst; het
  * Nederlands is de vertaling in de stem van Alex (stemprofiel §13).
  *
+ * Regel (Alex, 25/11): alleen de copy van Amina, zoals zij ze bedoelde. Niets
+ * erbij schrijven: geen bijschriften, geen tussenkopjes, geen voorbeelden.
+ * Wat er wel staat en niet van haar komt, is wat een pagina technisch nodig
+ * heeft: de labels van het menu en de footer, de foutmeldingen en de bevestiging
+ * van het formulier, de alt-tekst van de foto en de titel voor Google.
+ *
  * Tekst aanpassen = alleen copy.nl.ts en copy.en.ts. De pagina volgt vanzelf.
  */
 
@@ -13,14 +19,6 @@ export type Taal = "nl" | "en";
 
 /** Waar een case staat. De volgorde is ook de volgorde van de vier streepjes op de pagina. */
 export type CaseStatus = "voorstel" | "opbouw" | "piloot" | "opgeleverd";
-
-/** Eén bestand uit het voorbeeldbrein. `markeer` is de regel die met de markeerstift aangeduid wordt. */
-export interface BreinBestand {
-  map: string;
-  naam: string;
-  regels: string[];
-  markeer?: number;
-}
 
 export interface Getuigenis {
   quote: string;
@@ -37,8 +35,6 @@ export interface Copy {
     cta: string;
     menuOpenen: string;
     menuSluiten: string;
-    bel: string;
-    uren: string;
     taalLabel: string;
   };
   hero: {
@@ -51,7 +47,6 @@ export interface Copy {
     punten: string[];
     ondersteund: string;
     gesproken: string;
-    bestandBijschrift: string;
   };
   herken: {
     kicker: string;
@@ -70,13 +65,12 @@ export interface Copy {
     verander: { titel: string; tekst: string }[];
     slot: string;
     knop: string;
-    verkenner: { titel: string; uitleg: string; bestanden: BreinBestand[]; voorbeeld: string; wortel: string };
   };
   werkwijze: {
     h2: string;
     sub: string;
     intro: string;
-    stappen: { titel: string; tekst: string; duur: string }[];
+    stappen: { titel: string; tekst: string }[];
     knop: string;
   };
   waarom: {
@@ -89,7 +83,8 @@ export interface Copy {
     h2: string;
     sub: string;
     intro: string;
-    niveaus: { titel: string; tekst: string }[];
+    /** De vijf zinnen van Amina, van eenvoudig naar veel. Geen eigen tussenkopjes. */
+    niveaus: string[];
     praktijk: string;
     statusLabel: string;
     statussen: Record<CaseStatus, string>;
@@ -106,7 +101,6 @@ export interface Copy {
     bel: string;
     belUren: string;
     fotoAlt: string;
-    fotoBijschrift: string;
   };
   bewijs: {
     h2: string;
@@ -121,7 +115,6 @@ export interface Copy {
     h2: string;
     sub: string;
     items: { q: string; a: string }[];
-    toonAlle: string;
     knop: string;
   };
   voorWie: {
@@ -141,14 +134,12 @@ export interface Copy {
       email: string;
       telefoon: string;
       website: string;
-      websiteHint: string;
       bericht: string;
       knop: string;
       bezig: string;
       bedankt: string;
       bedanktSub: string;
       fout: string;
-      privacy: string;
     };
   };
   overOns: { metaTitel: string; metaBeschrijving: string };

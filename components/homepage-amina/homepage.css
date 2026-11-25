@@ -1,38 +1,46 @@
 /* =====================================================================
-   Homepage 2026-11 (branch homepage-amina)
+   Homepage 2026-11 (branch homepage-amina), tweede ronde 25/11
 
-   Eén idee: Finit schrijft uit hoe een bedrijf werkt. De pagina ziet er dus
-   uit als werk op papier: inkt, balpenblauw en één markeerstift.
+   Alleen de copy van Amina, zoals zij ze schreef. Het design doet het met
+   letters, wit, een strak raster en drie vlakke kleuren. Geen tekeningen,
+   geen verzonnen voorbeelden of labeltjes, geen versiering.
 
-   - Inkt (#0F1B3D): koppen, de donkere banden, de footer.
-   - Balpenblauw (#2246DC): de ene gevulde knop, links en de focusrand.
-   - Markeerstift (#FFE873): alleen om een regel aan te duiden, nooit als vlak.
-   - Verder wit en één koel grijs. Geen tekeningen, geen kleurverlopen.
+   De kleuren zijn die van Finit zelf (Alex, 25/11: het felle blauw van de
+   eerste ronde paste niet): alleen marineblauw, in één tint met een donkere
+   en een lichte variant.
 
-   Lettertypes blijven Bricolage Grotesque (koppen) en Schibsted Grotesk
-   (tekst). Het voorbeeldbrein staat in een vaste-breedteletter, omdat het
-   gewone tekstbestanden zijn: zo ziet een .txt eruit in Kladblok.
+   - Grond (#F5F7FB): de hele pagina. Geen afwisselende banden.
+   - Marineblauw (#1A2D63): koppen, de ene gevulde knop, links, de twee
+     donkere banden ("Herkenbaar?" en het slot met het formulier).
+   - Donker marineblauw (#14234F): de knop bij hover, de footer.
+   - Geen tweede kleur, geen markeerstift, geen kleurverlopen, geen schaduw
+     onder knoppen.
 
-   Maten: 4/8/12/16/24/32/48/64/96/128. Alle klassen beginnen met nh-.
+   Lettertypes: Bricolage Grotesque (koppen) en Schibsted Grotesk (tekst).
+   Maten: 4/8/12/16/24/32/48/64/96/128. Hoeken: 8 (knop, veld) en 12
+   (blad, foto). Alle klassen beginnen met nh-.
    ===================================================================== */
 
 .nh {
+  --nh-grond: #f5f7fb;
   --nh-wit: #ffffff;
-  --nh-vel: #f3f5f8;
-  --nh-inkt: #0f1b3d;
-  --nh-tekst: #2a334d;
-  --nh-grijs: #5a6478;
-  --nh-lijn: #dde2ea;
-  --nh-pen: #2246dc;
-  --nh-pen-donker: #1936b0;
-  --nh-stift: #ffe873;
+  --nh-inkt: #1a2d63;
+  --nh-tekst: #3d4766;
+  --nh-grijs: #626b86;
+  --nh-lijn: #dce2ee;
+  --nh-pen: #1a2d63;
+  --nh-pen-donker: #14234f;
+  --nh-band: #1a2d63;
+  --nh-diep: #14234f;
   --nh-groen: #17804a;
-  --nh-op-inkt: #c9d2e8;
-  --nh-lijn-op-inkt: rgba(255, 255, 255, 0.16);
-  --nh-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --nh-op-inkt: #d3dbef;
+  --nh-op-band: #d3dbef;
+  --nh-lijn-op-inkt: rgba(255, 255, 255, 0.2);
+  --nh-r1: 8px;
+  --nh-r2: 12px;
   --nh-kop: var(--font-bricolage), var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
 
-  background: var(--nh-wit);
+  background: var(--nh-grond);
   color: var(--nh-tekst);
   font-family: var(--font-schibsted), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 1.0625rem;
@@ -44,13 +52,14 @@
 @media (min-width: 768px) {
   .nh { font-size: 1.125rem; }
 }
-.nh ::selection { background: var(--nh-stift); color: var(--nh-inkt); }
+.nh ::selection { background: #d5def5; color: var(--nh-inkt); }
 .nh :focus-visible { outline: 2px solid var(--nh-pen); outline-offset: 3px; border-radius: 4px; }
-.nh-donker :focus-visible { outline-color: var(--nh-stift); }
+.nh-donker :focus-visible, .nh-band :focus-visible { outline-color: #fff; }
+.nh-band .nh-form :focus-visible { outline-color: var(--nh-pen); }
 
 .nh-skip {
   position: absolute; left: 16px; top: -64px; z-index: 60;
-  background: var(--nh-inkt); color: #fff; padding: 12px 16px; border-radius: 8px;
+  background: var(--nh-inkt); color: #fff; padding: 12px 16px; border-radius: var(--nh-r1);
   font-size: 1rem; font-weight: 600; transition: top 120ms ease;
 }
 .nh-skip:focus { top: 16px; }
@@ -60,34 +69,45 @@
 @media (min-width: 768px) { .nh-wrap { padding-inline: 40px; } }
 @media (min-width: 1280px) { .nh-wrap { padding-inline: 48px; } }
 
-.nh-sectie { padding-block: 72px; scroll-margin-top: 72px; }
-@media (min-width: 1024px) { .nh-sectie { padding-block: 112px; } }
-.nh-vel { background: var(--nh-vel); }
+/* Secties liggen op dezelfde grond: de witruimte en de kop scheiden ze, geen banden. */
+.nh-sectie { padding-block: 48px; scroll-margin-top: 72px; }
+@media (min-width: 1024px) { .nh-sectie { padding-block: 72px; } }
 .nh-donker { background: var(--nh-inkt); color: var(--nh-op-inkt); }
+.nh-band { background: var(--nh-band); color: var(--nh-op-band); }
+.nh-sectie.nh-donker, .nh-sectie.nh-band { padding-block: 72px; margin-top: 48px; }
+.nh-sectie.nh-donker { margin-bottom: 48px; }
+@media (min-width: 1024px) {
+  .nh-sectie.nh-donker, .nh-sectie.nh-band { padding-block: 120px; margin-top: 72px; }
+  .nh-sectie.nh-donker { margin-bottom: 72px; }
+}
 
-/* Twee kolommen: links de kop (blijft staan op een groot scherm), rechts de inhoud. */
+/* Het raster: twaalf kolommen. De varianten zeggen waar de tekst en waar de rest staat. */
 .nh-rail { display: grid; gap: 40px; }
 @media (min-width: 1024px) {
   .nh-rail { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; }
+  .nh-rail--lees { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
   .nh-rail-vast { position: sticky; top: 104px; }
 }
 
 /* ---------- Letters ---------- */
-.nh-h1, .nh-h2, .nh-h3, .nh-vervolg {
+.nh-h1, .nh-h2, .nh-h3, .nh-vervolg, .nh-groot {
   font-family: var(--nh-kop);
   color: var(--nh-inkt);
   text-wrap: balance;
 }
+/* De kop van de pagina: groot en strak, het zwaarste element van het eerste scherm. */
 .nh-h1 {
-  font-size: clamp(2.375rem, 1.35rem + 4.6vw, 4.25rem);
-  font-weight: 650; line-height: 1.02; letter-spacing: -0.032em;
+  font-size: clamp(2.5rem, 1.1rem + 6vw, 5.25rem);
+  font-weight: 650; line-height: 0.98; letter-spacing: -0.038em;
   font-variation-settings: "opsz" 96;
+  max-width: 12.5em;
 }
+/* De tweede helft van de kop: zelfde letter, lichter en grijzer. */
 .nh-vervolg {
-  font-size: clamp(1.3125rem, 1.05rem + 1.1vw, 1.75rem);
-  font-weight: 500; line-height: 1.28; letter-spacing: -0.014em;
+  font-size: clamp(1.375rem, 1.05rem + 1.3vw, 1.9375rem);
+  font-weight: 500; line-height: 1.24; letter-spacing: -0.016em;
   font-variation-settings: "opsz" 36;
-  color: var(--nh-tekst);
+  color: var(--nh-grijs);
 }
 .nh-h2 {
   font-size: clamp(1.875rem, 1.3rem + 2.5vw, 3rem);
@@ -99,193 +119,168 @@
   font-variation-settings: "opsz" 28;
 }
 @media (min-width: 768px) { .nh-h3 { font-size: 1.4375rem; } }
+/* Een zin die groter mag dan lopende tekst: de vraag, het slot van een sectie. */
+.nh-groot {
+  font-size: clamp(1.375rem, 1.1rem + 1.1vw, 1.875rem);
+  font-weight: 500; line-height: 1.28; letter-spacing: -0.016em;
+  font-variation-settings: "opsz" 36;
+  max-width: 26em;
+}
 .nh-sub { font-size: 1.1875rem; line-height: 1.5; color: var(--nh-inkt); font-weight: 500; max-width: 34em; }
 @media (min-width: 768px) { .nh-sub { font-size: 1.3125rem; } }
 .nh-tekst { max-width: 36em; }
 .nh-klein { font-size: 0.9375rem; line-height: 1.55; color: var(--nh-grijs); }
-.nh-donker .nh-h1, .nh-donker .nh-h2, .nh-donker .nh-h3, .nh-donker .nh-sub { color: #fff; }
+.nh-donker .nh-h2, .nh-donker .nh-h3, .nh-donker .nh-sub, .nh-donker .nh-groot,
+.nh-band .nh-h2, .nh-band .nh-h3, .nh-band .nh-sub, .nh-band .nh-groot { color: #fff; }
 .nh-donker .nh-klein { color: var(--nh-op-inkt); }
 
 /* ---------- Knoppen en links ---------- */
-/* Eén gevulde knop op de hele pagina: het startgesprek. De rest is een link. */
+/* Eén gevulde knop op de hele pagina: het startgesprek. Vlak, zonder schaduw. De rest is een link. */
 .nh-knop {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  min-height: 52px; padding: 12px 24px; border-radius: 10px;
+  min-height: 52px; padding: 12px 24px; border-radius: var(--nh-r1);
   background: var(--nh-pen); color: #fff;
   font-size: 1.0625rem; font-weight: 600; line-height: 1.2; text-align: center;
-  box-shadow: 0 1px 2px rgba(15, 27, 61, 0.18), 0 10px 24px -12px rgba(34, 70, 220, 0.55);
-  transition: background-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+  transition: background-color 140ms ease, transform 100ms ease;
 }
-.nh-knop:hover { background: var(--nh-pen-donker); transform: translateY(-1px); box-shadow: 0 1px 2px rgba(15, 27, 61, 0.2), 0 14px 28px -12px rgba(34, 70, 220, 0.6); }
-.nh-knop:active { transform: translateY(0); }
+.nh-knop:hover { background: var(--nh-pen-donker); }
+.nh-knop:active { transform: translateY(1px); }
 .nh-knop:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-.nh-knop--klein { min-height: 44px; padding: 10px 18px; font-size: 1rem; }
-@media (min-width: 640px) { .nh-knop { white-space: nowrap; flex-shrink: 0; } }
+.nh-knop--klein { min-height: 44px; padding: 10px 20px; font-size: 1rem; }
 .nh-knop--breed { width: 100%; }
-@media (min-width: 640px) { .nh-knop--breed { width: auto; } }
+@media (min-width: 640px) {
+  .nh-knop { white-space: nowrap; flex-shrink: 0; }
+  .nh-knop--breed { width: auto; }
+}
 
+/* De tweede keuze is altijd een link: onderstreept, met een pijl die zegt waar ze heen gaat. */
 .nh-link {
   color: var(--nh-pen); font-weight: 600;
   text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 5px;
-  text-decoration-color: color-mix(in srgb, var(--nh-pen) 35%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--nh-pen) 40%, transparent);
   transition: text-decoration-color 140ms ease, color 140ms ease;
 }
 .nh-link:hover { text-decoration-color: currentColor; color: var(--nh-pen-donker); }
-.nh-donker .nh-link { color: #fff; text-decoration-color: rgba(255, 255, 255, 0.45); }
-.nh-donker .nh-link:hover { color: #fff; text-decoration-color: #fff; }
-/* Een link die naar beneden wijst (springt naar een sectie verderop). */
+.nh-donker .nh-link, .nh-band .nh-link { color: #fff; text-decoration-color: rgba(255, 255, 255, 0.55); }
+.nh-donker .nh-link:hover, .nh-band .nh-link:hover { color: #fff; text-decoration-color: #fff; }
 .nh-link-neer { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
-.nh-link-neer svg { transition: transform 160ms ease; }
+.nh-link-neer svg { flex: none; transition: transform 160ms ease; }
 .nh-link-neer:hover svg { transform: translateY(2px); }
+/* Knop en link naast elkaar: links uitgelijnd, de belangrijkste eerst. Op gsm onder elkaar. */
+.nh-acties { display: flex; flex-direction: column; gap: 8px; }
+@media (min-width: 640px) { .nh-acties { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px 32px; } }
 
 /* ---------- Navigatie ---------- */
 .nh-nav {
   position: sticky; top: 0; z-index: 40;
-  background: var(--nh-wit); border-bottom: 1px solid var(--nh-lijn);
+  background: var(--nh-grond); border-bottom: 1px solid var(--nh-lijn);
 }
 .nh-nav-rij { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 64px; }
 @media (min-width: 1024px) { .nh-nav-rij { height: 72px; } }
-.nh-nav-links { display: none; align-items: center; gap: 28px; }
+.nh-nav-links { display: none; align-items: center; gap: 32px; }
 @media (min-width: 1100px) { .nh-nav-links { display: flex; } }
-.nh-nav-link { font-size: 1rem; font-weight: 500; color: var(--nh-tekst); padding-block: 12px; transition: color 140ms ease; }
-.nh-nav-link:hover { color: var(--nh-pen); }
+.nh-nav-link { font-size: 0.9375rem; font-weight: 500; color: var(--nh-tekst); padding-block: 12px; transition: color 140ms ease; }
+.nh-nav-link:hover, .nh-nav-link[aria-current="page"] { color: var(--nh-inkt); text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1.5px; }
 .nh-taal { display: inline-flex; align-items: center; gap: 2px; font-size: 0.9375rem; font-weight: 600; }
-.nh-taal a, .nh-taal span { min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; }
-.nh-taal a { color: var(--nh-grijs); transition: color 140ms ease, background-color 140ms ease; }
-.nh-taal a:hover { color: var(--nh-inkt); background: var(--nh-vel); }
-.nh-taal [aria-current="true"] { color: var(--nh-inkt); background: var(--nh-vel); }
-.nh-nav-link[aria-current="page"] { color: var(--nh-pen); }
-.nh-menuknop { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 10px; color: var(--nh-inkt); }
-.nh-menuknop:hover { background: var(--nh-vel); }
+.nh-taal a, .nh-taal span { min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--nh-r1); }
+.nh-taal a { color: var(--nh-grijs); transition: color 140ms ease; }
+.nh-taal a:hover { color: var(--nh-inkt); text-decoration: underline; text-underline-offset: 5px; }
+.nh-taal [aria-current="true"] { color: var(--nh-inkt); }
+.nh-menuknop { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: var(--nh-r1); color: var(--nh-inkt); }
+.nh-menuknop:hover { background: #e9ecf1; }
 @media (min-width: 1100px) { .nh-menuknop { display: none; } }
 .nh-nav-knop { display: none; }
 @media (min-width: 640px) { .nh-nav-knop { display: inline-flex; } }
 
-.nh-menu { position: fixed; inset: 64px 0 0 0; z-index: 39; background: var(--nh-wit); overflow-y: auto; overscroll-behavior: contain; padding: 24px 24px 40px; }
+.nh-menu { position: fixed; inset: 64px 0 0 0; z-index: 39; background: var(--nh-grond); overflow-y: auto; overscroll-behavior: contain; padding: 24px 24px 40px; }
 .nh-menu-link { display: flex; align-items: center; justify-content: space-between; min-height: 56px; border-bottom: 1px solid var(--nh-lijn); font-family: var(--nh-kop); font-size: 1.375rem; font-weight: 600; color: var(--nh-inkt); letter-spacing: -0.012em; }
 
-/* ---------- Hero ---------- */
-.nh-hero { padding-block: 40px 64px; }
-@media (min-width: 1024px) { .nh-hero { padding-block: 56px 88px; } }
-.nh-hero-grid { display: grid; gap: 48px; }
+/* ---------- Hero: alleen op het eerste scherm, en alleen letters ---------- */
+.nh-hero { display: flex; flex-direction: column; padding-top: 40px; }
 @media (min-width: 1024px) {
-  .nh-hero-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 56px; align-items: center; }
+  .nh-hero { min-height: calc(100dvh - 73px); padding-top: 0; }
 }
-.nh-voorwie { font-size: 1rem; font-weight: 600; color: var(--nh-pen); line-height: 1.4; }
-.nh-punten { display: grid; gap: 10px; }
+.nh-hero-lijf { padding-bottom: 40px; }
+@media (min-width: 1024px) { .nh-hero-lijf { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-block: 48px; } }
+.nh-voorwie { font-size: 1rem; font-weight: 600; color: var(--nh-inkt); line-height: 1.4; }
+/* Onder de kop: links de belofte met de knop, rechts de uitleg met de drie geruststellingen. */
+.nh-hero-rij { display: grid; gap: 32px; margin-top: 32px; }
+@media (min-width: 1024px) {
+  .nh-hero-rij { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 96px; margin-top: 40px; align-items: start; }
+}
+.nh-punten { display: grid; gap: 8px; }
 .nh-punt { display: flex; align-items: flex-start; gap: 12px; font-size: 1rem; line-height: 1.5; color: var(--nh-tekst); }
-.nh-vink { flex: none; width: 20px; height: 20px; margin-top: 2px; color: var(--nh-pen); }
-.nh-kruis { flex: none; width: 20px; height: 20px; margin-top: 3px; color: var(--nh-grijs); }
-.nh-steun { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; }
-.nh-steun img { height: 26px; width: auto; opacity: 0.88; }
-.nh-steun img.nh-steun-smal { height: 15px; }
+.nh-vink { flex: none; width: 20px; height: 20px; margin-top: 2px; color: var(--nh-inkt); }
+.nh-kruis { flex: none; width: 20px; height: 20px; margin-top: 2px; color: var(--nh-grijs); }
+/* Onderaan het eerste scherm: wie ons steunt, en met hoeveel bedrijven we al spraken. */
+.nh-strook { display: flex; flex-direction: column; gap: 20px; border-top: 1px solid var(--nh-lijn); padding-block: 24px; }
+@media (min-width: 1200px) { .nh-strook { flex-direction: row; align-items: center; justify-content: space-between; gap: 48px; } }
+.nh-steun { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; }
+.nh-steun img { height: 24px; width: auto; }
+.nh-steun img.nh-steun-smal { height: 14px; }
+.nh-feit { font-weight: 600; color: var(--nh-inkt); }
 
-/* ---------- Het brein: één bestand, en de verkenner ---------- */
-.nh-blad {
-  background: var(--nh-wit); border: 1px solid var(--nh-lijn); border-radius: 14px; overflow: hidden;
-  box-shadow: 0 1px 2px rgba(15, 27, 61, 0.06), 0 28px 56px -28px rgba(15, 27, 61, 0.28);
-}
-.nh-blad-kop {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 12px 20px; border-bottom: 1px solid var(--nh-lijn); background: var(--nh-vel);
-  font-family: var(--nh-mono); font-size: 0.8125rem; line-height: 1.4; color: var(--nh-grijs);
-}
-.nh-blad-kop b { color: var(--nh-inkt); font-weight: 600; }
-.nh-blad-lijf { padding: 20px 20px 24px; font-family: var(--nh-mono); font-size: 0.8125rem; line-height: 1.7; color: var(--nh-inkt); min-height: 20em; }
-@media (min-width: 768px) { .nh-blad-lijf { padding: 24px 28px 28px; font-size: 0.875rem; } }
-.nh-regel { display: block; min-height: 1.7em; }
-.nh-regel--titel { font-weight: 700; }
-/* De markeerstift: een streep achter de tekst, die ook klopt als de regel over twee lijnen loopt. */
-.nh-markeer {
-  padding: 0.08em 4px; margin-inline: -4px; border-radius: 3px;
-  background-image: linear-gradient(var(--nh-stift), var(--nh-stift));
-  background-repeat: no-repeat; background-size: 100% 100%;
-  -webkit-box-decoration-break: clone; box-decoration-break: clone;
-}
-
-/* Bij het laden wordt het bestand geschreven: regel na regel, en dan gaat de stift over de uitzondering. Eén keer. */
-@media (prefers-reduced-motion: no-preference) {
-  .nh-schrijf .nh-regel { opacity: 0; transform: translateY(6px); animation: nh-regel-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards; animation-delay: calc(300ms + var(--i) * 200ms); }
-  .nh-schrijf .nh-markeer { background-size: 0% 100%; animation: nh-stift 620ms cubic-bezier(0.3, 0.7, 0.2, 1) forwards; animation-delay: calc(700ms + var(--n) * 200ms); }
-  .nh-wissel { animation: nh-regel-in 220ms ease both; }
-}
-@keyframes nh-regel-in { to { opacity: 1; transform: none; } }
-@keyframes nh-stift { to { background-size: 100% 100%; } }
-
-/* De verkenner: is er plaats (het blad zelf is breed genoeg), dan staan de bestanden links
-   in een kolom; anders als een rij knoppen erboven. Daarom een container query en geen
-   schermbreedte: op een laptop is het blad smaller dan op een tablet. */
-.nh-blad { container-type: inline-size; }
-.nh-verkenner { display: grid; }
-.nh-boom { display: flex; gap: 8px; overflow-x: auto; padding: 12px; border-bottom: 1px solid var(--nh-lijn); background: var(--nh-vel); font-family: var(--nh-mono); font-size: 0.8125rem; }
-.nh-boom-item { display: contents; }
-.nh-map { display: none; padding: 12px 8px 4px; color: var(--nh-grijs); }
-.nh-bestand {
-  display: flex; align-items: center; gap: 8px; flex: none; width: auto; min-height: 44px; padding: 8px 12px; border-radius: 8px;
-  color: var(--nh-tekst); text-align: left; white-space: nowrap; background: var(--nh-wit); border: 1px solid var(--nh-lijn);
-  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
-}
-.nh-bestand:hover { color: var(--nh-inkt); background: var(--nh-wit); }
-.nh-bestand[aria-selected="true"] { background: var(--nh-inkt); border-color: var(--nh-inkt); color: #fff; }
-.nh-bestand svg { flex: none; width: 15px; height: 15px; opacity: 0.7; }
-@container (min-width: 600px) {
-  .nh-verkenner { grid-template-columns: 200px minmax(0, 1fr); }
-  .nh-boom { display: block; overflow: visible; padding: 16px 12px; border-bottom: 0; border-right: 1px solid var(--nh-lijn); }
-  .nh-boom-item { display: block; }
-  .nh-map { display: block; }
-  .nh-boom-item:first-child .nh-map { padding-top: 0; }
-  .nh-bestand { width: 100%; white-space: normal; overflow-wrap: anywhere; background: transparent; border-color: transparent; min-height: 40px; padding: 6px 8px; }
-  .nh-bestand:hover { background: var(--nh-wit); }
-  .nh-bestand[aria-selected="true"] { background: var(--nh-inkt); }
-}
-
-/* ---------- Herkenbaar? (donker: het zijn je avonden) ---------- */
+/* ---------- Herkenbaar? (de ene donkere band) ---------- */
 .nh-pijnen { display: grid; border-top: 1px solid var(--nh-lijn-op-inkt); }
 @media (min-width: 768px) { .nh-pijnen { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 64px; border-top: 0; } }
-.nh-pijn { padding-block: 28px; border-bottom: 1px solid var(--nh-lijn-op-inkt); }
-@media (min-width: 768px) { .nh-pijn { border-top: 1px solid var(--nh-lijn-op-inkt); border-bottom: 0; padding-block: 28px 36px; } }
+.nh-pijn { padding-block: 24px 32px; border-bottom: 1px solid var(--nh-lijn-op-inkt); }
+@media (min-width: 768px) { .nh-pijn { border-top: 1px solid var(--nh-lijn-op-inkt); border-bottom: 0; } }
+
+/* ---------- Het brein: de twee dingen die veranderen, naast de uitleg ---------- */
+.nh-paneel { background: var(--nh-wit); border: 1px solid var(--nh-lijn); border-radius: var(--nh-r2); padding: 28px 24px; }
+@media (min-width: 768px) { .nh-paneel { padding: 36px 36px 40px; } }
+.nh-paneel li + li { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--nh-lijn); }
+
+/* ---------- Hoe we werken: een tijdlijn, want het zijn echt stappen ---------- */
+.nh-stappen { position: relative; display: grid; gap: 40px; }
+.nh-stappen::before { content: ""; position: absolute; left: 23.5px; top: 24px; bottom: 24px; width: 1px; background: #aab1c0; }
+.nh-stap { position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 20px; }
+@media (min-width: 768px) { .nh-stap { column-gap: 32px; } }
+.nh-stap-nr {
+  display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%;
+  background: var(--nh-inkt); color: #fff;
+  font-family: var(--nh-kop); font-size: 1.25rem; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums;
+}
+.nh-stap-lijf { padding-top: 8px; }
 
 /* ---------- Lijsten met een lijn ertussen ---------- */
 .nh-rijen > * { border-top: 1px solid var(--nh-lijn); padding-block: 28px; }
 .nh-rijen > *:last-child { border-bottom: 1px solid var(--nh-lijn); }
-.nh-donker .nh-rijen > * { border-color: var(--nh-lijn-op-inkt); }
-
-/* De vijf stappen: het zijn echt stappen, dus genummerd. */
-.nh-stap { display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 16px; row-gap: 8px; }
-@media (min-width: 768px) { .nh-stap { grid-template-columns: 72px minmax(0, 1fr) auto; column-gap: 24px; } }
-.nh-stap-nr { font-family: var(--nh-kop); font-size: 2rem; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--nh-pen); font-variant-numeric: tabular-nums; }
-@media (min-width: 768px) { .nh-stap-nr { font-size: 2.75rem; } }
-.nh-duur { grid-column: 2; font-size: 0.9375rem; font-weight: 600; color: var(--nh-grijs); white-space: nowrap; }
-@media (min-width: 768px) { .nh-duur { grid-column: 3; grid-row: 1; padding-top: 4px; text-align: right; } }
-
-/* Waarom Finit: kop links, uitleg rechts. */
 .nh-paar { display: grid; gap: 8px; }
-@media (min-width: 768px) { .nh-paar { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; } }
+@media (min-width: 768px) { .nh-paar { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; } }
 
-/* Wat we bouwen: vijf niveaus, van eenvoudig naar veel. Het balkje toont hoe ver. */
-.nh-niveau { display: grid; gap: 8px 24px; align-items: baseline; }
-@media (min-width: 768px) { .nh-niveau { grid-template-columns: 96px minmax(0, 4fr) minmax(0, 7fr); } }
-.nh-meter { display: inline-flex; gap: 4px; align-items: center; height: 1.5em; }
-.nh-meter i { display: block; width: 14px; height: 6px; border-radius: 2px; background: var(--nh-lijn); }
-.nh-meter i[data-aan="true"] { background: var(--nh-pen); }
+/* ---------- Wat we bouwen: een trap. Elke zin bouwt verder op de vorige. ---------- */
+.nh-trap { display: grid; gap: 8px; }
+.nh-trede {
+  background: var(--nh-wit); border: 1px solid var(--nh-lijn); border-left: 3px solid var(--nh-inkt);
+  border-radius: 0 var(--nh-r1) var(--nh-r1) 0; padding: 20px 24px; font-size: 1.0625rem; line-height: 1.55; color: var(--nh-inkt);
+}
+@media (min-width: 900px) { .nh-trede { margin-left: calc(var(--t) * 7%); padding: 22px 28px; } }
 
-.nh-cases { display: grid; gap: 24px; }
-@media (min-width: 768px) { .nh-cases { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; } }
-.nh-case { background: var(--nh-wit); border: 1px solid var(--nh-lijn); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
-@media (min-width: 768px) { .nh-case { padding: 28px 32px 28px; } }
-.nh-case-voet { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--nh-lijn); display: grid; gap: 4px; }
-.nh-status { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: 0.9375rem; font-weight: 600; color: var(--nh-inkt); }
-.nh-status .nh-meter i { width: 18px; }
-.nh-status[data-status="piloot"] .nh-meter i[data-aan="true"],
-.nh-status[data-status="opgeleverd"] .nh-meter i[data-aan="true"] { background: var(--nh-groen); }
-.nh-tools { font-size: 1rem; line-height: 1.7; color: var(--nh-tekst); max-width: 52em; }
-.nh-tools b { color: var(--nh-inkt); font-weight: 600; }
+/* De voorbeelden: één blad, één rij per bedrijf. Geen kaartjes. */
+.nh-blad { background: var(--nh-wit); border: 1px solid var(--nh-lijn); border-radius: var(--nh-r2); overflow: hidden; }
+.nh-dossier-rij { display: grid; gap: 8px; padding: 24px 20px; border-top: 1px solid var(--nh-lijn); }
+.nh-dossier-rij:first-child { border-top: 0; }
+@media (min-width: 900px) {
+  .nh-dossier-rij { grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 2.6fr); gap: 40px; padding: 28px 32px; align-items: start; }
+}
+.nh-dossier-sector { font-family: var(--nh-kop); font-size: 1.1875rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; color: var(--nh-inkt); }
+.nh-dossier-tekst { font-size: 1rem; line-height: 1.6; }
+.nh-status { display: flex; align-items: flex-start; gap: 10px; font-size: 0.9375rem; font-weight: 600; line-height: 1.45; color: var(--nh-inkt); }
+.nh-status::before { content: ""; flex: none; width: 10px; height: 10px; margin-top: 0.42em; border-radius: 50%; background: #aab1c0; }
+.nh-status[data-status="opbouw"]::before { background: #4a6bc4; }
+.nh-status[data-status="piloot"]::before, .nh-status[data-status="opgeleverd"]::before { background: var(--nh-groen); }
+.nh-status small { display: block; margin-top: 2px; font-size: 0.875rem; font-weight: 400; color: var(--nh-grijs); }
+
+/* De tools: de echte logo's, in hun eigen kleur. */
+.nh-tools { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; }
+.nh-tool { display: inline-flex; align-items: center; gap: 8px; font-size: 0.9375rem; font-weight: 500; color: var(--nh-tekst); white-space: nowrap; }
+.nh-tool img { width: 22px; height: 22px; object-fit: contain; }
 
 /* ---------- Team ---------- */
-/* Links de foto van de drie samen, rechts wie wat doet. */
 .nh-team { display: grid; gap: 40px; }
 @media (min-width: 1024px) { .nh-team { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; align-items: start; } }
-.nh-foto { position: relative; overflow: hidden; border-radius: 14px; background: var(--nh-vel); aspect-ratio: 4 / 3; }
+.nh-foto { position: relative; overflow: hidden; border-radius: var(--nh-r2); background: #e9ecf1; aspect-ratio: 4 / 3; }
 .nh-foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .nh-mens { border-top: 1px solid var(--nh-lijn); padding-block: 20px; }
 .nh-mens:first-child { border-top: 2px solid var(--nh-inkt); }
@@ -293,6 +288,7 @@
 
 /* ---------- Bewijs ---------- */
 .nh-quote { font-family: var(--nh-kop); font-size: 1.375rem; font-weight: 500; line-height: 1.35; letter-spacing: -0.012em; color: var(--nh-inkt); }
+.nh-getuige { background: var(--nh-wit); border: 1px solid var(--nh-lijn); border-radius: var(--nh-r2); padding: 28px; display: grid; gap: 12px; }
 
 /* ---------- Vragen ---------- */
 .nh-vraag { border-top: 1px solid var(--nh-lijn); }
@@ -303,54 +299,57 @@
   font-family: var(--nh-kop); font-size: 1.1875rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; color: var(--nh-inkt);
   font-variation-settings: "opsz" 24;
 }
-@media (min-width: 768px) { .nh-vraag summary { font-size: 1.3125rem; padding-block: 24px; } }
+@media (min-width: 768px) { .nh-vraag summary { font-size: 1.3125rem; padding-block: 22px; } }
 .nh-vraag summary::-webkit-details-marker { display: none; }
-.nh-vraag summary:hover { color: var(--nh-pen); }
-.nh-plus { flex: none; width: 24px; height: 24px; margin-top: 2px; color: var(--nh-pen); transition: transform 200ms ease; }
+.nh-vraag summary:hover { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1.5px; }
+.nh-plus { flex: none; width: 24px; height: 24px; margin-top: 2px; color: var(--nh-inkt); transition: transform 200ms ease; }
 .nh-vraag[open] .nh-plus { transform: rotate(45deg); }
 .nh-antwoord { padding-bottom: 28px; padding-right: 48px; max-width: 38em; }
 
-/* ---------- Voor wie ---------- */
-.nh-twee { display: grid; gap: 24px; }
-@media (min-width: 900px) { .nh-twee { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; } }
-.nh-vak { border-radius: 14px; padding: 28px 24px; }
-@media (min-width: 768px) { .nh-vak { padding: 36px 40px 40px; } }
-.nh-vak--niet { background: transparent; border: 1px solid var(--nh-lijn); }
-.nh-vak--wel { background: var(--nh-wit); border: 1px solid var(--nh-lijn); box-shadow: 0 1px 2px rgba(15, 27, 61, 0.06), 0 24px 48px -28px rgba(15, 27, 61, 0.25); }
+/* ---------- Voor wie: twee kolommen, geen vakken ---------- */
+.nh-twee { display: grid; gap: 40px; }
+@media (min-width: 900px) { .nh-twee { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; } }
+.nh-kolom { border-top: 2px solid var(--nh-inkt); padding-top: 20px; }
+.nh-kolom--niet { border-top-color: #aab1c0; }
+.nh-kolom--niet .nh-h3, .nh-kolom--niet .nh-punt { color: var(--nh-grijs); }
 
-/* ---------- Slot en formulier ---------- */
-.nh-form { background: var(--nh-wit); color: var(--nh-tekst); border-radius: 16px; padding: 24px; }
+/* ---------- Slot en formulier (de tweede marineblauwe band) ---------- */
+.nh-form { background: var(--nh-wit); color: var(--nh-tekst); border-radius: var(--nh-r2); padding: 24px; }
 @media (min-width: 768px) { .nh-form { padding: 40px; } }
+.nh-form .nh-h3 { color: var(--nh-inkt); }
 .nh-label { display: block; margin-bottom: 8px; font-size: 1rem; font-weight: 600; color: var(--nh-inkt); line-height: 1.35; }
 .nh-veld {
-  width: 100%; min-height: 52px; padding: 12px 16px; border-radius: 10px;
-  border: 1px solid #b9c0cd; background: var(--nh-wit); color: var(--nh-inkt);
+  width: 100%; min-height: 52px; padding: 12px 16px; border-radius: var(--nh-r1);
+  border: 1px solid #aab1c0; background: var(--nh-wit); color: var(--nh-inkt);
   font: inherit; font-size: 1.0625rem; line-height: 1.4;
   transition: border-color 140ms ease, box-shadow 140ms ease;
 }
-.nh-veld::placeholder { color: #8a93a5; }
-.nh-veld:hover { border-color: var(--nh-grijs); }
+.nh-veld:hover { border-color: var(--nh-inkt); }
 .nh-veld:focus { outline: none; border-color: var(--nh-pen); box-shadow: 0 0 0 3px color-mix(in srgb, var(--nh-pen) 22%, transparent); }
 .nh-veld[aria-invalid="true"] { border-color: #b3261e; }
 .nh-fout { margin-top: 6px; font-size: 0.9375rem; color: #b3261e; }
-/* Het formulier is een wit vak in een donkere band: de tekst erin is dus weer donker. */
-.nh-form .nh-klein { color: var(--nh-grijs); }
-.nh-form .nh-h3 { color: var(--nh-inkt); }
 
 /* ---------- Footer ---------- */
-.nh-footer { background: #0a1430; color: var(--nh-op-inkt); font-size: 1rem; }
+.nh-footer { background: var(--nh-diep); color: var(--nh-op-inkt); font-size: 1rem; }
+.nh-footer--los { margin-top: 48px; }
+@media (min-width: 1024px) { .nh-footer--los { margin-top: 72px; } }
 .nh-footer a, .nh-footer button { transition: color 140ms ease; }
-.nh-footer a:hover, .nh-footer button:hover { color: #fff; }
+.nh-footer a:hover, .nh-footer button:hover { color: #fff; text-decoration: underline; text-underline-offset: 5px; }
 
 /* ---------- Gsm: de knop blijft onderaan in beeld ---------- */
 .nh-plak {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 35;
-  padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--nh-wit); border-top: 1px solid var(--nh-lijn);
-  box-shadow: 0 -12px 28px -20px rgba(15, 27, 61, 0.45);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--nh-grond); border-top: 1px solid var(--nh-lijn);
   transform: translateY(110%); transition: transform 220ms ease;
 }
 .nh-plak[data-toon="true"] { transform: none; }
 @media (min-width: 640px) { .nh-plak { display: none; } }
+
+/* Eén beweging, bij het laden: de kop en wat eronder staat komen rustig binnen. */
+@media (prefers-reduced-motion: no-preference) {
+  .nh-kom { animation: nh-kom 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--d, 0) * 90ms); }
+}
+@keyframes nh-kom { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
   .nh-plak, .nh-knop, .nh-plus, .nh-link-neer svg { transition: none; }
 }

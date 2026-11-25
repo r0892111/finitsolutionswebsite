@@ -3,50 +3,52 @@
 /**
  * De homepage (finitsolutions.be/ en /en/), branch homepage-amina, 25/11/2026.
  *
- * Copy: Amina (tab "Hub copy", 24/11). Alle tekst staat in ./copy.nl.ts en
- * ./copy.en.ts; deze pagina bevat geen tekst. Opmaak: ./homepage.css.
+ * Alleen de copy van Amina (tab "Hub copy", 24/11), in haar volgorde: hero →
+ * herkenbaar? → wat is een company brain → hoe we werken → waarom Finit → wat
+ * we bouwen → wie zit er achter Finit → bewijs → FAQ → voor wie → slot met het
+ * formulier. Alle tekst staat in ./copy.nl.ts en ./copy.en.ts; deze pagina
+ * bevat geen tekst. Opmaak: ./homepage.css, regels: ./DESIGN.md.
  *
- * Volgorde, zoals in haar copy: hero → herkenbaar? → wat is een company brain
- * → hoe we werken → waarom Finit → wat we bouwen → wie zit er achter Finit →
- * bewijs → vragen → voor wie → slot met het formulier.
- *
- * Eén gevulde knop op de hele pagina: "Plan een gratis startgesprek". Die
- * springt altijd naar het formulier onderaan (#startgesprek). Al de rest is een
- * link. Geen tekeningen: het enige beeld naast de foto's is het brein zelf, als
- * tekstbestand.
+ * Knoppen: één gevulde knop, "Plan een gratis startgesprek", op de plaatsen
+ * waar Amina ze zette (hero, na de vijf stappen, bij het bewijs, na de FAQ, in
+ * het formulier) en in het menu. Ze springt altijd naar het formulier. Haar
+ * twee andere knoppen ("Toon me wat er ontbreekt", "Toon me hoe het werkt")
+ * zijn links met een pijl naar de volgende sectie, zodat er per scherm maar
+ * één gevulde knop staat.
  */
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ArrowDown, Check, Phone, Plus, X } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { PHONE_LINK, PHONE_NUMBER } from "@/lib/finit-links";
-import { BreinBlad, BreinVerkenner } from "./brein";
-import type { CaseStatus, Taal } from "./copy";
+import type { Taal } from "./copy";
 import { COPY, HOME, Kop, Steun, TeamBlok, Voet, WaaromBlok, useSecties } from "./kader";
 import { StartFormulier } from "./start-formulier";
 
-const STATUS_VOLGORDE: CaseStatus[] = ["voorstel", "opbouw", "piloot", "opgeleverd"];
-/** Zoveel vragen staan er meteen; de rest komt met "Toon alle vragen". */
-const VRAGEN_ZICHTBAAR = 8;
-
-function Meter({ aan, van }: { aan: number; van: number }) {
-  return (
-    <span className="nh-meter" aria-hidden="true">
-      {Array.from({ length: van }, (_, i) => (
-        <i key={i} data-aan={i < aan} />
-      ))}
-    </span>
-  );
-}
+/** De echte logo's van de tools uit Amina's lijst, in hun eigen kleur. Stripe is een woordmerk. */
+const TOOL_LOGO: Record<string, string> = {
+  Teamleader: "/Teamleader_Icon.svg",
+  Odoo: "/tool-odoo.svg",
+  Outlook: "/Microsoft_Office_Outlook_(2018–2024).svg",
+  Gmail: "/Gmail_icon_(2020).png",
+  Excel: "/Microsoft_Office_Excel_(2019–2025).svg",
+  Teams: "/Microsoft_Office_Teams_(2019–2025).svg",
+  WhatsApp: "/tool-whatsapp.svg",
+  "Google Calendar": "/tool-googlecalendar.svg",
+  "Google Drive": "/tool-googledrive.svg",
+  HubSpot: "/tool-hubspot.svg",
+  Pipedrive: "/Pipedrive_id-7ejZnwv_0.svg",
+  Shopify: "/shopify_icon.png",
+  WooCommerce: "/tool-woocommerce.svg",
+  Notion: "/tool-notion.svg",
+};
 
 export function HomePagina({ taal }: { taal: Taal }) {
   const t = COPY[taal];
   const [plak, setPlak] = useState(false);
-  const [alleVragen, setAlleVragen] = useState(false);
   const { klik } = useSecties(taal, true);
-  // De knop van het startgesprek: overal dezelfde, springt naar het formulier.
   const start = (location: string) => klik("startgesprek", location);
-  const spring = klik;
 
   // Gsm: de knop plakt onderaan zodra de hero uit beeld is, en verdwijnt bij het formulier.
   useEffect(() => {
@@ -69,45 +71,42 @@ export function HomePagina({ taal }: { taal: Taal }) {
 
       <main id="inhoud">
         {/* ---------------------------------------------------------- */}
-        {/* 1. Hero                                                    */}
+        {/* 1. Hero: alleen letters, alleen op het eerste scherm       */}
         {/* ---------------------------------------------------------- */}
         <header className="nh-hero">
-          <div className="nh-wrap nh-hero-grid">
-            <div>
-              <p className="nh-voorwie">{t.hero.voorWie}</p>
-              <h1 className="nh-h1 mt-4">{t.hero.h1}</h1>
-              <p className="nh-vervolg mt-5 max-w-[26em]">{t.hero.h1Vervolg}</p>
-              <p className="nh-tekst mt-6">{t.hero.sub}</p>
+          <div className="nh-wrap nh-hero-lijf">
+            <p className="nh-voorwie nh-kom">{t.hero.voorWie}</p>
+            <h1 className="nh-h1 nh-kom mt-4" style={{ "--d": 1 } as React.CSSProperties}>{t.hero.h1}</h1>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-7">
-                <a id="hero-knop" href="#startgesprek" onClick={start("hero")} className="nh-knop nh-knop--breed">{t.hero.knop}</a>
-                <a href="#werkwijze" onClick={spring("werkwijze", "hero")} className="nh-link nh-link-neer justify-center sm:justify-start">
-                  {t.hero.tweedeLink}
-                  <ArrowDown className="h-4 w-4" aria-hidden="true" />
-                </a>
+            <div className="nh-hero-rij nh-kom" style={{ "--d": 2 } as React.CSSProperties}>
+              <div>
+                <p className="nh-vervolg">{t.hero.h1Vervolg}</p>
+                <div className="nh-acties mt-8">
+                  <a id="hero-knop" href="#startgesprek" onClick={start("hero")} className="nh-knop nh-knop--breed">{t.hero.knop}</a>
+                  <a href="#werkwijze" onClick={klik("werkwijze", "hero")} className="nh-link nh-link-neer justify-center sm:justify-start">
+                    {t.hero.tweedeLink}
+                    <ArrowDown className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                </div>
               </div>
-
-              <ul className="nh-punten mt-8">
-                {t.hero.punten.map((p) => (
-                  <li key={p} className="nh-punt">
-                    <Check className="nh-vink" strokeWidth={2.5} aria-hidden="true" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
+              <div>
+                <p>{t.hero.sub}</p>
+                <ul className="nh-punten mt-6">
+                  {t.hero.punten.map((p) => (
+                    <li key={p} className="nh-punt">
+                      <Check className="nh-vink" strokeWidth={2.25} aria-hidden="true" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-
-            <figure>
-              <BreinBlad bestand={t.brein.verkenner.bestanden[0]} voorbeeld={t.brein.verkenner.voorbeeld} wortel={t.brein.verkenner.wortel} schrijf />
-              <figcaption className="nh-klein mt-4">{t.hero.bestandBijschrift}</figcaption>
-            </figure>
           </div>
 
-          {/* De vertrouwensstrook: wie ons steunt, en met hoeveel bedrijven we al spraken. */}
-          <div className="nh-wrap mt-12 lg:mt-16">
-            <div className="flex flex-col gap-6 border-t border-[var(--nh-lijn)] pt-8 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+          <div className="nh-wrap">
+            <div className="nh-strook">
               <Steun label={t.hero.ondersteund} />
-              <p className="font-medium text-[var(--nh-inkt)] lg:pb-1 lg:text-right">{t.hero.gesproken}</p>
+              <p className="nh-feit">{t.hero.gesproken}</p>
             </div>
           </div>
         </header>
@@ -117,9 +116,9 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* ---------------------------------------------------------- */}
         <section id="herkenbaar" className="nh-sectie nh-donker">
           <div className="nh-wrap">
-            <p className="nh-h3 !text-[var(--nh-stift)]">{t.herken.kicker}</p>
+            <p className="nh-h3">{t.herken.kicker}</p>
             <h2 className="nh-h2 mt-4 max-w-[22em]">{t.herken.h2}</h2>
-            <p className="nh-sub mt-5 !text-[var(--nh-op-inkt)]">{t.herken.vraag}</p>
+            <p className="nh-groot mt-6 !text-[var(--nh-op-inkt)]">{t.herken.vraag}</p>
 
             <ul className="nh-pijnen mt-12 lg:mt-16">
               {t.herken.punten.map((p) => (
@@ -130,17 +129,15 @@ export function HomePagina({ taal }: { taal: Taal }) {
               ))}
             </ul>
 
-            <div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:gap-16">
-              <p className="nh-sub !max-w-[30em]">{t.herken.slot}</p>
-              <div className="flex flex-col gap-3 lg:items-end">
-                <a href="#brein" onClick={spring("brein", "herken")} className="nh-link nh-link-neer text-[1.1875rem]">
-                  {t.herken.knop}
-                  <ArrowDown className="h-5 w-5" aria-hidden="true" />
-                </a>
-                <a href="#startgesprek" onClick={start("herken")} className="nh-klein inline-flex min-h-[44px] items-center underline decoration-white/30 underline-offset-4 hover:decoration-white">
-                  {t.herken.kleineLink}
-                </a>
-              </div>
+            <p className="nh-groot mt-12 lg:mt-16">{t.herken.slot}</p>
+            <div className="nh-acties mt-6">
+              <a href="#brein" onClick={klik("brein", "herken")} className="nh-link nh-link-neer text-[1.1875rem]">
+                {t.herken.knop}
+                <ArrowDown className="h-5 w-5" aria-hidden="true" />
+              </a>
+              <a href="#startgesprek" onClick={start("herken")} className="inline-flex min-h-[44px] items-center text-[1rem] text-[var(--nh-op-inkt)] underline decoration-white/40 underline-offset-4 hover:text-white hover:decoration-white">
+                {t.herken.kleineLink}
+              </a>
             </div>
           </div>
         </section>
@@ -153,39 +150,32 @@ export function HomePagina({ taal }: { taal: Taal }) {
             <h2 className="nh-h2 max-w-[20em]">{t.brein.h2}</h2>
             <p className="nh-sub mt-5">{t.brein.sub}</p>
 
-            <div className="nh-rail mt-12 lg:mt-16">
+            {/* Links de uitleg, rechts (blijft staan) de twee dingen die veranderen. Op gsm staan ze eronder, zoals in de copy. */}
+            <div className="nh-rail nh-rail--lees mt-12 lg:mt-16">
               <div className="nh-tekst space-y-5">
                 {t.brein.alineas.map((a) => (
                   <p key={a.slice(0, 24)}>{a}</p>
                 ))}
               </div>
-              <figure className="nh-rail-vast">
-                <BreinVerkenner bestanden={t.brein.verkenner.bestanden} voorbeeld={t.brein.verkenner.voorbeeld} wortel={t.brein.verkenner.wortel} label={t.brein.verkenner.titel} />
-                <figcaption className="nh-klein mt-4">
-                  {t.brein.verkenner.titel}. {t.brein.verkenner.uitleg}
-                </figcaption>
-              </figure>
+              <div className="nh-paneel nh-rail-vast">
+                <h3 className="nh-h3">{t.brein.veranderTitel}</h3>
+                <ul className="mt-6">
+                  {t.brein.verander.map((v) => (
+                    <li key={v.titel}>
+                      <p className="font-semibold text-[var(--nh-inkt)]">{v.titel}</p>
+                      <p className="mt-1">{v.tekst}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            <div className="mt-16 lg:mt-24">
-              <h3 className="nh-h3">{t.brein.veranderTitel}</h3>
-              <ul className="mt-6 grid gap-8 md:grid-cols-2 md:gap-16">
-                {t.brein.verander.map((v) => (
-                  <li key={v.titel} className="border-t-2 border-[var(--nh-inkt)] pt-5">
-                    <h4 className="nh-h3">{v.titel}</h4>
-                    <p className="mt-2 max-w-[30em]">{v.tekst}</p>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-12 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
-                <p className="nh-sub">
-                  <span className="nh-markeer">{t.brein.slot.split(". ")[0]}.</span> {t.brein.slot.split(". ").slice(1).join(". ")}
-                </p>
-                <a href="#werkwijze" onClick={spring("werkwijze", "brein")} className="nh-link nh-link-neer shrink-0 text-[1.1875rem]">
-                  {t.brein.knop}
-                  <ArrowDown className="h-5 w-5" aria-hidden="true" />
-                </a>
-              </div>
+            <p className="nh-groot mt-12 lg:mt-16">{t.brein.slot}</p>
+            <div className="nh-acties mt-6">
+              <a href="#werkwijze" onClick={klik("werkwijze", "brein")} className="nh-link nh-link-neer text-[1.1875rem]">
+                {t.brein.knop}
+                <ArrowDown className="h-5 w-5" aria-hidden="true" />
+              </a>
             </div>
           </div>
         </section>
@@ -193,26 +183,30 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* ---------------------------------------------------------- */}
         {/* 4. Hoe we werken                                           */}
         {/* ---------------------------------------------------------- */}
-        <section id="werkwijze" className="nh-sectie nh-vel">
+        <section id="werkwijze" className="nh-sectie">
           <div className="nh-wrap nh-rail">
             <div className="nh-rail-vast">
               <h2 className="nh-h2">{t.werkwijze.h2}</h2>
               <p className="nh-sub mt-5">{t.werkwijze.sub}</p>
               <p className="nh-tekst mt-5">{t.werkwijze.intro}</p>
-              <a href="#startgesprek" onClick={start("werkwijze")} className="nh-knop nh-knop--breed mt-8">{t.werkwijze.knop}</a>
             </div>
-            <ol className="nh-rijen">
-              {t.werkwijze.stappen.map((s, i) => (
-                <li key={s.titel} className="nh-stap">
-                  <span className="nh-stap-nr" aria-hidden="true">{i + 1}</span>
-                  <div>
-                    <h3 className="nh-h3">{s.titel}</h3>
-                    <p className="mt-2 max-w-[34em]">{s.tekst}</p>
-                  </div>
-                  <span className="nh-duur">{s.duur}</span>
-                </li>
-              ))}
-            </ol>
+            <div>
+              <ol className="nh-stappen">
+                {t.werkwijze.stappen.map((s, i) => (
+                  <li key={s.titel} className="nh-stap">
+                    <span className="nh-stap-nr" aria-hidden="true">{i + 1}</span>
+                    <div className="nh-stap-lijf">
+                      <h3 className="nh-h3">{s.titel}</h3>
+                      <p className="mt-2 max-w-[34em]">{s.tekst}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              {/* De knop staat na de vijf stappen, zoals in de copy, en lijnt uit met de tekst van de stappen. */}
+              <div className="mt-10 sm:pl-[68px] md:pl-[80px]">
+                <a href="#startgesprek" onClick={start("werkwijze")} className="nh-knop nh-knop--breed">{t.werkwijze.knop}</a>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -228,48 +222,51 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* ---------------------------------------------------------- */}
         {/* 6. Wat we bouwen                                           */}
         {/* ---------------------------------------------------------- */}
-        <section id="bouwen" className="nh-sectie nh-vel">
+        <section id="bouwen" className="nh-sectie">
           <div className="nh-wrap">
             <h2 className="nh-h2 max-w-[20em]">{t.bouwen.h2}</h2>
             <p className="nh-sub mt-5">{t.bouwen.sub}</p>
-            <p className="nh-tekst mt-5">{t.bouwen.intro}</p>
 
-            {/* De vijf niveaus: elk bouwt verder op het vorige, vandaar de volgorde en het balkje. */}
-            <ol className="nh-rijen mt-10">
-              {t.bouwen.niveaus.map((n, i) => (
-                <li key={n.titel} className="nh-niveau">
-                  <Meter aan={i + 1} van={t.bouwen.niveaus.length} />
-                  <h3 className="nh-h3">{n.titel}</h3>
-                  <p className="max-w-[36em]">{n.tekst}</p>
-                </li>
+            {/* Amina's alinea, zin per zin: elke zin bouwt verder op de vorige, vandaar de trap. */}
+            <p className="nh-tekst mt-12">{t.bouwen.intro}</p>
+            <ol className="nh-trap mt-6">
+              {t.bouwen.niveaus.map((zin, i) => (
+                <li key={zin} className="nh-trede" style={{ "--t": i } as React.CSSProperties}>{zin}</li>
               ))}
             </ol>
 
-            <p className="nh-sub mt-16 lg:mt-24">{t.bouwen.praktijk}</p>
-            <ul className="nh-cases mt-8">
-              {t.bouwen.cases.map((c) => {
-                const stand = STATUS_VOLGORDE.indexOf(c.status) + 1;
-                return (
-                  <li key={c.sector} className="nh-case">
-                    <h3 className="nh-h3">{c.sector}</h3>
-                    <p className="text-[1rem] leading-[1.6]">{c.tekst}</p>
-                    <div className="nh-case-voet">
-                      <p className="nh-status" data-status={c.status}>
-                        <Meter aan={stand} van={STATUS_VOLGORDE.length} />
-                        <span>
-                          {t.bouwen.statusLabel}: {t.bouwen.statussen[c.status].toLowerCase()}
-                        </span>
-                      </p>
-                      {c.statusNoot && <p className="nh-klein">{c.statusNoot}</p>}
-                    </div>
-                  </li>
-                );
-              })}
+            <p className="nh-groot mt-16 lg:mt-24">{t.bouwen.praktijk}</p>
+            <ul className="nh-blad mt-8">
+              {t.bouwen.cases.map((c) => (
+                <li key={c.sector} className="nh-dossier-rij">
+                  <h3 className="nh-dossier-sector">{c.sector}</h3>
+                  <p className="nh-dossier-tekst">{c.tekst}</p>
+                  <p className="nh-status" data-status={c.status}>
+                    <span>
+                      {t.bouwen.statusLabel}: {t.bouwen.statussen[c.status].toLowerCase()}
+                      {c.statusNoot && <small>{c.statusNoot}</small>}
+                    </span>
+                  </p>
+                </li>
+              ))}
             </ul>
 
-            <p className="nh-tools mt-12">
-              <b>{t.bouwen.toolsTitel}</b> {t.bouwen.tools.join(", ")}, {t.bouwen.toolsRest}
-            </p>
+            <p className="mt-12 font-semibold text-[var(--nh-inkt)]">{t.bouwen.toolsTitel}</p>
+            <ul className="nh-tools mt-4">
+              {t.bouwen.tools.map((naam) => (
+                <li key={naam} className="nh-tool" translate="no">
+                  {naam === "Stripe" ? (
+                    <Image src="/Stripe_Logo,_revised_2016.svg.webp" alt="Stripe" width={86} height={36} className="!h-[20px] !w-auto" />
+                  ) : (
+                    <>
+                      {TOOL_LOGO[naam] && <Image src={TOOL_LOGO[naam]} alt="" width={44} height={44} />}
+                      {naam}
+                    </>
+                  )}
+                </li>
+              ))}
+              <li className="nh-tool !whitespace-normal">{t.bouwen.toolsRest}</li>
+            </ul>
           </div>
         </section>
 
@@ -290,50 +287,48 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* 8. Bewijs                                                  */}
         {/* ---------------------------------------------------------- */}
         {/* Getuigenissen verschijnen pas als er echte in de copy staan (bewijs.getuigenissen). */}
-        <section id="bewijs" className="nh-sectie nh-vel">
+        <section id="bewijs" className="nh-sectie">
           <div className="nh-wrap">
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end lg:gap-16">
-              <div>
-                <h2 className="nh-h2">{t.bewijs.h2}</h2>
-                <p className="nh-sub mt-5">{t.bewijs.sub}</p>
-              </div>
-              <div className="flex flex-col gap-8 lg:items-start">
+            <div className="border-t-2 border-[var(--nh-inkt)] pt-10 lg:pt-12">
+              <h2 className="nh-h2 max-w-[18em]">{t.bewijs.h2}</h2>
+              <p className="nh-sub mt-5">{t.bewijs.sub}</p>
+
+              {t.bewijs.getuigenissen.length > 0 && (
+                <div className="mt-12">
+                  <p className="nh-h3">{t.bewijs.getuigenissenTitel}</p>
+                  <ul className="mt-6 grid gap-6 md:grid-cols-2">
+                    {t.bewijs.getuigenissen.map((g) => (
+                      <li key={g.naam} className="nh-getuige">
+                        <blockquote className="nh-quote">&ldquo;{g.quote}&rdquo;</blockquote>
+                        <p className="nh-klein">
+                          {g.naam}, {g.bedrijf}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="mt-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
                 <Steun label={t.bewijs.ondersteund} />
                 <a href="#startgesprek" onClick={start("bewijs")} className="nh-knop nh-knop--breed">{t.bewijs.knop}</a>
               </div>
             </div>
-
-            {t.bewijs.getuigenissen.length > 0 && (
-              <div className="mt-16">
-                <h3 className="nh-h3">{t.bewijs.getuigenissenTitel}</h3>
-                <ul className="mt-6 grid gap-6 md:grid-cols-2">
-                  {t.bewijs.getuigenissen.map((g) => (
-                    <li key={g.naam} className="nh-case">
-                      <blockquote className="nh-quote">&ldquo;{g.quote}&rdquo;</blockquote>
-                      <p className="nh-klein">
-                        {g.naam}, {g.bedrijf}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
         </section>
 
         {/* ---------------------------------------------------------- */}
-        {/* 9. Vragen                                                  */}
+        {/* 9. FAQ                                                     */}
         {/* ---------------------------------------------------------- */}
         <section id="vragen" className="nh-sectie">
           <div className="nh-wrap nh-rail">
             <div className="nh-rail-vast">
               <h2 className="nh-h2">{t.faq.h2}</h2>
               <p className="nh-sub mt-5">{t.faq.sub}</p>
-              <a href="#startgesprek" onClick={start("faq")} className="nh-knop nh-knop--breed mt-8">{t.faq.knop}</a>
             </div>
             <div>
-              {t.faq.items.map((item, i) => (
-                <details key={item.q} className="nh-vraag" hidden={!alleVragen && i >= VRAGEN_ZICHTBAAR} onToggle={(e) => (e.currentTarget as HTMLDetailsElement).open && pushEvent("faq_open", { vraag: item.q.slice(0, 60), taal })}>
+              {t.faq.items.map((item) => (
+                <details key={item.q} className="nh-vraag" onToggle={(e) => (e.currentTarget as HTMLDetailsElement).open && pushEvent("faq_open", { vraag: item.q.slice(0, 60), taal })}>
                   <summary>
                     <span>{item.q}</span>
                     <Plus className="nh-plus" strokeWidth={2} aria-hidden="true" />
@@ -341,16 +336,10 @@ export function HomePagina({ taal }: { taal: Taal }) {
                   <p className="nh-antwoord">{item.a}</p>
                 </details>
               ))}
-              {!alleVragen && t.faq.items.length > VRAGEN_ZICHTBAAR && (
-                <button
-                  type="button"
-                  onClick={() => { setAlleVragen(true); pushEvent("faq_alle", { taal }); }}
-                  className="nh-link nh-link-neer mt-6"
-                >
-                  {t.faq.toonAlle.replace("{aantal}", String(t.faq.items.length))}
-                  <ArrowDown className="h-4 w-4" aria-hidden="true" />
-                </button>
-              )}
+              {/* De knop staat na de vragen, zoals in de copy. */}
+              <div className="mt-10">
+                <a href="#startgesprek" onClick={start("faq")} className="nh-knop nh-knop--breed">{t.faq.knop}</a>
+              </div>
             </div>
           </div>
         </section>
@@ -358,12 +347,12 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* ---------------------------------------------------------- */}
         {/* 10. Voor wie                                               */}
         {/* ---------------------------------------------------------- */}
-        <section id="voor-wie" className="nh-sectie nh-vel">
+        <section id="voor-wie" className="nh-sectie">
           <div className="nh-wrap">
             <h2 className="nh-h2 max-w-[18em]">{t.voorWie.h2}</h2>
             <p className="nh-sub mt-5">{t.voorWie.sub}</p>
             <div className="nh-twee mt-12">
-              <div className="nh-vak nh-vak--niet">
+              <div className="nh-kolom nh-kolom--niet">
                 <h3 className="nh-h3">{t.voorWie.niet.titel}</h3>
                 <ul className="nh-punten mt-6 !gap-4">
                   {t.voorWie.niet.items.map((p) => (
@@ -374,38 +363,38 @@ export function HomePagina({ taal }: { taal: Taal }) {
                   ))}
                 </ul>
               </div>
-              <div className="nh-vak nh-vak--wel">
+              <div className="nh-kolom">
                 <h3 className="nh-h3">{t.voorWie.wel.titel}</h3>
                 <ul className="nh-punten mt-6 !gap-4">
                   {t.voorWie.wel.items.map((p) => (
                     <li key={p} className="nh-punt !text-[1.0625rem]">
-                      <Check className="nh-vink" strokeWidth={2.5} aria-hidden="true" />
+                      <Check className="nh-vink" strokeWidth={2.25} aria-hidden="true" />
                       {p}
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
-            <p className="nh-sub mt-12">{t.voorWie.slot}</p>
+            <p className="nh-groot mt-12 lg:mt-16">{t.voorWie.slot}</p>
           </div>
         </section>
 
         {/* ---------------------------------------------------------- */}
-        {/* 11. Slot en formulier                                      */}
+        {/* 11. Slot en formulier: de tweede marineblauwe band         */}
         {/* ---------------------------------------------------------- */}
-        <section id="startgesprek" className="nh-sectie nh-donker">
+        <section id="startgesprek" className="nh-sectie nh-band">
           {/* Oudere pagina's (blog, quiz, het oude menu) linken nog naar /#contact: dat komt hier uit. */}
           <span id="contact" className="block" style={{ scrollMarginTop: 72 }} aria-hidden="true" />
           <div className="nh-wrap nh-rail">
             <div>
               <h2 className="nh-h2">{t.slot.h2}</h2>
               <p className="nh-sub mt-5">{t.slot.sub}</p>
-              <p className="nh-h3 mt-10 !text-[var(--nh-stift)]">{t.slot.kort}</p>
+              <p className="nh-h3 mt-10">{t.slot.kort}</p>
               <p className="nh-tekst mt-3">{t.slot.tekst}</p>
               <p className="mt-8">
                 <a href={PHONE_LINK} onClick={() => pushEvent("contact_click", { method: "phone", location: "slot" })} className="nh-link inline-flex min-h-[44px] items-center gap-3">
                   <Phone className="h-5 w-5" aria-hidden="true" />
-                  {PHONE_NUMBER}
+                  <span translate="no">{PHONE_NUMBER}</span>
                 </a>
               </p>
             </div>

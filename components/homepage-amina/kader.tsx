@@ -10,7 +10,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { Menu, Phone, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { useConsent } from "@/contexts/consent-context";
 import { CONTACT_EMAIL, INSTAGRAM_URL, LINKEDIN_URL, PHONE_LINK, PHONE_NUMBER, VAT_NUMBER } from "@/lib/finit-links";
@@ -54,13 +54,11 @@ export function useSecties(taal: Taal, thuis: boolean, naKlik?: () => void) {
 
 export function Steun({ label }: { label: string }) {
   return (
-    <div>
+    <div className="nh-steun">
       <p className="nh-klein">{label}</p>
-      <div className="nh-steun mt-3">
-        <Image src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" width={400} height={120} />
-        <Image src="/SI @KBC Black (2).png" alt="Start it @KBC" width={400} height={120} />
-        <Image src="/elevenlabs-grants.webp" alt="ElevenLabs Grants" width={1496} height={132} className="nh-steun-smal" />
-      </div>
+      <Image src="/VLAIO_sponsorlogo-antraciet.png" alt="VLAIO" width={400} height={120} />
+      <Image src="/SI @KBC Black (2).png" alt="Start it @KBC" width={400} height={120} />
+      <Image src="/elevenlabs-grants.webp" alt="ElevenLabs Grants" width={1496} height={132} className="nh-steun-smal" />
     </div>
   );
 }
@@ -125,12 +123,12 @@ export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boo
           ))}
           <a href={OVER_ONS[taal]} className="nh-menu-link">{t.nav.overOns}</a>
           <a href={href("startgesprek")} onClick={klik("startgesprek", "menu")} className="nh-knop mt-8 w-full">{t.nav.cta}</a>
-          <p className="nh-klein mt-8">{t.nav.bel}</p>
-          <a href={PHONE_LINK} onClick={() => pushEvent("contact_click", { method: "phone", location: "menu" })} className="nh-h3 mt-1 inline-flex min-h-[44px] items-center gap-3">
-            <Phone className="h-5 w-5 text-[var(--nh-pen)]" aria-hidden="true" />
-            {PHONE_NUMBER}
-          </a>
-          <p className="nh-klein">{t.nav.uren}</p>
+          {/* Amina's zin uit "Wie zit er achter Finit". */}
+          <p className="mt-8">
+            {t.team.bel}{" "}
+            <a href={PHONE_LINK} onClick={() => pushEvent("contact_click", { method: "phone", location: "menu" })} className="nh-link whitespace-nowrap" translate="no">{PHONE_NUMBER}</a>
+            , {t.team.belUren}
+          </p>
         </div>
       )}
     </>
@@ -147,7 +145,6 @@ export function TeamBlok({ taal, location, voorrang = false }: { taal: Taal; loc
           <div className="nh-foto">
             <Image src="/home/oprichters-beurs.jpg" alt={t.fotoAlt} width={2000} height={1506} sizes="(min-width: 1024px) 660px, 100vw" priority={voorrang} />
           </div>
-          <figcaption className="nh-klein mt-3">{t.fotoBijschrift}</figcaption>
         </figure>
         <div>
           <p className="nh-klein mb-4 font-semibold">{t.intro}</p>
@@ -165,7 +162,7 @@ export function TeamBlok({ taal, location, voorrang = false }: { taal: Taal; loc
 
       <p className="nh-sub mt-12 !max-w-none">
         {t.bel}{" "}
-        <a href={PHONE_LINK} onClick={() => pushEvent("contact_click", { method: "phone", location })} className="nh-link whitespace-nowrap">{PHONE_NUMBER}</a>
+        <a href={PHONE_LINK} onClick={() => pushEvent("contact_click", { method: "phone", location })} className="nh-link whitespace-nowrap" translate="no">{PHONE_NUMBER}</a>
         , {t.belUren}
       </p>
     </>
@@ -192,11 +189,12 @@ export function WaaromBlok({ taal }: { taal: Taal }) {
   );
 }
 
-export function Voet({ taal }: { taal: Taal }) {
+/** `los`: met ruimte erboven, voor een pagina die niet op een gekleurde band eindigt. */
+export function Voet({ taal, los = false }: { taal: Taal; los?: boolean }) {
   const t = COPY[taal];
   const { openSettings } = useConsent();
   return (
-    <footer className="nh-footer">
+    <footer className={`nh-footer ${los ? "nh-footer--los" : ""}`}>
       <div className="nh-wrap py-12">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           <div>

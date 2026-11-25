@@ -129,7 +129,7 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
         <div>
           <label htmlFor={`${id}-bedrijfswebsite`} className="nh-label">{t.website}</label>
           {/* Tekst in plaats van type="url": zo mag "jouwbedrijf.be" zonder https:// ervoor. */}
-          <input id={`${id}-bedrijfswebsite`} type="text" inputMode="url" autoComplete="url" spellCheck={false} value={bedrijfswebsite} onChange={(e) => setBedrijfswebsite(e.target.value)} placeholder={t.websiteHint} className="nh-veld" aria-invalid={!!fouten.bedrijfswebsite} aria-describedby={fouten.bedrijfswebsite ? `${id}-bedrijfswebsite-fout` : undefined} />
+          <input id={`${id}-bedrijfswebsite`} type="text" inputMode="url" autoComplete="url" spellCheck={false} value={bedrijfswebsite} onChange={(e) => setBedrijfswebsite(e.target.value)} className="nh-veld" aria-invalid={!!fouten.bedrijfswebsite} aria-describedby={fouten.bedrijfswebsite ? `${id}-bedrijfswebsite-fout` : undefined} />
           {fouten.bedrijfswebsite && <p id={`${id}-bedrijfswebsite-fout`} className="nh-fout">{fouten.bedrijfswebsite}</p>}
         </div>
       </div>
@@ -152,11 +152,10 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
         </p>
       )}
 
-      <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+      <div className="mt-6">
         <button type="submit" disabled={status === "bezig"} className="nh-knop nh-knop--breed">
           {status === "bezig" ? t.bezig : t.knop}
         </button>
-        <p className="nh-klein">{t.privacy}</p>
       </div>
     </form>
   );

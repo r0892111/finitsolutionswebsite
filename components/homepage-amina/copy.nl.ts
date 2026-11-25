@@ -3,16 +3,14 @@ import type { Copy } from "./copy";
 /**
  * De Nederlandse tekst van de homepage (standaard, finitsolutions.be/).
  *
- * Vertaling van Amina's Engelse copy (zie ./copy.en.ts) in de stem van Alex:
- * je/jij, zaakvoerder en kmo, korte zinnen, betekenis eerst en dan het woord
- * (stemprofiel §13). Finit is een AI-bureau of IT-partner, nooit een
- * AI-consultant. Geen gedachtestreepjes, geen uitroeptekens, geen hype.
+ * Vertaling van Amina's Engelse copy (zie ./copy.en.ts), zin per zin, in de
+ * stem van Alex: je/jij, zaakvoerder en kmo, korte zinnen, betekenis eerst en
+ * dan het woord (stemprofiel §13). Geen gedachtestreepjes, geen uitroeptekens.
  *
- * Niet van Amina, wel nodig voor de pagina (en dus na te lezen): de titel en
- * beschrijving voor Google, de labels van het menu, de duur bij elke stap, de
- * bijschriften bij de foto's, de tekst van het formulier na het versturen en de
- * voorbeeldbestanden van het brein (geschreven op basis van haar voorbeelden:
- * de korting, de opdracht op vrijdagnamiddag, de kwade klant, de leverancier).
+ * Alleen haar copy (Alex, 25/11). Niet van haar, maar technisch nodig: `meta`
+ * (titel en beschrijving voor Google), `nav` (de labels van het menu, met de
+ * namen van haar secties), de meldingen van het formulier (bezig, bedankt,
+ * fout), `overOns.meta`, `footer` en de alt-tekst van de foto.
  */
 export const NL: Copy = {
   meta: {
@@ -23,17 +21,15 @@ export const NL: Copy = {
 
   nav: {
     links: [
-      { id: "brein", label: "Het brein" },
       { id: "werkwijze", label: "Hoe we werken" },
       { id: "bouwen", label: "Wat we bouwen" },
-      { id: "vragen", label: "Vragen" },
+      { id: "waarom", label: "Waarom Finit" },
+      { id: "vragen", label: "FAQ" },
     ],
     overOns: "Over ons",
     cta: "Plan een gratis startgesprek",
     menuOpenen: "Menu openen",
     menuSluiten: "Menu sluiten",
-    bel: "Of bel ons gerust",
-    uren: "Maandag tot zaterdag, van 8u30 tot 19u",
     taalLabel: "Taal",
   },
 
@@ -52,7 +48,6 @@ export const NL: Copy = {
     ],
     ondersteund: "Ondersteund door",
     gesproken: "We spraken al met meer dan honderd Belgische kmo's.",
-    bestandBijschrift: "Eén bestand uit een brein. Gewone tekst, die elke AI kan lezen.",
   },
 
   // 2. Herkenbaar?
@@ -106,93 +101,6 @@ export const NL: Copy = {
     ],
     slot: "En het blijft van jou. Het is gewone tekst, dus elk AI-model kan het lezen, vandaag en later.",
     knop: "Toon me hoe het werkt",
-    verkenner: {
-      titel: "Zo ziet een brein eruit",
-      uitleg: "Klik op een bestand om het te openen.",
-      voorbeeld: "Voorbeeld",
-      wortel: "brein",
-      bestanden: [
-        {
-          map: "regels",
-          naam: "korting.txt",
-          regels: [
-            "Korting geven",
-            "",
-            "Klant koopt al meer dan drie jaar bij ons:",
-            "tot 5% korting, zonder te overleggen.",
-            "",
-            "Meer dan 5%:",
-            "altijd eerst vragen aan de zaakvoerder.",
-            "",
-            "Uitzondering:",
-            "op transport geven we nooit korting.",
-          ],
-          markeer: 9,
-        },
-        {
-          map: "processen",
-          naam: "vrijdag.txt",
-          regels: [
-            "Opdracht op vrijdagnamiddag",
-            "",
-            "Dringend, zoals een lek of een stroompanne:",
-            "vandaag nog bellen en inplannen.",
-            "",
-            "Niet dringend:",
-            "maandag voor 10 uur bevestigen, met datum.",
-            "",
-            "Bij twijfel:",
-            "de klant bellen en het vragen.",
-          ],
-          markeer: 9,
-        },
-        {
-          map: "uitzonderingen",
-          naam: "leveranciers.txt",
-          regels: [
-            "Leveranciers",
-            "",
-            "Leverancier A:",
-            "levert bijna altijd een week te laat.",
-            "Reken die week mee in de planning.",
-            "",
-            "Leverancier B:",
-            "op tijd, als we voor woensdag bestellen.",
-            "",
-            "Beloof de klant nooit een datum",
-            "voor de leverancier bevestigd heeft.",
-          ],
-          markeer: 4,
-        },
-        {
-          map: "stijl",
-          naam: "kwade-klant.txt",
-          regels: [
-            "Een klant die al kwaad is",
-            "",
-            "Eerst bellen, niet mailen.",
-            "Niet uitleggen wie de fout maakte.",
-            "Wel zeggen wat we nu doen, en tegen wanneer.",
-            "Dezelfde dag bevestigen wat afgesproken is.",
-          ],
-          markeer: 2,
-        },
-        {
-          map: "stijl",
-          naam: "mails.txt",
-          regels: [
-            "Zo schrijven we naar klanten",
-            "",
-            "We zeggen je en jij, nooit u.",
-            "Korte zinnen.",
-            "Geen vaktermen zonder uitleg.",
-            "Eindig met de volgende stap en een datum.",
-            "Prijzen zijn exclusief btw. Zet dat erbij.",
-          ],
-          markeer: 5,
-        },
-      ],
-    },
   },
 
   // 4. Hoe we werken
@@ -204,27 +112,22 @@ export const NL: Copy = {
       {
         titel: "Een gratis startgesprek.",
         tekst: "Een halfuur, vrijblijvend. Jij vertelt hoe je bedrijf draait en waar de tijd naartoe gaat. Wij luisteren vooral.",
-        duur: "Een halfuur",
       },
       {
         titel: "De breinweek.",
         tekst: "In één week brengen we je bedrijf in kaart. We zitten twee uur samen met jou als zaakvoerder. Daarna komen we een dag ter plaatse bij de mensen die het werk elke dag doen, want zij weten vaak het best hoe het er echt aan toegaat. Wij schrijven alles uit.",
-        duur: "Eén week",
       },
       {
         titel: "Je roadmap en je offerte.",
         tekst: "Je ziet wat AI als eerste kan overnemen, in volgorde van wat het meest opbrengt, met een offerte per onderdeel. Wat je niet nodig hebt, laat je weg.",
-        duur: "Jij kiest",
       },
       {
         titel: "We bouwen, stuk voor stuk.",
         tekst: "Gekoppeld aan de software die je al gebruikt. Alles begint in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. Jij test elk stuk voor we verdergaan.",
-        duur: "Stuk voor stuk",
       },
       {
         titel: "Het draait, en wij blijven.",
         tekst: "We houden het in de gaten, lossen problemen op en werken het bij. Om de drie maanden zitten we samen om te kijken wat er nog van je bord kan.",
-        duur: "Doorlopend",
       },
     ],
     knop: "Plan een gratis startgesprek",
@@ -234,7 +137,7 @@ export const NL: Copy = {
   waarom: {
     h2: "Een AI bouwen kunnen er genoeg. De vraag is waarop die gebouwd is.",
     sub: "Voor iemand iets voor je bouwt, moet er eerst iemand begrijpen hoe je bedrijf echt werkt.",
-    intro: "Bij Finit Solutions beginnen we met begrijpen hoe jouw bedrijf werkt. Dat is het stuk waarmee we starten, en het is de reden waarom alles wat we bouwen op jouw bedrijf lijkt.",
+    intro: "Een AI bouwen kunnen er genoeg. Bij Finit Solutions beginnen we met begrijpen hoe jouw bedrijf werkt. Dat is het stuk waarmee we starten, en het is de reden waarom alles wat we bouwen op jouw bedrijf lijkt.",
     punten: [
       {
         titel: "We beginnen bij je bedrijf, niet bij een tool.",
@@ -257,14 +160,11 @@ export const NL: Copy = {
     sub: "Het werk dat je avonden vult, is precies waarvoor wij bouwen.",
     intro: "Alles wat Finit Solutions bouwt, vertrekt van hetzelfde brein.",
     niveaus: [
-      { titel: "Een vaste regel", tekst: "Het eenvoudigste dat we bouwen volgt een vaste regel: als dit gebeurt, doe dan dat." },
-      { titel: "Workflows", tekst: "Daarna komen workflows, waarin AI iets leest en de volgende stap voorbereidt." },
-      {
-        titel: "AI-werknemers",
-        tekst: "Dan AI-werknemers, die beslissingen nemen over je software heen, zoals een medewerker die je mailbox in de gaten houdt en afhandelt wat er binnenkomt.",
-      },
-      { titel: "Eén die de anderen aanstuurt", tekst: "Daarboven kan één AI-werknemer er meerdere aansturen." },
-      { titel: "Software op maat", tekst: "En als geen enkel bestaand pakket past, bouwen we software op maat rond wat je echt nodig hebt." },
+      "Het eenvoudigste dat we bouwen volgt een vaste regel: als dit gebeurt, doe dan dat.",
+      "Daarna komen workflows, waarin AI iets leest en de volgende stap voorbereidt.",
+      "Dan AI-werknemers, die beslissingen nemen over je software heen, zoals een medewerker die je mailbox in de gaten houdt en afhandelt wat er binnenkomt.",
+      "Daarboven kan één AI-werknemer er meerdere aansturen.",
+      "En als geen enkel bestaand pakket past, bouwen we software op maat rond wat je echt nodig hebt.",
     ],
     praktijk: "Zo ziet dat er in de praktijk uit. Alle voorbeelden zijn anoniem gemaakt.",
     statusLabel: "Status",
@@ -353,7 +253,6 @@ export const NL: Copy = {
     bel: "Liever eerst even praten? Bel ons op",
     belUren: "van maandag tot zaterdag, van 8u30 tot 19u.",
     fotoAlt: "Karel, Jord en Alex van Finit Solutions aan hun stand op een beurs.",
-    fotoBijschrift: "Van links naar rechts: Karel, Jord en Alex.",
   },
 
   // 8. Bewijs
@@ -430,7 +329,6 @@ export const NL: Copy = {
         a: "Je systemen blijven draaien. Mochten we ooit stoppen, dan laten we je dat ruim op voorhand weten en starten we een overdracht: alle toegangen, de hosting en de abonnementen gaan naar jou of naar een IT-partner van jouw keuze, zonder kosten.",
       },
     ],
-    toonAlle: "Toon alle {aantal} vragen",
     knop: "Plan een gratis startgesprek",
   },
 
@@ -439,22 +337,22 @@ export const NL: Copy = {
     h2: "We zeggen je liever nee dan je tijd te verspillen.",
     sub: "Dit is geen magische knop. Dit is voor wie het werkt, en voor wie niet.",
     niet: {
-      titel: "Het is niets voor jou als",
+      titel: "Het is niets voor jou als:",
       items: [
-        "je een knop wil die alles vanzelf doet. Die bestaat niet.",
-        "je een snelle oplossing wil zonder dat het jou of je team tijd kost.",
-        "je wil dat AI je mensen vervangt in plaats van hen te helpen.",
-        "er vandaag geen echte pijn is. In dat geval zeggen we je dat eerlijk.",
+        "Je wil een knop die alles vanzelf doet. Die bestaat niet.",
+        "Je wil een snelle oplossing zonder dat het jou of je team tijd kost.",
+        "Je wil dat AI je mensen vervangt in plaats van hen te helpen.",
+        "Er is vandaag geen echte pijn. In dat geval zeggen we je dat eerlijk.",
       ],
     },
     wel: {
-      titel: "Finit Solutions werkt het best als",
+      titel: "Finit Solutions werkt het best voor jou als:",
       items: [
-        "je een klein of middelgroot dienstenbedrijf leidt.",
-        "je team tijd verliest aan mails, offertes, planning en het invullen van het CRM.",
-        "er te veel afhangt van jou of van één sleutelpersoon.",
-        "je wil beginnen delegeren, met een gerust hart.",
-        "je bereid bent om een paar uur uit te leggen hoe je bedrijf echt werkt.",
+        "Je leidt een klein of middelgroot dienstenbedrijf.",
+        "Je team verliest tijd aan mails, offertes, planning en het invullen van het CRM.",
+        "Er hangt te veel af van jou of van één sleutelpersoon.",
+        "Je wil beginnen delegeren, met een gerust hart.",
+        "Je bent bereid om een paar uur uit te leggen hoe je bedrijf echt werkt.",
       ],
     },
     slot: "We gaan diep in op hoe je bedrijf werkt, en dat vraagt wat van je tijd. Net daarom werkt het daarna ook.",
@@ -471,14 +369,12 @@ export const NL: Copy = {
       email: "E-mailadres",
       telefoon: "Telefoonnummer",
       website: "Website van je bedrijf",
-      websiteHint: "jouwbedrijf.be",
       bericht: "Waar verlies je de meeste tijd, of wat wil je vragen?",
       knop: "Plan een gratis startgesprek",
       bezig: "Versturen…",
       bedankt: "Je aanvraag is aangekomen.",
       bedanktSub: "We bellen je om een moment te kiezen. Je hoort meestal binnen 24 uur van ons.",
       fout: "Het versturen lukte niet. Probeer het opnieuw, of mail ons op {email}.",
-      privacy: "We gebruiken je gegevens alleen om je terug te bellen.",
     },
   },
 
@@ -488,7 +384,7 @@ export const NL: Copy = {
   },
 
   footer: {
-    video: "Bekijk de video van Alex",
+    video: "Video",
     links: [
       { label: "Vacatures", href: "/vacatures/" },
       { label: "Contact", href: "/contact/" },

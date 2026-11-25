@@ -4,14 +4,12 @@ import type { Copy } from "./copy";
  * The English text of the homepage (finitsolutions.be/en/).
  *
  * This is Amina's copy from the tab "Hub copy" in the Google Doc "Upwork
- * scripts" (24/11/2026), in sentence case. One sentence was left out: the
- * intro of "Why Finit" repeated the heading word for word.
+ * scripts" (24/11/2026), word for word, in sentence case.
  *
- * Not from Amina, but needed for the page (so to be checked): the title and
- * description for Google, the menu labels, the duration on each step, the photo
- * captions, the form messages and the example files of the brain (written from
- * her own examples: the discount, the Friday afternoon job, the angry customer,
- * the late supplier).
+ * Only her copy (Alex, 25/11). Not hers, but technically needed: `meta` (title
+ * and description for Google), `nav` (menu labels, using her section names),
+ * the form messages (sending, thanks, error), `overOns.meta`, `footer` and the
+ * alt text of the photo.
  */
 export const EN: Copy = {
   meta: {
@@ -22,17 +20,15 @@ export const EN: Copy = {
 
   nav: {
     links: [
-      { id: "brein", label: "The brain" },
       { id: "werkwijze", label: "How we work" },
       { id: "bouwen", label: "What we build" },
-      { id: "vragen", label: "Questions" },
+      { id: "waarom", label: "Why Finit" },
+      { id: "vragen", label: "FAQ" },
     ],
     overOns: "About us",
     cta: "Plan a free start call",
     menuOpenen: "Open menu",
     menuSluiten: "Close menu",
-    bel: "Or just call us",
-    uren: "Monday to Saturday, 8:30 to 19:00",
     taalLabel: "Language",
   },
 
@@ -51,7 +47,6 @@ export const EN: Copy = {
     ],
     ondersteund: "Backed by",
     gesproken: "We've spoken with more than a hundred Belgian SMEs.",
-    bestandBijschrift: "One file from a brain. Plain text that any AI can read.",
   },
 
   // 2. Sound familiar?
@@ -105,93 +100,6 @@ export const EN: Copy = {
     ],
     slot: "And it stays yours. It's plain text, so any AI model can read it, today or in the future.",
     knop: "Show me how it works",
-    verkenner: {
-      titel: "This is what a brain looks like",
-      uitleg: "Click a file to open it.",
-      voorbeeld: "Example",
-      wortel: "brain",
-      bestanden: [
-        {
-          map: "rules",
-          naam: "discount.txt",
-          regels: [
-            "Giving a discount",
-            "",
-            "Customer for more than three years:",
-            "up to 5% discount, no need to check.",
-            "",
-            "More than 5%:",
-            "always ask the owner first.",
-            "",
-            "Exception:",
-            "we never give a discount on transport.",
-          ],
-          markeer: 9,
-        },
-        {
-          map: "processes",
-          naam: "friday.txt",
-          regels: [
-            "A job on Friday afternoon",
-            "",
-            "Urgent, like a leak or a power cut:",
-            "call and schedule it today.",
-            "",
-            "Not urgent:",
-            "confirm before 10 on Monday, with a date.",
-            "",
-            "In doubt:",
-            "call the customer and ask.",
-          ],
-          markeer: 9,
-        },
-        {
-          map: "exceptions",
-          naam: "suppliers.txt",
-          regels: [
-            "Suppliers",
-            "",
-            "Supplier A:",
-            "nearly always delivers a week late.",
-            "Count that week into the planning.",
-            "",
-            "Supplier B:",
-            "on time, if we order before Wednesday.",
-            "",
-            "Never promise the customer a date",
-            "before the supplier has confirmed.",
-          ],
-          markeer: 4,
-        },
-        {
-          map: "tone",
-          naam: "angry-customer.txt",
-          regels: [
-            "A customer who is already angry",
-            "",
-            "Call first, don't email.",
-            "Don't explain who made the mistake.",
-            "Do say what we're doing now, and by when.",
-            "Confirm what was agreed the same day.",
-          ],
-          markeer: 2,
-        },
-        {
-          map: "tone",
-          naam: "emails.txt",
-          regels: [
-            "How we write to customers",
-            "",
-            "First names, never formal.",
-            "Short sentences.",
-            "No jargon without an explanation.",
-            "Always end with the next step and a date.",
-            "Prices exclude VAT. Always say so.",
-          ],
-          markeer: 5,
-        },
-      ],
-    },
   },
 
   // 4. How we work
@@ -203,27 +111,22 @@ export const EN: Copy = {
       {
         titel: "A free start call.",
         tekst: "Half an hour, no obligation. You tell us how your company runs and where the time goes. We mostly listen.",
-        duur: "Half an hour",
       },
       {
         titel: "The brain week.",
         tekst: "In one week we map your business. We spend two hours with you as owner, then a day on site with the people who actually do the work, because they often know best how it really goes. We write it all down.",
-        duur: "One week",
       },
       {
         titel: "Your roadmap and quote.",
         tekst: "You see what AI can take over first, in order of what pays back most, with a quote for each part. What you don't need, you leave out.",
-        duur: "You choose",
       },
       {
         titel: "We build, one piece at a time.",
         tekst: "Connected to the software you already use. Everything starts in review mode: the AI prepares, a person approves. You test each piece before we move on.",
-        duur: "Piece by piece",
       },
       {
         titel: "It runs, and we stay.",
         tekst: "We monitor it, fix it and update it. Every three months we sit down to see what else can be taken off your plate.",
-        duur: "Ongoing",
       },
     ],
     knop: "Plan a free start call",
@@ -233,7 +136,7 @@ export const EN: Copy = {
   waarom: {
     h2: "Plenty of people can build you an AI. The question is what it's built on.",
     sub: "Before anyone builds anything for you, someone has to understand how your company really works.",
-    intro: "At Finit Solutions, we start by understanding how your company works. That's the part we start with, and it's the reason everything we build looks like your company.",
+    intro: "Plenty of people can build you an AI. At Finit Solutions, we start by understanding how your company works. That's the part we start with, and it's the reason everything we build looks like your company.",
     punten: [
       {
         titel: "We start with your company, not a tool.",
@@ -256,14 +159,11 @@ export const EN: Copy = {
     sub: "The work that fills your evenings is exactly what we build for.",
     intro: "Everything Finit Solutions builds starts from the same brain.",
     niveaus: [
-      { titel: "A fixed rule", tekst: "The simplest builds follow a fixed rule: when this happens, do that." },
-      { titel: "Workflows", tekst: "Next come workflows, where AI reads something and prepares the next step." },
-      {
-        titel: "AI employees",
-        tekst: "Then AI employees, which make decisions across your software, like a person who watches your mailbox and handles what comes in.",
-      },
-      { titel: "One that manages the others", tekst: "Above that, one agent can manage several of them." },
-      { titel: "Custom software", tekst: "And when nothing off the shelf fits, we build custom software around what you really need." },
+      "The simplest builds follow a fixed rule: when this happens, do that.",
+      "Next come workflows, where AI reads something and prepares the next step.",
+      "Then AI employees, which make decisions across your software, like a person who watches your mailbox and handles what comes in.",
+      "Above that, one agent can manage several of them.",
+      "And when nothing off the shelf fits, we build custom software around what you really need.",
     ],
     praktijk: "Here is what that looks like in practice. All examples are anonymised.",
     statusLabel: "Status",
@@ -352,7 +252,6 @@ export const EN: Copy = {
     bel: "Prefer to talk first? Call us on",
     belUren: "Monday to Saturday, 8:30 to 19:00.",
     fotoAlt: "Karel, Jord and Alex of Finit Solutions at their stand at a trade fair.",
-    fotoBijschrift: "From left to right: Karel, Jord and Alex.",
   },
 
   // 8. Proof
@@ -428,7 +327,6 @@ export const EN: Copy = {
         a: "Your systems keep running. If we ever stop, we'll tell you well in advance and start a handover: all access, hosting and subscriptions move to you or to an IT partner of your choice, at no cost.",
       },
     ],
-    toonAlle: "Show all {aantal} questions",
     knop: "Plan a free start call",
   },
 
@@ -437,22 +335,22 @@ export const EN: Copy = {
     h2: "We'd rather tell you no than waste your time.",
     sub: "This isn't a magic button. Here's who it works for, and who it doesn't.",
     niet: {
-      titel: "It's not for you if",
+      titel: "It's not for you if:",
       items: [
-        "you want a button that does everything by itself. That doesn't exist.",
-        "you want a quick fix without any of your time or your team's.",
-        "you want AI to replace your people instead of helping them.",
-        "there's no real pain at the moment. In that case we'll tell you honestly.",
+        "You want a button that does everything by itself. That doesn't exist.",
+        "You want a quick fix without any of your time or your team's.",
+        "You want AI to replace your people instead of helping them.",
+        "There's no real pain at the moment. In that case we'll tell you honestly.",
       ],
     },
     wel: {
-      titel: "Finit Solutions works best if",
+      titel: "Finit Solutions works best for...",
       items: [
-        "you run a small or mid-sized service company.",
-        "your team loses time on emails, quotes, planning and CRM input.",
-        "too much depends on you or on one key person.",
-        "you want to start delegating, with peace of mind.",
-        "you're willing to spend a few hours explaining how your business really works.",
+        "You run a small or mid-sized service company.",
+        "Your team loses time on emails, quotes, planning and CRM input.",
+        "Too much depends on you or on one key person.",
+        "You want to start delegating, with peace of mind.",
+        "You're willing to spend a few hours explaining how your business really works.",
       ],
     },
     slot: "We go deep into how your company works, and that takes some of your time. That's exactly why it works afterwards.",
@@ -469,14 +367,12 @@ export const EN: Copy = {
       email: "Email",
       telefoon: "Phone",
       website: "Company website",
-      websiteHint: "yourcompany.be",
       bericht: "Where do you lose the most time, or what do you want to ask?",
       knop: "Plan a free start call",
       bezig: "Sending…",
       bedankt: "Your request has arrived.",
       bedanktSub: "We'll call you to pick a time. You usually hear from us within 24 hours.",
       fout: "Sending didn't work. Try again, or email us at {email}.",
-      privacy: "We only use your details to call you back.",
     },
   },
 
@@ -486,7 +382,7 @@ export const EN: Copy = {
   },
 
   footer: {
-    video: "Watch Alex's video (in Dutch)",
+    video: "Video (in Dutch)",
     links: [
       { label: "Jobs (in Dutch)", href: "/vacatures/" },
       { label: "Contact (in Dutch)", href: "/contact/" },
