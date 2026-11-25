@@ -7,7 +7,7 @@
  *
  * 1. een smalle strook naar "Wat je krijgt";
  * 2. badge, kop, subzin, de VSL van de cursus, twee pillen, de knop;
- * 3. het formulier voor een gesprek van 30 minuten met Luka;
+ * 3. het formulier "Inschrijven" (daarna belt Luka om de inschrijving rond te maken);
  * 4. wat je krijgt (de lessen, plus de promptbibliotheek en de supportcall);
  * 5. de twijfels als korte FAQ.
  *

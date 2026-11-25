@@ -16,7 +16,7 @@
 export const CURSUS = {
   metaTitel: "Bouw zelf het brein van jouw bedrijf",
   metaBeschrijving:
-    "De cursus van Finit voor zaakvoerders: 21 korte lessen, je startmap, een promptbibliotheek en een supportcall. Bekijk de video en plan een gesprek van 30 minuten.",
+    "De cursus van Finit voor zaakvoerders: 21 korte lessen, je startmap, een promptbibliotheek en een supportcall. Bekijk de video en schrijf je in.",
 
   // De smalle strook helemaal bovenaan, naar "Wat je krijgt".
   strook: { tekst: "Nieuw: nu met een promptbibliotheek en een supportcall.", link: "Bekijk wat je krijgt" },
@@ -26,8 +26,8 @@ export const CURSUS = {
   sub: "In 21 korte lessen schrijf je uit hoe jouw bedrijf werkt, zodat elke AI dat eerst kan lezen. Jouw AI stelt de vragen, jij vertelt. Geen code.",
 
   pillen: ["Geen technische kennis nodig", "Een paar avonden van jouw tijd"],
-  knop: "Plan een vrijblijvend gesprek",
-  knopNoot: "Vul dit formulier in om een gesprek van 30 minuten in te plannen. Duurt 60 seconden.",
+  knop: "Inschrijven",
+  knopNoot: "Vul dit formulier in om je in te schrijven. Duurt 60 seconden.",
 
   speler: {
     label: "Video: bouw zelf het brein van jouw bedrijf",
@@ -38,7 +38,7 @@ export const CURSUS = {
     verderKnop: "Verder kijken",
     opnieuwKnop: "Opnieuw beginnen",
     eindeVraag: "Wil je dit voor jouw bedrijf?",
-    eindeKnop: "Plan een vrijblijvend gesprek",
+    eindeKnop: "Inschrijven",
     eindeOpnieuw: "Bekijk opnieuw",
     fout: "De video laadt niet. Herlaad de pagina of probeer het later opnieuw.",
     kwaliteit: "Kwaliteit van de video",
@@ -52,8 +52,8 @@ export const CURSUS = {
   // Het formulier, vraag per vraag. Verzendt naar /api/cursus-aanvraag (Tuesday, groep
   // "Cursus (Skool)" op het bord Leads › Socials, plus een mail naar contact@).
   formulier: {
-    titel: "Plan een gesprek van 30 minuten",
-    uitleg: "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter, en dan plannen we samen een moment in.",
+    titel: "Inschrijven",
+    uitleg: "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter.",
     terug: "Terug",
     volgende: "Volgende",
     stapVan: "Vraag {nu} van {totaal}",
@@ -91,7 +91,7 @@ export const CURSUS = {
         id: "gegevens",
         soort: "gegevens",
         vraag: "Waar mogen we je **bereiken?**",
-        sub: "We bellen je om een moment te kiezen voor het gesprek van 30 minuten.",
+        sub: "We bellen je om je inschrijving rond te maken.",
       },
     ],
     velden: {
@@ -111,12 +111,12 @@ export const CURSUS = {
       websiteLeeg: "Vul de website van je bedrijf in.",
       website: "Deze website klopt niet. Bijvoorbeeld jouwbedrijf.be.",
     },
-    verstuur: "Vraag het gesprek aan",
+    verstuur: "Inschrijven",
     bezig: "Versturen…",
     privacy: "We gebruiken je gegevens alleen om je te contacteren.",
     privacyLink: "Privacyverklaring",
     fout: "Het versturen lukte niet. Probeer het opnieuw of mail ons op {email}.",
-    bedankt: "Bedankt{naam}. We bellen je om het gesprek in te plannen.",
+    bedankt: "Bedankt{naam}. We bellen je om je inschrijving rond te maken.",
     bedanktSub: "Is de cursus niets voor jou, dan zeggen we dat ook eerlijk.",
     // Gaat mee in de mail naar contact@.
     vslGekeken: "VSL bekeken tot {procent} %",
