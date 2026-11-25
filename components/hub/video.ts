@@ -41,3 +41,6 @@ export const VSL = {
   /** Om de zoveel seconden onthouden we waar je zit. */
   bewaarElke: 5,
 };
+
+/** De vorm van een VSL-instelling; /cursus/ heeft er een eigen (components/cursus/video.ts). */
+export type VslInstelling = typeof VSL;
