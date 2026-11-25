@@ -25,10 +25,12 @@ export const HUB = {
   // Dezelfde strook als iemand via ?reel=C03 komt en er een resource bij die post hoort.
   strookUitPost: { tekst: "De prompts uit de post?", link: "Hier vind je ze" },
 
-  // Hero: badge, kop met één woordgroep in accentkleur, subzin. Copy van Amina,
-  // tab "for VSL page" in de doc Upwork scripts, vertaald 25/11/2026 (Alex).
-  badge: "Finit Solutions, de grootste bouwer van company brains in België",
-  kop: { voor: "Deze video gaat niet echt over AI.", accent: "Hij gaat over wat er in je hoofd zit." },
+  // Hero in vier treden: kop (met accent), haak, lopende tekst, video. Copy van Amina,
+  // tab "for VSL page" in de doc Upwork scripts, vertaald 25/11/2026. Geen badge meer:
+  // de grootste zin uit de doc is de kop (Alex 25/11), het logo erboven zegt Finit Solutions.
+  kop: { voor: "De grootste bouwer van", accent: "company brains in België" },
+  // De haak, twee zinnen; op een breed scherm elk op een eigen regel.
+  haak: ["Deze video gaat niet echt over AI.", "Hij gaat over wat er in je hoofd zit."],
   sub: "Je prijzen, je uitzonderingen, hoe je omgaat met die ene moeilijke klant. We schrijven het allemaal uit in één week, en dat verandert wat AI voor je kan doen. Bekijk de video en beslis dan zelf of het iets voor jou is.",
 
   // Eén zin onder de video, boven de knop.

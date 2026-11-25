@@ -1048,8 +1048,6 @@ html {
   .hub-wrap, .hub-form-wrap, .hub-faq-wrap { width: calc(100% - 28px); }
   .hub-badge { font-size: 13px; min-height: 40px; padding: 8px 17px; }
   .hub-titel { font-size: clamp(36px, 10.7vw, 52px); line-height: 1.03; }
-  /* Een lange accentzin in de kop mag op gsm over twee regels lopen. */
-  .hub-titel .hp-onder { white-space: normal; }
   .hub-sub { font-size: 17px; line-height: 1.4; }
   .hub-intro { font-size: 17px; line-height: 1.4; }
   .hub-pillen { gap: 10px; }
@@ -1061,6 +1059,32 @@ html {
   .hub-faq-vraag { font-size: clamp(15px, 4.3vw, 18px); padding-block: 17px; gap: 14px; }
   .hub-faq-plus { width: 22px; height: 22px; margin-top: 0; }
   .hub-faq-antwoord { font-size: 16px; padding-bottom: 17px; margin-top: -4px; }
+}
+/* Hero van de hub (Alex 25/11, copy van Amina): vier treden in één lijn.
+   Kop 70 → haak 38 (±0,55 × de kop, vet, marine) → lopende tekst 24 (grijs, ±65 tekens
+   per regel) → kleine lettertjes 18 onder de knop. De zin onder de video heeft de maat
+   van de lopende tekst maar is halfvet en marine, zodat hij naar de knop leidt.
+   Alleen op /hub (.hub-hero-vsl); /cursus/ houdt badge, subzin en pillen. */
+.hub-hero-vsl .hub-titel { line-height: 1.05; }
+.hub-haak { font-size: 38px; line-height: 1.2; font-weight: 700; color: #1A2D63; max-width: 900px; margin: var(--hub-r3) auto 0; }
+.hub-lead { font-size: 24px; line-height: 1.5; color: #6C7590; max-width: 760px; margin: var(--hub-r2) auto var(--hub-r4); }
+.hub-onder-video { font-size: 24px; line-height: 1.4; font-weight: 600; color: #1A2D63; max-width: 760px; margin: var(--hub-r4) auto var(--hub-r3); }
+.hub-hero-vsl .hub-noot { font-size: 18px; line-height: 1.4; }
+@media (max-width: 1100px) {
+  .hub-haak { font-size: clamp(26px, 3.4vw, 36px); }
+  .hub-lead, .hub-onder-video { font-size: clamp(19px, 2.2vw, 23px); }
+  .hub-hero-vsl .hub-noot { font-size: 17px; }
+}
+@media (max-width: 767px) {
+  /* Het accent ("company brains in België") mag op gsm over twee regels lopen. */
+  .hub-hero-vsl .hub-titel .hp-onder { white-space: normal; }
+  .hub-haak { font-size: 22px; line-height: 1.25; }
+  .hub-lead { font-size: 16px; }
+  .hub-onder-video { font-size: 17px; }
+  .hub-hero-vsl .hub-noot { font-size: 13px; }
+}
+@media (max-width: 380px) {
+  .hub-haak { font-size: 20px; }
 }
 @media (max-width: 380px) {
   .hub-wrap, .hub-form-wrap, .hub-faq-wrap { width: calc(100% - 20px); }

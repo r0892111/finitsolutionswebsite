@@ -7,7 +7,7 @@
  * video bekijken en het formulier invullen. Van boven naar onder:
  *
  * 1. een smalle strook naar de gratis resources onderaan;
- * 2. badge, kop, subzin, de video, één zin onder de video, de knop;
+ * 2. kop, haak, lopende tekst, de video, één zin onder de video, de knop;
  * 3. het formulier, vraag per vraag (vlak onder de video, zoals bij hen);
  * 4. de twijfels uit de video als korte FAQ;
  * 5. de gratis prompts en gidsen, achter een e-mailslot.
@@ -156,16 +156,12 @@ export function HubPagina({ start }: { start?: "resources" }) {
         </span>
       </a>
 
-      {/* 2. Badge, kop, subzin, video, knop */}
-      <section className="hub-hero bg-[radial-gradient(60%_45%_at_50%_0%,#EEF2FB_0%,rgba(238,242,251,0)_70%)]">
+      {/* 2. Kop, haak, lopende tekst, video, knop */}
+      <section className="hub-hero hub-hero-vsl bg-[radial-gradient(60%_45%_at_50%_0%,#EEF2FB_0%,rgba(238,242,251,0)_70%)]">
         <div className="hub-wrap text-center">
           <a href="/" className="hub-logo mx-auto flex w-fit" aria-label="Finit Solutions, naar de homepage">
             <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto sm:h-7" priority />
           </a>
-
-          <p className="hub-badge mx-auto flex w-fit max-w-full items-center rounded-full border border-[#1A2D63]/15 bg-white font-semibold text-[#1A2D63] shadow-[0_6px_18px_-12px_rgba(26,45,99,0.5)]">
-            {HUB.badge}
-          </p>
 
           <h1 className="hp-display hub-titel mx-auto text-balance font-bold text-[#1A2D63]">
             {HUB.kop.voor}{" "}
@@ -176,14 +172,18 @@ export function HubPagina({ start }: { start?: "resources" }) {
             </span>
           </h1>
 
-          <p className="hub-sub text-balance text-[#6C7590]">{HUB.sub}</p>
+          <p className="hub-haak text-balance">
+            {HUB.haak[0]} <br className="hidden sm:inline" />
+            {HUB.haak[1]}
+          </p>
+
+          <p className="hub-lead text-balance">{HUB.sub}</p>
 
           <div className="hub-video mx-auto">
             <VslSpeler meta={meta} onNaarFormulier={() => naarFormulier("einde_video")} />
           </div>
 
-          {/* Lettergrootte van de subzin, witruimte van de vroegere pillen. */}
-          <p className="hub-sub hub-pillen text-balance font-semibold text-[#1A2D63]">{HUB.onderVideo}</p>
+          <p className="hub-onder-video text-balance">{HUB.onderVideo}</p>
 
           <button
             type="button"
