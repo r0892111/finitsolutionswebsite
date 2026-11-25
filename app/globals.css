@@ -1125,12 +1125,15 @@ html {
 .hub-wie-lijst li:first-child { border-top: 0; }
 /* De knop onder de vragen: rustig, omlijnd, zodat "Boek een conversatie" de hoofdknop blijft. */
 .hub-faq-meer-wrap { margin-top: var(--hub-r3); }
-.hub-faq-meer { gap: 0.5em; font-size: 22px; min-height: 60px; padding: 12px 30px; }
-.hub-faq-meer svg { width: 1em; height: 1em; }
+.hub-faq-meer, .hub-naar-website { gap: 0.5em; font-size: 22px; min-height: 60px; padding: 12px 30px; }
+.hub-faq-meer svg, .hub-naar-website svg { width: 1em; height: 1em; }
+/* Onder het formulier: de omlijnde knop naar de aanpak op de homepage (Alex 25/11). */
+.hub-naar-website-wrap { margin-top: var(--hub-r4); }
+.hub-naar-website { max-width: 100%; text-align: center; }
 @media (max-width: 1100px) {
   .hub-wie-titel { font-size: clamp(22px, 2.6vw, 28px); }
   .hub-wie-lijst li { font-size: clamp(17px, 2vw, 21px); }
-  .hub-faq-meer { font-size: 19px; min-height: 54px; }
+  .hub-faq-meer, .hub-naar-website { font-size: 19px; min-height: 54px; }
 }
 @media (max-width: 767px) {
   .hub-wie-raster { grid-template-columns: 1fr; gap: 16px; }
@@ -1139,7 +1142,7 @@ html {
   .hub-wie-icoon { width: 34px; height: 34px; }
   .hub-wie-icoon--klein { width: 24px; height: 24px; }
   .hub-wie-lijst li { font-size: 16px; gap: 10px; padding: 12px 0; }
-  .hub-faq-meer { font-size: 15px; min-height: 48px; padding: 10px 20px; }
+  .hub-faq-meer, .hub-naar-website { font-size: 15px; min-height: 48px; padding: 10px 20px; }
 }
 @media (max-width: 380px) {
   .hub-hero-vsl .hub-titel { font-size: 32px; }

@@ -34,6 +34,11 @@ export const HUB = {
   sub: ["Je werkprocedures, regels, uitzonderingen, …", "We schrijven het allemaal uit in één week, en dat verandert wat AI voor je **bedrijf** kan doen."],
   naarVideo: "Bekijk deze video om te weten of het iets voor jou is.",
 
+  // Onder het formulier (Alex 25/11): voor wie nog twijfelt, naar de aanpak op de homepage.
+  // De nieuwe homepage (tak homepage-amina) noemt die sectie "werkwijze": pas het anker
+  // aan zodra die live gaat.
+  naarWebsite: { tekst: "Twijfel je nog? Lees hier hoe we te werk gaan", href: "/#aanpak" },
+
   // Vlak onder de video (Alex 25/11): wie ons steunt, met hun logo's uit /public.
   steun: {
     label: "Ondersteund door",
@@ -45,7 +50,7 @@ export const HUB = {
   },
 
   // Eén zin onder de video, boven de knop.
-  onderVideo: "We plannen nieuwe projecten per maand in. Wil je er volgende maand bij zijn? Boek dan nu een conversatie.",
+  onderVideo: "Nieuwe projecten plannen we maandelijks in. Wil je er volgende maand bij zijn?",
   // De knop voor een gesprek heet overal op de site zo (Alex 25/11).
   knop: "Boek een conversatie",
   knopNoot: "60 minuten, gratis. Erna zeggen we je eerlijk of we je kunnen helpen.",

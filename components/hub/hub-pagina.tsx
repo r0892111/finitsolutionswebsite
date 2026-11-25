@@ -218,6 +218,16 @@ export function HubPagina({ start }: { start?: "resources" }) {
       <section id="gesprek" className="scroll-mt-4 pb-[var(--hub-r6)]" aria-labelledby="gesprek-titel">
         <div className="hub-form-wrap">
           <StapFormulier bron={formBron} meta={meta} kopId="gesprek-titel" />
+          <div className="hub-naar-website-wrap text-center">
+            <a
+              href={HUB.naarWebsite.href}
+              onClick={() => pushEvent("hub_klik", { ...meta, keuze: "website_aanpak" })}
+              className="hub-naar-website inline-flex items-center rounded-full border border-[#1A2D63]/20 bg-white font-semibold text-[#1A2D63] transition-colors hover:bg-[#F5F7FB]"
+            >
+              {HUB.naarWebsite.tekst}
+              <ArrowRight aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </section>
 
