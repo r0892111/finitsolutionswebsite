@@ -1,18 +1,17 @@
-import { HomePage } from "@/components/home/home-page";
 import { Metadata } from "next";
+import { HomePagina } from "@/components/homepage-amina/home-pagina";
+import { NL } from "@/components/homepage-amina/copy.nl";
+import "@/components/homepage-amina/homepage.css";
 
-const TITLE = "Finit Solutions | Jouw bedrijf, klaar voor AI";
-const DESCRIPTION =
-  "In vier weken analyseren wij je bedrijf en leggen we alles vast in een brein. Daarna bouwen we AI-werknemers, koppelingen, software en websites die elke dag werk uit je handen nemen. Voor Vlaamse KMO's.";
-
+// De homepage, Nederlands (standaard). De Engelse versie staat op /en/.
 export const metadata: Metadata = {
-  title: { absolute: TITLE },
-  description: DESCRIPTION,
-  alternates: { canonical: "/" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/", siteName: "Finit Solutions", locale: "nl_BE", type: "website", images: ["/og-image.png"] },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: ["/og-image.png"] },
+  title: { absolute: NL.meta.titel },
+  description: NL.meta.beschrijving,
+  alternates: { canonical: "/", languages: { "nl-BE": "/", en: "/en/", "x-default": "/" } },
+  openGraph: { title: NL.meta.titel, description: NL.meta.beschrijving, url: "/", siteName: "Finit Solutions", locale: "nl_BE", type: "website", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: NL.meta.titel, description: NL.meta.beschrijving, images: ["/og-image.png"] },
 };
 
 export default function Home() {
-  return <HomePage />;
+  return <HomePagina taal="nl" />;
 }
