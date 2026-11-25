@@ -731,7 +731,7 @@ const RecognitionSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
             className="group inline-flex items-center gap-2.5 bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
           >
             <Calendar className="w-4 h-4" />
-            <span>Plan een kennismaking</span>
+            <span>Boek een conversatie</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -1833,7 +1833,7 @@ const AanpakSection = ({ onCtaClick }: { onCtaClick?: () => void }) => {
             className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
           >
             <Calendar className="w-5 h-5" />
-            <span>Plan een kennismaking</span>
+            <span>Boek een conversatie</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -2337,7 +2337,7 @@ export function AIDesignLanding() {
             }}
             >
               <Calendar className="w-4 h-4" />
-              <span>Plan een kennismaking</span>
+              <span>Boek een conversatie</span>
             </button>
 
           {/* Mobile CTA + hamburger */}
@@ -2355,7 +2355,7 @@ export function AIDesignLanding() {
               style={{ opacity: mobileMenuOpen ? 0 : navScrollProgress, pointerEvents: !mobileMenuOpen && navScrollProgress > 0.5 ? 'auto' : 'none' }}
             >
               <Calendar className="w-4 h-4" />
-              <span>Plan een gesprek</span>
+              <span>Boek een conversatie</span>
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -2401,7 +2401,7 @@ export function AIDesignLanding() {
                 className="w-full inline-flex items-center justify-center gap-2 bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium"
               >
                 <Calendar className="w-4 h-4" />
-                Plan een kennismaking
+                Boek een conversatie
               </button>
               <div className="w-full bg-white rounded-2xl px-6 py-5 border border-[#1A2D63]/[0.06] shadow-[0_1px_0_0_rgba(26,45,99,0.1),0_4px_6px_-1px_rgba(26,45,99,0.15),0_10px_20px_-3px_rgba(26,45,99,0.2),0_20px_40px_-8px_rgba(26,45,99,0.15)] flex flex-col items-center gap-2 text-center">
                 <p className="text-[#475D8F]/70 text-xs font-instrument tracking-widest uppercase">Bel gerust op</p>
@@ -2513,7 +2513,7 @@ export function AIDesignLanding() {
                 className="group bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Plan een kennismaking</span>
+                <span>Boek een conversatie</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -2569,7 +2569,7 @@ export function AIDesignLanding() {
                 className="group w-full bg-[#1A2D63] text-white px-6 py-3.5 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Plan een kennismaking</span>
+                <span>Boek een conversatie</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -2686,7 +2686,7 @@ export function AIDesignLanding() {
                 className="inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
               >
                 <Calendar className="w-5 h-5 md:w-6 md:h-6" />
-                Plan een kennismaking
+                Boek een conversatie
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
               </button>
               <p className="text-sm text-[#1A2D63]/40">
@@ -2740,7 +2740,7 @@ export function AIDesignLanding() {
                   className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
                 >
                   <Calendar className="w-4 h-4" />
-                  Plan een kennismaking
+                  Boek een conversatie
                 </button>
                 <a
                   href="mailto:contact@finitsolutions.be"

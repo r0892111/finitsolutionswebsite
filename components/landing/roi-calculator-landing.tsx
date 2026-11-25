@@ -778,7 +778,7 @@ export function ROICalculatorLanding() {
             }}
           >
             <Calendar className="w-4 h-4" />
-            <span>Plan een gesprek</span>
+            <span>Boek een conversatie</span>
           </button>
 
           {/* Mobile CTA */}
@@ -798,7 +798,7 @@ export function ROICalculatorLanding() {
             }}
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Plan een gesprek</span>
+            <span>Boek een conversatie</span>
           </button>
         </div>
       </nav>
@@ -1194,7 +1194,7 @@ export function ROICalculatorLanding() {
 
                         <div className="pt-2 border-t border-[#1A2D63]/[0.06]">
                           <p className="text-xs text-[#475D8F]/50">
-                            Plan een gratis gesprek voor een analyse op maat van jouw specifieke situatie.
+                            Boek een conversatie voor een analyse op maat van jouw specifieke situatie.
                           </p>
                         </div>
                       </div>
@@ -1219,7 +1219,7 @@ export function ROICalculatorLanding() {
                     className="group inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-8 md:py-4 rounded-full text-base md:text-lg font-medium hover:bg-[#2A4488] transition-all shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
                   >
                     <Calendar className="w-5 h-5" />
-                    <span>Plan een gesprek</span>
+                    <span>Boek een conversatie</span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
@@ -1383,7 +1383,7 @@ export function ROICalculatorLanding() {
               className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
             >
               <Calendar className="w-4 h-4" />
-              <span>Plan een kennismakingsgesprek</span>
+              <span>Boek een conversatie</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </motion.div>

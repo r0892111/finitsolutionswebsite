@@ -120,7 +120,7 @@ export function LezingHandout() {
           <p className="mt-3 text-[17px] leading-relaxed text-white">{BREIN.idee}</p>
           <p className="mt-3 text-[17px] leading-relaxed text-white/80">{BREIN.uitnodiging}</p>
           <Link href={`${LEZING.contactPad}?bron=lezing-open-boek`} className="hp-btn hp-btn--light hp-btn--lg mt-6">
-            Plan een gesprek <ArrowRight className="h-4 w-4" aria-hidden />
+            Boek een conversatie <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
         </section>
 

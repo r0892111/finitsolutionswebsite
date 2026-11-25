@@ -433,7 +433,7 @@ export const BREIN = {
     'Een collega die klantvragen beantwoordt zoals jij dat zou doen',
   ],
   collegas: ['Marketing', 'Sales', 'Offertes', 'Klantvragen', 'Administratie', 'Planning'],
-  uitnodiging: 'Benieuwd wat dat voor jouw bedrijf kan betekenen? Plan een gesprek met Karel.',
+  uitnodiging: 'Benieuwd wat dat voor jouw bedrijf kan betekenen? Boek een conversatie met Karel.',
 } as const;
 
 /* ------------------------------------------------------------------ */

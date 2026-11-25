@@ -508,10 +508,10 @@ export function InstallateursLanding() {
             <img src="/Finit Logo Blue@4x.png" alt="Finit Logo" style={{ height: `${32 + (1 - navScrollProgress) * 14}px`, transition: "height 0.3s" }} className="w-auto object-contain hidden md:block" />
           </a>
           <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "nav_calendly", location: "lp_installateurs_nav" }); }} className="hidden md:flex items-center gap-2 bg-[#1A2D63] text-white rounded-full text-sm font-medium hover:scale-105 transition-all shadow-lg shadow-[#1A2D63]/20" style={{ paddingLeft: `${20 + (1 - navScrollProgress) * 4}px`, paddingRight: `${20 + (1 - navScrollProgress) * 4}px`, paddingTop: `${10 + (1 - navScrollProgress) * 2}px`, paddingBottom: `${10 + (1 - navScrollProgress) * 2}px`, transition: "padding 0.3s" }}>
-            <Calendar className="w-4 h-4" /><span>Plan een gesprek</span>
+            <Calendar className="w-4 h-4" /><span>Boek een conversatie</span>
           </button>
           <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "mobile_nav_calendly", location: "lp_installateurs_mobile_nav" }); }} className="md:hidden flex items-center gap-1.5 bg-[#1A2D63] text-white rounded-full text-xs font-medium px-3.5 py-2 transition-opacity duration-300" style={{ opacity: navScrollProgress, pointerEvents: navScrollProgress > 0.5 ? "auto" : "none" }}>
-            <Calendar className="w-3.5 h-3.5" /><span>Plan een gesprek</span>
+            <Calendar className="w-3.5 h-3.5" /><span>Boek een conversatie</span>
           </button>
         </div>
       </nav>
@@ -535,7 +535,7 @@ export function InstallateursLanding() {
             </motion.p>
             <motion.div className="flex flex-row items-center justify-center gap-3 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}>
               <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "hero_calendly", location: "lp_installateurs_hero" }); }} className="group bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10">
-                <Calendar className="w-4 h-4" /><span>Plan een kennismakingsgesprek</span><ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <Calendar className="w-4 h-4" /><span>Boek een conversatie</span><ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
             <motion.div className="flex items-center justify-center gap-3 mt-6 mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
@@ -566,7 +566,7 @@ export function InstallateursLanding() {
             </motion.p>
             <motion.div className="flex flex-col items-center justify-center gap-3 mb-5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}>
               <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "hero_calendly", location: "lp_installateurs_hero" }); }} className="group w-full bg-[#1A2D63] text-white px-6 py-3.5 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10">
-                <Calendar className="w-4 h-4" /><span>Plan een kennismakingsgesprek</span><ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <Calendar className="w-4 h-4" /><span>Boek een conversatie</span><ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
             <motion.div className="flex items-center justify-center gap-2.5 mt-5 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
@@ -900,7 +900,7 @@ export function InstallateursLanding() {
 
           <motion.div className="flex justify-center mt-10 md:mt-12" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.5, delay: 0.3 }}>
             <button type="button" onClick={() => { openForm(); pushEvent("cta_click", { cta_label: "process_calendly", location: "lp_installateurs_process" }); }} className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]">
-              <Calendar className="w-4 h-4" /><span>Plan een kennismakingsgesprek</span><ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <Calendar className="w-4 h-4" /><span>Boek een conversatie</span><ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </motion.div>
         </div>

@@ -15,7 +15,7 @@
 export const HUB = {
   metaTitel: "Laat AI werken zoals jouw bedrijf werkt",
   metaBeschrijving:
-    "Voor zaakvoerders/management van kmo's. Bekijk de video van Alex van Finit en plan een vrijblijvend gesprek. Plus gratis prompts en gidsen uit onze video's.",
+    "Voor zaakvoerders/management van kmo's. Bekijk de video van Alex van Finit en boek een conversatie. Plus gratis prompts en gidsen uit onze video's.",
   metaTitelResources: "Gratis prompts en gidsen",
   metaBeschrijvingResources:
     "Alle prompts en gidsen uit de video's en posts van Finit op één plek. Laat je e-mailadres achter en open ze meteen.",
@@ -50,7 +50,7 @@ export const HUB = {
     verderKnop: "Verder kijken",
     opnieuwKnop: "Opnieuw beginnen",
     eindeVraag: "Herken je je bedrijf hierin?",
-    eindeKnop: "Plan een gratis startgesprek",
+    eindeKnop: "Boek een conversatie",
     eindeOpnieuw: "Bekijk opnieuw",
     fout: "De video laadt niet. Herlaad de pagina of probeer het later opnieuw.",
     kwaliteit: "Kwaliteit van de video",
@@ -64,7 +64,7 @@ export const HUB = {
   // Het formulier, vraag per vraag. Verzendt via het bestaande contactformulier
   // (/api/contact-submit); de antwoorden op de keuzevragen gaan mee in het bericht.
   formulier: {
-    titel: "Plan een vrijblijvend gesprek",
+    titel: "Boek een conversatie",
     // Boven de eerste vraag: wat er gebeurt. Je kiest zelf geen moment in een agenda;
     // na de laatste vraag nemen wij contact op om er samen een te kiezen.
     uitleg: "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter, en dan plannen we samen een moment in.",

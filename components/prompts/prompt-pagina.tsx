@@ -90,7 +90,7 @@ export function PromptPagina({ pagina }: { pagina: Pagina }) {
               Start met de lesreeks <ArrowRight className="h-4 w-4" aria-hidden />
             </a>
             <Link href={`/hub/?${herkomst}#gesprek`} className="hp-btn hp-btn--lg !border-white/50 text-white hover:bg-white/10">
-              Plan een call met Karel
+              Boek een conversatie met Karel
             </Link>
           </div>
         </section>

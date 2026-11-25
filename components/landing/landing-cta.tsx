@@ -36,7 +36,7 @@ export function LandingCTA() {
                 className="inline-flex items-center gap-2 md:gap-3 bg-[#1A2D63] text-white px-6 py-3.5 md:px-10 md:py-5 rounded-full text-base md:text-lg font-medium hover:scale-105 transition-transform shadow-2xl shadow-[#1A2D63]/20"
               >
                 <Calendar className="w-5 h-5 md:w-6 md:h-6" />
-                Plan een kennismakingsgesprek
+                Boek een conversatie
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
               </button>
               <p className="text-sm text-[#1A2D63]/40">

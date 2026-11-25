@@ -663,7 +663,7 @@ export function ConsiderationLanding() {
             }}
           >
             <Calendar className="w-4 h-4" />
-            <span>Plan een gesprek</span>
+            <span>Boek een conversatie</span>
           </button>
 
           {/* Mobile CTA */}
@@ -683,7 +683,7 @@ export function ConsiderationLanding() {
             }}
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Plan een gesprek</span>
+            <span>Boek een conversatie</span>
           </button>
         </div>
       </nav>
@@ -755,7 +755,7 @@ export function ConsiderationLanding() {
                 className="group bg-[#1A2D63] text-white px-7 py-3.5 rounded-full text-base font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Plan een kennismakingsgesprek</span>
+                <span>Boek een conversatie</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
@@ -847,7 +847,7 @@ export function ConsiderationLanding() {
                 className="group w-full bg-[#1A2D63] text-white px-6 py-3.5 rounded-full text-[15px] font-medium flex items-center justify-center gap-2.5 hover:bg-[#2A4488] transition-colors shadow-lg shadow-[#1A2D63]/10"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Plan een kennismakingsgesprek</span>
+                <span>Boek een conversatie</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
@@ -1217,7 +1217,7 @@ export function ConsiderationLanding() {
               className="group inline-flex items-center gap-3 bg-[#1A2D63] text-white px-8 py-4 rounded-full text-[15px] font-medium hover:bg-[#2A4488] transition-all duration-200 shadow-[0_4px_20px_-4px_rgba(26,45,99,0.4)]"
             >
               <Calendar className="w-4 h-4" />
-              <span>Plan een kennismakingsgesprek</span>
+              <span>Boek een conversatie</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </motion.div>
