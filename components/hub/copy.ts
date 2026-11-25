@@ -31,7 +31,7 @@ export const HUB = {
   kop: { voor: "De eerste", accent: "company\u00A0brain", na: "bouwers in België" },
   haak: "Deze video gaat niet echt over AI, hij gaat over wat er in je hoofd zit.",
   // Twee regels; een woord tussen ** ** wordt vet (Alex' klemtoon op "bedrijf").
-  sub: ["Je werkprocedures, regels, uitzonderingen, …", "En dat verandert wat AI voor je **bedrijf** kan doen."],
+  sub: ["Je werkprocedures, regels, uitzonderingen, …", "We schrijven het allemaal uit in één week, en dat verandert wat AI voor je **bedrijf** kan doen."],
   naarVideo: "Bekijk deze video om te weten of het iets voor jou is.",
 
   // Vlak onder de video (Alex 25/11): wie ons steunt, met hun logo's uit /public.
@@ -159,7 +159,7 @@ export const HUB = {
   // de knop "Toon nog X vragen". "Na een halfuur" werd "na een uur": het gesprek duurt 60 minuten.
   twijfels: {
     titel: { voor: "Voor je een conversatie boekt, wil je waarschijnlijk", accent: "eerlijke antwoorden." },
-    intro: "Je hebt AI al de mist zien ingaan. Stel dus gerust de moeilijke vragen.",
+    intro: "Je hebt AI al de mist zien ingaan. Dit zijn de vragen die we het vaakst horen.",
     zichtbaar: 5,
     meer: "Toon nog {aantal} vragen",
     lijst: [
@@ -171,7 +171,7 @@ export const HUB = {
       {
         vraag: "Kan AI dit echt? Ik heb het al dingen zien verzinnen.",
         antwoord:
-          "Wij ook. Daarom begint alles in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. Twijfelgevallen gaan naar een mens, en wat AI zelf mag doen, breiden we alleen stap voor stap uit. We tonen je eerst een demo, want het zelf zien is beter dan het geloven.",
+          "Wij ook, en een company brain lost dat probleem al grotendeels op. Maar voor de zekerheid begint alles in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. Twijfelgevallen gaan naar een mens, en wat AI zelf mag doen, breiden we alleen stap voor stap uit. We tonen je eerst een demo, want het zelf zien is beter dan het geloven.",
       },
       {
         vraag: "We gebruiken ChatGPT al. Waarom hebben we dit dan nodig?",
@@ -236,18 +236,18 @@ export const HUB = {
     ],
   },
 
-  // Voor wie wel en niet (Alex 25/11), boven de vragen; tekst van de nieuwe homepage.
+  // Voor wie wel en niet (Alex 25/11), boven de vragen; tekst van de nieuwe homepage, met
+  // Alex' aanpassingen van 25/11 (geen intro en geen slotzin, twee punten herschreven).
   voorWie: {
     titel: { voor: "We zeggen je liever nee dan", accent: "je tijd te verspillen." },
-    intro: "Dit is geen magische knop. Dit is voor wie het werkt, en voor wie niet.",
     wel: {
       titel: "Dit is voor jou als:",
       items: [
         "Je leidt een klein of middelgroot dienstenbedrijf.",
+        "Je wil groeien zonder extra mankracht te hoeven aanwerven.",
         "Je team verliest tijd aan mails, offertes, planning en het invullen van het CRM.",
         "Er hangt te veel af van jou of van één sleutelpersoon.",
-        "Je wil beginnen delegeren, met een gerust hart.",
-        "Je bent bereid om een paar uur uit te leggen hoe je bedrijf echt werkt.",
+        "Je wil beginnen delegeren aan AI, met een gerust hart.",
       ],
     },
     niet: {
@@ -255,11 +255,9 @@ export const HUB = {
       items: [
         "Je wil een knop die alles vanzelf doet. Die bestaat niet.",
         "Je wil een snelle oplossing zonder dat het jou of je team tijd kost.",
-        "Je wil dat AI je mensen vervangt in plaats van hen te helpen.",
         "Er is vandaag geen echte pijn. In dat geval zeggen we je dat eerlijk.",
       ],
     },
-    slot: "We gaan diep in op hoe je bedrijf werkt, en dat vraagt wat van je tijd. Net daarom werkt het daarna ook.",
   },
 
   // De gratis resources onderaan, achter een e-mailadres.

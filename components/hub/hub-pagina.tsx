@@ -159,7 +159,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
       </a>
 
       {/* 2. Kop, haak, lopende tekst, zin naar de video, video, knop */}
-      <section className="hub-hero hub-hero-vsl bg-[radial-gradient(60%_45%_at_50%_0%,#EEF2FB_0%,rgba(238,242,251,0)_70%)]">
+      <section className="hub-hero hub-hero-vsl">
         <div className="hub-wrap text-center">
           <a href="/" className="hub-logo mx-auto flex w-fit" aria-label="Finit Solutions, naar de homepage">
             <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto sm:h-7" priority />
@@ -227,7 +227,6 @@ export function HubPagina({ start }: { start?: "resources" }) {
           <h2 className={KOP}>
             {HUB.voorWie.titel.voor} <Onder>{HUB.voorWie.titel.accent}</Onder>
           </h2>
-          <p className={INTRO}>{HUB.voorWie.intro}</p>
 
           <div className="hub-wie-raster">
             {(["wel", "niet"] as const).map((soort) => {
@@ -255,8 +254,6 @@ export function HubPagina({ start }: { start?: "resources" }) {
               );
             })}
           </div>
-
-          <p className="hub-wie-slot mx-auto text-balance text-center">{HUB.voorWie.slot}</p>
         </div>
       </section>
 
