@@ -166,44 +166,30 @@ export const EN: Copy = {
       "And when nothing off the shelf fits, we build custom software around what you really need.",
     ],
     praktijk: "Here is what that looks like in practice. All examples are anonymised.",
-    statusLabel: "Status",
-    statussen: {
-      voorstel: "Proposal stage",
-      opbouw: "Being built",
-      piloot: "Live pilot, in use",
-      opgeleverd: "Delivered",
-    },
     cases: [
       {
         sector: "Installers and technical services (HVAC, electrical, plumbing)",
         tekst: "An electrical installer receives a tender specification almost every working day. Our agent reads it, puts the items and quantities from the bill of quantities into his quoting tool, picks the right components for the wholesaler request and attaches the data sheets.",
-        status: "voorstel",
       },
       {
         sector: "Construction, windows and renovation",
         tekst: "A window and door company orders from many suppliers on every job. Our agent checks each order against the quote and keeps a checklist per job of what's been ordered and what's been delivered.",
-        status: "voorstel",
       },
       {
         sector: "Hospitality and events",
         tekst: "An events venue gets every request in one info mailbox. We build an agent that sorts it and drafts the replies, a quote agent that gives an indicative B2B price, automatic invoicing from the booking system to accounting, and a chatbot for the website.",
-        status: "opbouw",
-        statusNoot: "The quote agent is ready, the chatbot is in review.",
       },
       {
         sector: "Leisure and wellness",
         tekst: "A wellness centre gets its own booking platform: online booking and payment, a reception screen, massage scheduling, and an AI that answers customer questions.",
-        status: "opbouw",
       },
       {
         sector: "Cleaning and facility services",
         tekst: "A cleaning company with a large number of client sites. An agent picks up complaints from two mailboxes, links each to the right customer and site in their business software, and tracks the follow-up.",
-        status: "piloot",
       },
       {
         sector: "In any sector",
         tekst: "Incoming order emails turned into draft orders in the webshop of a B2B supplier.",
-        status: "opgeleverd",
       },
     ],
     toolsTitel: "Works with what you already use:",
@@ -382,10 +368,7 @@ export const EN: Copy = {
   },
 
   footer: {
-    video: "Video (in Dutch)",
     links: [
-      { label: "Jobs (in Dutch)", href: "/vacatures/" },
-      { label: "Contact (in Dutch)", href: "/contact/" },
       { label: "Privacy policy", href: "/privacy/" },
       { label: "Cookie statement", href: "/cookieverklaring/" },
       { label: "Disclaimer", href: "/disclaimer/" },

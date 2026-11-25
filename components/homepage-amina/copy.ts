@@ -17,9 +17,6 @@
 
 export type Taal = "nl" | "en";
 
-/** Waar een case staat. De volgorde is ook de volgorde van de vier streepjes op de pagina. */
-export type CaseStatus = "voorstel" | "opbouw" | "piloot" | "opgeleverd";
-
 export interface Getuigenis {
   quote: string;
   naam: string;
@@ -86,9 +83,8 @@ export interface Copy {
     /** De vijf zinnen van Amina, van eenvoudig naar veel. Geen eigen tussenkopjes. */
     niveaus: string[];
     praktijk: string;
-    statusLabel: string;
-    statussen: Record<CaseStatus, string>;
-    cases: { sector: string; tekst: string; status: CaseStatus; statusNoot?: string }[];
+    /** Wat we voor de klant doen. Geen stand van het project: dat hoort niet op een verkoopsite (Alex, 25/11). */
+    cases: { sector: string; tekst: string }[];
     toolsTitel: string;
     tools: string[];
     toolsRest: string;
@@ -144,7 +140,8 @@ export interface Copy {
   };
   overOns: { metaTitel: string; metaBeschrijving: string };
   footer: {
-    video: string;
+    /** De link naar de video op /hub. Alleen in het Nederlands: de hub is nog niet vertaald. */
+    video?: string;
     links: { label: string; href: string }[];
     cookies: string;
     btw: string;

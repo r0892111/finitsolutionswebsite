@@ -32,8 +32,6 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 | Lijn | `#DCE2EE` | Scheidingslijnen en randen |
 | Wit | `#FFFFFF` | Bladen: de voorbeelden, de trap, het formulier |
 
-Uitzondering: het bolletje bij de status van een voorbeeld (grijs, blauw, groen).
-
 ## Letters
 
 - Koppen: Bricolage Grotesque, gewicht 650. H1 40 tot 84 px, H2 30 tot 48 px.
@@ -49,12 +47,12 @@ Uitzondering: het bolletje bij de status van een voorbeeld (grijs, blauw, groen)
 
 ## Regels
 
-1. **Eén gevulde knop**: "Plan een gratis startgesprek", overal woordelijk dezelfde, op de plaatsen waar Amina ze zette: hero, na de vijf stappen, bij het bewijs, na de FAQ, in het formulier. Plus het menu en de plakbalk op gsm. Ze springt altijd naar het formulier.
+1. **Eén gevulde knop**: "Plan een gratis startgesprek", overal woordelijk dezelfde, op de plaatsen waar Amina ze zette: hero, na de vijf stappen, na de FAQ, in het formulier (en bij het bewijs zodra die sectie getoond wordt). Plus het menu en de plakbalk op gsm. Ze springt altijd naar het formulier.
 2. **De andere knoppen zijn links** met een streep en een pijl: "Bekijk hoe het werkt", "Toon me wat er ontbreekt", "Toon me hoe het werkt". Altijd links uitgelijnd, onder de tekst waar ze bij horen.
 3. **Vlak**: geen schaduw of kleurverloop op knoppen, geen markeerstift achter woorden, geen metertjes of sierlabels.
 4. **Maten** uit 4/8/12/16/24/32/48/64/96/128. Hoeken 8 (knop, veld) en 12 (blad, foto).
 5. **Beweging**: één keer, bij het laden, komt de hero rustig binnen. Verder alleen wat reageert op een klik. Stil bij "minder beweging".
-6. **Niets verzinnen**: `bewijs.getuigenissen` is leeg; het blok verschijnt vanzelf als er een echte in staat.
+6. **Niets verzinnen, en niets intern** (Alex, 25/11): geen stand van projecten ("voorstel", "in opbouw"), geen lege of halve blokken, geen labels die als een dashboard lezen. `bewijs.getuigenissen` is leeg, dus de hele sectie "Bewijs" blijft verborgen tot er een echte getuigenis in staat.
 7. **Toegankelijk**: knoppen en links minstens 44 px hoog, labels boven de velden, foutmelding onder het veld, "Naar de inhoud", zichtbare focusrand.
 
 ## Bronnen

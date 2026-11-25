@@ -10,8 +10,8 @@
  * bevat geen tekst. Opmaak: ./homepage.css, regels: ./DESIGN.md.
  *
  * Knoppen: één gevulde knop, "Plan een gratis startgesprek", op de plaatsen
- * waar Amina ze zette (hero, na de vijf stappen, bij het bewijs, na de FAQ, in
- * het formulier) en in het menu. Ze springt altijd naar het formulier. Haar
+ * waar Amina ze zette (hero, na de vijf stappen, na de FAQ, in het formulier; ook
+ * bij het bewijs zodra daar getuigenissen staan) en in het menu. Ze springt altijd naar het formulier. Haar
  * twee andere knoppen ("Toon me wat er ontbreekt", "Toon me hoe het werkt")
  * zijn links met een pijl naar de volgende sectie, zodat er per scherm maar
  * één gevulde knop staat.
@@ -241,12 +241,6 @@ export function HomePagina({ taal }: { taal: Taal }) {
                 <li key={c.sector} className="nh-dossier-rij">
                   <h3 className="nh-dossier-sector">{c.sector}</h3>
                   <p className="nh-dossier-tekst">{c.tekst}</p>
-                  <p className="nh-status" data-status={c.status}>
-                    <span>
-                      {t.bouwen.statusLabel}: {t.bouwen.statussen[c.status].toLowerCase()}
-                      {c.statusNoot && <small>{c.statusNoot}</small>}
-                    </span>
-                  </p>
                 </li>
               ))}
             </ul>
@@ -286,36 +280,33 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* ---------------------------------------------------------- */}
         {/* 8. Bewijs                                                  */}
         {/* ---------------------------------------------------------- */}
-        {/* Getuigenissen verschijnen pas als er echte in de copy staan (bewijs.getuigenissen). */}
-        <section id="bewijs" className="nh-sectie">
-          <div className="nh-wrap">
-            <div className="border-t-2 border-[var(--nh-inkt)] pt-10 lg:pt-12">
+        {/* De hele sectie verschijnt pas als er echte getuigenissen in de copy staan (bewijs.getuigenissen).
+            Zonder getuigenissen zou de kop een vraag stellen waar niets op volgt. */}
+        {t.bewijs.getuigenissen.length > 0 && (
+          <section id="bewijs" className="nh-sectie">
+            <div className="nh-wrap">
               <h2 className="nh-h2 max-w-[18em]">{t.bewijs.h2}</h2>
               <p className="nh-sub mt-5">{t.bewijs.sub}</p>
 
-              {t.bewijs.getuigenissen.length > 0 && (
-                <div className="mt-12">
-                  <p className="nh-h3">{t.bewijs.getuigenissenTitel}</p>
-                  <ul className="mt-6 grid gap-6 md:grid-cols-2">
-                    {t.bewijs.getuigenissen.map((g) => (
-                      <li key={g.naam} className="nh-getuige">
-                        <blockquote className="nh-quote">&ldquo;{g.quote}&rdquo;</blockquote>
-                        <p className="nh-klein">
-                          {g.naam}, {g.bedrijf}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <p className="nh-h3 mt-12">{t.bewijs.getuigenissenTitel}</p>
+              <ul className="mt-6 grid gap-6 md:grid-cols-2">
+                {t.bewijs.getuigenissen.map((g) => (
+                  <li key={g.naam} className="nh-getuige">
+                    <blockquote className="nh-quote">&ldquo;{g.quote}&rdquo;</blockquote>
+                    <p className="nh-klein">
+                      {g.naam}, {g.bedrijf}
+                    </p>
+                  </li>
+                ))}
+              </ul>
 
               <div className="mt-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
                 <Steun label={t.bewijs.ondersteund} />
                 <a href="#startgesprek" onClick={start("bewijs")} className="nh-knop nh-knop--breed">{t.bewijs.knop}</a>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ---------------------------------------------------------- */}
         {/* 9. FAQ                                                     */}

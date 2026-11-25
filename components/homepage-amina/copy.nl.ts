@@ -167,44 +167,30 @@ export const NL: Copy = {
       "En als geen enkel bestaand pakket past, bouwen we software op maat rond wat je echt nodig hebt.",
     ],
     praktijk: "Zo ziet dat er in de praktijk uit. Alle voorbeelden zijn anoniem gemaakt.",
-    statusLabel: "Status",
-    statussen: {
-      voorstel: "Voorstel",
-      opbouw: "In opbouw",
-      piloot: "Live als piloot, in gebruik",
-      opgeleverd: "Opgeleverd",
-    },
     cases: [
       {
         sector: "Installateurs en technische diensten (HVAC, elektriciteit, sanitair)",
         tekst: "Een elektro-installateur krijgt bijna elke werkdag een lastenboek binnen. Onze AI-werknemer leest het, zet de posten en hoeveelheden uit de meetstaat in zijn offertetool, kiest de juiste componenten voor de prijsaanvraag bij de groothandel en voegt de technische fiches toe.",
-        status: "voorstel",
       },
       {
         sector: "Bouw, ramen en renovatie",
         tekst: "Een ramen- en deurenbedrijf bestelt voor elke werf bij veel leveranciers. Onze AI-werknemer legt elke bestelling naast de offerte en houdt per werf een checklist bij van wat besteld is en wat geleverd is.",
-        status: "voorstel",
       },
       {
         sector: "Horeca en events",
         tekst: "Een eventlocatie krijgt elke aanvraag binnen in één info-mailbox. We bouwen een AI-werknemer die de mailbox sorteert en de antwoorden klaarzet, een offerte-AI die een richtprijs geeft voor bedrijven, automatische facturatie van het boekingssysteem naar de boekhouding, en een chatbot voor de website.",
-        status: "opbouw",
-        statusNoot: "De offerte-AI is klaar, de chatbot wordt nagekeken.",
       },
       {
         sector: "Vrije tijd en wellness",
         tekst: "Een wellnesscentrum krijgt een eigen boekingsplatform: online boeken en betalen, een scherm voor de receptie, de planning van de massages, en een AI die vragen van klanten beantwoordt.",
-        status: "opbouw",
       },
       {
         sector: "Schoonmaak en facilitaire diensten",
         tekst: "Een schoonmaakbedrijf met een groot aantal locaties bij klanten. Een AI-werknemer haalt de klachten uit twee mailboxen, koppelt elke klacht aan de juiste klant en locatie in hun bedrijfssoftware, en houdt de opvolging bij.",
-        status: "piloot",
       },
       {
         sector: "In elke sector",
         tekst: "Binnenkomende bestelmails worden conceptbestellingen in de webshop van een B2B-leverancier.",
-        status: "opgeleverd",
       },
     ],
     toolsTitel: "Werkt met wat je al gebruikt:",
@@ -384,7 +370,7 @@ export const NL: Copy = {
   },
 
   footer: {
-    video: "Video",
+    video: "Bekijk de video",
     links: [
       { label: "Vacatures", href: "/vacatures/" },
       { label: "Contact", href: "/contact/" },

@@ -207,7 +207,7 @@ export function Voet({ taal, los = false }: { taal: Taal; los?: boolean }) {
             </ul>
           </div>
           <ul className="grid gap-x-12 gap-y-1 sm:grid-cols-2">
-            <li><a href="/hub/" className="inline-flex min-h-[40px] items-center text-white">{t.footer.video}</a></li>
+            {t.footer.video && <li><a href="/hub/" className="inline-flex min-h-[40px] items-center text-white">{t.footer.video}</a></li>}
             <li><a href={OVER_ONS[taal]} className="inline-flex min-h-[40px] items-center">{t.nav.overOns}</a></li>
             {t.footer.links.map((l) => (
               <li key={l.href}><a href={l.href} className="inline-flex min-h-[40px] items-center">{l.label}</a></li>
