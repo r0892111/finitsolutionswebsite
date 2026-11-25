@@ -32,7 +32,7 @@ import { Onder } from "@/components/home/ui";
 import { TwijfelsLijst } from "./twijfels-lijst";
 import { pushEvent } from "@/lib/analytics";
 import { leesLijst } from "@/lib/resources";
-import { HUB, vetStukken } from "./copy";
+import { HUB, vast, vetStukken } from "./copy";
 import { ResourceSectie } from "./resource-sectie";
 import { StapFormulier } from "./stap-formulier";
 import { VslSpeler } from "./vsl-speler";
@@ -40,6 +40,15 @@ import { VslSpeler } from "./vsl-speler";
 const REELS = new Set(leesLijst(lokaleLijst).map((r) => r.reel?.toUpperCase()).filter(Boolean));
 const ACCENT = "text-[#2F55C4]";
 const KOP = "hp-display hub-sectietitel text-balance text-center font-bold text-[#1A2D63]";
+/** Elke zin op een eigen regel, zonder los woordje op het einde (Alex 25/11). */
+function zinnen(tekst: string) {
+  return tekst.split(/(?<=[.?!…])\s+/).map((zin, i) => (
+    <span key={i} className="block">
+      {vast(zin)}
+    </span>
+  ));
+}
+
 const INTRO = "hub-intro mx-auto text-balance text-center text-[#3D4766]";
 
 interface Herkomst {
@@ -173,17 +182,17 @@ export function HubPagina({ start }: { start?: "resources" }) {
             {HUB.kop.na}
           </h1>
 
-          <p className="hub-haak text-balance">{HUB.haak}</p>
+          <p className="hub-haak text-balance">{vast(HUB.haak)}</p>
 
-          <p className="hub-lead text-balance">
+          <p className="hub-lead">
             {HUB.sub.map((regel, r) => (
               <span key={r} className="block">
-                {vetStukken(regel).map((s, i) => (s.vet ? <strong key={i} className="font-semibold text-[#1A2D63]">{s.tekst}</strong> : <span key={i}>{s.tekst}</span>))}
+                {vetStukken(vast(regel)).map((s, i) => (s.vet ? <strong key={i} className="font-semibold text-[#1A2D63]">{s.tekst}</strong> : <span key={i}>{s.tekst}</span>))}
               </span>
             ))}
           </p>
 
-          <p className="hub-naar-video text-balance">{HUB.naarVideo}</p>
+          <p className="hub-naar-video text-balance">{vast(HUB.naarVideo)}</p>
 
           <div className="hub-video mx-auto">
             <VslSpeler meta={meta} onNaarFormulier={() => naarFormulier("einde_video")} />
@@ -200,7 +209,13 @@ export function HubPagina({ start }: { start?: "resources" }) {
             </ul>
           </div>
 
-          <p className="hub-onder-video text-balance">{HUB.onderVideo}</p>
+          <p className="hub-onder-video">
+            {HUB.onderVideo.map((zin) => (
+              <span key={zin} className="block">
+                {vast(zin)}
+              </span>
+            ))}
+          </p>
 
           <button
             type="button"
@@ -210,12 +225,12 @@ export function HubPagina({ start }: { start?: "resources" }) {
             {HUB.knop}
             <ArrowRight aria-hidden="true" />
           </button>
-          <p className="hub-noot text-[#6C7590]">{HUB.knopNoot}</p>
+          <p className="hub-noot text-[#6C7590]">{vast(HUB.knopNoot)}</p>
         </div>
       </section>
 
       {/* 3. Het formulier, meteen onder de video */}
-      <section id="gesprek" className="scroll-mt-4 pb-[var(--hub-r6)]" aria-labelledby="gesprek-titel">
+      <section id="gesprek" className="scroll-mt-4 pb-[var(--hub-r5)]" aria-labelledby="gesprek-titel">
         <div className="hub-form-wrap">
           <StapFormulier bron={formBron} meta={meta} kopId="gesprek-titel" />
           <div className="hub-naar-website-wrap text-center">
@@ -236,7 +251,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
       </section>
 
       {/* 4. Voor wie wel en niet (Alex 25/11): twee kaarten naast elkaar, groen en rood. */}
-      <section id="voor-wie" className="scroll-mt-4 pb-[var(--hub-r6)]">
+      <section id="voor-wie" className="scroll-mt-4 pb-[var(--hub-r5)]">
         <div className="hub-wrap">
           <h2 className={KOP}>
             {HUB.voorWie.titel.voor} <Onder>{HUB.voorWie.titel.accent}</Onder>
@@ -260,7 +275,7 @@ export function HubPagina({ start }: { start?: "resources" }) {
                         <span className="hub-wie-icoon hub-wie-icoon--klein" aria-hidden="true">
                           <Icoon strokeWidth={3} />
                         </span>
-                        <span>{item}</span>
+                        <span>{vast(item)}</span>
                       </li>
                     ))}
                   </ul>
@@ -272,12 +287,12 @@ export function HubPagina({ start }: { start?: "resources" }) {
       </section>
 
       {/* 5. Veelgestelde vragen: eerst vijf, de rest na "Toon nog X vragen". */}
-      <section id="twijfels" className="hp-stippen scroll-mt-4 bg-[#F5F7FB] py-[var(--hub-r6)]">
+      <section id="twijfels" className="hp-stippen scroll-mt-4 bg-[#F5F7FB] py-[var(--hub-r5)]">
         <div className="hub-faq-wrap">
           <h2 className={KOP}>
             {HUB.twijfels.titel.voor} <Onder>{HUB.twijfels.titel.accent}</Onder>
           </h2>
-          <p className={INTRO}>{HUB.twijfels.intro}</p>
+          <p className={INTRO}>{zinnen(HUB.twijfels.intro)}</p>
 
           <TwijfelsLijst lijst={HUB.twijfels.lijst} zichtbaar={HUB.twijfels.zichtbaar} meer={HUB.twijfels.meer} />
 
@@ -291,12 +306,12 @@ export function HubPagina({ start }: { start?: "resources" }) {
       </section>
 
       {/* 6. De gratis resources, achter een e-mailslot */}
-      <section id="resources" className="scroll-mt-4 py-[var(--hub-r6)]">
+      <section id="resources" className="scroll-mt-4 py-[var(--hub-r5)]">
         <div className="mx-auto w-full max-w-[56rem] px-4 sm:px-8">
           <h2 className={KOP}>
             {HUB.resources.titel.voor} <Onder>{HUB.resources.titel.accent}</Onder>
           </h2>
-          <p className={INTRO}>{HUB.resources.intro}</p>
+          <p className={INTRO}>{zinnen(HUB.resources.intro)}</p>
           <ResourceSectie reel={herkomst.reel} meta={meta} />
         </div>
       </section>

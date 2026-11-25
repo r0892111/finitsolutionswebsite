@@ -1062,17 +1062,18 @@ html {
 }
 /* Hero van de hub (Alex 25/11): de grootste zin is de kop, daarna telkens een trede
    kleiner. Kop 70 → haak 40 (vet, marine) → lopende tekst 28 (grijs, "bedrijf" vet) →
-   een losse zin naar de video 24 (halfvet, marine, met meer ruimte erboven want hij
+   een losse zin naar de video 24 (halfvet, marine, met wat ruimte erboven want hij
    hoort niet bij de alinea) → video → zin onder de video 28 (halfvet, marine) → knop →
    kleine lettertjes 20. Op desktop brede tekstblokken (tot 1000 à 1100 px), zoals de
    subzin bij Shadowboys. Alleen op /hub (.hub-hero-vsl); /cursus/ blijft zoals hij was. */
 .hub-hero-vsl .hub-titel { line-height: 1.05; }
 .hub-haak { font-size: 40px; line-height: 1.2; font-weight: 700; color: #1A2D63; max-width: 1100px; margin: var(--hub-r3) auto 0; }
-.hub-lead { font-size: 28px; line-height: 1.45; color: #6C7590; max-width: 1000px; margin: var(--hub-r2) auto 0; }
+/* Lopende tekst: breed (Alex 25/11, "lijkt zo op elkaar gepropt"), geen balans die de regels smal maakt. */
+.hub-lead { font-size: 28px; line-height: 1.45; color: #6C7590; max-width: 1200px; margin: var(--hub-r2) auto 0; text-wrap: pretty; }
 /* Ritme (Alex 25/11, "gewoon natuurlijk"): wat bij elkaar hoort staat dicht (kop, haak, tekst;
    knop en noot), tussen de groepen een grote stap (r5): tekst → zin naar de video,
    logo's → zin onder de video. */
-.hub-naar-video { font-size: 24px; line-height: 1.35; font-weight: 600; color: #1A2D63; max-width: 1000px; margin: var(--hub-r5) auto var(--hub-r3); }
+.hub-naar-video { font-size: 24px; line-height: 1.35; font-weight: 600; color: #1A2D63; max-width: 1000px; margin: var(--hub-r4) auto var(--hub-r3); }
 .hub-onder-video { font-size: 28px; line-height: 1.35; font-weight: 600; color: #1A2D63; max-width: 1000px; margin: var(--hub-r5) auto var(--hub-r3); }
 .hub-hero-vsl .hub-noot { font-size: 20px; line-height: 1.4; color: #3D4766; }
 @media (max-width: 1100px) {
@@ -1085,7 +1086,8 @@ html {
   /* Drie regels op gsm: "De eerste" / "company brain" / "bouwers in België". */
   .hub-hero-vsl .hub-titel { font-size: clamp(32px, 9.6vw, 46px); }
   .hub-haak { font-size: 24px; line-height: 1.25; }
-  .hub-lead { font-size: 19px; line-height: 1.45; }
+  /* Mag op gsm iets buiten de kolom van de rest steken. */
+  .hub-lead { font-size: 19px; line-height: 1.45; margin-left: -6px; margin-right: -6px; }
   .hub-naar-video { font-size: 17px; }
   .hub-onder-video { font-size: 18px; }
   .hub-hero-vsl .hub-noot { font-size: 15px; }

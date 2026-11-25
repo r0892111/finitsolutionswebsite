@@ -50,7 +50,8 @@ export const HUB = {
   },
 
   // Eén zin onder de video, boven de knop.
-  onderVideo: "Nieuwe projecten plannen we maandelijks in. Wil je er volgende maand bij zijn?",
+  // Twee zinnen, elk op een eigen regel (op gsm mag een zin zelf nog afbreken).
+  onderVideo: ["Nieuwe projecten plannen we maandelijks in.", "Wil je er volgende maand bij zijn?"],
   // De knop voor een gesprek heet overal op de site zo (Alex 25/11).
   knop: "Boek een conversatie",
   knopNoot: "60 minuten, gratis. Erna zeggen we je eerlijk of we je kunnen helpen.",
@@ -308,6 +309,18 @@ export const HUB = {
 };
 
 /** "Wat is je **rol**?" → stukken tekst met een vlag voor vet. */
+/**
+ * Geen los woordje op een nieuwe regel (Alex 25/11, "houd hier rekening mee, ook in de
+ * toekomst"): in elke zin blijft het laatste woord met een vaste spatie aan het vorige
+ * vast, dus nooit "maandelijks" / "in." of een eenzaam woord op de laatste regel.
+ */
+export function vast(tekst: string): string {
+  return tekst
+    .split(/(?<=[.?!…:])\s+/)
+    .map((zin) => zin.replace(/ (?=\S+$)/, "\u00A0"))
+    .join(" ");
+}
+
 export function vetStukken(zin: string): Array<{ tekst: string; vet: boolean }> {
   return zin.split("**").map((tekst, i) => ({ tekst, vet: i % 2 === 1 })).filter((s) => s.tekst);
 }
