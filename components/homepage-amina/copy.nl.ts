@@ -36,7 +36,8 @@ export const NL: Copy = {
   // 1. Hero
   hero: {
     voorWie: "Voor zaakvoerders in Vlaanderen die hun administratie nog altijd zelf doen",
-    h1: "Je bent al jaren het secretariaat van je eigen bedrijf.",
+    // "de secretaris", niet "het secretariaat" (Alex, 25/11).
+    h1: "Je bent al jaren de secretaris van je eigen bedrijf.",
     h1Streep: "eigen bedrijf.",
     h1Vervolg: "Wij schrijven in één week uit hoe je bedrijf werkt. Daarna doet AI het werk op jouw manier, in jouw plaats.",
     sub: "ChatGPT is slim, maar het weet niets over jouw bedrijf. Daarom beginnen we met een company brain: hierin staat hoe je werkt, je prijzen, je regels en je uitzonderingen, uitgeschreven in gewone tekst. Elke AI die we bouwen, leest dat eerst.",
@@ -48,7 +49,6 @@ export const NL: Copy = {
       "Het gesprek is gratis en vrijblijvend.",
     ],
     ondersteund: "Ondersteund door",
-    gesproken: "We spraken al met meer dan honderd Belgische kmo's.",
   },
 
   // 2. Herkenbaar? (door Amina ingekort op 25/11, na de comment van Alex)
@@ -110,11 +110,12 @@ export const NL: Copy = {
     stappen: [
       {
         titel: "Een gratis eerste conversatie",
-        tekst: "Een uur. Jij vertelt hoe je bedrijf draait en waar de tijd naartoe gaat. Wij luisteren vooral, en we zeggen je eerlijk of we bij elkaar passen.",
+        // Alex, 25/11: niet meer "wij luisteren vooral". In die 60 minuten gaan we al grondig door de processen.
+        tekst: "60 minuten waarin we al grondig en diepgaand door je processen gaan: hoe je bedrijf draait, waar de tijd naartoe gaat en waar het knelt. Aan het einde zeggen we je eerlijk of we bij elkaar passen.",
       },
       {
         titel: "Nog een paar gesprekken, tot we je een offerte kunnen geven",
-        tekst: "We praten verder, online of bij jou, tot we genoeg weten om een duidelijk plan en een prijs op papier te zetten. Je hoeft niets voor te bereiden. Je legt uit hoe je werkt. Elk gesprek tot dan kost je niets, en er start niets voor jij ja hebt gezegd.",
+        tekst: "We praten verder, online of bij jou, tot we genoeg weten om een duidelijk plan en een prijs op papier te zetten. Je legt uit hoe je werkt. Elk gesprek tot dan kost je niets, en er start niets voor jij ja hebt gezegd.",
       },
       {
         titel: "We schrijven je bedrijf uit",
@@ -122,7 +123,8 @@ export const NL: Copy = {
       },
       {
         titel: "Daarna bouwen we",
-        tekst: "Bovenop het brein, en gekoppeld aan de software die je al gebruikt. Alles begint in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. We blijven erbij om het draaiende te houden.",
+        // Alex, 25/11: niet "gekoppeld aan de software die je al gebruikt"; soms bouwen we software van nul.
+        tekst: "We bouwen wat je nodig hebt, van een eenvoudige automatisering tot een team van AI-werknemers of software volledig op maat. Alles begint in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. We blijven erbij om het draaiende te houden.",
       },
     ],
     knop: "Boek een conversatie",
@@ -169,11 +171,11 @@ export const NL: Copy = {
       },
       {
         sector: "Horeca en events",
-        tekst: "Een eventlocatie krijgt elke aanvraag binnen in één info-mailbox. We bouwen een AI-werknemer die de mailbox sorteert en de antwoorden klaarzet, een offerte-AI die een richtprijs geeft voor bedrijven, automatische facturatie van het boekingssysteem naar de boekhouding, en een chatbot voor de website.",
+        tekst: "Een eventlocatie krijgt elke aanvraag binnen in één info-mailbox. We bouwden een AI-werknemer die de mailbox sorteert en de antwoorden klaarzet, een offerte-AI die een richtprijs geeft voor bedrijven, automatische facturatie van het boekingssysteem naar de boekhouding, en een chatbot voor de website.",
       },
       {
         sector: "Vrije tijd en wellness",
-        tekst: "Een wellnesscentrum krijgt een eigen boekingsplatform: online boeken en betalen, een scherm voor de receptie, de planning van de massages, en een AI die vragen van klanten beantwoordt.",
+        tekst: "Een wellnesscentrum kreeg een eigen boekingsplatform: online boeken en betalen, een scherm voor de receptie, de planning van de massages, en een AI die vragen van klanten beantwoordt.",
       },
       {
         sector: "Schoonmaak en facilitaire diensten",
@@ -185,23 +187,6 @@ export const NL: Copy = {
       },
     ],
     toolsTitel: "Werkt met wat je al gebruikt:",
-    tools: [
-      "Teamleader",
-      "Odoo",
-      "Outlook",
-      "Gmail",
-      "Excel",
-      "Teams",
-      "WhatsApp",
-      "Google Calendar",
-      "Google Drive",
-      "HubSpot",
-      "Pipedrive",
-      "Shopify",
-      "WooCommerce",
-      "Stripe",
-      "Notion",
-    ],
     toolsRest: "en zowat al de rest.",
   },
 
@@ -247,7 +232,7 @@ export const NL: Copy = {
   // 9. Veelgestelde vragen
   faq: {
     h2: "Voor je een conversatie boekt, wil je waarschijnlijk eerlijke antwoorden.",
-    sub: "Je hebt AI al de mist zien ingaan. Stel dus gerust de moeilijke vragen.",
+    sub: "Je hebt AI al de mist zien ingaan. Dit zijn de twijfels die we het vaakst horen.",
     items: [
       {
         q: "Wat kost het?",
@@ -259,7 +244,7 @@ export const NL: Copy = {
       },
       {
         q: "We gebruiken ChatGPT al. Waarom hebben we dit dan nodig?",
-        a: "Omdat het gebruiken en er iets uit halen twee verschillende dingen zijn. ChatGPT kent uit zichzelf je prijzen, je uitzonderingen en je stijl niet. Wij vragen altijd wat er vandaag echt automatisch loopt. Meestal is het antwoord: niets. Een brein geeft ChatGPT die kennis. Zo krijg je dezelfde tool, met een heel ander resultaat.",
+        a: "Omdat het gebruiken en er iets uit halen twee verschillende dingen zijn. ChatGPT kent uit zichzelf je werkprocedures, regels en uitzonderingen niet. Wij vragen altijd wat er vandaag echt automatisch loopt. Meestal is het antwoord: niets. Een brein geeft ChatGPT die kennis. Zo krijg je dezelfde tool, met een heel ander resultaat.",
       },
       {
         q: "Is dit over twee maanden niet alweer verouderd?",
@@ -309,34 +294,33 @@ export const NL: Copy = {
     knop: "Boek een conversatie",
   },
 
-  // 10. Voor wie is dit. Elk punt maakt de zin af na "... als:" (dus "je een knop wil", niet "je wil een knop").
+  // 10. Voor wie is dit. Woordelijk de kaarten van de hub (Alex, 25/11), groen en rood.
+  // Elk punt maakt de zin af na "... als:" (dus "je een knop wil", niet "je wil een knop").
   voorWie: {
     h2: "We zeggen je liever nee dan je tijd te verspillen.",
+    wel: {
+      titel: "Dit is voor jou als:",
+      items: [
+        "Je zaakvoerder bent of in het management van een kmo zit.",
+        "Je wil groeien zonder extra mankracht te hoeven aanwerven.",
+        "Je team tijd verliest aan mails, offertes, planning en het invullen van het CRM.",
+        "Er te veel afhangt van jou of van één sleutelpersoon.",
+        "Je wil beginnen delegeren aan AI, met een gerust hart.",
+      ],
+    },
     niet: {
-      titel: "Het is niets voor jou als:",
+      titel: "Dit is niet voor jou als:",
       items: [
         "Je een knop wil die alles vanzelf doet. Die bestaat niet.",
         "Je een snelle oplossing wil zonder dat het jou of je team tijd kost.",
-        "Je wil dat AI je mensen vervangt in plaats van hen te helpen.",
         "Er vandaag geen echte pijn is. In dat geval zeggen we je dat eerlijk.",
       ],
     },
-    wel: {
-      titel: "Finit Solutions werkt het best voor jou als:",
-      items: [
-        "Je een klein of middelgroot dienstenbedrijf leidt.",
-        "Je team tijd verliest aan mails, offertes, planning en het invullen van het CRM.",
-        "Er te veel afhangt van jou of van één sleutelpersoon.",
-        "Je wil beginnen delegeren, met een gerust hart.",
-        "Je bereid bent om een paar uur uit te leggen hoe je bedrijf echt werkt.",
-      ],
-    },
-    slot: "We gaan diep in op hoe je bedrijf werkt, en dat vraagt wat van je tijd. Net daarom werkt het daarna ook.",
   },
 
   // 11. Slot en formulier
   slot: {
-    h2: "Geen contract, geen druk, gewoon een eerste gesprek.",
+    h2: "Geen contract, geen druk, gewoon een eerste conversatie.",
     sub: "Ontdek wat er in je hoofd vastzit, voor het je iets kost.",
     kort: "Een uur, gratis en vrijblijvend.",
     tekst: "We vragen hoe je bedrijf draait, welke software je gebruikt en waar de tijd naartoe gaat. Daarna zeggen we je eerlijk of we kunnen helpen. Geen contract, geen druk.",

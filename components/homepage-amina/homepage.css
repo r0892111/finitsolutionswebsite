@@ -68,10 +68,62 @@
 }
 @keyframes nh-open { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 
-/* Kruisje voor de lijst "niets voor jou": dezelfde maat als het vinkje, maar grijs. */
-.nh-kruis {
-  flex: none; width: 20px; height: 20px; margin-top: 2px; border-radius: 9999px;
-  background: #e3e7ef; color: #6c7590; display: inline-flex; align-items: center; justify-content: center;
+/* Voor wie wel en niet: de groene en de rode kaart van de hub (Alex, 25/11), met dezelfde
+   kleuren, bovenrand en ronde iconen. Hier overgenomen omdat de hub-regels (hub-wie-*) nog
+   in PR #39 zitten; de letters zijn een maat kleiner, op de schaal van deze pagina. */
+.nh-wie-raster { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; text-align: left; }
+.nh-wie-kaart {
+  position: relative; overflow: hidden; border-radius: 24px; border: 1px solid; padding: 32px 32px 16px;
+  box-shadow: 0 1px 2px rgba(26, 45, 99, 0.04), 0 18px 40px -28px rgba(26, 45, 99, 0.35);
+}
+.nh-wie-kaart::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 6px; background: var(--wie); }
+.nh-wie-kaart--wel { --wie: #15803d; --wie-zacht: #dcfce7; border-color: rgba(21, 128, 61, 0.22); background: linear-gradient(180deg, #f3fbf5 0%, #ffffff 160px); }
+.nh-wie-kaart--niet { --wie: #b91c1c; --wie-zacht: #fee2e2; border-color: rgba(185, 28, 28, 0.2); background: linear-gradient(180deg, #fdf5f5 0%, #ffffff 160px); }
+.nh-wie-titel { display: flex; align-items: center; gap: 14px; font-size: 1.625rem; line-height: 1.2; font-weight: 700; color: var(--wie); margin-bottom: 8px; }
+.nh-wie-icoon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 9999px; background: var(--wie); color: #fff; }
+.nh-wie-icoon svg { width: 55%; height: 55%; }
+.nh-wie-icoon--klein { width: 26px; height: 26px; margin-top: 0.1em; background: var(--wie-zacht); color: var(--wie); }
+.nh-wie-lijst li { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-top: 1px solid #eef0f5; font-size: 1.125rem; line-height: 1.45; color: #3d4766; }
+.nh-wie-lijst li:first-child { border-top: 0; }
+@media (max-width: 1100px) {
+  .nh-wie-titel { font-size: clamp(1.3125rem, 2.4vw, 1.5rem); }
+  .nh-wie-lijst li { font-size: 1.0625rem; }
+}
+@media (max-width: 767px) {
+  .nh-wie-raster { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; }
+  .nh-wie-kaart { border-radius: 18px; padding: 24px 18px 8px; }
+  .nh-wie-titel { font-size: 1.3125rem; gap: 10px; }
+  .nh-wie-icoon { width: 34px; height: 34px; }
+  .nh-wie-icoon--klein { width: 24px; height: 24px; }
+  .nh-wie-lijst li { font-size: 1rem; gap: 10px; padding: 12px 0; }
+}
+
+/* De logo's van de tools: alleen het beeld, in een witte pil. Een woordmerk krijgt meer breedte. */
+.nh-logo {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 52px; min-width: 52px; padding: 0 13px; border-radius: 9999px;
+  border: 1px solid #e3e7ef; background: #fff;
+}
+.nh-logo img { height: 24px; width: auto; max-width: 30px; object-fit: contain; }
+/* Een woordmerk: het logo is de naam. */
+.nh-logo--breed { padding: 0 18px; }
+.nh-logo--breed img { height: 20px; max-width: 104px; }
+/* Een woordmerk met een ondertitel of met lucht rond het logo: hoger, anders wordt het onleesbaar. */
+.nh-logo--hoog { padding: 0 16px; }
+.nh-logo--hoog img { height: 32px; max-width: 110px; }
+/* Een symbool met veel lucht in het bestand zelf: groter tonen, de lucht valt binnen de pil. */
+.nh-logo--ruim { padding: 0 6px; }
+.nh-logo--ruim img { height: 44px; max-width: 56px; }
+/* Gsm: een maat kleiner, zodat de rij niet het hele scherm vult. */
+@media (max-width: 639px) {
+  .nh-logo { height: 44px; min-width: 44px; padding: 0 10px; }
+  .nh-logo img { height: 20px; max-width: 26px; }
+  .nh-logo--breed { padding: 0 14px; }
+  .nh-logo--breed img { height: 17px; max-width: 88px; }
+  .nh-logo--hoog { padding: 0 13px; }
+  .nh-logo--hoog img { height: 27px; max-width: 94px; }
+  .nh-logo--ruim { padding: 0 5px; }
+  .nh-logo--ruim img { height: 37px; max-width: 48px; }
 }
 
 /* Foutmelding onder een veld van het formulier. */

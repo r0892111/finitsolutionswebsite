@@ -22,33 +22,65 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ArrowRight, ChevronDown, Plus } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, ChevronRight, Plus, X } from "lucide-react";
 import { CONTAINER, H2, H3, KOP, LEAD, Vinkje } from "@/components/home/ui";
 import type { Taal } from "./copy";
 import { COPY, HOME, Kop, Plusje, Steun, Streep, TEKST, TeamBlok, Voet, WaaromBlok, useSecties, vast } from "./kader";
 import { StartFormulier } from "./start-formulier";
-
-/** De echte logo's van de tools uit Amina's lijst, in hun eigen kleur. Stripe is een woordmerk. */
-const TOOL_LOGO: Record<string, string> = {
-  Teamleader: "/Teamleader_Icon.svg",
-  Odoo: "/tool-odoo.svg",
-  Outlook: "/Microsoft_Office_Outlook_(2018–2024).svg",
-  Gmail: "/Gmail_icon_(2020).png",
-  Excel: "/Microsoft_Office_Excel_(2019–2025).svg",
-  Teams: "/Microsoft_Office_Teams_(2019–2025).svg",
-  WhatsApp: "/tool-whatsapp.svg",
-  "Google Calendar": "/tool-googlecalendar.svg",
-  "Google Drive": "/tool-googledrive.svg",
-  HubSpot: "/tool-hubspot.svg",
-  Pipedrive: "/Pipedrive_id-7ejZnwv_0.svg",
-  Shopify: "/shopify_icon.png",
-  WooCommerce: "/tool-woocommerce.svg",
-  Notion: "/tool-notion.svg",
-};
+import { TOOLS } from "./tools";
 
 /** Het pilletje "Stap 1", "Stap 2": het is een traject, geen keuze (zoals op de live site). */
 function StapPil({ label }: { label: string }) {
   return <span className="rounded-full bg-[#1A2D63] px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-white">{label}</span>;
+}
+
+/**
+ * De zes voorbeelden per sector. Alex, 25/11: aanklikbaar, maar er mag niets verschuiven.
+ *
+ * Desktop: de sectoren links, de tekst van de gekozen sector rechts in één wit paneel.
+ * Alle teksten liggen in dat paneel op elkaar (de niet-gekozen onzichtbaar), zodat het
+ * paneel altijd zo hoog is als de langste tekst en de blauwe band nooit meebeweegt.
+ * Gsm: de tekst klapt open in de rij zelf, één tegelijk.
+ */
+function Voorbeelden({ cases }: { cases: { sector: string; tekst: string }[] }) {
+  const [actief, setActief] = useState(0);
+  return (
+    <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-5">
+      <ul className="space-y-2.5">
+        {cases.map((c, i) => {
+          const open = i === actief;
+          return (
+            <li key={c.sector} className={`overflow-hidden rounded-[16px] border transition-colors duration-200 ${open ? "border-white bg-white text-[#1A2D63]" : "border-white/15 bg-white/[0.07] text-white hover:bg-white/[0.13]"}`}>
+              <button
+                type="button"
+                onClick={() => setActief(i)}
+                aria-expanded={open}
+                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-[1.0625rem] font-semibold leading-snug focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#E9A13B]"
+              >
+                <span>{c.sector}</span>
+                <ChevronRight className={`h-5 w-5 shrink-0 transition-transform duration-200 ${open ? "rotate-90 lg:rotate-0" : "opacity-70"}`} aria-hidden="true" />
+              </button>
+              <div className="hp-vouw lg:hidden" data-open={open}>
+                <div>
+                  <div>
+                    <p className="px-5 pb-5 text-[0.9375rem] leading-[1.6] text-[#3D4766]">{vast(c.tekst)}</p>
+                  </div>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+      <div className="hp-card hidden p-8 lg:grid xl:p-10" aria-live="polite">
+        {cases.map((c, i) => (
+          <div key={c.sector} className={`[grid-area:1/1] ${i === actief ? "hp-wissel" : "invisible"}`} aria-hidden={i !== actief}>
+            <h3 className="hp-display hp-display-sm text-[1.45rem] font-semibold leading-[1.2] text-[#1A2D63]">{c.sector}</h3>
+            <p className="mt-3 text-[1.0625rem] leading-[1.65] text-[#3D4766]">{vast(c.tekst)}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 /** Wit H2 op een marineblauwe band: zelfde maat als H2. */
@@ -60,15 +92,17 @@ export function HomePagina({ taal }: { taal: Taal }) {
   const { klik } = useSecties(taal, true);
   const start = (location: string) => klik("startgesprek", location);
 
-  // Gsm: de knop plakt onderaan zodra de hero uit beeld is, en verdwijnt bij het formulier.
+  // Gsm: de knop plakt onderaan zodra de hele hero voorbij is (Alex, 25/11: niet terwijl je nog
+  // op de hero zit, anders staan er twee dezelfde knoppen tegelijk), en verdwijnt bij het formulier.
+  // De hero telt als voorbij wanneer hij volledig onder de navigatie (68 px) verdwenen is.
   useEffect(() => {
-    const hero = document.getElementById("hero-knop");
+    const hero = document.getElementById("hero");
     const slot = document.getElementById("startgesprek");
     if (!hero || !slot) return;
     let heroWeg = false;
     let slotInBeeld = false;
     const zet = () => setPlak(heroWeg && !slotInBeeld);
-    const o1 = new IntersectionObserver(([e]) => { heroWeg = !e.isIntersecting && e.boundingClientRect.top < 0; zet(); });
+    const o1 = new IntersectionObserver(([e]) => { heroWeg = !e.isIntersecting && e.boundingClientRect.bottom <= 68; zet(); }, { rootMargin: "-68px 0px 0px 0px" });
     const o2 = new IntersectionObserver(([e]) => { slotInBeeld = e.isIntersecting; zet(); }, { rootMargin: "0px 0px -20% 0px" });
     o1.observe(hero);
     o2.observe(slot);
@@ -117,10 +151,8 @@ export function HomePagina({ taal }: { taal: Taal }) {
               ))}
             </ul>
 
-            <div className="mt-10 flex flex-col items-center gap-6 border-t border-[#E3E7EF] pt-8 lg:flex-row lg:justify-between lg:text-left">
-              <div className="lg:hidden"><Steun label={t.hero.ondersteund} midden /></div>
-              <div className="hidden lg:block"><Steun label={t.hero.ondersteund} /></div>
-              <p className="hp-display hp-display-sm text-[1.0625rem] font-semibold leading-[1.3] text-[#1A2D63] sm:text-[1.125rem]">{t.hero.gesproken}</p>
+            <div className="mt-10 border-t border-[#E3E7EF] pt-8">
+              <Steun label={t.hero.ondersteund} midden />
             </div>
           </div>
         </header>
@@ -246,41 +278,21 @@ export function HomePagina({ taal }: { taal: Taal }) {
             </div>
 
             <p className="mx-auto mt-10 max-w-[40rem] text-center text-[0.9375rem] leading-[1.55] text-white/70">{vast(t.bouwen.praktijk)}</p>
-            {/* Alex, 25/11: aanklikbaar, zodat niet alle tekst tegelijk verschijnt. */}
-            <ul className="mt-5 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {t.bouwen.cases.map((c) => (
-                <li key={c.sector}>
-                  <details className="hp-details hp-card hp-case">
-                    <summary className="flex items-start justify-between gap-4 p-5 text-[1.0625rem] font-semibold leading-snug text-[#1A2D63] sm:p-6">
-                      <span>{c.sector}</span>
-                      <Plusje />
-                    </summary>
-                    <p className="px-5 pb-5 text-[0.9375rem] leading-[1.6] text-[#3D4766] sm:px-6 sm:pb-6">{vast(c.tekst)}</p>
-                  </details>
-                </li>
-              ))}
-            </ul>
+            <Voorbeelden cases={t.bouwen.cases} />
           </div>
         </section>
 
-        {/* De tools: chips met het echte logo, zoals op de live site. */}
+        {/* De tools: alleen de logo's, zonder naam ernaast (Alex, 25/11). De lijst staat in ./tools.ts. */}
         <div className="bg-white">
           <div className={`${CONTAINER} pt-12 text-center sm:pt-14`}>
             <p className="text-[0.9375rem] font-semibold text-[#6C7590]">{t.bouwen.toolsTitel}</p>
-            <ul className="mx-auto mt-5 flex max-w-[58rem] flex-wrap justify-center gap-2.5">
-              {t.bouwen.tools.map((naam) => (
-                <li key={naam} className="hp-chip">
-                  {naam === "Stripe" ? (
-                    <Image src="/Stripe_Logo,_revised_2016.svg.webp" alt="Stripe" width={86} height={36} className="h-5 w-auto" />
-                  ) : (
-                    <>
-                      {TOOL_LOGO[naam] && <Image src={TOOL_LOGO[naam]} alt="" width={48} height={48} className="h-5 w-5 object-contain" />}
-                      <span>{naam}</span>
-                    </>
-                  )}
+            <ul className="mx-auto mt-5 flex max-w-[64rem] flex-wrap justify-center gap-2.5">
+              {TOOLS.map((tool) => (
+                <li key={tool.naam} className={`nh-logo ${tool.vorm ? `nh-logo--${tool.vorm}` : ""}`} title={tool.naam}>
+                  <Image src={tool.src} alt={tool.naam} width={96} height={48} />
                 </li>
               ))}
-              <li className="hp-chip hp-chip--plus">
+              <li className="hp-chip hp-chip--plus min-h-[52px]">
                 <Plus className="h-4 w-4" aria-hidden="true" />
                 <span>{t.bouwen.toolsRest}</span>
               </li>
@@ -363,33 +375,33 @@ export function HomePagina({ taal }: { taal: Taal }) {
             <div className={`${KOP} max-w-[48rem]`}>
               <h2 className={H2}><Streep tekst={t.voorWie.h2} /></h2>
             </div>
-            <div className="mt-10 grid gap-4 sm:gap-5 lg:grid-cols-2">
-              <div className="rounded-[20px] border border-[#E3E7EF] bg-[#F5F7FB] p-6 sm:p-8">
-                <h3 className={`${H3} text-[#3D4766]`}>{t.voorWie.niet.titel}</h3>
-                <ul className="mt-5 space-y-3.5">
-                  {t.voorWie.niet.items.map((p) => (
-                    <li key={p} className={`flex items-start gap-3 ${TEKST}`}>
-                      <span className="nh-kruis" aria-hidden="true">
-                        <svg width="9" height="9" viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
+            {/* Woordelijk de kaarten van de hub (Alex, 25/11): groen voor wie wel, rood voor wie niet. */}
+            <div className="nh-wie-raster">
+              {(["wel", "niet"] as const).map((soort) => {
+                const blok = t.voorWie[soort];
+                const Icoon = soort === "wel" ? Check : X;
+                return (
+                  <div key={soort} className={`nh-wie-kaart nh-wie-kaart--${soort}`}>
+                    <h3 className="nh-wie-titel">
+                      <span className="nh-wie-icoon" aria-hidden="true">
+                        <Icoon strokeWidth={3} />
                       </span>
-                      <span>{vast(p)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="hp-card hp-card--accent p-6 sm:p-8">
-                <h3 className={H3}>{t.voorWie.wel.titel}</h3>
-                <ul className="mt-5 space-y-3.5">
-                  {t.voorWie.wel.items.map((p) => (
-                    <li key={p} className={`flex items-start gap-3 ${TEKST}`}>
-                      <Vinkje />
-                      <span>{vast(p)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                      {blok.titel}
+                    </h3>
+                    <ul className="nh-wie-lijst">
+                      {blok.items.map((item) => (
+                        <li key={item}>
+                          <span className="nh-wie-icoon nh-wie-icoon--klein" aria-hidden="true">
+                            <Icoon strokeWidth={3} />
+                          </span>
+                          <span>{vast(item)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
             </div>
-            <p className="hp-display hp-display-sm mx-auto mt-10 max-w-[44rem] text-center text-[1.25rem] font-semibold leading-[1.35] text-[#1A2D63] sm:text-[1.45rem]">{vast(t.voorWie.slot)}</p>
           </div>
         </section>
 

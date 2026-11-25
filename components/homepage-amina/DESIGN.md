@@ -5,11 +5,12 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 ## De regels van Alex (25/11)
 
 1. **De huisstijl van de live site.** Na twee rondes met een eigen, strakker ontwerp zei Alex: terug naar de oude stijl, maar zonder de tekeningetjes. Dat is het `hp-`blok in `app/globals.css` met de bouwstenen uit `components/home/ui.tsx`. Deze pagina hoort er dus uit te zien als de rest van de site (`/cases`, `/contact`, `/hub`).
-2. **Alleen de copy van Amina, zoals zij ze bedoelde.** Niets erbij schrijven: geen bijschriften, tussenkopjes, voorbeelden of labeltjes. Wat er wel staat en niet van haar komt: de labels van het menu en de footer, het woord "Stap", de foutmeldingen en de bevestiging van het formulier, "(optioneel)" bij het vraagveld, de alt-tekst van de foto en de titel voor Google. Eén zin komt uit een comment van Alex zelf (zie "Comments uit het document").
+2. **De copy van Amina, met de correcties van Alex.** Zelf niets erbij schrijven: geen bijschriften, tussenkopjes, voorbeelden of labeltjes. Wat er wel staat en niet van haar komt: de labels van het menu en de footer, het woord "Stap", de foutmeldingen en de bevestiging van het formulier, "(optioneel)" bij het vraagveld, de alt-tekst van de foto en de titel voor Google. Waar Alex haar tekst inhoudelijk rechtzette, staat dat in "Afwijkingen van Amina's document".
 3. **Geen tekeningen.** Het enige beeld is de echte foto van de drie oprichters en de echte logo's. Het brein-netwerk uit de oude hero staat er ook niet.
 4. **De knop voor een gesprek heet overal "Boek een conversatie"** (EN: "Book a conversation"). Het eerste gesprek duurt 60 minuten, dus nergens "een halfuur". Na het formulier nemen we binnen 24 uur contact op.
 5. **Nooit één los woord op de laatste regel.**
-6. **Niets intern of half af**: geen stand van projecten, geen lege blokken. `bewijs.getuigenissen` is bewust leeg, dus de sectie "Bewijs" blijft verborgen tot er een getuigenis in staat.
+6. **Inhoud die klopt** (Alex, 25/11): zeg "werkprocedures, regels en uitzonderingen" als het gaat over wat AI niet weet, niet "prijzen, uitzonderingen en stijl". Het eerste gesprek is 60 minuten waarin we al grondig door de processen gaan, niet "wij luisteren vooral". Beloof niet dat de klant niets moet voorbereiden. Zeg niet dat we altijd koppelen aan bestaande software: we bouwen wat nodig is, soms van nul. Geen "we spraken al met meer dan honderd Belgische kmo's".
+7. **Niets intern of half af**: geen stand van projecten, geen lege blokken. `bewijs.getuigenissen` is bewust leeg, dus de sectie "Bewijs" blijft verborgen tot er een getuigenis in staat.
 
 ## Waar staat wat
 
@@ -19,6 +20,7 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 | `copy.ts` | De vorm van de tekst (types). |
 | `home-pagina.tsx` | De homepage, in de volgorde van Amina. |
 | `over-ons-pagina.tsx` | "Over ons" (`/over-ons/`, `/en/about/`): haar sectie 7 en 5, met de foto. |
+| `tools.ts` | De logo's onder "Werkt met wat je al gebruikt". |
 | `kader.tsx` | Wat beide pagina's delen: menu, footer, de oprichters, "Waarom Finit", de logo's, en de hulpjes `Streep` en `vast`. |
 | `start-formulier.tsx` | Het formulier onderaan. Naam, e-mail, telefoon en website verplicht. Zelfde Netlify Function als de andere formulieren. |
 | `homepage.css` | Alleen wat de huisstijl nog niet had (prefix `nh-`): menu, taalkeuze, plakbalk op gsm, foutmelding. |
@@ -36,16 +38,16 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 
 ## Opbouw
 
-1. **Hero**: gecentreerd. Voor wie, kop met amber streep, de belofte, de uitleg, twee knoppen, drie vinkjes, wie ons steunt.
+1. **Hero**: gecentreerd. Voor wie, kop met amber streep ("de secretaris", niet "het secretariaat"), de belofte, de uitleg, twee knoppen, drie vinkjes, wie ons steunt.
 2. **Herkenbaar?**: vier kaarten, twee aan twee.
 3. **Company brain**: marineblauw paneel, links de uitleg, rechts de twee dingen die veranderen.
 4. **Hoe we werken**: vier kaarten met een pilletje "Stap 1" tot "Stap 4".
 5. **Waarom Finit**: drie kaarten met een rond icoon.
-6. **Wat we bouwen**: marineblauwe band. De zes voorbeelden klap je open (alleen de sector staat er, de tekst komt na een klik). Daaronder de tools als chips met hun logo.
-7. **Wie zit er achter Finit**: de foto en de drie oprichters.
+6. **Wat we bouwen**: marineblauwe band. De zes voorbeelden: op desktop de sectoren links en de tekst van de gekozen sector rechts in één wit paneel. Alle teksten liggen daar op elkaar, zodat het paneel altijd even hoog is en er niets verschuift bij een klik (Alex vond een uitklappende kaart die de band meetrekt onprofessioneel). Op gsm klapt de tekst open in de rij. Daaronder de tools: alleen de logo's, zonder naam (`tools.ts`).
+7. **Wie zit er achter Finit**: de foto (dicht op de gezichten: `public/home/oprichters-dichtbij.jpg`) en de drie oprichters.
 8. **Bewijs**: verborgen (zie regel 6).
 9. **FAQ**: één kaart met uitklapbare vragen.
-10. **Voor wie**: twee kaarten naast elkaar.
+10. **Voor wie**: woordelijk de kaarten van de hub, groen voor wie wel en rood voor wie niet (`nh-wie-*`, overgenomen van `hub-wie-*` uit PR #39).
 11. **Slot**: de tekst links, het formulier in een kaart rechts.
 
 ## Comments uit het document (verwerkt op 25/11)
@@ -59,9 +61,35 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 | 6. Voorbeelden | Alex: aanklikbaar maken. Amina: ja. | De voorbeelden klappen open. |
 | 7. Team | Amina: een aparte pagina "about us". | Bestaat: `/over-ons/`. |
 
+## Afwijkingen van Amina's document (door te geven aan Amina)
+
+Alex zette op 25/11 een aantal dingen recht die in haar document nog anders staan. Zolang zij haar document niet aanpast, wijkt de site hier bewust van af. Wie haar tekst opnieuw overneemt, mag deze punten niet terugzetten.
+
+| Waar | In haar document | Op de site | Waarom (Alex) |
+|---|---|---|---|
+| Hero, kop (NL) | vertaald als "het secretariaat" | "de secretaris van je eigen bedrijf" | Zijn woordkeuze. |
+| Hero, onderaan | "We've spoken with more than a hundred Belgian SMEs." | weg | Moet weg, overal. |
+| Stap 1 | "Half an hour. … We mostly listen" | 60 minuten waarin we al grondig en diepgaand door de processen gaan | Het eerste gesprek is geen luistergesprek meer. |
+| Stap 2 | "You don't prepare anything." | weg | Soms vragen we wel iets voor te bereiden. |
+| Stap 4 | "On top of the brain and connected to the software you already use." | "We bouwen wat je nodig hebt, van een eenvoudige automatisering tot een team van AI-werknemers of software volledig op maat." | We koppelen niet altijd; soms bouwen we software van nul. |
+| Sectie 6, intro | de vijf soorten (regel, workflow, AI-werknemer, …) | één zin: we bouwen wat het best past en het minst kost | Te veel uitleg. |
+| Sectie 6, voorbeelden | "We build an agent…", "…gets its own booking platform" | verleden tijd: "We bouwden", "kreeg" | |
+| Sectie 6, tools | lijst met namen | alleen logo's, plus meer Belgische bedrijfssoftware | |
+| FAQ, subkop | "So ask the hard questions." | "Dit zijn de twijfels die we het vaakst horen." | |
+| FAQ, ChatGPT | "your prices, your exceptions or your tone" | "je werkprocedures, regels en uitzonderingen" | Dat zegt meer; onthouden voor alle copy. |
+| Voor wie | haar twee lijsten met slotzin | de kaarten van de hub, woordelijk, zonder slotzin | Zelfde tekst als op de pagina met de video. |
+| Slot, kop | "just a first conversation" (NL was "gesprek") | "gewoon een eerste conversatie" | De naam van de knop. |
+| Overal | "Plan a free start call", "half an hour" | "Boek een conversatie", een uur | Zie regel 4. |
+
+Nog niet aangepast, maar het schuurt met stap 2: de subkop van "Hoe we werken" zegt "Je hoeft geen enkele pagina te schrijven. Je hoeft alleen te vertellen."
+
 ## Geen los woord op de laatste regel
 
 Drie lagen: koppen krijgen `text-wrap: balance`, lopende tekst `text-wrap: pretty` (beide in `homepage.css`), en `vast()` plakt de laatste twee woorden van een alinea aan elkaar voor browsers die dat niet kennen. In een kop houdt `Streep` het woord voor de streep op dezelfde regel.
+
+## Plakknop op gsm
+
+Onderaan het scherm plakt op gsm de knop "Boek een conversatie". Ze verschijnt pas als de hele hero voorbij is en verdwijnt bij het formulier (Alex, 25/11: nooit twee dezelfde knoppen tegelijk in beeld). Op schermen vanaf 640 px staat de knop in het menu en is er geen plakknop.
 
 ## Ankers
 

@@ -214,7 +214,7 @@ export function TeamBlok({ taal, location, voorrang = false }: { taal: Taal; loc
     <>
       <div className="grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:gap-12">
         <div className="hp-card overflow-hidden">
-          <Image src="/home/oprichters-beurs.jpg" alt={t.fotoAlt} width={2000} height={1506} sizes="(min-width: 1024px) 660px, 100vw" priority={voorrang} className="h-auto w-full" />
+          <Image src="/home/oprichters-dichtbij.jpg" alt={t.fotoAlt} width={1360} height={935} sizes="(min-width: 1024px) 660px, 100vw" priority={voorrang} className="h-auto w-full" />
         </div>
         <div>
           <p className="text-[0.9375rem] font-semibold text-[#6C7590]">{t.intro}</p>

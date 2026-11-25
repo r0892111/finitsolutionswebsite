@@ -47,7 +47,6 @@ export const EN: Copy = {
       "The call is free and without obligation.",
     ],
     ondersteund: "Backed by",
-    gesproken: "We've spoken with more than a hundred Belgian SMEs.",
   },
 
   // 2. Sound familiar? (shortened by Amina on 25/11, after Alex's comment)
@@ -109,11 +108,12 @@ export const EN: Copy = {
     stappen: [
       {
         titel: "A free intro conversation",
-        tekst: "An hour. You tell us how your company runs and where the time goes. We mostly listen, and we tell you honestly whether we're a fit.",
+        // Alex, 25/11: no longer "we mostly listen". In those 60 minutes we already go through the processes in depth.
+        tekst: "60 minutes in which we already go through your processes in depth: how your company runs, where the time goes and where it gets stuck. At the end we tell you honestly whether we're a fit.",
       },
       {
         titel: "A few more conversations, until we can give you a quote",
-        tekst: "We keep talking, online or at your place, until we know enough to put a clear plan and price on paper. You don't prepare anything. You explain how you work. Every call and consultation until now costs you nothing, and nothing starts until you've said yes.",
+        tekst: "We keep talking, online or at your place, until we know enough to put a clear plan and price on paper. You explain how you work. Every call and consultation until now costs you nothing, and nothing starts until you've said yes.",
       },
       {
         titel: "We write your business down",
@@ -121,7 +121,8 @@ export const EN: Copy = {
       },
       {
         titel: "Then we build",
-        tekst: "On top of the brain and connected to the software you already use. Everything starts in review mode: the AI prepares, a person approves. We stay on to keep it running.",
+        // Alex, 25/11: not "connected to the software you already use"; sometimes we build software from scratch.
+        tekst: "We build what you need, from a simple automation to a team of AI agents or fully custom software. Everything starts in review mode: the AI prepares, a person approves. We stay on to keep it running.",
       },
     ],
     knop: "Book a conversation",
@@ -168,11 +169,11 @@ export const EN: Copy = {
       },
       {
         sector: "Hospitality and events",
-        tekst: "An events venue gets every request in one info mailbox. We build an agent that sorts it and drafts the replies, a quote agent that gives an indicative B2B price, automatic invoicing from the booking system to accounting, and a chatbot for the website.",
+        tekst: "An events venue gets every request in one info mailbox. We built an agent that sorts it and drafts the replies, a quote agent that gives an indicative B2B price, automatic invoicing from the booking system to accounting, and a chatbot for the website.",
       },
       {
         sector: "Leisure and wellness",
-        tekst: "A wellness centre gets its own booking platform: online booking and payment, a reception screen, massage scheduling, and an AI that answers customer questions.",
+        tekst: "A wellness centre got its own booking platform: online booking and payment, a reception screen, massage scheduling, and an AI that answers customer questions.",
       },
       {
         sector: "Cleaning and facility services",
@@ -184,23 +185,6 @@ export const EN: Copy = {
       },
     ],
     toolsTitel: "Works with what you already use:",
-    tools: [
-      "Teamleader",
-      "Odoo",
-      "Outlook",
-      "Gmail",
-      "Excel",
-      "Teams",
-      "WhatsApp",
-      "Google Calendar",
-      "Google Drive",
-      "HubSpot",
-      "Pipedrive",
-      "Shopify",
-      "WooCommerce",
-      "Stripe",
-      "Notion",
-    ],
     toolsRest: "and most of the rest.",
   },
 
@@ -245,7 +229,7 @@ export const EN: Copy = {
   // 9. FAQ
   faq: {
     h2: "Before you book a conversation, you probably want straight answers.",
-    sub: "You've seen AI get it wrong. So ask the hard questions.",
+    sub: "You've seen AI get it wrong. These are the doubts we hear most.",
     items: [
       {
         q: "What does it cost?",
@@ -257,7 +241,7 @@ export const EN: Copy = {
       },
       {
         q: "We already use ChatGPT. Why would we need this?",
-        a: "Because using it and getting something from it are two different things. Out of the box, ChatGPT doesn't know your prices, your exceptions or your tone. We ask what actually runs automatically today. Usually the answer is nothing. A brain gives it that knowledge, so you get the same tool with a very different result.",
+        a: "Because using it and getting something from it are two different things. Out of the box, ChatGPT doesn't know your working procedures, your rules or your exceptions. We ask what actually runs automatically today. Usually the answer is nothing. A brain gives it that knowledge, so you get the same tool with a very different result.",
       },
       {
         q: "Won't this be outdated in two months?",
@@ -307,29 +291,27 @@ export const EN: Copy = {
     knop: "Book a conversation",
   },
 
-  // 10. Who this is for
+  // 10. Who this is for. Word for word the cards of the hub (Alex, 25/11), green and red.
   voorWie: {
     h2: "We'd rather tell you no than waste your time.",
+    wel: {
+      titel: "This is for you if:",
+      items: [
+        "You own an SME or are part of its management.",
+        "You want to grow without having to hire extra people.",
+        "Your team loses time on emails, quotes, planning and CRM input.",
+        "Too much depends on you or on one key person.",
+        "You want to start delegating to AI, with peace of mind.",
+      ],
+    },
     niet: {
-      titel: "It's not for you if:",
+      titel: "This is not for you if:",
       items: [
         "You want a button that does everything by itself. That doesn't exist.",
-        "You want a quick fix without any of your time or your team's.",
-        "You want AI to replace your people instead of helping them.",
+        "You want a quick fix that takes none of your time or your team's.",
         "There's no real pain at the moment. In that case we'll tell you honestly.",
       ],
     },
-    wel: {
-      titel: "Finit Solutions works best for...",
-      items: [
-        "You run a small or mid-sized service company.",
-        "Your team loses time on emails, quotes, planning and CRM input.",
-        "Too much depends on you or on one key person.",
-        "You want to start delegating, with peace of mind.",
-        "You're willing to spend a few hours explaining how your business really works.",
-      ],
-    },
-    slot: "We go deep into how your company works, and that takes some of your time. That's exactly why it works afterwards.",
   },
 
   // 11. Final CTA and form

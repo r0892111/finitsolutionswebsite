@@ -46,7 +46,6 @@ export interface Copy {
     tweedeLink: string;
     punten: string[];
     ondersteund: string;
-    gesproken: string;
   };
   herken: {
     kicker: string;
@@ -86,8 +85,8 @@ export interface Copy {
     praktijk: string;
     /** Wat we voor de klant doen. Geen stand van het project: dat hoort niet op een verkoopsite (Alex, 25/11). */
     cases: { sector: string; tekst: string }[];
+    /** De logo's zelf staan in home-pagina.tsx (TOOLS): alleen beeld, geen namen ernaast (Alex, 25/11). */
     toolsTitel: string;
-    tools: string[];
     toolsRest: string;
   };
   team: {
@@ -116,9 +115,9 @@ export interface Copy {
   };
   voorWie: {
     h2: string;
-    niet: { titel: string; items: string[] };
+    /** Woordelijk de kaarten van de hub (Alex, 25/11): eerst voor wie wel (groen), dan voor wie niet (rood). */
     wel: { titel: string; items: string[] };
-    slot: string;
+    niet: { titel: string; items: string[] };
   };
   slot: {
     h2: string;

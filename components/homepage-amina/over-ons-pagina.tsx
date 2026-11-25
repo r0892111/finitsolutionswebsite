@@ -59,10 +59,8 @@ export function OverOnsPagina({ taal }: { taal: Taal }) {
                 </div>
               </div>
             </div>
-            <div className="mt-10 flex flex-col items-center gap-6 lg:flex-row lg:justify-between">
-              <div className="lg:hidden"><Steun label={t.hero.ondersteund} midden /></div>
-              <div className="hidden lg:block"><Steun label={t.hero.ondersteund} /></div>
-              <p className="hp-display hp-display-sm text-center text-[1.0625rem] font-semibold leading-[1.3] text-[#1A2D63] sm:text-[1.125rem]">{t.hero.gesproken}</p>
+            <div className="mt-10">
+              <Steun label={t.hero.ondersteund} midden />
             </div>
           </div>
         </section>
