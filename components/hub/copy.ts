@@ -248,7 +248,7 @@ export const HUB = {
     wel: {
       titel: "Dit is voor jou als:",
       items: [
-        "Je leidt een klein of middelgroot dienstenbedrijf.",
+        "Je bent zaakvoerder of management van een kmo.",
         "Je wil groeien zonder extra mankracht te hoeven aanwerven.",
         "Je team verliest tijd aan mails, offertes, planning en het invullen van het CRM.",
         "Er hangt te veel af van jou of van één sleutelpersoon.",
