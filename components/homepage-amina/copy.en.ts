@@ -26,7 +26,7 @@ export const EN: Copy = {
       { id: "vragen", label: "FAQ" },
     ],
     overOns: "About us",
-    cta: "Plan a free start call",
+    cta: "Book a conversation",
     menuOpenen: "Open menu",
     menuSluiten: "Close menu",
     taalLabel: "Language",
@@ -38,7 +38,7 @@ export const EN: Copy = {
     h1: "You've been the company's secretary for years.",
     h1Vervolg: "We can write your business down in just one week. Then AI can start doing the work your way, instead of you.",
     sub: "ChatGPT is smart, but it knows nothing about your company. We start with a company brain: how you work, your prices, your rules, your exceptions, written down in plain text. Every AI we build reads it first.",
-    knop: "Plan a free start call",
+    knop: "Book a conversation",
     tweedeLink: "See how it works",
     punten: [
       "You tell us how your company runs. We do the work.",
@@ -74,7 +74,7 @@ export const EN: Copy = {
     ],
     slot: "Recognise even one of these? Then the problem probably isn't you. It isn't the AI either. It's something much simpler, and it's what we fix.",
     knop: "Show me what's missing",
-    kleineLink: "Or plan a free start call",
+    kleineLink: "Or book a conversation",
   },
 
   // 3. What is a company brain? (AI fundament)
@@ -109,8 +109,8 @@ export const EN: Copy = {
     intro: "You're busy, and you don't have a week to spare for an AI project. So we do it differently: you talk, we do the work, and nobody installs a thing.",
     stappen: [
       {
-        titel: "A free start call.",
-        tekst: "Half an hour, no obligation. You tell us how your company runs and where the time goes. We mostly listen.",
+        titel: "A free conversation.",
+        tekst: "An hour, no obligation. You tell us how your company runs and where the time goes. We mostly listen.",
       },
       {
         titel: "The brain week.",
@@ -129,7 +129,7 @@ export const EN: Copy = {
         tekst: "We monitor it, fix it and update it. Every three months we sit down to see what else can be taken off your plate.",
       },
     ],
-    knop: "Plan a free start call",
+    knop: "Book a conversation",
   },
 
   // 5. Why Finit
@@ -248,12 +248,12 @@ export const EN: Copy = {
     // Empty on purpose (Alex, 25/11): no testimonials until the first case that fits the profile is finished.
     getuigenissen: [],
     ondersteund: "Backed by",
-    knop: "Plan a free start call",
+    knop: "Book a conversation",
   },
 
   // 9. FAQ
   faq: {
-    h2: "Before you book a call, you probably want straight answers.",
+    h2: "Before you book a conversation, you probably want straight answers.",
     sub: "You've seen AI get it wrong. So ask the hard questions.",
     items: [
       {
@@ -298,7 +298,7 @@ export const EN: Copy = {
       },
       {
         q: "We're too small for this.",
-        a: "Maybe. If there's no real need, we'll tell you honestly rather than sell you something. You can find out in half an hour.",
+        a: "Maybe. If there's no real need, we'll tell you honestly rather than sell you something. You can find out in an hour.",
       },
       {
         q: "I don't have time for this.",
@@ -313,7 +313,7 @@ export const EN: Copy = {
         a: "Your systems keep running. If we ever stop, we'll tell you well in advance and start a handover: all access, hosting and subscriptions move to you or to an IT partner of your choice, at no cost.",
       },
     ],
-    knop: "Plan a free start call",
+    knop: "Book a conversation",
   },
 
   // 10. Who this is for
@@ -346,7 +346,7 @@ export const EN: Copy = {
   slot: {
     h2: "No contract, no pressure, just a first conversation.",
     sub: "Find out what's stuck in your head, before it costs you.",
-    kort: "Half an hour, free, no obligation.",
+    kort: "An hour, free, no obligation.",
     tekst: "We ask how your company runs, what software you use and where the time goes. Then we tell you honestly whether we can help. No contract, no pressure.",
     formulier: {
       naam: "Name",
@@ -354,7 +354,7 @@ export const EN: Copy = {
       telefoon: "Phone",
       website: "Company website",
       bericht: "Where do you lose the most time, or what do you want to ask?",
-      knop: "Plan a free start call",
+      knop: "Book a conversation",
       bezig: "Sending…",
       bedankt: "Your request has arrived.",
       bedanktSub: "We'll call you to pick a time. You usually hear from us within 24 hours.",
@@ -377,5 +377,5 @@ export const EN: Copy = {
     btw: "VAT",
   },
 
-  plakbalk: "Plan a free start call",
+  plakbalk: "Book a conversation",
 };

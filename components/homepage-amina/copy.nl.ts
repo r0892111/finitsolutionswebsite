@@ -27,7 +27,7 @@ export const NL: Copy = {
       { id: "vragen", label: "FAQ" },
     ],
     overOns: "Over ons",
-    cta: "Plan een gratis startgesprek",
+    cta: "Boek een conversatie",
     menuOpenen: "Menu openen",
     menuSluiten: "Menu sluiten",
     taalLabel: "Taal",
@@ -39,7 +39,7 @@ export const NL: Copy = {
     h1: "Je bent al jaren het secretariaat van je eigen bedrijf.",
     h1Vervolg: "Wij schrijven in één week uit hoe je bedrijf werkt. Daarna doet AI het werk op jouw manier, in jouw plaats.",
     sub: "ChatGPT is slim, maar het weet niets over jouw bedrijf. Daarom beginnen we met een company brain: hierin staat hoe je werkt, je prijzen, je regels en je uitzonderingen, uitgeschreven in gewone tekst. Elke AI die we bouwen, leest dat eerst.",
-    knop: "Plan een gratis startgesprek",
+    knop: "Boek een conversatie",
     tweedeLink: "Bekijk hoe het werkt",
     punten: [
       "Jij vertelt hoe je bedrijf draait. Wij doen het werk.",
@@ -75,7 +75,7 @@ export const NL: Copy = {
     ],
     slot: "Herken je er ook maar één van? Dan ligt het probleem waarschijnlijk niet bij jou. En ook niet bij AI. Het is iets veel eenvoudigers, en net dat lossen wij op.",
     knop: "Toon me wat er ontbreekt",
-    kleineLink: "Of plan een gratis startgesprek",
+    kleineLink: "Of boek een conversatie",
   },
 
   // 3. Wat is een company brain? (AI-fundament)
@@ -110,8 +110,8 @@ export const NL: Copy = {
     intro: "Je hebt het druk, en je hebt geen week over voor een AI-project. Daarom doen wij het anders: jij vertelt, wij doen het werk, en niemand hoeft iets te installeren.",
     stappen: [
       {
-        titel: "Een gratis startgesprek.",
-        tekst: "Een halfuur, vrijblijvend. Jij vertelt hoe je bedrijf draait en waar de tijd naartoe gaat. Wij luisteren vooral.",
+        titel: "Een gratis conversatie.",
+        tekst: "Een uur, vrijblijvend. Jij vertelt hoe je bedrijf draait en waar de tijd naartoe gaat. Wij luisteren vooral.",
       },
       {
         titel: "De breinweek.",
@@ -130,7 +130,7 @@ export const NL: Copy = {
         tekst: "We houden het in de gaten, lossen problemen op en werken het bij. Om de drie maanden zitten we samen om te kijken wat er nog van je bord kan.",
       },
     ],
-    knop: "Plan een gratis startgesprek",
+    knop: "Boek een conversatie",
   },
 
   // 5. Waarom Finit
@@ -250,12 +250,12 @@ export const NL: Copy = {
     // Een getuigenis toevoegen = hier een regel { quote, naam, bedrijf } zetten; het blok verschijnt vanzelf.
     getuigenissen: [],
     ondersteund: "Ondersteund door",
-    knop: "Plan een gratis startgesprek",
+    knop: "Boek een conversatie",
   },
 
   // 9. Veelgestelde vragen
   faq: {
-    h2: "Voor je een gesprek boekt, wil je waarschijnlijk eerlijke antwoorden.",
+    h2: "Voor je een conversatie boekt, wil je waarschijnlijk eerlijke antwoorden.",
     sub: "Je hebt AI al de mist zien ingaan. Stel dus gerust de moeilijke vragen.",
     items: [
       {
@@ -300,7 +300,7 @@ export const NL: Copy = {
       },
       {
         q: "We zijn hier te klein voor.",
-        a: "Misschien. Is er geen echte nood, dan zeggen we je dat eerlijk, in plaats van je iets te verkopen. Na een halfuur weet je het.",
+        a: "Misschien. Is er geen echte nood, dan zeggen we je dat eerlijk, in plaats van je iets te verkopen. Na een uur weet je het.",
       },
       {
         q: "Ik heb hier geen tijd voor.",
@@ -315,7 +315,7 @@ export const NL: Copy = {
         a: "Je systemen blijven draaien. Mochten we ooit stoppen, dan laten we je dat ruim op voorhand weten en starten we een overdracht: alle toegangen, de hosting en de abonnementen gaan naar jou of naar een IT-partner van jouw keuze, zonder kosten.",
       },
     ],
-    knop: "Plan een gratis startgesprek",
+    knop: "Boek een conversatie",
   },
 
   // 10. Voor wie is dit
@@ -348,7 +348,7 @@ export const NL: Copy = {
   slot: {
     h2: "Geen contract, geen druk, gewoon een eerste gesprek.",
     sub: "Ontdek wat er in je hoofd vastzit, voor het je iets kost.",
-    kort: "Een halfuur, gratis en vrijblijvend.",
+    kort: "Een uur, gratis en vrijblijvend.",
     tekst: "We vragen hoe je bedrijf draait, welke software je gebruikt en waar de tijd naartoe gaat. Daarna zeggen we je eerlijk of we kunnen helpen. Geen contract, geen druk.",
     formulier: {
       naam: "Naam",
@@ -356,7 +356,7 @@ export const NL: Copy = {
       telefoon: "Telefoonnummer",
       website: "Website van je bedrijf",
       bericht: "Waar verlies je de meeste tijd, of wat wil je vragen?",
-      knop: "Plan een gratis startgesprek",
+      knop: "Boek een conversatie",
       bezig: "Versturen…",
       bedankt: "Je aanvraag is aangekomen.",
       bedanktSub: "We bellen je om een moment te kiezen. Je hoort meestal binnen 24 uur van ons.",
@@ -382,5 +382,5 @@ export const NL: Copy = {
     btw: "Btw",
   },
 
-  plakbalk: "Plan een gratis startgesprek",
+  plakbalk: "Boek een conversatie",
 };

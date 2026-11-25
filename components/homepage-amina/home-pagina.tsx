@@ -9,7 +9,7 @@
  * formulier. Alle tekst staat in ./copy.nl.ts en ./copy.en.ts; deze pagina
  * bevat geen tekst. Opmaak: ./homepage.css, regels: ./DESIGN.md.
  *
- * Knoppen: één gevulde knop, "Plan een gratis startgesprek", op de plaatsen
+ * Knoppen: één gevulde knop, "Boek een conversatie", op de plaatsen
  * waar Amina ze zette (hero, na de vijf stappen, na de FAQ, in het formulier; ook
  * bij het bewijs zodra daar getuigenissen staan) en in het menu. Ze springt altijd naar het formulier. Haar
  * twee andere knoppen ("Toon me wat er ontbreekt", "Toon me hoe het werkt")

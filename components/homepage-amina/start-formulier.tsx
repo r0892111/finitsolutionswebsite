@@ -83,7 +83,7 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
           telefoonnummer: telefoon.trim(),
           bedrijfswebsite: bedrijfswebsite.trim(),
           // Zonder bericht behandelt de functie het als de oude popup; met bericht als een vraag.
-          bericht: bericht.trim() || (taal === "nl" ? "Wil een gratis startgesprek plannen (formulier op de homepage)." : "Wants to plan a free start call (form on the English homepage)."),
+          bericht: bericht.trim() || (taal === "nl" ? "Wil een conversatie boeken (formulier op de homepage)." : "Wants to book a conversation (form on the English homepage)."),
           website,
           bron: `https://finitsolutions.be/${taal === "en" ? "en/" : ""}#startgesprek`,
           pagina: window.location.href,

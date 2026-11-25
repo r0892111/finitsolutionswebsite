@@ -47,7 +47,7 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 
 ## Regels
 
-1. **Eén gevulde knop**: "Plan een gratis startgesprek", overal woordelijk dezelfde, op de plaatsen waar Amina ze zette: hero, na de vijf stappen, na de FAQ, in het formulier (en bij het bewijs zodra die sectie getoond wordt). Plus het menu en de plakbalk op gsm. Ze springt altijd naar het formulier.
+1. **Eén gevulde knop**: "Boek een conversatie" (EN: "Book a conversation"), overal woordelijk dezelfde. Regel van Alex, 25/11: zo heet de knop voor een gesprek op de hele site, niet meer "Plan een gratis startgesprek". Het eerste gesprek duurt 60 minuten, dus nergens meer "een halfuur". Ze staat op de plaatsen waar Amina ze zette: hero, na de vijf stappen, na de FAQ, in het formulier (en bij het bewijs zodra die sectie getoond wordt). Plus het menu en de plakbalk op gsm. Ze springt altijd naar het formulier.
 2. **De andere knoppen zijn links** met een streep en een pijl: "Bekijk hoe het werkt", "Toon me wat er ontbreekt", "Toon me hoe het werkt". Altijd links uitgelijnd, onder de tekst waar ze bij horen.
 3. **Vlak**: geen schaduw of kleurverloop op knoppen, geen markeerstift achter woorden, geen metertjes of sierlabels.
 4. **Maten** uit 4/8/12/16/24/32/48/64/96/128. Hoeken 8 (knop, veld) en 12 (blad, foto).
