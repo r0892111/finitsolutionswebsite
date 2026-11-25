@@ -28,7 +28,7 @@ export const HUB = {
   // Hero in vier treden: kop (met accent), haak, lopende tekst, video. Copy van Amina,
   // tab "for VSL page" in de doc Upwork scripts, vertaald 25/11/2026. Geen badge meer:
   // de grootste zin uit de doc is de kop (Alex 25/11), het logo erboven zegt Finit Solutions.
-  kop: { voor: "De grootste bouwer van", accent: "company brains in België" },
+  kop: { voor: "De grootste bouwer van", accent: "company\u00A0brains in België" }, // vaste spatie: "company brains" blijft samen op gsm
   // De haak, twee zinnen; op een breed scherm elk op een eigen regel.
   haak: ["Deze video gaat niet echt over AI.", "Hij gaat over wat er in je hoofd zit."],
   sub: "Je prijzen, je uitzonderingen, hoe je omgaat met die ene moeilijke klant. We schrijven het allemaal uit in één week, en dat verandert wat AI voor je kan doen. Bekijk de video en beslis dan zelf of het iets voor jou is.",
