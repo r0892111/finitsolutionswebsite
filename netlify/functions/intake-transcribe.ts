@@ -82,7 +82,10 @@ function parseMultipart(body: Buffer, boundary: string): MultipartPart[] | null 
   return parts;
 }
 
+// Gesloten sinds 25/11/2026 (veiligheidsronde): geen enkele pagina gebruikt de intake nog, en open
+// kostte ze geld (Claude, ElevenLabs) zonder maximum. Weer open: INTAKE_OPEN=1 in Netlify.
 export const handler: Handler = async (event: HandlerEvent) => {
+  if (process.env.INTAKE_OPEN !== "1") return { statusCode: 410, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ error: "gesloten" }) };
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }

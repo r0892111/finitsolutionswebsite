@@ -51,7 +51,10 @@ function pickLang(v: unknown): Language {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Gesloten sinds 25/11/2026 (veiligheidsronde): geen enkele pagina gebruikt de intake nog, en open
+// kostte ze geld (Claude, ElevenLabs) zonder maximum. Weer open: INTAKE_OPEN=1 in Netlify.
 export const handler: Handler = async (event: HandlerEvent) => {
+  if (process.env.INTAKE_OPEN !== "1") return json(410, { error: "gesloten" });
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
@@ -140,11 +143,9 @@ export const handler: Handler = async (event: HandlerEvent) => {
       personalization_json: personalization,
     });
   } catch (err) {
+    console.error("lead-magnet-start: insert mislukt", err instanceof Error ? err.message : "onbekende fout");
     await tuesday;
-    return json(500, {
-      error: "insert_failed",
-      message: err instanceof Error ? err.message : "unknown",
-    });
+    return json(500, { error: "insert_failed" });
   }
 
   await tuesday;

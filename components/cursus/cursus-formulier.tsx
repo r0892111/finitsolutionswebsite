@@ -24,6 +24,7 @@ import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { kijkProcent, kijkbeurtVoorFormulier } from "@/components/hub/kijkmeting";
 import { vetStukken } from "@/components/hub/copy";
 import { CURSUS } from "./copy";
+import { useBescherming } from "@/components/formulier-bescherming";
 
 const SUBMIT_URL = "/api/cursus-aanvraag";
 const TIMEOUT_MS = 10000;
@@ -73,6 +74,7 @@ export function CursusFormulier({ meta = {}, kopId }: { meta?: Record<string, st
   const [antwoorden, setAntwoorden] = useState<Record<string, string>>({});
   const [gegevens, setGegevens] = useState<Gegevens>({ naam: "", email: "", telefoon: "", website: "" });
   const [honing, setHoning] = useState(""); // honeypot: blijft leeg bij mensen
+  const bescherming = useBescherming(); // aanvraag_id, invultijd, tweede honeypot, Turnstile
   const [status, setStatus] = useState<Status>(null);
   // Pas na de eerste poging tot versturen tonen we meldingen; daarna lopen ze mee met wat je typt.
   const [geprobeerd, setGeprobeerd] = useState(false);
@@ -172,12 +174,15 @@ export function CursusFormulier({ meta = {}, kopId }: { meta?: Record<string, st
           bedrijfswebsite: gegevens.website.trim(),
           website: honing,
           cursus,
+          ...bescherming.velden(),
         }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
+      bescherming.naVersturen(true);
       setStatus("klaar");
       pushEvent("form_submitted", { ...meta, location: "cursus" });
     } catch {
+      bescherming.naVersturen(false);
       setStatus("fout");
     } finally {
       clearTimeout(timeout);
@@ -306,6 +311,7 @@ export function CursusFormulier({ meta = {}, kopId }: { meta?: Record<string, st
                   fout={fouten.website}
                 />
               </div>
+              {bescherming.extraVelden}
               {/* Honeypot: voor mensen onzichtbaar, bots vullen het in. */}
               <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
                 <label htmlFor={`${id}-honing`}>Website</label>
