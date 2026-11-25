@@ -1048,6 +1048,8 @@ html {
   .hub-wrap, .hub-form-wrap, .hub-faq-wrap { width: calc(100% - 28px); }
   .hub-badge { font-size: 13px; min-height: 40px; padding: 8px 17px; }
   .hub-titel { font-size: clamp(36px, 10.7vw, 52px); line-height: 1.03; }
+  /* Een lange accentzin in de kop mag op gsm over twee regels lopen. */
+  .hub-titel .hp-onder { white-space: normal; }
   .hub-sub { font-size: 17px; line-height: 1.4; }
   .hub-intro { font-size: 17px; line-height: 1.4; }
   .hub-pillen { gap: 10px; }
