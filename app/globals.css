@@ -1087,6 +1087,23 @@ html {
   .hub-onder-video { font-size: 17px; }
   .hub-hero-vsl .hub-noot { font-size: 14px; }
 }
+/* "Ondersteund door" onder de video (Alex 25/11): klein label, drie logo's in grijs,
+   op het oog even zwaar (VLAIO is een blok, ElevenLabs een lange woordmerk). */
+.hub-steun { margin: var(--hub-r4) auto 0; }
+.hub-steun-label { font-size: 15px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,45,99,0.45); }
+.hub-steun-logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px 52px; margin-top: 16px; }
+.hub-steun-logo { width: auto; filter: grayscale(1); opacity: 0.85; }
+.hub-steun-logo--vlaio { height: 40px; }
+.hub-steun-logo--kbc { height: 32px; }
+.hub-steun-logo--elevenlabs { height: 24px; }
+@media (max-width: 767px) {
+  .hub-steun-label { font-size: 11px; }
+  .hub-steun-logos { gap: 14px 22px; margin-top: 12px; }
+  .hub-steun-logo--vlaio { height: 24px; }
+  .hub-steun-logo--kbc { height: 19px; }
+  .hub-steun-logo--elevenlabs { height: 14px; }
+}
+
 /* Voor wie wel en niet (Alex 25/11, zoals de ✅/❌-rijen bij Shadowboys maar naast elkaar):
    twee witte kaarten met een gekleurde bovenrand, een zachte tint bovenaan en ronde
    vinkjes en kruisjes. Groen en rood alleen hier, altijd met een icoon erbij. */

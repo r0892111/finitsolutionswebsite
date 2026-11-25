@@ -189,6 +189,17 @@ export function HubPagina({ start }: { start?: "resources" }) {
             <VslSpeler meta={meta} onNaarFormulier={() => naarFormulier("einde_video")} />
           </div>
 
+          <div className="hub-steun">
+            <p className="hub-steun-label">{HUB.steun.label}</p>
+            <ul className="hub-steun-logos">
+              {HUB.steun.logos.map((l) => (
+                <li key={l.id}>
+                  <Image src={l.src} alt={l.alt} width={l.breed} height={l.hoog} className={`hub-steun-logo hub-steun-logo--${l.id}`} />
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <p className="hub-onder-video text-balance">{HUB.onderVideo}</p>
 
           <button

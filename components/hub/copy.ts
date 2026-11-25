@@ -34,6 +34,16 @@ export const HUB = {
   sub: ["Je werkprocedures, regels, uitzonderingen, …", "En dat verandert wat AI voor je **bedrijf** kan doen."],
   naarVideo: "Bekijk deze video om te weten of het iets voor jou is.",
 
+  // Vlak onder de video (Alex 25/11): wie ons steunt, met hun logo's uit /public.
+  steun: {
+    label: "Ondersteund door",
+    logos: [
+      { id: "vlaio", src: "/VLAIO_sponsorlogo-antraciet.png", alt: "VLAIO", breed: 911, hoog: 355 },
+      { id: "kbc", src: "/SI @KBC Black (2).png", alt: "Start it @KBC", breed: 700, hoog: 142 },
+      { id: "elevenlabs", src: "/elevenlabs-grants.webp", alt: "ElevenLabs Grants", breed: 1496, hoog: 132 },
+    ],
+  },
+
   // Eén zin onder de video, boven de knop.
   onderVideo: "We plannen nieuwe projecten per maand in. Wil je er volgende maand bij zijn? Boek dan nu een conversatie.",
   // De knop voor een gesprek heet overal op de site zo (Alex 25/11).
