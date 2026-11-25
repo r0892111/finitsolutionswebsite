@@ -26,6 +26,7 @@ import { EMAIL_RE, telefoonOk } from "@/lib/contact-velden";
 import { kijkProcent, kijkbeurtVoorFormulier } from "./kijkmeting";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { HUB, vetStukken } from "./copy";
+import { useBescherming } from "@/components/formulier-bescherming";
 
 const SUBMIT_URL = "/api/contact-submit";
 const TIMEOUT_MS = 10000;
@@ -74,6 +75,7 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
   const [telefoon, setTelefoon] = useState("");
   const [website, setWebsite] = useState("");
   const [honing, setHoning] = useState(""); // honeypot: blijft leeg bij mensen
+  const bescherming = useBescherming(); // aanvraag_id, invultijd, tweede honeypot, Turnstile
   const [status, setStatus] = useState<Status>(null);
   // Pas na de eerste poging tot versturen tonen we meldingen; daarna lopen ze mee met wat je typt.
   const [geprobeerd, setGeprobeerd] = useState(false);
@@ -174,12 +176,14 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: timer.signal,
-        body: JSON.stringify({ naam: naam.trim(), email: email.trim(), telefoonnummer: telefoon.trim(), bedrijfswebsite: website.trim(), bericht: bericht(), website: honing, bron, hub }),
+        body: JSON.stringify({ naam: naam.trim(), email: email.trim(), telefoonnummer: telefoon.trim(), bedrijfswebsite: website.trim(), bericht: bericht(), website: honing, bron, hub, ...bescherming.velden() }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
+      bescherming.naVersturen(true);
       setStatus("klaar");
       pushEvent("form_submitted", { ...meta, location: "hub" });
     } catch {
+      bescherming.naVersturen(false);
       setStatus("fout");
     } finally {
       clearTimeout(timeout);
@@ -305,6 +309,7 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
                   <input id={`${id}-website`} type="text" inputMode="url" autoComplete="url" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder={F.velden.websiteHint} className={VELD} />
                 </div>
               </div>
+              {bescherming.extraVelden}
               {/* Honeypot: voor mensen onzichtbaar, bots vullen het in. */}
               <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
                 <label htmlFor={`${id}-honing`}>Website</label>

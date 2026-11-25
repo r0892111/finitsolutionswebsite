@@ -16,6 +16,7 @@ import { ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { VRAAG } from "./copy";
+import { useBescherming } from "@/components/formulier-bescherming";
 
 const SUBMIT_URL = "/api/contact-submit";
 const TIMEOUT_MS = 10000;
@@ -46,6 +47,7 @@ export function VraagFormulier({
   const [bericht, setBericht] = useState("");
   const [website, setWebsite] = useState(""); // honeypot: onzichtbaar, blijft leeg bij mensen
   const [status, setStatus] = useState<Status>("leeg");
+  const bescherming = useBescherming(); // aanvraag_id, invultijd, tweede honeypot, Turnstile
 
   const verstuur = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,12 +61,14 @@ export function VraagFormulier({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: timer.signal,
-        body: JSON.stringify({ naam, email, telefoonnummer: metTelefoon ? telefoonnummer : "", bedrijfswebsite, bericht, website, bron, pagina: window.location.href }),
+        body: JSON.stringify({ naam, email, telefoonnummer: metTelefoon ? telefoonnummer : "", bedrijfswebsite, bericht, website, bron, pagina: window.location.href, ...bescherming.velden() }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
+      bescherming.naVersturen(true);
       setStatus("klaar");
       pushEvent("form_submitted", { location });
     } catch {
+      bescherming.naVersturen(false);
       setStatus("fout");
     } finally {
       clearTimeout(timeout);
@@ -116,6 +120,7 @@ export function VraagFormulier({
         <textarea id={`${id}-bericht`} required rows={3} value={bericht} onChange={(e) => setBericht(e.target.value)} placeholder={VRAAG.berichtHint} className={`${VELD} resize-y`} />
       </div>
 
+      {bescherming.extraVelden}
       {/* Honeypot: voor mensen onzichtbaar en niet te bereiken, bots vullen het in. */}
       <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
         <label htmlFor={`${id}-website`}>Website</label>

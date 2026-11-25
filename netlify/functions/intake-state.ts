@@ -52,25 +52,9 @@ async function handleGet(event: HandlerEvent) {
     };
     return json(200, body);
   } catch (err) {
+    // De details alleen in de log, nooit naar de browser.
     console.error("[intake-state GET] error:", err);
-    let message = "unknown";
-    if (err instanceof Error) {
-      message = err.message;
-    } else if (err && typeof err === "object") {
-      const e = err as { message?: string; code?: string; details?: string };
-      message = e.message ?? e.details ?? `(${e.code ?? "no-code"})`;
-    } else if (typeof err === "string") {
-      message = err;
-    }
-    return json(500, {
-      error: "internal_error",
-      message,
-      env_check: {
-        has_supabase_url: !!process.env.SUPABASE_URL,
-        has_service_role: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-        has_anthropic: !!process.env.ANTHROPIC_API_KEY,
-      },
-    });
+    return json(500, { error: "internal_error" });
   }
 }
 
@@ -112,7 +96,10 @@ async function handlePut(event: HandlerEvent) {
   }
 }
 
+// Gesloten sinds 25/11/2026 (veiligheidsronde): geen enkele pagina gebruikt de intake nog, en open
+// kostte ze geld (Claude, ElevenLabs) zonder maximum. Weer open: INTAKE_OPEN=1 in Netlify.
 export const handler: Handler = async (event) => {
+  if (process.env.INTAKE_OPEN !== "1") return json(410, { error: "gesloten" });
   if (event.httpMethod === "GET") return handleGet(event);
   if (event.httpMethod === "PUT") return handlePut(event);
   return { statusCode: 405, body: "Method Not Allowed" };

@@ -3,8 +3,12 @@
  * /api/cursus-aanvraag (server): de groep in Tuesday en de controle op de website.
  */
 
-/** De groep op het bord Leads › Socials in Tuesday. Tuesday zoekt een groep ook op zijn titel. */
-export const CURSUS_GROEP = "Cursus (Skool)";
+/**
+ * De cursusgroep op het bord Leads › Socials in Tuesday, op zijn vaste id (heette eerst "Cursus (Skool)",
+ * op 25/11 "Cursus Skool"). Altijd het id, nooit de naam: een groep mag vrij hernoemd worden, en vindt
+ * Tuesday een naam niet, dan zet het de lead zonder foutmelding in de eerste groep van het bord.
+ */
+export const CURSUS_GROEP = "groep_badupaw";
 
 /** "https://www.jouwbedrijf.be/x" → "jouwbedrijf.be"; ongeldig → "". */
 export function domein(url: string): string {

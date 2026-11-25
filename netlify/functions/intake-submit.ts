@@ -45,7 +45,10 @@ interface PostBody {
   token?: unknown;
 }
 
+// Gesloten sinds 25/11/2026 (veiligheidsronde): geen enkele pagina gebruikt de intake nog, en open
+// kostte ze geld (Claude, ElevenLabs) zonder maximum. Weer open: INTAKE_OPEN=1 in Netlify.
 export const handler: Handler = async (event: HandlerEvent) => {
+  if (process.env.INTAKE_OPEN !== "1") return json(410, { error: "gesloten" });
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
@@ -111,7 +114,6 @@ export const handler: Handler = async (event: HandlerEvent) => {
           ok: false,
           error: "github_commit_failed",
           attempts: commitResult.attempts,
-          message: commitResult.error,
         });
       }
 
@@ -152,10 +154,8 @@ export const handler: Handler = async (event: HandlerEvent) => {
       injection_hits: injection.hits,
     });
   } catch (err) {
-    return json(500, {
-      ok: false,
-      error: "internal_error",
-      message: err instanceof Error ? err.message : "unknown",
-    });
+    // De details alleen in de log, nooit naar de browser.
+    console.error("intake-submit: fout", err instanceof Error ? err.message : "onbekende fout");
+    return json(500, { ok: false, error: "internal_error" });
   }
 };

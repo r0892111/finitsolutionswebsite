@@ -10,10 +10,10 @@
  * samengetelde resultaat even onder "cache/…".
  *
  * Let op: "strong consistency" (altijd de verse waarde lezen) werkt alleen in
- * functies in de nieuwe vorm (export default). In Lambda-stijl (export const
- * handler, zoals contact-submit) ontbreekt daarvoor het adres; daar alleen schrijven.
+ * functies in de nieuwe vorm (export default). Alle functies die deze store
+ * gebruiken, staan sinds 25/11 in die vorm.
  */
-import { connectLambda, getStore } from "@netlify/blobs";
+import { getStore } from "@netlify/blobs";
 
 export const STORE = "hub-vsl-kijkbeurten";
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -52,11 +52,10 @@ export function dagMagNieuw(dag: string): boolean {
 }
 
 /**
- * Na een verstuurd formulier (vanuit contact-submit, Lambda-stijl): zet het merkje
- * voor die kijkbeurt. Alleen schrijven, niets lezen.
+ * Na een verstuurd formulier (vanuit contact-submit en cursus-aanvraag, sinds 25/11 in de
+ * nieuwe vorm): zet het merkje voor die kijkbeurt. Alleen schrijven, niets lezen.
  */
-export async function markeerFormulier(event: unknown, id: string, dag: string): Promise<void> {
+export async function markeerFormulier(id: string, dag: string): Promise<void> {
   if (!UUID.test(id) || !dagMagNieuw(dag)) return;
-  connectLambda(event as Parameters<typeof connectLambda>[0]);
   await getStore({ name: STORE }).set(`formulier/${dag}/${id.toLowerCase()}`, new Date().toISOString());
 }
