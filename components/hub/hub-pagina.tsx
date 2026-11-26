@@ -11,7 +11,7 @@
  *    de video, de knop;
  * 3. het formulier, vraag per vraag (vlak onder de video, zoals bij hen);
  * 4. voor wie het wel en niet is, twee kaarten naast elkaar;
- * 5. de veelgestelde vragen (eerst vijf, de rest na "Toon nog X vragen");
+ * 5. de veelgestelde vragen (allemaal zichtbaar, in de stijl van de homepage);
  * 6. de gratis prompts en gidsen, achter een e-mailslot.
  *
  * /hub/resources/ toont dezelfde pagina en springt meteen naar 6.
@@ -330,7 +330,7 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
         </div>
       </section>
 
-      {/* 5. Veelgestelde vragen: eerst vijf, de rest na "Toon nog X vragen". */}
+      {/* 5. Veelgestelde vragen: allemaal zichtbaar, in één kaart zoals op de homepage (Amina 26/11). */}
       <section id="twijfels" className="hp-stippen scroll-mt-4 bg-[#F5F7FB] py-[var(--hub-r5)]">
         <div className="hub-faq-wrap">
           <h2 className={KOP}>
@@ -338,7 +338,7 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
           </h2>
           <p className={INTRO}>{zinnen(T.twijfels.intro)}</p>
 
-          <TwijfelsLijst lijst={T.twijfels.lijst} zichtbaar={T.twijfels.zichtbaar} meer={T.twijfels.meer} />
+          <TwijfelsLijst lijst={T.twijfels.lijst} kaart />
 
           <div className="hub-slot-cta text-center">
             <button type="button" onClick={() => naarFormulier("na_twijfels")} className="hp-btn hp-btn--primary hub-knop">
