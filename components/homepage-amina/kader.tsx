@@ -26,6 +26,7 @@ export const COPY: Record<Taal, Copy> = { nl: NL, en: EN };
 export const HOME: Record<Taal, string> = { nl: "/", en: "/en/" };
 export const OVER_ONS: Record<Taal, string> = { nl: "/over-ons/", en: "/en/about/" };
 export const GRATIS: Record<Taal, string> = { nl: "/gratis-materiaal/", en: "/en/free-resources/" };
+export const HUB: Record<Taal, string> = { nl: "/hub/", en: "/hub/en/" };
 
 /** Lopende tekst in kaarten en lijsten. */
 export const TEKST = "text-[1rem] leading-[1.6] text-[#3D4766]";
@@ -161,11 +162,13 @@ export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boo
           <a href={HOME[taal]} aria-label="Finit Solutions" className="flex shrink-0 items-center xl:justify-self-start">
             <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="nh-nav-logo w-auto" priority />
           </a>
-          <div className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-7">
+          {/* Vanaf 1160 px: met "Company brain" erbij (26/11) past de rij niet meer op 1024 px, daaronder de menuknop. */}
+          <div className="hidden items-center gap-5 whitespace-nowrap min-[1160px]:flex xl:gap-7">
             {t.nav.links.map((l) => (
               <a key={l.id} href={href(l.id)} onClick={klik(l.id, "nav")} className="nh-nav-link">{l.label}</a>
             ))}
             <a href={OVER_ONS[taal]} className="nh-nav-link" aria-current={actief === "over-ons" ? "page" : undefined}>{t.nav.overOns}</a>
+            <a href={HUB[taal]} className="nh-nav-link">{t.nav.brein}</a>
             <a href={GRATIS[taal]} className="nh-nav-link" aria-current={actief === "gratis" ? "page" : undefined}>{t.gratis.nav}</a>
           </div>
           <div className="flex items-center gap-2 sm:gap-4 xl:justify-self-end">
@@ -187,7 +190,7 @@ export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boo
             </a>
             <button
               type="button"
-              className="flex h-11 w-11 items-center justify-center rounded-full text-[#1A2D63] transition-colors hover:bg-[#1A2D63]/5 lg:hidden"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-[#1A2D63] transition-colors hover:bg-[#1A2D63]/5 min-[1160px]:hidden"
               onClick={() => setMenuOpen((v) => !v)}
               aria-expanded={menuOpen}
               aria-controls="nh-menu"
@@ -200,11 +203,12 @@ export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boo
       </nav>
 
       {menuOpen && (
-        <div id="nh-menu" className="nh-menu lg:hidden">
+        <div id="nh-menu" className="nh-menu min-[1160px]:hidden">
           {t.nav.links.map((l) => (
             <a key={l.id} href={href(l.id)} onClick={klik(l.id, "menu")} className="nh-menu-link">{l.label}</a>
           ))}
           <a href={OVER_ONS[taal]} className="nh-menu-link">{t.nav.overOns}</a>
+          <a href={HUB[taal]} className="nh-menu-link">{t.nav.brein}</a>
           <a href={GRATIS[taal]} className="nh-menu-link">{t.gratis.nav}</a>
           <a href={href("startgesprek")} onClick={klik("startgesprek", "menu")} className="hp-btn hp-btn--accent hp-btn--lg mt-8 w-full">
             {t.nav.cta}

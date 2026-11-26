@@ -32,6 +32,8 @@ export interface Copy {
     links: { id: string; label: string }[];
     /** De aparte pagina "Over ons" (wens Alex 25/11). */
     overOns: string;
+    /** Naar de videopagina /hub/ (wens Alex 26/11). */
+    brein: string;
     cta: string;
     menuOpenen: string;
     menuSluiten: string;
