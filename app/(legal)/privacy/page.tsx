@@ -37,7 +37,7 @@ export default function PrivacyPage() {
               transition={{ duration: 0.5, delay: 0.15 }}
               className="mb-8 text-[#6C7590]"
             >
-              Versie: <strong>18/08/2025</strong> — Website:{" "}
+              Versie: <strong>26/11/2026</strong> — Website:{" "}
               <a href="https://finitsolutions.be/" target="_blank" rel="noopener noreferrer" className="underline">
                 https://finitsolutions.be/
               </a>
