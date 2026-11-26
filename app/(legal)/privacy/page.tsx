@@ -296,6 +296,21 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                 en via welk kanaal u kwam. Dat kanaal onthoudt de pagina alleen zolang uw tabblad open is. Uw aanvraag
                 komt terecht in onze mailbox en in ons eigen klantenbeheersysteem, waar we ze opvolgen.
               </p>
+              <p className="mt-4">
+                Geeft u in de cookiebanner toestemming voor statistieken, dan meten we met Google Analytics (Google Ireland
+                Ltd.) hoe de website gebruikt wordt. Geeft u toestemming voor marketing, dan meten we met de Meta-pixel (Meta
+                Platforms Ireland Ltd.) en Google Ads welke advertenties op Facebook, Instagram en Google tot een bezoek of een
+                aanvraag leiden. Verstuurt u in dat geval een formulier, dan geeft onze server die aanvraag ook rechtstreeks
+                door aan Meta: uw e-mailadres en telefoonnummer in versleutelde vorm (een zogenaamde hash), uw IP-adres, het
+                soort browser en de Meta-cookies. Zo telt Meta dezelfde aanvraag niet dubbel en zien we welke advertenties
+                werken. Zonder uw toestemming voor marketing gebeurt dit niet. U kunt uw keuze op elk moment wijzigen via de
+                link &quot;Cookie-instellingen&quot; onderaan elke pagina.
+              </p>
+              <p className="mt-4">
+                Laat u op de website uw e-mailadres achter om onze gratis prompts te openen, dan bewaren we het in Brevo
+                (Sendinblue SAS, Frankrijk), ons mailprogramma, samen met het kanaal waarlangs u kwam. Mails met AI-nieuws en
+                tips sturen we alleen als u daarvoor het vakje aanvinkte. Afmelden kan onderaan elke mail.
+              </p>
 
               {/* 8. Leadinfo */}
               <h2 className="text-2xl font-semibold mt-8 mb-4" id="leadinfo">
@@ -457,6 +472,8 @@ Externe (IT)-dienstverleners die ons ondersteunen bij het aanbieden van function
 Aanbieders van automatiserings- en AI-diensten die ons helpen een aanvraag via de website voor te bereiden: GitHub (Microsoft) voert de automatische opzoeking uit, Anthropic (Claude) vat de informatie samen en Firecrawl haalt de openbare pagina's van uw website op;
 Externe juridische en financiële adviseurs en consultants in het kader van hun dienstverlening;
 Marketing- en communicatiepartners die ons bijstaan bij het opzetten en uitvoeren van campagnes, nieuwsbrieven en andere communicatie-initiatieven;
+Advertentie- en analyseplatformen, alleen met uw toestemming via de cookiebanner: Meta (Facebook, Instagram) en Google (zie punt 7);
+Ons mailprogramma Brevo, voor wie zijn e-mailadres achterlaat (zie punt 7);
 Financiële instellingen en betalingsdienstverleners voor de afhandeling van transacties.
               </p>
 
@@ -474,6 +491,10 @@ Voor zover dergelijke doorgiften nodig zijn, nemen wij de nodige maatregelen om 
                 verwerkt door dienstverleners in de Verenigde Staten: GitHub (Microsoft), Anthropic en Firecrawl. Die
                 doorgifte gebeurt op basis van de passende waarborgen uit de AVG, zoals het EU-VS-gegevensprivacykader of de
                 standaardcontractbepalingen van de Europese Commissie.
+              </p>
+              <p className="mt-4">
+                Meta en Google (zie punt 7) kunnen gegevens ook in de Verenigde Staten verwerken, eveneens op basis van het
+                EU-VS-gegevensprivacykader of de standaardcontractbepalingen.
               </p>
 
               {/* 16. Beveiliging */}
