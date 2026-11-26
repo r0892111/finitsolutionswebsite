@@ -1,0 +1,159 @@
+/* =====================================================================
+   Homepage en "Over ons" (branch homepage-amina).
+
+   De huisstijl is die van de live site: het hp-blok in app/globals.css
+   (marineblauw, amber voor de ene hoofdknop, pilknoppen, witte kaarten met
+   zachte schaduw, de streep onder het laatste woord van een kop). Dit
+   bestand bevat alleen wat die huisstijl nog niet had. Zie DESIGN.md.
+   ===================================================================== */
+
+.nh { color: #3d4766; background: #fff; overflow-wrap: break-word; }
+
+/* Nooit één los woord op de laatste regel (Alex, 25/11). Koppen krijgen regels van
+   gelijke lengte, lopende tekst breekt zo dat de laatste regel niet uit één woord
+   bestaat. Voor browsers die dat niet kennen plakt vast() in kader.tsx de laatste
+   twee woorden aan elkaar. */
+.nh :where(h1, h2, h3) { text-wrap: balance; }
+.nh :where(p, li, summary, blockquote, label) { text-wrap: pretty; }
+
+/* Springen naar een sectie: de vaste navigatie mag de kop niet bedekken. */
+.nh-sectie { scroll-margin-top: 68px; }
+/* Een tweede naam voor een sectie (oude links blijven werken): staat vlak voor de sectie, zonder hoogte. */
+.nh-anker { display: block; scroll-margin-top: 68px; }
+
+.nh-skip {
+  position: absolute; left: 16px; top: -64px; z-index: 60;
+  background: #1a2d63; color: #fff; padding: 12px 16px; border-radius: 9999px;
+  font-size: 1rem; font-weight: 600; transition: top 120ms ease;
+}
+.nh-skip:focus { top: 16px; }
+
+/* Navigatie zoals op de vorige homepage: vast bovenaan, doorzichtig zolang je bovenaan staat,
+   wit en wazig zodra je scrolt of het menu opent; de balk en het logo worden dan iets kleiner. */
+.nh-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+  background: transparent; border-bottom: 1px solid transparent;
+  transition: background-color 300ms ease, border-color 300ms ease;
+}
+.nh-nav[data-vast="true"] {
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  border-bottom-color: rgba(26, 45, 99, 0.1);
+}
+.nh-nav-rij { height: 68px; transition: height 300ms ease; }
+.nh-nav-logo { height: 28px; transition: height 300ms ease; }
+@media (min-width: 1024px) {
+  .nh-nav-rij { height: 84px; }
+  .nh-nav-logo { height: 38px; }
+  .nh-nav[data-vast="true"] .nh-nav-rij { height: 68px; }
+  .nh-nav[data-vast="true"] .nh-nav-logo { height: 28px; }
+}
+@media (prefers-reduced-motion: reduce) { .nh-nav, .nh-nav-rij, .nh-nav-logo { transition: none; } }
+/* De teamfoto onder de hero: iets lichter, met de gezichten in beeld (zoals op de vorige homepage). */
+.nh-teamfoto { filter: brightness(1.3) contrast(1.03); object-position: center 42%; }
+.nh-nav-link { font-size: 0.9375rem; font-weight: 500; color: rgba(26, 45, 99, 0.8); transition: color 160ms ease; }
+.nh-nav-link:hover, .nh-nav-link[aria-current="page"] { color: #1a2d63; }
+.nh-nav-link:focus-visible, .nh-taal a:focus-visible { outline: 2px solid #1a2d63; outline-offset: 4px; border-radius: 6px; }
+
+/* Taalkeuze: twee pilletjes, het gekozen is gevuld. */
+.nh-taal { display: inline-flex; padding: 3px; border: 1px solid #e3e7ef; border-radius: 9999px; background: #fff; }
+.nh-taal > * {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2.25rem; min-height: 1.875rem; padding: 0 0.5rem; border-radius: 9999px;
+  font-size: 0.8125rem; font-weight: 600; color: #6c7590; transition: color 160ms ease, background-color 160ms ease;
+}
+.nh-taal > a:hover { color: #1a2d63; }
+.nh-taal > [aria-current="true"] { background: #1a2d63; color: #fff; }
+
+/* Het menu op een telefoon: schermvullend onder de navigatie. */
+.nh-menu {
+  position: fixed; inset: 68px 0 0 0; z-index: 39; overflow-y: auto;
+  background: #fff; padding: 12px 20px calc(32px + env(safe-area-inset-bottom));
+}
+.nh-menu-link {
+  display: flex; align-items: center; min-height: 56px; border-bottom: 1px solid #e3e7ef;
+  font-family: var(--font-bricolage), var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.375rem; font-weight: 600; letter-spacing: -0.012em; color: #1a2d63;
+}
+
+/* Wat je kan aanklikken om meer te lezen (de voorbeelden en de vragen): het plusje draait
+   via hp-details. Hier alleen de focusring en de tekst die rustig verschijnt. */
+.nh summary:focus-visible { outline: 2px solid #1a2d63; outline-offset: 2px; border-radius: 12px; }
+@media (prefers-reduced-motion: no-preference) {
+  .nh details[open] > :not(summary) { animation: nh-open 260ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+}
+@keyframes nh-open { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* Voor wie wel en niet: de groene en de rode kaart van de hub (Alex, 25/11), met dezelfde
+   kleuren, bovenrand en ronde iconen. Hier overgenomen omdat de hub-regels (hub-wie-*) nog
+   in PR #39 zitten; de letters zijn een maat kleiner, op de schaal van deze pagina. */
+.nh-wie-raster { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; text-align: left; }
+.nh-wie-kaart {
+  position: relative; overflow: hidden; border-radius: 24px; border: 1px solid; padding: 32px 32px 16px;
+  box-shadow: 0 1px 2px rgba(26, 45, 99, 0.04), 0 18px 40px -28px rgba(26, 45, 99, 0.35);
+}
+.nh-wie-kaart::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 6px; background: var(--wie); }
+.nh-wie-kaart--wel { --wie: #15803d; --wie-zacht: #dcfce7; border-color: rgba(21, 128, 61, 0.22); background: linear-gradient(180deg, #f3fbf5 0%, #ffffff 160px); }
+.nh-wie-kaart--niet { --wie: #b91c1c; --wie-zacht: #fee2e2; border-color: rgba(185, 28, 28, 0.2); background: linear-gradient(180deg, #fdf5f5 0%, #ffffff 160px); }
+.nh-wie-titel { display: flex; align-items: center; gap: 14px; font-size: 1.625rem; line-height: 1.2; font-weight: 700; color: var(--wie); margin-bottom: 8px; }
+.nh-wie-icoon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 9999px; background: var(--wie); color: #fff; }
+.nh-wie-icoon svg { width: 55%; height: 55%; }
+.nh-wie-icoon--klein { width: 26px; height: 26px; margin-top: 0.1em; background: var(--wie-zacht); color: var(--wie); }
+.nh-wie-lijst li { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-top: 1px solid #eef0f5; font-size: 1.125rem; line-height: 1.45; color: #3d4766; }
+.nh-wie-lijst li:first-child { border-top: 0; }
+@media (max-width: 1100px) {
+  .nh-wie-titel { font-size: clamp(1.3125rem, 2.4vw, 1.5rem); }
+  .nh-wie-lijst li { font-size: 1.0625rem; }
+}
+@media (max-width: 767px) {
+  .nh-wie-raster { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; }
+  .nh-wie-kaart { border-radius: 18px; padding: 24px 18px 8px; }
+  .nh-wie-titel { font-size: 1.3125rem; gap: 10px; }
+  .nh-wie-icoon { width: 34px; height: 34px; }
+  .nh-wie-icoon--klein { width: 24px; height: 24px; }
+  .nh-wie-lijst li { font-size: 1rem; gap: 10px; padding: 12px 0; }
+}
+
+/* De logo's van de tools: alleen het beeld, in een witte pil. Een woordmerk krijgt meer breedte. */
+.nh-logo {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 52px; min-width: 52px; padding: 0 13px; border-radius: 9999px;
+  border: 1px solid #e3e7ef; background: #fff;
+}
+.nh-logo img { height: 24px; width: auto; max-width: 30px; object-fit: contain; }
+/* Een woordmerk: het logo is de naam. */
+.nh-logo--breed { padding: 0 18px; }
+.nh-logo--breed img { height: 20px; max-width: 104px; }
+/* Een woordmerk met een ondertitel of met lucht rond het logo: hoger, anders wordt het onleesbaar. */
+.nh-logo--hoog { padding: 0 16px; }
+.nh-logo--hoog img { height: 32px; max-width: 110px; }
+/* Een symbool met veel lucht in het bestand zelf: groter tonen, de lucht valt binnen de pil. */
+.nh-logo--ruim { padding: 0 6px; }
+.nh-logo--ruim img { height: 44px; max-width: 56px; }
+/* Gsm: een maat kleiner, zodat de rij niet het hele scherm vult. */
+@media (max-width: 639px) {
+  .nh-logo { height: 44px; min-width: 44px; padding: 0 10px; }
+  .nh-logo img { height: 20px; max-width: 26px; }
+  .nh-logo--breed { padding: 0 14px; }
+  .nh-logo--breed img { height: 17px; max-width: 88px; }
+  .nh-logo--hoog { padding: 0 13px; }
+  .nh-logo--hoog img { height: 27px; max-width: 94px; }
+  .nh-logo--ruim { padding: 0 5px; }
+  .nh-logo--ruim img { height: 37px; max-width: 48px; }
+}
+
+/* Foutmelding onder een veld van het formulier. */
+.nh-fout { margin-top: 6px; font-size: 0.8125rem; line-height: 1.45; color: #b42318; }
+.nh [aria-invalid="true"] { border-color: #b42318; }
+
+/* Gsm: de hoofdknop blijft onderaan bereikbaar, tot je bij het formulier bent. */
+.nh-plak {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 35;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.96); border-top: 1px solid #e3e7ef;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  transform: translateY(110%); visibility: hidden; transition: transform 220ms ease, visibility 0s 220ms;
+}
+.nh-plak[data-toon="true"] { transform: none; visibility: visible; transition: transform 220ms ease; }
+@media (min-width: 640px) { .nh-plak { display: none; } }
+@media (prefers-reduced-motion: reduce) { .nh-plak, .nh-skip { transition: none; } }

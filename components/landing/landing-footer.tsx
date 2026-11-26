@@ -51,7 +51,7 @@ export function LandingFooter() {
                   className="bg-white text-[#1A2D63] px-6 py-3 rounded-full text-base font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2"
                 >
                   <Calendar className="w-4 h-4" />
-                  Plan een kennismakingsgesprek
+                  Boek een conversatie
                 </button>
                 <a
                   href="mailto:contact@finitsolutions.be"

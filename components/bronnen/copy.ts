@@ -128,6 +128,6 @@ export const BRONNEN = {
   ctaLabel: "Zelf beginnen?",
   ctaTekst: "Bouw het brein van je bedrijf zelf met onze lesreeks, of laat het ons doen.",
   ctaZelf: "Start met de lesreeks",
-  ctaLaten: "Plan een call met Karel",
+  ctaLaten: "Boek een conversatie met Karel",
   terug: "Alle gidsen en prompts",
 };

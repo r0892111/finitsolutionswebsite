@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Herken Jij Dit? | Finit Solutions',
     description:
-      'Verlies je te veel tijd aan administratie? AI-automatisering neemt het over. Plan een gratis gesprek.',
+      'Verlies je te veel tijd aan administratie? AI-automatisering neemt het over. Boek een conversatie.',
     url: 'https://finitsolutions.be/herken-jij-dit',
     siteName: 'Finit Solutions',
     locale: 'nl_BE',

@@ -1,8 +1,6 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
-import { Inter, Montserrat } from 'next/font/google';
-
-import { bricolage, schibsted } from '@/lib/fonts';
+import { bricolage, generalSans, inter, montserrat, schibsted } from '@/lib/fonts';
 
 import { Toaster } from '@/components/ui/toaster';
 import { ConsentProvider } from '@/contexts/consent-context';
@@ -10,21 +8,6 @@ import { CookieBanner } from '@/components/cookie-banner';
 import { CookieSettingsModal } from '@/components/cookie-settings-modal';
 import { LanguageProvider } from '@/contexts/language-context';
 import { AuthProvider } from '@/contexts/auth-context';
-
-const inter = Inter({ subsets: ['latin'] });
-const montserrat = Montserrat({ 
-  subsets: ['latin'],
-  weight: ['700'],
-  variable: '--font-montserrat',
-});
-
-// General Sans font configuration for Finit brand
-const generalSans = Inter({ 
-  subsets: ['latin'],
-  weight: ['400', '500', '700'], // Regular, Medium, Bold
-  variable: '--font-general-sans',
-  display: 'swap',
-});
 
 const SITE_TITLE = 'Finit Solutions | Jouw bedrijf, klaar voor AI';
 const SITE_DESCRIPTION =
@@ -82,6 +65,10 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+  },
+  // Meta-domeinverificatie: bewijst aan Meta dat finitsolutions.be van ons bedrijfsportfolio is.
+  verification: {
+    other: { 'facebook-domain-verification': 'gqjjtxr7k6xepdrq4pwrporoken3eo' },
   },
 };
 

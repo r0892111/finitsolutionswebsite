@@ -7,37 +7,55 @@
  * video bekijken en het formulier invullen. Van boven naar onder:
  *
  * 1. een smalle strook naar de gratis resources onderaan;
- * 2. badge (voor wie), kop, subzin, de video, twee pillen, de knop;
+ * 2. kop, haak, lopende tekst, een zin naar de video, de video, één zin onder
+ *    de video, de knop;
  * 3. het formulier, vraag per vraag (vlak onder de video, zoals bij hen);
- * 4. de twijfels uit de video als korte FAQ;
- * 5. de gratis prompts en gidsen, achter een e-mailslot.
+ * 4. voor wie het wel en niet is, twee kaarten naast elkaar;
+ * 5. de veelgestelde vragen (allemaal zichtbaar, in de stijl van de homepage);
+ * 6. de gratis prompts en gidsen, achter een e-mailslot.
  *
- * /hub/resources/ toont dezelfde pagina en springt meteen naar 5.
+ * /hub/resources/ toont dezelfde pagina en springt meteen naar 6.
  *
  * Herkomst: ?bron=tiktok (kanaal) en ?reel=C03 (post) gaan mee naar het
  * formulier ("Pagina" in de mail en op monday), naar Brevo bij het e-mailslot
  * en naar Google Tag Manager als events (hub_view, hub_menu, vsl_*, hub_form_stap,
  * form_submit, hub_toegang, hub_klik).
  *
- * Alle tekst staat in ./copy.ts, de video in ./video.ts.
+ * Alle tekst staat in ./copy.ts (Engels: ./copy.en.ts), de video in ./video.ts.
+ *
+ * Taal (Alex 25/11): /hub/ is Nederlands, /hub/en/ dezelfde pagina in het Engels, met
+ * Engelse ondertitels die meteen aan staan. Rechtsboven wisselt NL | EN, met ?bron= en
+ * ?reel= erbij, zodat de herkomst niet verloren gaat.
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight, Check, X } from "lucide-react";
 import lokaleLijst from "@/content/resources.json";
 import { Onder } from "@/components/home/ui";
 import { TwijfelsLijst } from "./twijfels-lijst";
 import { pushEvent } from "@/lib/analytics";
 import { leesLijst } from "@/lib/resources";
-import { HUB } from "./copy";
+import { HUB, vast, vetStukken } from "./copy";
+import { HUB_EN } from "./copy.en";
+import { HubTekstContext } from "./taal";
 import { ResourceSectie } from "./resource-sectie";
 import { StapFormulier } from "./stap-formulier";
+import { VSL, VSL_EN } from "./video";
 import { VslSpeler } from "./vsl-speler";
 
 const REELS = new Set(leesLijst(lokaleLijst).map((r) => r.reel?.toUpperCase()).filter(Boolean));
 const ACCENT = "text-[#2F55C4]";
 const KOP = "hp-display hub-sectietitel text-balance text-center font-bold text-[#1A2D63]";
+/** Elke zin op een eigen regel, zonder los woordje op het einde (Alex 25/11). */
+function zinnen(tekst: string) {
+  return tekst.split(/(?<=[.?!…])\s+/).map((zin, i) => (
+    <span key={i} className="block">
+      {vast(zin)}
+    </span>
+  ));
+}
+
 const INTRO = "hub-intro mx-auto text-balance text-center text-[#3D4766]";
 
 interface Herkomst {
@@ -55,7 +73,37 @@ function schoon(v: string | null, max: number): string {
   return (v ?? "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, max);
 }
 
-export function HubPagina({ start }: { start?: "resources" }) {
+type Taal = "nl" | "en";
+const TALEN: ReadonlyArray<{ code: Taal; pad: string; kort: string }> = [
+  { code: "nl", pad: "/hub/", kort: "NL" },
+  { code: "en", pad: "/hub/en/", kort: "EN" },
+];
+
+/** NL | EN rechtsboven. De link neemt ?bron= en ?reel= mee. */
+function TaalKnop({ taal, label, meta }: { taal: Taal; label: string; meta: Record<string, string> }) {
+  const [zoek, setZoek] = useState("");
+  useEffect(() => setZoek(window.location.search), []);
+  return (
+    <nav className="hub-taal" aria-label={label}>
+      {TALEN.map((t) => (
+        <a
+          key={t.code}
+          href={`${t.pad}${zoek}`}
+          hrefLang={t.code}
+          lang={t.code}
+          aria-current={t.code === taal ? "page" : undefined}
+          onClick={() => t.code !== taal && pushEvent("hub_taal", { ...meta, naar: t.code })}
+          className="hub-taal-knop"
+        >
+          {t.kort}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: Taal }) {
+  const T = taal === "en" ? HUB_EN : HUB;
   const [herkomst, setHerkomst] = useState<Herkomst>({ bron: "direct", reel: "", pad: "/hub/" });
 
   // Herkomst uit de URL, één keer bij het openen. Op /hub/resources/ meteen naar de resources.
@@ -103,11 +151,14 @@ export function HubPagina({ start }: { start?: "resources" }) {
     return () => timers.forEach((t) => window.clearTimeout(t));
   }, [start]);
 
-  const meta = useMemo(() => ({ bron: herkomst.bron, ...(herkomst.reel ? { reel: herkomst.reel } : {}) }), [herkomst]);
+  const meta = useMemo(
+    () => ({ bron: herkomst.bron, ...(herkomst.reel ? { reel: herkomst.reel } : {}), ...(taal === "en" ? { taal } : {}) }),
+    [herkomst, taal]
+  );
   const zoek = `?bron=${herkomst.bron}${herkomst.reel ? `&reel=${herkomst.reel}` : ""}`;
   // Komt als "Pagina" in de mail en op monday, zodat we zien waar de lead vandaan komt.
   const formBron = `https://finitsolutions.be${herkomst.pad}${zoek}`;
-  const strook = herkomst.reel && REELS.has(herkomst.reel) ? HUB.strookUitPost : HUB.strook;
+  const strook = herkomst.reel && REELS.has(herkomst.reel) ? T.strookUitPost : T.strook;
 
   const naarResources = useCallback(
     (e: React.MouseEvent) => {
@@ -140,10 +191,11 @@ export function HubPagina({ start }: { start?: "resources" }) {
 
   // Stippen over de hele pagina: hetzelfde patroon als in de case-kaarten op de homepage (wens Alex 20/11).
   return (
-    <main className="hub-ritme hp-stippen min-h-screen bg-white text-[#3D4766]">
+    <HubTekstContext.Provider value={T}>
+    <main lang={taal} className="hub-ritme hp-stippen min-h-screen bg-white text-[#3D4766]">
       {/* 1. De strook naar de gratis resources */}
       <a
-        href="/hub/resources/"
+        href={taal === "en" ? "/hub/en/#resources" : "/hub/resources/"}
         onClick={naarResources}
         className="group flex items-center justify-center gap-x-1.5 bg-[#1A2D63] px-4 py-2.5 text-center text-[0.875rem] leading-[1.4] text-white/90 sm:text-[0.9375rem]"
       >
@@ -156,96 +208,166 @@ export function HubPagina({ start }: { start?: "resources" }) {
         </span>
       </a>
 
-      {/* 2. Badge, kop, subzin, video, knop */}
-      <section className="hub-hero bg-[radial-gradient(60%_45%_at_50%_0%,#EEF2FB_0%,rgba(238,242,251,0)_70%)]">
+      {/* 2. Kop, haak, lopende tekst, zin naar de video, video, knop */}
+      <section className="hub-hero hub-hero-vsl">
+        <TaalKnop taal={taal} label={T.taal.label} meta={meta} />
         <div className="hub-wrap text-center">
-          <a href="/" className="hub-logo mx-auto flex w-fit" aria-label="Finit Solutions, naar de homepage">
+          <a href={T.taal.home} className="hub-logo mx-auto flex w-fit" aria-label={T.taal.logo}>
             <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto sm:h-7" priority />
           </a>
 
-          <p className="hub-badge mx-auto flex w-fit max-w-full items-center rounded-full border border-[#1A2D63]/15 bg-white font-semibold text-[#1A2D63] shadow-[0_6px_18px_-12px_rgba(26,45,99,0.5)]">
-            {HUB.badge}
-          </p>
-
           <h1 className="hp-display hub-titel mx-auto text-balance font-bold text-[#1A2D63]">
-            {HUB.kop.voor}{" "}
-            {/* Twee regels zoals bij Shadowboys: het accent op een eigen regel. */}
-            <br className="hidden sm:inline" />
+            {T.kop.voor}{" "}
             <span className={ACCENT}>
-              <Onder>{HUB.kop.accent}</Onder>
-            </span>
+              <Onder>{T.kop.accent}</Onder>
+            </span>{" "}
+            {T.kop.na}
           </h1>
 
-          <p className="hub-sub text-balance text-[#6C7590]">{HUB.sub}</p>
+          <p className="hub-haak text-balance">{vast(T.haak)}</p>
+
+          {/* Desktop: één alinea, twee even lange regels. Gsm: elk stuk op een eigen regel. */}
+          <p className="hub-lead">
+            {T.sub.map((deel, r) => (
+              <span key={r} className="hub-lead-deel">
+                {vetStukken(vast(deel)).map((s, i) => (s.vet ? <strong key={i} className="font-semibold text-[#1A2D63]">{s.tekst}</strong> : <span key={i}>{s.tekst}</span>))}
+                {r < T.sub.length - 1 ? " " : null}
+              </span>
+            ))}
+          </p>
+
+          <p className="hub-naar-video text-balance">{vast(T.naarVideo)}</p>
 
           <div className="hub-video mx-auto">
-            <VslSpeler meta={meta} onNaarFormulier={() => naarFormulier("einde_video")} />
+            <VslSpeler meta={meta} video={taal === "en" ? VSL_EN : VSL} tekst={T.speler} onNaarFormulier={() => naarFormulier("einde_video")} />
           </div>
 
-          <ul className="hub-pillen flex flex-wrap justify-center">
-            {HUB.pillen.map((p) => (
-              <li key={p} className="hub-pil inline-flex items-center rounded-full border border-[#1A2D63]/20 bg-white font-semibold text-[#1A2D63]">
-                {p}
-              </li>
+          <div className="hub-steun">
+            <p className="hub-steun-label">{T.steun.label}</p>
+            <ul className="hub-steun-logos">
+              {T.steun.logos.map((l) => (
+                <li key={l.id}>
+                  <Image src={l.src} alt={l.alt} width={l.breed} height={l.hoog} className={`hub-steun-logo hub-steun-logo--${l.id}`} />
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <p className="hub-onder-video">
+            {T.onderVideo.map((zin) => (
+              <span key={zin} className="block">
+                {vast(zin)}
+              </span>
             ))}
-          </ul>
+          </p>
 
           <button
             type="button"
             onClick={() => naarFormulier("knop_onder_video")}
             className="hp-btn hp-btn--primary hub-knop"
           >
-            {HUB.knop}
+            {T.knop}
             <ArrowRight aria-hidden="true" />
           </button>
-          <p className="hub-noot text-[#6C7590]">{HUB.knopNoot}</p>
+          <p className="hub-noot text-[#6C7590]">{vast(T.knopNoot)}</p>
         </div>
       </section>
 
       {/* 3. Het formulier, meteen onder de video */}
-      <section id="gesprek" className="scroll-mt-4 pb-[var(--hub-r6)]" aria-labelledby="gesprek-titel">
+      <section id="gesprek" className="scroll-mt-4 pb-[var(--hub-r5)]" aria-labelledby="gesprek-titel">
         <div className="hub-form-wrap">
           <StapFormulier bron={formBron} meta={meta} kopId="gesprek-titel" />
+          <div className="hub-naar-website-wrap text-center">
+            <a
+              href={T.naarWebsite.href}
+              onClick={() => pushEvent("hub_klik", { ...meta, keuze: "website_aanpak" })}
+              className="hub-naar-website inline-flex items-center rounded-full border border-[#1A2D63]/20 bg-white font-semibold text-[#1A2D63] transition-colors hover:bg-[#F5F7FB]"
+            >
+              {/* Op gsm bewust twee regels: de vraag, dan de rest. */}
+              <span>
+                {T.naarWebsite.vraag} <br className="sm:hidden" />
+                {T.naarWebsite.tekst}
+              </span>
+              <ArrowRight aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* 4. De twijfels uit de video */}
-      <section id="twijfels" className="hp-stippen scroll-mt-4 bg-[#F5F7FB] py-[var(--hub-r6)]">
+      {/* 4. Voor wie wel en niet (Alex 25/11): twee kaarten naast elkaar, groen en rood. */}
+      <section id="voor-wie" className="scroll-mt-4 pb-[var(--hub-r5)]">
+        <div className="hub-wrap">
+          <h2 className={KOP}>
+            {T.voorWie.titel.voor} <Onder>{T.voorWie.titel.accent}</Onder>
+          </h2>
+
+          <div className="hub-wie-raster">
+            {(["wel", "niet"] as const).map((soort) => {
+              const blok = T.voorWie[soort];
+              const Icoon = soort === "wel" ? Check : X;
+              return (
+                <div key={soort} className={`hub-wie-kaart hub-wie-kaart--${soort}`}>
+                  <h3 className="hub-wie-titel">
+                    <span className="hub-wie-icoon" aria-hidden="true">
+                      <Icoon strokeWidth={3} />
+                    </span>
+                    {blok.titel}
+                  </h3>
+                  <ul className="hub-wie-lijst">
+                    {blok.items.map((item) => (
+                      <li key={item}>
+                        <span className="hub-wie-icoon hub-wie-icoon--klein" aria-hidden="true">
+                          <Icoon strokeWidth={3} />
+                        </span>
+                        <span>{vast(item)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Veelgestelde vragen: allemaal zichtbaar, in één kaart zoals op de homepage (Amina 26/11). */}
+      <section id="twijfels" className="hp-stippen scroll-mt-4 bg-[#F5F7FB] py-[var(--hub-r5)]">
         <div className="hub-faq-wrap">
           <h2 className={KOP}>
-            {HUB.twijfels.titel.voor} <Onder>{HUB.twijfels.titel.accent}</Onder>
+            {T.twijfels.titel.voor} <Onder>{T.twijfels.titel.accent}</Onder>
           </h2>
-          <p className={INTRO}>{HUB.twijfels.intro}</p>
+          <p className={INTRO}>{zinnen(T.twijfels.intro)}</p>
 
-          <TwijfelsLijst lijst={HUB.twijfels.lijst} />
+          <TwijfelsLijst lijst={T.twijfels.lijst} kaart />
 
           <div className="hub-slot-cta text-center">
             <button type="button" onClick={() => naarFormulier("na_twijfels")} className="hp-btn hp-btn--primary hub-knop">
-              {HUB.knop}
+              {T.knop}
               <ArrowRight aria-hidden="true" />
             </button>
           </div>
         </div>
       </section>
 
-      {/* 5. De gratis resources, achter een e-mailslot */}
-      <section id="resources" className="scroll-mt-4 py-[var(--hub-r6)]">
+      {/* 6. De gratis resources, achter een e-mailslot */}
+      <section id="resources" className="scroll-mt-4 py-[var(--hub-r5)]">
         <div className="mx-auto w-full max-w-[56rem] px-4 sm:px-8">
           <h2 className={KOP}>
-            {HUB.resources.titel.voor} <Onder>{HUB.resources.titel.accent}</Onder>
+            {T.resources.titel.voor} <Onder>{T.resources.titel.accent}</Onder>
           </h2>
-          <p className={INTRO}>{HUB.resources.intro}</p>
+          <p className={INTRO}>{zinnen(T.resources.intro)}</p>
           <ResourceSectie reel={herkomst.reel} meta={meta} />
         </div>
       </section>
 
       <footer className="border-t border-[#E3E7EF] px-4 py-[var(--hub-r4)] text-center text-[0.875rem] text-[#6C7590] sm:px-8">
-        Finit Solutions · <a href="/" className="hp-link">finitsolutions.be</a> ·{" "}
-        <a href="/privacy/" className="hp-link">{HUB.footer.privacy}</a> ·{" "}
+        Finit Solutions · <a href={T.taal.home} className="hp-link">finitsolutions.be</a> ·{" "}
+        <a href="/privacy/" className="hp-link">{T.footer.privacy}</a> ·{" "}
         <a href={`/vacatures/${zoek}&via=hub`} className="hp-link">
-          {HUB.footer.vacatures}
+          {T.footer.vacatures}
         </a>
       </footer>
     </main>
+    </HubTekstContext.Provider>
   );
 }

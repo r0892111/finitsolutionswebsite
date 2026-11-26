@@ -15,9 +15,7 @@ import { useId, useState } from "react";
 import { Lock } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { vraagToegang } from "@/lib/hub-toegang";
-import { HUB } from "./copy";
-
-const S = HUB.slot;
+import { useHub } from "./taal";
 
 export function SlotFormulier({
   titel,
@@ -38,6 +36,7 @@ export function SlotFormulier({
   className?: string;
 }) {
   const id = useId();
+  const S = useHub().slot;
   const [email, setEmail] = useState("");
   const [mails, setMails] = useState(false);
   const [honing, setHoning] = useState(""); // honeypot

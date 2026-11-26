@@ -231,7 +231,7 @@ export function EmbeddedContactForm() {
         {isSubmitting ? (
           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
         ) : (
-          "Plan een gesprek"
+          "Boek een conversatie"
         )}
       </button>
       {extraVelden}
@@ -321,7 +321,7 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
         <div className="pt-12 px-6 pb-6 md:pt-12 md:px-8 md:pb-8">
           <div className="mb-6">
             <h2 className="font-newsreader text-2xl md:text-3xl text-[#1A2D63] mb-1.5">
-              Plan een kennismakingsgesprek
+              Boek een conversatie
             </h2>
             <p className="font-instrument text-[#475D8F] text-sm md:text-base">
               Vul je gegevens in en we nemen binnen 48 uur contact op om een moment in te plannen.
@@ -416,7 +416,7 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
               {isSubmitting ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                "Plan een gesprek"
+                "Boek een conversatie"
               )}
             </button>
             {extraVelden}

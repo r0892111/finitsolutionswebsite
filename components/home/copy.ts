@@ -71,7 +71,7 @@ export const MENU = {
 };
 
 // De hoofdknop; gaat naar het formulier op /contact (22/10: was de lesreeks op Skool).
-export const CTA_START = "Plan een startgesprek";
+export const CTA_START = "Boek een conversatie";
 // De tweede knop: de contactpagina, voor wie eerst een vraag heeft.
 export const CTA_CONTACT = "Neem contact met ons op";
 
@@ -439,7 +439,7 @@ export const VRAGEN: { h2: string; items: FaqItem[] } = {
 // dan het telefoonnummer. Geen kennismaking meer inplannen. Nieuw (review 13/09); de foto van
 // Karel is weg sinds 14/09.
 export const SLOT = {
-  startTitel: "Plan je startgesprek",
+  startTitel: "Boek een conversatie",
   startTekst: "Een halfuur, vrijblijvend. We bekijken hoe je bedrijf vandaag werkt, met wie we spreken en welke systemen je gebruikt.",
   bel: "Even sparren over AI in jouw bedrijf? Bel gerust.",
   mailLabel: "Of mail naar",
@@ -477,10 +477,10 @@ export const VACATURES_BLOK = {
 // De pagina /contact: waar "Neem contact met ons op" naartoe gaat. Nieuw (review 13/09).
 export const CONTACT = {
   metaTitel: "Contact",
-  metaBeschrijving: "Plan een startgesprek voor de Company Brain Setup, of stel je vraag over wat we bouwen. Bel, mail of laat je gegevens achter.",
+  metaBeschrijving: "Boek een conversatie over de Company Brain Setup, of stel je vraag over wat we bouwen. Bel, mail of laat je gegevens achter.",
   kruimel: "Contact",
   h1: ["Neem contact", "met ons op"],
-  intro: "Plan een startgesprek voor de Company Brain Setup, of stel je vraag over wat we bouwen. Bel, mail of laat hieronder je gegevens achter. Je krijgt meestal binnen 24 uur antwoord.",
+  intro: "Boek een conversatie over de Company Brain Setup, of stel je vraag over wat we bouwen. Bel, mail of laat hieronder je gegevens achter. Je krijgt meestal binnen 24 uur antwoord.",
 };
 
 // De /bedankt-pagina na het formulier. De drie stappen volgen het model van 22/10:
