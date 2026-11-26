@@ -55,22 +55,10 @@ export const EN: Copy = {
     h2: "You paid for AI, your team uses it daily, and you still end up rewriting everything yourself.",
     vraag: "So what exactly did it save you?",
     punten: [
-      {
-        titel: "Everything still passes through you.",
-        tekst: "The quote, the email, the planning. Your team is good, but the last step is always yours.",
-      },
-      {
-        titel: "You rewrite what AI gives you.",
-        tekst: "Your people use ChatGPT daily, then you fix the tone, the price and the exception it never knew about.",
-      },
-      {
-        titel: "The knowledge sits in one head.",
-        tekst: "Which customer gets the exception, which supplier is always late. Nobody wrote it down, and you hope that person never leaves.",
-      },
-      {
-        titel: "You don't know where to start.",
-        tekst: "You've seen AI make things up, and you quietly wonder if you're falling behind.",
-      },
+      "Everything still passes through you.",
+      "You rewrite what AI gives you.",
+      "The knowledge sits in one head.",
+      "You don't know where to start.",
     ],
     slot: "Recognise even one of these? Then the problem probably isn't you. It isn't the AI either. It's something much simpler, and it's what we fix.",
     knop: "Show me what's missing",

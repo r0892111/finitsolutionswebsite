@@ -51,7 +51,8 @@ export interface Copy {
     kicker: string;
     h2: string;
     vraag: string;
-    punten: { titel: string; tekst: string }[];
+    /** Alleen de vier titels (Alex, 26/11: met de tekstjes eronder werd het te lang). De tekstjes staan nog in het document van Amina. */
+    punten: string[];
     slot: string;
     knop: string;
     kleineLink: string;

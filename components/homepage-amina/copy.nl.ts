@@ -57,22 +57,10 @@ export const NL: Copy = {
     h2: "Je betaalt voor AI, je team gebruikt het elke dag, en toch herschrijf je uiteindelijk alles zelf.",
     vraag: "Wat heb je er dan precies mee bespaard?",
     punten: [
-      {
-        titel: "Alles passeert nog altijd langs jou.",
-        tekst: "De offerte, de mail, de planning. Je team is goed, maar de laatste stap is altijd voor jou.",
-      },
-      {
-        titel: "Je herschrijft wat AI je geeft.",
-        tekst: "Je mensen gebruiken ChatGPT elke dag. Daarna verbeter jij de toon, de prijs en die ene uitzondering waar het nooit van wist.",
-      },
-      {
-        titel: "De kennis zit in één hoofd.",
-        tekst: "Welke klant de uitzondering krijgt, welke leverancier altijd te laat is. Niemand heeft het opgeschreven, en je hoopt dat die ene persoon nooit vertrekt.",
-      },
-      {
-        titel: "Je weet niet waar je moet beginnen.",
-        tekst: "Je hebt AI al dingen zien verzinnen, en stilletjes vraag je je af of je achterop raakt.",
-      },
+      "Alles passeert nog altijd langs jou.",
+      "Je herschrijft wat AI je geeft.",
+      "De kennis zit in één hoofd.",
+      "Je weet niet waar je moet beginnen.",
     ],
     slot: "Herken je er ook maar één van? Dan ligt het probleem waarschijnlijk niet bij jou. En ook niet bij AI. Het is iets veel eenvoudigers, en net dat lossen wij op.",
     knop: "Toon me wat er ontbreekt",

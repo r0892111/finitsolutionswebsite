@@ -39,7 +39,7 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 ## Opbouw
 
 1. **Hero**: gecentreerd. Voor wie, kop met amber streep ("de secretaris", niet "het secretariaat"), de belofte, de uitleg, twee knoppen, drie vinkjes, wie ons steunt.
-2. **Herkenbaar?**: vier kaarten, twee aan twee.
+2. **Herkenbaar?**: vier kaarten, twee aan twee, met alleen de titel (Alex, 26/11: met de tekstjes eronder werd het te lang).
 3. **Company brain**: marineblauw paneel, links de uitleg, rechts de twee dingen die veranderen.
 4. **Hoe we werken**: vier kaarten met een pilletje "Stap 1" tot "Stap 4".
 5. **Waarom Finit**: drie kaarten met een rond icoon.
@@ -61,13 +61,16 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 | 6. Voorbeelden | Alex: aanklikbaar maken. Amina: ja. | De voorbeelden klappen open. |
 | 7. Team | Amina: een aparte pagina "about us". | Bestaat: `/over-ons/`. |
 
-## Afwijkingen van Amina's document (door te geven aan Amina)
+## Afwijkingen van Amina's document (doorgegeven aan Amina)
+
+Op 26/11 staat deze lijst, in het Engels en met de reden erbij, in haar Google Doc als tab "Corrections (homepage)". De zeven comments op de tab "Hub copy" die verwerkt zijn, zijn daar afgesloten.
 
 Alex zette op 25/11 een aantal dingen recht die in haar document nog anders staan. Zolang zij haar document niet aanpast, wijkt de site hier bewust van af. Wie haar tekst opnieuw overneemt, mag deze punten niet terugzetten.
 
 | Waar | In haar document | Op de site | Waarom (Alex) |
 |---|---|---|---|
 | Hero, kop (NL) | vertaald als "het secretariaat" | "de secretaris van je eigen bedrijf" | Zijn woordkeuze. |
+| Sectie 2, de vier punten | een vette lijn met een of twee zinnen eronder | alleen de vier vette lijnen | Met de zinnen erbij werd het te lang (haar eigen voorstel). |
 | Hero, onderaan | "We've spoken with more than a hundred Belgian SMEs." | weg | Moet weg, overal. |
 | Stap 1 | "Half an hour. … We mostly listen" | 60 minuten waarin we al grondig en diepgaand door de processen gaan | Het eerste gesprek is geen luistergesprek meer. |
 | Stap 2 | "You don't prepare anything." | weg | Soms vragen we wel iets voor te bereiden. |

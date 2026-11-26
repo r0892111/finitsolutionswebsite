@@ -168,11 +168,11 @@ export function HomePagina({ taal }: { taal: Taal }) {
               <p className={`mt-4 ${LEAD} font-medium text-[#1A2D63]`}>{t.herken.vraag}</p>
             </div>
 
-            <ul className="mt-10 grid gap-4 sm:grid-cols-2 sm:gap-5">
+            {/* Alleen de vier titels, zonder uitleg eronder (Alex, 26/11). */}
+            <ul className="mx-auto mt-10 grid max-w-[58rem] gap-3 sm:grid-cols-2 sm:gap-4">
               {t.herken.punten.map((p) => (
-                <li key={p.titel} className="hp-card p-6 sm:p-7">
-                  <h3 className={H3}>{p.titel}</h3>
-                  <p className={`mt-2 ${TEKST}`}>{vast(p.tekst)}</p>
+                <li key={p} className="hp-card flex items-center px-6 py-5 sm:px-7 sm:py-6">
+                  <h3 className={H3}>{p}</h3>
                 </li>
               ))}
             </ul>
