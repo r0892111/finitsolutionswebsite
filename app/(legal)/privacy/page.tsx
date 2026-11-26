@@ -308,7 +308,7 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
               </p>
               <p className="mt-4">
                 Laat u op de website uw e-mailadres achter om onze gratis prompts te openen, dan bewaren we het in Brevo
-                (Sendinblue SAS, Frankrijk), ons mailprogramma, samen met het kanaal waarlangs u kwam. Mails met AI-nieuws en
+                (Sendinblue SAS, Frankrijk), ons mailprogramma, en in ons eigen klantenbeheersysteem, samen met het kanaal waarlangs u kwam. Mails met AI-nieuws en
                 tips sturen we alleen als u daarvoor het vakje aanvinkte. Afmelden kan onderaan elke mail.
               </p>
 

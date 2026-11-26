@@ -13,10 +13,16 @@
  * Wie niet aanvinkt, krijgt geen mails: dan staat OPT_IN op false en komt hij
  * op geen enkele lijst. Bestaande velden van de contactenlijst, geen nieuwe.
  *
+ * Een nieuw adres komt daarnaast in Tuesday, bord Socials, groep "mailinglijst"
+ * (Alex, 26/11): apart van de leads en zonder status, zodat niemand het voor een
+ * aanvraag houdt. Mislukt Tuesday, dan merkt de bezoeker niets (lib/tuesday.ts).
+ *
  * Env: BREVO_API_KEY (verplicht, dezelfde als het contactformulier),
- *      BREVO_HUB_LIJST_ID (optioneel, het nummer van de lijst in Brevo).
+ *      BREVO_HUB_LIJST_ID (optioneel, het nummer van de lijst in Brevo),
+ *      CRM_API_TOKEN of CRM_SOCIALS_TOKEN (optioneel) — sleutel voor Tuesday. Nooit loggen.
  */
 import type { Handler, HandlerEvent } from "@netlify/functions";
+import { kanaalLabel, naarTuesday, TUESDAY } from "../../lib/tuesday";
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 const BREVO = "https://api.brevo.com/v3/contacts";
@@ -24,6 +30,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Welke tekst stond er bij het vinkje: zo weten we later waarvoor iemand toestemming gaf.
 // 2026-11-20b: doel van de mails = af en toe AI-nieuwtjes en tips, hooguit twee per maand.
 const TEKSTVERSIE = "hub-slot-2026-11-20b";
+// Socials › "mailinglijst", op het vaste id (een onbekend id belandt zonder fout in de eerste groep). Aangemaakt 26/11.
+const MAILINGLIJST_GROEP = "groep_mxaahhq";
 
 function json(statusCode: number, body: unknown) {
   return { statusCode, headers: JSON_HEADERS, body: JSON.stringify(body) };
@@ -60,6 +68,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
   const lijst = Number(process.env.BREVO_HUB_LIJST_ID);
   const lijsten = mails && Number.isInteger(lijst) && lijst > 0 ? [lijst] : undefined;
   const headers = { "api-key": apiKey, "Content-Type": "application/json", accept: "application/json" };
+  let nieuwContact = false;
 
   try {
     const nieuw = await fetch(BREVO, {
@@ -89,10 +98,30 @@ export const handler: Handler = async (event: HandlerEvent) => {
       }
     } else if (!nieuw.ok) {
       throw new Error(`Brevo POST ${nieuw.status} ${(await nieuw.text()).slice(0, 300)}`);
+    } else {
+      nieuwContact = true;
     }
   } catch (err) {
     console.error("hub-toegang: bewaren mislukt", err);
     return json(502, { error: "save_failed" });
+  }
+
+  // Alleen een nieuw adres naar Tuesday: een bestaand staat er al (of kwam van vóór 26/11).
+  if (nieuwContact) {
+    await naarTuesday(
+      TUESDAY.socials,
+      {
+        name: email,
+        group_id: MAILINGLIJST_GROEP,
+        values: {
+          email,
+          bron: kanaalLabel(bron),
+          ...(reel ? { reel } : {}),
+          message: `Opende de gratis prompts op de hub. Mails: ${mails ? "ja" : "nee"}.`,
+        },
+      },
+      "hub-toegang",
+    );
   }
 
   // Bewijs van toestemming, zonder het adres zelf in de logs.

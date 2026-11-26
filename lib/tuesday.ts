@@ -23,6 +23,26 @@ export const TUESDAY = {
   websiteLead: "/intake/website-lead",
 } as const;
 
+// ?bron= uit de link naar het label van de keuzelijst "Source" op Socials.
+const KANALEN: Record<string, string> = {
+  tiktok: "TikTok",
+  instagram: "Instagram",
+  ig: "Instagram",
+  youtube: "YouTube",
+  yt: "YouTube",
+  linkedin: "LinkedIn",
+  facebook: "Facebook",
+  fb: "Facebook",
+  x: "X",
+  twitter: "X",
+  threads: "Threads",
+};
+
+export function kanaalLabel(slug: string): string {
+  if (!slug || slug === "direct") return "Website";
+  return KANALEN[slug] ?? "Other";
+}
+
 export function tuesdaySleutel(): string | undefined {
   return process.env.CRM_API_TOKEN ?? process.env.CRM_SOCIALS_TOKEN;
 }
