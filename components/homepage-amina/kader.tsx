@@ -157,8 +157,8 @@ export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boo
     <>
       <a href="#inhoud" className="nh-skip">{taal === "nl" ? "Naar de inhoud" : "Skip to content"}</a>
       <nav className="nh-nav" data-vast={gescrold || menuOpen} aria-label={taal === "nl" ? "Hoofdmenu" : "Main menu"}>
-        <div className="nh-nav-rij mx-auto flex max-w-[93.33rem] items-center justify-between gap-4 px-4 sm:px-6">
-          <a href={HOME[taal]} aria-label="Finit Solutions" className="flex shrink-0 items-center">
+        <div className="nh-nav-rij mx-auto flex max-w-[93.33rem] items-center justify-between gap-4 px-4 sm:px-6 xl:grid xl:grid-cols-[1fr_auto_1fr]">
+          <a href={HOME[taal]} aria-label="Finit Solutions" className="flex shrink-0 items-center xl:justify-self-start">
             <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="nh-nav-logo w-auto" priority />
           </a>
           <div className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-7">
@@ -168,7 +168,7 @@ export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boo
             <a href={OVER_ONS[taal]} className="nh-nav-link" aria-current={actief === "over-ons" ? "page" : undefined}>{t.nav.overOns}</a>
             <a href={GRATIS[taal]} className="nh-nav-link" aria-current={actief === "gratis" ? "page" : undefined}>{t.gratis.nav}</a>
           </div>
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 xl:justify-self-end">
             <div className="nh-taal" role="group" aria-label={t.nav.taalLabel}>
               {(["nl", "en"] as const).map((l) =>
                 l === taal ? (
