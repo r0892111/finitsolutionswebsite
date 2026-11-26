@@ -18,6 +18,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
+import { leadVelden } from "@/lib/herkomst";
 import { EMAIL_RE, telefoonOk } from "@/lib/contact-velden";
 import { websiteOk } from "@/lib/cursus-aanvraag";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
@@ -147,6 +148,9 @@ export function CursusFormulier({ meta = {}, kopId }: { meta?: Record<string, st
     setStatus("bezig");
     const kijk = kijkbeurtVoorFormulier();
     const procent = kijkProcent();
+    // De herkomst van het bezoek en de signalen voor Meta (lib/herkomst.ts); event_id = aanvraag_id.
+    const velden = bescherming.velden();
+    const lead = leadVelden(velden.aanvraag_id);
     const cursus = {
       kanaal: meta.bron ?? "direct",
       reel: meta.reel ?? "",
@@ -156,7 +160,8 @@ export function CursusFormulier({ meta = {}, kopId }: { meta?: Record<string, st
       grootte: antwoorden.grootte ?? "",
       ai: antwoorden.ai ?? "",
       eerst: (antwoorden.bericht ?? "").trim(),
-      pagina: window.location.href,
+      // De eerste link van het bezoek (met utm_*), zodat de advertentie zichtbaar is in Tuesday.
+      pagina: lead.pagina,
       kijkbeurt: kijk ? { id: kijk.id, dag: kijk.dag } : null,
     };
     pushEvent("form_submit", { ...meta, location: "cursus" });
@@ -174,13 +179,14 @@ export function CursusFormulier({ meta = {}, kopId }: { meta?: Record<string, st
           bedrijfswebsite: gegevens.website.trim(),
           website: honing,
           cursus,
-          ...bescherming.velden(),
+          ...velden,
+          ...lead,
         }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
       bescherming.naVersturen(true);
       setStatus("klaar");
-      pushEvent("form_submitted", { ...meta, location: "cursus" });
+      pushEvent("form_submitted", { ...meta, location: "cursus", event_id: lead.event_id });
     } catch {
       bescherming.naVersturen(false);
       setStatus("fout");

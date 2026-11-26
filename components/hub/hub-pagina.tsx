@@ -9,7 +9,8 @@
  * 1. een smalle strook naar de gratis resources onderaan;
  * 2. kop, haak, lopende tekst, een zin naar de video, de video, één zin onder
  *    de video, de knop;
- * 3. het formulier, vraag per vraag (vlak onder de video, zoals bij hen);
+ * 3. het formulier, vraag per vraag (vlak onder de video, zoals bij hen),
+ *    met daaronder de quote van Bas, een klant;
  * 4. voor wie het wel en niet is, twee kaarten naast elkaar;
  * 5. de veelgestelde vragen (eerst vijf, de rest na "Toon nog X vragen");
  * 6. de gratis prompts en gidsen, achter een e-mailslot.
@@ -19,7 +20,8 @@
  * Herkomst: ?bron=tiktok (kanaal) en ?reel=C03 (post) gaan mee naar het
  * formulier ("Pagina" in de mail en op monday), naar Brevo bij het e-mailslot
  * en naar Google Tag Manager als events (hub_view, hub_menu, vsl_*, hub_form_stap,
- * form_submit, hub_toegang, hub_klik).
+ * form_submit, hub_toegang, hub_klik). Sinds 26/11 via lib/herkomst.ts, dat ook
+ * utm_*, fbclid en gclid leest en de eerste link van het bezoek onthoudt.
  *
  * Alle tekst staat in ./copy.ts (Engels: ./copy.en.ts), de video in ./video.ts.
  *
@@ -35,6 +37,7 @@ import lokaleLijst from "@/content/resources.json";
 import { Onder } from "@/components/home/ui";
 import { TwijfelsLijst } from "./twijfels-lijst";
 import { pushEvent } from "@/lib/analytics";
+import { leesHerkomst } from "@/lib/herkomst";
 import { leesLijst } from "@/lib/resources";
 import { HUB, vast, vetStukken } from "./copy";
 import { HUB_EN } from "./copy.en";
@@ -62,15 +65,6 @@ interface Herkomst {
   bron: string;
   reel: string;
   pad: string;
-}
-
-// De eerste bron en reel van dit bezoek, zolang het tabblad open is: wie eerst rondklikt
-// en dan zonder ?bron= terugkomt, blijft aan het juiste kanaal gekoppeld (o.a. voor Tuesday).
-const HERKOMST_OPSLAG = "finit_hub_herkomst";
-
-/** Alleen kleine letters, cijfers, - en _: zo kan er niets vreemds in een link of mail belanden. */
-function schoon(v: string | null, max: number): string {
-  return (v ?? "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, max);
 }
 
 type Taal = "nl" | "en";
@@ -106,26 +100,11 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
   const T = taal === "en" ? HUB_EN : HUB;
   const [herkomst, setHerkomst] = useState<Herkomst>({ bron: "direct", reel: "", pad: "/hub/" });
 
-  // Herkomst uit de URL, één keer bij het openen. Op /hub/resources/ meteen naar de resources.
+  // Herkomst één keer bij het openen: de eerste van dit bezoek blijft gelden, wie eerst rondklikt
+  // blijft aan het juiste kanaal gekoppeld (o.a. voor Tuesday). Op /hub/resources/ meteen naar de resources.
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    const uitUrl = { bron: schoon(p.get("bron"), 40), reel: schoon(p.get("reel"), 12).toUpperCase() };
-    let eerste: { bron: string; reel: string } | null = null;
-    try {
-      const bewaard = JSON.parse(sessionStorage.getItem(HERKOMST_OPSLAG) ?? "null") as { bron?: unknown; reel?: unknown } | null;
-      if (bewaard) eerste = { bron: schoon(String(bewaard.bron ?? ""), 40), reel: schoon(String(bewaard.reel ?? ""), 12).toUpperCase() };
-      if (!eerste && (uitUrl.bron || uitUrl.reel)) {
-        eerste = uitUrl;
-        sessionStorage.setItem(HERKOMST_OPSLAG, JSON.stringify(uitUrl));
-      }
-    } catch {
-      /* geen opslag: dan geldt gewoon de link */
-    }
-    const h: Herkomst = {
-      bron: eerste?.bron || uitUrl.bron || "direct",
-      reel: eerste?.reel || uitUrl.reel,
-      pad: window.location.pathname,
-    };
+    const { bron, reel } = leesHerkomst();
+    const h: Herkomst = { bron, reel, pad: window.location.pathname };
     setHerkomst(h);
     pushEvent("hub_view", { bron: h.bron, ...(h.reel ? { reel: h.reel } : {}) });
     // Oude ankers van vóór 20/11 (#karel, #laten, #keuze) gaan naar het formulier.
@@ -292,6 +271,17 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
             </a>
           </div>
         </div>
+      </section>
+
+      {/* De quote van Bas, een klant (Alex 26/11): een rustige kaart onder het formulier. */}
+      <section className="pb-[var(--hub-r5)]">
+        <figure className="hub-form-wrap hub-getuigenis">
+          <span className="hub-getuigenis-foto" aria-hidden="true">
+            <Image src={T.getuigenis.foto} alt="" width={840} height={790} />
+          </span>
+          <blockquote className="hp-display hp-display-sm hub-getuigenis-quote text-balance">&ldquo;{T.getuigenis.quote}&rdquo;</blockquote>
+          <figcaption className="hub-getuigenis-naam">{T.getuigenis.naam}</figcaption>
+        </figure>
       </section>
 
       {/* 4. Voor wie wel en niet (Alex 25/11): twee kaarten naast elkaar, groen en rood. */}

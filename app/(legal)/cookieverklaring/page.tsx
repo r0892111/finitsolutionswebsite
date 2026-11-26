@@ -151,11 +151,18 @@ export default function CookieVerklaringPage() {
                       <td className="p-3 align-top">Tot je het wist</td>
                     </tr>
                     <tr className="border-t">
-                      <td className="p-3 align-top font-mono text-xs">finit_hub_herkomst</td>
+                      <td className="p-3 align-top font-mono text-xs">finit_herkomst</td>
                       <td className="p-3 align-top">Session storage</td>
                       <td className="p-3 align-top">finitsolutions.be</td>
-                      <td className="p-3 align-top">Onthoudt via welk kanaal en welke post je op de hub kwam, voor het formulier.</td>
+                      <td className="p-3 align-top">Onthoudt via welk kanaal, welke post of welke advertentie je op de site kwam (de eerste link van je bezoek), zodat we dat bij je aanvraag zien.</td>
                       <td className="p-3 align-top">Tot je het tabblad sluit</td>
+                    </tr>
+                    <tr className="border-t">
+                      <td className="p-3 align-top font-mono text-xs">finit_lead_event</td>
+                      <td className="p-3 align-top">Session storage</td>
+                      <td className="p-3 align-top">finitsolutions.be</td>
+                      <td className="p-3 align-top">Geeft het nummer van je aanvraag door aan de bedankpagina, zodat één aanvraag maar één keer geteld wordt.</td>
+                      <td className="p-3 align-top">Tot de bedankpagina geladen is</td>
                     </tr>
                   </tbody>
                 </table>

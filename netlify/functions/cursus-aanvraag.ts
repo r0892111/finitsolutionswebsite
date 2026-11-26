@@ -19,6 +19,8 @@
  *
  * Env (dezelfde als contact-submit): BREVO_API_KEY, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL,
  * CRM_API_TOKEN of CRM_SOCIALS_TOKEN, PAPI_GITHUB_TOKEN en TURNSTILE_SECRET_KEY (optioneel). Nooit loggen.
+ * Sinds 26/11 ook META_PIXEL_ID en META_CAPI_TOKEN (optioneel): een Lead naar Meta, alleen met
+ * toestemming voor marketing (lib/meta-capi.ts).
  */
 import type { Context } from "@netlify/functions";
 import { EMAIL_RE, telefoonOk } from "../../lib/contact-velden";
@@ -29,6 +31,7 @@ import { papiSeintje } from "../../lib/papi";
 import { aanvraagId, eenRegel, papiMagVandaag, vergeet, wacht } from "../../lib/formulier-wacht";
 import { esc, mailNaarContact, papiRegel } from "../../lib/brevo-mail";
 import { CURSUS } from "../../components/cursus/copy";
+import { stuurMetaLead } from "../../lib/meta-capi";
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
 
@@ -106,6 +109,9 @@ export default async (req: Request, context: Context): Promise<Response> => {
   const stop = await wacht(req, context.ip, body, "cursus-aanvraag");
   if (stop) return stop;
   const id = aanvraagId(body);
+
+  // Een Lead naar Meta, op de achtergrond; kan de aanvraag nooit tegenhouden (lib/meta-capi.ts).
+  context.waitUntil(stuurMetaLead({ body, req, ip: context.ip, email, telefoon, pagina, bron: "cursus-aanvraag" }));
 
   // Tuesday: dezelfde kolommen als de hubleads (contact-submit), in de eigen groep.
   const siteUrl = /^https?:\/\//i.test(website) ? website : `https://${website}`;

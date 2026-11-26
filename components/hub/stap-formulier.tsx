@@ -25,6 +25,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
+import { leadVelden } from "@/lib/herkomst";
 import { EMAIL_RE, telefoonOk, websiteOk } from "@/lib/contact-velden";
 import { kijkProcent, kijkbeurtVoorFormulier } from "./kijkmeting";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
@@ -175,6 +176,9 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
     bezigRef.current = true;
     setStatus("bezig");
     const kijk = kijkbeurtVoorFormulier();
+    // De herkomst van het bezoek en de signalen voor Meta (lib/herkomst.ts); event_id = aanvraag_id.
+    const velden = bescherming.velden();
+    const lead = leadVelden(velden.aanvraag_id);
     // Gestructureerd voor Tuesday (bord Leads › Socials); mail en monday krijgen het bericht zoals voorheen.
     const hub = {
       kanaal: meta.bron ?? "direct",
@@ -184,7 +188,8 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
       grootte: inHetNederlands(VRAGEN, "grootte", antwoorden.grootte),
       meeste_tijd: inHetNederlands(VRAGEN, "tijd", antwoorden.tijd),
       eerst: (antwoorden.bericht ?? "").trim(),
-      pagina: window.location.href,
+      // De eerste link van het bezoek (met utm_*), zodat de advertentie zichtbaar is in Tuesday.
+      pagina: lead.pagina,
       kijkbeurt: kijk ? { id: kijk.id, dag: kijk.dag } : null,
     };
     pushEvent("form_submit", { ...meta, location: "hub" });
@@ -195,13 +200,13 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: timer.signal,
-        body: JSON.stringify({ naam: naam.trim(), email: email.trim(), telefoonnummer: telefoon.trim(), bedrijfswebsite: website.trim(), bericht: bericht(), website: honing, bron, hub, ...bescherming.velden() }),
+        body: JSON.stringify({ naam: naam.trim(), email: email.trim(), telefoonnummer: telefoon.trim(), bedrijfswebsite: website.trim(), bericht: bericht(), website: honing, bron, hub, ...velden, ...lead }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
       bescherming.naVersturen(true);
       setStatus("klaar");
       setVenster(true);
-      pushEvent("form_submitted", { ...meta, location: "hub" });
+      pushEvent("form_submitted", { ...meta, location: "hub", event_id: lead.event_id });
     } catch {
       bescherming.naVersturen(false);
       setStatus("fout");

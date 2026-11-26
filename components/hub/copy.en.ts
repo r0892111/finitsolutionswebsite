@@ -38,6 +38,12 @@ export const HUB_EN: HubTekst = {
 
   naarWebsite: { vraag: "Still unsure?", tekst: "Read how we work", href: "/en/#aanpak" },
 
+  getuigenis: {
+    quote: "Fast delivery, friendly people. I had no idea AI could already do so much of the work today!",
+    naam: HUB.getuigenis.naam,
+    foto: HUB.getuigenis.foto,
+  },
+
   steun: { label: "Backed by", logos: HUB.steun.logos },
 
   onderVideo: ["We plan new projects month by month.", "Want to be included next month?"],

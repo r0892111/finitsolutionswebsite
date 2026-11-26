@@ -12,6 +12,8 @@
  * Een woord tussen ** ** in een vraag van het formulier wordt vet.
  */
 
+import { CASES } from "../home/copy";
+
 export const HUB = {
   metaTitel: "Laat AI werken zoals jouw bedrijf werkt",
   metaBeschrijving:
@@ -50,6 +52,9 @@ export const HUB = {
   // De nieuwe homepage (tak homepage-amina) noemt die sectie "werkwijze": pas het anker
   // aan zodra die live gaat.
   naarWebsite: { vraag: "Twijfel je nog?", tekst: "Lees hier hoe we te werk gaan", href: "/#aanpak" },
+
+  // Onder het formulier (Alex 26/11): de quote van Bas, een klant. Dezelfde als op de homepage.
+  getuigenis: { quote: CASES.quote, naam: CASES.naam, foto: CASES.foto },
 
   // Vlak onder de video (Alex 25/11): wie ons steunt, met hun logo's uit /public.
   steun: {

@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { useBescherming } from "@/components/formulier-bescherming";
+import { geefLeadDoor, leadVelden } from "@/lib/herkomst";
 
 // ============================================
 // TYPES
@@ -77,6 +78,9 @@ function useFormSubmit() {
 
       pushEvent("form_submit", { location: sourceUrl });
       setError(null);
+      // De herkomst van het bezoek en de signalen voor Meta (lib/herkomst.ts); event_id = aanvraag_id.
+      const extra = velden();
+      const lead = leadVelden(extra.aanvraag_id);
 
       // Traag netwerk mag de bezoeker niet eindeloos laten wachten.
       const timer = new AbortController();
@@ -92,13 +96,15 @@ function useFormSubmit() {
             telefoonnummer: formData.telefoonnummer,
             email: formData.email,
             bron: sourceUrl,
-            // De volledige adresbalk (met ?bron=…), voor Tuesday.
-            pagina: window.location.href,
-            ...velden(),
+            ...extra,
+            // Met `pagina` = de eerste link van het bezoek (met utm_*), voor Tuesday.
+            ...lead,
           }),
         });
         if (!res.ok) throw new Error(`status ${res.status}`);
         naVersturen(true);
+        // form_submitted vertrekt pas op /bedankt (thank-you-landing.tsx), met dit event_id.
+        geefLeadDoor(lead.event_id);
       } catch {
         naVersturen(false);
         // Bewust zichtbaar: als de aanvraag niet aankomt moet de bezoeker
