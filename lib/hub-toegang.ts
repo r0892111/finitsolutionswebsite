@@ -8,7 +8,8 @@
  *
  * Dat cookie is functioneel (het onthoudt iets wat de bezoeker zelf vroeg),
  * geen tracking. Het adres zelf blijft alleen in de browser staan zolang het
- * nog niet bij de server raakte; daarna wissen we het hier.
+ * nog niet bij de server raakte; daarna wissen we het hier. De voornaam (optioneel, Gratis
+ * materiaal) blijft wel bewaard, alleen op dit toestel, voor de begroeting ("Succes ermee, Jan!").
  */
 
 const SLEUTEL = "finit_hub_toegang";
@@ -17,6 +18,8 @@ const JAAR = 60 * 60 * 24 * 365;
 
 interface Bewaard {
   sinds: string;
+  /** Voor de begroeting op Gratis materiaal; blijft op dit toestel. */
+  voornaam?: string;
   /** Alleen zolang de server het adres nog niet heeft: dan proberen we het later opnieuw. */
   wacht?: { email: string; voornaam?: string; mails: boolean; bron: string; reel: string; plek?: string };
 }
@@ -89,7 +92,8 @@ export async function vraagToegang(a: Aanvraag): Promise<"ok" | "ongeldig"> {
   const uitkomst = await stuur(a);
   if (uitkomst === "ongeldig") return "ongeldig";
   const sinds = new Date().toISOString();
-  schrijf(uitkomst === "ok" ? { sinds } : { sinds, wacht: { email: a.email, ...(a.voornaam ? { voornaam: a.voornaam } : {}), mails: a.mails, bron: a.bron, reel: a.reel, plek: a.plek } });
+  const naam = a.voornaam ? { voornaam: a.voornaam } : {};
+  schrijf(uitkomst === "ok" ? { sinds, ...naam } : { sinds, ...naam, wacht: { email: a.email, ...(a.voornaam ? { voornaam: a.voornaam } : {}), mails: a.mails, bron: a.bron, reel: a.reel, plek: a.plek } });
   zetCookie();
   return "ok";
 }
@@ -108,5 +112,10 @@ export async function bijBezoek() {
   }
   if (!b.wacht) return;
   const uitkomst = await stuur(b.wacht);
-  if (uitkomst !== "mislukt") schrijf({ sinds: b.sinds });
+  if (uitkomst !== "mislukt") schrijf({ sinds: b.sinds, ...(b.voornaam ? { voornaam: b.voornaam } : {}) });
+}
+
+/** De voornaam die de bezoeker op dit toestel achterliet (of leeg). */
+export function bewaardeVoornaam(): string {
+  return lees()?.voornaam ?? "";
 }

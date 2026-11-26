@@ -29,7 +29,7 @@ import { ResourceSectie } from "@/components/hub/resource-sectie";
 import { HubTekstContext } from "@/components/hub/taal";
 import { VSL } from "@/components/hub/video";
 import { pushEvent } from "@/lib/analytics";
-import { heeftToegang } from "@/lib/hub-toegang";
+import { bewaardeVoornaam, heeftToegang } from "@/lib/hub-toegang";
 import type { Taal } from "./copy";
 import { COPY, GRATIS, Kop, TEKST, Voet, vast } from "./kader";
 import { InschrijfKaart } from "./inschrijf-kaart";
@@ -53,7 +53,9 @@ export function GratisPagina({ taal }: { taal: Taal }) {
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
     setHerkomst({ bron: schoon(p.get("bron"), 40) || "direct", reel: schoon(p.get("reel"), 12).toUpperCase() });
-    setOpen(heeftToegang());
+    const toegang = heeftToegang();
+    setOpen(toegang);
+    if (toegang) setVoornaam(bewaardeVoornaam());
   }, []);
 
   const meta = { bron: herkomst.bron, reel: herkomst.reel, plek: PLEK, taal };
