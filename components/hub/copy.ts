@@ -160,7 +160,8 @@ export const HUB = {
     },
     verstuur: "Boek een conversatie",
     bezig: "Versturen…",
-    privacy: "We gebruiken je gegevens alleen om je te contacteren.",
+    // Eerlijk over de PAPI (25/11): elke lead wordt voorbereid met openbare info en AI-tools.
+    privacy: "We gebruiken je gegevens om je te contacteren en om het gesprek voor te bereiden. Daarvoor bekijken we openbare info over je bedrijf, ook met AI-tools.",
     privacyLink: "Privacyverklaring",
     fout: "Het versturen lukte niet. Probeer het opnieuw of mail ons op {email}.",
     // Na het versturen (Amina en Alex 25/11): eerst een apart venster met een klein feestje,

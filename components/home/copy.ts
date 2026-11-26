@@ -463,7 +463,8 @@ export const VRAAG = {
   bedankt: "Bedankt, je bericht is aangekomen.",
   bedanktSub: "Je krijgt meestal binnen 24 uur antwoord.",
   fout: "Het versturen lukte niet. Probeer het opnieuw of mail ons op {email}.",
-  privacy: "We gebruiken je gegevens alleen om te antwoorden.",
+  // Eerlijk over de PAPI (25/11): elke aanvraag wordt voorbereid met openbare info en AI-tools.
+  privacy: "We gebruiken je gegevens om te antwoorden. Om dat goed voor te bereiden, bekijken we openbare info over je bedrijf, ook met AI-tools.",
 };
 
 // De band onderaan de homepage, boven de footer, naar /vacatures. Nieuw 29/10 (Alex).

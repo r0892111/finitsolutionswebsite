@@ -425,6 +425,12 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
           <p className="mt-4 text-center text-sm text-[#475D8F]/60 font-instrument">
             Binnen 30 minuten weet je wat de mogelijkheden met AI zijn.
           </p>
+          <p className="mt-2 text-center text-xs text-[#475D8F]/60 font-instrument">
+            We gebruiken je gegevens om je te contacteren en om het gesprek voor te bereiden, ook met AI-tools.{" "}
+            <a href="/privacy/" className="underline hover:text-[#1A2D63]">
+              Privacyverklaring
+            </a>
+          </p>
         </div>
       </div>
 

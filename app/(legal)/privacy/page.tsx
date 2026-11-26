@@ -37,7 +37,7 @@ export default function PrivacyPage() {
               transition={{ duration: 0.5, delay: 0.15 }}
               className="mb-8 text-[#6C7590]"
             >
-              Versie: <strong>18/08/2025</strong> — Website:{" "}
+              Versie: <strong>26/11/2026</strong> — Website:{" "}
               <a href="https://finitsolutions.be/" target="_blank" rel="noopener noreferrer" className="underline">
                 https://finitsolutions.be/
               </a>
@@ -203,6 +203,27 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                         Voor de duur van behandeling van uw vraag of bericht en onze daaropvolgende samenwerking.
                       </td>
                     </tr>
+                    {/* Nieuw 25/11/2026: de automatische voorbereiding van een aanvraag (de PAPI). Te laten nalezen door de advocaat. */}
+                    <tr className="border-t">
+                      <td className="p-3 align-top">
+                        Identificatie- en contactgegevens en uw antwoorden uit een formulier op de website; Openbare
+                        gegevens over uw bedrijf
+                      </td>
+                      <td className="p-3 align-top">
+                        Om ons eerste contact met u voor te bereiden. Na uw aanvraag zoeken we automatisch openbare
+                        informatie op over uw bedrijf (de Kruispuntbank van Ondernemingen, de jaarrekeningen bij de
+                        Nationale Bank van België, uw website, vacatures en artikels) en vatten we die samen voor de
+                        medewerker die u contacteert. Daarvoor gebruiken we ook AI-tools. Ontvangers en doorgifte buiten
+                        de EER: zie punt 14 en 15.
+                      </td>
+                      <td className="p-3 align-top">
+                        Gerechtvaardigd belang van Finit Solutions om goed voorbereid met u in gesprek te gaan. U kan zich
+                        hiertegen altijd verzetten (zie het recht van bezwaar in punt 9).
+                      </td>
+                      <td className="p-3 align-top">
+                        Voor de duur van behandeling van uw aanvraag en onze eventuele samenwerking.
+                      </td>
+                    </tr>
                     <tr className="border-t">
                       <td className="p-3 align-top">E-mailadres</td>
                       <td className="p-3 align-top">
@@ -274,6 +295,21 @@ Gerechtvaardigd belang van Finit Solutions om zich met een vlot functionerende w
                 het formulier op de hub, dan sturen we samen met uw aanvraag mee tot hoever u de video in dat bezoek bekeek
                 en via welk kanaal u kwam. Dat kanaal onthoudt de pagina alleen zolang uw tabblad open is. Uw aanvraag
                 komt terecht in onze mailbox en in ons eigen klantenbeheersysteem, waar we ze opvolgen.
+              </p>
+              <p className="mt-4">
+                Geeft u in de cookiebanner toestemming voor statistieken, dan meten we met Google Analytics (Google Ireland
+                Ltd.) hoe de website gebruikt wordt. Geeft u toestemming voor marketing, dan meten we met de Meta-pixel (Meta
+                Platforms Ireland Ltd.) en Google Ads welke advertenties op Facebook, Instagram en Google tot een bezoek of een
+                aanvraag leiden. Verstuurt u in dat geval een formulier, dan geeft onze server die aanvraag ook rechtstreeks
+                door aan Meta: uw e-mailadres en telefoonnummer in versleutelde vorm (een zogenaamde hash), uw IP-adres, het
+                soort browser en de Meta-cookies. Zo telt Meta dezelfde aanvraag niet dubbel en zien we welke advertenties
+                werken. Zonder uw toestemming voor marketing gebeurt dit niet. U kunt uw keuze op elk moment wijzigen via de
+                link &quot;Cookie-instellingen&quot; onderaan elke pagina.
+              </p>
+              <p className="mt-4">
+                Laat u op de website uw e-mailadres achter om onze gratis prompts te openen, dan bewaren we het in Brevo
+                (Sendinblue SAS, Frankrijk), ons mailprogramma, samen met het kanaal waarlangs u kwam. Mails met AI-nieuws en
+                tips sturen we alleen als u daarvoor het vakje aanvinkte. Afmelden kan onderaan elke mail.
               </p>
 
               {/* 8. Leadinfo */}
@@ -433,8 +469,11 @@ Verder geven wij geen persoonsgegevens door aan derden, tenzij wij hiertoe verpl
 In het bijzonder identificeren we volgende categorieën van ontvangers:
 Overheden of regulerende instanties wanneer zij hierom verzoeken in het kader van de naleving van een vonnis of arrest, wetgeving, regulering, norm of juridische procedure;
 Externe (IT)-dienstverleners die ons ondersteunen bij het aanbieden van functionaliteiten op de website en het uitvoeren van onze bedrijfsactiviteiten;
+Aanbieders van automatiserings- en AI-diensten die ons helpen een aanvraag via de website voor te bereiden: GitHub (Microsoft) voert de automatische opzoeking uit, Anthropic (Claude) vat de informatie samen en Firecrawl haalt de openbare pagina's van uw website op;
 Externe juridische en financiële adviseurs en consultants in het kader van hun dienstverlening;
 Marketing- en communicatiepartners die ons bijstaan bij het opzetten en uitvoeren van campagnes, nieuwsbrieven en andere communicatie-initiatieven;
+Advertentie- en analyseplatformen, alleen met uw toestemming via de cookiebanner: Meta (Facebook, Instagram) en Google (zie punt 7);
+Ons mailprogramma Brevo, voor wie zijn e-mailadres achterlaat (zie punt 7);
 Financiële instellingen en betalingsdienstverleners voor de afhandeling van transacties.
               </p>
 
@@ -446,6 +485,16 @@ Financiële instellingen en betalingsdienstverleners voor de afhandeling van tra
                 We geven uw persoonsgegevens uitsluitend door aan verwerkers of verwerkingsverantwoordelijken in derde landen, voor zover we hiertoe wettelijk gerechtigd zijn of indien dit noodzakelijk is om een dossier te behandelen.
 Voor zover dergelijke doorgiften nodig zijn, nemen wij de nodige maatregelen om ervoor te zorgen dat uw persoonsgegevens in hoge mate worden beschermd en dat alle doorgiften van persoonsgegevens buiten de EER rechtmatig plaatsvinden.
 
+              </p>
+              <p>
+                Wanneer we een aanvraag via een formulier op de website voorbereiden (zie punt 5), worden uw gegevens ook
+                verwerkt door dienstverleners in de Verenigde Staten: GitHub (Microsoft), Anthropic en Firecrawl. Die
+                doorgifte gebeurt op basis van de passende waarborgen uit de AVG, zoals het EU-VS-gegevensprivacykader of de
+                standaardcontractbepalingen van de Europese Commissie.
+              </p>
+              <p className="mt-4">
+                Meta en Google (zie punt 7) kunnen gegevens ook in de Verenigde Staten verwerken, eveneens op basis van het
+                EU-VS-gegevensprivacykader of de standaardcontractbepalingen.
               </p>
 
               {/* 16. Beveiliging */}
