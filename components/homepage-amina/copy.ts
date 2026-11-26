@@ -150,8 +150,32 @@ export interface Copy {
     };
   };
   overOns: { metaTitel: string; metaBeschrijving: string };
-  /** De pagina "Gratis materiaal" (vraag van Amina, 26/11). De teksten op de pagina zelf zijn die van de hub. */
-  gratis: { nav: string; metaTitel: string; videoKnop: string };
+  /**
+   * De pagina "Gratis materiaal" (vraag van Amina, 26/11). Sinds 26/11 (Alex) eerst een
+   * inschrijfscherm zoals bij een nieuwsbrief, in de stijl van de hub; na het inschrijven de
+   * BREIN-prompt apart bovenaan en daaronder alle andere prompts en gidsen.
+   */
+  gratis: {
+    nav: string;
+    metaTitel: string;
+    videoKnop: string;
+    /** Het eerste scherm. Kop in drie stukken: het middelste krijgt het accent, zoals op de hub. */
+    kop: { voor: string; accent: string; na: string };
+    sub: string;
+    kaart: {
+      titel: string;
+      tekst: string;
+      voornaam: string;
+      voornaamHint: string;
+      email: string;
+      knop: string;
+    };
+    /** Wat je krijgt, onder de kaart. */
+    krijg: string[];
+    /** Na het inschrijven. {naam} wordt ", Jan" (of niets als we de voornaam niet kennen). */
+    open: { titel: string; intro: string; rest: string };
+    brein: { label: string; titel: string; tekst: string; knop: string; pdf: string; cover: string };
+  };
   footer: {
     /** De link naar de video op /hub. Alleen in het Nederlands: de hub is nog niet vertaald. */
     video?: string;

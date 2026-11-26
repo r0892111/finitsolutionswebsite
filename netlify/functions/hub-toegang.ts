@@ -7,7 +7,8 @@
  * - nieuw adres: contact aanmaken met UTM_SOURCE (kanaal, ?bron=), UTM_MEDIUM
  *   "hub" of "gratis-materiaal" (de aparte pagina met de gratis prompts, sinds
  *   26/11: die bezoekers zijn koudere leads en krijgen later een eigen mailreeks),
- *   UTM_CONTENT (de post, ?reel=) en OPT_IN (mails aangevinkt of niet);
+ *   UTM_CONTENT (de post, ?reel=), OPT_IN (mails aangevinkt of niet) en FIRSTNAME als de
+ *   bezoeker zijn voornaam gaf (optioneel veld op Gratis materiaal, sinds 26/11);
  * - bestaand adres: niets overschrijven, alleen OPT_IN aanzetten als hij nu
  *   wel mails wil;
  * - mails aangevinkt en BREVO_HUB_LIJST_ID ingesteld: ook op die lijst.
@@ -58,6 +59,8 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase().slice(0, 200) : "";
   if (!EMAIL_RE.test(email)) return json(400, { error: "invalid_email" });
+  // Voornaam: optioneel. Enkel letters, spaties, koppel- en weglatingstekens; de rest gaat eruit.
+  const voornaam = typeof body.voornaam === "string" ? body.voornaam.replace(/<[^>]*>/g, "").replace(/[^\p{L}\p{M}' -]/gu, "").replace(/\s+/g, " ").trim().slice(0, 60) : "";
   const mails = body.mails === true;
   const bron = schoon(body.bron, 40) || "direct";
   const reel = schoon(body.reel, 12).toUpperCase();
@@ -80,7 +83,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
       headers,
       body: JSON.stringify({
         email,
-        attributes: { UTM_SOURCE: bron, UTM_MEDIUM: medium, ...(reel ? { UTM_CONTENT: reel } : {}), OPT_IN: mails },
+        attributes: { UTM_SOURCE: bron, UTM_MEDIUM: medium, ...(reel ? { UTM_CONTENT: reel } : {}), ...(voornaam ? { FIRSTNAME: voornaam } : {}), OPT_IN: mails },
         ...(lijsten ? { listIds: lijsten } : {}),
       }),
     });
@@ -115,7 +118,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
     await naarTuesday(
       TUESDAY.socials,
       {
-        name: email,
+        name: voornaam ? `${voornaam} (${email})` : email,
         group_id: MAILINGLIJST_GROEP,
         values: {
           email,

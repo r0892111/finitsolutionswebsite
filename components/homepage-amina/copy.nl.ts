@@ -351,6 +351,34 @@ export const NL: Copy = {
     nav: "Gratis materiaal",
     metaTitel: "Gratis prompts en gidsen | Finit Solutions",
     videoKnop: "Bekijk de video",
+    kop: { voor: "De prompts uit mijn video's,", accent: "gratis", na: "op één plek" },
+    sub: "Laat je e-mailadres achter en alles gaat meteen open. Ook de BREIN-prompt.",
+    kaart: {
+      titel: "Krijg nu gratis toegang tot de BREIN-prompt",
+      tekst: "Plus alle andere prompts en gidsen uit mijn video's. Vul je e-mailadres in en alles gaat meteen open.",
+      voornaam: "Voornaam",
+      voornaamHint: "Je voornaam",
+      email: "E-mailadres",
+      knop: "Geef me de gratis prompts",
+    },
+    krijg: [
+      "De BREIN-prompt: AI leert hoe jouw bedrijf werkt",
+      "Alle prompts en gidsen uit mijn video's, de nieuwste bovenaan",
+      "Op dit toestel blijft alles daarna open",
+    ],
+    open: {
+      titel: "Alles staat open{naam}.",
+      intro: "Begin met de BREIN-prompt. Daaronder vind je alle andere prompts en gidsen.",
+      rest: "Alle andere prompts en gidsen",
+    },
+    brein: {
+      label: "BREIN-prompt",
+      titel: "Leer AI hoe jouw bedrijf werkt",
+      tekst: "Plak de prompt in Claude of ChatGPT en beantwoord de vragen. Je krijgt een set bestanden over je bedrijf: het brein waarmee AI daarna weet hoe jij werkt.",
+      knop: "Open de BREIN-prompt",
+      pdf: "https://drive.google.com/file/d/1q0XLe-yXxwqzWdsietBWXAs-895JVWYi/view",
+      cover: "/gratis/brein-prompt-nl.jpg",
+    },
   },
 
   footer: {

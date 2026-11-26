@@ -37,21 +37,23 @@ const SOORT_KLEUR: Record<string, string> = {
  * `plek`: waar de sectie staat. "hub" (standaard) of "gratis-materiaal" (de aparte pagina met de
  * gratis prompts): gaat mee met het analytics-event en met de aanmelding, zodat de twee groepen
  * later apart te volgen zijn.
+ * `slot`: false = altijd open, zonder e-mailslot (Gratis materiaal heeft sinds 26/11 een eigen
+ * inschrijfscherm en toont deze lijst pas daarna).
  */
-export function ResourceSectie({ reel, meta, plek = "hub" }: { reel: string; meta: Record<string, string>; plek?: string }) {
+export function ResourceSectie({ reel, meta, plek = "hub", slot = true }: { reel: string; meta: Record<string, string>; plek?: string; slot?: boolean }) {
   const H = useHub();
   const R = H.resources;
   const S = H.slot;
   const [resources, setResources] = useState<Resource[]>(() => voegSamen(LOKAAL));
   const [filter, setFilter] = useState("");
   // null = nog niet gekeken (eerste render op de server): dan niets tonen dat flitst.
-  const [open, setOpen] = useState<boolean | null>(null);
+  const [open, setOpen] = useState<boolean | null>(slot ? null : true);
 
   useEffect(() => {
     const toegang = heeftToegang();
-    setOpen(toegang);
+    if (slot) setOpen(toegang);
     if (toegang) void bijBezoek();
-  }, []);
+  }, [slot]);
 
   useEffect(() => {
     if (!RESOURCES_URL) return;
