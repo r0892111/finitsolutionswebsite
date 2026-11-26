@@ -81,6 +81,7 @@ Alex zette op 25/11 een aantal dingen recht die in haar document nog anders staa
 | FAQ, subkop | "So ask the hard questions." | "Dit zijn de twijfels die we het vaakst horen." | |
 | FAQ, ChatGPT | "your prices, your exceptions or your tone" | "je werkprocedures, regels en uitzonderingen" | Dat zegt meer; onthouden voor alle copy. |
 | Voor wie | haar twee lijsten met slotzin | de kaarten van de hub, woordelijk, zonder slotzin | Zelfde tekst als op de pagina met de video. |
+| Sectie 7, kop | weg sinds 26/11 (stond er als "You're about to hand over how your company runs.") | blijft staan: "Je gaat ons toevertrouwen hoe je bedrijf draait.", ook als titel van Over ons | Keuze van Alex, 26/11. Staat nog niet in de tab voor Amina. |
 | Slot, kop | "just a first conversation" (NL was "gesprek") | "gewoon een eerste conversatie" | De naam van de knop. |
 | Overal | "Plan a free start call", "half an hour" | "Boek een conversatie", een uur | Zie regel 4. |
 
