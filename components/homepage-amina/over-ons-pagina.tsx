@@ -21,7 +21,7 @@ export function OverOnsPagina({ taal }: { taal: Taal }) {
       <Kop taal={taal} thuis={false} taalPaden={OVER_ONS} actief="over-ons" />
       <main id="inhoud">
         <section className="bg-white">
-          <div className={`${CONTAINER} pb-14 pt-12 sm:pb-20 sm:pt-16`}>
+          <div className={`${CONTAINER} pb-14 pt-28 sm:pb-20 sm:pt-32`}>
             <div className="hp-rise mx-auto max-w-[48rem] text-center">
               <h1 className="hp-display text-[2.2rem] font-bold leading-[1.05] text-[#1A2D63] sm:text-[2.8rem] lg:text-[3.2rem]">
                 <Streep tekst={t.team.h2} accent />

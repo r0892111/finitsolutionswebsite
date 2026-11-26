@@ -16,6 +16,8 @@
  * Tekst aanpassen = alleen copy.nl.ts en copy.en.ts. De pagina volgt vanzelf.
  */
 
+import type { BreinPagina } from "@/components/home/copy";
+
 export type Taal = "nl" | "en";
 
 export interface Getuigenis {
@@ -47,6 +49,13 @@ export interface Copy {
     punten: string[];
     ondersteund: string;
   };
+  /**
+   * De breinvisualisatie rechts in de hero en de foto eronder, zoals op de vorige homepage
+   * (Alex, 26/11: terug naar hoe het was, met de nieuwe copy). Niet uit de copy van Amina.
+   * `labels` en `info` zijn alleen nodig voor het Engels; het Nederlands staat in components/home/copy.ts.
+   */
+  brein3d: { aria: string; labels?: Record<string, string>; info?: Record<string, BreinPagina> };
+  foto: { statement: string; alt: string };
   herken: {
     kicker: string;
     h2: string;

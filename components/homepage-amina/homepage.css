@@ -28,13 +28,29 @@
 }
 .nh-skip:focus { top: 16px; }
 
-/* Navigatie: wit en licht doorschijnend, zoals op de live site na het scrollen. */
+/* Navigatie zoals op de vorige homepage: vast bovenaan, doorzichtig zolang je bovenaan staat,
+   wit en wazig zodra je scrolt of het menu opent; de balk en het logo worden dan iets kleiner. */
 .nh-nav {
-  position: sticky; top: 0; z-index: 40;
-  background: rgba(255, 255, 255, 0.92);
-  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(26, 45, 99, 0.1);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+  background: transparent; border-bottom: 1px solid transparent;
+  transition: background-color 300ms ease, border-color 300ms ease;
 }
+.nh-nav[data-vast="true"] {
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  border-bottom-color: rgba(26, 45, 99, 0.1);
+}
+.nh-nav-rij { height: 68px; transition: height 300ms ease; }
+.nh-nav-logo { height: 28px; transition: height 300ms ease; }
+@media (min-width: 1024px) {
+  .nh-nav-rij { height: 84px; }
+  .nh-nav-logo { height: 38px; }
+  .nh-nav[data-vast="true"] .nh-nav-rij { height: 68px; }
+  .nh-nav[data-vast="true"] .nh-nav-logo { height: 28px; }
+}
+@media (prefers-reduced-motion: reduce) { .nh-nav, .nh-nav-rij, .nh-nav-logo { transition: none; } }
+/* De teamfoto onder de hero: iets lichter, met de gezichten in beeld (zoals op de vorige homepage). */
+.nh-teamfoto { filter: brightness(1.3) contrast(1.03); object-position: center 42%; }
 .nh-nav-link { font-size: 0.9375rem; font-weight: 500; color: rgba(26, 45, 99, 0.8); transition: color 160ms ease; }
 .nh-nav-link:hover, .nh-nav-link[aria-current="page"] { color: #1a2d63; }
 .nh-nav-link:focus-visible, .nh-taal a:focus-visible { outline: 2px solid #1a2d63; outline-offset: 4px; border-radius: 6px; }
