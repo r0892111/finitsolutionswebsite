@@ -125,6 +125,12 @@ export const NL: Copy = {
         tekst: "We bouwen wat je nodig hebt, van een eenvoudige automatisering tot een team van AI-werknemers of software volledig op maat. Alles begint in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. We blijven erbij om het draaiende te houden.",
       },
     ],
+    // Niet van Amina: Alex vroeg haar op 26/11 om hier naar de video te verwijzen, zij vond het een goed idee.
+    video: {
+      titel: "Liever eerst zien hoe het werkt?",
+      tekst: "In een korte video legt Alex uit wat een company brain is en hoe we samen te werk gaan.",
+      knop: "Bekijk de uitleg",
+    },
     knop: "Boek een conversatie",
   },
 
@@ -339,6 +345,40 @@ export const NL: Copy = {
   overOns: {
     metaTitel: "Over ons | Finit Solutions",
     metaBeschrijving: "De drie oprichters van Finit Solutions: Alex Otten, Karel Van Ransbeeck en Jord Goossens. Achter elke AI-werknemer staat een mens die je kan bellen.",
+  },
+
+  gratis: {
+    nav: "Gratis materiaal",
+    metaTitel: "Gratis prompts en gidsen | Finit Solutions",
+    videoKnop: "Bekijk de video",
+    kop: { voor: "De prompts uit mijn video's,", accent: "gratis", na: "op één plek" },
+    sub: "Laat je e-mailadres achter en alles gaat meteen open. Ook de BREIN-prompt.",
+    kaart: {
+      titel: "Krijg nu gratis toegang tot de BREIN-prompt",
+      tekst: "Plus alle andere prompts en gidsen uit mijn video's. Vul je e-mailadres in en alles gaat meteen open.",
+      voornaam: "Voornaam",
+      voornaamHint: "Je voornaam",
+      email: "E-mailadres",
+      knop: "Geef me de gratis prompts",
+    },
+    krijg: [
+      "De BREIN-prompt: AI leert hoe jouw bedrijf werkt",
+      "Alle prompts en gidsen uit mijn video's, de nieuwste bovenaan",
+      "Op dit toestel blijft alles daarna open",
+    ],
+    open: {
+      titel: "Succes ermee{naam}!",
+      intro: "Begin met de BREIN-prompt. Daaronder vind je alle andere prompts en gidsen.",
+      rest: "Alle andere prompts en gidsen",
+    },
+    brein: {
+      label: "BREIN-prompt",
+      titel: "Leer AI hoe jouw bedrijf werkt",
+      tekst: "Plak de prompt in Claude of ChatGPT en beantwoord de vragen. Je krijgt een set bestanden over je bedrijf: het brein waarmee AI daarna weet hoe jij werkt.",
+      knop: "Open de BREIN-prompt",
+      pdf: "https://drive.google.com/file/d/1q0XLe-yXxwqzWdsietBWXAs-895JVWYi/view",
+      cover: "/gratis/brein-prompt-nl.jpg",
+    },
   },
 
   footer: {

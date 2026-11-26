@@ -22,8 +22,10 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, ChevronDown, ChevronRight, Plus, X } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, ChevronRight, Play, Plus, X } from "lucide-react";
 import { Brein3D } from "@/components/home/brein-3d";
+import { VSL } from "@/components/hub/video";
+import { pushEvent } from "@/lib/analytics";
 import { AANPAK_FOTO } from "@/components/home/copy";
 import { CONTAINER, H2, H3, KOP, LEAD, Onder, Vinkje } from "@/components/home/ui";
 import type { Taal } from "./copy";
@@ -305,6 +307,28 @@ export function HomePagina({ taal }: { taal: Taal }) {
                 </li>
               ))}
             </ol>
+            {/* De uitlegvideo op /hub/ (Alex en Amina 26/11): wie eerst wil kijken, vindt ze hier. */}
+            <a
+              href={taal === "en" ? "/hub/en/" : "/hub/"}
+              onClick={() => pushEvent("nav_click", { doel: "hub", location: "werkwijze", taal })}
+              className="hp-card group mt-4 grid overflow-hidden sm:mt-5 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:items-center"
+            >
+              <span className="relative block aspect-[16/9] bg-[#1A2D63]">
+                <Image src={VSL.affiche} alt="" fill sizes="(min-width: 640px) 420px, 100vw" className="object-cover" />
+                <span className="absolute inset-0 bg-[#1A2D63]/20 transition-colors group-hover:bg-[#1A2D63]/10" aria-hidden="true" />
+                <span className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#1A2D63] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.45)] transition-transform group-hover:scale-105" aria-hidden="true">
+                  <Play className="h-5 w-5 translate-x-0.5" fill="currentColor" />
+                </span>
+              </span>
+              <span className="block p-6 sm:p-7">
+                <span className={`block ${H3}`}>{t.werkwijze.video.titel}</span>
+                <span className={`mt-2 block ${TEKST}`}>{vast(t.werkwijze.video.tekst)}</span>
+                <span className="mt-4 inline-flex items-center gap-1.5 font-semibold text-[#1A2D63] underline decoration-[#1A2D63]/30 underline-offset-4 transition group-hover:decoration-[#1A2D63]">
+                  {t.werkwijze.video.knop}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                </span>
+              </span>
+            </a>
             <div className="mt-10 flex justify-center">
               <Hoofdknop location="werkwijze" label={t.werkwijze.knop} className="w-full sm:w-auto" />
             </div>

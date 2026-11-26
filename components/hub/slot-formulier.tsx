@@ -47,7 +47,7 @@ export function SlotFormulier({
     e.preventDefault();
     setBezig(true);
     setFout(false);
-    const uitkomst = await vraagToegang({ email: email.trim(), mails, bron, reel, website: honing });
+    const uitkomst = await vraagToegang({ email: email.trim(), mails, bron, reel, plek: meta.plek, website: honing });
     setBezig(false);
     if (uitkomst === "ongeldig") {
       setFout(true);

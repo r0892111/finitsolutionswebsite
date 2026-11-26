@@ -5,7 +5,10 @@
  * Brevo, waar we ook mailen (en waar afmelden al geregeld is):
  *
  * - nieuw adres: contact aanmaken met UTM_SOURCE (kanaal, ?bron=), UTM_MEDIUM
- *   "hub", UTM_CONTENT (de post, ?reel=) en OPT_IN (mails aangevinkt of niet);
+ *   "hub" of "gratis-materiaal" (de aparte pagina met de gratis prompts, sinds
+ *   26/11: die bezoekers zijn koudere leads en krijgen later een eigen mailreeks),
+ *   UTM_CONTENT (de post, ?reel=), OPT_IN (mails aangevinkt of niet) en FIRSTNAME als de
+ *   bezoeker zijn voornaam gaf (optioneel veld op Gratis materiaal, sinds 26/11);
  * - bestaand adres: niets overschrijven, alleen OPT_IN aanzetten als hij nu
  *   wel mails wil;
  * - mails aangevinkt en BREVO_HUB_LIJST_ID ingesteld: ook op die lijst.
@@ -56,9 +59,13 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase().slice(0, 200) : "";
   if (!EMAIL_RE.test(email)) return json(400, { error: "invalid_email" });
+  // Voornaam: optioneel. Enkel letters, spaties, koppel- en weglatingstekens; de rest gaat eruit.
+  const voornaam = typeof body.voornaam === "string" ? body.voornaam.replace(/<[^>]*>/g, "").replace(/[^\p{L}\p{M}' -]/gu, "").replace(/\s+/g, " ").trim().slice(0, 60) : "";
   const mails = body.mails === true;
   const bron = schoon(body.bron, 40) || "direct";
   const reel = schoon(body.reel, 12).toUpperCase();
+  // Alleen de aparte pagina krijgt een eigen waarde; al de rest (hub, promptpagina's) blijft "hub".
+  const medium = schoon(body.plek, 40) === "gratis-materiaal" ? "gratis-materiaal" : "hub";
 
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) {
@@ -76,7 +83,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
       headers,
       body: JSON.stringify({
         email,
-        attributes: { UTM_SOURCE: bron, UTM_MEDIUM: "hub", ...(reel ? { UTM_CONTENT: reel } : {}), OPT_IN: mails },
+        attributes: { UTM_SOURCE: bron, UTM_MEDIUM: medium, ...(reel ? { UTM_CONTENT: reel } : {}), ...(voornaam ? { FIRSTNAME: voornaam } : {}), OPT_IN: mails },
         ...(lijsten ? { listIds: lijsten } : {}),
       }),
     });
@@ -111,13 +118,13 @@ export const handler: Handler = async (event: HandlerEvent) => {
     await naarTuesday(
       TUESDAY.socials,
       {
-        name: email,
+        name: voornaam ? `${voornaam} (${email})` : email,
         group_id: MAILINGLIJST_GROEP,
         values: {
           email,
           bron: kanaalLabel(bron),
           ...(reel ? { reel } : {}),
-          message: `Opende de gratis prompts op de hub. Mails: ${mails ? "ja" : "nee"}.`,
+          message: `Opende de gratis prompts (${medium === "gratis-materiaal" ? "pagina Gratis materiaal" : "hub"}). Mails: ${mails ? "ja" : "nee"}.`,
         },
       },
       "hub-toegang",
@@ -125,6 +132,6 @@ export const handler: Handler = async (event: HandlerEvent) => {
   }
 
   // Bewijs van toestemming, zonder het adres zelf in de logs.
-  console.log(JSON.stringify({ hub_toegang: true, mails, tekst: TEKSTVERSIE, bron, reel, ts: new Date().toISOString() }));
+  console.log(JSON.stringify({ hub_toegang: true, mails, tekst: TEKSTVERSIE, bron, reel, plek: medium, ts: new Date().toISOString() }));
   return json(200, { ok: true });
 };

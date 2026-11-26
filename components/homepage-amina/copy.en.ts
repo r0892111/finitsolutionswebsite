@@ -146,6 +146,11 @@ export const EN: Copy = {
         tekst: "We build what you need, from a simple automation to a team of AI agents or fully custom software. Everything starts in review mode: the AI prepares, a person approves. We stay on to keep it running.",
       },
     ],
+    video: {
+      titel: "Prefer to see how it works first?",
+      tekst: "In a short video, Alex explains what a company brain is and how we work together.",
+      knop: "Watch the explanation",
+    },
     knop: "Book a conversation",
   },
 
@@ -358,6 +363,40 @@ export const EN: Copy = {
   overOns: {
     metaTitel: "About us | Finit Solutions",
     metaBeschrijving: "The three founders of Finit Solutions: Alex Otten, Karel Van Ransbeeck and Jord Goossens. Behind every AI employee, there's a person you can call.",
+  },
+
+  gratis: {
+    nav: "Free resources",
+    metaTitel: "Free prompts and guides | Finit Solutions",
+    videoKnop: "Watch the video",
+    kop: { voor: "The prompts from my videos,", accent: "free", na: "in one place" },
+    sub: "Leave your email address and everything opens right away. Including the BRAIN prompt.",
+    kaart: {
+      titel: "Get free access to the BRAIN prompt now",
+      tekst: "Plus every other prompt and guide from my videos. Enter your email address and everything opens right away.",
+      voornaam: "First name",
+      voornaamHint: "Your first name",
+      email: "Email address",
+      knop: "Give me the free prompts",
+    },
+    krijg: [
+      "The BRAIN prompt: AI learns how your business works",
+      "Every prompt and guide from my videos, newest first",
+      "Everything stays open on this device afterwards",
+    ],
+    open: {
+      titel: "Good luck with it{naam}!",
+      intro: "Start with the BRAIN prompt. Below it you'll find every other prompt and guide.",
+      rest: "Every other prompt and guide",
+    },
+    brein: {
+      label: "BRAIN prompt",
+      titel: "Teach AI how your business works",
+      tekst: "Paste the prompt into Claude or ChatGPT and answer the questions. You get a set of files about your business: the brain that tells AI how you work.",
+      knop: "Open the BRAIN prompt",
+      pdf: "https://drive.google.com/file/d/1SnTDiIzvSevTNbbSpPg9T4OQPtMeuMsS/view",
+      cover: "/gratis/brein-prompt-en.jpg",
+    },
   },
 
   footer: {

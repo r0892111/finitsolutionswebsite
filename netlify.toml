@@ -12,6 +12,20 @@
   # Node.js version
   NODE_VERSION = "18"
 
+# Korte link voor de prompt-pdf's en video's (Alex 26/11): finitsolutions.be/gratis.
+[[redirects]]
+  from = "/gratis"
+  to = "/gratis-materiaal/"
+  status = 301
+
+# Sinds 26/11 staan de gratis prompts op een eigen pagina (Amina en Alex): oude links gaan daarheen.
+# force: de oude pagina bestaat nog in de export (als vangnet stuurt ze zelf ook door).
+[[redirects]]
+  from = "/hub/resources/*"
+  to = "/gratis-materiaal/"
+  status = 301
+  force = true
+
 # Shopify mandatory GDPR compliance webhooks → Netlify Functions
 # De algemene voorwaarden staan op de offertes, niet meer op de site (23/09/2026).
 [[redirects]]
