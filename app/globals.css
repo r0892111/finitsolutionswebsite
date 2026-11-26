@@ -1021,6 +1021,17 @@ html {
 .hub-faq-plus[data-open="true"] { transform: rotate(45deg); }
 .hub-faq-vraag { cursor: pointer; }
 .hub-faq-vraag:focus-visible { outline: 2px solid #1A2D63; outline-offset: 4px; border-radius: 12px; }
+/* Variant `kaart` (Amina 26/11): de vragen in één witte kaart met dunne lijnen, in de letter
+   en maten van de vragen op de homepage (home-pagina.tsx, sectie 9). */
+.hub-faq-kaart { max-width: 54rem; margin: var(--hub-r4) auto 0; padding-inline: 24px; }
+.hub-faq-kaart .hub-faq-vraag { font-size: 1.0625rem; line-height: 1.375; padding-block: 20px; gap: 24px; }
+.hub-faq-kaart .hub-faq-plus { width: 24px; height: 24px; margin-top: 2px; }
+.hub-faq-kaart .hub-faq-plus svg { width: 12px; height: 12px; }
+.hub-faq-kaart .hub-faq-antwoord { font-size: 1rem; line-height: 1.6; padding: 0 32px 24px 0; margin-top: 0; }
+@media (min-width: 640px) {
+  .hub-faq-kaart { padding-inline: 32px; }
+  .hub-faq-kaart .hub-faq-antwoord { padding-right: 48px; }
+}
 @media (prefers-reduced-motion: reduce) {
   .hub-faq-paneel, .hub-faq-paneel .hub-faq-antwoord, .hub-faq-plus { transition: none; }
 }

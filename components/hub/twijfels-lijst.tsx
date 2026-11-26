@@ -9,6 +9,9 @@
  * Met `zichtbaar` staan er eerst maar zoveel vragen; de knop eronder ("Toon nog X
  * vragen", tekst in `meer`) toont de rest, en de focus gaat naar de eerste nieuwe
  * vraag (Alex 25/11, hub). Zonder `zichtbaar` staan ze er allemaal, zoals op /cursus/.
+ *
+ * Met `kaart` staan de vragen in één witte kaart met dunne lijnen ertussen, in de letter
+ * en stijl van de vragen op de homepage (Amina 26/11, hub).
  */
 
 import { useEffect, useId, useRef, useState } from "react";
@@ -18,10 +21,12 @@ export function TwijfelsLijst({
   lijst,
   zichtbaar,
   meer = "Toon nog {aantal} vragen",
+  kaart = false,
 }: {
   lijst: ReadonlyArray<{ vraag: string; antwoord: string }>;
   zichtbaar?: number;
   meer?: string;
+  kaart?: boolean;
 }) {
   const id = useId();
   const [open, setOpen] = useState<number | null>(null);
@@ -37,11 +42,14 @@ export function TwijfelsLijst({
 
   return (
     <>
-    <div className="hub-faq-lijst">
+    <div className={kaart ? "hp-card hub-faq-kaart" : "hub-faq-lijst"}>
       {lijst.slice(0, grens).map((t, i) => {
         const isOpen = open === i;
         return (
-          <div key={t.vraag} className="hub-faq border border-[#E3E7EF] bg-white shadow-[0_1px_2px_rgba(26,45,99,0.04)]">
+          <div
+            key={t.vraag}
+            className={kaart ? (i > 0 ? "border-t border-[#E3E7EF]" : undefined) : "hub-faq border border-[#E3E7EF] bg-white shadow-[0_1px_2px_rgba(26,45,99,0.04)]"}
+          >
             <h3>
               <button
                 type="button"
@@ -50,7 +58,7 @@ export function TwijfelsLijst({
                 aria-expanded={isOpen}
                 aria-controls={`${id}-p${i}`}
                 onClick={() => setOpen(isOpen ? null : i)}
-                className="hub-faq-vraag flex w-full items-start justify-between text-left font-semibold text-[#1A2D63]"
+                className={`hub-faq-vraag flex w-full items-start justify-between text-left text-[#1A2D63] ${kaart ? "font-medium" : "font-semibold"}`}
               >
                 <span>{t.vraag}</span>
                 <span className="hub-faq-plus flex shrink-0 items-center justify-center rounded-full bg-[#E6ECF9] text-[#1A2D63]" data-open={isOpen} aria-hidden="true">

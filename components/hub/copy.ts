@@ -39,7 +39,7 @@ export const HUB = {
   // Een woord tussen ** ** wordt vet (klemtoon op "bedrijf").
   sub: [
     "Je werkprocedures, regels, uitzonderingen, …",
-    "We schrijven het in één week",
+    "We schrijven het in **ÉÉN WEEK**",
     "allemaal uit, en dat verandert wat AI",
     "voor je **bedrijf** kan doen.",
   ],
@@ -184,13 +184,11 @@ export const HUB = {
 
   // De twijfels die Alex in de video beantwoordt. Ze gaan uit de video en staan hier.
   // De veelgestelde vragen van de nieuwe homepage (copy van Amina, branch homepage-amina),
-  // op de hub sinds 25/11 (Alex). De eerste `zichtbaar` staan er meteen; de rest komt na
-  // de knop "Toon nog X vragen". "Na een halfuur" werd "na een uur": het gesprek duurt 60 minuten.
+  // op de hub sinds 25/11 (Alex). Sinds 26/11 allemaal zichtbaar, in de stijl van de homepage
+  // (Amina). "Na een halfuur" werd "na een uur": het gesprek duurt 60 minuten.
   twijfels: {
     titel: { voor: "Voor je een conversatie boekt, wil je waarschijnlijk", accent: "eerlijke antwoorden." },
     intro: "Je hebt AI al de mist zien ingaan. Dit zijn de vragen die we het vaakst horen.",
-    zichtbaar: 5,
-    meer: "Toon nog {aantal} vragen",
     lijst: [
       {
         vraag: "Wat kost het?",

@@ -33,7 +33,7 @@ export const HUB_EN: HubTekst = {
 
   kop: { voor: "The first", accent: "company brain", na: "builders in Belgium" },
   haak: "This video isn't really about AI. It's about what's in your head.",
-  sub: ["Your procedures, rules, exceptions, …", "We write it all down in one week,", "and that changes what AI", "can do for your **business**."],
+  sub: ["Your procedures, rules, exceptions, …", "We write it all down in **ONE WEEK**,", "and that changes what AI", "can do for your **business**."],
   naarVideo: "Watch it, then decide if it's for you.",
 
   naarWebsite: { vraag: "Still unsure?", tekst: "Read how we work", href: "/en/#aanpak" },
@@ -153,8 +153,6 @@ export const HUB_EN: HubTekst = {
   twijfels: {
     titel: { voor: "Before you book a conversation, you probably want", accent: "straight answers." },
     intro: "You've seen AI get it wrong. These are the questions we hear most.",
-    zichtbaar: 5,
-    meer: "Show {aantal} more questions",
     lijst: [
       {
         vraag: "What does it cost?",
