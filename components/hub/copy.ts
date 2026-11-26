@@ -21,7 +21,8 @@ export const HUB = {
     "Alle prompts en gidsen uit de video's en posts van Finit op één plek. Laat je e-mailadres achter en open ze meteen.",
 
   // De taalknop rechtsboven (NL | EN, Alex 25/11) en het logo, voor schermlezers.
-  taal: { label: "Kies je taal", logo: "Finit Solutions, naar de homepage" },
+  // home = waar het logo en de footer naartoe gaan (de homepage in dezelfde taal).
+  taal: { label: "Kies je taal", logo: "Finit Solutions, naar de homepage", home: "/" },
 
   // De smalle strook helemaal bovenaan, naar de resources onderaan.
   strook: { tekst: "Gratis prompts en gidsen?", link: "Hier vind je ze" },
