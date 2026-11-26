@@ -125,6 +125,12 @@ export const NL: Copy = {
         tekst: "We bouwen wat je nodig hebt, van een eenvoudige automatisering tot een team van AI-werknemers of software volledig op maat. Alles begint in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. We blijven erbij om het draaiende te houden.",
       },
     ],
+    // Niet van Amina: Alex vroeg haar op 26/11 om hier naar de video te verwijzen, zij vond het een goed idee.
+    video: {
+      titel: "Liever eerst zien hoe het werkt?",
+      tekst: "In een korte video legt Alex uit wat een company brain is en hoe we samen te werk gaan.",
+      knop: "Bekijk de uitleg",
+    },
     knop: "Boek een conversatie",
   },
 

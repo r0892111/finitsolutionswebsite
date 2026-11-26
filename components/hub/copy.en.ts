@@ -42,7 +42,7 @@ export const HUB_EN: HubTekst = {
 
   onderVideo: ["We plan new projects month by month.", "Want to be included next month?"],
   knop: "Book a conversation",
-  knopNoot: "60 minutes, free. Afterwards we tell you honestly whether we can help.",
+  knopNoot: "One hour, no strings attached. Afterwards you know where AI saves time in your business.",
 
   speler: {
     label: "Video: how AI works the way your company works",

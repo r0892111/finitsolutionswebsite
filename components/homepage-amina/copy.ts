@@ -80,6 +80,8 @@ export interface Copy {
     /** Het woord voor het pilletje op elke kaart: "Stap 1", "Stap 2". */
     stap: string;
     stappen: { titel: string; tekst: string }[];
+    /** Verwijzing naar de uitlegvideo op /hub/, onder de stappen (Alex en Amina, 26/11). */
+    video: { titel: string; tekst: string; knop: string };
     knop: string;
   };
   waarom: {

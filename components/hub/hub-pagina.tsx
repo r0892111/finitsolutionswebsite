@@ -6,15 +6,16 @@
  * (docs/hub-analyse-shadowboys.md), in onze eigen huisstijl. Eén keuze: de
  * video bekijken en het formulier invullen. Van boven naar onder:
  *
- * 1. een smalle strook naar de gratis resources onderaan;
+ * 1. een smalle strook naar de pagina Gratis materiaal (/gratis-materiaal/);
  * 2. kop, haak, lopende tekst, een zin naar de video, de video, één zin onder
  *    de video, de knop;
  * 3. het formulier, vraag per vraag (vlak onder de video, zoals bij hen);
  * 4. voor wie het wel en niet is, twee kaarten naast elkaar;
- * 5. de veelgestelde vragen (allemaal zichtbaar, in de stijl van de homepage);
- * 6. de gratis prompts en gidsen, achter een e-mailslot.
+ * 5. de veelgestelde vragen (allemaal zichtbaar, in de stijl van de homepage).
  *
- * /hub/resources/ toont dezelfde pagina en springt meteen naar 6.
+ * De gratis prompts en gidsen staan sinds 26/11 op een eigen pagina, Gratis materiaal (Amina en
+ * Alex 26/11: de hub is voor wie de video bekijkt, ook het verkeer van de advertenties). Oude
+ * links (/hub/resources/, /hub/#resources, /hub/en/#resources) gaan daarheen, met ?bron= en ?reel=.
  *
  * Herkomst: ?bron=tiktok (kanaal) en ?reel=C03 (post) gaan mee naar het
  * formulier ("Pagina" in de mail en op monday), naar Brevo bij het e-mailslot
@@ -30,7 +31,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { ArrowDown, ArrowRight, Check, X } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import lokaleLijst from "@/content/resources.json";
 import { Onder } from "@/components/home/ui";
 import { TwijfelsLijst } from "./twijfels-lijst";
@@ -39,7 +40,6 @@ import { leesLijst } from "@/lib/resources";
 import { HUB, vast, vetStukken } from "./copy";
 import { HUB_EN } from "./copy.en";
 import { HubTekstContext } from "./taal";
-import { ResourceSectie } from "./resource-sectie";
 import { StapFormulier } from "./stap-formulier";
 import { VSL, VSL_EN } from "./video";
 import { VslSpeler } from "./vsl-speler";
@@ -106,8 +106,12 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
   const T = taal === "en" ? HUB_EN : HUB;
   const [herkomst, setHerkomst] = useState<Herkomst>({ bron: "direct", reel: "", pad: "/hub/" });
 
-  // Herkomst uit de URL, één keer bij het openen. Op /hub/resources/ meteen naar de resources.
+  // Herkomst uit de URL, één keer bij het openen. Oude links naar de resources gaan naar Gratis materiaal.
   useEffect(() => {
+    if (start === "resources" || window.location.hash === "#resources") {
+      window.location.replace(`${taal === "en" ? "/en/free-resources/" : "/gratis-materiaal/"}${window.location.search}`);
+      return;
+    }
     const p = new URLSearchParams(window.location.search);
     const uitUrl = { bron: schoon(p.get("bron"), 40), reel: schoon(p.get("reel"), 12).toUpperCase() };
     let eerste: { bron: string; reel: string } | null = null;
@@ -130,8 +134,7 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
     pushEvent("hub_view", { bron: h.bron, ...(h.reel ? { reel: h.reel } : {}) });
     // Oude ankers van vóór 20/11 (#karel, #laten, #keuze) gaan naar het formulier.
     const hash = window.location.hash;
-    const doel =
-      start === "resources" || hash === "#resources" ? "resources" : ["#gesprek", "#karel", "#laten", "#keuze"].includes(hash) ? "gesprek" : "";
+    const doel = ["#gesprek", "#karel", "#laten", "#keuze"].includes(hash) ? "gesprek" : "";
     if (!doel) return;
     // De browser zet de pagina na het laden terug op de oude plek (scroll restoration).
     // Daarom: dat uitzetten, meteen springen (niet zacht) en het een paar keer nakijken.
@@ -149,7 +152,7 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
     };
     timers.push(window.setTimeout(() => spring(1), 0));
     return () => timers.forEach((t) => window.clearTimeout(t));
-  }, [start]);
+  }, [start, taal]);
 
   const meta = useMemo(
     () => ({ bron: herkomst.bron, ...(herkomst.reel ? { reel: herkomst.reel } : {}), ...(taal === "en" ? { taal } : {}) }),
@@ -159,17 +162,6 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
   // Komt als "Pagina" in de mail en op monday, zodat we zien waar de lead vandaan komt.
   const formBron = `https://finitsolutions.be${herkomst.pad}${zoek}`;
   const strook = herkomst.reel && REELS.has(herkomst.reel) ? T.strookUitPost : T.strook;
-
-  const naarResources = useCallback(
-    (e: React.MouseEvent) => {
-      // Alleen scrollen. De adresbalk aanpassen (history.replaceState) laat Next.js
-      // het scrollen onderbreken; /hub/resources/ is er voor links van buitenaf.
-      e.preventDefault();
-      document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      pushEvent("hub_menu", { ...meta, doel: "resources" });
-    },
-    [meta]
-  );
 
   const naarFormulier = useCallback(
     (via: string) => {
@@ -193,17 +185,17 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
   return (
     <HubTekstContext.Provider value={T}>
     <main lang={taal} className="hub-ritme hp-stippen min-h-screen bg-white text-[#3D4766]">
-      {/* 1. De strook naar de gratis resources */}
+      {/* 1. De strook naar de pagina Gratis materiaal */}
       <a
-        href={taal === "en" ? "/hub/en/#resources" : "/hub/resources/"}
-        onClick={naarResources}
+        href={`${taal === "en" ? "/en/free-resources/" : "/gratis-materiaal/"}${zoek}`}
+        onClick={() => pushEvent("hub_menu", { ...meta, doel: "gratis-materiaal" })}
         className="group flex items-center justify-center gap-x-1.5 bg-[#1A2D63] px-4 py-2.5 text-center text-[0.875rem] leading-[1.4] text-white/90 sm:text-[0.9375rem]"
       >
         <span>
           {strook.tekst}{" "}
           <span className="whitespace-nowrap font-semibold text-white underline decoration-white/40 underline-offset-4 transition group-hover:decoration-white">
             {strook.link}
-            <ArrowDown className="ml-1 inline h-3.5 w-3.5 align-[-0.125em] transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
+            <ArrowRight className="ml-1 inline h-3.5 w-3.5 align-[-0.125em] transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
           </span>
         </span>
       </a>
@@ -346,17 +338,6 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
               <ArrowRight aria-hidden="true" />
             </button>
           </div>
-        </div>
-      </section>
-
-      {/* 6. De gratis resources, achter een e-mailslot */}
-      <section id="resources" className="scroll-mt-4 py-[var(--hub-r5)]">
-        <div className="mx-auto w-full max-w-[56rem] px-4 sm:px-8">
-          <h2 className={KOP}>
-            {T.resources.titel.voor} <Onder>{T.resources.titel.accent}</Onder>
-          </h2>
-          <p className={INTRO}>{zinnen(T.resources.intro)}</p>
-          <ResourceSectie reel={herkomst.reel} meta={meta} />
         </div>
       </section>
 

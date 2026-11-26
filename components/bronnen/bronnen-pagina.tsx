@@ -30,7 +30,7 @@ export function BronnenPagina() {
     <main className="min-h-screen bg-white text-[#3D4766]">
       <header className="bg-[#1A2D63] px-4 pb-12 pt-10 text-white sm:px-8">
         <div className="mx-auto max-w-[720px]">
-          <Link href="/hub/#resources" className="mb-8 inline-flex items-center gap-1.5 text-sm text-white/75 hover:text-white">
+          <Link href="/gratis-materiaal/" className="mb-8 inline-flex items-center gap-1.5 text-sm text-white/75 hover:text-white">
             <ArrowLeft className="h-4 w-4" aria-hidden /> {BRONNEN.terug}
           </Link>
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#FBE286]">{BRONNEN.label}</p>

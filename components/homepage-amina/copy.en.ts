@@ -146,6 +146,11 @@ export const EN: Copy = {
         tekst: "We build what you need, from a simple automation to a team of AI agents or fully custom software. Everything starts in review mode: the AI prepares, a person approves. We stay on to keep it running.",
       },
     ],
+    video: {
+      titel: "Prefer to see how it works first?",
+      tekst: "In a short video, Alex explains what a company brain is and how we work together.",
+      knop: "Watch the explanation",
+    },
     knop: "Book a conversation",
   },
 

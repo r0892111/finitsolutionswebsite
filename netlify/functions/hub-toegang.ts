@@ -121,7 +121,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
           email,
           bron: kanaalLabel(bron),
           ...(reel ? { reel } : {}),
-          message: `Opende de gratis prompts op de hub. Mails: ${mails ? "ja" : "nee"}.`,
+          message: `Opende de gratis prompts (${medium === "gratis-materiaal" ? "pagina Gratis materiaal" : "hub"}). Mails: ${mails ? "ja" : "nee"}.`,
         },
       },
       "hub-toegang",
