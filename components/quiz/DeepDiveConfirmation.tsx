@@ -62,7 +62,7 @@ export function DeepDiveConfirmation({ onRestart }: DeepDiveConfirmationProps) {
               className="bg-blue-600 hover:bg-blue-700"
               size="lg"
             >
-              Plan een gesprek in
+              Boek een conversatie
             </Button>
           </div>
         </div>

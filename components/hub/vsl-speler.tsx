@@ -67,17 +67,19 @@ function bewaarPositie(sleutel: string, sec: number) {
   }
 }
 // Ondertitels aan of uit: de keuze van de kijker, los van de video.
+// De Engelse hub (ondertitels standaard aan) onthoudt haar keuze apart.
 const CC_SLEUTEL = "finit_hub_vsl_ondertitels";
-function leesOndertitelsAan(): boolean {
+function leesOndertitelsAan(sleutel: string, standaard: boolean): boolean {
   try {
-    return window.localStorage.getItem(CC_SLEUTEL) === "1";
+    const keuze = window.localStorage.getItem(sleutel);
+    return keuze === null ? standaard : keuze === "1";
   } catch {
-    return false;
+    return standaard;
   }
 }
-function bewaarOndertitelsAan(aan: boolean) {
+function bewaarOndertitelsAan(sleutel: string, aan: boolean) {
   try {
-    window.localStorage.setItem(CC_SLEUTEL, aan ? "1" : "0");
+    window.localStorage.setItem(sleutel, aan ? "1" : "0");
   } catch {
     /* geblokkeerd: dan geldt de keuze alleen voor dit bezoek */
   }
@@ -182,8 +184,10 @@ export function VslSpeler({
   // Op volledig scherm verdwijnen de knoppen na 3 s spelen; een tik toont ze weer.
   const [bediening, setBediening] = useState(true);
 
-  // Ondertitels: standaard uit, tenzij de kijker ze eerder aanzette.
-  useEffect(() => setCc(leesOndertitelsAan()), []);
+  // Ondertitels: standaard uit (op de Engelse hub aan), tenzij de kijker eerder anders koos.
+  const ccStandaard = video.ondertitelsStandaard === true;
+  const ccSleutel = ccStandaard ? `${CC_SLEUTEL}_en` : CC_SLEUTEL;
+  useEffect(() => setCc(leesOndertitelsAan(ccSleutel, ccStandaard)), [ccSleutel, ccStandaard]);
 
   // Terugkomer? Dan de vraag in plaats van de afspeelknop.
   useEffect(() => {
@@ -519,9 +523,9 @@ export function VslSpeler({
   const wisselOndertitels = useCallback(() => {
     const aan = !cc;
     setCc(aan);
-    bewaarOndertitelsAan(aan);
+    bewaarOndertitelsAan(ccSleutel, aan);
     pushEvent("vsl_ondertitels", { ...metaRef.current, stand: aan ? "aan" : "uit" });
-  }, [cc]);
+  }, [cc, ccSleutel]);
 
   // Ondertitels: de regel die nu gezegd wordt, per beeldje bijgewerkt.
   useEffect(() => {

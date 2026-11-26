@@ -16,3 +16,11 @@ export function telefoonOk(s: string): boolean {
   const cijfers = t.replace(/\D/g, "").length;
   return cijfers >= 9 && cijfers <= 15;
 }
+
+/**
+ * Een website is goed als er een echte domeinnaam in staat: "jouwbedrijf.be",
+ * "www.jouwbedrijf.be" en "https://jouwbedrijf.be/contact" mogen allemaal.
+ * Verplicht op elk formulier behalve dat van de gratis resources (Alex, 25/11).
+ * Eén controle voor de hele site (browser en server): die van lib/cursus-aanvraag.ts.
+ */
+export { websiteOk } from "./cursus-aanvraag";

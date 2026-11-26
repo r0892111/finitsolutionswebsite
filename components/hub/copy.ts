@@ -15,25 +15,58 @@
 export const HUB = {
   metaTitel: "Laat AI werken zoals jouw bedrijf werkt",
   metaBeschrijving:
-    "Voor zaakvoerders/management van kmo's. Bekijk de video van Alex van Finit en plan een vrijblijvend gesprek. Plus gratis prompts en gidsen uit onze video's.",
+    "Voor zaakvoerders/management van kmo's. Bekijk de video van Alex van Finit en boek een conversatie. Plus gratis prompts en gidsen uit onze video's.",
   metaTitelResources: "Gratis prompts en gidsen",
   metaBeschrijvingResources:
     "Alle prompts en gidsen uit de video's en posts van Finit op één plek. Laat je e-mailadres achter en open ze meteen.",
+
+  // De taalknop rechtsboven (NL | EN, Alex 25/11) en het logo, voor schermlezers.
+  // home = waar het logo en de footer naartoe gaan (de homepage in dezelfde taal).
+  taal: { label: "Kies je taal", logo: "Finit Solutions, naar de homepage", home: "/" },
 
   // De smalle strook helemaal bovenaan, naar de resources onderaan.
   strook: { tekst: "Gratis prompts en gidsen?", link: "Hier vind je ze" },
   // Dezelfde strook als iemand via ?reel=C03 komt en er een resource bij die post hoort.
   strookUitPost: { tekst: "De prompts uit de post?", link: "Hier vind je ze" },
 
-  // Hero: badge (voor wie), kop met één woordgroep in accentkleur, subzin.
-  badge: "Voor zaakvoerders/management van kmo's",
-  kop: { voor: "Laat AI werken zoals", accent: "jouw bedrijf werkt" },
-  sub: "In één week schrijven we uit hoe jouw bedrijf draait. Daarna neemt AI het manuele werk over. Gebaseerd op meer dan 25 analysetrajecten.",
+  // Hero (Alex 25/11, op basis van Amina's tab "for VSL page"): de grootste zin is de kop,
+  // met "company brain" als accent (vaste spatie: blijft samen op één regel). Daaronder de
+  // haak, de lopende tekst in twee regels en een losse zin die naar de video leidt.
+  kop: { voor: "De eerste", accent: "company\u00A0brain", na: "bouwers in België" },
+  haak: "Deze video gaat niet echt over AI, hij gaat over wat er in je hoofd zit.",
+  // Elk stuk is één regel op gsm ("we schrijven het in één week / allemaal uit…", Alex 25/11);
+  // op desktop lopen ze door als één alinea in twee ongeveer even lange regels.
+  // Een woord tussen ** ** wordt vet (klemtoon op "bedrijf").
+  sub: [
+    "Je werkprocedures, regels, uitzonderingen, …",
+    "We schrijven het in één week",
+    "allemaal uit, en dat verandert wat AI",
+    "voor je **bedrijf** kan doen.",
+  ],
+  // Alleen op desktop: op gsm maakte die extra zin de hero te druk (Alex 25/11).
+  naarVideo: "Bekijk deze video om te weten of het iets voor jou is.",
 
-  // Twee pillen onder de video: de twee bezwaren die het vaakst terugkomen.
-  pillen: ["Geen technische kennis nodig", "Enkele uren van jouw tijd"],
-  knop: "Plan een vrijblijvend gesprek",
-  knopNoot: "Vul dit formulier in om een gesprek in te plannen. Duurt 60 seconden.",
+  // Onder het formulier (Alex 25/11): voor wie nog twijfelt, naar de aanpak op de homepage.
+  // De nieuwe homepage (tak homepage-amina) noemt die sectie "werkwijze": pas het anker
+  // aan zodra die live gaat.
+  naarWebsite: { vraag: "Twijfel je nog?", tekst: "Lees hier hoe we te werk gaan", href: "/#aanpak" },
+
+  // Vlak onder de video (Alex 25/11): wie ons steunt, met hun logo's uit /public.
+  steun: {
+    label: "Ondersteund door",
+    logos: [
+      { id: "vlaio", src: "/VLAIO_sponsorlogo-antraciet.png", alt: "VLAIO", breed: 911, hoog: 355 },
+      { id: "kbc", src: "/SI @KBC Black (2).png", alt: "Start it @KBC", breed: 700, hoog: 142 },
+      { id: "elevenlabs", src: "/elevenlabs-grants.webp", alt: "ElevenLabs Grants", breed: 1496, hoog: 132 },
+    ],
+  },
+
+  // Eén zin onder de video, boven de knop.
+  // Twee zinnen, elk op een eigen regel (op gsm mag een zin zelf nog afbreken).
+  onderVideo: ["Nieuwe projecten plannen we maandelijks in.", "Wil je er volgende maand bij zijn?"],
+  // De knop voor een gesprek heet overal op de site zo (Alex 25/11).
+  knop: "Boek een conversatie",
+  knopNoot: "60 minuten, gratis. Erna zeggen we je eerlijk of we je kunnen helpen.",
 
   // De speler.
   speler: {
@@ -45,7 +78,7 @@ export const HUB = {
     verderKnop: "Verder kijken",
     opnieuwKnop: "Opnieuw beginnen",
     eindeVraag: "Herken je je bedrijf hierin?",
-    eindeKnop: "Plan een vrijblijvend gesprek",
+    eindeKnop: "Boek een conversatie",
     eindeOpnieuw: "Bekijk opnieuw",
     fout: "De video laadt niet. Herlaad de pagina of probeer het later opnieuw.",
     kwaliteit: "Kwaliteit van de video",
@@ -59,10 +92,10 @@ export const HUB = {
   // Het formulier, vraag per vraag. Verzendt via het bestaande contactformulier
   // (/api/contact-submit); de antwoorden op de keuzevragen gaan mee in het bericht.
   formulier: {
-    titel: "Plan een vrijblijvend gesprek",
+    titel: "Boek een conversatie",
     // Boven de eerste vraag: wat er gebeurt. Je kiest zelf geen moment in een agenda;
     // na de laatste vraag nemen wij contact op om er samen een te kiezen.
-    uitleg: "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter, en dan plannen we samen een moment in.",
+    uitleg: "Eerst vijf korte vragen. Bij de laatste laat je je gegevens achter, en dan nemen we binnen de 24 uur contact met je op.",
     terug: "Terug",
     volgende: "Volgende",
     stapVan: "Vraag {nu} van {totaal}",
@@ -114,7 +147,6 @@ export const HUB = {
       telefoon: "Telefoonnummer",
       website: "Website van je bedrijf",
       websiteHint: "jouwbedrijf.be",
-      optioneel: "(optioneel)",
     },
     // Meldingen bij de velden als er iets ontbreekt of niet klopt (naam, e-mail en telefoon zijn verplicht).
     meldingen: {
@@ -123,14 +155,26 @@ export const HUB = {
       email: "Dit e-mailadres klopt niet. Kijk het even na.",
       telefoonLeeg: "Vul je telefoonnummer in.",
       telefoon: "Dit telefoonnummer klopt niet. Bijvoorbeeld 0470 12 34 56 of +32 470 12 34 56.",
+      websiteLeeg: "Vul de website van je bedrijf in.",
+      website: "Deze website klopt niet. Bijvoorbeeld jouwbedrijf.be.",
     },
-    verstuur: "Vraag het gesprek aan",
+    verstuur: "Boek een conversatie",
     bezig: "Versturen…",
     privacy: "We gebruiken je gegevens alleen om je te contacteren.",
     privacyLink: "Privacyverklaring",
     fout: "Het versturen lukte niet. Probeer het opnieuw of mail ons op {email}.",
-    bedankt: "Bedankt{naam}. We nemen contact met je op om een eerste gesprek in te plannen.",
-    bedanktSub: "Kunnen we je niet helpen, dan zeggen we dat ook eerlijk.",
+    // Na het versturen (Amina en Alex 25/11): eerst een apart venster met een klein feestje,
+    // daarachter blijft deze korte bevestiging staan op de plaats van het formulier.
+    bedankt: "Bedankt{naam}. We nemen binnen de 24 uur contact met je op om je conversatie in te plannen.",
+    venster: {
+      titel: "Bedankt{naam}, je aanvraag is binnen.",
+      sub: "We nemen binnen de 24 uur contact met je op om je conversatie in te plannen.",
+      urgentie: "Nieuwe projecten plannen we maandelijks in. Hou je telefoon bij de hand: hoe sneller we spreken, hoe groter de kans dat je er volgende maand al bij bent.",
+      meer: "Lees hoe we te werk gaan",
+      meerHref: "/#aanpak",
+      terug: "Terug naar de pagina",
+      sluiten: "Sluiten",
+    },
     // Kop boven de antwoorden in de mail en op monday.
     berichtKop: "Antwoorden uit het formulier op de hub:",
     // Gaat mee in het bericht naar contact@, monday en Tuesday (uit de kijkmeting van dit bezoek).
@@ -139,43 +183,111 @@ export const HUB = {
   },
 
   // De twijfels die Alex in de video beantwoordt. Ze gaan uit de video en staan hier.
+  // De veelgestelde vragen van de nieuwe homepage (copy van Amina, branch homepage-amina),
+  // op de hub sinds 25/11 (Alex). De eerste `zichtbaar` staan er meteen; de rest komt na
+  // de knop "Toon nog X vragen". "Na een halfuur" werd "na een uur": het gesprek duurt 60 minuten.
   twijfels: {
-    titel: { voor: "Twijfels die we", accent: "vaak horen" },
-    intro: "Logisch dat je nog twijfelt. Dit zijn de vragen die we het vaakst krijgen.",
+    titel: { voor: "Voor je een conversatie boekt, wil je waarschijnlijk", accent: "eerlijke antwoorden." },
+    intro: "Je hebt AI al de mist zien ingaan. Dit zijn de vragen die we het vaakst horen.",
+    zichtbaar: 5,
+    meer: "Toon nog {aantal} vragen",
     lijst: [
       {
-        vraag: "Ik heb AI al dingen zien verzinnen.",
+        vraag: "Wat kost het?",
         antwoord:
-          "Een company brain helpt daar al veel bij. En we beginnen altijd met een controlestap: alles wat AI naar een klant stuurt, kijkt eerst een mens na. Stap voor stap krijgt AI meer vrijheid, naargelang jullie ermee comfortabel zijn.",
+          "Elk onderdeel krijgt een eigen offerte. Zo zie je de kost voor je beslist, en laat je weg wat je niet nodig hebt. We brengen eerst in kaart wat je huidige manier van werken je kost, en daarna wat wij zouden veranderen. Het eerste gesprek is gratis, en dat geldt voor elk gesprek tot je iets tekent.",
       },
       {
-        vraag: "Ik wil niet dat AI met mijn klanten praat.",
-        antwoord: "Helemaal oké, die keuze ligt bij jullie. Wij zetten alles klaar, jij verstuurt.",
-      },
-      {
-        vraag: "Ik heb al software en wil die houden.",
+        vraag: "Kan AI dit echt? Ik heb het al dingen zien verzinnen.",
         antwoord:
-          "Wij bouwen bovenop jouw software. We koppelen wat nodig is en laten het manuele werk erin grotendeels verdwijnen.",
+          "Wij ook, en een company brain lost dat probleem al grotendeels op. Maar voor de zekerheid begint alles in conceptmodus: AI bereidt het werk voor, een mens keurt het goed. Twijfelgevallen gaan naar een mens, en wat AI zelf mag doen, breiden we alleen stap voor stap uit. We tonen je eerst een demo, want het zelf zien is beter dan het geloven.",
       },
       {
-        vraag: "En wat met mijn gegevens?",
+        vraag: "We gebruiken ChatGPT al. Waarom hebben we dit dan nodig?",
         antwoord:
-          "Die staan afgeschermd. We volgen de globale standaarden voor cybersecurity en werken altijd met NDA's en verwerkersovereenkomsten.",
+          "Omdat het gebruiken en er iets uit halen twee verschillende dingen zijn. ChatGPT kent uit zichzelf je prijzen, je uitzonderingen en je stijl niet. Wij vragen altijd wat er vandaag echt automatisch loopt. Meestal is het antwoord: niets. Een brein geeft ChatGPT die kennis. Zo krijg je dezelfde tool, met een heel ander resultaat.",
       },
       {
-        vraag: "Wat als er een beter model uitkomt?",
+        vraag: "Is dit over twee maanden niet alweer verouderd?",
         antwoord:
-          "Dan heb je geluk. Een company brain is gewoon een map met tekstbestanden. Die steek je in eender welk model.",
+          "Het brein is gewone tekst, en het is van jou. Elk model kan het lezen, vandaag en later. Komt er een beter model uit, dan sluit je dat gewoon aan. Je zit niet vast aan één tool.",
       },
       {
-        vraag: "Mijn team heeft hier schrik van.",
-        antwoord: "Wij praten nooit over mensen ontslaan. Wel over groeien zonder extra mensen aan te werven.",
+        vraag: "Het is een drukke periode. Kan dit wachten?",
+        antwoord:
+          "Dat kan. Maar AI negeren kost je misschien meer dan er iets aan doen. Een drukke periode is meestal net het teken dat je het het hardst nodig hebt. Wij beginnen liever voor de druk nog groter wordt.",
       },
       {
-        vraag: "Ik ben niet technisch en heb geen tijd.",
-        antwoord: "Dat hoeft ook niet. We hebben enkele uren van jou nodig en één dag met je medewerkers.",
+        vraag: "Wat met mijn medewerkers?",
+        antwoord:
+          "Wij praten over groeien zonder dat je evenveel extra mensen moet aanwerven, nooit over mensen ontslaan. We interviewen je team tijdens de breinweek, zodat hun kennis mee in het brein zit, en we leiden hen ter plaatse op.",
+      },
+      {
+        vraag: "Wat met mijn gegevens?",
+        antwoord:
+          "Bij elk project horen een geheimhoudingsovereenkomst (NDA) en een verwerkersovereenkomst, en meestal komt er ook een serviceovereenkomst bij. Alles wordt in Europa gehost, en je gegevens blijven gescheiden van die van andere klanten. De AI-verwerking door Anthropic loopt via de Verenigde Staten, en daar kunnen we niet omheen. Daarom staat elke subverwerker in onze verwerkersovereenkomst.",
+      },
+      {
+        vraag: "Gaat AI met mijn klanten praten?",
+        antwoord:
+          "Alleen als jij dat wil. Standaard bereidt AI het werk voor en verstuur jij. Alleen kleine, standaard dingen vertrekken automatisch. Een belangrijke offerte mag nooit de deur uit zonder dat er een mens naar gekeken heeft.",
+      },
+      {
+        vraag: "We hebben al software die werkt. Moeten we die vervangen?",
+        antwoord:
+          "Nee. We bouwen bovenop wat je hebt en koppelen het aan elkaar. We stellen alleen voor om iets te vervangen als dat echt zinvol is, en dan leggen we uit waarom.",
+      },
+      {
+        vraag: "Ik ben niet technisch.",
+        antwoord:
+          "Dat hoeft ook niet. Je hoeft alleen over je bedrijf te vertellen.",
+      },
+      {
+        vraag: "We zijn hier te klein voor.",
+        antwoord:
+          "Misschien. Is er geen echte nood, dan zeggen we je dat eerlijk, in plaats van je iets te verkopen. Na een uur weet je het.",
+      },
+      {
+        vraag: "Ik heb hier geen tijd voor.",
+        antwoord:
+          "We vragen twee uur van jou en één dag met je team. De rest van de breinweek is voor ons.",
+      },
+      {
+        vraag: "Kan ik een bedrijf zoals jullie vertrouwen?",
+        antwoord:
+          "Je systemen draaien zelfstandig, en de overdracht staat in het contract. Vraag ons gerust naar referenties tijdens het gesprek.",
+      },
+      {
+        vraag: "Wat als Finit stopt?",
+        antwoord:
+          "Je systemen blijven draaien. Mochten we ooit stoppen, dan laten we je dat ruim op voorhand weten en starten we een overdracht: alle toegangen, de hosting en de abonnementen gaan naar jou of naar een IT-partner van jouw keuze, zonder kosten.",
       },
     ],
+  },
+
+  // Voor wie wel en niet (Alex 25/11), boven de vragen; tekst van de nieuwe homepage, met
+  // Alex' aanpassingen van 25/11 (geen intro en geen slotzin, twee punten herschreven).
+  // Elk punt maakt de zin "Dit is (niet) voor jou als …" af: dus "als je … bent".
+  voorWie: {
+    titel: { voor: "We zeggen je liever nee dan", accent: "je tijd te verspillen." },
+    wel: {
+      titel: "Dit is voor jou als:",
+      items: [
+        "Je zaakvoerder bent of in het management van een kmo zit.",
+        "Je wil groeien zonder extra mankracht te hoeven aanwerven.",
+        "Je team tijd verliest aan mails, offertes, planning en het invullen van het CRM.",
+        "Er te veel afhangt van jou of van één sleutelpersoon.",
+        "Je wil beginnen delegeren aan AI, met een gerust hart.",
+      ],
+    },
+    niet: {
+      titel: "Dit is niet voor jou als:",
+      items: [
+        "Je een knop wil die alles vanzelf doet. Die bestaat niet.",
+        "Je een snelle oplossing wil zonder dat het jou of je team tijd kost.",
+        "Er vandaag geen echte pijn is. In dat geval zeggen we je dat eerlijk.",
+      ],
+    },
   },
 
   // De gratis resources onderaan, achter een e-mailadres.
@@ -193,6 +305,9 @@ export const HUB = {
       bronnen: "Bekijk de bronnen",
       standaard: "Bekijken",
     } as Record<string, string>,
+    // Namen van de soorten (Gids, Prompts, …): leeg = die uit lib/resources.ts. De Engelse hub vult ze in.
+    soort: {} as Record<string, string>,
+    soortMeervoud: {} as Record<string, string>,
   },
 
   // Het slot op de resources. Eerlijk zeggen wat je krijgt en wat we met je adres doen.
@@ -219,6 +334,21 @@ export const HUB = {
 
   footer: { vacatures: "Vacatures", privacy: "Privacy" },
 };
+
+/** De vorm van alle hubteksten; de Engelse versie (./copy.en.ts) volgt die. */
+export type HubTekst = typeof HUB;
+
+/**
+ * Geen los woordje op een nieuwe regel (Alex 25/11, "houd hier rekening mee, ook in de
+ * toekomst"): in elke zin blijft het laatste woord met een vaste spatie aan het vorige
+ * vast, dus nooit "maandelijks" / "in." of een eenzaam woord op de laatste regel.
+ */
+export function vast(tekst: string): string {
+  return tekst
+    .split(/(?<=[.?!…:])\s+/)
+    .map((zin) => zin.replace(/ (?=\S+$)/, "\u00A0"))
+    .join(" ");
+}
 
 /** "Wat is je **rol**?" → stukken tekst met een vlag voor vet. */
 export function vetStukken(zin: string): Array<{ tekst: string; vet: boolean }> {

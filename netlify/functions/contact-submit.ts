@@ -9,7 +9,8 @@
  * Deze functie stuurt de inzending als mail via de Brevo API en geeft een
  * echte HTTP-status terug, zodat een storing meteen zichtbaar is.
  *
- * Twee formulieren komen hier binnen: de popup "Plan een kennismaking"
+ * Formulieren die hier binnenkomen: het formulier op de homepage (`bron` eindigt op
+ * #startgesprek: naam, e-mail, telefoon en website verplicht), de popup "Plan een kennismaking"
  * (naam, e-mail, telefoon) en het korte vraagformulier op de contactkaart
  * (naam, e-mail, telefoon, website van het bedrijf, bericht). Het onderscheid
  * zit in het veld `bericht`. Het vraagformulier maakt alles verplicht in de
@@ -186,6 +187,14 @@ export default async (req: Request, context: Context): Promise<Response> => {
   if (vanHub && !telefoonOk(telefoon)) return json(400, { error: "invalid_telefoon" });
   // De website is op de hub (nog) optioneel: een onzinwaarde gaat niet naar Tuesday.
   if (vanHub && bedrijfswebsite && !websiteOk(bedrijfswebsite)) bedrijfswebsite = "";
+
+  // Het formulier op de nieuwe homepage (/#startgesprek en /en/#startgesprek): naam, telefoon en
+  // website verplicht (Alex, 25/11: vier verplichte velden op elk formulier, behalve dat van de
+  // gratis resources). Dezelfde controles als in de browser.
+  const isStart = /^https:\/\/finitsolutions\.be\/(en\/)?#startgesprek$/.test(bron);
+  if (isStart && naam.length < 2) return json(400, { error: "missing_naam" });
+  if (isStart && !telefoonOk(telefoon)) return json(400, { error: "invalid_telefoon" });
+  if (isStart && !websiteOk(bedrijfswebsite)) return json(400, { error: "invalid_website" });
 
   // Bots, vreemde sites, dubbels en een vloed stoppen hier (zie lib/formulier-wacht.ts).
   const stop = await wacht(req, context.ip, body, "contact-submit");
