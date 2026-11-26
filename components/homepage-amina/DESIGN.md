@@ -4,9 +4,9 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 
 ## De regels van Alex (25/11)
 
-1. **De huisstijl van de live site.** Na twee rondes met een eigen, strakker ontwerp zei Alex: terug naar de oude stijl, maar zonder de tekeningetjes. Dat is het `hp-`blok in `app/globals.css` met de bouwstenen uit `components/home/ui.tsx`. Deze pagina hoort er dus uit te zien als de rest van de site (`/cases`, `/contact`, `/hub`).
+1. **De huisstijl en de opbouw van de vorige homepage.** Na twee rondes met een eigen, strakker ontwerp zei Alex op 25/11: terug naar de oude stijl. Op 26/11 ging hij verder: "terug meer naar de styling van hoe het was, met de foto van Finit maakt kmo's klaar voor het AI-tijdperk met die link naar Y Combinator, en rechts op de hero de breinvisualisatie", met de nieuwe copy. De pagina volgt dus de vorige homepage (`components/home/home-page.tsx`, niet meer in gebruik maar wel de bron): het `hp-`blok in `app/globals.css`, de bouwstenen uit `components/home/ui.tsx`, het brein uit `components/home/brein-3d.tsx`.
 2. **De copy van Amina, met de correcties van Alex.** Zelf niets erbij schrijven: geen bijschriften, tussenkopjes, voorbeelden of labeltjes. Wat er wel staat en niet van haar komt: de labels van het menu en de footer, het woord "Stap", de foutmeldingen en de bevestiging van het formulier, "(optioneel)" bij het vraagveld, de alt-tekst van de foto en de titel voor Google. Waar Alex haar tekst inhoudelijk rechtzette, staat dat in "Afwijkingen van Amina's document".
-3. **Geen tekeningen.** Het enige beeld is de echte foto van de drie oprichters en de echte logo's. Het brein-netwerk uit de oude hero staat er ook niet.
+3. **Geen tekeningen.** De getekende figuurtjes van de vorige homepage blijven weg (Alex, 25/11). Wel terug sinds 26/11: de breinvisualisatie in de hero en de foto met het citaat van Y Combinator.
 4. **De knop voor een gesprek heet overal "Boek een conversatie"** (EN: "Book a conversation"). Het eerste gesprek duurt 60 minuten, dus nergens "een halfuur". Na het formulier nemen we binnen 24 uur contact op.
 5. **Nooit één los woord op de laatste regel.**
 6. **Inhoud die klopt** (Alex, 25/11): zeg "werkprocedures, regels en uitzonderingen" als het gaat over wat AI niet weet, niet "prijzen, uitzonderingen en stijl". Het eerste gesprek is 60 minuten waarin we al grondig door de processen gaan, niet "wij luisteren vooral". Beloof niet dat de klant niets moet voorbereiden. Zeg niet dat we altijd koppelen aan bestaande software: we bouwen wat nodig is, soms van nul. Geen "we spraken al met meer dan honderd Belgische kmo's".
@@ -21,6 +21,7 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 | `home-pagina.tsx` | De homepage, in de volgorde van Amina. |
 | `over-ons-pagina.tsx` | "Over ons" (`/over-ons/`, `/en/about/`): haar sectie 7 en 5, met de foto. |
 | `tools.ts` | De logo's onder "Werkt met wat je al gebruikt". |
+| `components/home/brein-3d.tsx` | De breinvisualisatie. Krijgt voor het Engels `labels` en `info` mee uit `copy.en.ts`. |
 | `kader.tsx` | Wat beide pagina's delen: menu, footer, de oprichters, "Waarom Finit", de logo's, en de hulpjes `Streep` en `vast`. |
 | `start-formulier.tsx` | Het formulier onderaan. Naam, e-mail, telefoon en website verplicht. Zelfde Netlify Function als de andere formulieren. |
 | `homepage.css` | Alleen wat de huisstijl nog niet had (prefix `nh-`): menu, taalkeuze, plakbalk op gsm, foutmelding. |
@@ -38,11 +39,12 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 
 ## Opbouw
 
-1. **Hero**: gecentreerd. Voor wie, kop met amber streep ("de secretaris", niet "het secretariaat"), de belofte, de uitleg, twee knoppen, drie vinkjes, wie ons steunt.
-2. **Herkenbaar?**: vier kaarten, twee aan twee, met alleen de titel (Alex, 26/11: met de tekstjes eronder werd het te lang).
+1. **Hero**: zoals vroeger. Links voor wie, de kop met amber streep ("de secretaris", niet "het secretariaat"), de belofte, de uitleg, twee knoppen, drie vinkjes en wie ons steunt. Rechts de breinvisualisatie (alleen op een breed scherm). Het menu is doorzichtig zolang je bovenaan staat en wordt wit en wazig bij het scrollen.
+   Daaronder, op de overgang van wit naar lichtgrijs: de foto van Karel en Jord met "Finit maakt Vlaamse KMO's klaar voor het AI-tijdperk." en het kaartje met het citaat van Y Combinator (link naar hun pagina). Die zin, het citaat en de teksten in het brein komen van de vorige homepage, niet van Amina.
+2. **Herkenbaar?**: de korte kop met de streep, zoals "Herken jij dit?" vroeger; haar lange zin staat eronder als inleiding. Vier kaarten, twee aan twee, met alleen de titel (Alex, 26/11: met de tekstjes eronder werd het te lang).
 3. **Company brain**: marineblauw paneel, links de uitleg, rechts de twee dingen die veranderen.
 4. **Hoe we werken**: vier kaarten met een pilletje "Stap 1" tot "Stap 4".
-5. **Waarom Finit**: drie kaarten met een rond icoon.
+5. **Waarom Finit**: in de vorm van de kaart "Eén partner voor al je IT" van vroeger: links de kop en de uitleg, rechts de drie punten als tegels met een rond icoon. De kaart ligt op de overgang van wit naar de marineblauwe band.
 6. **Wat we bouwen**: marineblauwe band. De zes voorbeelden: op desktop de sectoren links en de tekst van de gekozen sector rechts in één wit paneel. Alle teksten liggen daar op elkaar, zodat het paneel altijd even hoog is en er niets verschuift bij een klik (Alex vond een uitklappende kaart die de band meetrekt onprofessioneel). Op gsm klapt de tekst open in de rij. Daaronder de tools: alleen de logo's, zonder naam (`tools.ts`).
 7. **Wie zit er achter Finit**: de foto (dicht op de gezichten: `public/home/oprichters-dichtbij.jpg`) en de drie oprichters.
 8. **Bewijs**: verborgen (zie regel 6).

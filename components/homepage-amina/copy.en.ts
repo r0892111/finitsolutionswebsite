@@ -49,6 +49,39 @@ export const EN: Copy = {
     ondersteund: "Backed by",
   },
 
+  // The brain visual and the photo of the previous homepage (Alex, 26/11). The keys are the
+  // Dutch names of the nodes in components/home/brein-3d.tsx.
+  brein3d: {
+    aria: "The brain of a service company: pages such as Quotes, Customers, Planning and Invoicing, with lines between them for the connections.",
+    labels: {
+      "Jouw bedrijf": "Your company", Sales: "Sales", Offertes: "Quotes", Klanten: "Customers", Prijzen: "Prices", Planning: "Planning",
+      Agenda: "Calendar", Facturatie: "Invoicing", Boekhouding: "Accounting", Service: "Service", Klachten: "Complaints", Mailbox: "Mailbox",
+      WhatsApp: "WhatsApp", Leveranciers: "Suppliers", "Wie doet wat": "Who does what", Werkwijze: "How you work",
+    },
+    info: {
+      "Jouw bedrijf": { bestand: "your-company.md", kop: "The home page of your brain", regels: ["What you do and for whom", "How your company makes money", "What the other pages are about"] },
+      Sales: { bestand: "sales.md", kop: "From first contact to yes", regels: ["Where new customers come from", "What you ask at a first contact", "When you follow up, and how"] },
+      Offertes: { bestand: "quotes.md", kop: "How a quote comes together", regels: ["Which details you need first", "How you calculate the price", "Who checks it before it goes out", "When you follow up"] },
+      Klanten: { bestand: "customers.md", kop: "Who your customers are", regels: ["What they had done before", "How you address them", "What you keep track of per customer"] },
+      Prijzen: { bestand: "prices.md", kop: "Your rates and margins", regels: ["Your hourly rate and fixed prices", "Discount rules", "What the AI may never change by itself"] },
+      Planning: { bestand: "planning.md", kop: "How you plan the work", regels: ["Who can go where, and when", "What gets priority", "How you confirm an appointment"] },
+      Agenda: { bestand: "calendar.md", kop: "Your calendar and the rules", regels: ["Where your calendar lives", "When you can be reached", "Reminders and confirmations"] },
+      Facturatie: { bestand: "invoicing.md", kop: "When and how you invoice", regels: ["Payment terms", "When a reminder goes out", "What goes on an invoice"] },
+      Boekhouding: { bestand: "accounting.md", kop: "What your accountant needs", regels: ["Which documents, and when", "Where they are kept", "Who delivers them"] },
+      Service: { bestand: "service.md", kop: "How you help customers after the sale", regels: ["Which questions keep coming back", "What you solve yourself and what you don't", "How fast you reply"] },
+      Klachten: { bestand: "complaints.md", kop: "How you handle a complaint", regels: ["How you recognise a complaint", "Who gets involved", "What you promise the customer"] },
+      Mailbox: { bestand: "mailbox.md", kop: "What comes into your mailbox", regels: ["Which kinds of emails you get", "What you answer right away", "What you forward, and to whom"] },
+      WhatsApp: { bestand: "whatsapp.md", kop: "What customers send via WhatsApp", regels: ["Which questions you get", "How you reply", "When a message becomes an appointment"] },
+      Leveranciers: { bestand: "suppliers.md", kop: "Who you order from", regels: ["Terms and delivery times", "Who your contact is", "What you check before you promise a date"] },
+      "Wie doet wat": { bestand: "who-does-what.md", kop: "Your team and who decides", regels: ["Who does which task", "Who may decide what", "When the AI brings in a person"] },
+      Werkwijze: { bestand: "how-you-work.md", kop: "How you work", regels: ["The fixed steps per task", "Your house style and tone", "What always passes by you"] },
+    },
+  },
+  foto: {
+    statement: "Finit gets Flemish SMEs ready for the AI era.",
+    alt: "Karel and Jord of Finit Solutions behind their stand at a trade fair.",
+  },
+
   // 2. Sound familiar? (shortened by Amina on 25/11, after Alex's comment)
   herken: {
     kicker: "Sound familiar?",

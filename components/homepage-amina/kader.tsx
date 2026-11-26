@@ -14,7 +14,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowRight, Building2, HeartHandshake, Mail, Menu, Phone, X, Zap } from "lucide-react";
-import { CONTAINER, H2, H3, KOP, LEAD, Onder } from "@/components/home/ui";
+import { CONTAINER, H3, LEAD, Onder } from "@/components/home/ui";
 import { pushEvent } from "@/lib/analytics";
 import { useConsent } from "@/contexts/consent-context";
 import { CONTACT_EMAIL, INSTAGRAM_URL, LINKEDIN_URL, PHONE_LINK, PHONE_NUMBER, VAT_NUMBER } from "@/lib/finit-links";
@@ -121,12 +121,24 @@ export function Steun({ label, midden = false }: { label: string; midden?: boole
   );
 }
 
-/** Navigatie: logo links, de secties in het midden, de taal en de amber hoofdknop rechts. */
+/**
+ * Navigatie zoals op de vorige homepage: vast bovenaan, doorzichtig zolang je bovenaan staat,
+ * wit met een wazige rand zodra je scrolt. Logo links, de secties in het midden, de taal en de
+ * amber hoofdknop rechts.
+ */
 export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boolean; taalPaden: Record<Taal, string>; actief?: "over-ons" }) {
   const t = COPY[taal];
   const [menuOpen, setMenuOpen] = useState(false);
   const sluit = useCallback(() => setMenuOpen(false), []);
   const { href, klik } = useSecties(taal, thuis, sluit);
+  const [gescrold, setGescrold] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setGescrold(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Het mobiele menu: de pagina erachter scrolt niet mee, Escape sluit.
   useEffect(() => {
@@ -143,10 +155,10 @@ export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boo
   return (
     <>
       <a href="#inhoud" className="nh-skip">{taal === "nl" ? "Naar de inhoud" : "Skip to content"}</a>
-      <nav className="nh-nav" aria-label={taal === "nl" ? "Hoofdmenu" : "Main menu"}>
-        <div className="mx-auto flex h-[68px] max-w-[93.33rem] items-center justify-between gap-4 px-4 sm:px-6">
+      <nav className="nh-nav" data-vast={gescrold || menuOpen} aria-label={taal === "nl" ? "Hoofdmenu" : "Main menu"}>
+        <div className="nh-nav-rij mx-auto flex max-w-[93.33rem] items-center justify-between gap-4 px-4 sm:px-6">
           <a href={HOME[taal]} aria-label="Finit Solutions" className="flex shrink-0 items-center">
-            <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="h-7 w-auto sm:h-8" priority />
+            <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="nh-nav-logo w-auto" priority />
           </a>
           <div className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-7">
             {t.nav.links.map((l) => (
@@ -241,31 +253,36 @@ export function TeamBlok({ taal, location, voorrang = false }: { taal: Taal; loc
 
 const WAAROM_ICOON = [Building2, Zap, HeartHandshake];
 
-/** Waarom Finit: de kop met de drie punten als kaarten. */
+/**
+ * Waarom Finit, in de vorm van de kaart "Eén partner voor al je IT" van de vorige homepage:
+ * links de kop met de uitleg, rechts de drie punten als tegels met een rond icoon.
+ */
 export function WaaromBlok({ taal }: { taal: Taal }) {
   const t = COPY[taal].waarom;
   return (
-    <>
-      <div className={`${KOP} max-w-[48rem]`}>
-        <h2 className={H2}><Streep tekst={t.h2} /></h2>
-        <p className={`mt-4 ${LEAD} font-medium text-[#1A2D63]`}>{vast(t.sub)}</p>
-        <p className={`mt-3 ${LEAD}`}>{vast(t.intro)}</p>
+    <div className="hp-card grid gap-8 p-6 sm:p-7 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10 lg:p-9">
+      <div className="flex flex-col justify-center">
+        <h2 className={`${H3} text-[1.65rem] lg:text-[1.9rem]`}>{t.h2}</h2>
+        <p className="mt-3 text-[1.0625rem] font-medium leading-[1.5] text-[#1A2D63]">{vast(t.sub)}</p>
+        <p className="mt-2 text-[1rem] leading-[1.6] text-[#3D4766] lg:text-[1.0625rem]">{vast(t.intro)}</p>
       </div>
-      <ul className="mt-10 grid gap-4 sm:gap-5 lg:grid-cols-3">
+      <ul className="grid content-center gap-3">
         {t.punten.map((p, i) => {
           const Icoon = WAAROM_ICOON[i] ?? Building2;
           return (
-            <li key={p.titel} className="hp-card p-6 sm:p-7">
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1A2D63] text-[#E9A13B]">
+            <li key={p.titel} className="flex items-start gap-3.5 rounded-[16px] bg-[#F5F7FB] p-4">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A2D63] text-[#E9A13B]">
                 <Icoon className="h-5 w-5" aria-hidden="true" />
               </span>
-              <h3 className={`mt-5 ${H3}`}>{p.titel}</h3>
-              <p className={`mt-2 ${TEKST}`}>{vast(p.tekst)}</p>
+              <div>
+                <h3 className="text-[1rem] font-semibold leading-[1.35] text-[#1A2D63]">{p.titel}</h3>
+                <p className="mt-0.5 text-[0.9375rem] leading-[1.5] text-[#3D4766]">{vast(p.tekst)}</p>
+              </div>
             </li>
           );
         })}
       </ul>
-    </>
+    </div>
   );
 }
 

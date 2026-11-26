@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { BREIN_3D, BREIN_INFO } from "./copy";
+import { BREIN_3D, BREIN_INFO, type BreinPagina } from "./copy";
 
 /**
  * Het beeld in de hero: het AI-fundament van een dienstenbedrijf als een
@@ -173,7 +173,15 @@ function straal(k: Knoop, pt: Punt) {
   return basis * (0.7 + 0.5 * pt.d) * pt.s;
 }
 
-export function Brein3D() {
+/**
+ * `labels`, `info` en `aria` zijn voor een andere taal (de Engelse homepage): de bollen
+ * houden hun Nederlandse naam als sleutel, `labels` zegt hoe ze getoond worden en `info`
+ * wat er in het tekstbestand staat. Zonder deze props: het Nederlands uit ./copy.
+ */
+export function Brein3D({ labels, info, aria }: { labels?: Record<string, string>; info?: Record<string, BreinPagina>; aria?: string } = {}) {
+  // In refs: de tekenlus hieronder start één keer en leest ze daar.
+  const labelsRef = useRef(labels);
+  const infoRef = useRef(info);
   const wrap = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const placeholderRef = useRef<SVGSVGElement>(null);
@@ -305,15 +313,16 @@ export function Brein3D() {
         const links = pt.x < CX;
         ctx.textAlign = links ? "right" : "left";
         const x = links ? pt.x - r - 7 : pt.x + r + 7;
-        const breedte = ctx.measureText(k.label).width;
+        const naam = labelsRef.current?.[k.label] ?? k.label;
+        const breedte = ctx.measureText(naam).width;
         const vak = { x1: links ? x - breedte : x, y1: pt.y - 8, x2: links ? x : x + breedte, y2: pt.y + 8 };
         if (getekend.some((g) => vak.x1 < g.x2 + 6 && vak.x2 > g.x1 - 6 && vak.y1 < g.y2 + 2 && vak.y2 > g.y1 - 2)) continue;
         getekend.push(vak);
         ctx.lineWidth = 4;
         ctx.strokeStyle = `rgba(255,255,255,${0.95 * alpha})`;
-        ctx.strokeText(k.label, x, pt.y);
+        ctx.strokeText(naam, x, pt.y);
         ctx.fillStyle = open ? `rgba(${ACCENT},1)` : `rgba(${NAVY},${alpha})`;
-        ctx.fillText(k.label, x, pt.y);
+        ctx.fillText(naam, x, pt.y);
       }
     };
 
@@ -340,9 +349,9 @@ export function Brein3D() {
         getoond = toon;
         if (toon >= 0) {
           const k = KNOPEN[toon];
-          const info = BREIN_INFO[k.label];
+          const info = (infoRef.current ?? BREIN_INFO)[k.label];
           if (tipNaam.current) tipNaam.current.textContent = info?.bestand ?? "";
-          if (tipKop.current) tipKop.current.textContent = info?.kop ?? k.label;
+          if (tipKop.current) tipKop.current.textContent = info?.kop ?? labelsRef.current?.[k.label] ?? k.label;
           if (tipLijst.current) {
             tipLijst.current.replaceChildren(
               ...(info?.regels ?? []).map((regel) => {
@@ -493,7 +502,7 @@ export function Brein3D() {
   return (
     <div className="w-full">
       <div ref={wrap} className="relative select-none cursor-grab active:cursor-grabbing" style={{ touchAction: "pan-y" }}>
-        <canvas ref={canvasRef} hidden className="block w-full" role="img" aria-label={BREIN_3D.aria} />
+        <canvas ref={canvasRef} hidden className="block w-full" role="img" aria-label={aria ?? BREIN_3D.aria} />
         <svg ref={placeholderRef} viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full" aria-hidden="true">
           {LIJNEN.filter((l) => !l.sub).map((l, i) => (
             <line key={i} x1={eerste[l.a].x} y1={eerste[l.a].y} x2={eerste[l.b].x} y2={eerste[l.b].y} stroke="#1A2D63" strokeOpacity={rond(0.12 + 0.6 * Math.min(eerste[l.a].d, eerste[l.b].d))} strokeWidth={1} />

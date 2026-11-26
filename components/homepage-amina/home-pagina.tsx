@@ -23,7 +23,9 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ArrowRight, Check, ChevronDown, ChevronRight, Plus, X } from "lucide-react";
-import { CONTAINER, H2, H3, KOP, LEAD, Vinkje } from "@/components/home/ui";
+import { Brein3D } from "@/components/home/brein-3d";
+import { AANPAK_FOTO } from "@/components/home/copy";
+import { CONTAINER, H2, H3, KOP, LEAD, Onder, Vinkje } from "@/components/home/ui";
 import type { Taal } from "./copy";
 import { COPY, HOME, Kop, Plusje, Steun, Streep, TEKST, TeamBlok, Voet, WaaromBlok, useSecties, vast } from "./kader";
 import { StartFormulier } from "./start-formulier";
@@ -83,6 +85,23 @@ function Voorbeelden({ cases }: { cases: { sector: string; tekst: string }[] }) 
   );
 }
 
+/** Het citaat van Y Combinator over het "company brain", met het YC-logo en de bron als link (zoals op de vorige homepage). */
+function Citaat({ className = "" }: { className?: string }) {
+  const c = AANPAK_FOTO.citaat;
+  return (
+    <blockquote className={className}>
+      <div className="flex items-center gap-2.5">
+        <Image src={c.logo} alt="" width={28} height={28} className="h-7 w-7 rounded-[5px]" />
+        <span className="text-[0.875rem] font-semibold text-[#1A2D63]">{c.logoNaam}</span>
+      </div>
+      <p className="mt-3 text-[0.9375rem] leading-[1.5] text-[#3D4766]" lang="en">&ldquo;{c.tekst}&rdquo;</p>
+      <cite className="mt-1.5 block text-[0.8125rem] not-italic text-[#6C7590]">
+        <a href={c.url} target="_blank" rel="noopener noreferrer" className="hp-link">{c.bron}</a>
+      </cite>
+    </blockquote>
+  );
+}
+
 /** Wit H2 op een marineblauwe band: zelfde maat als H2. */
 const H2_WIT = "hp-display text-balance text-[1.9rem] font-bold leading-[1.06] text-white sm:text-[2.3rem] lg:text-[2.6rem]";
 
@@ -125,60 +144,95 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* -------------------------------------------------------------- */}
         {/* 1. Hero                                                        */}
         {/* -------------------------------------------------------------- */}
-        <header id="hero" className={`${CONTAINER} pb-12 pt-12 text-center sm:pt-16 lg:pb-14 lg:pt-20`}>
-          <div className="hp-rise mx-auto max-w-[58rem]">
-            <p className="mx-auto max-w-[22rem] text-[0.9375rem] font-semibold leading-[1.4] text-[#1A2D63] sm:max-w-none sm:text-[1rem]">{t.hero.voorWie}</p>
-            <h1 className="hp-display mt-4 text-[2.4rem] font-bold leading-[1.04] text-[#1A2D63] sm:text-[3.1rem] lg:text-[3.7rem]">
-              <Streep tekst={t.hero.h1} streep={t.hero.h1Streep} accent />
-            </h1>
-            <p className="mx-auto mt-6 max-w-[42rem] text-[1.1875rem] font-medium leading-[1.45] text-[#1A2D63] sm:text-[1.3125rem]">{vast(t.hero.h1Vervolg)}</p>
-            <p className={`mx-auto mt-4 max-w-[44rem] ${LEAD}`}>{vast(t.hero.sub)}</p>
+        <header id="hero" className={`${CONTAINER} pb-12 pt-28 sm:pt-32 lg:pb-10 lg:pt-32`}>
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-10">
+            <div className="hp-rise">
+              <p className="text-[0.9375rem] font-semibold leading-[1.4] text-[#1A2D63] sm:text-[1rem]">{t.hero.voorWie}</p>
+              <h1 className="hp-display mt-3 text-[2.5rem] font-bold leading-[1.03] text-[#1A2D63] min-[400px]:text-[2.75rem] sm:text-[3.1rem] lg:text-[2.9rem] xl:text-[3.3rem]">
+                <Streep tekst={t.hero.h1} streep={t.hero.h1Streep} accent />
+              </h1>
+              <p className="mt-5 max-w-[36rem] text-[1.125rem] font-medium leading-[1.5] text-[#1A2D63] lg:text-[1.1875rem]">{vast(t.hero.h1Vervolg)}</p>
+              <p className={`mt-3 max-w-[36rem] ${LEAD}`}>{vast(t.hero.sub)}</p>
 
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Hoofdknop id="hero-knop" location="hero" label={t.hero.knop} className="w-full sm:w-auto" />
-              <a href="#werkwijze" onClick={klik("werkwijze", "hero")} className="hp-btn hp-btn--secondary hp-btn--lg w-full sm:w-auto">
-                {t.hero.tweedeLink}
-                <ChevronDown className="h-4 w-4" aria-hidden="true" />
-              </a>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Hoofdknop id="hero-knop" location="hero" label={t.hero.knop} className="w-full sm:w-auto" />
+                <a href="#werkwijze" onClick={klik("werkwijze", "hero")} className="hp-btn hp-btn--secondary hp-btn--lg w-full sm:w-auto">
+                  {t.hero.tweedeLink}
+                  <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </div>
+
+              <ul className="mt-6 space-y-2.5">
+                {t.hero.punten.map((punt) => (
+                  <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#3D4766] lg:text-[1rem]">
+                    <Vinkje />
+                    <span>{punt}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-7">
+                <Steun label={t.hero.ondersteund} />
+              </div>
             </div>
 
-            <ul className="mx-auto mt-7 w-fit space-y-2.5 text-left">
-              {t.hero.punten.map((punt) => (
-                <li key={punt} className="flex items-start gap-3 text-[0.9375rem] leading-[1.5] text-[#3D4766] lg:text-[1rem]">
-                  <Vinkje />
-                  <span>{punt}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-10 border-t border-[#E3E7EF] pt-8">
-              <Steun label={t.hero.ondersteund} midden />
+            {/* Het brein staat alleen naast de tekst. Is er geen plaats voor twee kolommen, dan valt het weg. */}
+            <div className="hidden w-full lg:block">
+              <Brein3D labels={t.brein3d.labels} info={t.brein3d.info} aria={t.brein3d.aria} />
             </div>
           </div>
         </header>
 
         {/* -------------------------------------------------------------- */}
+        {/* 1b. De teamfoto op de naad onder de hero, met één statement    */}
+        {/* -------------------------------------------------------------- */}
+        {/* Zoals op de vorige homepage (Alex, 26/11). Wit boven, grijs onder: de foto ligt op de
+            overgang naar "Herkenbaar?". De linkerhelft is vervaagd, zodat het statement er
+            rechtstreeks op staat. Het citaat van Y Combinator hangt als kaartje over de
+            rechteronderhoek (op een smaller scherm staat het onder de foto). */}
+        <div className="bg-[linear-gradient(to_bottom,#FFFFFF_0,#FFFFFF_50%,#F5F7FB_50%,#F5F7FB_100%)]">
+          <div className={`${CONTAINER} relative`}>
+            <Citaat className="hp-card absolute bottom-0 right-8 z-10 hidden w-[23rem] translate-y-1/2 p-5 lg:block xl:right-0" />
+            <div className="hp-card relative overflow-hidden">
+              <div className="relative aspect-[4/5] sm:aspect-[16/9] lg:aspect-[21/8]">
+                <Image src={AANPAK_FOTO.foto} alt={t.foto.alt} fill sizes="(min-width: 1184px) 74rem, 100vw" className="nh-teamfoto object-cover" />
+                <div className="hp-foto-waas pointer-events-none absolute inset-y-0 left-0 hidden w-[60%] sm:block" aria-hidden="true" />
+                <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-[#1A2D63]/75 via-[#1A2D63]/35 to-transparent sm:block" aria-hidden="true" />
+                <div className="absolute inset-x-0 top-0 sm:inset-y-0 sm:left-7 sm:right-auto sm:flex sm:items-center lg:left-9">
+                  <div className="hp-foto-waas-boven pointer-events-none absolute inset-0 sm:hidden" aria-hidden="true" />
+                  <p className="hp-display relative text-balance px-5 pb-9 pt-5 text-[clamp(1.75rem,8vw,2.75rem)] font-bold leading-[1.08] text-white sm:max-w-[26rem] sm:p-0 sm:text-[2.1rem] lg:max-w-[30rem] lg:text-[2.5rem]">
+                    {t.foto.statement}
+                  </p>
+                </div>
+              </div>
+              <Citaat className="p-5 lg:hidden" />
+            </div>
+          </div>
+        </div>
+
+        {/* -------------------------------------------------------------- */}
         {/* 2. Herkenbaar?                                                 */}
         {/* -------------------------------------------------------------- */}
         <section id="herkenbaar" className="nh-sectie bg-[#F5F7FB]">
-          <div className={`${CONTAINER} pb-10 pt-14 sm:pt-20`}>
-            <div className={`${KOP} max-w-[52rem]`}>
-              <p className="inline-flex rounded-full bg-[#E6ECF9] px-3.5 py-1.5 text-[0.8125rem] font-semibold text-[#1A2D63]">{t.herken.kicker}</p>
-              <h2 className={`mt-4 ${H2}`}><Streep tekst={t.herken.h2} /></h2>
-              <p className={`mt-4 ${LEAD} font-medium text-[#1A2D63]`}>{t.herken.vraag}</p>
+          {/* Op desktop meer ruimte bovenaan: het YC-kaartje hangt half onder de foto erboven. */}
+          <div className={`${CONTAINER} pb-10 pt-12 sm:pt-14 lg:pt-24`}>
+            <div className={`${KOP} max-w-[48rem]`}>
+              <h2 className={H2}><Onder>{t.herken.kicker}</Onder></h2>
+              <p className={`mt-4 ${LEAD}`}>{vast(t.herken.h2)}</p>
+              <p className={`mt-2 ${LEAD} font-semibold text-[#1A2D63]`}>{t.herken.vraag}</p>
             </div>
 
             {/* Alleen de vier titels, zonder uitleg eronder (Alex, 26/11). */}
             <ul className="mx-auto mt-10 grid max-w-[58rem] gap-3 sm:grid-cols-2 sm:gap-4">
               {t.herken.punten.map((p) => (
                 <li key={p} className="hp-card flex items-center px-6 py-5 sm:px-7 sm:py-6">
-                  <h3 className={H3}>{p}</h3>
+                  <h3 className="hp-display hp-display-sm text-[1.3rem] font-semibold leading-[1.2] text-[#1A2D63] sm:text-[1.45rem]">{p}</h3>
                 </li>
               ))}
             </ul>
 
             <div className="mx-auto mt-10 max-w-[46rem] text-center">
-              <p className="hp-display hp-display-sm text-[1.25rem] font-semibold leading-[1.35] text-[#1A2D63] sm:text-[1.45rem]">{vast(t.herken.slot)}</p>
+              <p className="hp-display text-[1.3rem] font-semibold leading-[1.3] text-[#1A2D63] sm:text-[1.6rem]">{vast(t.herken.slot)}</p>
               <div className="mt-6 flex flex-col items-center gap-4">
                 <a href="#brein" onClick={klik("brein", "herken")} className="hp-btn hp-btn--primary hp-btn--lg w-full sm:w-auto">
                   {t.herken.knop}
@@ -237,7 +291,7 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* De knop onder het formulier op /hub linkt naar /#aanpak (zo heette deze sectie op de vorige homepage). */}
         <span id="aanpak" className="nh-anker" aria-hidden="true" />
         <section id="werkwijze" className="nh-sectie bg-white">
-          <div className={`${CONTAINER} py-14 sm:py-20`}>
+          <div className={`${CONTAINER} pb-12 pt-14 sm:pb-14 sm:pt-20`}>
             <div className={`${KOP} max-w-[48rem]`}>
               <h2 className={H2}><Streep tekst={t.werkwijze.h2} /></h2>
               <p className={`mt-4 ${LEAD}`}>{vast(t.werkwijze.sub)}</p>
@@ -260,8 +314,10 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* -------------------------------------------------------------- */}
         {/* 5. Waarom Finit                                                */}
         {/* -------------------------------------------------------------- */}
-        <section id="waarom" className="nh-sectie bg-[#F5F7FB]">
-          <div className={`${CONTAINER} py-14 sm:py-20`}>
+        {/* Zoals de kaart "Eén partner voor al je IT" vroeger: de achtergrond breekt in het midden
+            (wit boven, marineblauw onder), zodat de kaart exact op de overgang naar "Wat we bouwen" ligt. */}
+        <section id="waarom" className="nh-sectie bg-[linear-gradient(to_bottom,#FFFFFF_0,#FFFFFF_50%,#1A2D63_50%,#1A2D63_100%)]">
+          <div className={CONTAINER}>
             <WaaromBlok taal={taal} />
           </div>
         </section>
@@ -270,7 +326,7 @@ export function HomePagina({ taal }: { taal: Taal }) {
         {/* 6. Wat we bouwen: de voorbeelden klap je open                  */}
         {/* -------------------------------------------------------------- */}
         <section id="bouwen" className="nh-sectie bg-[#1A2D63] text-white">
-          <div className={`${CONTAINER} py-14 sm:py-20`}>
+          <div className={`${CONTAINER} pb-14 pt-12 sm:pb-20 sm:pt-16`}>
             <div className={`${KOP} max-w-[48rem]`}>
               <h2 className={H2_WIT}><Streep tekst={t.bouwen.h2} wit /></h2>
               <p className="mt-4 text-[1.0625rem] font-medium leading-[1.55] text-white sm:text-[1.125rem]">{vast(t.bouwen.sub)}</p>

@@ -51,6 +51,16 @@ export const NL: Copy = {
     ondersteund: "Ondersteund door",
   },
 
+  // De breinvisualisatie en de foto van de vorige homepage (Alex, 26/11). De labels en de
+  // tekstbestanden van het brein staan in components/home/copy.ts (BREIN_INFO).
+  brein3d: {
+    aria: "Het brein van een dienstenbedrijf: pagina's zoals Offertes, Klanten, Planning en Facturatie, met lijnen ertussen voor de verbanden.",
+  },
+  foto: {
+    statement: "Finit maakt Vlaamse KMO's klaar voor het AI-tijdperk.",
+    alt: "Karel en Jord van Finit Solutions achter hun stand op een beurs.",
+  },
+
   // 2. Herkenbaar? (door Amina ingekort op 25/11, na de comment van Alex)
   herken: {
     kicker: "Herkenbaar?",
