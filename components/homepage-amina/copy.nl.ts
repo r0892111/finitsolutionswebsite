@@ -27,6 +27,7 @@ export const NL: Copy = {
       { id: "vragen", label: "FAQ" },
     ],
     overOns: "Over ons",
+    brein: "Company brain",
     cta: "Boek een conversatie",
     menuOpenen: "Menu openen",
     menuSluiten: "Menu sluiten",
