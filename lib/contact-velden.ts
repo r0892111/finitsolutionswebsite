@@ -18,11 +18,9 @@ export function telefoonOk(s: string): boolean {
 }
 
 /**
- * Een website is goed als er een domeinnaam in staat: "jouwbedrijf.be",
+ * Een website is goed als er een echte domeinnaam in staat: "jouwbedrijf.be",
  * "www.jouwbedrijf.be" en "https://jouwbedrijf.be/contact" mogen allemaal.
  * Verplicht op elk formulier behalve dat van de gratis resources (Alex, 25/11).
+ * Eén controle voor de hele site (browser en server): die van lib/cursus-aanvraag.ts.
  */
-export function websiteOk(s: string): boolean {
-  const t = s.trim().replace(/^https?:\/\//i, "");
-  return /^(?:[a-z0-9-]+\.)+[a-z]{2,}(?:[\/?#]\S*)?$/i.test(t);
-}
+export { websiteOk } from "./cursus-aanvraag";

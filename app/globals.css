@@ -1000,12 +1000,6 @@ html {
    gewone knopgewicht van de site. Breed genoeg om op te vallen, niet over de hele kolom. */
 .hp-btn.hub-knop { font-size: 28px; line-height: 1.15; min-height: 80px; padding: 16px 44px; max-width: 100%; gap: 0.45em; }
 .hub-knop svg { width: 0.9em; height: 0.9em; }
-/* De gespreksknop met links ervan de tweede knop naar de homepage (25/11). In de code staat de
-   gespreksknop eerst (tabvolgorde, en bovenaan op gsm); op een breed scherm draait de rij om. */
-.hub-knoppen { display: flex; flex-direction: row-reverse; flex-wrap: wrap-reverse; align-items: stretch; justify-content: center; gap: var(--hub-r2) var(--hub-r3); }
-.hp-btn.hub-knop--tweede { flex-direction: column; gap: 0.18em; padding-block: 10px; padding-inline: 36px; }
-.hub-knop-vraag { font-size: 0.6em; line-height: 1.2; font-weight: 500; color: #6C7590; }
-.hub-knop-actie { display: inline-flex; align-items: center; gap: 0.4em; line-height: 1.15; }
 .hub-noot { font-size: 30px; line-height: 1.267; margin-top: var(--hub-r2); }
 .hub-form-wrap { width: min(calc(100% - 48px), 1011px); margin-inline: auto; }
 .hub-faq-wrap { width: min(calc(100% - 48px), 1022px); margin-inline: auto; }
@@ -1059,15 +1053,118 @@ html {
   .hub-pillen { gap: 10px; }
   .hub-pil { font-size: 13px; min-height: 40px; padding: 7px 8px; }
   .hp-btn.hub-knop { font-size: clamp(16px, 4.6vw, 19px); min-height: 56px; padding: 14px 18px; width: 100%; }
-  .hub-knoppen { flex-direction: column; flex-wrap: nowrap; gap: var(--hub-r2); }
-  .hp-btn.hub-knop--tweede { padding-block: 9px; }
-  .hub-knop-vraag { font-size: 0.74em; }
   .hub-noot { font-size: 13px; }
   .hub-sectietitel { font-size: clamp(30px, 9vw, 42px); }
   .hub-faq { border-radius: 17px; padding-inline: 15px; }
   .hub-faq-vraag { font-size: clamp(15px, 4.3vw, 18px); padding-block: 17px; gap: 14px; }
   .hub-faq-plus { width: 22px; height: 22px; margin-top: 0; }
   .hub-faq-antwoord { font-size: 16px; padding-bottom: 17px; margin-top: -4px; }
+}
+/* Hero van de hub (Alex 25/11): de grootste zin is de kop, daarna telkens een trede
+   kleiner. Kop 70 → haak 40 (vet, marine) → lopende tekst 28 (grijs, "bedrijf" vet) →
+   een losse zin naar de video 24 (halfvet, marine, met wat ruimte erboven want hij
+   hoort niet bij de alinea) → video → zin onder de video 28 (halfvet, marine) → knop →
+   kleine lettertjes 20. Op desktop brede tekstblokken (tot 1000 à 1100 px), zoals de
+   subzin bij Shadowboys. Alleen op /hub (.hub-hero-vsl); /cursus/ blijft zoals hij was. */
+.hub-hero-vsl .hub-titel { line-height: 1.05; }
+/* Taalknop NL | EN rechtsboven (Alex 25/11): klein, op de hoogte van het logo. */
+.hub-hero-vsl { position: relative; }
+.hub-taal { position: absolute; top: calc(var(--hub-r4) - 4px); right: 24px; display: flex; gap: 2px; padding: 3px; border: 1px solid rgba(26, 45, 99, 0.15); border-radius: 9999px; background: #fff; }
+.hub-taal-knop { min-width: 40px; padding: 5px 10px; border-radius: 9999px; font-size: 14px; font-weight: 600; line-height: 1.2; letter-spacing: 0.04em; text-align: center; color: rgba(26, 45, 99, 0.65); transition: background-color 160ms, color 160ms; }
+.hub-taal-knop:hover { background: #F5F7FB; color: #1A2D63; }
+.hub-taal-knop[aria-current="page"] { background: #1A2D63; color: #fff; }
+@media (max-width: 767px) {
+  .hub-taal { top: calc(var(--hub-r4) - 8px); right: 12px; }
+  .hub-taal-knop { min-width: 36px; padding: 5px 8px; font-size: 13px; }
+}
+.hub-haak { font-size: 40px; line-height: 1.2; font-weight: 700; color: #1A2D63; max-width: 1100px; margin: var(--hub-r3) auto 0; }
+/* Lopende tekst: breed (Alex 25/11, "lijkt zo op elkaar gepropt"), geen balans die de regels smal maakt. */
+.hub-lead { font-size: 28px; line-height: 1.45; color: #6C7590; max-width: 1040px; margin: var(--hub-r2) auto 0; text-wrap: balance; }
+.hub-lead-deel { display: inline; }
+/* Ritme (Alex 25/11, "gewoon natuurlijk"): wat bij elkaar hoort staat dicht (kop, haak, tekst;
+   knop en noot), tussen de groepen een grote stap (r5): tekst → zin naar de video,
+   logo's → zin onder de video. */
+.hub-naar-video { font-size: 24px; line-height: 1.35; font-weight: 600; color: #1A2D63; max-width: 1000px; margin: var(--hub-r4) auto var(--hub-r3); }
+.hub-onder-video { font-size: 28px; line-height: 1.35; font-weight: 600; color: #1A2D63; max-width: 1000px; margin: var(--hub-r5) auto var(--hub-r3); }
+.hub-hero-vsl .hub-noot { font-size: 20px; line-height: 1.4; color: #3D4766; }
+@media (max-width: 1100px) {
+  .hub-haak { font-size: clamp(27px, 3.5vw, 38px); }
+  .hub-lead, .hub-onder-video { font-size: clamp(20px, 2.5vw, 26px); }
+  .hub-naar-video { font-size: clamp(18px, 2.1vw, 22px); }
+  .hub-hero-vsl .hub-noot { font-size: 18px; }
+}
+@media (max-width: 767px) {
+  /* Drie regels op gsm: "De eerste" / "company brain" / "bouwers in België". */
+  .hub-hero-vsl .hub-titel { font-size: clamp(32px, 9.6vw, 46px); }
+  /* Rustiger op gsm (Alex 25/11, "prceis zo druk"): haak in twee regels ("… over AI," /
+     "hij gaat over …"), lopende tekst kleiner in vier regels, geen zin naar de video. */
+  .hub-haak { font-size: 21px; line-height: 1.3; }
+  /* Mag op gsm iets buiten de kolom van de rest steken. */
+  .hub-lead { font-size: 17px; line-height: 1.5; margin: var(--hub-r2) -6px var(--hub-r4); }
+  .hub-lead-deel { display: block; }
+  .hub-naar-video { display: none; }
+  .hub-onder-video { font-size: 18px; }
+  .hub-hero-vsl .hub-noot { font-size: 15px; }
+}
+/* "Ondersteund door" onder de video (Alex 25/11): klein label, drie logo's in grijs,
+   op het oog even zwaar (VLAIO is een blok, ElevenLabs een lange woordmerk). */
+.hub-steun { margin: var(--hub-r4) auto 0; }
+.hub-steun-label { font-size: 15px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #4A5578; }
+.hub-steun-logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px 52px; margin-top: 16px; }
+.hub-steun-logo { width: auto; filter: grayscale(1); opacity: 0.85; }
+.hub-steun-logo--vlaio { height: 40px; }
+.hub-steun-logo--kbc { height: 32px; }
+.hub-steun-logo--elevenlabs { height: 24px; }
+@media (max-width: 767px) {
+  .hub-steun-label { font-size: 12px; }
+  /* Groter op gsm (Alex 25/11): VLAIO en KBC op de eerste rij, ElevenLabs eronder. */
+  .hub-steun-logos { gap: 14px 26px; margin-top: 14px; }
+  .hub-steun-logo--vlaio { height: 30px; }
+  .hub-steun-logo--kbc { height: 24px; }
+  .hub-steun-logo--elevenlabs { height: 18px; }
+}
+
+/* Voor wie wel en niet (Alex 25/11, zoals de ✅/❌-rijen bij Shadowboys maar naast elkaar):
+   twee witte kaarten met een gekleurde bovenrand, een zachte tint bovenaan en ronde
+   vinkjes en kruisjes. Groen en rood alleen hier, altijd met een icoon erbij. */
+.hub-wie-raster { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 1180px; margin: var(--hub-r4) auto 0; text-align: left; }
+.hub-wie-kaart { position: relative; overflow: hidden; border-radius: 27px; border: 1px solid; padding: 34px 34px 18px; box-shadow: 0 1px 2px rgba(26,45,99,0.04), 0 18px 40px -28px rgba(26,45,99,0.35); }
+.hub-wie-kaart::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 6px; }
+.hub-wie-kaart--wel { --wie: #15803D; --wie-zacht: #DCFCE7; border-color: rgba(21,128,61,0.22); background: linear-gradient(180deg, #F3FBF5 0%, #FFFFFF 160px); }
+.hub-wie-kaart--niet { --wie: #B91C1C; --wie-zacht: #FEE2E2; border-color: rgba(185,28,28,0.2); background: linear-gradient(180deg, #FDF5F5 0%, #FFFFFF 160px); }
+.hub-wie-kaart::before { background: var(--wie); }
+.hub-wie-titel { display: flex; align-items: center; gap: 14px; font-size: 30px; line-height: 1.2; font-weight: 700; color: var(--wie); margin-bottom: 10px; }
+.hub-wie-icoon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 9999px; background: var(--wie); color: #fff; }
+.hub-wie-icoon svg { width: 55%; height: 55%; }
+.hub-wie-icoon--klein { width: 30px; height: 30px; margin-top: 0.12em; background: var(--wie-zacht); color: var(--wie); }
+.hub-wie-lijst li { display: flex; align-items: flex-start; gap: 14px; padding: 16px 0; border-top: 1px solid #EEF0F5; font-size: 22px; line-height: 1.4; color: #3D4766; }
+.hub-wie-lijst li:first-child { border-top: 0; }
+/* De knop onder de vragen: rustig, omlijnd, zodat "Boek een conversatie" de hoofdknop blijft. */
+.hub-faq-meer-wrap { margin-top: var(--hub-r3); }
+.hub-faq-meer, .hub-naar-website { gap: 0.5em; font-size: 22px; min-height: 60px; padding: 12px 30px; }
+.hub-faq-meer svg, .hub-naar-website svg { width: 1em; height: 1em; }
+/* Onder het formulier: de omlijnde knop naar de aanpak op de homepage (Alex 25/11). */
+.hub-naar-website-wrap { margin-top: var(--hub-r4); }
+.hub-naar-website { max-width: 100%; text-align: center; }
+@media (max-width: 1100px) {
+  .hub-wie-titel { font-size: clamp(22px, 2.6vw, 28px); }
+  .hub-wie-lijst li { font-size: clamp(17px, 2vw, 21px); }
+  .hub-faq-meer, .hub-naar-website { font-size: 19px; min-height: 54px; }
+}
+@media (max-width: 767px) {
+  .hub-wie-raster { grid-template-columns: 1fr; gap: 16px; }
+  .hub-wie-kaart { border-radius: 18px; padding: 24px 18px 8px; }
+  .hub-wie-titel { font-size: 21px; gap: 10px; }
+  .hub-wie-icoon { width: 34px; height: 34px; }
+  .hub-wie-icoon--klein { width: 24px; height: 24px; }
+  .hub-wie-lijst li { font-size: 16px; gap: 10px; padding: 12px 0; }
+  .hub-faq-meer, .hub-naar-website { font-size: 15px; min-height: 48px; padding: 10px 20px; }
+  .hub-naar-website { border-radius: 18px; line-height: 1.35; }
+}
+@media (max-width: 380px) {
+  .hub-hero-vsl .hub-titel { font-size: 32px; }
+  .hub-haak { font-size: 19px; }
+  .hub-lead { font-size: 16px; }
 }
 @media (max-width: 380px) {
   .hub-wrap, .hub-form-wrap, .hub-faq-wrap { width: calc(100% - 20px); }
@@ -1076,4 +1173,51 @@ html {
   .hub-pillen { gap: 7px; }
   .hub-pil { font-size: 11px; }
   .hub-faq-vraag { font-size: 14px; }
+}
+
+/* =====================================================================
+   Bedanktvenster na een formulier (components/bedankt-venster.tsx, 25/11)
+   Een wit venster boven een zachte marine waas, het vinkje in marine met
+   twaalf stukjes confetti die er één keer uit springen, een amberkleurig
+   blokje met de urgentie en twee knoppen.
+   --------------------------------------------------------------------- */
+.bv-achtergrond { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(15, 29, 71, 0.45); backdrop-filter: blur(4px); animation: bv-in 220ms ease-out both; }
+.bv-venster { position: relative; width: min(100%, 600px); max-height: calc(100dvh - 40px); overflow: auto; border-radius: 28px; background: #fff; padding: 44px 40px 36px; text-align: center; box-shadow: 0 30px 80px -30px rgba(15, 29, 71, 0.55); animation: bv-venster-in 420ms cubic-bezier(0.16, 1, 0.3, 1) both; outline: none; }
+.bv-sluit { position: absolute; top: 14px; right: 14px; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 9999px; color: #6C7590; transition: background-color 160ms ease, color 160ms ease; }
+.bv-sluit:hover { background: #F5F7FB; color: #1A2D63; }
+.bv-sluit svg { width: 20px; height: 20px; }
+.bv-vink-wrap { position: relative; width: 76px; height: 76px; margin: 0 auto; }
+.bv-vink { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; border-radius: 9999px; background: #1A2D63; box-shadow: 0 12px 28px -12px rgba(26, 45, 99, 0.7); animation: bv-vink 520ms cubic-bezier(0.34, 1.56, 0.64, 1) 120ms both; }
+.bv-vink svg { width: 44px; height: 44px; }
+.bv-vink path { stroke-dasharray: 40; stroke-dashoffset: 40; animation: hp-vink-lijn 420ms cubic-bezier(0.65, 0, 0.35, 1) 420ms forwards; }
+.bv-confetti { position: absolute; left: 50%; top: 50%; width: 9px; height: 14px; margin: -7px 0 0 -4.5px; border-radius: 2px; opacity: 0; animation: bv-confetti 1100ms cubic-bezier(0.2, 0.7, 0.3, 1) 380ms forwards; }
+.bv-titel { margin-top: 26px; font-size: 30px; line-height: 1.2; font-weight: 700; color: #1A2D63; }
+.bv-sub { margin-top: 10px; font-size: 18px; line-height: 1.5; color: #3D4766; }
+.bv-urgentie { display: flex; gap: 12px; align-items: flex-start; margin-top: 24px; padding: 16px 18px; border-radius: 16px; background: #FDF6EA; border: 1px solid rgba(233, 161, 59, 0.35); text-align: left; font-size: 16px; line-height: 1.5; color: #3D4766; }
+.bv-urgentie svg { flex: none; width: 20px; height: 20px; margin-top: 2px; color: #B7791F; }
+.bv-knoppen { display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin-top: 28px; }
+.bv-knop { display: inline-flex; align-items: center; justify-content: center; gap: 0.5em; min-height: 54px; padding: 12px 24px; border-radius: 9999px; font-size: 17px; font-weight: 600; }
+.bv-knop svg { width: 1em; height: 1em; }
+.bv-knop--terug { border: 1px solid rgba(26, 45, 99, 0.2); background: #fff; color: #1A2D63; transition: background-color 160ms ease; }
+.bv-knop--terug:hover { background: #F5F7FB; }
+@keyframes bv-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bv-venster-in { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes bv-vink { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
+@keyframes bv-confetti {
+  0% { opacity: 1; transform: rotate(var(--hoek)) translateY(0) rotate(0deg); }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--hoek)) translateY(calc(var(--afstand) * -1)) rotate(var(--draai)); }
+}
+@media (max-width: 767px) {
+  .bv-achtergrond { padding: 14px; align-items: flex-end; }
+  .bv-venster { border-radius: 22px; padding: 36px 20px 22px; }
+  .bv-titel { font-size: 23px; }
+  .bv-sub { font-size: 16px; }
+  .bv-urgentie { font-size: 14.5px; padding: 14px; }
+  .bv-knop { font-size: 16px; min-height: 50px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bv-achtergrond, .bv-venster, .bv-vink { animation: none; }
+  .bv-vink path { animation: none; stroke-dashoffset: 0; }
+  .bv-confetti { display: none; }
 }

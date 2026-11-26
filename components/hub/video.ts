@@ -41,3 +41,16 @@ export const VSL = {
   /** Om de zoveel seconden onthouden we waar je zit. */
   bewaarElke: 5,
 };
+
+/** De vorm van een VSL-instelling; /cursus/ heeft er een eigen (components/cursus/video.ts). */
+export type VslInstelling = typeof VSL & {
+  /** Ondertitels staan standaard aan (tot de kijker ze uitzet). */
+  ondertitelsStandaard?: boolean;
+};
+
+/**
+ * Dezelfde video op de Engelse hub (/hub/en/, Alex 25/11). Alex spreekt Nederlands, dus de
+ * Engelse ondertitels staan meteen aan. Ze zijn per zin vertaald uit ondertitels.json en over
+ * de tijd van die zin verdeeld; maak ze opnieuw als de video verandert.
+ */
+export const VSL_EN: VslInstelling = { ...VSL, ondertitels: "/hub/vsl/ondertitels-en.json", ondertitelsStandaard: true };

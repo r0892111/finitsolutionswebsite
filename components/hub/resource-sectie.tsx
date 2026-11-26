@@ -19,12 +19,10 @@ import lokaleLijst from "@/content/resources.json";
 import { pushEvent } from "@/lib/analytics";
 import { bijBezoek, heeftToegang } from "@/lib/hub-toegang";
 import { haalExterneLijst, leesLijst, RESOURCES_URL, soortLabel, soortMeervoud, voegSamen, type Resource } from "@/lib/resources";
-import { HUB } from "./copy";
+import { useHub } from "./taal";
 import { SlotFormulier } from "./slot-formulier";
 
 const LOKAAL = leesLijst(lokaleLijst);
-const R = HUB.resources;
-const S = HUB.slot;
 const FILTER_VOLGORDE = ["gids", "prompt", "pakket", "template", "video"];
 
 // Elke soort zijn eigen tint van marineblauw.
@@ -36,6 +34,9 @@ const SOORT_KLEUR: Record<string, string> = {
 };
 
 export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<string, string> }) {
+  const H = useHub();
+  const R = H.resources;
+  const S = H.slot;
   const [resources, setResources] = useState<Resource[]>(() => voegSamen(LOKAAL));
   const [filter, setFilter] = useState("");
   // null = nog niet gekeken (eerste render op de server): dan niets tonen dat flitst.
@@ -112,7 +113,7 @@ export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<stri
                       actief ? "border-[#1A2D63] bg-[#1A2D63] text-white" : "border-[#1A2D63]/20 bg-white text-[#1A2D63] hover:border-[#1A2D63]/45"
                     }`}
                   >
-                    {s ? soortMeervoud(s) : R.filterAlles}
+                    {s ? R.soortMeervoud[s] ?? soortMeervoud(s) : R.filterAlles}
                   </button>
                 );
               })}
@@ -154,6 +155,7 @@ function ResourceKaart({
   voorbeeld?: boolean;
   onKlik?: () => void;
 }) {
+  const R = useHub().resources;
   // Pdf's en externe pagina's in een nieuw tabblad, zodat de hub open blijft.
   const nieuwTab = r.url.startsWith("https://") || r.url.toLowerCase().endsWith(".pdf");
   const knop = R.openKnop[r.soort] ?? R.openKnop.standaard;
@@ -177,7 +179,7 @@ function ResourceKaart({
         )}
         <span className="flex min-w-0 flex-1 flex-col">
           <span className="flex flex-wrap items-center gap-2">
-            <span className={`rounded-full px-3 py-1 text-[0.8125rem] font-semibold ${SOORT_KLEUR[r.soort] ?? SOORT_KLEUR.gids}`}>{soortLabel(r.soort)}</span>
+            <span className={`rounded-full px-3 py-1 text-[0.8125rem] font-semibold ${SOORT_KLEUR[r.soort] ?? SOORT_KLEUR.gids}`}>{R.soort[r.soort] ?? soortLabel(r.soort)}</span>
             {uitPost && <span className="text-[0.8125rem] font-semibold text-[#1A2D63]">{R.uitPost}</span>}
           </span>
           <span className="hp-display hp-display-sm mt-3 text-[1.3125rem] font-semibold leading-[1.2] text-[#1A2D63]">{r.titel}</span>

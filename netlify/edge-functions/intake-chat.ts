@@ -348,7 +348,12 @@ function friendlyError(language: Language, err: unknown): string {
 // Main handler
 // ---------------------------------------------------------------------------
 
+// Gesloten sinds 25/11/2026 (veiligheidsronde): geen enkele pagina gebruikt de intake nog, en open
+// kostte ze geld (Claude, ElevenLabs) zonder maximum. Weer open: INTAKE_OPEN=1 in Netlify.
 export default async (req: Request): Promise<Response> => {
+  if (Deno.env.get("INTAKE_OPEN") !== "1") {
+    return new Response(JSON.stringify({ error: "gesloten" }), { status: 410, headers: { "Content-Type": "application/json" } });
+  }
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
   }

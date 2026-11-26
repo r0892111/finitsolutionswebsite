@@ -4,6 +4,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
+import { useBescherming } from "@/components/formulier-bescherming";
 
 // ============================================
 // TYPES
@@ -64,6 +65,8 @@ function useFormSubmit() {
   const pathname = usePathname();
   const [showLoader, setShowLoader] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // aanvraag_id, invultijd, honeypot en Turnstile (zie components/formulier-bescherming.tsx).
+  const { velden, naVersturen, extraVelden } = useBescherming();
 
   const submitForm = useCallback(
     async (formData: ContactFormData) => {
@@ -91,10 +94,13 @@ function useFormSubmit() {
             bron: sourceUrl,
             // De volledige adresbalk (met ?bron=…), voor Tuesday.
             pagina: window.location.href,
+            ...velden(),
           }),
         });
         if (!res.ok) throw new Error(`status ${res.status}`);
+        naVersturen(true);
       } catch {
+        naVersturen(false);
         // Bewust zichtbaar: als de aanvraag niet aankomt moet de bezoeker
         // dat weten en een alternatief krijgen, in plaats van een
         // bedankpagina te zien voor een mail die nooit vertrok.
@@ -112,10 +118,10 @@ function useFormSubmit() {
       }, 800);
       return true;
     },
-    [router, pathname]
+    [router, pathname, velden, naVersturen]
   );
 
-  return { showLoader, submitForm, error };
+  return { showLoader, submitForm, error, extraVelden };
 }
 
 // ============================================
@@ -129,7 +135,7 @@ export function EmbeddedContactForm() {
     email: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { showLoader, submitForm, error } = useFormSubmit();
+  const { showLoader, submitForm, error, extraVelden } = useFormSubmit();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -225,9 +231,10 @@ export function EmbeddedContactForm() {
         {isSubmitting ? (
           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
         ) : (
-          "Plan een gesprek"
+          "Boek een conversatie"
         )}
       </button>
+      {extraVelden}
     </form>
   );
 }
@@ -243,7 +250,7 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
     email: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { showLoader, submitForm, error } = useFormSubmit();
+  const { showLoader, submitForm, error, extraVelden } = useFormSubmit();
 
   // Lock body scroll when open
   useEffect(() => {
@@ -314,7 +321,7 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
         <div className="pt-12 px-6 pb-6 md:pt-12 md:px-8 md:pb-8">
           <div className="mb-6">
             <h2 className="font-newsreader text-2xl md:text-3xl text-[#1A2D63] mb-1.5">
-              Plan een kennismakingsgesprek
+              Boek een conversatie
             </h2>
             <p className="font-instrument text-[#475D8F] text-sm md:text-base">
               Vul je gegevens in en we nemen binnen 48 uur contact op om een moment in te plannen.
@@ -409,9 +416,10 @@ export function ContactFormPopup({ isOpen, onClose }: ContactFormPopupProps) {
               {isSubmitting ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                "Plan een gesprek"
+                "Boek een conversatie"
               )}
             </button>
+            {extraVelden}
           </form>
 
           <p className="mt-4 text-center text-sm text-[#475D8F]/60 font-instrument">

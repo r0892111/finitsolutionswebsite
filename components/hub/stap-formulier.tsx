@@ -19,22 +19,23 @@
  * fout staat de melding onder het veld en springt de cursor naar het eerste
  * foute veld. De server controleert naam, e-mail en telefoon opnieuw
  * (lib/contact-velden.ts); de website bewust niet, zodat wie de pagina nog
- * open had van voor 25/11 zijn aanvraag niet kwijtraakt.
+ * open had van voor de livegang zijn aanvraag niet kwijtraakt.
  */
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
 import { EMAIL_RE, telefoonOk, websiteOk } from "@/lib/contact-velden";
 import { kijkProcent, kijkbeurtVoorFormulier } from "./kijkmeting";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { HUB, vetStukken } from "./copy";
+import { useHub } from "./taal";
+import { useBescherming } from "@/components/formulier-bescherming";
+import { BedanktVenster } from "@/components/bedankt-venster";
 
 const SUBMIT_URL = "/api/contact-submit";
 const TIMEOUT_MS = 10000;
 const LETTERS = "ABCDEFGH";
-const F = HUB.formulier;
-const VRAGEN = F.vragen;
 
 const VELD =
   "w-full rounded-xl border border-[#1A2D63]/15 bg-white px-4 py-3 text-[1rem] text-[#1A2D63] placeholder:text-[#6C7590]/60 transition focus:border-[#1A2D63]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2D63]/15";
@@ -46,8 +47,7 @@ type Veld = "naam" | "email" | "telefoon" | "website";
 const VELDEN: readonly Veld[] = ["naam", "email", "telefoon", "website"];
 
 /** De meldingen voor de verplichte velden; leeg = alles in orde. */
-function controleer(naam: string, email: string, telefoon: string, website: string): Partial<Record<Veld, string>> {
-  const m = F.meldingen;
+function controleer(m: typeof HUB.formulier.meldingen, naam: string, email: string, telefoon: string, website: string): Partial<Record<Veld, string>> {
   const fouten: Partial<Record<Veld, string>> = {};
   if (naam.trim().length < 2) fouten.naam = m.naam;
   if (!email.trim()) fouten.email = m.emailLeeg;
@@ -71,7 +71,19 @@ function Vraag({ zin, id }: { zin: string; id?: string }) {
   );
 }
 
+/**
+ * Een aangeklikte keuze in het Nederlands, voor de mail, monday en Tuesday: op /hub/en/ kiest
+ * de bezoeker in het Engels, Luka leest Nederlands. Dezelfde plaats in de lijst van ./copy.ts.
+ */
+function inHetNederlands(vragen: typeof HUB.formulier.vragen, vraagId: string, antwoord: string | undefined): string {
+  if (!antwoord) return "";
+  const i = vragen.find((v) => v.id === vraagId)?.opties?.indexOf(antwoord) ?? -1;
+  return (i >= 0 && HUB.formulier.vragen.find((v) => v.id === vraagId)?.opties?.[i]) || antwoord;
+}
+
 export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?: Record<string, string>; kopId?: string }) {
+  const F = useHub().formulier;
+  const VRAGEN = F.vragen;
   const id = useId();
   const [stap, setStap] = useState(0);
   const [antwoorden, setAntwoorden] = useState<Record<string, string>>({});
@@ -80,7 +92,10 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
   const [telefoon, setTelefoon] = useState("");
   const [website, setWebsite] = useState("");
   const [honing, setHoning] = useState(""); // honeypot: blijft leeg bij mensen
+  const bescherming = useBescherming(); // aanvraag_id, invultijd, tweede honeypot, Turnstile
   const [status, setStatus] = useState<Status>(null);
+  const [venster, setVenster] = useState(false);
+  const sluitVenster = useCallback(() => setVenster(false), []);
   // Pas na de eerste poging tot versturen tonen we meldingen; daarna lopen ze mee met wat je typt.
   const [geprobeerd, setGeprobeerd] = useState(false);
   const gemeld = useRef(false);
@@ -129,14 +144,14 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
   });
 
   const bericht = () => {
-    const regels = VRAGEN.filter((v) => v.soort === "keuze" && antwoorden[v.id]).map((v) => `${v.label}: ${antwoorden[v.id]}`);
+    const regels = VRAGEN.filter((v) => v.soort === "keuze" && antwoorden[v.id]).map((v) => `${v.label}: ${inHetNederlands(VRAGEN, v.id, antwoorden[v.id])}`);
     const vrij = (antwoorden.bericht ?? "").trim();
     const procent = kijkProcent();
     const vsl = procent === null ? F.vslNiet : F.vslGekeken.replace("{procent}", String(procent));
     return [vrij, "", F.berichtKop, ...regels, vsl].join("\n").trim();
   };
 
-  const fouten = geprobeerd ? controleer(naam, email, telefoon, website) : {};
+  const fouten = geprobeerd ? controleer(F.meldingen, naam, email, telefoon, website) : {};
 
   // Geen dubbele aanvragen bij een dubbelklik: de knop staat uit, en dit vangt de klik ervoor.
   const bezigRef = useRef(false);
@@ -147,7 +162,7 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
       naarStap(stap + 1);
       return;
     }
-    const nuFout = controleer(naam, email, telefoon, website);
+    const nuFout = controleer(F.meldingen, naam, email, telefoon, website);
     const eerste = VELDEN.find((v) => nuFout[v]);
     if (eerste) {
       setGeprobeerd(true);
@@ -165,9 +180,9 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
       kanaal: meta.bron ?? "direct",
       reel: meta.reel ?? "",
       vsl_procent: kijkProcent() ?? 0,
-      rol: antwoorden.rol ?? "",
-      grootte: antwoorden.grootte ?? "",
-      meeste_tijd: antwoorden.tijd ?? "",
+      rol: inHetNederlands(VRAGEN, "rol", antwoorden.rol),
+      grootte: inHetNederlands(VRAGEN, "grootte", antwoorden.grootte),
+      meeste_tijd: inHetNederlands(VRAGEN, "tijd", antwoorden.tijd),
       eerst: (antwoorden.bericht ?? "").trim(),
       pagina: window.location.href,
       kijkbeurt: kijk ? { id: kijk.id, dag: kijk.dag } : null,
@@ -180,12 +195,15 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: timer.signal,
-        body: JSON.stringify({ naam: naam.trim(), email: email.trim(), telefoonnummer: telefoon.trim(), bedrijfswebsite: website.trim(), bericht: bericht(), website: honing, bron, hub }),
+        body: JSON.stringify({ naam: naam.trim(), email: email.trim(), telefoonnummer: telefoon.trim(), bedrijfswebsite: website.trim(), bericht: bericht(), website: honing, bron, hub, ...bescherming.velden() }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
+      bescherming.naVersturen(true);
       setStatus("klaar");
+      setVenster(true);
       pushEvent("form_submitted", { ...meta, location: "hub" });
     } catch {
+      bescherming.naVersturen(false);
       setStatus("fout");
     } finally {
       clearTimeout(timeout);
@@ -205,7 +223,13 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
         <p className="hp-display hp-display-sm mx-auto mt-5 max-w-[30rem] text-balance text-[1.4rem] font-semibold leading-[1.25] text-[#1A2D63]">
           {F.bedankt.replace("{naam}", voornaam ? `, ${voornaam}` : "")}
         </p>
-        <p className="mt-3 text-[1rem] text-[#3D4766]">{F.bedanktSub}</p>
+        {venster && (
+          <BedanktVenster
+            tekst={{ ...F.venster, titel: F.venster.titel.replace("{naam}", voornaam ? `, ${voornaam}` : "") }}
+            onSluit={sluitVenster}
+            onMeer={() => pushEvent("hub_klik", { ...meta, keuze: "bedankt_aanpak" })}
+          />
+        )}
       </div>
     );
   }
@@ -231,24 +255,25 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
 
       {/* Op de gegevensstap controleren we zelf (noValidate), op de andere stappen doet de browser het. */}
       <form onSubmit={verstuur} noValidate={vraag.soort === "gegevens"} className="px-5 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6" aria-labelledby={`${id}-vraag`}>
-        <div className="flex min-h-[2.25rem] items-center justify-between gap-3 text-[0.875rem] text-[#6C7590]">
-          {stap > 0 ? (
+        {/* "Vraag 2 van 5" groot, links, vlak boven de vraag (Alex 25/11); terug staat rechts. */}
+        <div className="flex min-h-[2.25rem] items-center justify-between gap-3">
+          <span className="text-[1.0625rem] font-semibold text-[#2F55C4] sm:text-[1.25rem]">
+            {F.stapVan.replace("{nu}", String(stap + 1)).replace("{totaal}", String(VRAGEN.length))}
+          </span>
+          {stap > 0 && (
             <button
               type="button"
               onClick={() => naarStap(stap - 1)}
-              className="-ml-2 inline-flex min-h-[2.25rem] items-center gap-1.5 rounded-full px-2 font-medium text-[#1A2D63] transition-colors hover:bg-[#F5F7FB]"
+              className="-mr-2 inline-flex min-h-[2.25rem] items-center gap-1.5 rounded-full px-2 text-[0.875rem] font-medium text-[#1A2D63] transition-colors hover:bg-[#F5F7FB]"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
               {F.terug}
             </button>
-          ) : (
-            <span />
           )}
-          <span className="font-semibold text-[#1A2D63]">{F.stapVan.replace("{nu}", String(stap + 1)).replace("{totaal}", String(VRAGEN.length))}</span>
         </div>
 
         {/* Nieuwe vraag: zakt zacht op zijn plaats, zonder eerst te verdwijnen (geen flikkering onder de balk). */}
-        <div key={stap} className="hub-stap-in mt-3">
+        <div key={stap} className="hub-stap-in mt-2">
           <Vraag zin={vraag.vraag} id={`${id}-vraag`} />
 
           {vraag.soort === "keuze" && (
@@ -306,6 +331,7 @@ export function StapFormulier({ bron, meta = {}, kopId }: { bron: string; meta?:
                 {/* Tekst in plaats van type="url": zo mag "jouwbedrijf.be" zonder https:// ervoor. */}
                 <Invoer id={`${id}-website`} label={F.velden.website} type="text" inputMode="url" autoComplete="url" placeholder={F.velden.websiteHint} waarde={website} zet={setWebsite} fout={fouten.website} />
               </div>
+              {bescherming.extraVelden}
               {/* Honeypot: voor mensen onzichtbaar, bots vullen het in. */}
               <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
                 <label htmlFor={`${id}-honing`}>Website</label>

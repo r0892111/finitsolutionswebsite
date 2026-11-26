@@ -803,7 +803,7 @@ export default function VoiceToCRMPage() {
                     style={{ backgroundColor: 'rgb(57, 86, 134)' }}
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? 'Versturen...' : 'Plan gesprek'}
+                    {isSubmitting ? 'Versturen...' : 'Boek een conversatie'}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </form>

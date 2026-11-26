@@ -603,7 +603,7 @@ const TimelineDot = ({ index }: { index: number }) => {
 const timelineSteps = [
   {
     label: "Vandaag",
-    title: "Plan een gesprek",
+    title: "Boek een conversatie",
     description: "Kies een moment dat jou uitkomt. Duurt maar 2 minuten.",
   },
   {
@@ -720,7 +720,7 @@ export function AIReadinessScanLanding() {
             }}
           >
             <Calendar className="w-4 h-4" />
-            <span>Plan een gesprek</span>
+            <span>Boek een conversatie</span>
           </button>
 
           {/* Mobile CTA */}
@@ -740,7 +740,7 @@ export function AIReadinessScanLanding() {
             }}
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Plan een gesprek</span>
+            <span>Boek een conversatie</span>
           </button>
         </div>
       </nav>

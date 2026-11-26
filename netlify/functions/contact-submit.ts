@@ -9,7 +9,8 @@
  * Deze functie stuurt de inzending als mail via de Brevo API en geeft een
  * echte HTTP-status terug, zodat een storing meteen zichtbaar is.
  *
- * Twee formulieren komen hier binnen: de popup "Plan een kennismaking"
+ * Formulieren die hier binnenkomen: het formulier op de homepage (`bron` eindigt op
+ * #startgesprek: naam, e-mail, telefoon en website verplicht), de popup "Plan een kennismaking"
  * (naam, e-mail, telefoon) en het korte vraagformulier op de contactkaart
  * (naam, e-mail, telefoon, website van het bedrijf, bericht). Het onderscheid
  * zit in het veld `bericht`. Het vraagformulier maakt alles verplicht in de
@@ -26,9 +27,17 @@
  * hubformulier (/hub/, met het veld `hub`) als item op het bord Leads › Socials,
  * met het kanaal, de reel en hoe ver de VSL bekeken werd; de kijkbeurt van de
  * VSL-meting krijgt dan "formulier verstuurd". Alle andere (popup, vraagformulier)
- * via Jords route /api/intake/website-lead naar het bord Content. Mislukt Tuesday,
+ * sinds 25/11 ook naar Socials, groep "Ads en content", met bron Website (het bord
+ * Content is weg). Mislukt Tuesday,
  * dan vertrekken mail en monday gewoon; de fout wordt gelogd zonder
  * persoonsgegevens en zonder sleutel.
+ *
+ * Sinds 25/11 (veiligheidsronde): eerst de wacht (lib/formulier-wacht.ts: Origin, honeypot,
+ * invultijd, Turnstile, dubbels via aanvraag_id, hooguit 5 per IP per uur). Staat de lead
+ * in Tuesday, dan krijgt de bezoeker meteen 200 en lopen monday, het PAPI-seintje (hooguit
+ * één per e-mailadres per dag) en de mail op de achtergrond (waitUntil). Mislukt Tuesday,
+ * dan is de mail het vangnet en vertrekt ze eerst; mislukt die ook, dan 502 en mag de
+ * bezoeker opnieuw met hetzelfde aanvraag_id. Nieuwe functievorm (export default).
  *
  * Nodige env-variabelen in Netlify:
  *   BREVO_API_KEY      (verplicht) — Brevo → SMTP & API → API Keys
@@ -37,15 +46,21 @@
  *   MONDAY_API_TOKEN, MONDAY_BOARD_ID (optioneel, samen) — monday.com
  *   MONDAY_GROUP_ID, MONDAY_COL_*, MONDAY_STATUS_LABEL (optioneel) — zie lib/monday/create-item.ts
  *   CRM_API_TOKEN of CRM_SOCIALS_TOKEN (optioneel) — sleutel voor Tuesday. Nooit loggen.
+ *   PAPI_GITHUB_TOKEN, TURNSTILE_SECRET_KEY (optioneel) — zie lib/papi.ts en lib/formulier-wacht.ts
  */
-import type { Handler, HandlerEvent } from "@netlify/functions";
+import type { Context } from "@netlify/functions";
 import { createMondayItem, mondayConfigFromEnv } from "../../lib/monday/create-item";
-import { EMAIL_RE, telefoonOk, websiteOk } from "../../lib/contact-velden";
+import { EMAIL_RE, telefoonOk } from "../../lib/contact-velden";
+// Dezelfde websitecontrole als het cursusformulier.
+import { websiteOk } from "../../lib/cursus-aanvraag";
 import { markeerFormulier } from "../../lib/vsl-meting-opslag";
 import { naarTuesday, TUESDAY, type TuesdayStatus } from "../../lib/tuesday";
+import { papiSeintje } from "../../lib/papi";
+import { aanvraagId, eenRegel, papiMagVandaag, vergeet, wacht } from "../../lib/formulier-wacht";
+import { esc, mailNaarContact, papiRegel } from "../../lib/brevo-mail";
+import { HUB } from "../../components/hub/copy";
 
-// monday mag de bezoeker niet laten wachten: de browser wacht maximaal 10 s,
-// en na monday moet de mail nog vertrekken.
+// monday loopt naast Tuesday en mag nooit langer duren dan Tuesday zelf (5 s).
 const MONDAY_TIMEOUT_MS = 5000;
 
 const JSON_HEADERS = { "Content-Type": "application/json" };
@@ -66,19 +81,24 @@ const KANALEN: Record<string, string> = {
 };
 
 // Een gratis mailadres zegt niets over het bedrijf: dan heet het item naar de persoon.
+/** Socials › "Ads en content": popup en vraagformulier (vast id, zodat een hernoemde groep niets breekt). */
+const SOCIALS_WEBSITE_GROEP = "groep_1";
+
 const GRATIS_MAIL = new Set([
   "gmail.com", "googlemail.com", "hotmail.com", "hotmail.be", "outlook.com", "outlook.be", "live.com", "live.be",
   "msn.com", "icloud.com", "me.com", "yahoo.com", "telenet.be", "skynet.be", "proximus.be", "scarlet.be",
 ]);
-const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
+// De mail gaat naar contact@ (lib/brevo-mail.ts): een gedeeld adres, zodat alle vennoten
+// de aanvragen binnenkrijgen en een lead niet in één persoonlijke mailbox blijft hangen.
 
-// contact@ is een gedeeld adres, zodat alle vennoten de aanvragen binnenkrijgen
-// en een lead niet in één persoonlijke mailbox blijft hangen.
-const TO_EMAIL = process.env.CONTACT_TO_EMAIL || "contact@finitsolutions.be";
-const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || "alex@finitsolutions.be";
+function json(status: number, body: unknown): Response {
+  return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });
+}
 
-function json(statusCode: number, body: unknown) {
-  return { statusCode, headers: JSON_HEADERS, body: JSON.stringify(body) };
+// Een keuzeveld van de hub mag alleen een antwoord uit de vaste lijst zijn; anders leeg.
+function keuze(t: string, vraagId: string): string {
+  const vraag = HUB.formulier.vragen.find((q) => q.id === vraagId);
+  return vraag && "opties" in vraag && (vraag.opties as readonly string[]).includes(t) ? t : "";
 }
 
 function pickStr(v: unknown, max = 200): string {
@@ -122,45 +142,34 @@ function leesHub(v: unknown): HubVelden | null {
     kanaal: slug(h.kanaal, 40),
     reel: slug(h.reel, 12).toUpperCase(),
     vslProcent: procent,
-    rol: pickStr(h.rol, 120),
-    grootte: pickStr(h.grootte, 120),
-    meesteTijd: pickStr(h.meeste_tijd, 120),
+    rol: keuze(pickStr(h.rol, 120), "rol"),
+    grootte: keuze(pickStr(h.grootte, 120), "grootte"),
+    meesteTijd: keuze(pickStr(h.meeste_tijd, 120), "tijd"),
     eerst: pickStr(h.eerst, 3000),
     pagina: /^https?:\/\//i.test(pagina) ? pagina : "",
     kijkbeurt: k && typeof k.id === "string" && typeof k.dag === "string" ? { id: k.id, dag: k.dag } : null,
   };
 }
 
-// Alles wat de bezoeker intypt komt in de mail terecht; escapen houdt de
-// HTML heel en voorkomt injectie in onze eigen inbox.
-function esc(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-export const handler: Handler = async (event: HandlerEvent) => {
-  if (event.httpMethod !== "POST") {
+export default async (req: Request, context: Context): Promise<Response> => {
+  if (req.method !== "POST") {
     return json(405, { error: "method_not_allowed" });
   }
 
   let body: Record<string, unknown>;
   try {
-    body = JSON.parse(event.body ?? "{}") as Record<string, unknown>;
+    const b: unknown = await req.json();
+    if (!b || typeof b !== "object" || Array.isArray(b)) return json(400, { error: "invalid_json" });
+    body = b as Record<string, unknown>;
   } catch {
     return json(400, { error: "invalid_json" });
   }
 
-  // Honeypot: een veld dat onzichtbaar is voor mensen. Ingevuld = bot.
-  // We doen alsof alles goed ging, zodat de bot niets leert.
-  if (pickStr(body.website)) return json(200, { ok: true });
-
-  const naam = pickStr(body.naam, 120);
+  // De honeypot (`website`, `controle`) zit in de wacht hieronder, na de controle van de velden.
+  const naam = eenRegel(pickStr(body.naam, 120));
   const email = pickStr(body.email, 200);
   const telefoon = pickStr(body.telefoonnummer, 40);
-  const bedrijfswebsite = pickStr(body.bedrijfswebsite, 200);
+  let bedrijfswebsite = pickStr(body.bedrijfswebsite, 200);
   const bericht = pickStr(body.bericht, 3000);
   const bron = pickStr(body.bron, 300) || "onbekend";
   // De volledige adresbalk (met ?bron=…) voor Tuesday; de mail en monday houden `bron`.
@@ -169,28 +178,31 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
   if (!naam) return json(400, { error: "missing_naam" });
   if (!EMAIL_RE.test(email)) return json(400, { error: "invalid_email" });
-  // Het hubformulier (/hub/) vraagt ook een telefoonnummer, verplicht (Alex, 20/11).
-  // De popup en het vraagformulier elders op de site houden hun eigen regels.
+  // Het hubformulier (/hub/, of met het veld `hub`) vraagt ook een telefoonnummer, verplicht
+  // (Alex, 20/11), en dezelfde controles als in de browser. De popup en het vraagformulier
+  // elders op de site houden hun eigen regels.
   const isHub = /^https:\/\/finitsolutions\.be\/hub\//.test(bron);
-  if (isHub && naam.length < 2) return json(400, { error: "missing_naam" });
-  if (isHub && !telefoonOk(telefoon)) return json(400, { error: "invalid_telefoon" });
-  // Het formulier onderaan de homepage (/ en /en/, sinds 25/11): naam, e-mail, telefoon en
-  // website verplicht (Alex, 25/11). Op /hub/ controleert alleen de browser de website: wie
-  // de pagina nog open had van voor die wijziging, mag zijn aanvraag niet kwijtraken.
+  const vanHub = isHub || (typeof body.hub === "object" && body.hub !== null);
+  if (vanHub && naam.length < 2) return json(400, { error: "missing_naam" });
+  if (vanHub && !telefoonOk(telefoon)) return json(400, { error: "invalid_telefoon" });
+  // De website is op de hub (nog) optioneel: een onzinwaarde gaat niet naar Tuesday.
+  if (vanHub && bedrijfswebsite && !websiteOk(bedrijfswebsite)) bedrijfswebsite = "";
+
+  // Het formulier op de nieuwe homepage (/#startgesprek en /en/#startgesprek): naam, telefoon en
+  // website verplicht (Alex, 25/11: vier verplichte velden op elk formulier, behalve dat van de
+  // gratis resources). Dezelfde controles als in de browser.
   const isStart = /^https:\/\/finitsolutions\.be\/(en\/)?#startgesprek$/.test(bron);
   if (isStart && naam.length < 2) return json(400, { error: "missing_naam" });
   if (isStart && !telefoonOk(telefoon)) return json(400, { error: "invalid_telefoon" });
   if (isStart && !websiteOk(bedrijfswebsite)) return json(400, { error: "invalid_website" });
 
-  const apiKey = process.env.BREVO_API_KEY;
-  if (!apiKey) {
-    console.error("contact-submit: BREVO_API_KEY ontbreekt");
-    return json(500, { error: "mail_not_configured" });
-  }
+  // Bots, vreemde sites, dubbels en een vloed stoppen hier (zie lib/formulier-wacht.ts).
+  const stop = await wacht(req, context.ip, body, "contact-submit");
+  if (stop) return stop;
+  const id = aanvraagId(body);
 
-  // Tuesday en de kijkbeurt lopen parallel met monday. Het hubformulier (vlag: het
-  // veld `hub`, of een /hub/-pagina) gaat alleen naar Socials, de rest naar Content.
-  const vanHub = isHub || (typeof body.hub === "object" && body.hub !== null);
+  // Tuesday, monday en de kijkbeurt lopen parallel. Alles gaat naar Socials: de hub naar de
+  // eerste groep, popup en vraagformulier naar "Ads en content" (vast id).
   const hub = vanHub ? leesHub(body.hub) : null;
   let tuesdayBelofte: Promise<TuesdayStatus> = Promise.resolve("off");
   if (hub) {
@@ -213,26 +225,32 @@ export const handler: Handler = async (event: HandlerEvent) => {
     if (hub.pagina) values.pagina = hub.pagina;
     tuesdayBelofte = naarTuesday(TUESDAY.socials, { name: naamItem, values }, "contact-submit");
   } else if (!vanHub) {
-    // Jords route vraagt name, email en message; de popup heeft geen bericht.
-    const lead: Record<string, string> = {
-      name: naam,
+    // Popup en vraagformulier: sinds Luka het bord Content op 25/11 weghaalde, ook naar Socials,
+    // groep "Ads en content" (vast id), met bron Website. De popup heeft geen bericht.
+    const mailDomein = email.split("@")[1]?.toLowerCase() ?? "";
+    const naamItem = domein(bedrijfswebsite) || (mailDomein && !GRATIS_MAIL.has(mailDomein) ? mailDomein : "") || naam;
+    const values: Record<string, string | number> = {
+      status: "New lead 0%",
+      bron: "Website",
+      contact_name: naam,
       email,
       message: bericht || "Wil een kennismaking plannen (popup op de website).",
-      page: pagina,
+      pagina,
     };
-    if (telefoon) lead.phone = telefoon;
-    if (bedrijfswebsite) lead.website = bedrijfswebsite;
-    tuesdayBelofte = naarTuesday(TUESDAY.websiteLead, lead, "contact-submit");
+    if (telefoon) values.phone = telefoon;
+    if (bedrijfswebsite && websiteOk(bedrijfswebsite)) {
+      values.website = /^https?:\/\//i.test(bedrijfswebsite) ? bedrijfswebsite : `https://${bedrijfswebsite}`;
+    }
+    tuesdayBelofte = naarTuesday(TUESDAY.socials, { name: naamItem, group_id: SOCIALS_WEBSITE_GROEP, values }, "contact-submit");
   }
   const kijkBelofte = hub?.kijkbeurt
-    ? markeerFormulier(event, hub.kijkbeurt.id, hub.kijkbeurt.dag).catch(() => console.error("contact-submit: kijkbeurt niet bijgewerkt"))
+    ? markeerFormulier(hub.kijkbeurt.id, hub.kijkbeurt.dag).catch(() => console.error("contact-submit: kijkbeurt niet bijgewerkt"))
     : Promise.resolve();
 
-  // Eerst monday, zodat de mail kan zeggen of de lead er staat.
-  let mondayStatus: "off" | "ok" | "failed" = "off";
-  let mondayRegel = "";
+  // monday naast Tuesday; de mail zegt daarna of de lead er staat.
   const monday = mondayConfigFromEnv();
-  if (monday) {
+  const mondayBelofte: Promise<string> = (async () => {
+    if (!monday) return "";
     const mondayTimer = new AbortController();
     const mondayTimeout = setTimeout(() => mondayTimer.abort(), MONDAY_TIMEOUT_MS);
     try {
@@ -241,20 +259,18 @@ export const handler: Handler = async (event: HandlerEvent) => {
         { naam, email, telefoon, bedrijfswebsite, bericht, bron },
         mondayTimer.signal
       );
-      mondayStatus = "ok";
-      mondayRegel = `<p style="margin:16px 0 0;font-size:14px;color:#6C7590">monday: <a href="${esc(item.url)}" style="color:#1A2D63">item #${esc(item.id)}</a></p>`;
+      return `<p style="margin:16px 0 0;font-size:14px;color:#6C7590">monday: <a href="${esc(item.url)}" style="color:#1A2D63">item #${esc(item.id)}</a></p>`;
     } catch (err) {
-      console.error("contact-submit: monday-item mislukt", err);
-      mondayStatus = "failed";
-      mondayRegel = `<p style="margin:16px 0 0;font-size:14px;color:#b45309">monday: lead aanmaken mislukt, voeg deze manueel toe.</p>`;
+      console.error("contact-submit: monday-item mislukt", err instanceof Error ? err.name : "onbekende fout");
+      return `<p style="margin:16px 0 0;font-size:14px;color:#b45309">monday: lead aanmaken mislukt, voeg deze manueel toe.</p>`;
     } finally {
       clearTimeout(mondayTimeout);
     }
-  }
+  })();
 
   const tuesdayStatus = await tuesdayBelofte;
   await kijkBelofte;
-  const bord = hub ? "Socials" : "Content";
+  const bord = "Socials";
   const tuesdayRegel =
     tuesdayStatus === "ok"
       ? `<p style="margin:8px 0 0;font-size:14px;color:#6C7590">Tuesday: item op het bord ${bord}.</p>`
@@ -274,7 +290,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
   const titel = isVraag ? "Nieuwe vraag via de website" : "Nieuwe aanvraag via de website";
   const onderwerp = isVraag ? `Nieuwe vraag: ${naam}` : `Nieuwe aanvraag: ${naam}`;
 
-  const html = `
+  const html = (mondayRegel: string, extra: string) => `
     <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#1A2D63">
       <h2 style="margin:0 0 16px">${titel}</h2>
       <table cellpadding="6" style="border-collapse:collapse;font-size:15px">
@@ -293,35 +309,28 @@ export const handler: Handler = async (event: HandlerEvent) => {
       }
       ${mondayRegel}
       ${tuesdayRegel}
+      ${extra}
     </div>`;
+  const mail = async (extra = "") =>
+    mailNaarContact({ onderwerp, html: html(await mondayBelofte, extra), antwoordAan: { email, naam } }, "contact-submit");
 
-  try {
-    const res = await fetch(BREVO_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "api-key": apiKey,
-        "Content-Type": "application/json",
-        accept: "application/json",
-      },
-      body: JSON.stringify({
-        sender: { name: "Finit website", email: FROM_EMAIL },
-        to: [{ email: TO_EMAIL }],
-        // Antwoorden gaat rechtstreeks naar de lead.
-        replyTo: { email, name: naam },
-        subject: onderwerp,
-        htmlContent: html,
-      }),
-    });
-
-    if (!res.ok) {
-      const detail = await res.text();
-      console.error("contact-submit: Brevo gaf", res.status, detail.slice(0, 500));
-      return json(502, { error: "mail_failed", status: res.status });
-    }
-  } catch (err) {
-    console.error("contact-submit: netwerkfout", err);
-    return json(502, { error: "mail_failed" });
+  if (tuesdayStatus === "ok") {
+    // De lead staat veilig in Tuesday: de bezoeker hoeft niet te wachten op monday, GitHub of Brevo.
+    // Pas na "ok" het PAPI-seintje (lib/papi.ts), anders vindt de automaat de lead nog niet.
+    context.waitUntil(
+      (async () => {
+        const papi = (await papiMagVandaag(email)) ? await papiSeintje("contact-submit") : "overgeslagen";
+        await mail(papiRegel(papi));
+      })()
+    );
+    return json(200, { ok: true, tuesday: tuesdayStatus });
   }
 
-  return json(200, { ok: true, monday: mondayStatus, tuesday: tuesdayStatus });
+  // Geen Tuesday: de mail is het vangnet. Mislukt die ook, dan mag de bezoeker opnieuw.
+  if (!(await mail())) {
+    await vergeet(id);
+    return json(502, { error: "mail_failed" });
+  }
+  return json(200, { ok: true, tuesday: tuesdayStatus });
 };
+

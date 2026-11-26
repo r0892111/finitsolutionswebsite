@@ -29,16 +29,15 @@ import type HlsType from "hls.js";
 import { pushEvent } from "@/lib/analytics";
 import { meetTijd, startKijkbeurt, stuurKijkbeurt } from "./kijkmeting";
 import { HUB } from "./copy";
-import { VSL } from "./video";
+import { VSL, type VslInstelling } from "./video";
 
 type Fase = "start" | "verder" | "speelt" | "pauze" | "einde" | "fout";
 type Woord = [string, number, number];
 type Regel = [number, number, Woord[]];
 
 // Hangt aan de bron: een nieuwe video begint dus niet op de plek van de oude.
-const SLEUTEL = `finit_hub_vsl_positie:${VSL.bron}`;
-const IS_HLS = /\.m3u8(\?|$)/i.test(VSL.bron);
-const T = HUB.speler;
+const sleutelVoor = (bron: string) => `finit_hub_vsl_positie:${bron}`;
+const isHls = (bron: string) => /\.m3u8(\?|$)/i.test(bron);
 
 // Volledig scherm: de standaard-API, de oude Safari-variant, en op de iPhone Apples eigen videospeler.
 type KaderMetWebkit = HTMLDivElement & { webkitRequestFullscreen?: () => Promise<void> | void };
@@ -52,40 +51,42 @@ function volSchermElement(): Element | null {
   return d.fullscreenElement ?? d.webkitFullscreenElement ?? null;
 }
 
-function leesPositie(): number {
+function leesPositie(sleutel: string): number {
   try {
-    const n = parseFloat(window.localStorage.getItem(SLEUTEL) ?? "");
+    const n = parseFloat(window.localStorage.getItem(sleutel) ?? "");
     return Number.isFinite(n) ? n : 0;
   } catch {
     return 0;
   }
 }
-function bewaarPositie(sec: number) {
+function bewaarPositie(sleutel: string, sec: number) {
   try {
-    window.localStorage.setItem(SLEUTEL, String(Math.floor(sec)));
+    window.localStorage.setItem(sleutel, String(Math.floor(sec)));
   } catch {
     /* privévenster of opslag geblokkeerd: dan vragen we gewoon niet */
   }
 }
 // Ondertitels aan of uit: de keuze van de kijker, los van de video.
+// De Engelse hub (ondertitels standaard aan) onthoudt haar keuze apart.
 const CC_SLEUTEL = "finit_hub_vsl_ondertitels";
-function leesOndertitelsAan(): boolean {
+function leesOndertitelsAan(sleutel: string, standaard: boolean): boolean {
   try {
-    return window.localStorage.getItem(CC_SLEUTEL) === "1";
+    const keuze = window.localStorage.getItem(sleutel);
+    return keuze === null ? standaard : keuze === "1";
   } catch {
-    return false;
+    return standaard;
   }
 }
-function bewaarOndertitelsAan(aan: boolean) {
+function bewaarOndertitelsAan(sleutel: string, aan: boolean) {
   try {
-    window.localStorage.setItem(CC_SLEUTEL, aan ? "1" : "0");
+    window.localStorage.setItem(sleutel, aan ? "1" : "0");
   } catch {
     /* geblokkeerd: dan geldt de keuze alleen voor dit bezoek */
   }
 }
-function wisPositie() {
+function wisPositie(sleutel: string) {
   try {
-    window.localStorage.removeItem(SLEUTEL);
+    window.localStorage.removeItem(sleutel);
   } catch {
     /* idem */
   }
@@ -113,10 +114,10 @@ function grootEnSnel(): boolean {
  * De link die de speler laadt. Met token-authenticatie bij Bunny eerst een
  * tijdelijke, ondertekende link vragen aan /api/vsl-bron; `null` als dat mislukt.
  */
-async function haalBron(): Promise<string | null> {
-  if (!VSL.ondertekenen) return VSL.bron;
+async function haalBron(video: VslInstelling): Promise<string | null> {
+  if (!video.ondertekenen) return video.bron;
   try {
-    const r = await fetch(`/api/vsl-bron?bron=${encodeURIComponent(VSL.bron)}`, { cache: "no-store" });
+    const r = await fetch(`/api/vsl-bron?bron=${encodeURIComponent(video.bron)}`, { cache: "no-store" });
     const j = (await r.json()) as { bron?: string };
     return r.ok && j.bron ? j.bron : null;
   } catch {
@@ -138,12 +139,20 @@ export function getoondeVoortgang(echt: number, sterkte = VSL.balkSterkte): numb
 export function VslSpeler({
   meta = {},
   onNaarFormulier,
+  video = VSL,
+  tekst = HUB.speler,
 }: {
   /** Gaat mee met de analytics-events (bron, reel). */
   meta?: Record<string, string>;
   /** De knop op het einde van de video. */
   onNaarFormulier?: () => void;
+  /** Welke video (standaard de VSL van de hub, ./video.ts). /cursus/ geeft de VSL van de cursus mee. */
+  video?: VslInstelling;
+  /** De teksten van de speler (standaard die van de hub). */
+  tekst?: typeof HUB.speler;
 }) {
+  const T = tekst;
+  const sleutel = sleutelVoor(video.bron);
   const videoRef = useRef<HTMLVideoElement>(null);
   const kaderRef = useRef<HTMLDivElement>(null);
   const verbergTimer = useRef<number | undefined>(undefined);
@@ -175,17 +184,19 @@ export function VslSpeler({
   // Op volledig scherm verdwijnen de knoppen na 3 s spelen; een tik toont ze weer.
   const [bediening, setBediening] = useState(true);
 
-  // Ondertitels: standaard uit, tenzij de kijker ze eerder aanzette.
-  useEffect(() => setCc(leesOndertitelsAan()), []);
+  // Ondertitels: standaard uit (op de Engelse hub aan), tenzij de kijker eerder anders koos.
+  const ccStandaard = video.ondertitelsStandaard === true;
+  const ccSleutel = ccStandaard ? `${CC_SLEUTEL}_en` : CC_SLEUTEL;
+  useEffect(() => setCc(leesOndertitelsAan(ccSleutel, ccStandaard)), [ccSleutel, ccStandaard]);
 
   // Terugkomer? Dan de vraag in plaats van de afspeelknop.
   useEffect(() => {
-    const pos = leesPositie();
-    if (pos > VSL.verderVanaf) {
+    const pos = leesPositie(sleutel);
+    if (pos > video.verderVanaf) {
       hervatOp.current = pos;
       setFase("verder");
     }
-  }, []);
+  }, [sleutel, video]);
 
   /** De bron één keer klaarzetten: hls.js laadt alleen de playlist, nog geen beeld. */
   const zetBronKlaar = useCallback(() => {
@@ -193,14 +204,14 @@ export function VslSpeler({
     const v = videoRef.current;
     if (!v) return Promise.resolve();
     bronKlaar.current = (async () => {
-      const bron = await haalBron();
+      const bron = await haalBron(video);
       if (!bron) {
         bronFout.current = true;
         return;
       }
       // hls.js overal waar het kan, zodat wij de kwaliteit kiezen (ook 4K). Op iPhone en iPad
       // de eigen speler van Apple; een mp4 als bron speelt gewoon.
-      if (!IS_HLS || isIos()) {
+      if (!isHls(video.bron) || isIos()) {
         v.src = bron;
         return;
       }
@@ -266,12 +277,12 @@ export function VslSpeler({
   }, [zetBronKlaar]);
 
   const laadOndertitels = useCallback(() => {
-    if (!VSL.ondertitels || regels) return;
-    fetch(VSL.ondertitels)
+    if (!video.ondertitels || regels) return;
+    fetch(video.ondertitels)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => Array.isArray(d) && setRegels(d as Regel[]))
       .catch(() => undefined);
-  }, [regels]);
+  }, [regels, video]);
 
   const start = useCallback(
     async (vanaf: number) => {
@@ -305,6 +316,7 @@ export function VslSpeler({
           bron: metaRef.current.bron ?? "direct",
           reel: metaRef.current.reel ?? "",
           kwaliteit: kwaliteitRef.current,
+          video: video.id,
         });
       } catch {
         // De browser weigerde (bv. energiebesparing): terug naar de afspeelknop.
@@ -312,7 +324,7 @@ export function VslSpeler({
         setFase(vanaf > 0 ? "verder" : "start");
       }
     },
-    [zetBronKlaar]
+    [zetBronKlaar, video]
   );
 
   const pauzeer = useCallback(() => videoRef.current?.pause(), []);
@@ -420,11 +432,11 @@ export function VslSpeler({
       if (eigenSprong.current && !v.seeking && Math.abs(v.currentTime - laatsteTijd.current) < 1.5) eigenSprong.current = false;
       if (!v.seeking && !eigenSprong.current) laatsteTijd.current = v.currentTime;
       const echt = v.currentTime / d;
-      setBalk(getoondeVoortgang(echt));
+      setBalk(getoondeVoortgang(echt, video.balkSterkte));
       if (!eigenSprong.current) meetTijd(v.currentTime, d, kwaliteitRef.current);
-      if (Math.abs(v.currentTime - laatstBewaard.current) >= VSL.bewaarElke) {
+      if (Math.abs(v.currentTime - laatstBewaard.current) >= video.bewaarElke) {
         laatstBewaard.current = v.currentTime;
-        bewaarPositie(v.currentTime);
+        bewaarPositie(sleutel, v.currentTime);
       }
       // Echte voortgang voor de analytics: 25, 50, 75 %.
       const kwart = Math.floor(echt * 4);
@@ -444,7 +456,7 @@ export function VslSpeler({
     };
     const opPauze = () => {
       if (v.ended) return;
-      bewaarPositie(v.currentTime);
+      bewaarPositie(sleutel, v.currentTime);
       stuurKijkbeurt();
       setFase((f) => (f === "speelt" ? "pauze" : f));
     };
@@ -453,7 +465,7 @@ export function VslSpeler({
       verlaatVolScherm();
       meetTijd(v.duration, v.duration, kwaliteitRef.current);
       stuurKijkbeurt();
-      wisPositie();
+      wisPositie(sleutel);
       setBalk(1);
       setFase("einde");
       pushEvent("vsl_voortgang", { ...metaRef.current, procent: "100" });
@@ -462,7 +474,7 @@ export function VslSpeler({
     const opLoopt = () => setLaadt(false);
     const opFout = () => setFase("fout");
     const opWeg = () => {
-      if (v.currentTime > 0 && !v.ended) bewaarPositie(v.currentTime);
+      if (v.currentTime > 0 && !v.ended) bewaarPositie(sleutel, v.currentTime);
     };
 
     v.addEventListener("timeupdate", opTijd);
@@ -501,7 +513,7 @@ export function VslSpeler({
       v.removeEventListener("error", opFout);
       window.removeEventListener("pagehide", opWeg);
     };
-  }, [verlaatVolScherm]);
+  }, [verlaatVolScherm, sleutel, video]);
 
   // De ondertitels pas ophalen als ze aan staan en de video gestart is.
   useEffect(() => {
@@ -511,9 +523,9 @@ export function VslSpeler({
   const wisselOndertitels = useCallback(() => {
     const aan = !cc;
     setCc(aan);
-    bewaarOndertitelsAan(aan);
+    bewaarOndertitelsAan(ccSleutel, aan);
     pushEvent("vsl_ondertitels", { ...metaRef.current, stand: aan ? "aan" : "uit" });
-  }, [cc]);
+  }, [cc, ccSleutel]);
 
   // Ondertitels: de regel die nu gezegd wordt, per beeldje bijgewerkt.
   useEffect(() => {
@@ -550,7 +562,7 @@ export function VslSpeler({
       <video
         ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
-        poster={VSL.affiche}
+        poster={video.affiche}
         preload="none"
         playsInline
         disablePictureInPicture
@@ -654,7 +666,7 @@ export function VslSpeler({
             bediening ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
         >
-          {VSL.ondertitels && (
+          {video.ondertitels && (
             <button
               type="button"
               onClick={wisselOndertitels}

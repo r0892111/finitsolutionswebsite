@@ -15,6 +15,7 @@
 
 import { useId, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { useBescherming } from "@/components/formulier-bescherming";
 import { pushEvent } from "@/lib/analytics";
 import { EMAIL_RE, telefoonOk, websiteOk } from "@/lib/contact-velden";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
@@ -58,6 +59,8 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
   const [website, setWebsite] = useState(""); // honeypot: onzichtbaar, blijft leeg bij mensen
   const [fouten, setFouten] = useState<{ naam?: string; email?: string; telefoon?: string; bedrijfswebsite?: string }>({});
   const [status, setStatus] = useState<Status>("leeg");
+  // Invultijd, één id per aanvraag (tegen dubbels), honeypot en Turnstile: zie formulier-bescherming.tsx.
+  const bescherming = useBescherming();
 
   const verstuur = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,8 +96,10 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
           website,
           bron: `https://finitsolutions.be/${taal === "en" ? "en/" : ""}#startgesprek`,
           pagina: window.location.href,
+          ...bescherming.velden(),
         }),
       });
+      bescherming.naVersturen(res.ok);
       if (!res.ok) throw new Error(`status ${res.status}`);
       setStatus("klaar");
       pushEvent("form_submitted", { location: "home_startgesprek", taal });
@@ -156,6 +161,7 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
         <label htmlFor={`${id}-website`}>Website</label>
         <input id={`${id}-website`} type="text" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
       </div>
+      {bescherming.extraVelden}
 
       {status === "fout" && (
         <p role="alert" className="mt-5 rounded-xl bg-red-50 px-4 py-3 text-[0.875rem] leading-[1.5] text-red-700">
