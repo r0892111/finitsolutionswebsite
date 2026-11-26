@@ -20,6 +20,7 @@ De homepage van finitsolutions.be met de copy van Amina (Google Doc "Upwork scri
 | `copy.ts` | De vorm van de tekst (types). |
 | `home-pagina.tsx` | De homepage, in de volgorde van Amina. |
 | `over-ons-pagina.tsx` | "Over ons" (`/over-ons/`, `/en/about/`): haar sectie 7 en 5, met de foto. |
+| `gratis-pagina.tsx` | "Gratis materiaal" (`/gratis-materiaal/`, `/en/free-resources/`, sinds 26/11, vraag van Amina): de prompts en gidsen van de hub achter het e-mailslot, met eronder een blok naar de video op `/hub/`. Geen eigen tekst: alles komt uit `components/hub/copy.ts` en `copy.en.ts`, alleen de menunaam en de knop "Bekijk de video" staan in `gratis` in de copy hier. Wie zich hier aanmeldt, krijgt in Brevo `UTM_MEDIUM = gratis-materiaal` (de hub geeft `hub`), zodat die groep later een eigen mailreeks kan krijgen. De prompt wordt nog niet gemaild: het slot opent alles meteen op de pagina. |
 | `tools.ts` | De logo's onder "Werkt met wat je al gebruikt". |
 | `components/home/brein-3d.tsx` | De breinvisualisatie. Krijgt voor het Engels `labels` en `info` mee uit `copy.en.ts`. |
 | `kader.tsx` | Wat beide pagina's delen: menu, footer, de oprichters, "Waarom Finit", de logo's, en de hulpjes `Streep` en `vast`. |

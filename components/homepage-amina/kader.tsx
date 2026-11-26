@@ -25,6 +25,7 @@ import { NL } from "./copy.nl";
 export const COPY: Record<Taal, Copy> = { nl: NL, en: EN };
 export const HOME: Record<Taal, string> = { nl: "/", en: "/en/" };
 export const OVER_ONS: Record<Taal, string> = { nl: "/over-ons/", en: "/en/about/" };
+export const GRATIS: Record<Taal, string> = { nl: "/gratis-materiaal/", en: "/en/free-resources/" };
 
 /** Lopende tekst in kaarten en lijsten. */
 export const TEKST = "text-[1rem] leading-[1.6] text-[#3D4766]";
@@ -126,7 +127,7 @@ export function Steun({ label, midden = false }: { label: string; midden?: boole
  * wit met een wazige rand zodra je scrolt. Logo links, de secties in het midden, de taal en de
  * amber hoofdknop rechts.
  */
-export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boolean; taalPaden: Record<Taal, string>; actief?: "over-ons" }) {
+export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boolean; taalPaden: Record<Taal, string>; actief?: "over-ons" | "gratis" }) {
   const t = COPY[taal];
   const [menuOpen, setMenuOpen] = useState(false);
   const sluit = useCallback(() => setMenuOpen(false), []);
@@ -165,6 +166,7 @@ export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boo
               <a key={l.id} href={href(l.id)} onClick={klik(l.id, "nav")} className="nh-nav-link">{l.label}</a>
             ))}
             <a href={OVER_ONS[taal]} className="nh-nav-link" aria-current={actief === "over-ons" ? "page" : undefined}>{t.nav.overOns}</a>
+            <a href={GRATIS[taal]} className="nh-nav-link" aria-current={actief === "gratis" ? "page" : undefined}>{t.gratis.nav}</a>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
             <div className="nh-taal" role="group" aria-label={t.nav.taalLabel}>
@@ -203,6 +205,7 @@ export function Kop({ taal, thuis, taalPaden, actief }: { taal: Taal; thuis: boo
             <a key={l.id} href={href(l.id)} onClick={klik(l.id, "menu")} className="nh-menu-link">{l.label}</a>
           ))}
           <a href={OVER_ONS[taal]} className="nh-menu-link">{t.nav.overOns}</a>
+          <a href={GRATIS[taal]} className="nh-menu-link">{t.gratis.nav}</a>
           <a href={href("startgesprek")} onClick={klik("startgesprek", "menu")} className="hp-btn hp-btn--accent hp-btn--lg mt-8 w-full">
             {t.nav.cta}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -312,6 +315,7 @@ export function Voet({ taal }: { taal: Taal }) {
           <ul className="grid gap-x-12 gap-y-3 text-[0.9375rem] sm:grid-cols-2">
             {t.footer.video && <li><a href="/hub/" className="text-white transition-colors hover:text-white">{t.footer.video}</a></li>}
             <li><a href={OVER_ONS[taal]} className="transition-colors hover:text-white">{t.nav.overOns}</a></li>
+            <li><a href={GRATIS[taal]} className="transition-colors hover:text-white">{t.gratis.nav}</a></li>
             {t.footer.links.filter((l) => !/privacy|cookie|disclaimer/.test(l.href)).map((l) => (
               <li key={l.href}><a href={l.href} className="transition-colors hover:text-white">{l.label}</a></li>
             ))}

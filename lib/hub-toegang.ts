@@ -18,7 +18,7 @@ const JAAR = 60 * 60 * 24 * 365;
 interface Bewaard {
   sinds: string;
   /** Alleen zolang de server het adres nog niet heeft: dan proberen we het later opnieuw. */
-  wacht?: { email: string; mails: boolean; bron: string; reel: string };
+  wacht?: { email: string; mails: boolean; bron: string; reel: string; plek?: string };
 }
 
 function lees(): Bewaard | null {
@@ -57,6 +57,8 @@ export interface Aanvraag {
   mails: boolean;
   bron: string;
   reel: string;
+  /** Waar het slot staat: "hub", "promptpagina" of "gratis-materiaal". */
+  plek?: string;
   /** Honeypot. */
   website?: string;
 }
@@ -85,7 +87,7 @@ export async function vraagToegang(a: Aanvraag): Promise<"ok" | "ongeldig"> {
   const uitkomst = await stuur(a);
   if (uitkomst === "ongeldig") return "ongeldig";
   const sinds = new Date().toISOString();
-  schrijf(uitkomst === "ok" ? { sinds } : { sinds, wacht: { email: a.email, mails: a.mails, bron: a.bron, reel: a.reel } });
+  schrijf(uitkomst === "ok" ? { sinds } : { sinds, wacht: { email: a.email, mails: a.mails, bron: a.bron, reel: a.reel, plek: a.plek } });
   zetCookie();
   return "ok";
 }

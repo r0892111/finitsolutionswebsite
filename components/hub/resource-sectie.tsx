@@ -33,7 +33,12 @@ const SOORT_KLEUR: Record<string, string> = {
   bronnen: "border border-[#1A2D63]/25 bg-white text-[#1A2D63]",
 };
 
-export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<string, string> }) {
+/**
+ * `plek`: waar de sectie staat. "hub" (standaard) of "gratis-materiaal" (de aparte pagina met de
+ * gratis prompts): gaat mee met het analytics-event en met de aanmelding, zodat de twee groepen
+ * later apart te volgen zijn.
+ */
+export function ResourceSectie({ reel, meta, plek = "hub" }: { reel: string; meta: Record<string, string>; plek?: string }) {
   const H = useHub();
   const R = H.resources;
   const S = H.slot;
@@ -90,7 +95,7 @@ export function ResourceSectie({ reel, meta }: { reel: string; meta: Record<stri
             tekst={S.tekst.replace("{aantal}", String(resources.length))}
             bron={meta.bron ?? "direct"}
             reel={reel}
-            meta={{ ...meta, plek: "hub" }}
+            meta={{ ...meta, plek }}
             onOpen={() => setOpen(true)}
             className="z-10 mx-auto -mt-40 max-w-[34rem] sm:-mt-48"
           />

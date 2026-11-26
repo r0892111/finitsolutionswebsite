@@ -360,6 +360,12 @@ export const EN: Copy = {
     metaBeschrijving: "The three founders of Finit Solutions: Alex Otten, Karel Van Ransbeeck and Jord Goossens. Behind every AI employee, there's a person you can call.",
   },
 
+  gratis: {
+    nav: "Free resources",
+    metaTitel: "Free prompts and guides | Finit Solutions",
+    videoKnop: "Watch the video",
+  },
+
   footer: {
     links: [
       { label: "Privacy policy", href: "/privacy/" },

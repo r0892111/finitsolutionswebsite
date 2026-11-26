@@ -341,6 +341,12 @@ export const NL: Copy = {
     metaBeschrijving: "De drie oprichters van Finit Solutions: Alex Otten, Karel Van Ransbeeck en Jord Goossens. Achter elke AI-werknemer staat een mens die je kan bellen.",
   },
 
+  gratis: {
+    nav: "Gratis materiaal",
+    metaTitel: "Gratis prompts en gidsen | Finit Solutions",
+    videoKnop: "Bekijk de video",
+  },
+
   footer: {
     video: "Bekijk de video",
     links: [

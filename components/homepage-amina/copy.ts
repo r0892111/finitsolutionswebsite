@@ -148,6 +148,8 @@ export interface Copy {
     };
   };
   overOns: { metaTitel: string; metaBeschrijving: string };
+  /** De pagina "Gratis materiaal" (vraag van Amina, 26/11). De teksten op de pagina zelf zijn die van de hub. */
+  gratis: { nav: string; metaTitel: string; videoKnop: string };
   footer: {
     /** De link naar de video op /hub. Alleen in het Nederlands: de hub is nog niet vertaald. */
     video?: string;
