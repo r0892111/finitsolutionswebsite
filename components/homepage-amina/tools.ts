@@ -15,6 +15,18 @@
  * kantoor, CRM en planning, verkoop en betalen, en de rest.
  * De bestanden in /public/tools/ komen van de site van de maker zelf, van
  * Wikimedia Commons of van Simple Icons (25/11/2026).
+ *
+ * Alleen software met een API (Alex, 26/11). Op 26/11/2026 nagekeken in de
+ * documentatie van de makers: alle 39 hebben er een. Bij een aantal is de
+ * toegang niet vrij, dus eerst nakijken voor je het een klant belooft:
+ * - Billit, Octopus, Silverfin: toegang voor een bureau moet je bij hen aanvragen.
+ * - Exact Online: voor meerdere klanten een betaald ontwikkelaarsabonnement.
+ * - Lightspeed: verschilt per product, vaak alleen voor partners.
+ * - Odoo en Salesforce: alleen op de duurdere formules van de klant.
+ * - WhatsApp: alleen het Business Platform, niet de gewone app.
+ * - SAP: een hele familie producten, per product anders.
+ * - Yuki heet in Nederland sinds 1/9/2026 "Nmbrs Accounting"; yuki.be toont nog Yuki.
+ * Een nieuw logo toevoegen = eerst nakijken dat er een API is.
  */
 export interface Tool {
   naam: string;
