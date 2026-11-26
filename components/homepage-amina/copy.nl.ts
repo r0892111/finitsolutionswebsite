@@ -367,7 +367,7 @@ export const NL: Copy = {
       "Op dit toestel blijft alles daarna open",
     ],
     open: {
-      titel: "Alles staat open{naam}.",
+      titel: "Succes ermee{naam}!",
       intro: "Begin met de BREIN-prompt. Daaronder vind je alle andere prompts en gidsen.",
       rest: "Alle andere prompts en gidsen",
     },

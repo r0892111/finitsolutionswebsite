@@ -385,7 +385,7 @@ export const EN: Copy = {
       "Everything stays open on this device afterwards",
     ],
     open: {
-      titel: "Everything is open{naam}.",
+      titel: "Good luck with it{naam}!",
       intro: "Start with the BRAIN prompt. Below it you'll find every other prompt and guide.",
       rest: "Every other prompt and guide",
     },
