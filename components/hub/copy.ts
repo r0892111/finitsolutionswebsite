@@ -66,8 +66,8 @@ export const HUB = {
   onderVideo: ["Nieuwe projecten plannen we maandelijks in.", "Wil je er volgende maand bij zijn?"],
   // De knop voor een gesprek heet overal op de site zo (Alex 25/11).
   knop: "Boek een conversatie",
-  // Amina 26/11: "60 minuten, gratis …" klonk wat wanhopig; Alex koos deze zin.
-  knopNoot: "Een uur, vrijblijvend. Daarna weet je waar AI in jouw bedrijf tijd wint.",
+  // Amina 26/11: "60 minuten, gratis …" klonk wat wanhopig. Zij stelde twee zinnen voor, Alex koos deze.
+  knopNoot: "Je weet daarna precies wat AI van je kan overnemen, of je nu met ons verdergaat of niet.",
 
   // De speler.
   speler: {
