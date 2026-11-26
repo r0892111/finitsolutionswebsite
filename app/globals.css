@@ -1146,6 +1146,23 @@ html {
 /* Onder het formulier: de omlijnde knop naar de aanpak op de homepage (Alex 25/11). */
 .hub-naar-website-wrap { margin-top: var(--hub-r4); }
 .hub-naar-website { max-width: 100%; text-align: center; }
+/* De quote van Bas onder het formulier (Alex 26/11): een rustige witte kaart, in de stijl van
+   "voor wie" maar zonder kleur, met een ronde foto, de quote in de displayletter, de naam eronder. */
+.hub-getuigenis { max-width: 760px; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 27px; border: 1px solid #E3E7EF; background: #FFFFFF; padding: 40px 48px 36px; box-shadow: 0 1px 2px rgba(26,45,99,0.04), 0 18px 40px -28px rgba(26,45,99,0.35); }
+.hub-getuigenis-foto { display: block; width: 88px; height: 88px; flex: none; overflow: hidden; border-radius: 9999px; border: 3px solid #E6ECF9; }
+/* Dezelfde uitsnede als op de homepage (case-kaart.tsx): ingezoomd op het gezicht. */
+.hub-getuigenis-foto img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.5); transform-origin: 50% 35%; }
+.hub-getuigenis-quote { margin-top: 20px; font-size: 28px; line-height: 1.35; font-weight: 500; color: #1A2D63; }
+.hub-getuigenis-naam { margin-top: 14px; font-size: 17px; font-weight: 600; color: #3D4766; }
+@media (max-width: 1100px) {
+  .hub-getuigenis-quote { font-size: clamp(22px, 2.6vw, 26px); }
+}
+@media (max-width: 767px) {
+  .hub-getuigenis { border-radius: 18px; padding: 28px 20px 24px; }
+  .hub-getuigenis-foto { width: 72px; height: 72px; }
+  .hub-getuigenis-quote { margin-top: 16px; font-size: 20px; }
+  .hub-getuigenis-naam { margin-top: 10px; font-size: 15px; }
+}
 @media (max-width: 1100px) {
   .hub-wie-titel { font-size: clamp(22px, 2.6vw, 28px); }
   .hub-wie-lijst li { font-size: clamp(17px, 2vw, 21px); }

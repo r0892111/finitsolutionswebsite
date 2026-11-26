@@ -17,6 +17,7 @@ import { useId, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { useBescherming } from "@/components/formulier-bescherming";
 import { pushEvent } from "@/lib/analytics";
+import { leadVelden } from "@/lib/herkomst";
 import { EMAIL_RE, telefoonOk, websiteOk } from "@/lib/contact-velden";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import type { Copy, Taal } from "./copy";
@@ -79,6 +80,9 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
 
     setStatus("bezig");
     pushEvent("form_submit", { location: "home_startgesprek", taal });
+    // De herkomst van het bezoek en de signalen voor Meta (lib/herkomst.ts); event_id = aanvraag_id.
+    const velden = bescherming.velden();
+    const lead = leadVelden(velden.aanvraag_id);
     const timer = new AbortController();
     const timeout = setTimeout(() => timer.abort(), TIMEOUT_MS);
     try {
@@ -94,15 +98,16 @@ export function StartFormulier({ t, taal }: { t: Copy["slot"]["formulier"]; taal
           // Zonder bericht behandelt de functie het als de oude popup; met bericht als een vraag.
           bericht: bericht.trim() || (taal === "nl" ? "Wil een conversatie boeken (formulier op de homepage)." : "Wants to book a conversation (form on the English homepage)."),
           website,
+          // Vast: zo herkent de server dit formulier. De echte herkomst zit in `herkomst` en `pagina`.
           bron: `https://finitsolutions.be/${taal === "en" ? "en/" : ""}#startgesprek`,
-          pagina: window.location.href,
-          ...bescherming.velden(),
+          ...velden,
+          ...lead,
         }),
       });
       bescherming.naVersturen(res.ok);
       if (!res.ok) throw new Error(`status ${res.status}`);
       setStatus("klaar");
-      pushEvent("form_submitted", { location: "home_startgesprek", taal });
+      pushEvent("form_submitted", { location: "home_startgesprek", taal, event_id: lead.event_id });
     } catch {
       setStatus("fout");
     } finally {

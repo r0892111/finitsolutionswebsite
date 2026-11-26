@@ -14,6 +14,7 @@
 import { useId, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
+import { leadVelden } from "@/lib/herkomst";
 import { CONTACT_EMAIL } from "@/lib/finit-links";
 import { VRAAG } from "./copy";
 import { useBescherming } from "@/components/formulier-bescherming";
@@ -53,6 +54,9 @@ export function VraagFormulier({
     e.preventDefault();
     setStatus("bezig");
     pushEvent("form_submit", { location });
+    // De herkomst van het bezoek en de signalen voor Meta (lib/herkomst.ts); event_id = aanvraag_id.
+    const velden = bescherming.velden();
+    const lead = leadVelden(velden.aanvraag_id);
 
     const timer = new AbortController();
     const timeout = setTimeout(() => timer.abort(), TIMEOUT_MS);
@@ -61,12 +65,12 @@ export function VraagFormulier({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: timer.signal,
-        body: JSON.stringify({ naam, email, telefoonnummer: metTelefoon ? telefoonnummer : "", bedrijfswebsite, bericht, website, bron, pagina: window.location.href, ...bescherming.velden() }),
+        body: JSON.stringify({ naam, email, telefoonnummer: metTelefoon ? telefoonnummer : "", bedrijfswebsite, bericht, website, bron, ...velden, ...lead }),
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
       bescherming.naVersturen(true);
       setStatus("klaar");
-      pushEvent("form_submitted", { location });
+      pushEvent("form_submitted", { location, event_id: lead.event_id });
     } catch {
       bescherming.naVersturen(false);
       setStatus("fout");

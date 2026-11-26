@@ -12,8 +12,9 @@
  * 5. de twijfels als korte FAQ.
  *
  * Herkomst: ?bron= en ?reel= zoals op de hub, of anders utm_source en
- * utm_content van de advertentie. Gaat mee naar Tuesday, de kijkmeting en
- * Google Tag Manager (cursus_view, vsl_*, cursus_form_stap, form_submit).
+ * utm_content van de advertentie (lib/herkomst.ts, sinds 26/11 voor de hele site).
+ * Gaat mee naar Tuesday, de kijkmeting en Google Tag Manager (cursus_view, vsl_*,
+ * cursus_form_stap, form_submit).
  *
  * Alle tekst staat in ./copy.ts, de video in ./video.ts.
  */
@@ -25,6 +26,7 @@ import { Onder } from "@/components/home/ui";
 import { TwijfelsLijst } from "@/components/hub/twijfels-lijst";
 import { VslSpeler } from "@/components/hub/vsl-speler";
 import { pushEvent } from "@/lib/analytics";
+import { leesHerkomst } from "@/lib/herkomst";
 import { CURSUS } from "./copy";
 import { CursusFormulier } from "./cursus-formulier";
 import { CURSUS_VSL } from "./video";
@@ -32,40 +34,19 @@ import { CURSUS_VSL } from "./video";
 const ACCENT = "text-[#2F55C4]";
 const KOP = "hp-display hub-sectietitel text-balance text-center font-bold text-[#1A2D63]";
 const INTRO = "hub-intro mx-auto text-balance text-center text-[#3D4766]";
-const HERKOMST_OPSLAG = "finit_cursus_herkomst";
 
 interface Herkomst {
   bron: string;
   reel: string;
 }
 
-/** Alleen kleine letters, cijfers, - en _: zo kan er niets vreemds in een link of mail belanden. */
-function schoon(v: string | null, max: number): string {
-  return (v ?? "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, max);
-}
-
 export function CursusPagina() {
   const [herkomst, setHerkomst] = useState<Herkomst>({ bron: "direct", reel: "" });
 
-  // Herkomst uit de link, één keer bij het openen. De eerste van dit bezoek blijft gelden.
+  // Herkomst één keer bij het openen. De eerste van dit bezoek blijft gelden.
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    const uitUrl = {
-      bron: schoon(p.get("bron") ?? p.get("utm_source"), 40),
-      reel: schoon(p.get("reel") ?? p.get("utm_content"), 12).toUpperCase(),
-    };
-    let eerste: Herkomst | null = null;
-    try {
-      const bewaard = JSON.parse(sessionStorage.getItem(HERKOMST_OPSLAG) ?? "null") as { bron?: unknown; reel?: unknown } | null;
-      if (bewaard) eerste = { bron: schoon(String(bewaard.bron ?? ""), 40), reel: schoon(String(bewaard.reel ?? ""), 12).toUpperCase() };
-      if (!eerste && (uitUrl.bron || uitUrl.reel)) {
-        eerste = uitUrl;
-        sessionStorage.setItem(HERKOMST_OPSLAG, JSON.stringify(uitUrl));
-      }
-    } catch {
-      /* geen opslag: dan geldt gewoon de link */
-    }
-    const h = { bron: eerste?.bron || uitUrl.bron || "direct", reel: eerste?.reel || uitUrl.reel };
+    const { bron, reel } = leesHerkomst();
+    const h: Herkomst = { bron, reel };
     setHerkomst(h);
     pushEvent("cursus_view", { bron: h.bron, ...(h.reel ? { reel: h.reel } : {}) });
   }, []);

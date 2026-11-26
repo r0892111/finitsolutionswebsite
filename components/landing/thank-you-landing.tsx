@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { ArrowLeft, Mail, Phone } from "lucide-react";
 import { pushEvent } from "@/lib/analytics";
+import { neemLeadOver } from "@/lib/herkomst";
 import { CONTACT_EMAIL, PHONE_LINK, PHONE_NUMBER } from "@/lib/finit-links";
 import { BEDANKT, MENU } from "@/components/home/copy";
 import { SiteFooter } from "@/components/home/site-footer";
@@ -37,8 +38,10 @@ function Vinkje() {
 }
 
 export function ThankYouLanding() {
+  // Na de popup: met het event_id van de aanvraag, zodat Meta de pixel en de server samen telt.
   useEffect(() => {
-    pushEvent("form_submitted", { location: "lp_thankyou" });
+    const eventId = neemLeadOver();
+    pushEvent("form_submitted", { location: "lp_thankyou", ...(eventId ? { event_id: eventId } : {}) });
   }, []);
 
   return (

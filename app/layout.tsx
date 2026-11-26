@@ -8,6 +8,7 @@ import { CookieBanner } from '@/components/cookie-banner';
 import { CookieSettingsModal } from '@/components/cookie-settings-modal';
 import { LanguageProvider } from '@/contexts/language-context';
 import { AuthProvider } from '@/contexts/auth-context';
+import { HerkomstVastleggen } from '@/components/herkomst-vastleggen';
 
 const SITE_TITLE = 'Finit Solutions | Jouw bedrijf, klaar voor AI';
 const SITE_DESCRIPTION =
@@ -153,6 +154,8 @@ export default function RootLayout({
         <LanguageProvider>
           <AuthProvider>
             <ConsentProvider>
+              {/* De bron van het bezoek (kanaal, post, advertentie), voor elk formulier: zie lib/herkomst.ts. */}
+              <HerkomstVastleggen />
               {children}
               <CookieBanner />
               <CookieSettingsModal />

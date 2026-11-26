@@ -27,8 +27,10 @@
  * hubformulier (/hub/, met het veld `hub`) als item op het bord Leads › Socials,
  * met het kanaal, de reel en hoe ver de VSL bekeken werd; de kijkbeurt van de
  * VSL-meting krijgt dan "formulier verstuurd". Alle andere (popup, vraagformulier)
- * sinds 25/11 ook naar Socials, groep "Ads en content", met bron Website (het bord
- * Content is weg). Mislukt Tuesday,
+ * sinds 25/11 ook naar Socials, groep "Ads en content" (het bord Content is weg). Sinds
+ * 26/11 met het kanaal uit het veld `herkomst` (lib/herkomst.ts: ?bron=, utm_source,
+ * fbclid, …) als bron, en Website als dat ontbreekt; `pagina` is dan de eerste link van
+ * het bezoek, met de utm-parameters. De herkomst staat ook als regel in de mail. Mislukt Tuesday,
  * dan vertrekken mail en monday gewoon; de fout wordt gelogd zonder
  * persoonsgegevens en zonder sleutel.
  *
@@ -47,6 +49,8 @@
  *   MONDAY_GROUP_ID, MONDAY_COL_*, MONDAY_STATUS_LABEL (optioneel) — zie lib/monday/create-item.ts
  *   CRM_API_TOKEN of CRM_SOCIALS_TOKEN (optioneel) — sleutel voor Tuesday. Nooit loggen.
  *   PAPI_GITHUB_TOKEN, TURNSTILE_SECRET_KEY (optioneel) — zie lib/papi.ts en lib/formulier-wacht.ts
+ *   META_PIXEL_ID, META_CAPI_TOKEN, META_GRAPH_VERSIE, META_TEST_EVENT_CODE (optioneel) — een Lead
+ *     naar Meta, alleen met toestemming voor marketing; zie lib/meta-capi.ts. Zonder: niets.
  */
 import type { Context } from "@netlify/functions";
 import { createMondayItem, mondayConfigFromEnv } from "../../lib/monday/create-item";
@@ -59,6 +63,7 @@ import { papiSeintje } from "../../lib/papi";
 import { aanvraagId, eenRegel, papiMagVandaag, vergeet, wacht } from "../../lib/formulier-wacht";
 import { esc, mailNaarContact, papiRegel } from "../../lib/brevo-mail";
 import { HUB } from "../../components/hub/copy";
+import { stuurMetaLead } from "../../lib/meta-capi";
 
 // monday loopt naast Tuesday en mag nooit langer duren dan Tuesday zelf (5 s).
 const MONDAY_TIMEOUT_MS = 5000;
@@ -105,6 +110,11 @@ function pickStr(v: unknown, max = 200): string {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
 }
 
+/** Alleen kleine letters, cijfers, - en _. */
+function slug(x: unknown, max: number): string {
+  return typeof x === "string" ? x.toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, max) : "";
+}
+
 function kanaalLabel(slug: string): string {
   if (!slug || slug === "direct") return "Website";
   return KANALEN[slug] ?? "Other";
@@ -134,7 +144,6 @@ interface HubVelden {
 function leesHub(v: unknown): HubVelden | null {
   if (!v || typeof v !== "object") return null;
   const h = v as Record<string, unknown>;
-  const slug = (x: unknown, max: number) => (typeof x === "string" ? x.toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, max) : "");
   const procent = typeof h.vsl_procent === "number" && Number.isFinite(h.vsl_procent) ? Math.round(Math.min(100, Math.max(0, h.vsl_procent))) : 0;
   const pagina = pickStr(h.pagina, 500);
   const k = h.kijkbeurt as Record<string, unknown> | null | undefined;
@@ -149,6 +158,27 @@ function leesHub(v: unknown): HubVelden | null {
     pagina: /^https?:\/\//i.test(pagina) ? pagina : "",
     kijkbeurt: k && typeof k.id === "string" && typeof k.dag === "string" ? { id: k.id, dag: k.dag } : null,
   };
+}
+
+/** De herkomst van het bezoek, uit lib/herkomst.ts in de browser. Alles kort en op één regel. */
+interface HerkomstVelden {
+  bron: string;
+  reel: string;
+  utm: Array<[string, string]>;
+}
+
+function leesHerkomst(v: unknown): HerkomstVelden | null {
+  if (!v || typeof v !== "object") return null;
+  const h = v as Record<string, unknown>;
+  const utm = (["utm_source", "utm_medium", "utm_campaign", "utm_content"] as const)
+    .map((k): [string, string] => [k, eenRegel(pickStr(h[k], 100))])
+    .filter(([, w]) => w);
+  return { bron: slug(h.bron, 40), reel: slug(h.reel, 12).toUpperCase(), utm };
+}
+
+/** "instagram · post R012 · utm_source=fb · utm_campaign=…", voor de mail. */
+function herkomstRegel(h: HerkomstVelden): string {
+  return [h.bron || "direct", h.reel ? `post ${h.reel}` : "", ...h.utm.map(([k, w]) => `${k}=${w}`)].filter(Boolean).join(" · ");
 }
 
 export default async (req: Request, context: Context): Promise<Response> => {
@@ -172,9 +202,10 @@ export default async (req: Request, context: Context): Promise<Response> => {
   let bedrijfswebsite = pickStr(body.bedrijfswebsite, 200);
   const bericht = pickStr(body.bericht, 3000);
   const bron = pickStr(body.bron, 300) || "onbekend";
-  // De volledige adresbalk (met ?bron=…) voor Tuesday; de mail en monday houden `bron`.
+  // De eerste link van het bezoek (met ?bron= of utm_*) voor Tuesday; de mail en monday houden `bron`.
   const paginaVeld = pickStr(body.pagina, 500);
   const pagina = /^https?:\/\//i.test(paginaVeld) ? paginaVeld : bron;
+  const herkomst = leesHerkomst(body.herkomst);
 
   if (!naam) return json(400, { error: "missing_naam" });
   if (!EMAIL_RE.test(email)) return json(400, { error: "invalid_email" });
@@ -201,6 +232,10 @@ export default async (req: Request, context: Context): Promise<Response> => {
   if (stop) return stop;
   const id = aanvraagId(body);
 
+  // Een Lead naar Meta, op de achtergrond: alleen met de sleutels in Netlify én toestemming voor
+  // marketing, en nooit een reden om de aanvraag te laten mislukken (lib/meta-capi.ts).
+  context.waitUntil(stuurMetaLead({ body, req, ip: context.ip, email, telefoon, pagina, bron: "contact-submit" }));
+
   // Tuesday, monday en de kijkbeurt lopen parallel. Alles gaat naar Socials: de hub naar de
   // eerste groep, popup en vraagformulier naar "Ads en content" (vast id).
   const hub = vanHub ? leesHub(body.hub) : null;
@@ -225,19 +260,22 @@ export default async (req: Request, context: Context): Promise<Response> => {
     if (hub.pagina) values.pagina = hub.pagina;
     tuesdayBelofte = naarTuesday(TUESDAY.socials, { name: naamItem, values }, "contact-submit");
   } else if (!vanHub) {
-    // Popup en vraagformulier: sinds Luka het bord Content op 25/11 weghaalde, ook naar Socials,
-    // groep "Ads en content" (vast id), met bron Website. De popup heeft geen bericht.
+    // Popup, vraagformulier en het formulier op de homepage: sinds Luka het bord Content op 25/11
+    // weghaalde, ook naar Socials, groep "Ads en content" (vast id). De bron is het kanaal uit de
+    // herkomst (alleen labels die al in Tuesday bestaan, anders Other), Website als die ontbreekt.
+    // De popup heeft geen bericht.
     const mailDomein = email.split("@")[1]?.toLowerCase() ?? "";
     const naamItem = domein(bedrijfswebsite) || (mailDomein && !GRATIS_MAIL.has(mailDomein) ? mailDomein : "") || naam;
     const values: Record<string, string | number> = {
       status: "New lead 0%",
-      bron: "Website",
+      bron: kanaalLabel(herkomst?.bron ?? ""),
       contact_name: naam,
       email,
       message: bericht || "Wil een kennismaking plannen (popup op de website).",
       pagina,
     };
     if (telefoon) values.phone = telefoon;
+    if (herkomst?.reel) values.reel = herkomst.reel;
     if (bedrijfswebsite && websiteOk(bedrijfswebsite)) {
       values.website = /^https?:\/\//i.test(bedrijfswebsite) ? bedrijfswebsite : `https://${bedrijfswebsite}`;
     }
@@ -285,6 +323,8 @@ export default async (req: Request, context: Context): Promise<Response> => {
     ["Website", bedrijfswebsite || "—"],
     ["Pagina", bron],
   ];
+  // Via welk kanaal en welke advertentie de lead binnenkwam (lib/herkomst.ts).
+  if (herkomst) rijen.push(["Herkomst", herkomstRegel(herkomst)]);
 
   const isVraag = bericht.length > 0;
   const titel = isVraag ? "Nieuwe vraag via de website" : "Nieuwe aanvraag via de website";
