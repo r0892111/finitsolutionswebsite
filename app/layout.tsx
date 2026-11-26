@@ -66,6 +66,10 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  // Meta-domeinverificatie: bewijst aan Meta dat finitsolutions.be van ons bedrijfsportfolio is.
+  verification: {
+    other: { 'facebook-domain-verification': 'gqjjtxr7k6xepdrq4pwrporoken3eo' },
+  },
 };
 
 export const viewport: Viewport = {
