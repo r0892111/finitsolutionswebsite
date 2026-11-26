@@ -11,9 +11,9 @@
  * mail, monday en Tuesday gaan (die leest Luka), en de keuzes die de bezoeker aanklikt
  * gaan ook in het Nederlands mee (stap-formulier.tsx zoekt ze op in ./copy.ts).
  *
- * De homepage, de privacyverklaring, de gidsen en de nieuwsbrief zijn er nog alleen in het
- * Nederlands; dat staat er eerlijk bij. Komt de Engelse homepage live (/en/), zet dan
- * naarWebsite.href en formulier.venster.meerHref op "/en/#aanpak" en haal "(in Dutch)" weg.
+ * De homepage heeft een Engelse versie (/en/, live samen met deze hub): de knoppen naar "hoe we
+ * werken", het logo en de footer gaan daarheen. De privacyverklaring, de vacatures, de gidsen
+ * en de nieuwsbrief zijn er nog alleen in het Nederlands; dat staat er eerlijk bij.
  */
 
 import { HUB, type HubTekst } from "./copy";
@@ -26,7 +26,7 @@ export const HUB_EN: HubTekst = {
   metaBeschrijvingResources:
     "All prompts and guides from Finit's videos and posts in one place. Leave your email address and open them straight away.",
 
-  taal: { label: "Choose your language", logo: "Finit Solutions, to the homepage" },
+  taal: { label: "Choose your language", logo: "Finit Solutions, to the homepage", home: "/en/" },
 
   strook: { tekst: "Free prompts and guides?", link: "Find them here" },
   strookUitPost: { tekst: "The prompts from the post?", link: "Find them here" },
@@ -36,7 +36,7 @@ export const HUB_EN: HubTekst = {
   sub: ["Your procedures, rules, exceptions, …", "We write it all down in one week,", "and that changes what AI", "can do for your **business**."],
   naarVideo: "Watch it, then decide if it's for you.",
 
-  naarWebsite: { vraag: "Still unsure?", tekst: "Read how we work (in Dutch)", href: "/#aanpak" },
+  naarWebsite: { vraag: "Still unsure?", tekst: "Read how we work", href: "/en/#aanpak" },
 
   steun: { label: "Backed by", logos: HUB.steun.logos },
 
@@ -138,8 +138,8 @@ export const HUB_EN: HubTekst = {
       sub: "We'll get in touch within 24 hours to schedule your conversation.",
       urgentie:
         "We plan new projects month by month. Keep your phone close: the sooner we talk, the better your chance of being included next month.",
-      meer: "Read how we work (in Dutch)",
-      meerHref: "/#aanpak",
+      meer: "Read how we work",
+      meerHref: "/en/#aanpak",
       terug: "Back to the page",
       sluiten: "Close",
     },

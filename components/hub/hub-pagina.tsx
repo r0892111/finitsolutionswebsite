@@ -212,7 +212,7 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
       <section className="hub-hero hub-hero-vsl">
         <TaalKnop taal={taal} label={T.taal.label} meta={meta} />
         <div className="hub-wrap text-center">
-          <a href="/" className="hub-logo mx-auto flex w-fit" aria-label={T.taal.logo}>
+          <a href={T.taal.home} className="hub-logo mx-auto flex w-fit" aria-label={T.taal.logo}>
             <Image src="/Finit Logo Blue@4x.png" alt="Finit Solutions" width={424} height={120} className="h-6 w-auto sm:h-7" priority />
           </a>
 
@@ -361,7 +361,7 @@ export function HubPagina({ start, taal = "nl" }: { start?: "resources"; taal?: 
       </section>
 
       <footer className="border-t border-[#E3E7EF] px-4 py-[var(--hub-r4)] text-center text-[0.875rem] text-[#6C7590] sm:px-8">
-        Finit Solutions · <a href="/" className="hp-link">finitsolutions.be</a> ·{" "}
+        Finit Solutions · <a href={T.taal.home} className="hp-link">finitsolutions.be</a> ·{" "}
         <a href="/privacy/" className="hp-link">{T.footer.privacy}</a> ·{" "}
         <a href={`/vacatures/${zoek}&via=hub`} className="hp-link">
           {T.footer.vacatures}
