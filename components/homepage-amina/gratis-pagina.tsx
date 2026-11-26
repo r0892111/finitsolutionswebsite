@@ -119,10 +119,9 @@ export function GratisPagina({ taal }: { taal: Taal }) {
                     onClick={() => pushEvent("hub_klik", { ...meta, keuze: "resource", resource: "brein-prompt" })}
                     className="hp-card group grid overflow-hidden border-2 border-[#1A2D63] transition-[box-shadow,transform] hover:-translate-y-0.5 hover:shadow-[0_20px_44px_-24px_rgba(26,45,99,0.45)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:items-center"
                   >
-                    <span className="flex justify-center bg-[#E6ECF9] px-8 pt-8 sm:h-full sm:items-center sm:py-8">
-                      <span className="relative block aspect-[453/640] w-[11rem] overflow-hidden rounded-t-lg shadow-[0_18px_40px_-22px_rgba(26,45,99,0.55)] sm:w-full sm:max-w-[15rem] sm:rounded-lg">
-                        <Image src={G.brein.cover} alt="" fill sizes="(min-width: 640px) 240px, 176px" className="object-cover object-top" />
-                      </span>
+                    {/* De pdf zelf, ingezoomd op de bovenkant en tot aan de rand (Alex 26/11: geen kader errond). */}
+                    <span className="relative block aspect-[4/3] w-full overflow-hidden border-b border-[#1A2D63]/10 sm:aspect-auto sm:h-full sm:min-h-[20rem] sm:border-b-0 sm:border-r">
+                      <Image src={G.brein.cover} alt="" fill sizes="(min-width: 640px) 420px, 100vw" className="object-cover object-top" />
                     </span>
                     <span className="flex flex-col p-6 sm:p-8 lg:p-10">
                       <span className="w-fit rounded-full bg-[#1A2D63] px-3 py-1 text-[0.8125rem] font-semibold text-white">{G.brein.label}</span>
